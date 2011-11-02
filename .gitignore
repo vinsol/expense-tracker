@@ -1,0 +1,9 @@
+*.class
+bin/
+bin/*.ap?
+bin/*.swp
+bin/classes.dex
+.project
+.classpath
+.DS_Store
+gen/
