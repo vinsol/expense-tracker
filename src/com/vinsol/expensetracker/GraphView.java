@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.util.Log;
 import android.view.View;
 
 public class GraphView extends View {
@@ -37,7 +36,7 @@ public class GraphView extends View {
 	protected void onDraw(Canvas canvas) {
 		float border = 0.042f*getWidth();
 		float horstart = border * 2;
-		float height = getHeight()*0.6f;
+		float height = getHeight()*0.5f;
 		float width = getWidth();
 		float max = getMax();
 		float min = getMin();
@@ -49,7 +48,6 @@ public class GraphView extends View {
 		paint.setTextAlign(Align.LEFT);
 		for (int i = 0; i < horlabels.length; i++) {
 			paint.setColor(Color.DKGRAY);
-			Log.v("graph", ""+graphwidth);
 			float x = ((graphwidth / horlabels.length) * i)+(0.0625f*graphwidth)+2*border;
 			paint.setTextAlign(Align.CENTER);
 			paint.setColor(Color.WHITE);
