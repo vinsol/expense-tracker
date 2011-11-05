@@ -4,19 +4,18 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 
-public class TextEntry extends Activity {
-
+public class Voice extends Activity {
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-
-        ///////   ****** No Title Bar   ********* /////////
+		///////   ****** No Title Bar   ********* /////////
         
         
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         
-        setContentView(R.layout.textentry);
+        setContentView(R.layout.voice);
 	}
 	
 }

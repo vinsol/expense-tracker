@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -18,8 +17,15 @@ public class MainActivity extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        ///////   ****** No Title Bar   ********* /////////
+        
+        
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        
         setContentView(R.layout.main);
+        
+        
+        
         //temp view of graph
         //******start view******//
         float[] values = new float[] { 200.0f,100.5f, 22.5f, 140.0f , 3.0f,89.0f,72.0f };
@@ -48,7 +54,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		
 		
 		//opens text entry Activity
-		EditText main_text = (EditText) findViewById(R.id.main_text);
+		Button main_text = (Button) findViewById(R.id.main_text);
 		main_text.setOnClickListener(this);
 		
 		
@@ -94,7 +100,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		
 		//////   *******    opens Voice Activity    ********    ///////////
 		else if (v.getId() == R.id.main_voice){
-			Log.v("Voice", "Voice");
+			Intent intentVoice = new Intent(this, Voice.class);
+			startActivity(intentVoice);
 		}
 		
 		

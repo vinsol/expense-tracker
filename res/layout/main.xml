@@ -42,21 +42,10 @@
         android:layout_below="@id/main_header"
         android:orientation="horizontal" />
 
-    <Button
-        android:id="@+id/main_save_reminder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Save Reminder" 
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:layout_marginTop="20dp"/>
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/main_save_reminder"
+        android:layout_above="@+id/main_save_reminder"
         android:gravity="center"
 		android:id="@+id/temp_main_linearlayout"
 		android:layout_marginRight="30dp"
@@ -94,7 +83,7 @@
             android:background="@android:color/white"
             android:padding="6dp"/>
 
-        <EditText
+        <Button
             android:id="@+id/main_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -102,4 +91,19 @@
             android:hint="Text" />
     </RelativeLayout>
 
+        
+        
+        
+        <!-- Footer -->
+    <Button
+        android:id="@id/main_save_reminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Save Reminder" 
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:layout_marginTop="20dp"/>
+        
 </RelativeLayout>
