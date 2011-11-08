@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    
+    
+    
+    <!-- ScrollView for body -->
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/text_voice_camera_footer"
+        android:layout_below="@+id/text_voice_camera_date_bar"
+        android:background="@drawable/text_entry_bg"
+        android:id="@+id/text_voice_camera_body">
+    
+    	<!-- Body -->
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+           	android:paddingTop="15dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            >
+            
+            <LinearLayout
+                android:id="@+id/text_voice_camera_data"
+            	android:layout_width="fill_parent"
+           		android:layout_height="fill_parent">
+            
+            <LinearLayout
+                android:id="@+id/text_voice_camera_camera_details"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:visibility="gone"
+                >
+                
+                <ImageView 
+                    android:id="@+id/text_voice_camera_image_display"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/proto_frame"
+                    android:layout_marginRight="10dp"/>
+                
+                <Button
+                    android:id="@+id/text_voice_camera_retake_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/largecamera_button_retake"
+                    android:layout_marginLeft="10dp"/>
+                
+            </LinearLayout>
+            
+            <RelativeLayout
+                android:id="@+id/text_voice_camera_voice_details"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
+                
+                <LinearLayout
+                    android:id="@+id/text_voice_camera_time_details"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    >
+                    
+                    <TextView
+                        android:id="@+id/text_voice_camera_minute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@android:color/black" 
+                        android:textSize="50sp"
+                        android:text="00"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@android:color/black"
+                        android:textSize="50sp"
+                        android:text=":"/>
+                    <TextView
+                        android:id="@+id/text_voice_camera_seconds"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@android:color/black"
+                        android:textSize="50sp" 
+                        android:text="00"/>
+                
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:id="@+id/text_voice_camera_voice_control_buttons"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/text_voice_camera_time_details"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp">
+                    
+                    <Button
+                        android:id="@+id/text_voice_camera_stop_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/voice_stop"
+                       />
+                    
+                    <Button
+                        android:id="@+id/text_voice_camera_play_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/voice_play"
+                        android:visibility="gone"
+                       />
+                    
+                    <Button
+                        android:id="@+id/text_voice_camera_rerecord_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/voice_rerecord"
+                       />
+                    
+                </LinearLayout>
+                    
+            </RelativeLayout>
+            
+            </LinearLayout>
+                
+                
+            <ImageView
+                    android:id="@+id/text_voice_camera_voice_details_separator"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:src="@drawable/list_divider"
+                    android:layout_below="@id/text_voice_camera_data"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    />
+            
+                
+            <EditText 
+                android:id="@+id/text_voice_camera_amount"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_voice_camera_voice_details_separator"
+                android:hint="amount"
+                android:layout_marginBottom="20dp"/>
+            
+            <EditText 
+                android:id="@+id/text_voice_camera_tag"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_voice_camera_amount"
+                android:lines="4"
+                android:gravity="top"
+                android:hint="tag"/>
+            
+            
+        </RelativeLayout>
+    
+    </ScrollView>
+        
+    
+        
+        
+    <!-- Date Bar -->
+    <LinearLayout  
+        android:id="@id/text_voice_camera_date_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_voice_camera_header"
+        android:background="@drawable/date_bg_white_no_shadow"
+        android:gravity="center"
+        android:orientation="horizontal">
+    
+        <ImageView
+            android:id="@+id/text_voice_camera_date_bar_previous_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/previous_arrow"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+        
+        <TextView
+            android:id="@+id/text_voice_camera_date_bar_dateview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nov 6, 2011"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" 
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+        
+        <ImageView
+            android:id="@+id/text_voice_camera_date_bar_next_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/next_arrow"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
+        
+    </LinearLayout>
+    
+    <!-- Footer -->
+    <LinearLayout
+        android:id="@id/text_voice_camera_footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_bar_bg"
+        android:gravity="center"
+        >
+
+        <Button
+            android:id="@+id/text_voice_camera_save_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/save_entry"
+            android:layout_marginRight="5dp"
+            />
+        
+        <Button
+            android:id="@+id/text_voice_camera_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/delete"
+            android:layout_marginLeft="5dp"
+            />
+
+    </LinearLayout>
+
+
+	<!-- Header -->
+    <RelativeLayout
+        android:id="@id/text_voice_camera_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/topbar_bg" >
+
+        <TextView
+            android:id="@+id/text_voice_camera_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:hapticFeedbackEnabled="false"
+            android:text="Text Entry"
+            android:textAppearance="?android:attr/textAppearanceLarge" 
+            android:textStyle="bold" 
+            android:typeface="sans"/>
+    </RelativeLayout>
+    
+    
+</RelativeLayout>

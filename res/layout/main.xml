@@ -9,14 +9,10 @@
         android:layout_width="fill_parent"
         android:layout_below="@+id/main_header"
         android:layout_above="@+id/main_footer"
-        android:background="@drawable/home_bg">
+        android:background="@drawable/home_bg"
+        android:id="@+id/main_body">
     
 	<!-- Body -->
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/main_body"
-        >
         
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -89,7 +85,6 @@
         
     	  </RelativeLayout>  
     	      
-    	</RelativeLayout>
     
     
     </ScrollView>
