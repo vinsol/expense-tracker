@@ -3,14 +3,19 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
     
+    <!-- ScrollView for body-->
+    <ScrollView
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/main_header"
+        android:layout_above="@+id/main_footer"
+        android:background="@drawable/home_bg">
+    
 	<!-- Body -->
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/main_body"
-        android:layout_above="@+id/main_footer"
-        android:layout_below="@+id/main_header"
-        android:background="@drawable/home_bg"
         >
         
         <RelativeLayout
@@ -87,7 +92,7 @@
     	</RelativeLayout>
     
     
-    
+    </ScrollView>
     <!-- Footer -->
 
     <RelativeLayout
