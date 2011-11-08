@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    >
+    
+    <!-- Body -->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/textentry_body"
+        android:layout_above="@+id/textentry_footer"
+        android:layout_below="@+id/textentry_date_bar"
+        android:background="@drawable/text_entry_bg"
+        >
+        
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp">
+            
+            <EditText 
+                android:id="@+id/textentry_amount"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="amount"
+                android:layout_marginBottom="20dp"/>
+            
+            <EditText 
+                android:id="@+id/textentry_tag"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textentry_amount"
+                android:lines="4"
+                android:gravity="top"
+                android:hint="tag"/>
+            
+            
+        </RelativeLayout>
+        
+    </RelativeLayout>
+    
+    <!-- Date Bar -->
+    <RelativeLayout  
+        android:id="@id/textentry_date_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textentry_header"
+        android:background="@drawable/date_bg_white_no_shadow"/>
+    
+    
+    <!-- Footer -->
+    <LinearLayout
+        android:id="@id/textentry_footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_bar_bg"
+        android:gravity="center"
+        >
+
+        <Button
+            android:id="@+id/textentry_save_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/save_entry"
+            android:layout_marginRight="5dp"
+            />
+        
+        <Button
+            android:id="@+id/textentry_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/delete"
+            android:layout_marginLeft="5dp"
+            />
+
+    </LinearLayout>
+
+
+	<!-- Header -->
+    <RelativeLayout
+        android:id="@id/textentry_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/topbar_bg" >
+
+        <TextView
+            android:id="@+id/textentry_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:hapticFeedbackEnabled="false"
+            android:text="Text Entry"
+            android:textAppearance="?android:attr/textAppearanceLarge" 
+            android:textStyle="bold" 
+            android:typeface="sans"/>
+    </RelativeLayout>
+    
+    
+</RelativeLayout>

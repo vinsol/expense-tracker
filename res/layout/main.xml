@@ -1,109 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
-    <RelativeLayout
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:background="@android:color/darker_gray"
-        android:layout_marginTop="10dp"
-        android:id="@+id/main_header"
-        android:padding="10dp"
-        >
-    	<ImageView
-    	    android:id="@+id/main_listview"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_alignParentRight="true"
-    	    android:layout_alignParentTop="true"
-       		android:src="@drawable/ic_listview" 
-        	android:paddingRight="20dp"
-        	android:paddingLeft="20dp"/>
-
-    	<TextView
-     	   android:id="@+id/main_header_title"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentLeft="true"
-       		android:layout_alignParentTop="true"
-        	android:hapticFeedbackEnabled="false"
-        	android:text="Expense Tracker"
-        	android:textAppearance="?android:attr/textAppearanceLarge" 
-        	android:layout_marginLeft="30dp"
-        	/>
-
-    </RelativeLayout>
+    android:layout_height="fill_parent" >
     
-    <LinearLayout
-        android:id="@+id/main_graph"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/main_header"
-        android:orientation="horizontal" />
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/main_save_reminder"
-        android:gravity="center"
-		android:id="@+id/temp_main_linearlayout"
-		android:layout_marginRight="30dp"
-		android:layout_marginLeft="30dp">
-
-        <Button
-            android:id="@+id/main_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Camera" />
-
-        <Button
-            android:id="@+id/main_favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Favorite" />
-    </LinearLayout>
-
+	<!-- Body -->
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/temp_main_linearlayout"
-		android:layout_marginRight="30dp"
-		android:layout_marginLeft="30dp"
-		android:layout_marginBottom="20dp">
-
-        <ImageView
-            android:id="@+id/main_voice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true" 
-            android:src="@android:drawable/ic_btn_speak_now"
-            android:background="@android:color/white"
-            android:padding="6dp"/>
-
-        <Button
-            android:id="@+id/main_text"
+        android:layout_height="fill_parent"
+        android:id="@+id/main_body"
+        android:layout_above="@+id/main_footer"
+        android:layout_below="@+id/main_header"
+        android:background="@drawable/home_bg"
+        >
+        
+        <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/main_voice"
-            android:hint="Text" />
-    </RelativeLayout>
+            android:layout_height="fill_parent"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp">
+        
+       		<LinearLayout
+        		android:id="@+id/main_graph"
+        		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:orientation="horizontal" 
+        		android:background="@drawable/graph"
+        		android:layout_marginBottom="20dp"/>
 
+    		
+
+    		<RelativeLayout
+        		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:layout_below="@id/main_graph"
+        		android:id="@+id/main_text_voice"
+        		android:background="@drawable/text_voice"
+        		android:layout_marginBottom="20dp">
+
+        		<Button
+        		    android:id="@+id/main_voice"
+        		    android:layout_width="wrap_content"
+        		    android:layout_height="wrap_content"
+        		    android:layout_alignParentRight="true"
+        		    android:layout_centerVertical="true"
+        		    android:background="@drawable/voice" 
+        		    android:layout_marginRight="5dp"/>
+
+        		<Button
+        		    android:id="@+id/main_text"
+        		    android:layout_width="wrap_content"
+        		    android:layout_height="wrap_content"
+        		    android:layout_alignParentLeft="true"
+        		    android:layout_centerVertical="true"
+        		    android:layout_marginLeft="5dp"
+        		    android:background="@drawable/text_entry" />
+
+    		</RelativeLayout>
+    		
+    	    <LinearLayout
+     		    android:id="@+id/main_camera_favorites"
+        		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:layout_below="@id/main_text_voice"
+        		android:gravity="center" >
+
+        		<Button
+            		android:id="@+id/main_camera"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:layout_weight="1"
+            		android:background="@drawable/camera" 
+            		android:layout_marginRight="10dp"/>
+
+        		<Button
+            		android:id="@+id/main_favorite"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:layout_weight="1"
+            		android:background="@drawable/favorites"
+            		android:layout_marginLeft="10dp" />
+    		</LinearLayout>
         
-        
-        
-        <!-- Footer -->
-    <Button
-        android:id="@id/main_save_reminder"
-        android:layout_width="wrap_content"
+    	  </RelativeLayout>  
+    	      
+    	</RelativeLayout>
+    
+    
+    
+    <!-- Footer -->
+
+    <RelativeLayout
+        android:id="@id/main_footer"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Save Reminder" 
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:layout_marginTop="20dp"/>
-        
+        android:background="@drawable/bottom_bar_bg"
+        >
+
+        <Button
+            android:id="@+id/main_save_reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/save_reminder" />
+
+    </RelativeLayout>
+	<!-- Header -->
+    <RelativeLayout
+        android:id="@id/main_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/topbar_bg" >
+
+        <ImageView
+            android:id="@+id/main_listview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/list_icon" />
+
+        <TextView
+            android:id="@+id/main_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:hapticFeedbackEnabled="false"
+            android:text="Expense Tracker"
+            android:textAppearance="?android:attr/textAppearanceLarge" 
+            android:textStyle="bold" 
+            android:typeface="sans"/>
+    </RelativeLayout>
+
 </RelativeLayout>

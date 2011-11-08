@@ -2,6 +2,7 @@ package com.vinsol.expensetracker;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 
 public class TextEntry extends Activity {
@@ -16,7 +17,8 @@ public class TextEntry extends Activity {
         
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         
-        setContentView(R.layout.textentry);
+        setContentView(R.layout.text_voice);
+        Log.v("Text", "Text");
 	}
 	
 }

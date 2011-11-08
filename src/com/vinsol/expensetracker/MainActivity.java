@@ -9,7 +9,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 public class MainActivity extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
@@ -28,19 +27,19 @@ public class MainActivity extends Activity implements OnClickListener{
         
         //temp view of graph
         //******start view******//
-        float[] values = new float[] { 200.0f,100.5f, 22.5f, 140.0f , 3.0f,89.0f,72.0f };
-		String[] horlabels = new String[] { "mon", "tue", "wed", "thu","fri","sat","sun" };
-		GraphView graphView = new GraphView(this, values, "GraphTest",horlabels);
-		
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-						LinearLayout.LayoutParams.FILL_PARENT,
-						LinearLayout.LayoutParams.WRAP_CONTENT
-						);
-		
-		params.setMargins(20, 40, 40, 50);
-		
-		LinearLayout layout  = (LinearLayout) findViewById(R.id.main_graph);
-		layout.addView(graphView, params);
+//        float[] values = new float[] { 200.0f,100.5f, 22.5f, 140.0f , 3.0f,89.0f,72.0f };
+//		String[] horlabels = new String[] { "mon", "tue", "wed", "thu","fri","sat","sun" };
+//		GraphView graphView = new GraphView(this, values, "GraphTest",horlabels);
+//		
+//		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+//						LinearLayout.LayoutParams.FILL_PARENT,
+//						LinearLayout.LayoutParams.WRAP_CONTENT
+//						);
+//		
+//		params.setMargins(20, 40, 40, 50);
+//		
+//		LinearLayout layout  = (LinearLayout) findViewById(R.id.main_graph);
+//		layout.addView(graphView, params);
 		//******stop view******//
 		
 		
@@ -59,7 +58,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		
 		
 		//opens voice Activity
-		ImageView main_voice = (ImageView) findViewById(R.id.main_voice);
+		Button main_voice = (Button) findViewById(R.id.main_voice);
 		main_voice.setOnClickListener(this);
 		
 		
