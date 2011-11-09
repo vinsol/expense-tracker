@@ -13,10 +13,11 @@ import android.widget.TextView;
 
 public class CameraActivity extends Activity implements OnClickListener{
 
-	private static final int PICTURE_RESULT = 0;
+	private static final int PICTURE_RESULT = 35;
 	private TextView text_voice_camera_header_title;
 	private ImageView text_voice_camera_voice_details_separator;
 	private LinearLayout text_voice_camera_camera_details;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
