@@ -42,14 +42,14 @@
                     android:id="@+id/text_voice_camera_image_display"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/proto_frame"
+                    android:background="@drawable/photo_frame"
                     android:layout_marginRight="10dp"/>
                 
                 <Button
                     android:id="@+id/text_voice_camera_retake_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/largecamera_button_retake"
+                    android:background="@drawable/largecamera_button_retake_states"
                     android:layout_marginLeft="10dp"/>
                 
             </LinearLayout>
@@ -139,7 +139,7 @@
                         android:paddingLeft="10dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/voice_rerecord"
+                        android:background="@drawable/voice_rerecord_states"
                        />
                     
                 </LinearLayout>
@@ -196,12 +196,12 @@
         android:gravity="center"
         android:orientation="horizontal">
     
-        <ImageView
+        <ImageButton
             android:id="@+id/text_voice_camera_date_bar_previous_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/previous_arrow"
-            android:paddingLeft="5dp"
+            android:background="@drawable/previous_arrow_states"
+            android:paddingLeft="10dp"
             android:paddingRight="5dp"/>
         
         <TextView
@@ -214,13 +214,13 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"/>
         
-        <ImageView
+        <ImageButton
             android:id="@+id/text_voice_camera_date_bar_next_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/next_arrow"
+            android:background="@drawable/next_arrow_states"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp"/>
+            android:paddingRight="10dp"/>
         
     </LinearLayout>
     
@@ -238,7 +238,7 @@
             android:id="@+id/text_voice_camera_save_entry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/save_entry"
+            android:background="@drawable/save_entry_states"
             android:layout_marginRight="5dp"
             />
         
@@ -246,7 +246,7 @@
             android:id="@+id/text_voice_camera_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/delete"
+            android:background="@drawable/delete_states"
             android:layout_marginLeft="5dp"
             />
 
