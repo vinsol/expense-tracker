@@ -2,7 +2,9 @@ package com.vinsol.expensetracker;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -22,6 +24,7 @@ public class Voice extends Activity implements OnClickListener{
 	private Button text_voice_camera_stop_button;
 	private Button text_voice_camera_play_button;
 	private Button text_voice_camera_rerecord_button;
+	private MyCount countDownTimer;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,18 @@ public class Voice extends Activity implements OnClickListener{
 
 	private void controlVoiceChronometer() {
 		text_voice_camera_time_details_chronometer.start();
+		text_voice_camera_time_details_chronometer.setOnChronometerTickListener(new OnChronometerTickListener() {
+			
+			@Override
+			public void onChronometerTick(Chronometer chronometer) {
+				if(text_voice_camera_time_details_chronometer.getText().length() > 5){
+					text_voice_camera_time_details_chronometer.stop();
+					text_voice_camera_stop_button.setVisibility(View.GONE);
+					text_voice_camera_play_button.setVisibility(View.VISIBLE);
+					text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
+				}
+			}
+		});
 	}
 
 	private void setGraphicsVoice() {
@@ -82,6 +97,10 @@ public class Voice extends Activity implements OnClickListener{
 		
 						////  ***** if stop button pressed ****** //////
 		if(v.getId() == R.id.text_voice_camera_stop_button){
+			try{
+				countDownTimer.cancel();
+			}catch(NullPointerException e){};
+			
 			text_voice_camera_time_details_chronometer.stop();
 			text_voice_camera_stop_button.setVisibility(View.GONE);
 			text_voice_camera_play_button.setVisibility(View.VISIBLE);
@@ -89,22 +108,19 @@ public class Voice extends Activity implements OnClickListener{
 		}
 						////  ***** if play button pressed ****** //////		
 		else if(v.getId() == R.id.text_voice_camera_play_button){
-			
-			/////////   *******   Countdown Timer  for Chronometer ******* /////////
-			text_voice_camera_time_details_chronometer.setOnChronometerTickListener(new OnChronometerTickListener() {
-				
-				@Override
-				public void onChronometerTick(Chronometer arg0) {
-					
-					
-				}
-			});
+			Log.v("hello", text_voice_camera_time_details_chronometer.getText()+"");
+			countDownTimer = new MyCount(300000, 1000);
+			countDownTimer.start();
 			text_voice_camera_play_button.setVisibility(View.GONE);
 			text_voice_camera_stop_button.setVisibility(View.VISIBLE);
 			text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
+			
 		}
 						////  ***** if rerecord button pressed ****** //////		
 		else if(v.getId() == R.id.text_voice_camera_rerecord_button){
+			try{
+				countDownTimer.cancel();
+			}catch(NullPointerException e){};
 			text_voice_camera_time_details_chronometer.setBase(SystemClock.elapsedRealtime());
 			text_voice_camera_time_details_chronometer.start();
 			text_voice_camera_play_button.setVisibility(View.GONE);
@@ -112,6 +128,40 @@ public class Voice extends Activity implements OnClickListener{
 			text_voice_camera_rerecord_button.setVisibility(View.GONE);
 		}
 		
+	}
+	
+	
+	/////////   *********       CountdownTimer for Chronometer    *********    //////////      
+	//countdowntimer is an abstract class, so extend it and fill in methods
+	private class MyCount extends CountDownTimer{
+
+		public MyCount(long millisInFuture, long countDownInterval) {
+			super(millisInFuture, countDownInterval);
+		}
+
+		@Override
+		public void onFinish() {
+			text_voice_camera_time_details_chronometer.setText("done!");
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {
+			String minutes = "00";
+			if(millisUntilFinished >= 60000){
+				Long temp = millisUntilFinished / 60000;
+				if(temp < 10){
+					minutes = "0"+temp;
+				}else{
+					minutes = temp+"";
+				}
+			}
+			String seconds = (millisUntilFinished%60000)/1000+"";
+			if((millisUntilFinished%60000)/1000 < 10){
+					seconds = "0"+seconds;
+			}
+			text_voice_camera_time_details_chronometer.setText(minutes +":" + seconds);
+		}
+
 	}
 	
 }
