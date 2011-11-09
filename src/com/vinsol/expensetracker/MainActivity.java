@@ -106,7 +106,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		
 		//////   *******    opens Camera Activity    ********    ///////////
 		else if(v.getId() == R.id.main_camera){
-			Log.v("Camera", "Camera");
+			Intent intentCamera = new Intent(this, CameraActivity.class);
+			startActivity(intentCamera);
 		}
 
 		
