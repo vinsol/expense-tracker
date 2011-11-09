@@ -30,7 +30,6 @@
         		android:layout_marginBottom="20dp"/>
 
     		
-
     		<RelativeLayout
         		android:layout_width="fill_parent"
         		android:layout_height="wrap_content"
@@ -45,7 +44,7 @@
         		    android:layout_height="wrap_content"
         		    android:layout_alignParentRight="true"
         		    android:layout_centerVertical="true"
-        		    android:background="@drawable/voice" 
+        		    android:background="@drawable/voice_states" 
         		    android:layout_marginRight="5dp"/>
 
         		<Button
@@ -55,7 +54,7 @@
         		    android:layout_alignParentLeft="true"
         		    android:layout_centerVertical="true"
         		    android:layout_marginLeft="5dp"
-        		    android:background="@drawable/text_entry" />
+        		    android:background="@drawable/text_entry_states" />
 
     		</RelativeLayout>
     		
@@ -71,7 +70,7 @@
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
             		android:layout_weight="1"
-            		android:background="@drawable/camera" 
+            		android:background="@drawable/camera_states" 
             		android:layout_marginRight="10dp"/>
 
         		<Button
@@ -79,7 +78,7 @@
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
             		android:layout_weight="1"
-            		android:background="@drawable/favorites"
+            		android:background="@drawable/favorites_states"
             		android:layout_marginLeft="10dp" />
     		</LinearLayout>
         
@@ -104,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/save_reminder" />
+            android:background="@drawable/save_reminder_states" />
 
     </RelativeLayout>
 	<!-- Header -->
@@ -122,7 +121,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/list_icon" />
+            android:src="@drawable/list_icon_states" 
+            android:paddingRight="5dp"
+            android:paddingLeft="10dp"/>
 
         <TextView
             android:id="@+id/main_header_title"
