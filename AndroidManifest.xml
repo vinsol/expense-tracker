@@ -4,7 +4,7 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="4" />
+    <uses-sdk android:minSdkVersion="3" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -23,17 +23,13 @@
         <activity 
             android:name=".TextEntry"
         	android:configChanges="orientation"
-    		android:screenOrientation="portrait"></activity>
+    		android:screenOrientation="portrait"
+    		android:windowSoftInputMode="adjustPan"></activity>
         <activity 
             android:name=".Voice"
         	android:configChanges="orientation"
     		android:screenOrientation="portrait"
-            ></activity>
-        
-        <activity 
-            android:name=".CameraActivity1"
-        	android:configChanges="orientation"
-    		android:screenOrientation="portrait"
+    		android:windowSoftInputMode="adjustPan"
             ></activity>
             
     </application>
