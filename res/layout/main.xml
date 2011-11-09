@@ -17,9 +17,9 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginTop="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp">
+           	android:paddingTop="15dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp">
         
        		<LinearLayout
         		android:id="@+id/main_graph"
