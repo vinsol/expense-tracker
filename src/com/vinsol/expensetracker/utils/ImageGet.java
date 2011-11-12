@@ -28,6 +28,8 @@ public class ImageGet {
 	private int THUMBNAIL_MAX_HEIGHT = 60;
 	private int THUMBNAIL_MAX_WIDTH = 60;
 	
+	
+	////////   ********   Constructor **********  ///////////
 	public ImageGet(String file) {
 		mFileName = file;
 		mExpenseTrackerDirectory = new File("/mnt/sdcard/ExpenseTracker");
@@ -56,6 +58,7 @@ public class ImageGet {
 		imageByCamera.recycle();
 	}
 	
+	//////////   ******** get image of dimension 160x120  *********   ///////////
 	public Bitmap getSmallImage(){
 		mFile = new File(mExpenseTrackerDirectory,mFileName+"_small"+".jpg");
 		height = SMALL_MAX_HEIGHT;
@@ -63,6 +66,8 @@ public class ImageGet {
 		return getBitmap();
 	}
 	
+	
+	///////////   *********  get image of dimension 60 x60   **********    /////////
 	public Bitmap getThumbnailImage(){
 		mFile = new File(mExpenseTrackerDirectory,mFileName+"_thumbnail"+".jpg");
 		height = THUMBNAIL_MAX_HEIGHT;
@@ -70,6 +75,8 @@ public class ImageGet {
 		return getBitmap();
 	} 
 	
+	
+	///////////   **********   get cropped bitmap Image   **********   ///////////
 	private Bitmap getBitmap(){
 		FileInputStream fileInputStream = null;
 		try {

@@ -35,6 +35,8 @@ public class CameraFileSave {
 	private File mPathImageByCamera;
 	
 	
+	
+	/////////    *********   Constructors   ********    /////////////
 	public CameraFileSave(String _filename) {
 		filename = _filename;
 		mExpenseTrackerDirectory = new File("/mnt/sdcard/ExpenseTracker");
@@ -55,12 +57,15 @@ public class CameraFileSave {
 			e.printStackTrace();
 		}
 		
+		//////////   *******   To handle Portrait Layout   *******   /////////
 		if(imageByCamera.getHeight() > imageByCamera.getWidth()){
 			SMALL_MAX_WIDTH = 120;
 			SMALL_MAX_HEIGHT = 160;
 		}
 	}
 
+	
+	//////////     *********    Function to save File    *********    /////////
 	private void CameraFileSaveFunc(Bitmap bitmapToSave) {
 		FileOutputStream out = null;
 		mFileToSaveBitmap.mkdirs();
@@ -78,14 +83,19 @@ public class CameraFileSave {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        
+        ///////////    *********   Clear Bitmap to save VM space   *********   /////////
         bitmapToSave.recycle();
 	}
 	
+	/////////     ***********   Create Both Small and thumbnail file   *********   /////////
 	public void create(){
 		createSmall();
 		createThumbnail();
 	}
 	
+	
+	///////   ********* Create Small Bitmap   of size 160 x 120   ********   ///////////
 	public void createSmall(){
 		width = SMALL_MAX_WIDTH;
 		height = SMALL_MAX_HEIGHT;
