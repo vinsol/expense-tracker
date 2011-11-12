@@ -1,18 +1,15 @@
 package com.vinsol.expensetracker;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.vinsol.expensetracker.utils.CameraFileSave;
+import com.vinsol.expensetracker.utils.ImageGet;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -67,116 +64,15 @@ public class CameraActivity extends Activity implements OnClickListener{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-//		if (requestCode == PICTURE_RESULT && resultCode == Activity.RESULT_OK){
 
-//            File path = new File("/mnt/sdcard/ExpenseTracker");
-//            path.mkdirs();
-//            String name = "test1.jpg";
-//            File file = new File(path, name);
-//            try {
-//                FileOutputStream out = new FileOutputStream(file);
-//                
-//                x.compress(Bitmap.CompressFormat.JPEG, 100, out);
-//                out.flush();
-//                out.close();
-//
-//         } catch (Exception e) {
-//                e.printStackTrace();
-//         }
-//    }
-		
-		int MAX_HEIGHT = 130;
-		int MAX_WIDTH = 165;
-		
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		File path = new File("/mnt/sdcard/ExpenseTracker/test1.jpg");
-		FileInputStream fileInputStream = null;
-		try {
-			fileInputStream = new FileInputStream(path);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Bitmap bm = BitmapFactory.decodeStream(fileInputStream,null,options);
-		int defaultHeight = bm.getHeight();
-        int defaultWidth = bm.getWidth();
-        int height = MAX_HEIGHT;
-        int width = MAX_WIDTH;
-        int i = 1;
-        do{
-     	   height = MAX_HEIGHT * i;
-     	   width = MAX_WIDTH * i;
-     	   Log.v("height calc", height+"");
-     	  Log.v("width calc", width+"");
-     	   i++;
-        }while(height < (defaultHeight-MAX_HEIGHT) && width < (defaultWidth-MAX_WIDTH) );
-        i--;
-        int diffHeight = defaultHeight - height;
-        int diffWidth = defaultWidth - width;
-        int x = diffWidth / 2;
-        int y = diffHeight / 2;
-        int finalx;
-        int finaly;
-        if(diffWidth % 2 == 0)
-        	   finalx = defaultWidth - x;
-        else
-     	   finalx = defaultWidth - x+1;
-        if(diffHeight % 2 == 0)
-        	   finaly = defaultHeight - y;
-        else
-     	   finaly = defaultHeight - y+1;
+		CameraFileSave cameraFileSave = new CameraFileSave("test1");
+		cameraFileSave.create();
+		ImageGet imageGet = new ImageGet("test1");
+		Bitmap bm = imageGet.getSmallImage();
+        ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
+        text_voice_camera_image_display.setImageBitmap(bm);
+        bm.recycle();
         
-		Log.v("height", bm.getHeight()+" "+y+" "+finaly + " "+defaultHeight+ " "+defaultHeight + " "+height);
-		Log.v("width", bm.getWidth()+" "+x+" "+finalx + " "+defaultWidth+ " "+defaultWidth+" "+width);
-		try {
-			fileInputStream.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		//Find the correct scale value. It should be the power of 2.
-        int width_tmp=defaultWidth, height_tmp=defaultHeight;
-        int scale=1;
-        while(true){
-            if(width_tmp/2<MAX_WIDTH || height_tmp/2<MAX_HEIGHT)
-                break;
-            width_tmp/=2;
-            height_tmp/=2;
-            scale*=2;
-        }
-     
-        
-        //Decode with inSampleSize
-        File path1 = new File("/mnt/sdcard/ExpenseTracker");
-        path.mkdirs();
-        String name = "test1_small.jpg";
-        File file = new File(path1, name);
-        FileOutputStream out = null;
-		try {
-			out = new FileOutputStream(file);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		//  Bitmap.createBitmap(bm, x, y, finalx, finaly).compress(Bitmap.CompressFormat.JPEG, 20, out);
-		
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        
-        try {
-        	   
-               
-               BitmapFactory.decodeStream(new FileInputStream(path), null, o2).compress(Bitmap.CompressFormat.JPEG, 100, out);
-               out.flush();
-               out.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
         
 	}
 
