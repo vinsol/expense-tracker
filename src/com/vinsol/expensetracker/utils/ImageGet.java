@@ -53,6 +53,7 @@ public class ImageGet {
 			SMALL_MAX_WIDTH = 120;
 			SMALL_MAX_HEIGHT = 160;
 		}
+		imageByCamera.recycle();
 	}
 	
 	public Bitmap getSmallImage(){

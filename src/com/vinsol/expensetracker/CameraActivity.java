@@ -71,7 +71,7 @@ public class CameraActivity extends Activity implements OnClickListener{
 		Bitmap bm = imageGet.getSmallImage();
         ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
         text_voice_camera_image_display.setImageBitmap(bm);
-        bm.recycle();
+//        bm.recycle();
         
         
 	}

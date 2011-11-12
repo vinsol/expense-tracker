@@ -78,6 +78,7 @@ public class CameraFileSave {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        bitmapToSave.recycle();
 	}
 	
 	public void create(){
@@ -126,6 +127,7 @@ public class CameraFileSave {
 	private int getScale(Bitmap bip){
 		//Find the correct scale value. It should be the power of 2.
         int width_tmp=bip.getWidth(), height_tmp=bip.getHeight();
+        bip.recycle();
 		int scale=1;
         while(true){
             if(width_tmp/2<width || height_tmp/2<height)
