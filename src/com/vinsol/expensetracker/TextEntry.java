@@ -32,8 +32,8 @@ public class TextEntry extends Activity {
         text_voice_camera_amount.setLayoutParams(params);
         
         
-        
-        
+        ////////   ********    Handle Date Bar   *********   ////////
+        new DateHandler(this);
 	}
 	
 	@Override

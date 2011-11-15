@@ -52,6 +52,8 @@ public class Voice extends Activity implements OnClickListener{
         controlVoiceChronometer();
         setClickListeners();
         
+        ////////********    Handle Date Bar   *********   ////////
+        new DateHandler(this);
 	}
 
 	private void setClickListeners() {

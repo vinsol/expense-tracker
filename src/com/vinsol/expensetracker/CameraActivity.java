@@ -45,7 +45,11 @@ public class CameraActivity extends Activity implements OnClickListener{
         
         setGraphicsCamera();
         setClickListeners();
-		startCamera();
+        startCamera();
+        
+        
+        ////////********    Handle Date Bar   *********   ////////
+        new DateHandler(this);
 	}
 	
 	private void startCamera() {
@@ -64,14 +68,14 @@ public class CameraActivity extends Activity implements OnClickListener{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
+		if(PICTURE_RESULT == requestCode && Activity.RESULT_OK == resultCode){
 		CameraFileSave cameraFileSave = new CameraFileSave("test1");
 		cameraFileSave.create();
 		ImageGet imageGet = new ImageGet("test1");
 		Bitmap bm = imageGet.getSmallImage();
         ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
         text_voice_camera_image_display.setImageBitmap(bm);
-        
+		}
 	}
 
 	private void setGraphicsCamera() {

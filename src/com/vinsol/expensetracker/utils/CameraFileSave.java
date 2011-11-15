@@ -50,12 +50,14 @@ public class CameraFileSave {
 			e.printStackTrace();
 		}
 		imageByCamera = BitmapFactory.decodeStream(fileInputStream);
+		
 		try {
 			fileInputStream.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 		//////////   *******   To handle Portrait Layout   *******   /////////
 		if(imageByCamera.getHeight() > imageByCamera.getWidth()){
@@ -68,7 +70,7 @@ public class CameraFileSave {
 	//////////     *********    Function to save File    *********    /////////
 	private void CameraFileSaveFunc(Bitmap bitmapToSave) {
 		FileOutputStream out = null;
-		mFileToSaveBitmap.mkdirs();
+//		mFileToSaveBitmap.mkdirs();
 		try {
 			out = new FileOutputStream(mFileToSaveBitmap);
 		} catch (FileNotFoundException e1) {
