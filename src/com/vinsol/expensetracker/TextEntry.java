@@ -1,5 +1,7 @@
 package com.vinsol.expensetracker;
 
+import com.vinsol.expensetracker.location.LocationLast;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +34,12 @@ public class TextEntry extends Activity {
         
         
         
+	}
+	
+	@Override
+	protected void onResume() {
+		new LocationLast(this);
+		super.onResume();
 	}
 	
 }

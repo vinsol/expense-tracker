@@ -1,7 +1,9 @@
 package com.vinsol.expensetracker;
 
+import com.vinsol.expensetracker.location.LocationData;
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class MainActivity extends Activity implements OnClickListener{
+	public static String mCurrentLocation;
+	public static Location mLocation;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +91,17 @@ public class MainActivity extends Activity implements OnClickListener{
 		
     }
 
+    @Override
+    protected void onResume() {
+    	
+    	/////////    ********    Starts GPS and Check for Location each time Activity Resumes *******   ////////
+    	new LocationData(this);	
+    	
+    	super.onResume();
+    }
+    
+    
+    
 	@Override
 	public void onClick(View v) {
 		
@@ -127,7 +143,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		else if(v.getId() == R.id.main_listview){
 			Log.v("ListView", "ListView");
 		}
-
-		
+	
 	}
+
+	
 }
