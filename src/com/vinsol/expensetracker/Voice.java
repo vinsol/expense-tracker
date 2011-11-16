@@ -1,5 +1,9 @@
 package com.vinsol.expensetracker;
 
+import com.vinsol.expensetracker.utils.AudioPlay;
+import com.vinsol.expensetracker.utils.DisplayTime;
+import com.vinsol.expensetracker.utils.RecordingHelper;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -25,6 +29,9 @@ public class Voice extends Activity implements OnClickListener{
 	private Button text_voice_camera_play_button;
 	private Button text_voice_camera_rerecord_button;
 	private MyCount countDownTimer;
+	private RecordingHelper mRecordingHelper;
+	private String mFileName = "test1";
+	private AudioPlay mAudioPlay;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +59,26 @@ public class Voice extends Activity implements OnClickListener{
         controlVoiceChronometer();
         setClickListeners();
         
-        ////////********    Handle Date Bar   *********   ////////
+        ////////   ********  Handle Date Bar   *********   ////////
         new DateHandler(this);
+        
+        
+        ////////   ********   Starts Recording each time activity starts   ******   ///////
+        mRecordingHelper = new RecordingHelper(mFileName);
+		mRecordingHelper.startRecording();
+		
+		
+	}
+	
+	@Override
+	protected void onPause() {
+		
+		//////   *****  Check whether audio is recording or not   *******   ///////
+		//////   ******   If audio recording started then stop recording audio   *****   ///////
+		if(mRecordingHelper.isRecording()){
+			mRecordingHelper.stopRecording();
+		}
+		super.onPause();
 	}
 
 	private void setClickListeners() {
@@ -97,39 +122,73 @@ public class Voice extends Activity implements OnClickListener{
 		///////   ********     Adding On Click Actions to click listeners *********    //////////
 		
 		
-						////  ***** if stop button pressed ****** //////
+		////  ***** if stop button pressed ****** //////
 		if(v.getId() == R.id.text_voice_camera_stop_button){
 			try{
 				countDownTimer.cancel();
 			}catch(NullPointerException e){};
 			
-			text_voice_camera_time_details_chronometer.stop();
+			//////   ******   Handles UI items on button click  ******  ///////
 			text_voice_camera_stop_button.setVisibility(View.GONE);
 			text_voice_camera_play_button.setVisibility(View.VISIBLE);
 			text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
+			
+			//////  *******  Stop Recording Audio and stop chronometer  ********   ////////
+			mRecordingHelper.stopRecording();
+			text_voice_camera_time_details_chronometer.stop();
 		}
-						////  ***** if play button pressed ****** //////		
+		
+		
+		////  ***** if play button pressed ****** //////		
 		else if(v.getId() == R.id.text_voice_camera_play_button){
+			//////	     ********   to handle playback of recorded file   *********   ////////
+			mAudioPlay = new AudioPlay(mFileName);
 			Log.v("hello", text_voice_camera_time_details_chronometer.getText()+"");
-			countDownTimer = new MyCount(300000, 1000);
-			countDownTimer.start();
+			
+			///////   *******   Chronometer Starts Countdown   ******  ///////
+			countDownTimer = new MyCount(mAudioPlay.getPlayBackTime(), 1000);
+			
+			//////   ******   Handles UI items on button click  ******  ///////
 			text_voice_camera_play_button.setVisibility(View.GONE);
 			text_voice_camera_stop_button.setVisibility(View.VISIBLE);
 			text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
 			
+			/////   ********   Start Audio Playback and counter to play audio   ****** ///////
+			if(!mAudioPlay.isAudioPlaying()){
+				mAudioPlay.startPlayBack();
+			} else {
+				mAudioPlay.stopPlayBack();
+				mAudioPlay.startPlayBack();
+			}
+			countDownTimer.start();
 		}
-						////  ***** if rerecord button pressed ****** //////		
+		
+		////  ***** if rerecord button pressed ****** //////		
 		else if(v.getId() == R.id.text_voice_camera_rerecord_button){
 			try{
 				countDownTimer.cancel();
 			}catch(NullPointerException e){};
-			text_voice_camera_time_details_chronometer.setBase(SystemClock.elapsedRealtime());
-			text_voice_camera_time_details_chronometer.start();
+			
+			/////  *******   If Audio PlayBack is there stop playing audio   *******//////
+			try{
+				if(mAudioPlay.isAudioPlaying()){
+					mAudioPlay.stopPlayBack();
+				}
+			}catch(NullPointerException e){}
+			
+			//////   ******   Handles UI items on button click  ******  ///////
 			text_voice_camera_play_button.setVisibility(View.GONE);
 			text_voice_camera_stop_button.setVisibility(View.VISIBLE);
 			text_voice_camera_rerecord_button.setVisibility(View.GONE);
+			
+			//////  ******  Restarts chronometer and recording   *******  ////////
+			if(mRecordingHelper.isRecording())
+				mRecordingHelper.stopRecording();
+			mRecordingHelper = new RecordingHelper(mFileName);
+			mRecordingHelper.startRecording();
+			text_voice_camera_time_details_chronometer.setBase(SystemClock.elapsedRealtime());
+			text_voice_camera_time_details_chronometer.start();
 		}
-		
 	}
 	
 	
@@ -137,31 +196,23 @@ public class Voice extends Activity implements OnClickListener{
 	//countdowntimer is an abstract class, so extend it and fill in methods
 	private class MyCount extends CountDownTimer{
 
+		DisplayTime mDisplayTime;
+		
 		public MyCount(long millisInFuture, long countDownInterval) {
 			super(millisInFuture, countDownInterval);
+			mDisplayTime = new DisplayTime();
 		}
 
 		@Override
 		public void onFinish() {
-			text_voice_camera_time_details_chronometer.setText("done!");
+			text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(mAudioPlay.getPlayBackTime()));
+			text_voice_camera_stop_button.setVisibility(View.GONE);
+			text_voice_camera_play_button.setVisibility(View.VISIBLE);
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
-			String minutes = "00";
-			if(millisUntilFinished >= 60000){
-				Long temp = millisUntilFinished / 60000;
-				if(temp < 10){
-					minutes = "0"+temp;
-				}else{
-					minutes = temp+"";
-				}
-			}
-			String seconds = (millisUntilFinished%60000)/1000+"";
-			if((millisUntilFinished%60000)/1000 < 10){
-					seconds = "0"+seconds;
-			}
-			text_voice_camera_time_details_chronometer.setText(minutes +":" + seconds);
+			text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(millisUntilFinished));
 		}
 
 	}

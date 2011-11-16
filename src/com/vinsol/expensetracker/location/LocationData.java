@@ -12,7 +12,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 public class LocationData {
 
@@ -40,8 +39,9 @@ public class LocationData {
 			public void gotLocation(Location _location) {
 				location = _location;
 				MainActivity.mLocation = _location;
-				if(location!=null)
-					new GetLocation().execute();
+				if(location != null){
+					exGetLocation();
+				}
 			}
 		});
 		return null;
@@ -67,9 +67,13 @@ public class LocationData {
 		protected void onPostExecute(Void result) {
 			MainActivity.mCurrentLocation = list.get(0).getFeatureName()+"   "+list.get(0).getLocality()+"   "+list.get(0).getAdminArea()+"   "+list.get(0).getCountryName();
 			MainActivity.mLocation = location;
-			Toast.makeText(mContext, MainActivity.mCurrentLocation, Toast.LENGTH_LONG).show();
+//			Toast.makeText(mContext, MainActivity.mCurrentLocation, Toast.LENGTH_LONG).show();
 			super.onPostExecute(result);
 		}
     }
+	
+	private void exGetLocation(){
+		new GetLocation().execute();
+	}
 	
 }
