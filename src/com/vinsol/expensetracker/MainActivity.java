@@ -96,7 +96,6 @@ public class MainActivity extends Activity implements OnClickListener{
     	
     	/////////    ********    Starts GPS and Check for Location each time Activity Resumes *******   ////////
     	new LocationData(this);	
-    	
     	super.onResume();
     }
     

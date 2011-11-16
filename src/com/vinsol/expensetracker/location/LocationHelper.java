@@ -1,12 +1,18 @@
 package com.vinsol.expensetracker.location;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.vinsol.expensetracker.MainActivity;
+
 import android.content.Context;
+import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 public class LocationHelper {
 	
@@ -18,11 +24,12 @@ public class LocationHelper {
     boolean mCheckGPS_Status=false;
     boolean mCheckNetwork_Status=false;
     Geocoder mGeocoder;
-    
+    Context mContext;
     
     public boolean getLocation(Context context, LocationResult result)
     {
         //LocationResult callback class to pass location value from MyLocation to user code.
+    	mContext = context;
         mLocationResult=result;
         if(mLocationManager==null)
             mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -83,6 +90,7 @@ public class LocationHelper {
     /////////    ********    To get last known location   ********   ///////////
     
     class GetLastLocation extends TimerTask {
+
         @Override
         public void run() {
              mLocationManager.removeUpdates(locationListenerGps);
@@ -96,26 +104,41 @@ public class LocationHelper {
 
              //if there are both values use the latest one
              if(gps_loc!=null && net_loc!=null){
-                 if(gps_loc.getTime()>net_loc.getTime()){
+                 if(gps_loc.getAccuracy() < net_loc.getAccuracy()){
                      mLocationResult.gotLocation(gps_loc);
+                     getData(gps_loc);
                  }
                  else {
                      mLocationResult.gotLocation(net_loc);
+                     getData(net_loc);
                  }
                  return;
              }
 
              if(gps_loc!=null){
-                mLocationResult.gotLocation(gps_loc);
+            	 mLocationResult.gotLocation(gps_loc);
+            	 getData(gps_loc);
                 return;
              }
              if(net_loc!=null){
                  mLocationResult.gotLocation(net_loc);
+                 getData(net_loc);
                  return;
              }
         }
     }
 
+    //////   ******    get Data based on gps info   ******   ////////
+    public void getData(Location location){
+    	try{
+    		Geocoder geocoder = new Geocoder(mContext);
+    		List<Address> list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+    		MainActivity.mCurrentLocation = list.get(0).getFeatureName()+"   "+list.get(0).getLocality()+"   "+list.get(0).getAdminArea()+"   "+list.get(0).getCountryName();
+    		MainActivity.mLocation = location;
+    		Log.v("location", MainActivity.mCurrentLocation);
+    	} catch (Exception e){}
+    	
+    }
     
     ///////////    ********    LocationResult Abstract Class   *********    ///////////
     
