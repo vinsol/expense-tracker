@@ -3,6 +3,7 @@ package com.vinsol.expensetracker;
 import java.util.HashMap;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -105,6 +106,20 @@ public class DatabaseAdapter {
 				e.printStackTrace();
 			}
 			return false;
+		}
+		
+		protected Cursor getCompleteDatabase(){
+			
+			return db.query(TABLE_NAME, new String [] { 
+					KEY_ID,
+					KEY_TAG,
+					KEY_AMOUNT,
+					KEY_DATE_TIME,
+					KEY_LOCATION,
+					KEY_FAVORITE,
+					KEY_TYPE
+					}, null, null, null, null, null);
+			
 		}
 		
 		private class MyCreateOpenHelper extends SQLiteOpenHelper{

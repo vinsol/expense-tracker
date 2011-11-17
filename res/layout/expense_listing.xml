@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    
+    
+    <!-- Body --> 
+    <ListView 
+       	android:id="@+id/expense_listing_listview"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/expense_listing_header"
+        android:background="@drawable/expense_listing_listview_bg"
+        
+        ></ListView>
+	<!-- Header -->
+    <RelativeLayout
+        android:id="@id/expense_listing_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/topbar_bg" >
+
+        <TextView
+            android:id="@+id/expense_listing_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:hapticFeedbackEnabled="false"
+            android:text="Expenses List"
+            android:textAppearance="?android:attr/textAppearanceLarge" 
+            android:textStyle="bold" 
+            android:typeface="sans"/>
+    </RelativeLayout>
+    
+
+</RelativeLayout>

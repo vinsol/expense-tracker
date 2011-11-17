@@ -17,7 +17,13 @@ public class DisplayDate {
     	month = getMonth(mCalendar.get(Calendar.MONTH));
     	day = mCalendar.get(Calendar.DAY_OF_MONTH)+"";
     	year = mCalendar.get(Calendar.YEAR)+"";
-    	
+    	Calendar currentDate = Calendar.getInstance();
+    	if(Integer.parseInt(day) == currentDate.get(Calendar.DAY_OF_MONTH) && 
+    			mCalendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
+    			Integer.parseInt(year) == currentDate.get(Calendar.YEAR)){
+    		
+    		return "Today, "+month+" "+day;
+    	}
     	return month+" "+day+", "+year;
     }
 

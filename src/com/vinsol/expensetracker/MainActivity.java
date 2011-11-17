@@ -140,7 +140,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		
 		//////   *******    opens ListView Activity    ********    ///////////
 		else if(v.getId() == R.id.main_listview){
-			Log.v("ListView", "ListView");
+			Intent intentListView = new Intent(this, ExpenseListing.class);
+			startActivity(intentListView);
 		}
 	
 	}
