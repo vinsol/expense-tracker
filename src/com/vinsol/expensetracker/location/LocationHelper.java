@@ -104,7 +104,7 @@ public class LocationHelper {
 
              //if there are both values use the latest one
              if(gps_loc!=null && net_loc!=null){
-                 if(gps_loc.getAccuracy() < net_loc.getAccuracy()){
+                 if(gps_loc.getTime() > net_loc.getTime()){
                      mLocationResult.gotLocation(gps_loc);
                      getData(gps_loc);
                  }
@@ -133,7 +133,7 @@ public class LocationHelper {
     	try{
     		Geocoder geocoder = new Geocoder(mContext);
     		List<Address> list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-    		MainActivity.mCurrentLocation = list.get(0).getFeatureName()+"   "+list.get(0).getLocality()+"   "+list.get(0).getAdminArea()+"   "+list.get(0).getCountryName();
+    		MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getLocality()+", "+list.get(0).getAdminArea();
     		MainActivity.mLocation = location;
     		Log.v("location", MainActivity.mCurrentLocation);
     	} catch (Exception e){}

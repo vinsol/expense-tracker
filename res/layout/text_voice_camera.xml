@@ -156,7 +156,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_voice_camera_voice_details_separator"
                 android:hint="amount"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                android:numeric="decimal"/>
             
             <EditText 
                 android:id="@+id/text_voice_camera_tag"

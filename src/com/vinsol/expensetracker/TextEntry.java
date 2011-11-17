@@ -34,6 +34,10 @@ public class TextEntry extends Activity {
         
         ////////   ********    Handle Date Bar   *********   ////////
         new DateHandler(this);
+        
+        ////////   *********     Get Last most accurate location info   *********   /////////
+        LocationLast mLocationLast = new LocationLast(this);
+		mLocationLast.getLastLocation();
 	}
 	
 	@Override

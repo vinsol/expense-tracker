@@ -1,6 +1,8 @@
 package com.vinsol.expensetracker;
 
 import java.io.File;
+
+import com.vinsol.expensetracker.location.LocationLast;
 import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.ImageGet;
 
@@ -50,6 +52,10 @@ public class CameraActivity extends Activity implements OnClickListener{
         
         ////////********    Handle Date Bar   *********   ////////
         new DateHandler(this);
+        
+        ////////*********     Get Last most accurate location info   *********   /////////
+        LocationLast mLocationLast = new LocationLast(this);
+		mLocationLast.getLastLocation();
 	}
 	
 	private void startCamera() {

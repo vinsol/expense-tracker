@@ -12,7 +12,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 public class LocationLast {
 	
@@ -42,7 +41,12 @@ public class LocationLast {
 				} 
 			
 				int accuracy = (int) Math.ceil(mLocation.getAccuracy() - mTempLocation.getAccuracy());
-				if(accuracy > 0){
+				if(mLocation.getTime() == mTempLocation.getTime()){
+					if(accuracy > 0 ){
+						mLocation = mTempLocation;
+					}
+				}
+				if(mLocation.getTime() < mTempLocation.getTime()){
 					mLocation = mTempLocation;
 				}
 			}
@@ -70,9 +74,9 @@ public class LocationLast {
 		
 		@Override
 		protected void onPostExecute(Void result) {
-			MainActivity.mCurrentLocation = list.get(0).getFeatureName()+"   "+list.get(0).getLocality()+"   "+list.get(0).getAdminArea()+"   "+list.get(0).getCountryName();
+			MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getLocality()+", "+list.get(0).getAdminArea();
 			MainActivity.mLocation = mLocation;
-			Toast.makeText(mContext, MainActivity.mCurrentLocation, Toast.LENGTH_LONG).show();
+			Log.v("loc last", MainActivity.mCurrentLocation);
 			super.onPostExecute(result);
 		}
     }

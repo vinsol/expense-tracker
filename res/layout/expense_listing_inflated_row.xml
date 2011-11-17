@@ -10,6 +10,7 @@
         android:background="@drawable/list_inflated_row_bg"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
+        android:id="@+id/expense_listing_inflated_row_listview"
         >
     
     	<ImageView 
@@ -76,5 +77,11 @@
     	</RelativeLayout>    
     	
     </RelativeLayout>
+    
+    <ImageView 
+        android:layout_below="@id/expense_listing_inflated_row_listview"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:background="@drawable/list_inflated_row_divider"/>
     
 </RelativeLayout>

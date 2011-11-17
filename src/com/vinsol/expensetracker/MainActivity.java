@@ -1,11 +1,15 @@
 package com.vinsol.expensetracker;
 
+import java.util.Calendar;
+import java.util.HashMap;
+
 import com.vinsol.expensetracker.location.LocationData;
+import com.vinsol.expensetracker.location.LocationLast;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -49,8 +53,10 @@ public class MainActivity extends Activity implements OnClickListener{
 		
 		
 		
-		
-		
+//		DatabaseAdapter adapter =new DatabaseAdapter(this);
+//		adapter.open();
+//		adapter.drop_table();
+//		adapter.close();
 		
 		
 		//////     *********    Adding Click Listeners to MainActivity **********   /////////
@@ -95,7 +101,9 @@ public class MainActivity extends Activity implements OnClickListener{
     protected void onResume() {
     	
     	/////////    ********    Starts GPS and Check for Location each time Activity Resumes *******   ////////
-    	new LocationData(this);	
+    	new LocationData(this);
+    	LocationLast mLocationLast = new LocationLast(this);
+		mLocationLast.getLastLocation();
     	super.onResume();
     }
     
@@ -128,13 +136,28 @@ public class MainActivity extends Activity implements OnClickListener{
 		
 		//////   *******    opens Favorite Activity    ********    ///////////
 		else if(v.getId() == R.id.main_favorite){
-			Log.v("Favorite", "Favorite");
+			Intent intentFavorite = new Intent(this, FavoriteActivity.class);
+			startActivity(intentFavorite);
 		}
 		
 		
-		//////   *******    opens SaveReminder Activity    ********    ///////////
+		//////   *******    opens List Activity  and adds unknown entry to database  ********    ///////////
 		else if(v.getId() == R.id.main_save_reminder){
-			Log.v("Save Reminder", "Save Reminder");
+			HashMap<String, String> _list = new HashMap<String, String>();
+			Calendar mCalendar = Calendar.getInstance();
+			_list.put(DatabaseAdapter.KEY_DATE_TIME, mCalendar.getTime().toString());
+			
+			if(MainActivity.mCurrentLocation != null){
+				_list.put(DatabaseAdapter.KEY_LOCATION, MainActivity.mCurrentLocation);
+			}
+			_list.put(DatabaseAdapter.KEY_TYPE, getString(R.string.unknown));
+			_list.put(DatabaseAdapter.KEY_FAVORITE, getString(R.string.favorite_not));
+			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
+			mDatabaseAdapter.open();
+			mDatabaseAdapter.insert_to_database(_list);
+			mDatabaseAdapter.close();
+			Intent intentListView = new Intent(this, ExpenseListing.class);
+			startActivity(intentListView);
 		}
 
 		

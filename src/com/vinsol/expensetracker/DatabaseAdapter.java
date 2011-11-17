@@ -14,17 +14,17 @@ import android.util.Log;
 public class DatabaseAdapter {
 	
 	//database and table name
-		public final String DATABASE_NAME = "ExpenseTrackerDB";
-		public final String TABLE_NAME = "ExpenseTrackerTable";
+		private final String DATABASE_NAME = "ExpenseTrackerDB";
+		private final String TABLE_NAME = "ExpenseTrackerTable";
 		
 		//column index
-		public final String KEY_ID="_id";
-		public final String KEY_TAG="TAG";
-		public final String KEY_AMOUNT="AMOUNT";
-		public final String KEY_DATE_TIME="DATE_TIME";
-		public final String KEY_LOCATION="LOCATION";
-		public final String KEY_FAVORITE="FAVORITE";
-		public final String KEY_TYPE = "TYPE";
+		public static final String KEY_ID="_id";
+		public static final String KEY_TAG="TAG";
+		public static final String KEY_AMOUNT="AMOUNT";
+		public static final String KEY_DATE_TIME="DATE_TIME";
+		public static final String KEY_LOCATION="LOCATION";
+		public static final String KEY_FAVORITE="FAVORITE";
+		public static final String KEY_TYPE = "TYPE";
 		
 		//sql open or create database
 		private final String DATABASE_CREATE= "create table if not exists "+ TABLE_NAME +"("+
@@ -34,7 +34,7 @@ public class DatabaseAdapter {
 				KEY_DATE_TIME+" VARCHAR(255) NOT NULL,"+
 				KEY_LOCATION+" TEXT, "+
 				KEY_FAVORITE+" VARCHAR(1), "+
-				KEY_TYPE+" VARCHAR(1) NOT NULL, "+
+				KEY_TYPE+" VARCHAR(1) NOT NULL "+
 				")";
 		
 		private SQLiteDatabase db;

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="unknown">0</string>
+    <string name="text">1</string>
+    <string name="image">2</string>
+    <string name="voice">3</string>
+    <string name="favorite">T</string>
+    <string name="favorite_not">F</string>
+    
+</resources>

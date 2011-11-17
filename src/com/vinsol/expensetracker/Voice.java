@@ -1,5 +1,6 @@
 package com.vinsol.expensetracker;
 
+import com.vinsol.expensetracker.location.LocationLast;
 import com.vinsol.expensetracker.utils.AudioPlay;
 import com.vinsol.expensetracker.utils.DisplayTime;
 import com.vinsol.expensetracker.utils.RecordingHelper;
@@ -68,6 +69,9 @@ public class Voice extends Activity implements OnClickListener{
 		mRecordingHelper.startRecording();
 		
 		
+		////////*********     Get Last most accurate location info   *********   /////////
+		LocationLast mLocationLast = new LocationLast(this);
+		mLocationLast.getLastLocation();
 	}
 	
 	@Override
