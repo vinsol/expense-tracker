@@ -145,7 +145,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		else if(v.getId() == R.id.main_save_reminder){
 			HashMap<String, String> _list = new HashMap<String, String>();
 			Calendar mCalendar = Calendar.getInstance();
-			_list.put(DatabaseAdapter.KEY_DATE_TIME, mCalendar.getTime().toString());
+			_list.put(DatabaseAdapter.KEY_DATE_TIME, Long.toString(mCalendar.getTimeInMillis()));
 			
 			if(MainActivity.mCurrentLocation != null){
 				_list.put(DatabaseAdapter.KEY_LOCATION, MainActivity.mCurrentLocation);

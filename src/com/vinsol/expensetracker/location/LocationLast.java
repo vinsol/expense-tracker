@@ -74,7 +74,20 @@ public class LocationLast {
 		
 		@Override
 		protected void onPostExecute(Void result) {
-			MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getLocality()+", "+list.get(0).getAdminArea();
+			if(list.get(0).getFeatureName() != null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()!=null)
+    			MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getLocality()+", "+list.get(0).getAdminArea();
+    		else if(list.get(0).getFeatureName() == null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()!=null)
+    			MainActivity.mCurrentLocation = list.get(0).getLocality()+", "+list.get(0).getAdminArea();
+    		else if(list.get(0).getFeatureName() == null && list.get(0).getLocality()==null && list.get(0).getAdminArea()!=null)
+    			MainActivity.mCurrentLocation = list.get(0).getAdminArea();
+    		else if(list.get(0).getFeatureName() == null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()==null)
+    			MainActivity.mCurrentLocation = list.get(0).getLocality();
+    		else if(list.get(0).getFeatureName() != null && list.get(0).getLocality()==null && list.get(0).getAdminArea()==null)
+    			MainActivity.mCurrentLocation = list.get(0).getFeatureName();
+    		else if(list.get(0).getFeatureName() != null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()==null)
+    			MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getLocality();
+    		else if(list.get(0).getFeatureName() != null && list.get(0).getLocality()==null && list.get(0).getAdminArea()!=null)
+    			MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getAdminArea();
 			MainActivity.mLocation = mLocation;
 			Log.v("loc last", MainActivity.mCurrentLocation);
 			super.onPostExecute(result);

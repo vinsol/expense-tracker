@@ -5,6 +5,7 @@ import com.vinsol.expensetracker.location.LocationHelper.LocationResult;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 public class LocationData {
 
@@ -26,6 +27,7 @@ public class LocationData {
 			@Override
 			public void gotLocation(Location _location) {
 				MainActivity.mLocation = _location;
+				Log.v("Got", "Got");
 			}
 		});
 		return null;

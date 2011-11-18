@@ -122,6 +122,12 @@ public class DatabaseAdapter {
 			
 		}
 		
+		protected Cursor getDateDatabase(){
+			
+			return db.rawQuery("select * from "+TABLE_NAME+" order by "+KEY_DATE_TIME+" desc", null);
+			
+		}
+		
 		private class MyCreateOpenHelper extends SQLiteOpenHelper{
 
 			public MyCreateOpenHelper(Context context) {

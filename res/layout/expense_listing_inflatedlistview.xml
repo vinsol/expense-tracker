@@ -9,7 +9,6 @@
         android:layout_width="fill_parent"
         android:background="@drawable/list_date_bg"
         android:gravity="center_vertical"
-        android:layout_alignParentTop="true"
         >
         
         <TextView 
@@ -43,7 +42,6 @@
 	    android:layout_height="wrap_content"
 	    android:layout_width="fill_parent"
 	    android:layout_below="@id/expense_listing_list_date_amount_view"
-	    android:layout_above="@+id/expense_listing_list_add_expenses"
 	    android:id="@+id/expense_listing_inflated_listview"
 	    />
 	
@@ -53,7 +51,7 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:background="@drawable/list_add_expenses_bg"
-	    android:layout_alignParentBottom="true">
+	    android:layout_below="@id/expense_listing_inflated_listview">
 	    
 	    <ImageView 
 	        android:src="@drawable/list_add_expenses_add_button"
