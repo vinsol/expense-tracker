@@ -8,6 +8,7 @@ import java.util.List;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 public class ConvertCursorToListString {
 	Context context;
@@ -15,30 +16,6 @@ public class ConvertCursorToListString {
 		context=_context;
 	}
 	
-	List<HashMap<String, String>> getListStringPArticularDate(){
-		DatabaseAdapter adapter=new DatabaseAdapter(context);
-		adapter.open();
-		Cursor cursor= adapter.getCompleteDatabase();
-		List<HashMap<String, String>> mainlist=new ArrayList<HashMap<String, String>>();
-		cursor.moveToFirst();
-		do{
-			List<String> tempList = new ArrayList<String>();
-			tempList.add(DatabaseAdapter.KEY_ID);
-			tempList.add(DatabaseAdapter.KEY_AMOUNT);
-			tempList.add(DatabaseAdapter.KEY_DATE_TIME);
-			tempList.add(DatabaseAdapter.KEY_FAVORITE);
-			tempList.add(DatabaseAdapter.KEY_LOCATION);
-			tempList.add(DatabaseAdapter.KEY_TAG);
-			tempList.add(DatabaseAdapter.KEY_TYPE);
-			HashMap<String, String> list=getHashMap(tempList,cursor);
-			if(!list.isEmpty())
-				mainlist.add(list);
-			cursor.moveToNext();
-		}
-		while(!cursor.isAfterLast());
-		adapter.close();
-		return mainlist;
-	}
 
 	List<HashMap<String, String>> getDateListString(){
 		HashMap<String, String> list = new HashMap<String, String>();
@@ -60,10 +37,13 @@ public class ConvertCursorToListString {
 				list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
 			}
 			String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
-			if(tempAmount != null){
-				temptotalAmount += Long.parseLong(tempAmount);  
+			Log.v("tempAmount", tempAmount+" yo");
+			if(tempAmount != null ){
+				try{
+					temptotalAmount += Long.parseLong(tempAmount);
+				}catch(NumberFormatException e){}
 			} else {
-				tempAmount = "";
+//				tempAmount = "";
 				isTempAmountNull = true;
 			}
 			
@@ -86,6 +66,7 @@ public class ConvertCursorToListString {
 					}
 					isTempAmountNull = false;
 					list.put(DatabaseAdapter.KEY_AMOUNT, totalAmountString);
+					temptotalAmount = 0;
 				} 
 			}
 			 else {
@@ -128,5 +109,37 @@ public class ConvertCursorToListString {
 			return list;
 			}catch(NullPointerException e){}
 		return null;
+	}
+
+	public List<HashMap<String, String>> getListStringParticularDate() {
+		DatabaseAdapter adapter=new DatabaseAdapter(context);
+		adapter.open();
+		Cursor cursor= adapter.getCompleteDatabase();
+		List<HashMap<String, String>> mainlist=new ArrayList<HashMap<String, String>>();
+		cursor.moveToFirst();
+		do{
+			List<String> tempList = new ArrayList<String>();
+			tempList.add(DatabaseAdapter.KEY_ID);
+			tempList.add(DatabaseAdapter.KEY_AMOUNT);
+//			tempList.add(DatabaseAdapter.KEY_DATE_TIME);
+			tempList.add(DatabaseAdapter.KEY_FAVORITE);
+			tempList.add(DatabaseAdapter.KEY_LOCATION);
+			tempList.add(DatabaseAdapter.KEY_TAG);
+			tempList.add(DatabaseAdapter.KEY_TYPE);
+			HashMap<String, String> list=getHashMap(tempList,cursor);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+			DisplayDate mDisplayDate = new DisplayDate(calendar);
+			list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
+			if(!list.isEmpty())
+				mainlist.add(list);
+			cursor.moveToNext();
+		}
+		while(!cursor.isAfterLast());
+		adapter.close();
+		for(int i=0;i<mainlist.size();i++){
+			Log.v("str "+i, mainlist.get(i).toString());
+		}
+		return mainlist;
 	}
 }

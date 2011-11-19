@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.vinsol.expensetracker.location.LocationLast;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -66,7 +65,6 @@ public class ExpenseListing extends Activity{
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		private MyListAdapter(Context context, int resource,List list1) {
 			super(context, resource,list1);
-			mSubList = mConvertCursorToListString.getListStringPArticularDate();
 		}
 	
 		@Override
@@ -85,7 +83,7 @@ public class ExpenseListing extends Activity{
 			expenses_listing_add_expenses_textview.setText("Add Expenses to "+mHashMap.get(DatabaseAdapter.KEY_DATE_TIME));
 			expenses_listing_list_date_view.setText(mHashMap.get(DatabaseAdapter.KEY_DATE_TIME));
 			expenses_listing_list_amount_view.setText(mHashMap.get(DatabaseAdapter.KEY_AMOUNT));
-			
+			mSubList = mConvertCursorToListString.getListStringParticularDate();
 			mMySubListAdapter = new MySubListAdapter(ExpenseListing.this, R.layout.expense_listing_inflated_row, mSubList);
 			expense_listing_inflated_listview.setAdapter(mMySubListAdapter);
 			return row;
