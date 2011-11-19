@@ -14,13 +14,13 @@ public class FileDelete {
 	}
 
 	private void deleteAll(long _id) {
-		File file = new File("/sdcard/ExpenseTracker/+"+_id+".jpg");
+		File file = new File("/sdcard/ExpenseTracker/"+_id+".jpg");
 		delete(file);
-		file = new File("/sdcard/ExpenseTracker/+"+_id+"_small.jpg");
+		file = new File("/sdcard/ExpenseTracker/"+_id+"_small.jpg");
 		delete(file);
-		file = new File("/sdcard/ExpenseTracker/+"+_id+"_thumbnail.jpg");
+		file = new File("/sdcard/ExpenseTracker/"+_id+"_thumbnail.jpg");
 		delete(file);
-		file = new File("/sdcard/ExpenseTracker/Audio/+"+_id+".amr");
+		file = new File("/sdcard/ExpenseTracker/Audio/"+_id+".amr");
 		delete(file);
 	}
 
