@@ -220,5 +220,4 @@ public class Voice extends Activity implements OnClickListener{
 		}
 
 	}
-	
 }

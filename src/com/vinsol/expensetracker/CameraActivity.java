@@ -2,7 +2,6 @@ package com.vinsol.expensetracker;
 
 import java.io.File;
 import java.util.HashMap;
-
 import com.vinsol.expensetracker.location.LocationLast;
 import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.FileDelete;
@@ -139,7 +138,10 @@ public class CameraActivity extends Activity implements OnClickListener{
 			HashMap<String, String> _list = new HashMap<String, String>();
 			_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
 			_list.put(DatabaseAdapter.KEY_AMOUNT, text_voice_camera_amount.getText().toString());
-			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
+			
+			if(text_voice_camera_tag.getText().toString() != ""){
+				_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
+			}
 			
 			//////    *******   Update database if user added additional info   *******  ///////
 			mDatabaseAdapter.open();
