@@ -40,6 +40,9 @@ public class ExpenseListing extends Activity{
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		Log.v("created", "created");
 		mConvertCursorToListString = new ConvertCursorToListString(this);
+		
+		
+		/////////     *********    Getting list of dates   *******    ///////////
 		mDataDateList = mConvertCursorToListString.getDateListString();
 		if(!mDataDateList.isEmpty()){
 			for(int i=0;i<mDataDateList.size();i++){
@@ -49,6 +52,7 @@ public class ExpenseListing extends Activity{
 			Log.v("mDataDateList ", "empty");
 		}
 		
+		//////////     *********    Setting adapter to listview   ******   ///////////
 		mMyListAdapter = new MyListAdapter(this, R.layout.expense_listing_inflatedlistview, mDataDateList);
 		mListView.setAdapter(mMyListAdapter);
 	}
@@ -62,7 +66,7 @@ public class ExpenseListing extends Activity{
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		private MyListAdapter(Context context, int resource,List list1) {
 			super(context, resource,list1);
-			mSubList = mConvertCursorToListString.getListString();
+			mSubList = mConvertCursorToListString.getListStringPArticularDate();
 		}
 	
 		@Override

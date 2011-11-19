@@ -19,6 +19,7 @@ import android.widget.ImageView;
 public class MainActivity extends Activity implements OnClickListener{
 	public static String mCurrentLocation;
 	public static Location mLocation;
+	private DatabaseAdapter mDatabaseAdapter;
 	
     /** Called when the activity is first created. */
     @Override
@@ -59,6 +60,12 @@ public class MainActivity extends Activity implements OnClickListener{
 //		adapter.close();
 		
 		
+        /////////     *********    DatabaseAdaptor initialize     *********    ////////
+        mDatabaseAdapter = new DatabaseAdapter(this);
+        
+        
+        
+        
 		//////     *********    Adding Click Listeners to MainActivity **********   /////////
 		
 		
@@ -116,6 +123,10 @@ public class MainActivity extends Activity implements OnClickListener{
 		
 		if(v.getId() == R.id.main_text){
 			Intent intentTextEntry = new Intent(this, TextEntry.class);
+			long _id = insertToDatabase(R.string.text);
+			Bundle bundle = new Bundle();
+			bundle.putLong("_id", _id);
+			intentTextEntry.putExtra("textEntryBundle", bundle);
 			startActivity(intentTextEntry);
 		}
 
@@ -123,6 +134,10 @@ public class MainActivity extends Activity implements OnClickListener{
 		//////   *******    opens Voice Activity    ********    ///////////
 		else if (v.getId() == R.id.main_voice){
 			Intent intentVoice = new Intent(this, Voice.class);
+			long _id = insertToDatabase(R.string.voice);
+			Bundle bundle = new Bundle();
+			bundle.putLong("_id", _id);
+			intentVoice.putExtra("voiceBundle", bundle);
 			startActivity(intentVoice);
 		}
 		
@@ -130,6 +145,10 @@ public class MainActivity extends Activity implements OnClickListener{
 		//////   *******    opens Camera Activity    ********    ///////////
 		else if(v.getId() == R.id.main_camera){
 			Intent intentCamera = new Intent(this, CameraActivity.class);
+			long _id = insertToDatabase(R.string.camera);
+			Bundle bundle = new Bundle();
+			bundle.putLong("_id", _id);
+			intentCamera.putExtra("cameraBundle", bundle);
 			startActivity(intentCamera);
 		}
 
@@ -137,25 +156,17 @@ public class MainActivity extends Activity implements OnClickListener{
 		//////   *******    opens Favorite Activity    ********    ///////////
 		else if(v.getId() == R.id.main_favorite){
 			Intent intentFavorite = new Intent(this, FavoriteActivity.class);
+			long _id = insertToDatabase(R.string.favorite_entry);
+			Bundle bundle = new Bundle();
+			bundle.putLong("_id", _id);
+			intentFavorite.putExtra("favoriteBundle", bundle);
 			startActivity(intentFavorite);
 		}
 		
 		
 		//////   *******    opens List Activity  and adds unknown entry to database  ********    ///////////
 		else if(v.getId() == R.id.main_save_reminder){
-			HashMap<String, String> _list = new HashMap<String, String>();
-			Calendar mCalendar = Calendar.getInstance();
-			_list.put(DatabaseAdapter.KEY_DATE_TIME, Long.toString(mCalendar.getTimeInMillis()));
-			
-			if(MainActivity.mCurrentLocation != null){
-				_list.put(DatabaseAdapter.KEY_LOCATION, MainActivity.mCurrentLocation);
-			}
-			_list.put(DatabaseAdapter.KEY_TYPE, getString(R.string.unknown));
-			_list.put(DatabaseAdapter.KEY_FAVORITE, getString(R.string.favorite_not));
-			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
-			mDatabaseAdapter.open();
-			mDatabaseAdapter.insert_to_database(_list);
-			mDatabaseAdapter.close();
+			insertToDatabase(R.string.unknown);
 			Intent intentListView = new Intent(this, ExpenseListing.class);
 			startActivity(intentListView);
 		}
@@ -169,5 +180,22 @@ public class MainActivity extends Activity implements OnClickListener{
 	
 	}
 
+	
+	/////////    ********   function to mark entry into the database and returns the id of the new entry *****  //////
+	private long insertToDatabase(int type){
+		HashMap<String, String> _list = new HashMap<String, String>();
+		Calendar mCalendar = Calendar.getInstance();
+		_list.put(DatabaseAdapter.KEY_DATE_TIME, Long.toString(mCalendar.getTimeInMillis()));
+		
+		if(MainActivity.mCurrentLocation != null){
+			_list.put(DatabaseAdapter.KEY_LOCATION, MainActivity.mCurrentLocation);
+		}
+		_list.put(DatabaseAdapter.KEY_TYPE, getString(type));
+		_list.put(DatabaseAdapter.KEY_FAVORITE, getString(R.string.favorite_not));
+		mDatabaseAdapter.open();
+		long _id = mDatabaseAdapter.insert_to_database(_list);
+		mDatabaseAdapter.close();
+		return _id;
+	}
 	
 }

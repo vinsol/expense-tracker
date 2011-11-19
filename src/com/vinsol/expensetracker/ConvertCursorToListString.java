@@ -15,7 +15,7 @@ public class ConvertCursorToListString {
 		context=_context;
 	}
 	
-	List<HashMap<String, String>> getListString(){
+	List<HashMap<String, String>> getListStringPArticularDate(){
 		DatabaseAdapter adapter=new DatabaseAdapter(context);
 		adapter.open();
 		Cursor cursor= adapter.getCompleteDatabase();
@@ -59,7 +59,6 @@ public class ConvertCursorToListString {
 			if(list.isEmpty()){
 				list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
 			}
-//			Log.v("date", mDisplayDate.getDisplayDate());
 			String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
 			if(tempAmount != null){
 				temptotalAmount += Long.parseLong(tempAmount);  
@@ -104,25 +103,6 @@ public class ConvertCursorToListString {
 				isTempAmountNull = false;
 				list.put(DatabaseAdapter.KEY_AMOUNT, totalAmountString);
 				cursor.moveToNext();
-//				cursor.moveToNext();
-//				if(!cursor.isAfterLast()) {
-//					Calendar mTempSubCalendar = Calendar.getInstance();
-//					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
-//					
-//					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
-//					if(!mDisplayDate.getDisplayDate().equals(mTempDisplayDate.getDisplayDate()))
-////					if(mainlist.get(mainlist.size()-1).get(DatabaseAdapter.KEY_DATE_TIME).equals(mDisplayDate.getDisplayDate())){
-//					{
-//						if(isTempAmountQues){
-//							totalAmountString = temptotalAmount+" ?";
-//						} else {
-//							totalAmountString = temptotalAmount+"";
-//						}
-//						isTempAmountQues = false;
-//						list.put(DatabaseAdapter.KEY_AMOUNT, totalAmountString);
-//						list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());		
-//					}
-//				}
 			}
 			
 			if(!list.isEmpty() && totalAmountString != null) {
@@ -149,6 +129,4 @@ public class ConvertCursorToListString {
 			}catch(NullPointerException e){}
 		return null;
 	}
-	
-	
 }

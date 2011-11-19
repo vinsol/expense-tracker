@@ -128,6 +128,23 @@ public class DatabaseAdapter {
 			
 		}
 		
+//		protected Cursor getParticularDateDatabase(String regex){
+//
+//			String where = "";
+//			
+//			return db.query(TABLE_NAME, 
+//					new String [] { 
+//					KEY_ID,
+//					KEY_TAG,
+//					KEY_AMOUNT,
+//					KEY_DATE_TIME,
+//					KEY_LOCATION,
+//					KEY_FAVORITE,
+//					KEY_TYPE
+//					}, selection, selectionArgs, groupBy, having, orderBy);
+//			
+//		}
+		
 		private class MyCreateOpenHelper extends SQLiteOpenHelper{
 
 			public MyCreateOpenHelper(Context context) {
