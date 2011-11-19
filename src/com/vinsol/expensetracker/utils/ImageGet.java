@@ -32,7 +32,7 @@ public class ImageGet {
 	////////   ********   Constructor **********  ///////////
 	public ImageGet(String file) {
 		mFileName = file;
-		mExpenseTrackerDirectory = new File("/mnt/sdcard/ExpenseTracker");
+		mExpenseTrackerDirectory = new File("/sdcard/ExpenseTracker");
 		
 		File mPathImageByCamera = new File(mExpenseTrackerDirectory, file+".jpg");
 		FileInputStream fileInputStream = null;

@@ -89,12 +89,18 @@ public class DatabaseAdapter {
 		
 		protected boolean editDatabase(HashMap<String, String> _list){
 			ContentValues contentValues=new ContentValues();
-			contentValues.put(KEY_TAG, _list.get(KEY_TAG));
-			contentValues.put(KEY_AMOUNT, _list.get(KEY_AMOUNT));
-			contentValues.put(KEY_DATE_TIME, _list.get(KEY_DATE_TIME));
-			contentValues.put(KEY_LOCATION, _list.get(KEY_LOCATION));
-			contentValues.put(KEY_FAVORITE, _list.get(KEY_FAVORITE));
-			contentValues.put(KEY_TYPE, _list.get(KEY_TYPE));
+			if(_list.get(KEY_TAG) != null)
+				contentValues.put(KEY_TAG, _list.get(KEY_TAG));
+			if(_list.get(KEY_AMOUNT) != null)
+				contentValues.put(KEY_AMOUNT, _list.get(KEY_AMOUNT));
+			if(_list.get(KEY_DATE_TIME) != null)
+				contentValues.put(KEY_DATE_TIME, _list.get(KEY_DATE_TIME));
+			if(_list.get(KEY_LOCATION) != null)
+				contentValues.put(KEY_LOCATION, _list.get(KEY_LOCATION));
+			if(_list.get(KEY_FAVORITE) != null)
+				contentValues.put(KEY_FAVORITE, _list.get(KEY_FAVORITE));
+			if(_list.get(KEY_TYPE) != null)
+				contentValues.put(KEY_TYPE, _list.get(KEY_TYPE));
 			String where = KEY_ID + "="+ _list.get(KEY_ID);
 			try{
 				Log.v("TRYING", "EDITING");

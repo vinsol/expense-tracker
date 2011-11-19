@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.vinsol.expensetracker.location.LocationLast;
 import com.vinsol.expensetracker.utils.CameraFileSave;
+import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.ImageGet;
 
 import android.app.Activity;
@@ -13,6 +14,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -45,6 +47,9 @@ public class CameraActivity extends Activity implements OnClickListener{
         
         setContentView(R.layout.text_voice_camera);
         
+        ////////*********     Get id from intent extras     ********   ////////////
+        intentExtras = getIntent().getBundleExtra("cameraBundle");
+        _id = intentExtras.getLong("_id");
         
         ////////   ********    Initializing and assigning memory to UI Items **********    /////////
         
@@ -66,10 +71,6 @@ public class CameraActivity extends Activity implements OnClickListener{
         LocationLast mLocationLast = new LocationLast(this);
 		mLocationLast.getLastLocation();
 		
-		////////     *********     Get id from intent extras     ********   ////////////
-		intentExtras = getIntent().getBundleExtra("cameraBundle");
-		_id = intentExtras.getLong("_id");
-		
 		////////     ***********      Initializing Database Adaptor   **********  //////////
 		mDatabaseAdapter = new DatabaseAdapter(this);
 	}
@@ -84,14 +85,14 @@ public class CameraActivity extends Activity implements OnClickListener{
         File file = new File(path, name);
 		camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
         startActivityForResult(camera, PICTURE_RESULT);
-        
+        Log.v("_id", _id+"");
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(PICTURE_RESULT == requestCode && Activity.RESULT_OK == resultCode){
-		CameraFileSave cameraFileSave = new CameraFileSave("test1");
+		CameraFileSave cameraFileSave = new CameraFileSave(_id+"");
 		cameraFileSave.create();
 		ImageGet imageGet = new ImageGet(""+_id);
 		Bitmap bm = imageGet.getSmallImage();
@@ -118,6 +119,15 @@ public class CameraActivity extends Activity implements OnClickListener{
 		
 		Button text_voice_camera_save_entry = (Button) findViewById(R.id.text_voice_camera_save_entry);
 		text_voice_camera_save_entry.setOnClickListener(this);
+		
+		Button text_voice_camera_delete = (Button) findViewById(R.id.text_voice_camera_delete);
+		text_voice_camera_delete.setOnClickListener(this);
+		
+		ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
+		text_voice_camera_image_display.setOnClickListener(this);
+		
+		Button text_voice_camera_retake_button = (Button) findViewById(R.id.text_voice_camera_retake_button);
+		text_voice_camera_retake_button.setOnClickListener(this);
 	}
 
 	@Override
@@ -135,29 +145,37 @@ public class CameraActivity extends Activity implements OnClickListener{
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editDatabase(_list);
 			mDatabaseAdapter.close();
+			finish();
 		}
 		
 		
 		/////////     *********   Adding action if delete button **********  /////////
 		
 		if(v.getId() == R.id.text_voice_camera_delete){
+			new FileDelete(_id);
+			
 			//////   *******   Delete entry from database ********   /////////
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(_id));
 			mDatabaseAdapter.close();
+			finish();
 		}
 		
 		
 		//////////      **********    Adding action if image is pressed   ******** ///////////
 		
 		if(v.getId() == R.id.text_voice_camera_image_display){
-			
+			Intent intentImageViewActivity = new Intent(this, ImageViewActivity.class);
+			Bundle intentImageViewActivityBundle = new Bundle();
+			intentImageViewActivityBundle.putLong("_id", _id);
+			intentImageViewActivity.putExtra("intentImageViewActivity", intentImageViewActivityBundle);
+			startActivity(intentImageViewActivity);
 		}
 		
 		/////////   **********   Adding action if retake button is pressed     ******  ////////
 		
 		if(v.getId() == R.id.text_voice_camera_retake_button){
-			
+			startCamera();
 		}
 	}
 }

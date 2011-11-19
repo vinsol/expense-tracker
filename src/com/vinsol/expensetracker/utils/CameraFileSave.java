@@ -39,7 +39,7 @@ public class CameraFileSave {
 	/////////    *********   Constructors   ********    /////////////
 	public CameraFileSave(String _filename) {
 		filename = _filename;
-		mExpenseTrackerDirectory = new File("/mnt/sdcard/ExpenseTracker");
+		mExpenseTrackerDirectory = new File("/sdcard/ExpenseTracker");
 		mExpenseTrackerDirectory.mkdirs();
 		mPathImageByCamera = new File(mExpenseTrackerDirectory, filename+".jpg");
 		FileInputStream fileInputStream = null;
