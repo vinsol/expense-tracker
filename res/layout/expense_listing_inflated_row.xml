@@ -3,6 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
     >
+    
+    
 
     <RelativeLayout 
         android:layout_height="wrap_content"
@@ -48,7 +50,7 @@
     	        android:maxLines="1"
     	        android:textColor="#00539f"
     	        android:text="2 PM at East patel nagar, Delhi."
-    	        android:layout_alignParentBottom="true" 
+    	        android:layout_below="@id/expense_listing_inflated_row_tag"
             	android:typeface="sans"/>
     	    
     	</RelativeLayout>
@@ -63,7 +65,7 @@
     	    >
     	    
     	    <TextView
-    	        android:id="@+id/expense_listing_inflated_row_tag"
+    	        android:id="@+id/expense_listing_inflated_row_amount"
     	        android:layout_width="50dp"
     	        android:layout_height="wrap_content"
     	        android:maxLines="2"

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
+    
+    <!-- List header -->
     <RelativeLayout
         android:id="@+id/expense_listing_list_date_amount_view"
         android:layout_height="wrap_content"
@@ -38,38 +41,4 @@
         
     </RelativeLayout>
     
-	<ListView 
-	    android:layout_height="wrap_content"
-	    android:layout_width="fill_parent"
-	    android:layout_below="@id/expense_listing_list_date_amount_view"
-	    android:id="@+id/expense_listing_inflated_listview"
-	    />
-	<!-- android:layout_below="@id/expense_listing_inflated_listview" -->
-	
-	<LinearLayout
-	    android:id="@+id/expense_listing_list_add_expenses"
-	    android:gravity="center"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:background="@drawable/list_add_expenses_bg"
-	    android:layout_alignParentBottom="true">
-	    
-	    <ImageView 
-	        android:src="@drawable/list_add_expenses_add_button"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"/>
-	    
-	    <TextView 
-	        android:id="@+id/expenses_listing_add_expenses_textview"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:paddingLeft="10dp"
-	        android:paddingRight="10dp"
-            android:textStyle="bold" 
-            android:typeface="sans"
-	        android:text="Add expenses to today"
-            android:textColor="#00539f"/>
-	    
-	</LinearLayout>
-	
-</RelativeLayout>
+</LinearLayout>

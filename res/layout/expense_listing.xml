@@ -2,21 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-
-    
-    
-    <!-- Body --> 
-    <ListView 
-       	android:id="@+id/expense_listing_listview"
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:layout_below="@+id/expense_listing_header"
-        android:background="@drawable/expense_listing_listview_bg"
-        
-        ></ListView>
-	<!-- Header -->
+	
+    <!-- Header -->
     <RelativeLayout
-        android:id="@id/expense_listing_header"
+        android:id="@+id/expense_listing_header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -35,6 +24,16 @@
             android:textStyle="bold" 
             android:typeface="sans"/>
     </RelativeLayout>
+   
+    
+    <!-- Body --> 
+    <ListView 
+       	android:id="@+id/expense_listing_listview"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:background="@drawable/expense_listing_listview_bg"
+        ></ListView>
+	
     
 
 </RelativeLayout>
