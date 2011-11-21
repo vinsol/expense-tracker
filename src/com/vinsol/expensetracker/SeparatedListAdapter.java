@@ -8,6 +8,7 @@ import java.util.Map;
 import com.vinsol.expensetracker.R;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ class SeparatedListAdapter extends BaseAdapter {
 	public final static int TYPE_SECTION_HEADER = 0;
 	public final static int TYPE_SECTION_FOOTER = 0;
 	private Context mContext;
-	private List<HashMap<String, String>> mSubList;
+	private List<List<List<String>>> mSubList;
 	private List<HashMap<String, String>> mDatadateList;
 	
 	public SeparatedListAdapter(Context context) {
@@ -34,8 +35,8 @@ class SeparatedListAdapter extends BaseAdapter {
 		
 	}
 
-	public void addSection(String section, Adapter adapter, List<HashMap<String, String>> _mSubList, List<HashMap<String, String>> _mDataDateList) {
-		mSubList = _mSubList;
+	public void addSection(String section, Adapter adapter, List<List<List<String>>> listString, List<HashMap<String, String>> _mDataDateList) {
+		mSubList = listString;
 		mDatadateList = _mDataDateList;
 		this.headers.add(section);
 		this.footers.add(section);
@@ -65,7 +66,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		// total together all sections, plus one for each section header
 		int total = 0;
 		for(Adapter adapter : this.sections.values())
-			total += adapter.getCount() + 2;
+			total += adapter.getCount() + 2 ;
 		return total;
 	}
 
@@ -85,7 +86,9 @@ class SeparatedListAdapter extends BaseAdapter {
 
 			// check if position inside this section
 			if(position == 0) return TYPE_SECTION_HEADER;
-			if(position < size-1) return type + adapter.getItemViewType(position - 1);
+			if(position < size-1) {
+				return type + adapter.getItemViewType(position - 1);
+			}
 			if(position < size) return TYPE_SECTION_FOOTER;
 			// otherwise jump into next section
 			position -= size;
@@ -105,6 +108,7 @@ class SeparatedListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		int sectionnum = 0;
+		
 		for(Object section : this.sections.keySet()) {
 			Adapter adapter = sections.get(section);
 			int size = adapter.getCount() + 2;
@@ -126,15 +130,24 @@ class SeparatedListAdapter extends BaseAdapter {
 				expenses_listing_list_amount_view.setText(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_AMOUNT));
 				return header;
 			}
-			
-			if(position < size-1){ 
-				TextView expense_listing_inflated_row_tag = (TextView) row.findViewById(R.id.expense_listing_inflated_row_tag);
-				TextView expense_listing_inflated_row_amount = (TextView) row.findViewById(R.id.expense_listing_inflated_row_amount);
-				TextView expense_listing_inflated_row_location_time = (TextView) row.findViewById(R.id.expense_listing_inflated_row_location_time);
+			if(position < size-1){
+//				for(int i = 0;i < mSubList.get(position).get(i).size();i++){
+//					try{
+//						Log.v("pos", position-1+" "+mSubList.get(position-1).size());
+////						TextView expense_listing_inflated_row_tag = (TextView) row.findViewById(R.id.expense_listing_inflated_row_tag);
+////						expense_listing_inflated_row_tag.setText(mSubList.get(position-1).get(i).get(1));
+//						Log.v("text "+i, mSubList.get(position).get(i).toString());
+//					} catch (Exception e){}
+//				}
 				
-				expense_listing_inflated_row_tag.setText(mSubList.get(position-1).get(DatabaseAdapter.KEY_TAG));
-				expense_listing_inflated_row_amount.setText(mSubList.get(position-1).get(DatabaseAdapter.KEY_AMOUNT));
-				expense_listing_inflated_row_location_time.setText(mSubList.get(position-1).get(DatabaseAdapter.KEY_LOCATION));
+				for(int i = 0 ;i<adapter.getCount();i++){
+					List<String> mlist = (List<String>) adapter.getItem(position-1);
+					Log.v("i "+i, mlist.get(3));
+				}				
+				List<String> mlist = (List<String>) adapter.getItem(position-1);
+				TextView expense_listing_inflated_row_location_time = (TextView) row.findViewById(R.id.expense_listing_inflated_row_location_time);
+				expense_listing_inflated_row_location_time.setText(mlist.get(3));
+//				}
 				return row;
 			}
 			
@@ -146,9 +159,12 @@ class SeparatedListAdapter extends BaseAdapter {
 			// otherwise jump into next section
 			position -= size;
 			sectionnum++;
+			
+			
 		}
 		return null;
 	}
+	
 
 	@Override
 	public long getItemId(int position) {
