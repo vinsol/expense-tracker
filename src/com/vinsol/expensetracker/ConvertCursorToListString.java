@@ -8,7 +8,6 @@ import java.util.List;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 public class ConvertCursorToListString {
 	Context context;
@@ -37,7 +36,6 @@ public class ConvertCursorToListString {
 				list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
 			}
 			String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
-			Log.v("tempAmount", tempAmount+" yo");
 			if(tempAmount != null ){
 				try{
 					temptotalAmount += Long.parseLong(tempAmount);
@@ -114,7 +112,7 @@ public class ConvertCursorToListString {
 	public List<HashMap<String, String>> getListStringParticularDate() {
 		DatabaseAdapter adapter=new DatabaseAdapter(context);
 		adapter.open();
-		Cursor cursor= adapter.getCompleteDatabase();
+		Cursor cursor= adapter.getDateDatabase();
 		List<HashMap<String, String>> mainlist=new ArrayList<HashMap<String, String>>();
 		cursor.moveToFirst();
 		do{
@@ -126,20 +124,19 @@ public class ConvertCursorToListString {
 			tempList.add(DatabaseAdapter.KEY_LOCATION);
 			tempList.add(DatabaseAdapter.KEY_TAG);
 			tempList.add(DatabaseAdapter.KEY_TYPE);
+			
 			HashMap<String, String> list=getHashMap(tempList,cursor);
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 			DisplayDate mDisplayDate = new DisplayDate(calendar);
 			list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
+			list.put(DatabaseAdapter.KEY_DATE_TIME+"Millis", cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 			if(!list.isEmpty())
 				mainlist.add(list);
 			cursor.moveToNext();
 		}
 		while(!cursor.isAfterLast());
 		adapter.close();
-		for(int i=0;i<mainlist.size();i++){
-			Log.v("str "+i, mainlist.get(i).toString());
-		}
 		return mainlist;
 	}
 }

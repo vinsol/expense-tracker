@@ -5,19 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.vinsol.expensetracker.location.LocationLast;
-import com.vinsol.expensetracker.utils.SeparatedListAdapter;
-
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class ExpenseListing extends Activity{
 	
@@ -40,142 +32,109 @@ public class ExpenseListing extends Activity{
         ////////   *********     Get Last most accurate location info   *********   /////////
         LocationLast mLocationLast = new LocationLast(this);
 		mLocationLast.getLastLocation();
-//		mListView = (ListView) findViewById(R.id.expense_listing_listview);
-		Log.v("created", "created");
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		
 		
 		/////////     *********    Getting list of dates   *******    ///////////
 		mDataDateList = mConvertCursorToListString.getDateListString();
 		mSubList = mConvertCursorToListString.getListStringParticularDate();
-		if(!mDataDateList.isEmpty()){
-			for(int i=0;i<mDataDateList.size();i++){
-				Log.v("mDataDateList "+i, mDataDateList.get(i).toString());
-			}
-		} else {
-			Log.v("mDataDateList ", "empty");
-		}
-//		RelativeLayout expense_listing_list_date_amount_view = (RelativeLayout) findViewById(R.id.expense_listing_list_date_amount_view);
-//		LinearLayout expense_listing_list_add_expenses = (LinearLayout) findViewById(R.id.expense_listing_list_add_expenses);
-		
+//		if(!mDataDateList.isEmpty()){
+//			for(int i=0;i<mDataDateList.size();i++){
+//				Log.v("mDataDateList "+i, mDataDateList.get(i).toString());
+//			}
+//		} else {
+//			Log.v("mDataDateList ", "empty");
+//		}
 		
 		//////////     *********    Setting adapter to listview   ******   ///////////
-		
-//		for(int i=0;i<mSubList.size();i++){
-		{
-			HashMap<String, String> _hashmap = mSubList.get(0);
+		int j = 0;
+		mSeparatedListAdapter = new SeparatedListAdapter(this);
+		for(int i=0;i<mDataDateList.size();i++){
 			List<String> _list = new ArrayList<String>();
-			_list.add(_hashmap.get(DatabaseAdapter.KEY_ID));
-			_list.add("2");
-			_list.add("5");
-			mSeparatedListAdapter = new SeparatedListAdapter(this);
-			mSeparatedListAdapter.addSection("Array test", new ArrayAdapter<String>(this,
-					R.layout.expense_listing, _list));
-			mSeparatedListAdapter.addSection("Array F", new ArrayAdapter<String>(this,
-					R.layout.expense_listing, _list));
-//			mMyListAdapter = new MyListAdapter(this, R.layout.expense_listing_inflated_row, _list);
-//			View list_header = getLayoutInflater().inflate(R.layout.mainlist_header_view, null);
-//			mListView.addHeaderView(list_header);
+			String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
+			while(j < mSubList.size() && date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
+				_list.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
+				j++;
+			}
+//			if(mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null || mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != "")
+//				_list.add(mSubList.get(j).get(DatabaseAdapter.KEY_TAG));
+//			else {
+//				if(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))){
+//					_list.add("Unfinished Camera Entry");
+//				} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.voice))) {
+//					_list.add("Unfinished Voice Entry");
+//				} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.text))) {
+//					_list.add("Unfinished Text Entry");
+//				} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.favorite_entry))) {
+//					_list.add("Unfinished Favorite Entry");
+//				} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.unknown))) {
+//					_list.add("Unknown Entry");
+//				}
+//			}
+//			
+//			if(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != null || mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != ""){
+//				_list.add(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT));
+//			} else {
+//				_list.add("");
+//			}
+//			
+//			///////   *******  Adding location date data to list   *******   //////////
+//			
+//			if(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != null && mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != "" &&
+//					mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null && mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != "") {
+//				_list.add(getLocationDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis"),mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
+//			} 
+//			
+//			else if (mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != null && mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != "" &&
+//					(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) == null || mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) == "")) {
+//				_list.add(getLocationDateDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+//			} 
+//			
+//			else if ((mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") == null || mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") == "") &&
+//					mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null && mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != "") {
+//				_list.add("Unknown time at "+ mSubList.get(j).get(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
+//			} 
+//			
+//			else {
+//				_list.add("Unknown Location and Date");
+//			}
+//			
+//			
+//			
+//			if(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE) != null || mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE) != ""){
+//				_list.add(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE));
+//			} else {
+//				_list.add("");
+//			}
+//			
+//			if(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE) != null || mSubList.get(j).get(DatabaseAdapter.KEY_TYPE) != ""){
+//				_list.add(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE));
+//			} else {
+//				_list.add("");
+//			}
+			mSeparatedListAdapter.addSection(i+"", new ArrayAdapter<String>(this,R.layout.expense_listing, _list) , mSubList, mDataDateList);
 			
 		}
-//		Toast.makeText(this, ""+mSubList.size(), Toast.LENGTH_LONG);
-//		mListView.addFooterView(expense_listing_list_add_expenses);
-		
-		
-//		mListView.setAdapter(mMyListAdapter);
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setAdapter(mSeparatedListAdapter);
-//		this.setContentView(mListView);
-		
-		
-		
 	}
 	
-	
-	private class MyListAdapter extends ArrayAdapter<String>{
-		
-//		List<HashMap<String, String>> mSubList;
-//		MySubListAdapter mMySubListAdapter;
-//		Context mContext;
-		
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		private MyListAdapter(Context context, int resource,List list1) {
-			super(context, resource,list1);
-//			mContext = context;
-		}
-	
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			
-			LayoutInflater inflater=(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View row =inflater.inflate(R.layout.expense_listing_inflated_row, parent,false);
-
-			
-			
-			
-			HashMap<String, String> mHashMap = new HashMap<String, String>();
-			mHashMap = mSubList.get(position);
-			
-//			
-//			
-			TextView expense_listing_inflated_row_tag = (TextView) row.findViewById(R.id.expense_listing_inflated_row_tag);
-			TextView expense_listing_inflated_row_location_time = (TextView) row.findViewById(R.id.expense_listing_inflated_row_location_time);
-			TextView expense_listing_inflated_row_amount = (TextView) row.findViewById(R.id.expense_listing_inflated_row_amount);
-			expense_listing_inflated_row_tag.setText(mHashMap.get(DatabaseAdapter.KEY_TAG));
-			expense_listing_inflated_row_amount.setText(mHashMap.get(DatabaseAdapter.KEY_AMOUNT));
-			expense_listing_inflated_row_location_time.setText(mHashMap.get(DatabaseAdapter.KEY_LOCATION));
-			
-//			TextView expenses_listing_list_date_view = (TextView) row.findViewById(R.id.expenses_listing_list_date_view);
-//			TextView expenses_listing_list_amount_view = (TextView) row.findViewById(R.id.expenses_listing_list_amount_view);
-//			TextView expenses_listing_add_expenses_textview = (TextView) row.findViewById(R.id.expenses_listing_add_expenses_textview);
-//			ListView expense_listing_inflated_listview = (ListView) row.findViewById(R.id.expense_listing_inflated_listview);
-//			HashMap<String, String> mHashMap = new HashMap<String, String>();
-//			
-//			mHashMap = mDataDateList.get(position);
-//			expenses_listing_add_expenses_textview.setText("Add Expenses to "+mHashMap.get(DatabaseAdapter.KEY_DATE_TIME));
-//			expenses_listing_list_date_view.setText(mHashMap.get(DatabaseAdapter.KEY_DATE_TIME));
-//			expenses_listing_list_amount_view.setText(mHashMap.get(DatabaseAdapter.KEY_AMOUNT));
-//			mSubList = mConvertCursorToListString.getListStringParticularDate();
-//			Toast.makeText(mContext, "MainListView" , Toast.LENGTH_LONG).show();
-			
-//			mMySubListAdapter = new MySubListAdapter(ExpenseListing.this, R.id.expense_listing_inflated_listview, mSubList);
-//			
-//			expense_listing_inflated_listview.setAdapter(mMySubListAdapter);
-			
-			
-//			expense_listing_inflated_listview.set
-			
-			return row;
-		}
-//		
-//		private class MySubListAdapter extends ArrayAdapter<String>{
-//			
-//			@SuppressWarnings({ "rawtypes", "unchecked" })
-//			private MySubListAdapter(Context context, int resource,List list1) {
-//				super(context, resource,list1);
-//				
-//			}
-//		
-//			@Override
-//			public View getView(int position, View convertView, ViewGroup parent) {
-//				
-//				LayoutInflater inflater=(LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//				View row =inflater.inflate(R.layout.expense_listing_inflated_row, parent,false);
-//				HashMap<String, String> mHashMap = new HashMap<String, String>();
-//				mHashMap = mSubList.get(position);
-//				
-//				
-//				TextView expense_listing_inflated_row_tag = (TextView) row.findViewById(R.id.expense_listing_inflated_row_tag);
-//				TextView expense_listing_inflated_row_location_time = (TextView) row.findViewById(R.id.expense_listing_inflated_row_location_time);
-//				TextView expense_listing_inflated_row_amount = (TextView) row.findViewById(R.id.expense_listing_inflated_row_amount);
-//				expense_listing_inflated_row_tag.setText(mHashMap.get(DatabaseAdapter.KEY_TAG));
-//				expense_listing_inflated_row_amount.setText(mHashMap.get(DatabaseAdapter.KEY_AMOUNT));
-//				expense_listing_inflated_row_location_time.setText(mHashMap.get(DatabaseAdapter.KEY_LOCATION));
-//				Toast.makeText(ExpenseListing.this, "Yo" , Toast.LENGTH_LONG).show();
-//				
-//				return row;
-//			}	
-//	    }
-    }
+//	private String getLocationDateDate(String dateInMillis) {
+//		Calendar tempCalendar = Calendar.getInstance();
+//		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+//		if(tempCalendar.get(Calendar.MINUTE) != 0)
+//			return tempCalendar.get(Calendar.HOUR) + ":"+ tempCalendar.get(Calendar.MINUTE)+" "+tempCalendar.get(Calendar.AM_PM)+" at Unknown location";
+//		else 
+//			return tempCalendar.get(Calendar.HOUR) + ":"+" "+tempCalendar.get(Calendar.AM_PM)+" at Unknown location";
+//	}
+//	
+//	private String getLocationDate(String dateInMillis, String locationData) {
+//		Calendar tempCalendar = Calendar.getInstance();
+//		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+//		if(tempCalendar.get(Calendar.MINUTE) != 0)
+//			return tempCalendar.get(Calendar.HOUR) + ":"+ tempCalendar.get(Calendar.MINUTE)+" "+tempCalendar.get(Calendar.AM_PM)+" at "+locationData;
+//		else 
+//			return tempCalendar.get(Calendar.HOUR) + ":"+" "+tempCalendar.get(Calendar.AM_PM)+" at "+locationData;
+//	}
 	
 }
