@@ -3,11 +3,48 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
     
+   	<!-- Header -->
+    <RelativeLayout
+        android:id="@+id/main_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/topbar_bg" 
+        >
+
+        <ImageView
+            android:id="@+id/main_listview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/list_icon_states" 
+            android:paddingRight="5dp"
+            android:paddingLeft="10dp"
+            >
+        </ImageView>
+
+        <TextView
+            android:id="@+id/main_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:hapticFeedbackEnabled="false"
+            android:text="Expense Tracker"
+            android:textAppearance="?android:attr/textAppearanceLarge" 
+            android:textStyle="bold" 
+            android:typeface="sans"
+            >
+        </TextView>
+    </RelativeLayout>    
+    
     <!-- ScrollView for body-->
     <ScrollView
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
-        android:layout_below="@+id/main_header"
+        android:layout_below="@id/main_header"
         android:layout_above="@+id/main_footer"
         android:background="@drawable/home_bg"
         android:id="@+id/main_body">
@@ -106,36 +143,4 @@
             android:background="@drawable/save_reminder_states" />
 
     </RelativeLayout>
-	<!-- Header -->
-    <RelativeLayout
-        android:id="@id/main_header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/topbar_bg" >
-
-        <ImageView
-            android:id="@+id/main_listview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/list_icon_states" 
-            android:paddingRight="5dp"
-            android:paddingLeft="10dp"/>
-
-        <TextView
-            android:id="@+id/main_header_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:hapticFeedbackEnabled="false"
-            android:text="Expense Tracker"
-            android:textAppearance="?android:attr/textAppearanceLarge" 
-            android:textStyle="bold" 
-            android:typeface="sans"/>
-    </RelativeLayout>
-
 </RelativeLayout>
