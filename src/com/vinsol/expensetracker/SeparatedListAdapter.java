@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.utils.ImageGet;
+import com.vinsol.expensetracker.utils.RecordingHelper;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +18,9 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 class SeparatedListAdapter extends BaseAdapter {
 
@@ -25,18 +30,17 @@ class SeparatedListAdapter extends BaseAdapter {
 	public final static int TYPE_SECTION_HEADER = 0;
 	public final static int TYPE_SECTION_FOOTER = 0;
 	private Context mContext;
-	private List<List<List<String>>> mSubList;
+	private RecordingHelper mRecordingHelper;
 	private List<HashMap<String, String>> mDatadateList;
 	
 	public SeparatedListAdapter(Context context) {
 		mContext = context;
 		headers = new ArrayAdapter<String>(context, R.layout.mainlist_header_view);
 		footers = new ArrayAdapter<String>(context, R.layout.main_list_footerview);
-		
 	}
 
-	public void addSection(String section, Adapter adapter, List<List<List<String>>> listString, List<HashMap<String, String>> _mDataDateList) {
-		mSubList = listString;
+	public void addSection(String section, Adapter adapter, List<HashMap<String, String>> _mDataDateList) {
+		
 		mDatadateList = _mDataDateList;
 		this.headers.add(section);
 		this.footers.add(section);
@@ -114,15 +118,9 @@ class SeparatedListAdapter extends BaseAdapter {
 			int size = adapter.getCount() + 2;
 			// check if position inside this section
 			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			
-//			if(position == 0) return headers.getView(sectionnum, convertView, parent);
-			
 			View header = inflater.inflate(R.layout.mainlist_header_view, null);
-//			header.
 			View row = inflater.inflate(R.layout.expense_listing_inflated_row, null);
 			View footer = inflater.inflate(R.layout.main_list_footerview, null);
-//			footer.setLayoutParams(params);
-//			if(position == 0) return headers.getView(sectionnum, convertView, parent);
 			if(position == 0){
 				TextView expenses_listing_list_date_view = (TextView) header.findViewById(R.id.expenses_listing_list_date_view);
 				TextView expenses_listing_list_amount_view = (TextView) header.findViewById(R.id.expenses_listing_list_amount_view);
@@ -131,14 +129,6 @@ class SeparatedListAdapter extends BaseAdapter {
 				return header;
 			}
 			if(position < size-1){
-//				for(int i = 0;i < mSubList.get(position).get(i).size();i++){
-//					try{
-//						Log.v("pos", position-1+" "+mSubList.get(position-1).size());
-////						TextView expense_listing_inflated_row_tag = (TextView) row.findViewById(R.id.expense_listing_inflated_row_tag);
-////						expense_listing_inflated_row_tag.setText(mSubList.get(position-1).get(i).get(1));
-//						Log.v("text "+i, mSubList.get(position).get(i).toString());
-//					} catch (Exception e){}
-//				}
 				
 				for(int i = 0 ;i<adapter.getCount();i++){
 					List<String> mlist = (List<String>) adapter.getItem(position-1);
@@ -146,8 +136,29 @@ class SeparatedListAdapter extends BaseAdapter {
 				}				
 				List<String> mlist = (List<String>) adapter.getItem(position-1);
 				TextView expense_listing_inflated_row_location_time = (TextView) row.findViewById(R.id.expense_listing_inflated_row_location_time);
+				TextView expense_listing_inflated_row_tag = (TextView) row.findViewById(R.id.expense_listing_inflated_row_tag);
+				TextView expense_listing_inflated_row_amount = (TextView) row.findViewById(R.id.expense_listing_inflated_row_amount);
+				ImageView expense_listing_inflated_row_imageview = (ImageView) row.findViewById(R.id.expense_listing_inflated_row_imageview);
+				if(mlist.get(5).equals(mContext.getString(R.string.camera))){
+					try{
+						ImageGet imageGet = new ImageGet(mlist.get(0));
+						Bitmap bm = imageGet.getThumbnailImage();;
+						expense_listing_inflated_row_imageview.setImageBitmap(bm);
+					} catch (Exception e){
+						Toast.makeText(mContext, "Image Not Available", Toast.LENGTH_LONG);
+					}
+				} else if(mlist.get(5).equals(mContext.getString(R.string.text))){
+					expense_listing_inflated_row_imageview.setImageResource(R.drawable.text_list_icon);
+				} else if(mlist.get(5).equals(mContext.getString(R.string.unknown))){
+					expense_listing_inflated_row_imageview.setImageResource(R.drawable.unknown_list_icon);
+				} else if(mlist.get(5).equals(mContext.getString(R.string.voice))){
+					expense_listing_inflated_row_imageview.setImageResource(R.drawable.audio_play_list_icon);
+				} else if(mlist.get(5).equals(mContext.getString(R.string.favorite_entry))){
+					
+				}
 				expense_listing_inflated_row_location_time.setText(mlist.get(3));
-//				}
+				expense_listing_inflated_row_tag.setText(mlist.get(1));
+				expense_listing_inflated_row_amount.setText(mlist.get(2));
 				return row;
 			}
 			

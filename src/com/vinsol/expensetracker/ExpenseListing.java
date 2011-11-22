@@ -54,22 +54,16 @@ public class ExpenseListing extends Activity{
 		List listString = new ArrayList<List<List<String>>>();
 //		for()
 		for(int i=0;i<mDataDateList.size();i++){
-			List<String> _list = new ArrayList<String>();
 			List<List<String>> mList = new ArrayList<List<String>>();
 			String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
-//			while(j < mSubList.size() && date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
-//				listString = new ArrayList<List<String>>();
-//				j++;
-//			}
 			
 			while(j < mSubList.size() && date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
 				List<String> _templist = new ArrayList<String>();
 				_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
-				_list.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
-				
-			
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null || mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != "")
+				if(mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_TAG).equals("")){
 					_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TAG));
+					Log.v("true", "true "+j+" "+mSubList.get(j).get(DatabaseAdapter.KEY_TAG)+" io");
+				}
 				else {
 					if(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))){
 						_templist.add("Unfinished Camera Entry");
@@ -84,26 +78,27 @@ public class ExpenseListing extends Activity{
 					}
 				}
 			
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != null || mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != ""){
+				
+				if(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT).equals("")){
 					_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT));
 				} else {
-					_templist.add("");
+					_templist.add("?");
 				}
 			
 				///////   *******  Adding location date data to list   *******   //////////
 			
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != null && mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != "" &&
-					mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null && mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != "") {
+				if(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != null && !mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis").equals("") &&
+					mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals("")) {
 					_templist.add(getLocationDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis"),mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
 				} 
 			
-				else if (mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != null && mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != "" &&
-						(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) == null || mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) == "")) {
+				else if (mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != null && !mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis").equals("") &&
+						(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) == null || mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals(""))) {
 					_templist.add(getLocationDateDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 				} 
 			
-				else if ((mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") == null || mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") == "") &&
-						mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null && mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != "") {
+				else if ((mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") == null || mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis").equals("")) &&
+						mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals("")) {
 					_templist.add("Unknown time at "+ mSubList.get(j).get(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
 				} 
 			
@@ -113,13 +108,13 @@ public class ExpenseListing extends Activity{
 			
 			
 			
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE) != null || mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE) != ""){
+				if(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE).equals("")){
 					_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE));
 				} else {
 					_templist.add("");
 				}
 			
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE) != null || mSubList.get(j).get(DatabaseAdapter.KEY_TYPE) != ""){
+				if(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals("")){
 					_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE));
 				} else {
 					_templist.add("");
@@ -130,10 +125,10 @@ public class ExpenseListing extends Activity{
 				}
 				listString.add(mList);
 				List tt = (List) listString.get(i);
-				mSeparatedListAdapter.addSection(i+"", new ArrayAdapter<String>(this,R.layout.expense_listing, tt) , listString, mDataDateList);
-			
+				mSeparatedListAdapter.addSection(i+"", new ArrayAdapter<String>(this,R.layout.expense_listing, tt), mDataDateList);
 			
 			}
+		Log.v("mlist", listString.toString());
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setAdapter(mSeparatedListAdapter);
 	}
@@ -141,19 +136,52 @@ public class ExpenseListing extends Activity{
 	private String getLocationDateDate(String dateInMillis) {
 		Calendar tempCalendar = Calendar.getInstance();
 		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		int hour = tempCalendar.get(Calendar.HOUR);
+		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
+		if(minute.length() == 1){
+			minute = "0"+minute;
+		}
+		if(hour == 0){
+			hour = 12;
+		}
 		if(tempCalendar.get(Calendar.MINUTE) != 0)
-			return tempCalendar.get(Calendar.HOUR) + ":"+ tempCalendar.get(Calendar.MINUTE)+" "+tempCalendar.get(Calendar.AM_PM)+" at Unknown location";
+			if(tempCalendar.get(Calendar.AM_PM) == 1)
+				return hour + ":"+ minute+" "+"PM"+" at Unknown location";
+			if(tempCalendar.get(Calendar.AM_PM) == 0)
+				return hour + ":"+ minute+" "+"AM"+" at Unknown location";
+			
 		else 
-			return tempCalendar.get(Calendar.HOUR) + ":"+" "+tempCalendar.get(Calendar.AM_PM)+" at Unknown location";
+			if(tempCalendar.get(Calendar.AM_PM) == 1)
+				return hour + ":"+" "+"PM"+" at Unknown location";
+			if(tempCalendar.get(Calendar.AM_PM) == 0)
+				return hour + ":"+" "+"AM"+" at Unknown location";
+			
+		return null;
 	}
 	
 	private String getLocationDate(String dateInMillis, String locationData) {
 		Calendar tempCalendar = Calendar.getInstance();
 		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		int hour = tempCalendar.get(Calendar.HOUR);
+		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
+		if(minute.length() == 1){
+			minute = "0"+minute;
+		}
+		Log.v("hour", hour+"");
+		if(hour == 0){
+			hour = 12;
+		}
 		if(tempCalendar.get(Calendar.MINUTE) != 0)
-			return tempCalendar.get(Calendar.HOUR) + ":"+ tempCalendar.get(Calendar.MINUTE)+" "+tempCalendar.get(Calendar.AM_PM)+" at "+locationData;
+			if(tempCalendar.get(Calendar.AM_PM) == 1)
+				return  hour+ ":"+ minute+" "+"PM"+" at "+locationData;
+			if(tempCalendar.get(Calendar.AM_PM) == 0)
+				return  hour+ ":"+ minute+" "+"AM"+" at "+locationData;
 		else 
-			return tempCalendar.get(Calendar.HOUR) + ":"+" "+tempCalendar.get(Calendar.AM_PM)+" at "+locationData;
+			if(tempCalendar.get(Calendar.AM_PM) == 1)
+				return hour + ":"+" "+"PM"+" at "+locationData;
+			if(tempCalendar.get(Calendar.AM_PM) == 0)
+				return hour + ":"+" "+"AM"+" at "+locationData;
+		return null;
 	}
 	
 }
