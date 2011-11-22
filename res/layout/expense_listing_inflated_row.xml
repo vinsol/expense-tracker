@@ -9,7 +9,6 @@
     <RelativeLayout 
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:background="@drawable/list_inflated_row_bg"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:id="@+id/expense_listing_inflated_row_listview"

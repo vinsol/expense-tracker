@@ -21,6 +21,8 @@ public class ExpenseListing extends Activity{
 //	private MyListAdapter mMyListAdapter;
 	private SeparatedListAdapter mSeparatedListAdapter;
 	List<HashMap<String, String>> mSubList;
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,6 +53,7 @@ public class ExpenseListing extends Activity{
 		//////////     *********    Setting adapter to listview   ******   ///////////
 		int j = 0;
 		mSeparatedListAdapter = new SeparatedListAdapter(this);
+		@SuppressWarnings("rawtypes")
 		List listString = new ArrayList<List<List<String>>>();
 //		for()
 		for(int i=0;i<mDataDateList.size();i++){
@@ -124,6 +127,7 @@ public class ExpenseListing extends Activity{
 			
 				}
 				listString.add(mList);
+				@SuppressWarnings("rawtypes")
 				List tt = (List) listString.get(i);
 				mSeparatedListAdapter.addSection(i+"", new ArrayAdapter<String>(this,R.layout.expense_listing, tt), mDataDateList);
 			
