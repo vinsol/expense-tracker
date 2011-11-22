@@ -47,43 +47,38 @@
         android:layout_below="@id/main_header"
         android:layout_above="@+id/main_footer"
         android:background="@drawable/home_bg"
-        android:id="@+id/main_body">
+        android:id="@+id/main_body"
+        >
     
-	<!-- Body -->
-        
-        <RelativeLayout
+		<!-- Body -->
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
            	android:paddingTop="15dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp">
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
         
        		<LinearLayout
         		android:id="@+id/main_graph"
-        		android:layout_width="fill_parent"
+        		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
         		android:orientation="horizontal" 
         		android:background="@drawable/graph"
-        		android:layout_marginBottom="20dp"/>
+        		android:layout_marginBottom="20dp"
+        		>
+       		</LinearLayout>
 
-    		
-    		<RelativeLayout
-        		android:layout_width="fill_parent"
+    		<!-- text and voice button -->
+    		<LinearLayout
+        		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
         		android:layout_below="@id/main_graph"
         		android:id="@+id/main_text_voice"
         		android:background="@drawable/text_voice"
-        		android:layout_marginBottom="20dp">
-
-        		<Button
-        		    android:id="@+id/main_voice"
-        		    android:layout_width="wrap_content"
-        		    android:layout_height="wrap_content"
-        		    android:layout_alignParentRight="true"
-        		    android:layout_centerVertical="true"
-        		    android:background="@drawable/voice_states" 
-        		    android:layout_marginRight="5dp"/>
-
+        		android:layout_marginBottom="20dp"
+        		android:gravity="center"
+        		>
         		<Button
         		    android:id="@+id/main_text"
         		    android:layout_width="wrap_content"
@@ -91,41 +86,55 @@
         		    android:layout_alignParentLeft="true"
         		    android:layout_centerVertical="true"
         		    android:layout_marginLeft="5dp"
-        		    android:background="@drawable/text_entry_states" />
+        		    android:layout_marginRight="5dp"
+        		    android:background="@drawable/text_entry_states" 
+        		    >
+       		    </Button>
+       		    
+       		    <Button
+        		    android:id="@+id/main_voice"
+        		    android:layout_width="wrap_content"
+        		    android:layout_height="wrap_content"
+        		    android:layout_centerVertical="true"
+        		    android:background="@drawable/voice_states" 
+        		    android:layout_marginRight="5dp"
+        		    >
+				</Button>
+				
 
-    		</RelativeLayout>
+    		</LinearLayout>
     		
+    		<!-- camera and favorite button -->    
     	    <LinearLayout
      		    android:id="@+id/main_camera_favorites"
         		android:layout_width="fill_parent"
         		android:layout_height="wrap_content"
         		android:layout_below="@id/main_text_voice"
-        		android:gravity="center" >
+        		android:gravity="center" 
+        		>
 
         		<Button
             		android:id="@+id/main_camera"
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
-            		android:layout_weight="1"
             		android:background="@drawable/camera_states" 
-            		android:layout_marginRight="10dp"/>
+            		android:layout_marginRight="10dp"
+            		>
+           		</Button>
 
         		<Button
             		android:id="@+id/main_favorite"
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
-            		android:layout_weight="1"
             		android:background="@drawable/favorites_states"
-            		android:layout_marginLeft="10dp" />
+            		android:layout_marginLeft="10dp" 
+            		>
+           		</Button>
     		</LinearLayout>
-        
-    	  </RelativeLayout>  
-    	      
-    
-    
+   	  	</LinearLayout>  
     </ScrollView>
+    
     <!-- Footer -->
-
     <RelativeLayout
         android:id="@id/main_footer"
         android:layout_width="fill_parent"
@@ -140,7 +149,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/save_reminder_states" />
-
+            android:background="@drawable/save_reminder_states" 
+            >
+   	    </Button>
     </RelativeLayout>
 </RelativeLayout>
