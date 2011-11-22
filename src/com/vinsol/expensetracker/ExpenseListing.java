@@ -8,7 +8,6 @@ import java.util.List;
 import com.vinsol.expensetracker.location.LocationLast;
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -65,7 +64,6 @@ public class ExpenseListing extends Activity{
 				_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
 				if(mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_TAG).equals("")){
 					_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TAG));
-					Log.v("true", "true "+j+" "+mSubList.get(j).get(DatabaseAdapter.KEY_TAG)+" io");
 				}
 				else {
 					if(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))){
@@ -132,7 +130,6 @@ public class ExpenseListing extends Activity{
 				mSeparatedListAdapter.addSection(i+"", new ArrayAdapter<String>(this,R.layout.expense_listing, tt), mDataDateList);
 			
 			}
-		Log.v("mlist", listString.toString());
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setAdapter(mSeparatedListAdapter);
 	}
@@ -171,7 +168,6 @@ public class ExpenseListing extends Activity{
 		if(minute.length() == 1){
 			minute = "0"+minute;
 		}
-		Log.v("hour", hour+"");
 		if(hour == 0){
 			hour = 12;
 		}
