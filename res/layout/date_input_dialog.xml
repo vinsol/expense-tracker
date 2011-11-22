@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="300dp"
+  android:layout_height="fill_parent"
+  android:layout_gravity="center_horizontal">
+    
+    <TextView 
+    	android:layout_height = "wrap_content"
+    	android:layout_width = "290dp"
+    	android:padding = "5dp"
+    	android:text = "Select Date and Time"
+    	android:textSize = "20sp"
+    	android:layout_gravity = "center_horizontal"
+    	android:gravity="center_horizontal"/>
+    	
+    <TextView 
+    	android:id = "@+id/new_date_label"
+    	android:layout_height = "wrap_content"
+    	android:layout_width = "290dp"
+    	android:layout_margin="5dp"
+    	android:text = "this will be the date"
+    	android:textColor="#ffffff"
+    	android:padding="3dp"
+    	android:gravity="center_horizontal"/>
+    	
+    <DatePicker
+    	android:id = "@+id/new_date_picker"
+    	android:layout_height = "wrap_content"
+    	android:layout_width = "290dp"
+    	android:layout_margin="5dp"
+    	android:layout_gravity="center_horizontal"/>
+    	
+    <TimePicker 
+    	android:id = "@+id/new_time_picker"
+    	android:layout_height = "wrap_content"
+    	android:layout_width = "fill_parent"
+    	android:layout_margin = "5dp"
+    	android:layout_gravity = "center_horizontal"/>
+    	
+    <LinearLayout 
+    	android:orientation="horizontal"
+    	android:layout_height = "wrap_content"
+    	android:layout_width = "290dp"
+    	android:layout_margin = "5dp">
+    	
+    	<Button 
+    		android:id = "@+id/new_date_dialog_ok_button"
+    		android:layout_height = "wrap_content"
+    		android:layout_width = "142dp"
+    		android:layout_margin = "2dp"
+    		android:text="Ok"/>
+    	
+    	<Button 
+    		android:id = "@+id/new_date_dialog_cancel_button"
+    		android:layout_height = "wrap_content"
+    		android:layout_width = "142dp"
+    		android:layout_marginTop = "2dp"
+    		android:layout_marginBottom = "2dp"
+    		android:layout_marginRight = "2dp"
+    		android:text="Cancel"/>
+    			    	
+    </LinearLayout>
+    
+</LinearLayout>
