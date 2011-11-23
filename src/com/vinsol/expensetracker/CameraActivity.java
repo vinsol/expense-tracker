@@ -157,6 +157,8 @@ public class CameraActivity extends Activity implements OnClickListener{
 			mDatabaseAdapter.editDatabase(_list);
 			mDatabaseAdapter.close();
 			finish();
+			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			startActivity(intentExpenseListing);
 		}
 		
 		

@@ -9,6 +9,7 @@ import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.RecordingHelper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
@@ -239,6 +240,8 @@ public class Voice extends Activity implements OnClickListener{
 			mDatabaseAdapter.editDatabase(_list);
 			mDatabaseAdapter.close();
 			finish();
+			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			startActivity(intentExpenseListing);
 		}
 	
 	
@@ -294,6 +297,5 @@ public class Voice extends Activity implements OnClickListener{
 		public void onTick(long millisUntilFinished) {
 			text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(millisUntilFinished));
 		}
-
 	}
 }

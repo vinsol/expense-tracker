@@ -1,15 +1,17 @@
 package com.vinsol.expensetracker;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.utils.AudioPlay;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,9 +34,6 @@ class SeparatedListAdapter extends BaseAdapter{
 	private Context mContext;
 	private List<HashMap<String, String>> mDatadateList;
 	private LayoutInflater mInflater;
-	private AudioPlay mAudioPlay;
-	
-	
 	
 	public SeparatedListAdapter(Context context) {
 		mContext = context;
@@ -234,21 +233,34 @@ class SeparatedListAdapter extends BaseAdapter{
 
 		@Override
 		public void onClick(View v) {
-			if(mListenerList != null)
-				Log.v("id onclick", mListenerList.get(0));
-			if(mAudioPlay != null){
-				mAudioPlay.stopPlayBack();
-			}
 			if(v.getId() == R.id.expense_listing_inflated_row_imageview){
-				if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
-					mAudioPlay = new AudioPlay(mListenerList.get(0),mContext);
-					if(mAudioPlay.isAudioPlaying()){
-						mAudioPlay.stopPlayBack();
-					} else {
-						mAudioPlay.startPlayBack();
+				if(mListenerList != null)
+					if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+						if(mListenerList.get(5).equals(mContext.getString(R.string.voice))) {
+							File mFile = new File("/sdcard/ExpenseTracker/Audio/"+mListenerList.get(0)+".amr");
+							if(mFile.canRead()){
+								new AudioPlayDialog(mContext,mListenerList.get(0));
+							}
+							else {
+								//TODO audio image change
+							}
+						}
+						else if(mListenerList.get(5).equals(mContext.getString(R.string.camera))) {
+							File mFile = new File("/sdcard/ExpenseTracker/"+mListenerList.get(0)+".jpg");
+							if(mFile.canRead()){
+								Intent intentImageViewActivity = new Intent(mContext, ImageViewActivity.class);
+								Bundle bundle = new Bundle();
+								bundle.putLong("_id", Long.parseLong(mListenerList.get(0)));
+								intentImageViewActivity.putExtra("intentImageViewActivity", bundle);
+								mContext.startActivity(intentImageViewActivity);
+							}
+							else {
+								//TODO if image not found
+							}
+						}
 					}
-				}
 			}
+			
 			if(v.getId() == R.id.expense_listing_list_add_expenses){
 				Log.v("Position ", mPosition+"");
 				Log.v("mDataDateList", mDatadateList.get(mPosition).get(DatabaseAdapter.KEY_DATE_TIME));

@@ -6,6 +6,7 @@ import com.vinsol.expensetracker.location.LocationLast;
 import com.vinsol.expensetracker.utils.FileDelete;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -97,6 +98,8 @@ public class TextEntry extends Activity implements OnClickListener{
 			mDatabaseAdapter.editDatabase(_list);
 			mDatabaseAdapter.close();
 			finish();
+			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			startActivity(intentExpenseListing);
 		}
 	
 	
