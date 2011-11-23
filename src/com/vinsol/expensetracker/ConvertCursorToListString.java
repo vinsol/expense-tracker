@@ -25,33 +25,50 @@ public class ConvertCursorToListString {
 		long temptotalAmount = 0;
 		String totalAmountString = null;
 		boolean isTempAmountNull = false;
-		cursor.moveToFirst();
-		do {
+		if(cursor.getCount()>=1){
+			cursor.moveToFirst();
+			do {
+				
+				Calendar mTempCalendar = Calendar.getInstance();
+				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 			
-			Calendar mTempCalendar = Calendar.getInstance();
-			mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
+				if(list.isEmpty()){
+					list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
+				}
+				String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
+				if(tempAmount != null ){
+					try{
+						temptotalAmount += Long.parseLong(tempAmount);
+					}catch(NumberFormatException e){}
+				} else {
+					isTempAmountNull = true;
+				}
 			
-			DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
-			if(list.isEmpty()){
-				list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
-			}
-			String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
-			if(tempAmount != null ){
-				try{
-					temptotalAmount += Long.parseLong(tempAmount);
-				}catch(NumberFormatException e){}
-			} else {
-//				tempAmount = "";
-				isTempAmountNull = true;
-			}
-			
-			cursor.moveToNext();
-			
-			if(!cursor.isAfterLast()) {
-				Calendar mTempSubCalendar = Calendar.getInstance();
-				mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
-				DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
-				if(!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(mTempDisplayDate.getDisplayDate())){
+				cursor.moveToNext();
+				
+				if(!cursor.isAfterLast()) {
+					Calendar mTempSubCalendar = Calendar.getInstance();
+					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
+					if(!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(mTempDisplayDate.getDisplayDate())){
+						if(isTempAmountNull) {
+							if(temptotalAmount != 0) {
+								totalAmountString = temptotalAmount+" ?";
+							}
+							else {
+								totalAmountString = "?";
+							}
+						} else {
+							totalAmountString = temptotalAmount+"";
+						}
+						isTempAmountNull = false;
+						list.put(DatabaseAdapter.KEY_AMOUNT, totalAmountString);
+						temptotalAmount = 0;
+					} 
+				}
+				else {
+					cursor.moveToLast();
 					if(isTempAmountNull) {
 						if(temptotalAmount != 0) {
 							totalAmountString = temptotalAmount+" ?";
@@ -59,37 +76,21 @@ public class ConvertCursorToListString {
 						else {
 							totalAmountString = "?";
 						}
-					} else {
-						totalAmountString = temptotalAmount+"";
-					}
+						} else {
+							totalAmountString = temptotalAmount+"";
+						}
 					isTempAmountNull = false;
 					list.put(DatabaseAdapter.KEY_AMOUNT, totalAmountString);
-					temptotalAmount = 0;
-				} 
-			}
-			 else {
-				 cursor.moveToLast();
-				 if(isTempAmountNull) {
-					 if(temptotalAmount != 0) {
-							totalAmountString = temptotalAmount+" ?";
-						}
-						else {
-							totalAmountString = "?";
-						}
-					} else {
-						totalAmountString = temptotalAmount+"";
-					}
-				isTempAmountNull = false;
-				list.put(DatabaseAdapter.KEY_AMOUNT, totalAmountString);
-				cursor.moveToNext();
-			}
+					cursor.moveToNext();
+				}
 			
-			if(!list.isEmpty() && totalAmountString != null) {
-				mainlist.add(list);
-				list = new HashMap<String, String>();
-				totalAmountString = null;
-			}
-		}while(!cursor.isAfterLast());
+				if(!list.isEmpty() && totalAmountString != null) {
+					mainlist.add(list);
+					list = new HashMap<String, String>();
+					totalAmountString = null;
+				}
+			}while(!cursor.isAfterLast());
+		}
 		adapter.close();
 		return mainlist;
 	}
@@ -114,28 +115,29 @@ public class ConvertCursorToListString {
 		adapter.open();
 		Cursor cursor= adapter.getDateDatabase();
 		List<HashMap<String, String>> mainlist=new ArrayList<HashMap<String, String>>();
-		cursor.moveToFirst();
-		do{
-			List<String> tempList = new ArrayList<String>();
-			tempList.add(DatabaseAdapter.KEY_ID);
-			tempList.add(DatabaseAdapter.KEY_AMOUNT);
-//			tempList.add(DatabaseAdapter.KEY_DATE_TIME);
-			tempList.add(DatabaseAdapter.KEY_FAVORITE);
-			tempList.add(DatabaseAdapter.KEY_LOCATION);
-			tempList.add(DatabaseAdapter.KEY_TAG);
-			tempList.add(DatabaseAdapter.KEY_TYPE);
+		if(cursor.getCount()>=1){
+			cursor.moveToFirst();
+			do{
+				List<String> tempList = new ArrayList<String>();
+				tempList.add(DatabaseAdapter.KEY_ID);
+				tempList.add(DatabaseAdapter.KEY_AMOUNT);
+				tempList.add(DatabaseAdapter.KEY_FAVORITE);
+				tempList.add(DatabaseAdapter.KEY_LOCATION);
+				tempList.add(DatabaseAdapter.KEY_TAG);
+				tempList.add(DatabaseAdapter.KEY_TYPE);
 			
-			HashMap<String, String> list=getHashMap(tempList,cursor);
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
-			DisplayDate mDisplayDate = new DisplayDate(calendar);
-			list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
-			list.put(DatabaseAdapter.KEY_DATE_TIME+"Millis", cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
-			if(!list.isEmpty())
-				mainlist.add(list);
-			cursor.moveToNext();
+				HashMap<String, String> list=getHashMap(tempList,cursor);
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				DisplayDate mDisplayDate = new DisplayDate(calendar);
+				list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
+				list.put(DatabaseAdapter.KEY_DATE_TIME+"Millis", cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				if(!list.isEmpty())
+					mainlist.add(list);
+				cursor.moveToNext();
+			}
+			while(!cursor.isAfterLast());
 		}
-		while(!cursor.isAfterLast());
 		adapter.close();
 		return mainlist;
 	}
