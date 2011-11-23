@@ -11,7 +11,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.util.Log;
 
 public class LocationLast {
 	
@@ -32,7 +31,6 @@ public class LocationLast {
 		List<String> mProviderList = mLocationManager.getAllProviders();
 		for(int i = 0 ; i<mProviderList.size();i++){
 			mTempLocation = mLocationManager.getLastKnownLocation(mProviderList.get(i));
-			Log.v("asd", mProviderList.get(i));
 			if(mTempLocation != null){
 				if(mLocation == null && MainActivity.mLocation == null){
 					mLocation = mTempLocation;
@@ -67,6 +65,8 @@ public class LocationLast {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (Exception e){
+				e.printStackTrace();
 			}
 			return null;
 		}
@@ -74,22 +74,27 @@ public class LocationLast {
 		
 		@Override
 		protected void onPostExecute(Void result) {
-			if(list.get(0).getFeatureName() != null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()!=null)
-    			MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getLocality()+", "+list.get(0).getAdminArea();
-    		else if(list.get(0).getFeatureName() == null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()!=null)
-    			MainActivity.mCurrentLocation = list.get(0).getLocality()+", "+list.get(0).getAdminArea();
-    		else if(list.get(0).getFeatureName() == null && list.get(0).getLocality()==null && list.get(0).getAdminArea()!=null)
-    			MainActivity.mCurrentLocation = list.get(0).getAdminArea();
-    		else if(list.get(0).getFeatureName() == null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()==null)
-    			MainActivity.mCurrentLocation = list.get(0).getLocality();
-    		else if(list.get(0).getFeatureName() != null && list.get(0).getLocality()==null && list.get(0).getAdminArea()==null)
-    			MainActivity.mCurrentLocation = list.get(0).getFeatureName();
-    		else if(list.get(0).getFeatureName() != null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()==null)
-    			MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getLocality();
-    		else if(list.get(0).getFeatureName() != null && list.get(0).getLocality()==null && list.get(0).getAdminArea()!=null)
-    			MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getAdminArea();
-			MainActivity.mLocation = mLocation;
-			Log.v("loc last", MainActivity.mCurrentLocation);
+			if(list != null)
+			try{
+				if(list.get(0).getFeatureName() != null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()!=null)
+					MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getLocality()+", "+list.get(0).getAdminArea();
+				else 
+					if(list.get(0).getFeatureName() == null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()!=null)
+					MainActivity.mCurrentLocation = list.get(0).getLocality()+", "+list.get(0).getAdminArea();
+				else if(list.get(0).getFeatureName() == null && list.get(0).getLocality()==null && list.get(0).getAdminArea()!=null)
+					MainActivity.mCurrentLocation = list.get(0).getAdminArea();
+				else if(list.get(0).getFeatureName() == null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()==null)
+					MainActivity.mCurrentLocation = list.get(0).getLocality();
+				else if(list.get(0).getFeatureName() != null && list.get(0).getLocality()==null && list.get(0).getAdminArea()==null)
+					MainActivity.mCurrentLocation = list.get(0).getFeatureName();
+				else if(list.get(0).getFeatureName() != null && list.get(0).getLocality()!=null && list.get(0).getAdminArea()==null)
+					MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getLocality();
+				else if(list.get(0).getFeatureName() != null && list.get(0).getLocality()==null && list.get(0).getAdminArea()!=null)
+					MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getAdminArea();
+				MainActivity.mLocation = mLocation;
+			} catch(Exception e){
+				e.printStackTrace();
+			}
 			super.onPostExecute(result);
 		}
     }

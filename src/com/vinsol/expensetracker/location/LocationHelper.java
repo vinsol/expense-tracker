@@ -12,7 +12,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 
 public class LocationHelper {
 	
@@ -149,7 +148,6 @@ public class LocationHelper {
     			MainActivity.mCurrentLocation = list.get(0).getFeatureName()+", "+list.get(0).getAdminArea();
     		
     		MainActivity.mLocation = location;
-    		Log.v("location", MainActivity.mCurrentLocation);
     	} catch (Exception e){}
     	
     }
