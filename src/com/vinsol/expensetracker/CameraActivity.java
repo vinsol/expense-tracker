@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CameraActivity extends Activity implements OnClickListener{
 
@@ -77,26 +78,34 @@ public class CameraActivity extends Activity implements OnClickListener{
 	private void startCamera() {
 		
 		///////   *******   Starting Camera to capture Image   ********    //////////
-		Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);   
-		File path = new File("/mnt/sdcard/ExpenseTracker");
-        path.mkdirs();
-        String name = _id+".jpg";
-        File file = new File(path, name);
-		camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        startActivityForResult(camera, PICTURE_RESULT);
-        Log.v("_id", _id+"");
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);   
+			File path = new File("/mnt/sdcard/ExpenseTracker");
+			path.mkdirs();
+			String name = _id+".jpg";
+			File file = new File(path, name);
+			camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+			startActivityForResult(camera, PICTURE_RESULT);
+			Log.v("_id", _id+"");
+		} else {
+			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(PICTURE_RESULT == requestCode && Activity.RESULT_OK == resultCode){
-		CameraFileSave cameraFileSave = new CameraFileSave(_id+"");
-		cameraFileSave.create();
-		ImageGet imageGet = new ImageGet(""+_id);
-		Bitmap bm = imageGet.getSmallImage();
-        ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
-        text_voice_camera_image_display.setImageBitmap(bm);
+			if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+				CameraFileSave cameraFileSave = new CameraFileSave(_id+"",this);
+				cameraFileSave.create();
+				ImageGet imageGet = new ImageGet(""+_id,this);
+				Bitmap bm = imageGet.getSmallImage();
+				ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
+				text_voice_camera_image_display.setImageBitmap(bm);
+			} else {
+				Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 

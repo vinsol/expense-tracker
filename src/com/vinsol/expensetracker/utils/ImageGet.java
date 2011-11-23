@@ -5,9 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
+import android.widget.Toast;
 
 public class ImageGet {
 
@@ -28,51 +29,64 @@ public class ImageGet {
 	private int THUMBNAIL_MAX_HEIGHT = 60;
 	private int THUMBNAIL_MAX_WIDTH = 60;
 	
+	private Context mContext;
 	
 	////////   ********   Constructor **********  ///////////
-	public ImageGet(String file) {
-		mFileName = file;
-		mExpenseTrackerDirectory = new File("/sdcard/ExpenseTracker");
+	public ImageGet(String file,Context _context) {
+		mContext = _context;
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			mFileName = file;
+			mExpenseTrackerDirectory = new File("/sdcard/ExpenseTracker");
 		
-		File mPathImageByCamera = new File(mExpenseTrackerDirectory, file+".jpg");
-		FileInputStream fileInputStream = null;
-		try {
-			fileInputStream = new FileInputStream(mPathImageByCamera);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Bitmap imageByCamera = BitmapFactory.decodeStream(fileInputStream);
-		try {
-			fileInputStream.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			File mPathImageByCamera = new File(mExpenseTrackerDirectory, file+".jpg");
+			FileInputStream fileInputStream = null;
+			try {
+				fileInputStream = new FileInputStream(mPathImageByCamera);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			Bitmap imageByCamera = BitmapFactory.decodeStream(fileInputStream);
+			try {
+				fileInputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		
-		if(imageByCamera.getHeight() > imageByCamera.getWidth()){
-			Log.v("true", "true");
-			SMALL_MAX_WIDTH = 120;
-			SMALL_MAX_HEIGHT = 160;
+			if(imageByCamera.getHeight() > imageByCamera.getWidth()){
+				SMALL_MAX_WIDTH = 120;
+				SMALL_MAX_HEIGHT = 160;
+			}
+			imageByCamera.recycle();
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
-		imageByCamera.recycle();
 	}
 	
 	//////////   ******** get image of dimension 160x120  *********   ///////////
 	public Bitmap getSmallImage(){
-		mFile = new File(mExpenseTrackerDirectory,mFileName+"_small"+".jpg");
-		height = SMALL_MAX_HEIGHT;
-		width = SMALL_MAX_WIDTH;
-		return getBitmap();
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			mFile = new File(mExpenseTrackerDirectory,mFileName+"_small"+".jpg");
+			height = SMALL_MAX_HEIGHT;
+			width = SMALL_MAX_WIDTH;
+			return getBitmap();
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
+			return null;
+		}
 	}
 	
 	
 	///////////   *********  get image of dimension 60 x60   **********    /////////
 	public Bitmap getThumbnailImage(){
-		mFile = new File(mExpenseTrackerDirectory,mFileName+"_thumbnail"+".jpg");
-		height = THUMBNAIL_MAX_HEIGHT;
-		width = THUMBNAIL_MAX_WIDTH;
-		return getBitmap();
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			mFile = new File(mExpenseTrackerDirectory,mFileName+"_thumbnail"+".jpg");
+			height = THUMBNAIL_MAX_HEIGHT;
+			width = THUMBNAIL_MAX_WIDTH;
+			return getBitmap();
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
+			return null;
+		}
 	} 
 	
 	
@@ -82,7 +96,6 @@ public class ImageGet {
 		try {
 			fileInputStream = new FileInputStream(mFile);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Bitmap tempBitmap = BitmapFactory.decodeStream(fileInputStream);
@@ -95,15 +108,9 @@ public class ImageGet {
         do{
      	   tempHeight = height * i;
      	   tempWidth = width * i;
-     	   Log.v("height calc", height+"  hjkhkj height   "+defaultHeight);
-     	   Log.v("width calc", width+"   hasdkash  width   "+defaultWidth);
      	   i++;
         }while(tempHeight < (defaultHeight-height) && tempWidth < (defaultWidth-width) );
         i--;
-        
-        Log.v("defaultHeight", defaultHeight+" height "+height+" tempheight "+tempHeight);
-        Log.v("defaultWidth", defaultWidth+" Width "+width+" tempWidth "+tempWidth);
-        
         
         int diffHeight = defaultHeight - height;
         int diffWidth = defaultWidth - width;
@@ -119,9 +126,6 @@ public class ImageGet {
         	   finaly = defaultHeight - y;
         else
      	   finaly = defaultHeight - y+1;
-        
-		Log.v("height", tempBitmap.getHeight()+" "+y+" "+finaly + " "+defaultHeight+ " "+defaultHeight + " "+height);
-		Log.v("width", tempBitmap.getWidth()+" "+x+" "+finalx + " "+defaultWidth+ " "+defaultWidth+" "+width);
 		
         return Bitmap.createBitmap(tempBitmap, x, y, finalx, finaly);
 	}

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class ImageViewActivity extends Activity {
 	private Long _id;
@@ -28,7 +29,12 @@ public class ImageViewActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		_id = getBundleExtras.getLong("_id");
-		Bitmap bitmap = BitmapFactory.decodeFile("/mnt/sdcard/ExpenseTracker/"+_id+".jpg");
-		mImageView.setImageBitmap(bitmap);
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			Bitmap bitmap = BitmapFactory.decodeFile("/mnt/sdcard/ExpenseTracker/"+_id+".jpg");
+			mImageView.setImageBitmap(bitmap);
+			} 
+		else {
+			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
+		}
 	}
 }

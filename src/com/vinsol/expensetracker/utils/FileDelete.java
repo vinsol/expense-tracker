@@ -14,14 +14,16 @@ public class FileDelete {
 	}
 
 	private void deleteAll(long _id) {
-		File file = new File("/sdcard/ExpenseTracker/"+_id+".jpg");
-		delete(file);
-		file = new File("/sdcard/ExpenseTracker/"+_id+"_small.jpg");
-		delete(file);
-		file = new File("/sdcard/ExpenseTracker/"+_id+"_thumbnail.jpg");
-		delete(file);
-		file = new File("/sdcard/ExpenseTracker/Audio/"+_id+".amr");
-		delete(file);
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			File file = new File("/sdcard/ExpenseTracker/"+_id+".jpg");
+			delete(file);
+			file = new File("/sdcard/ExpenseTracker/"+_id+"_small.jpg");
+			delete(file);
+			file = new File("/sdcard/ExpenseTracker/"+_id+"_thumbnail.jpg");
+			delete(file);
+			file = new File("/sdcard/ExpenseTracker/Audio/"+_id+".amr");
+			delete(file);
+		}
 	}
 
 	private void delete(File file) {

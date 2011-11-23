@@ -6,9 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
+import android.widget.Toast;
 
 public class CameraFileSave {
 	private String filename;
@@ -34,75 +35,87 @@ public class CameraFileSave {
 	////////   ********  Location of Image Clicked by camera   ********   //////////
 	private File mPathImageByCamera;
 	
-	
+	private Context mContext;
 	
 	/////////    *********   Constructors   ********    /////////////
-	public CameraFileSave(String _filename) {
-		filename = _filename;
-		mExpenseTrackerDirectory = new File("/sdcard/ExpenseTracker");
-		mExpenseTrackerDirectory.mkdirs();
-		mPathImageByCamera = new File(mExpenseTrackerDirectory, filename+".jpg");
-		FileInputStream fileInputStream = null;
-		try {
-			fileInputStream = new FileInputStream(mPathImageByCamera);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		imageByCamera = BitmapFactory.decodeStream(fileInputStream);
+	public CameraFileSave(String _filename,Context _context) {
+		mContext = _context;
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			filename = _filename;
+			mExpenseTrackerDirectory = new File("/sdcard/ExpenseTracker");
+			mExpenseTrackerDirectory.mkdirs();
+			mPathImageByCamera = new File(mExpenseTrackerDirectory, filename+".jpg");
+			FileInputStream fileInputStream = null;
+			try {
+				fileInputStream = new FileInputStream(mPathImageByCamera);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			imageByCamera = BitmapFactory.decodeStream(fileInputStream);
+			
+			try {
+				fileInputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		
-		try {
-			fileInputStream.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		
-		//////////   *******   To handle Portrait Layout   *******   /////////
-		if(imageByCamera.getHeight() > imageByCamera.getWidth()){
-			SMALL_MAX_WIDTH = 120;
-			SMALL_MAX_HEIGHT = 160;
+			//////////   *******   To handle Portrait Layout   *******   /////////
+			if(imageByCamera.getHeight() > imageByCamera.getWidth()){
+				SMALL_MAX_WIDTH = 120;
+				SMALL_MAX_HEIGHT = 160;
+			}	
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 	}
 
 	
 	//////////     *********    Function to save File    *********    /////////
 	private void CameraFileSaveFunc(Bitmap bitmapToSave) {
-		FileOutputStream out = null;
-//		mFileToSaveBitmap.mkdirs();
-		try {
-			out = new FileOutputStream(mFileToSaveBitmap);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-        bitmapToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        try {
-        	out.flush();
-			out.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			FileOutputStream out = null;
+			try {
+				out = new FileOutputStream(mFileToSaveBitmap);
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+			bitmapToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
+			try {
+				out.flush();
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
         
-        ///////////    *********   Clear Bitmap to save VM space   *********   /////////
-        bitmapToSave.recycle();
+			///////////    *********   Clear Bitmap to save VM space   *********   /////////
+			bitmapToSave.recycle();
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	/////////     ***********   Create Both Small and thumbnail file   *********   /////////
 	public void create(){
-		createSmall();
-		createThumbnail();
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			createSmall();
+			createThumbnail();
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	
 	///////   ********* Create Small Bitmap   of size 160 x 120   ********   ///////////
 	public void createSmall(){
-		width = SMALL_MAX_WIDTH;
-		height = SMALL_MAX_HEIGHT;
-		mFileToSaveBitmap = new File(mExpenseTrackerDirectory, filename+"_small"+".jpg");
-		CameraFileSaveFunc(getBitmap());
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			width = SMALL_MAX_WIDTH;
+			height = SMALL_MAX_HEIGHT;
+			mFileToSaveBitmap = new File(mExpenseTrackerDirectory, filename+"_small"+".jpg");
+			CameraFileSaveFunc(getBitmap());
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	
@@ -110,10 +123,14 @@ public class CameraFileSave {
 	////////////  *********   To create thumbnail Image of size 60 x 60  **********   ///////////
 	
 	public void createThumbnail(){
-		width = THUMBNAIL_MAX_WIDTH;
-		height = THUMBNAIL_MAX_HEIGHT;
-		mFileToSaveBitmap = new File(mExpenseTrackerDirectory, filename+"_thumbnail"+".jpg");
-		CameraFileSaveFunc(getBitmap());
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			width = THUMBNAIL_MAX_WIDTH;
+			height = THUMBNAIL_MAX_HEIGHT;
+			mFileToSaveBitmap = new File(mExpenseTrackerDirectory, filename+"_thumbnail"+".jpg");
+			CameraFileSaveFunc(getBitmap());
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	
@@ -121,34 +138,41 @@ public class CameraFileSave {
 	
 	
 	public Bitmap getBitmap(){
-		int scale = getScale(imageByCamera);
-		BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        try {
-			return BitmapFactory.decodeStream(new FileInputStream(mPathImageByCamera), null, o2);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			int scale = getScale(imageByCamera);
+			BitmapFactory.Options o2 = new BitmapFactory.Options();
+			o2.inSampleSize = scale;
+			try {
+				return BitmapFactory.decodeStream(new FileInputStream(mPathImageByCamera), null, o2);
+			} catch (FileNotFoundException e) {
+				Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
+				e.printStackTrace();
+			}
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
-        return null;
+		return null;
 	}
 	
 	
 	//////////     **********     Scale to which Image Reduced    *********   ////////////
 	
 	private int getScale(Bitmap bip){
-		//Find the correct scale value. It should be the power of 2.
-        int width_tmp=bip.getWidth(), height_tmp=bip.getHeight();
-        bip.recycle();
 		int scale=1;
-        while(true){
-            if(width_tmp/2<width || height_tmp/2<height)
-                break;
-            width_tmp/=2;
-            height_tmp/=2;
-            scale*=2;
-        }
-        Log.v("scale", scale+"");
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+		//Find the correct scale value. It should be the power of 2.
+			int width_tmp=bip.getWidth(), height_tmp=bip.getHeight();
+			bip.recycle();
+			while(true){
+				if(width_tmp/2<width || height_tmp/2<height)
+					break;
+				width_tmp/=2;
+				height_tmp/=2;
+				scale*=2;
+			}
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
+		}
         return scale;
 	}
 	

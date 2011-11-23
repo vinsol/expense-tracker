@@ -12,7 +12,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -23,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Voice extends Activity implements OnClickListener{
 	
@@ -71,18 +71,24 @@ public class Voice extends Activity implements OnClickListener{
         intentExtras = getIntent().getBundleExtra("voiceBundle");
         _id = intentExtras.getLong("_id");
     	
-        setGraphicsVoice();
-        controlVoiceChronometer();
-        setClickListeners();
+        
+        
         
         ////////   ********  Handle Date Bar   *********   ////////
         new DateHandler(this);
         
         
         ////////   ********   Starts Recording each time activity starts   ******   ///////
-        mRecordingHelper = new RecordingHelper(_id+"");
-		mRecordingHelper.startRecording();
-		
+        if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+        	setGraphicsVoice();
+        	controlVoiceChronometer();
+        	mRecordingHelper = new RecordingHelper(_id+"",this);
+        	mRecordingHelper.startRecording();
+        } 
+        else {
+        	Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
+        }
+        setClickListeners();
 		
 		////////*********     Get Last most accurate location info   *********   /////////
 		LocationLast mLocationLast = new LocationLast(this);
@@ -95,8 +101,10 @@ public class Voice extends Activity implements OnClickListener{
 		
 		//////   *****  Check whether audio is recording or not   *******   ///////
 		//////   ******   If audio recording started then stop recording audio   *****   ///////
-		if(mRecordingHelper.isRecording()){
-			mRecordingHelper.stopRecording();
+		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+			if(mRecordingHelper.isRecording()){
+				mRecordingHelper.stopRecording();
+			}
 		}
 		super.onPause();
 	}
@@ -167,8 +175,7 @@ public class Voice extends Activity implements OnClickListener{
 		////  ***** if play button pressed ****** //////		
 		else if(v.getId() == R.id.text_voice_camera_play_button){
 			//////	     ********   to handle playback of recorded file   *********   ////////
-			mAudioPlay = new AudioPlay(_id+"");
-			Log.v("hello", text_voice_camera_time_details_chronometer.getText()+"");
+			mAudioPlay = new AudioPlay(_id+"",this);
 			
 			///////   *******   Chronometer Starts Countdown   ******  ///////
 			countDownTimer = new MyCount(mAudioPlay.getPlayBackTime(), 1000);
@@ -209,7 +216,7 @@ public class Voice extends Activity implements OnClickListener{
 			//////  ******  Restarts chronometer and recording   *******  ////////
 			if(mRecordingHelper.isRecording())
 				mRecordingHelper.stopRecording();
-			mRecordingHelper = new RecordingHelper(_id+"");
+			mRecordingHelper = new RecordingHelper(_id+"",this);
 			mRecordingHelper.startRecording();
 			text_voice_camera_time_details_chronometer.setBase(SystemClock.elapsedRealtime());
 			text_voice_camera_time_details_chronometer.start();

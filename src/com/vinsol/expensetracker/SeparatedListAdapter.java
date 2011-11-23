@@ -6,20 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.utils.AudioPlay;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-class SeparatedListAdapter extends BaseAdapter {
+class SeparatedListAdapter extends BaseAdapter{
 
 	public final Map<String,Adapter> sections = new LinkedHashMap<String,Adapter>();
 	public final ArrayAdapter<String> headers;
@@ -29,6 +32,9 @@ class SeparatedListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<HashMap<String, String>> mDatadateList;
 	private LayoutInflater mInflater;
+	private AudioPlay mAudioPlay;
+	
+	
 	
 	public SeparatedListAdapter(Context context) {
 		mContext = context;
@@ -138,16 +144,20 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderBody.expense_listing_inflated_row_imageview = (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_imageview);
 				} else {
 					holderBody = (ViewHolderBody)convertView.getTag();
-					Log.v("tag", convertView.getTag().toString()+" body");
 				}		
 				@SuppressWarnings("unchecked")
 				final List<String> mlist = (List<String>) adapter.getItem(position-1);
 				if(mlist.get(5).equals(mContext.getString(R.string.camera))){
-					try{
-						Bitmap bm = BitmapFactory.decodeFile("/sdcard/ExpenseTracker/"+mlist.get(0)+"_thumbnail.jpg");
-						holderBody.expense_listing_inflated_row_imageview.setImageBitmap(bm);
-					} catch (Exception e){
-						e.printStackTrace();
+					if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+						try{
+							Bitmap bm = BitmapFactory.decodeFile("/sdcard/ExpenseTracker/"+mlist.get(0)+"_thumbnail.jpg");
+							holderBody.expense_listing_inflated_row_imageview.setImageBitmap(bm);
+						} catch (Exception e){
+							//TODO if image not available on sdcard
+							e.printStackTrace();
+						}
+					} else {
+						//TODO if sdcard not available
 					}
 				} else if(mlist.get(5).equals(mContext.getString(R.string.text))){
 					holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.text_list_icon);
@@ -156,8 +166,10 @@ class SeparatedListAdapter extends BaseAdapter {
 				} else if(mlist.get(5).equals(mContext.getString(R.string.voice))){
 					holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.audio_play_list_icon);
 				} else if(mlist.get(5).equals(mContext.getString(R.string.favorite_entry))){
-					
+					/////TODO if favorite entry
 				}
+				holderBody.expense_listing_inflated_row_imageview.setFocusable(false);
+				holderBody.expense_listing_inflated_row_imageview.setOnClickListener(new MyClickListener(mlist));
 				holderBody.expense_listing_inflated_row_location_time.setText(mlist.get(3));
 				holderBody.expense_listing_inflated_row_tag.setText(mlist.get(1));
 				holderBody.expense_listing_inflated_row_amount.setText(mlist.get(2));
@@ -169,10 +181,12 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderFooter = new ViewHolderFooter();
 					convertView = mInflater.inflate(R.layout.main_list_footerview, null);
 					holderFooter.expenses_listing_add_expenses_textview = (TextView) convertView.findViewById(R.id.expenses_listing_add_expenses_textview);
+					holderFooter.expense_listing_list_add_expenses =(LinearLayout) convertView.findViewById(R.id.expense_listing_list_add_expenses); 
 				} else {
 					holderFooter = (ViewHolderFooter)convertView.getTag();
 				}
 				holderFooter.expenses_listing_add_expenses_textview.setText("Add expenses to "+mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
+				holderFooter.expense_listing_list_add_expenses.setOnClickListener(new MyClickListener(sectionnum));
 				return convertView;
 			}
 			// otherwise jump into next section
@@ -197,12 +211,49 @@ class SeparatedListAdapter extends BaseAdapter {
 	
 	class ViewHolderFooter {
 		TextView expenses_listing_add_expenses_textview;
+		LinearLayout expense_listing_list_add_expenses;
     }
 	
 
 	@Override
 	public long getItemId(int position) {
 		return position;
+	}
+	private class MyClickListener implements OnClickListener{
+
+		List<String> mListenerList;
+		int mPosition;
+		
+		public MyClickListener(List<String> mlist) {
+			mListenerList = mlist;
+		}
+
+		public MyClickListener(int position) {
+			mPosition = position;
+		}
+
+		@Override
+		public void onClick(View v) {
+			if(mListenerList != null)
+				Log.v("id onclick", mListenerList.get(0));
+			if(mAudioPlay != null){
+				mAudioPlay.stopPlayBack();
+			}
+			if(v.getId() == R.id.expense_listing_inflated_row_imageview){
+				if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+					mAudioPlay = new AudioPlay(mListenerList.get(0),mContext);
+					if(mAudioPlay.isAudioPlaying()){
+						mAudioPlay.stopPlayBack();
+					} else {
+						mAudioPlay.startPlayBack();
+					}
+				}
+			}
+			if(v.getId() == R.id.expense_listing_list_add_expenses){
+				Log.v("Position ", mPosition+"");
+				Log.v("mDataDateList", mDatadateList.get(mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
+			}
+		}
 	}
 
 }

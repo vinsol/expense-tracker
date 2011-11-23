@@ -30,8 +30,8 @@ public class DatabaseAdapter {
 		private final String DATABASE_CREATE= "create table if not exists "+ TABLE_NAME +"("+
 				KEY_ID+" INTEGER PRIMARY KEY AUTOINCREMENT ,"+
 				KEY_TAG+" TEXT,"+
-				KEY_AMOUNT+" INTEGER, "+
-				KEY_DATE_TIME+" VARCHAR(255) NOT NULL,"+
+				KEY_AMOUNT+" VARCHAR(255), "+
+				KEY_DATE_TIME+" TEXT NOT NULL,"+
 				KEY_LOCATION+" TEXT, "+
 				KEY_FAVORITE+" VARCHAR(1), "+
 				KEY_TYPE+" VARCHAR(1) NOT NULL "+

@@ -7,7 +7,6 @@ import com.vinsol.expensetracker.utils.FileDelete;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -34,7 +33,6 @@ public class TextEntry extends Activity implements OnClickListener{
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         
         setContentView(R.layout.text_voice_camera);
-        Log.v("Text", "Text");
         
         mDatabaseAdapter = new DatabaseAdapter(this);
         text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);

@@ -22,7 +22,7 @@ public class ConvertCursorToListString {
 		adapter.open();
 		Cursor cursor= adapter.getDateDatabase();
 		List<HashMap<String, String>> mainlist=new ArrayList<HashMap<String, String>>();
-		long temptotalAmount = 0;
+		double temptotalAmount = 0;
 		String totalAmountString = null;
 		boolean isTempAmountNull = false;
 		if(cursor.getCount()>=1){
@@ -39,7 +39,7 @@ public class ConvertCursorToListString {
 				String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
 				if(tempAmount != null ){
 					try{
-						temptotalAmount += Long.parseLong(tempAmount);
+						temptotalAmount += Double.parseDouble(tempAmount);
 					}catch(NumberFormatException e){}
 				} else {
 					isTempAmountNull = true;

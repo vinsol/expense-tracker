@@ -41,20 +41,12 @@ public class ExpenseListing extends Activity{
 		/////////     *********    Getting list of dates   *******    ///////////
 		mDataDateList = mConvertCursorToListString.getDateListString();
 		mSubList = mConvertCursorToListString.getListStringParticularDate();
-//		if(!mDataDateList.isEmpty()){
-//			for(int i=0;i<mDataDateList.size();i++){
-//				Log.v("mDataDateList "+i, mDataDateList.get(i).toString());
-//			}
-//		} else {
-//			Log.v("mDataDateList ", "empty");
-//		}
 		
 		//////////     *********    Setting adapter to listview   ******   ///////////
 		int j = 0;
 		mSeparatedListAdapter = new SeparatedListAdapter(this);
 		@SuppressWarnings("rawtypes")
 		List listString = new ArrayList<List<List<String>>>();
-//		for()
 		for(int i=0;i<mDataDateList.size();i++){
 			List<List<String>> mList = new ArrayList<List<String>>();
 			String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
@@ -128,10 +120,10 @@ public class ExpenseListing extends Activity{
 				@SuppressWarnings("rawtypes")
 				List tt = (List) listString.get(i);
 				mSeparatedListAdapter.addSection(i+"", new ArrayAdapter<String>(this,R.layout.expense_listing, tt), mDataDateList);
-			
 			}
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setAdapter(mSeparatedListAdapter);
+		
 	}
 	
 	private String getLocationDateDate(String dateInMillis) {

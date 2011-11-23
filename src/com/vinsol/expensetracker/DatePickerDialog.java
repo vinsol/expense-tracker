@@ -6,7 +6,6 @@ import com.vinsol.expensetracker.utils.DisplayDate;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -39,23 +38,19 @@ public class DatePickerDialog extends Dialog implements android.view.View.OnClic
 			Calendar mCalendar = Calendar.getInstance();
 			year = mCalendar.get(Calendar.YEAR);
 			dateViewString = (String) dateViewString.subSequence(7, dateViewString.length());
-			Log.v("date", dateViewString);
 		} else {
 			year = Integer.parseInt((String) dateViewString.subSequence(dateViewString.length()-4, dateViewString.length()));
 			dateViewString = (String) dateViewString.subSequence(0, dateViewString.length()-6);
-			Log.v("date", dateViewString);
 		}
 		month = getMonth((String) dateViewString.subSequence(0, 3));
 		dateViewString = (String) dateViewString.subSequence(4, dateViewString.length());
 		day = Integer.parseInt(dateViewString);
-		Log.v("year +month +day", year+" "+month+" "+day);
 		datePicker.init(year, month, day, new OnDateChangedListener() {
 			
 			@Override
 			public void onDateChanged(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
 				
 				if(isDateAfter(view)){
-					Log.v("After", "After");
 					Calendar mCalendar = Calendar.getInstance();
 					view.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), this);
 				}

@@ -2,33 +2,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" 
+
     >
     
     
 
-    <RelativeLayout 
-        android:layout_height="wrap_content"
+    <LinearLayout 
+        android:layout_height="fill_parent"
         android:layout_width="fill_parent"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
         android:id="@+id/expense_listing_inflated_row_listview"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+    	android:paddingBottom="10dp"
+    	android:paddingLeft="5dp"
         >
+        
+        <RelativeLayout
+            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+        	>
     
-    	<ImageView 
-        	android:id="@+id/expense_listing_inflated_row_imageview"
-        	android:background="@drawable/photo_frame"
-        	android:layout_width="60dp"
-        	android:layout_height="60dp"
-        	android:layout_marginRight="10dp"
-        	android:layout_marginLeft="10dp"
-       		android:scaleType="fitXY"/>
+    		<ImageView 
+        		android:id="@+id/expense_listing_inflated_row_imageview"
+        		android:background="@drawable/photo_frame"
+        		android:layout_width="57dp"
+        		android:layout_height="60dp"
+       			android:scaleType="fitXY"/>
+    	
+    	</RelativeLayout>
     	
     	<RelativeLayout
-    	    android:layout_width="wrap_content"
+    	    android:layout_width="185dp"
     	    android:layout_height="wrap_content"
-    	    android:layout_toRightOf="@id/expense_listing_inflated_row_imageview"
-    	    android:layout_toLeftOf="@+id/expense_listing_inflated_amountview"
-    	    android:layout_marginRight="11dp"
+    	    android:layout_marginLeft="10dp"
     	    >
     	    
     	    <TextView
@@ -41,6 +47,7 @@
     	        android:textStyle="bold" 
             	android:typeface="sans"
             	android:textColor="#4d4d4d"
+            	android:textSize="14sp"
     	        android:text="Dinner at Sai Guru Dhaba: Dal, chabal and roti "/>
     	    
     	    <TextView 
@@ -48,38 +55,33 @@
     	        android:layout_width="fill_parent"
     	        android:layout_height="wrap_content"
     	        android:maxLines="1"
+    	        android:textSize="12sp"
     	        android:textColor="#00539f"
     	        android:text="2 PM at East patel nagar, Delhi."
     	        android:layout_below="@id/expense_listing_inflated_row_tag"
             	android:typeface="sans"/>
     	    
     	</RelativeLayout>
-    	
+
     	<RelativeLayout
-    	    android:id="@id/expense_listing_inflated_amountview"
-    	    android:layout_height="wrap_content"
-    	    android:layout_width="wrap_content"
-    	    android:layout_alignParentRight="true"
-    	    android:gravity="center" 
-    	    android:layout_marginRight="5dp"
-    	    >
-    	    
+    	    android:id="@+id/expense_listing_inflated_amountview"
+    	    android:layout_width="50dp"
+    	    android:layout_height="fill_parent"
+    	   >
     	    <TextView
     	        android:id="@+id/expense_listing_inflated_row_amount"
     	        android:layout_width="50dp"
     	        android:layout_height="wrap_content"
-    	        android:maxLines="2"
-    	        android:gravity="right"
+    	    	android:gravity="right"    
     	        android:maxLength="12"
+    	        android:maxLines="2"
+    	        android:text="999.099999999999"
     	        android:textColor="#333333"
-    	        android:textStyle="bold" 
-            	android:typeface="sans"
-    	        android:layout_alignParentTop="true"
-    	        android:text="999.099999999999"/>
-    	    
-    	</RelativeLayout>    
+    	        android:textStyle="bold"
+    	        android:typeface="sans" />
+    	</RelativeLayout>
     	
-    </RelativeLayout>
+    </LinearLayout>
     
     <ImageView 
         android:layout_below="@id/expense_listing_inflated_row_listview"
