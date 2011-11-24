@@ -8,9 +8,13 @@ import java.util.List;
 import com.vinsol.expensetracker.location.LocationLast;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 public class ExpenseListing extends Activity{
 	
@@ -123,6 +127,20 @@ public class ExpenseListing extends Activity{
 			}
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setAdapter(mSeparatedListAdapter);
+		
+		if(mDataDateList.size() < 1){
+			mListView.setVisibility(View.GONE);
+			RelativeLayout mRelativeLayout = (RelativeLayout) findViewById(R.id.expense_listing_listview_no_item);
+			mRelativeLayout.setVisibility(View.VISIBLE);
+			ImageButton expense_listing_listview_no_item_button = (ImageButton) findViewById(R.id.expense_listing_listview_no_item_button);
+			expense_listing_listview_no_item_button.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					finish();
+				}
+			});
+		} 
 		
 	}
 	

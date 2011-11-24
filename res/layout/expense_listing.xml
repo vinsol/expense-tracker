@@ -35,6 +35,21 @@
         android:layout_below="@id/expense_listing_header"
         ></ListView>
 	
-    
+    <!-- Body -->
+    <RelativeLayout
+        android:id="@+id/expense_listing_listview_no_item"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/expense_listing_header"
+        android:background="@drawable/expense_listing_listview_bg"
+        android:gravity="center"
+        android:visibility="gone"> 
+    	<ImageButton
+    	    android:id="@+id/expense_listing_listview_no_item_button"
+        	android:layout_height="wrap_content"
+        	android:layout_width="wrap_content"
+        	android:background="@drawable/list_view_no_item"
+       	></ImageButton>
+	</RelativeLayout>
 
 </RelativeLayout>
