@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ public class ImageViewActivity extends Activity {
 		_id = getBundleExtras.getLong("_id");
 		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
 			try{
+				System.gc();
 				Drawable drawable = Drawable.createFromPath("/mnt/sdcard/ExpenseTracker/"+_id+".jpg");
 				mImageView.setImageDrawable(drawable);
 			} catch (Exception e){
@@ -45,5 +47,22 @@ public class ImageViewActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+	}
+	
+
+	///// ******************  Handling back press of key   ********** ///////////
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+	     if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+	    	 onBackPressed();
+	         return true;
+	      }
+	    return super.onKeyDown(keyCode, event);
+	}
+
+	public void onBackPressed() {
+	    // This will be called either automatically for you on 2.0    
+	    // or later, or by the code above on earlier versions of the platform.
+		finish();
+	    return;
 	}
 }
