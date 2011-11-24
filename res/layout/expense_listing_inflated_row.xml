@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" 
-
+    android:layout_height="fill_parent"
     >
-    
-    
 
-    <LinearLayout 
+    <RelativeLayout 
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:id="@+id/expense_listing_inflated_row_listview"
@@ -15,11 +12,14 @@
         android:paddingTop="10dp"
     	android:paddingBottom="10dp"
     	android:paddingLeft="5dp"
+    	android:paddingRight="10dp"
         >
         
         <RelativeLayout
             android:layout_height="fill_parent"
             android:layout_width="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/expense_listing_inflated_row_realtivelayout_imageview"
         	>
     
     		<ImageView 
@@ -35,6 +35,9 @@
     	    android:layout_width="185dp"
     	    android:layout_height="wrap_content"
     	    android:layout_marginLeft="10dp"
+    	    android:id="@+id/expense_listing_inflated_row_realtivelayout_tag_location"
+    	    android:layout_toRightOf="@id/expense_listing_inflated_row_realtivelayout_imageview"
+    	    android:layout_toLeftOf="@+id/expense_listing_inflated_amountview"
     	    >
     	    
     	    <TextView
@@ -55,6 +58,7 @@
     	        android:layout_width="fill_parent"
     	        android:layout_height="wrap_content"
     	        android:maxLines="1"
+    	        android:minLines="1"
     	        android:textSize="12sp"
     	        android:textColor="#00539f"
     	        android:text="2 PM at East patel nagar, Delhi."
@@ -64,8 +68,9 @@
     	</RelativeLayout>
 
     	<RelativeLayout
-    	    android:id="@+id/expense_listing_inflated_amountview"
+    	    android:id="@id/expense_listing_inflated_amountview"
     	    android:layout_width="50dp"
+    	    android:layout_alignParentRight="true"
     	    android:layout_height="fill_parent"
     	   >
     	    <TextView
@@ -81,7 +86,7 @@
     	        android:typeface="sans" />
     	</RelativeLayout>
     	
-    </LinearLayout>
+    </RelativeLayout>
     
     <ImageView 
         android:layout_below="@id/expense_listing_inflated_row_listview"

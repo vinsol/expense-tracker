@@ -30,7 +30,7 @@ public class DatabaseAdapter {
 		private final String DATABASE_CREATE= "create table if not exists "+ TABLE_NAME +"("+
 				KEY_ID+" INTEGER PRIMARY KEY AUTOINCREMENT ,"+
 				KEY_TAG+" TEXT,"+
-				KEY_AMOUNT+" VARCHAR(255), "+
+				KEY_AMOUNT+" TEXT, "+
 				KEY_DATE_TIME+" TEXT NOT NULL,"+
 				KEY_LOCATION+" TEXT, "+
 				KEY_FAVORITE+" VARCHAR(1), "+
@@ -48,7 +48,6 @@ public class DatabaseAdapter {
 		
 		protected DatabaseAdapter open() throws SQLException{
 			db=createOpenHelper.getWritableDatabase();
-			createOpenHelper.onCreate(db);
 			return this;
 		}
 		
@@ -68,18 +67,18 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_LOCATION, _list.get(KEY_LOCATION));
 			contentValues.put(KEY_FAVORITE, _list.get(KEY_FAVORITE));
 			contentValues.put(KEY_TYPE, _list.get(KEY_TYPE));
-			Log.v("TRYING", "TRYING");
+			Log.v("com.vinsol.expensetracker", "TRYING");
 			long _id = db.insert(TABLE_NAME, null, contentValues);
-			Log.v("ADDED", "ADDED");
+			Log.v("com.vinsol.expensetracker", "ADDED");
 			return _id;
 		}
 		
 		protected boolean deleteDatabaseEntryID(String id){
 			String where = KEY_ID + "="+ id;
 			try{
-				Log.v("Deleting", "Deleting");
+				Log.v("com.vinsol.expensetracker", "Deleting");
 				db.delete(TABLE_NAME, where, null);
-				Log.v("Deleted", "Deleted");
+				Log.v("com.vinsol.expensetracker", "Deleted");
 			}
 			catch(SQLiteException e){
 				return false;
@@ -103,9 +102,9 @@ public class DatabaseAdapter {
 				contentValues.put(KEY_TYPE, _list.get(KEY_TYPE));
 			String where = KEY_ID + "="+ _list.get(KEY_ID);
 			try{
-				Log.v("TRYING", "EDITING");
+				Log.v("com.vinsol.expensetracker", "EDITING");
 				db.update(TABLE_NAME, contentValues, where, null);
-				Log.v("TRYING", "EDITED");
+				Log.v("com.vinsol.expensetracker", "EDITED");
 				return true;
 			}
 			catch(Exception e){

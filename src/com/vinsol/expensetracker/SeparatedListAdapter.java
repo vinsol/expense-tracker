@@ -149,13 +149,20 @@ class SeparatedListAdapter extends BaseAdapter{
 				if(mlist.get(5).equals(mContext.getString(R.string.camera))){
 					if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
 						try{
-							Bitmap bm = BitmapFactory.decodeFile("/sdcard/ExpenseTracker/"+mlist.get(0)+"_thumbnail.jpg");
-							holderBody.expense_listing_inflated_row_imageview.setImageBitmap(bm);
+							File mFile = new File("/sdcard/ExpenseTracker/"+mlist.get(0)+"_thumbnail.jpg");
+							if(mFile.canRead()){
+								Bitmap bm = BitmapFactory.decodeFile(mFile.getPath());
+								holderBody.expense_listing_inflated_row_imageview.setImageBitmap(bm);
+							} else {
+								holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
+							}
 						} catch (Exception e){
 							//TODO if image not available on sdcard
+							holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
 							e.printStackTrace();
 						}
 					} else {
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
 						//TODO if sdcard not available
 					}
 				} else if(mlist.get(5).equals(mContext.getString(R.string.text))){
@@ -163,7 +170,14 @@ class SeparatedListAdapter extends BaseAdapter{
 				} else if(mlist.get(5).equals(mContext.getString(R.string.unknown))){
 					holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.unknown_list_icon);
 				} else if(mlist.get(5).equals(mContext.getString(R.string.voice))){
-					holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.audio_play_list_icon);
+					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+mlist.get(0)+".amr");
+					if(mFile.canRead()){
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.audio_play_list_icon);
+					}
+					else {
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_voice_file_thumbnail);
+					}
+					
 				} else if(mlist.get(5).equals(mContext.getString(R.string.favorite_entry))){
 					/////TODO if favorite entry
 				}

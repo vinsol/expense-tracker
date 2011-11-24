@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import com.vinsol.expensetracker.location.LocationLast;
 import com.vinsol.expensetracker.utils.CameraFileSave;
+import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.ImageGet;
 
@@ -13,7 +14,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -35,6 +35,7 @@ public class CameraActivity extends Activity implements OnClickListener{
 	private EditText text_voice_camera_amount;
 	private EditText text_voice_camera_tag;
 	private DatabaseAdapter mDatabaseAdapter;
+	private TextView text_voice_camera_date_bar_dateview;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class CameraActivity extends Activity implements OnClickListener{
         text_voice_camera_camera_details = (LinearLayout) findViewById(R.id.text_voice_camera_camera_details);
         text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);
         text_voice_camera_tag = (EditText) findViewById(R.id.text_voice_camera_tag);
+        text_voice_camera_date_bar_dateview = (TextView) findViewById(R.id.text_voice_camera_date_bar_dateview);
         
         setGraphicsCamera();
         setClickListeners();
@@ -86,7 +88,6 @@ public class CameraActivity extends Activity implements OnClickListener{
 			File file = new File(path, name);
 			camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
 			startActivityForResult(camera, PICTURE_RESULT);
-			Log.v("_id", _id+"");
 		} else {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
@@ -95,17 +96,21 @@ public class CameraActivity extends Activity implements OnClickListener{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
 		if(PICTURE_RESULT == requestCode && Activity.RESULT_OK == resultCode){
 			if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
 				CameraFileSave cameraFileSave = new CameraFileSave(_id+"",this);
 				cameraFileSave.create();
 				ImageGet imageGet = new ImageGet(""+_id,this);
 				Bitmap bm = imageGet.getSmallImage();
-				ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
 				text_voice_camera_image_display.setImageBitmap(bm);
 			} else {
+				text_voice_camera_image_display.setImageResource(R.drawable.no_image_small);
 				Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 			}
+		}
+		else {
+			text_voice_camera_image_display.setImageResource(R.drawable.no_image_small);
 		}
 	}
 
@@ -150,6 +155,12 @@ public class CameraActivity extends Activity implements OnClickListener{
 			
 			if(text_voice_camera_tag.getText().toString() != ""){
 				_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
+			}
+			try{
+				DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+				_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+			} catch (Exception e){
+				e.printStackTrace();
 			}
 			
 			//////    *******   Update database if user added additional info   *******  ///////

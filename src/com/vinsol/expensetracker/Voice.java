@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.vinsol.expensetracker.location.LocationLast;
 import com.vinsol.expensetracker.utils.AudioPlay;
+import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.DisplayTime;
 import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.RecordingHelper;
@@ -42,6 +43,7 @@ public class Voice extends Activity implements OnClickListener{
 	private long _id;
 	private Bundle intentExtras;
 	private DatabaseAdapter mDatabaseAdapter;
+	private TextView text_voice_camera_date_bar_dateview;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class Voice extends Activity implements OnClickListener{
         text_voice_camera_rerecord_button = (Button) findViewById(R.id.text_voice_camera_rerecord_button);
     	text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);
     	text_voice_camera_tag = (EditText) findViewById(R.id.text_voice_camera_tag);
+    	text_voice_camera_date_bar_dateview = (TextView) findViewById(R.id.text_voice_camera_date_bar_dateview);
     	mDatabaseAdapter = new DatabaseAdapter(this);
     	
     	////////*********     Get id from intent extras     ********   ////////////
@@ -96,6 +99,8 @@ public class Voice extends Activity implements OnClickListener{
 		mLocationLast.getLastLocation();
 		
 	}
+	
+	
 	
 	@Override
 	protected void onPause() {
@@ -235,6 +240,12 @@ public class Voice extends Activity implements OnClickListener{
 				_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
 			}
 		
+			try{
+				DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+				_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 			//////    *******   Update database if user added additional info   *******  ///////
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editDatabase(_list);
@@ -298,4 +309,6 @@ public class Voice extends Activity implements OnClickListener{
 			text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(millisUntilFinished));
 		}
 	}
+	
+	
 }

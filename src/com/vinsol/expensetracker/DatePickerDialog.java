@@ -49,7 +49,6 @@ public class DatePickerDialog extends Dialog implements android.view.View.OnClic
 			
 			@Override
 			public void onDateChanged(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
-				
 				if(isDateAfter(view)){
 					Calendar mCalendar = Calendar.getInstance();
 					view.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), this);
@@ -65,7 +64,10 @@ public class DatePickerDialog extends Dialog implements android.view.View.OnClic
 				else 
 					return false;
 			}
+			
+			
 		});
+		
 		Button okDateButton	= (Button)findViewById(R.id.new_date_dialog_ok_button);
 		Button cancelDateButton	= (Button)findViewById(R.id.new_date_dialog_cancel_button);
 		okDateButton.setOnClickListener(this);

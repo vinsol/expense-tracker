@@ -3,6 +3,7 @@ package com.vinsol.expensetracker;
 import java.util.HashMap;
 
 import com.vinsol.expensetracker.location.LocationLast;
+import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.FileDelete;
 
 import android.app.Activity;
@@ -14,6 +15,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
 public class TextEntry extends Activity implements OnClickListener{
 
@@ -22,6 +24,7 @@ public class TextEntry extends Activity implements OnClickListener{
 	private Bundle intentExtras;
 	private EditText text_voice_camera_amount;
 	private EditText text_voice_camera_tag;
+	private TextView text_voice_camera_date_bar_dateview;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class TextEntry extends Activity implements OnClickListener{
         mDatabaseAdapter = new DatabaseAdapter(this);
         text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);
         text_voice_camera_tag = (EditText) findViewById(R.id.text_voice_camera_tag);
+        text_voice_camera_date_bar_dateview = (TextView) findViewById(R.id.text_voice_camera_date_bar_dateview);
         
         ////////*********     Get id from intent extras     ********   ////////////
         intentExtras = getIntent().getBundleExtra("textEntryBundle");
@@ -92,11 +96,17 @@ public class TextEntry extends Activity implements OnClickListener{
 			if(text_voice_camera_tag.getText().toString() != ""){
 				_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
 			}
-			
+			try{
+				DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+				_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 			//////    *******   Update database if user added additional info   *******  ///////
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editDatabase(_list);
 			mDatabaseAdapter.close();
+			
 			finish();
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			startActivity(intentExpenseListing);

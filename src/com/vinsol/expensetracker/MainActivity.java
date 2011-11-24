@@ -58,7 +58,7 @@ public class MainActivity extends Activity implements OnClickListener{
 //		adapter.open();
 //		adapter.drop_table();
 //		adapter.close();
-		
+//		
 		
         /////////     *********    DatabaseAdaptor initialize     *********    ////////
         mDatabaseAdapter = new DatabaseAdapter(this);
@@ -196,6 +196,13 @@ public class MainActivity extends Activity implements OnClickListener{
 		long _id = mDatabaseAdapter.insert_to_database(_list);
 		mDatabaseAdapter.close();
 		return _id;
+	}
+	
+	@Override
+	protected void onStop() {
+		mLocation = null;
+		mCurrentLocation = null;
+		super.onStop();
 	}
 	
 }
