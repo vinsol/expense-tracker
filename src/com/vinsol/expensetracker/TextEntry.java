@@ -129,7 +129,14 @@ public class TextEntry extends Activity implements OnClickListener{
 		///////    *******  Creating HashMap to update info   *******  ////////
 		HashMap<String, String> _list = new HashMap<String, String>();
 		_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
-		_list.put(DatabaseAdapter.KEY_AMOUNT, text_voice_camera_amount.getText().toString());
+		
+		if(!text_voice_camera_amount.getText().toString().equals(".") && !text_voice_camera_amount.getText().toString().equals("")){
+			Double mAmount = Double.parseDouble(text_voice_camera_amount.getText().toString());
+			mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+			_list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
+		} else {
+			_list.put(DatabaseAdapter.KEY_AMOUNT, null);
+		}
 		if(text_voice_camera_tag.getText().toString() != ""){
 			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
 		}

@@ -112,7 +112,18 @@ public class CameraActivity extends Activity implements OnClickListener{
 			}
 		}
 		else {
-			text_voice_camera_image_display.setImageResource(R.drawable.no_image_small);
+			File mFile = new File("/sdcard/ExpenseTracker/"+_id+"_small.jpg");
+			if(mFile.canRead()){
+				ImageGet imageGet = new ImageGet(""+_id,this);
+				Bitmap bm = imageGet.getSmallImage();
+				text_voice_camera_image_display.setImageBitmap(bm);
+			} else {
+				DatabaseAdapter adapter = new DatabaseAdapter(this);
+				adapter.open();
+				adapter.deleteDatabaseEntryID(_id+"");
+				adapter.close();
+				finish();
+			}
 		}
 	}
 
@@ -188,8 +199,14 @@ public class CameraActivity extends Activity implements OnClickListener{
 		///////    *******  Creating HashMap to update info   *******  ////////
 		HashMap<String, String> _list = new HashMap<String, String>();
 		_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
-		_list.put(DatabaseAdapter.KEY_AMOUNT, text_voice_camera_amount.getText().toString());
-				
+		
+		if(!text_voice_camera_amount.getText().toString().equals(".") && !text_voice_camera_amount.getText().toString().equals("")){
+			Double mAmount = Double.parseDouble(text_voice_camera_amount.getText().toString());
+			mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+			_list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
+		} else {
+			_list.put(DatabaseAdapter.KEY_AMOUNT, null);
+		}		
 		if(text_voice_camera_tag.getText().toString() != ""){
 			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
 		}

@@ -14,23 +14,24 @@
     	android:textSize = "20sp"
     	android:layout_gravity = "center_horizontal"
     	android:gravity="center_horizontal"/>
-    	
+    
     <TextView 
     	android:id = "@+id/new_date_label"
     	android:layout_height = "wrap_content"
     	android:layout_width = "290dp"
-    	android:layout_margin="5dp"
-    	android:text = "this will be the date"
+    	android:text = "Text"
     	android:textColor="#ffffff"
+    	android:layout_margin="5dp"
     	android:padding="3dp"
-    	android:gravity="center_horizontal"/>
-    	
+    	android:gravity="center_horizontal"
+    	/>
+    
     <DatePicker
     	android:id = "@+id/new_date_picker"
     	android:layout_height = "wrap_content"
     	android:layout_width = "290dp"
     	android:layout_margin="5dp"
-    	android:layout_gravity="center_horizontal"/>
+    	android:layout_gravity="center"/>
     	
     <TimePicker 
     	android:id = "@+id/new_time_picker"

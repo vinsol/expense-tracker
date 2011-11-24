@@ -28,7 +28,6 @@ public class ConvertCursorToListString {
 		if(cursor.getCount()>=1){
 			cursor.moveToFirst();
 			do {
-				
 				Calendar mTempCalendar = Calendar.getInstance();
 				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 			
@@ -37,7 +36,7 @@ public class ConvertCursorToListString {
 					list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
 				}
 				String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
-				if(tempAmount != null ){
+				if(tempAmount != null && !tempAmount.equals("")){
 					try{
 						temptotalAmount += Double.parseDouble(tempAmount);
 					}catch(NumberFormatException e){}
@@ -63,6 +62,12 @@ public class ConvertCursorToListString {
 							totalAmountString = temptotalAmount+"";
 						}
 						isTempAmountNull = false;
+						if(totalAmountString.contains("?") && totalAmountString.length()>1){
+							String temp = totalAmountString.substring(0, totalAmountString.length()-2);
+							Double mAmount = Double.parseDouble(temp);
+							mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+							totalAmountString = mAmount.toString()+" ?";
+						}
 						list.put(DatabaseAdapter.KEY_AMOUNT, totalAmountString);
 						temptotalAmount = 0;
 					} 
@@ -80,6 +85,12 @@ public class ConvertCursorToListString {
 							totalAmountString = temptotalAmount+"";
 						}
 					isTempAmountNull = false;
+					if(totalAmountString.contains("?") && totalAmountString.length()>1){
+						String temp = totalAmountString.substring(0, totalAmountString.length()-2);
+						Double mAmount = Double.parseDouble(temp);
+						mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+						totalAmountString = mAmount.toString()+" ?";
+					}
 					list.put(DatabaseAdapter.KEY_AMOUNT, totalAmountString);
 					cursor.moveToNext();
 				}

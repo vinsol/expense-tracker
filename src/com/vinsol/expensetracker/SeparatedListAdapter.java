@@ -43,12 +43,10 @@ class SeparatedListAdapter extends BaseAdapter{
 	}
 
 	public void addSection(String section, Adapter adapter, List<HashMap<String, String>> _mDataDateList) {
-		
 		mDatadateList = _mDataDateList;
 		this.headers.add(section);
 		this.footers.add(section);
 		this.sections.put(section, adapter);
-		
 	}
 
 	public Object getItem(int position) {
@@ -166,7 +164,14 @@ class SeparatedListAdapter extends BaseAdapter{
 						//TODO if sdcard not available
 					}
 				} else if(mlist.get(5).equals(mContext.getString(R.string.text))){
-					holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.text_list_icon);
+					
+					if(!mlist.get(1).equals(mContext.getString(R.string.unfinished_textentry))) {
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.text_list_icon);
+					} else {
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.text_list_icon_no_tag);
+					}
+					
+					
 				} else if(mlist.get(5).equals(mContext.getString(R.string.unknown))){
 					holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.unknown_list_icon);
 				} else if(mlist.get(5).equals(mContext.getString(R.string.voice))){
@@ -273,6 +278,11 @@ class SeparatedListAdapter extends BaseAdapter{
 							}
 						}
 					}
+				if(mListenerList.get(5).equals(mContext.getString(R.string.text))) {
+					if(!mListenerList.get(1).equals(mContext.getString(R.string.unfinished_textentry))) {
+						new DescriptionDialog(mContext,mListenerList.get(1));
+					}
+				}
 			}
 			
 			if(v.getId() == R.id.expense_listing_list_add_expenses){

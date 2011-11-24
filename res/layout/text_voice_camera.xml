@@ -162,9 +162,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_voice_camera_amount"
-                android:lines="4"
+                android:minLines="3"
                 android:gravity="top"
-                android:hint="tag"/>
+                android:hint="description"/>
             
             
         </RelativeLayout>
