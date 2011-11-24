@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -44,6 +45,7 @@ public class Voice extends Activity implements OnClickListener{
 	private Bundle intentExtras;
 	private DatabaseAdapter mDatabaseAdapter;
 	private TextView text_voice_camera_date_bar_dateview;
+	private String dateViewString;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +99,14 @@ public class Voice extends Activity implements OnClickListener{
 		////////*********     Get Last most accurate location info   *********   /////////
 		LocationLast mLocationLast = new LocationLast(this);
 		mLocationLast.getLastLocation();
-		
 	}
 	
-	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		dateViewString = text_voice_camera_date_bar_dateview.getText().toString();
+	}
+
 	
 	@Override
 	protected void onPause() {
@@ -231,28 +237,7 @@ public class Voice extends Activity implements OnClickListener{
 		////////********  Adding Action to save entry     *********    ///////////
 		
 		if(v.getId() == R.id.text_voice_camera_save_entry){
-			///////    *******  Creating HashMap to update info   *******  ////////
-			HashMap<String, String> _list = new HashMap<String, String>();
-			_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
-			_list.put(DatabaseAdapter.KEY_AMOUNT, text_voice_camera_amount.getText().toString());
-			
-			if(text_voice_camera_tag.getText().toString() != ""){
-				_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
-			}
-		
-			try{
-				DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
-				_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
-			} catch (Exception e){
-				e.printStackTrace();
-			}
-			//////    *******   Update database if user added additional info   *******  ///////
-			mDatabaseAdapter.open();
-			mDatabaseAdapter.editDatabase(_list);
-			mDatabaseAdapter.close();
-			finish();
-			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-			startActivity(intentExpenseListing);
+			saveEntry();
 		}
 	
 	
@@ -286,6 +271,33 @@ public class Voice extends Activity implements OnClickListener{
 	}
 	
 	
+	private void saveEntry() {
+		///////    *******  Creating HashMap to update info   *******  ////////
+		HashMap<String, String> _list = new HashMap<String, String>();
+		_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
+		_list.put(DatabaseAdapter.KEY_AMOUNT, text_voice_camera_amount.getText().toString());
+				
+		if(text_voice_camera_tag.getText().toString() != ""){
+			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
+		}
+		
+		if(!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString))	
+		try{
+			DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+			_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		//////    *******   Update database if user added additional info   *******  ///////
+		mDatabaseAdapter.open();
+		mDatabaseAdapter.editDatabase(_list);
+		mDatabaseAdapter.close();
+		finish();
+		Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+		startActivity(intentExpenseListing);
+	}
+
+
 	/////////   *********       CountdownTimer for Chronometer    *********    //////////      
 	//countdowntimer is an abstract class, so extend it and fill in methods
 	private class MyCount extends CountDownTimer{
@@ -311,4 +323,19 @@ public class Voice extends Activity implements OnClickListener{
 	}
 	
 	
+	///// ******************  Handling back press of key   ********** ///////////
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+	     if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+	    	 onBackPressed();
+	         return true;
+	      }
+	    return super.onKeyDown(keyCode, event);
+	}
+
+	public void onBackPressed() {
+	    // This will be called either automatically for you on 2.0    
+	    // or later, or by the code above on earlier versions of the platform.
+		saveEntry();
+	    return;
+	}
 }
