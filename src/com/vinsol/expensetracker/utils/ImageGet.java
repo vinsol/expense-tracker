@@ -31,6 +31,7 @@ public class ImageGet {
 	public Bitmap getSmallImage(){
 		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
 			mFile = new File(mExpenseTrackerDirectory,mFileName+"_small"+".jpg");
+			System.gc();
 			Bitmap bm = BitmapFactory.decodeFile(mFile.getPath());
 			return bm;
 		} else {
@@ -44,6 +45,7 @@ public class ImageGet {
 	public Bitmap getThumbnailImage(){
 		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
 			mFile = new File(mExpenseTrackerDirectory,mFileName+"_thumbnail"+".jpg");
+			System.gc();
 			Bitmap bm = BitmapFactory.decodeFile(mFile.getPath());
 			return bm;
 		} else {

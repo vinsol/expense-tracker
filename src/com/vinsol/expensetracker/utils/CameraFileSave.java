@@ -51,6 +51,7 @@ public class CameraFileSave {
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
+			System.gc();
 			imageByCamera = BitmapFactory.decodeStream(fileInputStream);
 			
 			try {
@@ -143,6 +144,7 @@ public class CameraFileSave {
 			BitmapFactory.Options o2 = new BitmapFactory.Options();
 			o2.inSampleSize = scale;
 			try {
+				System.gc();
 				return BitmapFactory.decodeStream(new FileInputStream(mPathImageByCamera), null, o2);
 			} catch (FileNotFoundException e) {
 				Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
