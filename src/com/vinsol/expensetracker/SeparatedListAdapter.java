@@ -9,8 +9,7 @@ import java.util.Map;
 import com.vinsol.expensetracker.R;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -149,8 +148,8 @@ class SeparatedListAdapter extends BaseAdapter{
 						try{
 							File mFile = new File("/sdcard/ExpenseTracker/"+mlist.get(0)+"_thumbnail.jpg");
 							if(mFile.canRead()){
-								Bitmap bm = BitmapFactory.decodeFile(mFile.getPath());
-								holderBody.expense_listing_inflated_row_imageview.setImageBitmap(bm);
+								Drawable drawable = Drawable.createFromPath(mFile.getPath());
+								holderBody.expense_listing_inflated_row_imageview.setImageDrawable(drawable);
 							} else {
 								holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
 							}

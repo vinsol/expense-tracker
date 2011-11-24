@@ -3,6 +3,7 @@ package com.vinsol.expensetracker;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,11 +31,19 @@ public class ImageViewActivity extends Activity {
 		
 		_id = getBundleExtras.getLong("_id");
 		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
-			Bitmap bitmap = BitmapFactory.decodeFile("/mnt/sdcard/ExpenseTracker/"+_id+".jpg");
-			mImageView.setImageBitmap(bitmap);
-			} 
+			try{
+				Drawable drawable = Drawable.createFromPath("/mnt/sdcard/ExpenseTracker/"+_id+".jpg");
+				mImageView.setImageDrawable(drawable);
+			} catch (Exception e){
+			}
+		} 
 		else {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
 	}
 }
