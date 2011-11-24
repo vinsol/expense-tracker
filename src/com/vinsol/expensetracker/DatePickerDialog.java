@@ -6,7 +6,6 @@ import com.vinsol.expensetracker.utils.DisplayDate;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -16,7 +15,7 @@ import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-public class DatePickerDialog extends Dialog implements android.view.View.OnClickListener{
+public class DatePickerDialog extends Dialog implements android.view.View.OnClickListener,OnDateChangedListener{
 
 	private DatePicker datePicker;
 	private TimePicker timePicker;
@@ -50,41 +49,7 @@ public class DatePickerDialog extends Dialog implements android.view.View.OnClic
 		dateViewString = (String) dateViewString.subSequence(4, dateViewString.length());
 		day = Integer.parseInt(dateViewString);
 		
-		datePicker.init(year, month, day, new OnDateChangedListener() {
-			boolean color = true;
-			@Override
-			public void onDateChanged(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
-				
-				if(isDateAfter(view)){
-					Log.v("true", "true");
-					if(color) {
-						textView.setBackgroundColor(Color.rgb(0, 180, 0));
-						color = false;
-					}
-//					textViewVisible();
-					Calendar mCalendar = Calendar.getInstance();
-					view.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), this);
-				} else {
-					Log.v("flase", "false");
-					if(!color){
-						textView.setBackgroundColor(Color.rgb(180, 0, 0));
-						color = true;
-					}
-					
-//					textViewInvisible();
-				}
-			}
-
-			private boolean isDateAfter(DatePicker tempView) {
-				Calendar mCalendar = Calendar.getInstance();
-				Calendar tempCalendar = Calendar.getInstance();
-				tempCalendar.set(tempView.getYear(), tempView.getMonth(), tempView.getDayOfMonth(), 0, 0, 0);
-				if(tempCalendar.after(mCalendar))
-					return true;
-				else 
-					return false;
-			}
-		});
+		datePicker.init(year, month, day, this);
 		
 		Button okDateButton	= (Button)findViewById(R.id.new_date_dialog_ok_button);
 		Button cancelDateButton	= (Button)findViewById(R.id.new_date_dialog_cancel_button);
@@ -145,5 +110,38 @@ public class DatePickerDialog extends Dialog implements android.view.View.OnClic
 	
 	private void textViewVisible(){
 		textView.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void onDateChanged(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
+		boolean color = true;
+		if(isDateAfter(view)){
+			Log.v("true", "true");
+			textViewVisible();
+//			textViewVisible();
+			Calendar mCalendar = Calendar.getInstance();
+			if(color){
+				view.init(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), this);
+				color = false;
+			} else {
+				view.init(year, monthOfYear, dayOfMonth, null);
+			}
+			
+		} else {
+			textViewInvisible();
+			}
+			
+//			textViewInvisible();
+		}
+	
+	
+	private boolean isDateAfter(DatePicker tempView) {
+		Calendar mCalendar = Calendar.getInstance();
+		Calendar tempCalendar = Calendar.getInstance();
+		tempCalendar.set(tempView.getYear(), tempView.getMonth(), tempView.getDayOfMonth(), 0, 0, 0);
+		if(tempCalendar.after(mCalendar))
+			return true;
+		else 
+			return false;
 	}
 }
