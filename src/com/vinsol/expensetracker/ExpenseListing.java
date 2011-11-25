@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.vinsol.expensetracker.location.LocationLast;
+import com.vinsol.expensetracker.utils.DisplayDate;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -45,7 +47,7 @@ public class ExpenseListing extends Activity{
 		/////////     *********    Getting list of dates   *******    ///////////
 		mDataDateList = mConvertCursorToListString.getDateListString();
 		mSubList = mConvertCursorToListString.getListStringParticularDate();
-		
+		Log.v("mSubList", mSubList.toString());
 		//////////     *********    Setting adapter to listview   ******   ///////////
 		int j = 0;
 		mSeparatedListAdapter = new SeparatedListAdapter(this);
@@ -57,67 +59,193 @@ public class ExpenseListing extends Activity{
 			
 			while(j < mSubList.size() && date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
 				List<String> _templist = new ArrayList<String>();
-				_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_TAG).equals("")){
-					_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TAG));
-				}
-				else {
-					if(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))){
-						_templist.add("Unfinished Camera Entry");
-					} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.voice))) {
-						_templist.add("Unfinished Voice Entry");
-					} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.text))) {
-						_templist.add("Unfinished Text Entry");
-					} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.favorite_entry))) {
-						_templist.add("Unfinished Favorite Entry");
-					} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.unknown))) {
-						_templist.add("Unknown Entry");
+				Calendar mCalendar = Calendar.getInstance();
+				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+				DisplayDate mDisplayDate = new DisplayDate(mCalendar);
+				
+				if(mDisplayDate.isCurrentWeek()){
+					_templist = getListCurrentWeek(j);
+					mList.add(_templist);
+					j++;
+				} else if(mDisplayDate.isCurrentMonth()) {
+					
+					while(mDisplayDate.getHeaderFooterListDisplayDate().equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
+						Log.v("true", true+"");
+						//////    Adding i+" "+j as id
+						List<String> mTempSubList = new ArrayList<String>();
+						mTempSubList.add(i+" "+j);
+						
+						///// Adding tag
+						Calendar tempCalendar = Calendar.getInstance();
+						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
+						int isDayOfMonth = tempCalendar.get(Calendar.DAY_OF_MONTH);
+						mTempSubList.add(tempDisplayDate.getSubListTag()); //TODO
+						
+						/////  Adding Amount
+						double temptotalAmount = 0;
+						String totalAmountString = null;
+						boolean isTempAmountNull = false;
+						do{
+							String tempAmount = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
+							if(tempAmount != null && !tempAmount.equals("")){
+								try{
+									temptotalAmount += Double.parseDouble(tempAmount);
+								}catch(NumberFormatException e){}
+							} else {
+								isTempAmountNull = true;
+							}
+							j++;
+							if(j < mSubList.size()){
+								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+								tempDisplayDate = new DisplayDate(tempCalendar);
+							} else {
+								break;
+							}
+							
+						}while(tempCalendar.get(Calendar.DAY_OF_MONTH) == isDayOfMonth);
+						
+						if(isTempAmountNull) {
+							if(temptotalAmount != 0) {
+								totalAmountString = temptotalAmount+" ?";
+							}
+							else {
+								totalAmountString = "?";
+							}
+						} else {
+							totalAmountString = temptotalAmount+"";
+						}
+						mTempSubList.add(totalAmountString);
+						
+						mTempSubList.add("");
+						mTempSubList.add("");
+						mTempSubList.add(getString(R.string.sublist_daywise));
+						mList.add(mTempSubList);
+						if(j >= mSubList.size()){
+							break;
+						}
+					}
+					
+				} else if (mDisplayDate.isPrevMonths()) {
+					
+					while(mDisplayDate.getHeaderFooterListDisplayDate().equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
+						Log.v("true", true+"");
+						//////    Adding i+" "+j as id
+						List<String> mTempSubList = new ArrayList<String>();
+						mTempSubList.add(i+" "+j);
+						
+						///// Adding tag
+						Calendar tempCalendar = Calendar.getInstance();
+						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
+						int isWeekOfMonth = tempCalendar.get(Calendar.WEEK_OF_MONTH);
+						mTempSubList.add(tempDisplayDate.getSubListTag()); //TODO
+						
+						/////  Adding Amount
+						double temptotalAmount = 0;
+						String totalAmountString = null;
+						boolean isTempAmountNull = false;
+						do{
+							String tempAmount = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
+							if(tempAmount != null && !tempAmount.equals("")){
+								try{
+									temptotalAmount += Double.parseDouble(tempAmount);
+								}catch(NumberFormatException e){}
+							} else {
+								isTempAmountNull = true;
+							}
+							Log.v("datert", tempCalendar.get(Calendar.WEEK_OF_MONTH)+"");
+							j++;
+							if(j < mSubList.size()){
+								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+								tempDisplayDate = new DisplayDate(tempCalendar);
+							} else {
+								break;
+							}	
+							
+						}while(tempCalendar.get(Calendar.DAY_OF_MONTH) == isWeekOfMonth);
+						
+						if(isTempAmountNull) {
+							if(temptotalAmount != 0) {
+								totalAmountString = temptotalAmount+" ?";
+							}
+							else {
+								totalAmountString = "?";
+							}
+						} else {
+							totalAmountString = temptotalAmount+"";
+						}
+						mTempSubList.add(totalAmountString);
+						
+						mTempSubList.add("");
+						mTempSubList.add("");
+						mTempSubList.add(getString(R.string.sublist_weekwise));
+						mList.add(mTempSubList);
+						if(j >= mSubList.size()){
+							break;
+						}
+					}
+				} else 
+					
+					///////   ListView if previous year
+					
+				if (mDisplayDate.isPrevYears()) {
+					while(mDisplayDate.getHeaderFooterListDisplayDate().equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
+						//////    Adding i+" "+j as id
+						List<String> mTempSubList = new ArrayList<String>();
+						mTempSubList.add(i+" "+j);
+						
+						///// Adding tag
+						Calendar tempCalendar = Calendar.getInstance();
+						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
+						int isMonth = tempCalendar.get(Calendar.MONTH);
+						mTempSubList.add(tempDisplayDate.getSubListTag()); //TODO
+						
+						/////  Adding Amount
+						double temptotalAmount = 0;
+						String totalAmountString = null;
+						boolean isTempAmountNull = false;
+						do{
+							String tempAmount = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
+							if(tempAmount != null && !tempAmount.equals("")){
+								try{
+									temptotalAmount += Double.parseDouble(tempAmount);
+								}catch(NumberFormatException e){}
+							} else {
+								isTempAmountNull = true;
+							}
+							j++;
+							if(j < mSubList.size()){
+								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+								tempDisplayDate = new DisplayDate(tempCalendar);
+							} else {
+								break;
+							}
+							
+						}while(tempCalendar.get(Calendar.MONTH) == isMonth);
+						
+						if(isTempAmountNull) {
+							if(temptotalAmount != 0) {
+								totalAmountString = temptotalAmount+" ?";
+							}
+							else {
+								totalAmountString = "?";
+							}
+						} else {
+							totalAmountString = temptotalAmount+"";
+						}
+						mTempSubList.add(totalAmountString);
+						
+						mTempSubList.add("");
+						mTempSubList.add("");
+						mTempSubList.add(getString(R.string.sublist_monthwise));
+						mList.add(mTempSubList);
+						if(j >= mSubList.size()){
+							break;
+						}
 					}
 				}
-			
-				
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT).equals("")){
-					_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT));
-				} else {
-					_templist.add("?");
-				}
-			
-				///////   *******  Adding location date data to list   *******   //////////
-			
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != null && !mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis").equals("") &&
-					mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals("")) {
-					_templist.add(getLocationDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis"),mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
-				} 
-			
-				else if (mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != null && !mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis").equals("") &&
-						(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) == null || mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals(""))) {
-					_templist.add(getLocationDateDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
-				} 
-			
-				else if ((mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") == null || mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis").equals("")) &&
-						mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals("")) {
-					_templist.add("Unknown time at "+ mSubList.get(j).get(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
-				} 
-			
-				else {
-					_templist.add("Unknown Location and Date");
-				}
-			
-			
-			
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE).equals("")){
-					_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE));
-				} else {
-					_templist.add("");
-				}
-			
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals("")){
-					_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE));
-				} else {
-					_templist.add("");
-				}
-				mList.add(_templist);
-				j++;
 			
 				}
 				listString.add(mList);
@@ -142,6 +270,68 @@ public class ExpenseListing extends Activity{
 			});
 		} 
 		
+	}
+	
+	private List<String> getListCurrentWeek(int j){
+		List<String> _templist = new ArrayList<String>();
+		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
+		if(mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_TAG).equals("")){
+			_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TAG));
+		}
+		else {
+			if(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))){
+				_templist.add("Unfinished Camera Entry");
+			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.voice))) {
+				_templist.add("Unfinished Voice Entry");
+			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.text))) {
+				_templist.add("Unfinished Text Entry");
+			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.favorite_entry))) {
+				_templist.add("Unfinished Favorite Entry");
+			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.unknown))) {
+				_templist.add("Unknown Entry");
+			}
+		}
+
+	
+		if(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT).equals("")){
+			_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT));
+		} else {
+			_templist.add("?");
+		}
+
+		///////   *******  Adding location date data to list   *******   //////////
+		
+		if(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != null && !mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis").equals("") &&
+				mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals("")) {
+			_templist.add(getLocationDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis"),mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
+		} 
+
+		else if (mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") != null && !mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis").equals("") &&
+				(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) == null || mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals(""))) {
+			_templist.add(getLocationDateDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+		} 
+
+		else if ((mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis") == null || mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis").equals("")) &&
+				mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals("")) {
+			_templist.add("Unknown time at "+ mSubList.get(j).get(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
+		} 
+
+		else {
+			_templist.add("Unknown Location and Date");
+		}
+		
+		if(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE).equals("")){
+			_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE));
+		} else {
+			_templist.add("");
+		}
+
+		if(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals("")){
+			_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE));
+		} else {
+			_templist.add("");
+		}
+		return _templist;
 	}
 	
 	private String getLocationDateDate(String dateInMillis) {

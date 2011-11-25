@@ -27,13 +27,16 @@ public class ConvertCursorToListString {
 		boolean isTempAmountNull = false;
 		if(cursor.getCount()>=1){
 			cursor.moveToFirst();
+			
 			do {
 				Calendar mTempCalendar = Calendar.getInstance();
 				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 			
+				
+				
 				DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
 				if(list.isEmpty()){
-					list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
+					list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getHeaderFooterListDisplayDate());    ///TODO
 				}
 				String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
 				if(tempAmount != null && !tempAmount.equals("")){
@@ -43,14 +46,13 @@ public class ConvertCursorToListString {
 				} else {
 					isTempAmountNull = true;
 				}
-			
 				cursor.moveToNext();
 				
 				if(!cursor.isAfterLast()) {
 					Calendar mTempSubCalendar = Calendar.getInstance();
 					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
-					if(!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(mTempDisplayDate.getDisplayDate())){
+					if(!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(mTempDisplayDate.getHeaderFooterListDisplayDate())) { //TODO  
 						if(isTempAmountNull) {
 							if(temptotalAmount != 0) {
 								totalAmountString = temptotalAmount+" ?";
@@ -101,6 +103,8 @@ public class ConvertCursorToListString {
 					totalAmountString = null;
 				}
 			}while(!cursor.isAfterLast());
+			
+			
 		}
 		adapter.close();
 		return mainlist;
@@ -121,6 +125,8 @@ public class ConvertCursorToListString {
 		return null;
 	}
 
+	
+	
 	public List<HashMap<String, String>> getListStringParticularDate() {
 		DatabaseAdapter adapter=new DatabaseAdapter(context);
 		adapter.open();
@@ -141,7 +147,7 @@ public class ConvertCursorToListString {
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				DisplayDate mDisplayDate = new DisplayDate(calendar);
-				list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getDisplayDate());
+				list.put(DatabaseAdapter.KEY_DATE_TIME, mDisplayDate.getHeaderFooterListDisplayDate());   //TODO
 				list.put(DatabaseAdapter.KEY_DATE_TIME+"Millis", cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				if(!list.isEmpty())
 					mainlist.add(list);

@@ -5,7 +5,11 @@
     <string name="text">1</string>
     <string name="camera">2</string>
     <string name="voice">3</string>
-    <string name="favorite_entry">3</string>
+    <string name="favorite_entry">4</string>
+    <string name="sublist_daywise">5</string>
+    <string name="sublist_weekwise">6</string>
+    <string name="sublist_monthwise">7</string>
+    <string name="sublist_yearwise">8</string>
     <string name="favorite">T</string>
     <string name="favorite_not">F</string>
     <string name="unfinished_textentry">Unfinished Text Entry</string>

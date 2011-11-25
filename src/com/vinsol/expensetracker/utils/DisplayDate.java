@@ -28,8 +28,78 @@ public class DisplayDate {
     		
     		return "Today, "+month+" "+day;
     	}
+    	
+    	
     	return month+" "+day+", "+year;
     }
+	
+	
+	////////********    Function to get date in proper format to display in various activities ****** ///////
+	public String getHeaderFooterListDisplayDate(){
+		String month,day,year;	
+		month = getMonth(mCalendar.get(Calendar.MONTH));
+		day = mCalendar.get(Calendar.DAY_OF_MONTH)+"";
+		year = mCalendar.get(Calendar.YEAR)+"";
+		Calendar currentDate = Calendar.getInstance();
+		if(Integer.parseInt(day) == currentDate.get(Calendar.DAY_OF_MONTH) && 
+				mCalendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) &&
+				Integer.parseInt(year) == currentDate.get(Calendar.YEAR)){
+			return "Today, "+month+" "+day;
+		}
+		
+		if(isCurrentWeek()){
+			return month+" "+day+", "+year;
+		}
+		
+		if(isCurrentMonth()){
+			return month+", Week "+(mCalendar.get(Calendar.WEEK_OF_MONTH));
+		}
+		
+		if(isPrevMonths()){
+			return month+" "+mCalendar.get(Calendar.YEAR);
+		}
+		
+		if(isPrevYears()){
+			return mCalendar.get(Calendar.YEAR)+"";
+		}
+		return null;
+	}
+
+	public boolean isPrevYears() {
+		Calendar mTempCalendar = Calendar.getInstance();
+		if(mTempCalendar.get(Calendar.YEAR) > mCalendar.get(Calendar.YEAR)){
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isPrevMonths() {
+		Calendar mTempCalender = Calendar.getInstance();
+		if((mTempCalender.get(Calendar.MONTH) > mCalendar.get(Calendar.MONTH))
+				&& (mTempCalender.get(Calendar.YEAR) == mCalendar.get(Calendar.YEAR))){
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isCurrentMonth() {
+		Calendar mTempCalendar = Calendar.getInstance();
+		if((mTempCalendar.get(Calendar.MONTH) == mCalendar.get(Calendar.MONTH))
+				&&(mTempCalendar.get(Calendar.YEAR) == mCalendar.get(Calendar.YEAR))){
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isCurrentWeek() {
+		Calendar mTempCalendar = Calendar.getInstance();
+		if((mTempCalendar.get(Calendar.WEEK_OF_MONTH) == mCalendar.get(Calendar.WEEK_OF_MONTH))
+				&&(mTempCalendar.get(Calendar.MONTH) == mCalendar.get(Calendar.MONTH)) 
+				&&(mTempCalendar.get(Calendar.YEAR) == mCalendar.get(Calendar.YEAR))){
+			return true;
+		}
+		return false;
+	}
 	
 	////////   *******   Function which returns month as string  ********    ///////////
 	private String getMonth(int i) {
@@ -58,6 +128,42 @@ public class DisplayDate {
 				return "Nov";
 			case 11:
 				return "Dec";
+		}
+		return null;
+	}
+	
+	private String getWeek(int i) {
+		switch(i){
+			case 1:
+				return "Sunday";
+			case 2:
+				return "Monday";
+			case 3:
+				return "Tuesday";
+			case 4:
+				return "Wednesday";
+			case 5:
+				return "Thursday";
+			case 6:
+				return "Friday";
+			case 7:
+				return "Saturday";
+		}
+		return null;
+	}
+
+	public String getSubListTag() {
+		
+		if(isCurrentMonth()){
+			return getWeek(mCalendar.get(Calendar.DAY_OF_WEEK));
+		}
+		
+		if(isPrevMonths()){
+			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH);
+		}
+		
+		if(isPrevYears()){
+			return getMonth(mCalendar.get(Calendar.MONTH))+" "+mCalendar.get(Calendar.YEAR)+"";
 		}
 		return null;
 	}
