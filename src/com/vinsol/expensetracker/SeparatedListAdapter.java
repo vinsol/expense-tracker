@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.utils.DateHelper;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -185,11 +187,17 @@ class SeparatedListAdapter extends BaseAdapter{
 				} else if(mlist.get(5).equals(mContext.getString(R.string.favorite_entry))){
 					/////TODO if favorite entry
 				}
+				
 				holderBody.expense_listing_inflated_row_imageview.setFocusable(false);
 				holderBody.expense_listing_inflated_row_imageview.setOnClickListener(new MyClickListener(mlist));
 				holderBody.expense_listing_inflated_row_location_time.setText(mlist.get(3));
 				holderBody.expense_listing_inflated_row_tag.setText(mlist.get(1));
 				holderBody.expense_listing_inflated_row_amount.setText(mlist.get(2));
+				if((mlist.get(5).equals(mContext.getString(R.string.sublist_daywise))) || mlist.get(5).equals(mContext.getString(R.string.sublist_monthwise)) || 
+						mlist.get(5).equals(mContext.getString(R.string.sublist_yearwise)) || mlist.get(5).equals(mContext.getString(R.string.sublist_weekwise))){
+					holderBody.expense_listing_inflated_row_imageview.setVisibility(View.GONE);
+					holderBody.expense_listing_inflated_row_location_time.setVisibility(View.GONE);
+				}
 				return convertView;
 			}
 			
@@ -202,8 +210,13 @@ class SeparatedListAdapter extends BaseAdapter{
 				} else {
 					holderFooter = (ViewHolderFooter)convertView.getTag();
 				}
+				
 				holderFooter.expenses_listing_add_expenses_textview.setText("Add expenses to "+mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
 				holderFooter.expense_listing_list_add_expenses.setOnClickListener(new MyClickListener(sectionnum));
+				if(!isCurrentWeek(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME))){
+					holderFooter.expense_listing_list_add_expenses.setVisibility(View.GONE);
+				}
+				
 				return convertView;
 			}
 			// otherwise jump into next section
@@ -212,6 +225,20 @@ class SeparatedListAdapter extends BaseAdapter{
 			
 		}
 		return null;
+	}
+	
+	private boolean isCurrentWeek(String dateViewString) {
+	try{
+		DateHelper mDateHelper = new DateHelper(dateViewString);
+		mDateHelper.getTimeMillis();
+		Log.v(dateViewString, mDateHelper.getTimeMillis()+"");
+		return true;
+	}catch(Exception e){
+			e.printStackTrace();
+	
+		}
+	
+		return false;
 	}
 	
 	class ViewHolderBody {
@@ -230,6 +257,7 @@ class SeparatedListAdapter extends BaseAdapter{
 		TextView expenses_listing_add_expenses_textview;
 		LinearLayout expense_listing_list_add_expenses;
     }
+	
 	
 
 	@Override

@@ -26,7 +26,6 @@ public class ExpenseListing extends Activity{
 //	private MyListAdapter mMyListAdapter;
 	private SeparatedListAdapter mSeparatedListAdapter;
 	List<HashMap<String, String>> mSubList;
-	private boolean isLastAttempt = false;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -75,9 +74,7 @@ public class ExpenseListing extends Activity{
 					mList.add(_templist);
 					j++;
 					if(j < mSubList.size()){
-//						tempDate = mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME);
 					} else {
-						isLastAttempt = true;
 						break;
 					}
 				} else if(mDisplayDate.isCurrentMonth()) {
@@ -116,7 +113,6 @@ public class ExpenseListing extends Activity{
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
 							} else {
-								isLastAttempt = true;
 								break;
 							}
 							
@@ -220,12 +216,9 @@ public class ExpenseListing extends Activity{
 							}
 							j++;
 							if(j < mSubList.size()){
-//								tempDate = mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME);
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
 							} else {
-//								tempDate = null;
-								isLastAttempt = true;
 								break;
 							}	
 							
@@ -278,12 +271,7 @@ public class ExpenseListing extends Activity{
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_weekwise));
 						mList.add(mTempSubList);
-//						if(isLastAttempt){
-//							break;
-//						}
 						if(j == mSubList.size()){
-//							j--;
-							isLastAttempt = true;
 							break;
 						}
 					}
@@ -322,7 +310,6 @@ public class ExpenseListing extends Activity{
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
 							} else {
-								isLastAttempt = true;
 								break;
 							}
 							
@@ -376,11 +363,6 @@ public class ExpenseListing extends Activity{
 						if(j >= mSubList.size()){
 							break;
 						}
-//						if(j == mSubList.size()){
-//							j--;
-//							isLastAttempt = true;
-//							continue;
-//						}
 					}
 				}
 				}
