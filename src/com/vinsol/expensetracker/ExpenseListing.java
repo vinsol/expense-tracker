@@ -48,7 +48,11 @@ public class ExpenseListing extends Activity{
 		/////////     *********    Getting list of dates   *******    ///////////
 		mDataDateList = mConvertCursorToListString.getDateListString();
 		mSubList = mConvertCursorToListString.getListStringParticularDate();
+		Log.v("mDataDateList", mDataDateList.size()+"");
 		Log.v("mSubList", mSubList.toString());
+		for(int k=0;k<mSubList.size();k++){
+			Log.v("date", mSubList.get(k).get(DatabaseAdapter.KEY_DATE_TIME));
+		}
 		//////////     *********    Setting adapter to listview   ******   ///////////
 		int j = 0;
 		mSeparatedListAdapter = new SeparatedListAdapter(this);
@@ -58,7 +62,9 @@ public class ExpenseListing extends Activity{
 			List<List<String>> mList = new ArrayList<List<String>>();
 			String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
 			
-			do{
+			
+			while(j < mSubList.size() && date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
+				
 				List<String> _templist = new ArrayList<String>();
 				Calendar mCalendar = Calendar.getInstance();
 				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
@@ -68,9 +74,15 @@ public class ExpenseListing extends Activity{
 					_templist = getListCurrentWeek(j);
 					mList.add(_templist);
 					j++;
+					if(j < mSubList.size()){
+//						tempDate = mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME);
+					} else {
+						isLastAttempt = true;
+						break;
+					}
 				} else if(mDisplayDate.isCurrentMonth()) {
 					
-					while(mDisplayDate.getHeaderFooterListDisplayDate().equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
+					while(mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME).equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
 						//////    Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
 						mTempSubList.add(i+" "+j);
@@ -78,6 +90,7 @@ public class ExpenseListing extends Activity{
 						///// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+						mDisplayDate = new DisplayDate(tempCalendar);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
 						int isDayOfMonth = tempCalendar.get(Calendar.DAY_OF_MONTH);
 						mTempSubList.add(tempDisplayDate.getSubListTag()); //TODO
@@ -95,11 +108,15 @@ public class ExpenseListing extends Activity{
 							} else {
 								isTempAmountNull = true;
 							}
+							
 							j++;
+							
 							if(j < mSubList.size()){
+//								tempDate = mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME);
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
 							} else {
+								isLastAttempt = true;
 								break;
 							}
 							
@@ -165,21 +182,14 @@ public class ExpenseListing extends Activity{
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_daywise));
 						mList.add(mTempSubList);
-						if(isLastAttempt){
+						if(j >= mSubList.size()){
 							break;
-						}
-						
-						if(j == mSubList.size()){
-							j--;
-							isLastAttempt = true;
-							continue;
 						}
 					}
 					
 				} else if (mDisplayDate.isPrevMonths()) {
-					
-					while(mDisplayDate.getHeaderFooterListDisplayDate().equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
-						Log.v("prevmonth", true+"");
+					Log.v("dis", mDisplayDate.getHeaderFooterListDisplayDate());
+					while(mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME).equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
 						//////    Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
 						mTempSubList.add(i+" "+j);
@@ -187,14 +197,18 @@ public class ExpenseListing extends Activity{
 						///// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+						mDisplayDate = new DisplayDate(tempCalendar);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
 						int isWeekOfMonth = tempCalendar.get(Calendar.WEEK_OF_MONTH);
+						int isCurrentMonth = tempCalendar.get(Calendar.MONTH);
+						int isCurrentYear = tempCalendar.get(Calendar.YEAR);
 						mTempSubList.add(tempDisplayDate.getSubListTag()); //TODO
 						
 						/////  Adding Amount
 						double temptotalAmount = 0;
 						String totalAmountString = null;
 						boolean isTempAmountNull = false;
+						Log.v("do", "do");
 						do{
 							String tempAmount = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
 							if(tempAmount != null && !tempAmount.equals("")){
@@ -206,13 +220,18 @@ public class ExpenseListing extends Activity{
 							}
 							j++;
 							if(j < mSubList.size()){
+//								tempDate = mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME);
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
 							} else {
+//								tempDate = null;
+								isLastAttempt = true;
 								break;
 							}	
 							
-						}while(tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth);
+						}while(tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth && tempCalendar.get(Calendar.MONTH) == isCurrentMonth && tempCalendar.get(Calendar.YEAR) == isCurrentYear);
+						
+						Log.v("do", "do");
 						if(isTempAmountNull) {
 							if(temptotalAmount != 0) {
 								totalAmountString = temptotalAmount+" ?";
@@ -259,22 +278,18 @@ public class ExpenseListing extends Activity{
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_weekwise));
 						mList.add(mTempSubList);
-						if(isLastAttempt){
+//						if(isLastAttempt){
+//							break;
+//						}
+						if(j == mSubList.size()){
+//							j--;
+							isLastAttempt = true;
 							break;
 						}
-						if(j == mSubList.size()){
-							j--;
-							isLastAttempt = true;
-							continue;
-						}
 					}
-				} else 
-					
-					///////   ListView if previous year
-					
-				if (mDisplayDate.isPrevYears()) {
-					while(mDisplayDate.getHeaderFooterListDisplayDate().equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
-//						Log.v("prevYear", msg)
+				} else if (mDisplayDate.isPrevYears()) {
+					while(mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME).equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
+						Log.v("prevYear", "yo");
 						//////    Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
 						mTempSubList.add(i+" "+j);
@@ -284,6 +299,7 @@ public class ExpenseListing extends Activity{
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
 						int isMonth = tempCalendar.get(Calendar.MONTH);
+						int isYear = tempCalendar.get(Calendar.YEAR);
 						mTempSubList.add(tempDisplayDate.getSubListTag()); //TODO
 						
 						/////  Adding Amount
@@ -300,14 +316,17 @@ public class ExpenseListing extends Activity{
 								isTempAmountNull = true;
 							}
 							j++;
+							
 							if(j < mSubList.size()){
+//								tempDate = mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME);
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
 							} else {
+								isLastAttempt = true;
 								break;
 							}
 							
-						}while(tempCalendar.get(Calendar.MONTH) == isMonth);
+						}while((tempCalendar.get(Calendar.MONTH) == isMonth) && (tempCalendar.get(Calendar.YEAR) == isYear));
 						if(isTempAmountNull) {
 							if(temptotalAmount != 0) {
 								totalAmountString = temptotalAmount+" ?";
@@ -354,21 +373,22 @@ public class ExpenseListing extends Activity{
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_monthwise));
 						mList.add(mTempSubList);
-						if(isLastAttempt){
+						if(j >= mSubList.size()){
 							break;
 						}
-						if(j == mSubList.size()){
-							j--;
-							isLastAttempt = true;
-							continue;
-						}
+//						if(j == mSubList.size()){
+//							j--;
+//							isLastAttempt = true;
+//							continue;
+//						}
 					}
 				}
-				}while(j < mSubList.size() && date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME)));
+				}
 				listString.add(mList);
 				@SuppressWarnings("rawtypes")
 				List tt = (List) listString.get(i);
 				mSeparatedListAdapter.addSection(i+"", new ArrayAdapter<String>(this,R.layout.expense_listing, tt), mDataDateList);
+				
 			}
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setAdapter(mSeparatedListAdapter);
