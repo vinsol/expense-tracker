@@ -26,6 +26,7 @@ public class ExpenseListing extends Activity{
 //	private MyListAdapter mMyListAdapter;
 	private SeparatedListAdapter mSeparatedListAdapter;
 	List<HashMap<String, String>> mSubList;
+	private boolean isLastAttempt = false;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -57,7 +58,7 @@ public class ExpenseListing extends Activity{
 			List<List<String>> mList = new ArrayList<List<String>>();
 			String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
 			
-			while(j < mSubList.size() && date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
+			do{
 				List<String> _templist = new ArrayList<String>();
 				Calendar mCalendar = Calendar.getInstance();
 				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
@@ -70,7 +71,6 @@ public class ExpenseListing extends Activity{
 				} else if(mDisplayDate.isCurrentMonth()) {
 					
 					while(mDisplayDate.getHeaderFooterListDisplayDate().equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
-						Log.v("true", true+"");
 						//////    Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
 						mTempSubList.add(i+" "+j);
@@ -104,7 +104,6 @@ public class ExpenseListing extends Activity{
 							}
 							
 						}while(tempCalendar.get(Calendar.DAY_OF_MONTH) == isDayOfMonth);
-						
 						if(isTempAmountNull) {
 							if(temptotalAmount != 0) {
 								totalAmountString = temptotalAmount+" ?";
@@ -121,15 +120,21 @@ public class ExpenseListing extends Activity{
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_daywise));
 						mList.add(mTempSubList);
-						if(j >= mSubList.size()){
+						if(isLastAttempt){
 							break;
+						}
+						
+						if(j == mSubList.size()){
+							j--;
+							isLastAttempt = true;
+							continue;
 						}
 					}
 					
 				} else if (mDisplayDate.isPrevMonths()) {
 					
 					while(mDisplayDate.getHeaderFooterListDisplayDate().equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
-						Log.v("true", true+"");
+						Log.v("prevmonth", true+"");
 						//////    Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
 						mTempSubList.add(i+" "+j);
@@ -154,7 +159,6 @@ public class ExpenseListing extends Activity{
 							} else {
 								isTempAmountNull = true;
 							}
-							Log.v("datert", tempCalendar.get(Calendar.WEEK_OF_MONTH)+"");
 							j++;
 							if(j < mSubList.size()){
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
@@ -163,8 +167,7 @@ public class ExpenseListing extends Activity{
 								break;
 							}	
 							
-						}while(tempCalendar.get(Calendar.DAY_OF_MONTH) == isWeekOfMonth);
-						
+						}while(tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth);
 						if(isTempAmountNull) {
 							if(temptotalAmount != 0) {
 								totalAmountString = temptotalAmount+" ?";
@@ -181,8 +184,13 @@ public class ExpenseListing extends Activity{
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_weekwise));
 						mList.add(mTempSubList);
-						if(j >= mSubList.size()){
+						if(isLastAttempt){
 							break;
+						}
+						if(j == mSubList.size()){
+							j--;
+							isLastAttempt = true;
+							continue;
 						}
 					}
 				} else 
@@ -191,6 +199,7 @@ public class ExpenseListing extends Activity{
 					
 				if (mDisplayDate.isPrevYears()) {
 					while(mDisplayDate.getHeaderFooterListDisplayDate().equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))){
+//						Log.v("prevYear", msg)
 						//////    Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
 						mTempSubList.add(i+" "+j);
@@ -224,7 +233,6 @@ public class ExpenseListing extends Activity{
 							}
 							
 						}while(tempCalendar.get(Calendar.MONTH) == isMonth);
-						
 						if(isTempAmountNull) {
 							if(temptotalAmount != 0) {
 								totalAmountString = temptotalAmount+" ?";
@@ -241,13 +249,17 @@ public class ExpenseListing extends Activity{
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_monthwise));
 						mList.add(mTempSubList);
-						if(j >= mSubList.size()){
+						if(isLastAttempt){
 							break;
+						}
+						if(j == mSubList.size()){
+							j--;
+							isLastAttempt = true;
+							continue;
 						}
 					}
 				}
-			
-				}
+				}while(j < mSubList.size() && date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME)));
 				listString.add(mList);
 				@SuppressWarnings("rawtypes")
 				List tt = (List) listString.get(i);
