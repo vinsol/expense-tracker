@@ -35,21 +35,37 @@
         android:layout_below="@id/expense_listing_header"
         ></ListView>
 	
-    <!-- Body -->
+    <!-- Body if no list item -->
     <RelativeLayout
         android:id="@+id/expense_listing_listview_no_item"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/expense_listing_header"
         android:background="@drawable/expense_listing_listview_bg"
-        android:gravity="center"
-        android:visibility="gone"> 
+		android:gravity="center"
+		android:visibility="gone"
+        > 
+        <TextView
+            android:id="@+id/expense_listing_listview_no_item_textview"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="No expenses available to show, Please add expenses"
+            android:gravity="center"
+            android:textColor="#4d4d4d"
+            android:layout_marginBottom="5dp">
+            
+        </TextView>
+        <LinearLayout
+            android:layout_below="@id/expense_listing_listview_no_item_textview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
     	<ImageButton
     	    android:id="@+id/expense_listing_listview_no_item_button"
         	android:layout_height="wrap_content"
         	android:layout_width="wrap_content"
         	android:background="@drawable/list_view_no_item"
-       	></ImageButton>
+       	></ImageButton></LinearLayout>
 	</RelativeLayout>
 
 </RelativeLayout>
