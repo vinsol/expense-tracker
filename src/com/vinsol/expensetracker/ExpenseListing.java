@@ -106,7 +106,19 @@ public class ExpenseListing extends Activity{
 						}while(tempCalendar.get(Calendar.DAY_OF_MONTH) == isDayOfMonth);
 						if(isTempAmountNull) {
 							if(temptotalAmount != 0) {
-								totalAmountString = temptotalAmount+" ?";
+								String temp = Double.toString(temptotalAmount);
+								Double mAmount = Double.parseDouble(temp);
+								mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+								if(mAmount.toString().contains(".")){
+									Log.v("jkl", mAmount.toString().charAt(mAmount.toString().length()-2)+"");
+									if(mAmount.toString().charAt(mAmount.toString().length()-3) == '.'){
+										totalAmountString = mAmount.toString()+" ?";
+									} else if(mAmount.toString().charAt(mAmount.toString().length()-2) == '.'){
+										totalAmountString = mAmount.toString()+"0 ?";
+									}
+								} else {
+										totalAmountString = mAmount.toString()+".00 ?";
+								}
 							}
 							else {
 								totalAmountString = "?";
@@ -114,6 +126,39 @@ public class ExpenseListing extends Activity{
 						} else {
 							totalAmountString = temptotalAmount+"";
 						}
+						
+						if(totalAmountString.contains("?") && totalAmountString.length()>1){
+							String temp = totalAmountString.substring(0, totalAmountString.length()-2);
+							Double mAmount = Double.parseDouble(temp);
+							mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+							if(mAmount.toString().contains(".")){
+								if(mAmount.toString().charAt(mAmount.toString().length()-3) == '.'){
+									totalAmountString = mAmount.toString()+" ?";
+								} else if(mAmount.toString().charAt(mAmount.toString().length()-2) == '.'){
+									totalAmountString = mAmount.toString()+"0 ?";
+								}
+								
+							} else {
+									totalAmountString = mAmount.toString()+".00 ?";
+							}
+						} else  if(!totalAmountString.contains("?")){
+							String temp = totalAmountString.substring(0, totalAmountString.length());
+							Double mAmount = Double.parseDouble(temp);
+							mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+							Log.v("mAmount", mAmount.toString()+" "+mAmount.toString().charAt(mAmount.toString().length()-3)+" "+mAmount.toString().charAt(mAmount.toString().length()-2));
+							
+							if(mAmount.toString().contains(".")){
+								if(mAmount.toString().charAt(mAmount.toString().length()-3) == '.'){
+									totalAmountString = mAmount.toString()+"";
+								} else if(mAmount.toString().charAt(mAmount.toString().length()-2) == '.'){
+									totalAmountString = mAmount.toString()+"0";
+								}
+								
+							} else {
+									totalAmountString = mAmount.toString()+".00";
+							}
+						}
+						
 						mTempSubList.add(totalAmountString);
 						
 						mTempSubList.add("");
@@ -177,6 +222,36 @@ public class ExpenseListing extends Activity{
 							}
 						} else {
 							totalAmountString = temptotalAmount+"";
+						}
+						
+						if(totalAmountString.contains("?") && totalAmountString.length()>1){
+							String temp = totalAmountString.substring(0, totalAmountString.length()-2);
+							Double mAmount = Double.parseDouble(temp);
+							mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+							if(mAmount.toString().contains(".")){
+								if(mAmount.toString().charAt(mAmount.toString().length()-3) == '.'){
+									totalAmountString = mAmount.toString()+" ?";
+								} else if(mAmount.toString().charAt(mAmount.toString().length()-2) == '.'){
+									totalAmountString = mAmount.toString()+"0 ?";
+								}
+								
+							} else {
+									totalAmountString = mAmount.toString()+".00 ?";
+							}
+						} else if(!totalAmountString.contains("?")){
+							String temp = totalAmountString.substring(0, totalAmountString.length());
+							Double mAmount = Double.parseDouble(temp);
+							mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+							if(mAmount.toString().contains(".")){
+								if(mAmount.toString().charAt(mAmount.toString().length()-3) == '.'){
+									totalAmountString = mAmount.toString()+"";
+								} else if(mAmount.toString().charAt(mAmount.toString().length()-2) == '.'){
+									totalAmountString = mAmount.toString()+"0";
+								}
+								
+							} else {
+									totalAmountString = mAmount.toString()+".00";
+							}
 						}
 						mTempSubList.add(totalAmountString);
 						
@@ -243,6 +318,36 @@ public class ExpenseListing extends Activity{
 						} else {
 							totalAmountString = temptotalAmount+"";
 						}
+						if(totalAmountString.contains("?") && totalAmountString.length()>1){
+							String temp = totalAmountString.substring(0, totalAmountString.length()-2);
+							Double mAmount = Double.parseDouble(temp);
+							mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+							if(mAmount.toString().contains(".")){
+								if(mAmount.toString().charAt(mAmount.toString().length()-3) == '.'){
+									totalAmountString = mAmount.toString()+" ?";
+								} else if(mAmount.toString().charAt(mAmount.toString().length()-2) == '.'){
+									totalAmountString = mAmount.toString()+"0 ?";
+								}
+								
+							} else {
+									totalAmountString = mAmount.toString()+".00 ?";
+							}
+						} else  if(!totalAmountString.contains("?")){
+							String temp = totalAmountString.substring(0, totalAmountString.length());
+							Double mAmount = Double.parseDouble(temp);
+							mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+							if(mAmount.toString().contains(".")){
+								if(mAmount.toString().charAt(mAmount.toString().length()-3) == '.'){
+									totalAmountString = mAmount.toString()+"";
+								} else if(mAmount.toString().charAt(mAmount.toString().length()-2) == '.'){
+									totalAmountString = mAmount.toString()+"0";
+								}
+								
+							} else {
+									totalAmountString = mAmount.toString()+".00";
+							}
+						}
+						
 						mTempSubList.add(totalAmountString);
 						
 						mTempSubList.add("");
@@ -306,7 +411,40 @@ public class ExpenseListing extends Activity{
 
 	
 		if(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT).equals("")){
-			_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT));
+			String totalAmountString = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
+			
+			if(totalAmountString.contains("?") && totalAmountString.length()>1){
+				String temp = totalAmountString.substring(0, totalAmountString.length()-2);
+				Double mAmount = Double.parseDouble(temp);
+				mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+				if(mAmount.toString().contains(".")){
+					if(mAmount.toString().charAt(mAmount.toString().length()-3) == '.'){
+						totalAmountString = mAmount.toString()+" ?";
+					} else if(mAmount.toString().charAt(mAmount.toString().length()-2) == '.'){
+						totalAmountString = mAmount.toString()+"0 ?";
+					}
+					
+				} else {
+						totalAmountString = mAmount.toString()+".00 ?";
+				}
+			} else  if(!totalAmountString.contains("?")){
+				String temp = totalAmountString.substring(0, totalAmountString.length());
+				Double mAmount = Double.parseDouble(temp);
+				mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+				Log.v("mAmount", mAmount.toString()+" "+mAmount.toString().charAt(mAmount.toString().length()-3)+" "+mAmount.toString().charAt(mAmount.toString().length()-2));
+				
+				if(mAmount.toString().contains(".")){
+					if(mAmount.toString().charAt(mAmount.toString().length()-3) == '.'){
+						totalAmountString = mAmount.toString()+"";
+					} else if(mAmount.toString().charAt(mAmount.toString().length()-2) == '.'){
+						totalAmountString = mAmount.toString()+"0";
+					}
+					
+				} else {
+						totalAmountString = mAmount.toString()+".00";
+				}
+			}
+			_templist.add(totalAmountString);
 		} else {
 			_templist.add("?");
 		}
