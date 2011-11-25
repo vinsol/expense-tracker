@@ -246,8 +246,12 @@ public class Voice extends Activity implements OnClickListener{
 		if(v.getId() == R.id.text_voice_camera_delete){
 			//////   *****  Check whether audio is recording or not   *******   ///////
 			//////   ******   If audio recording started then stop recording audio   *****   ///////
-			if(mRecordingHelper.isRecording()){
-				mRecordingHelper.stopRecording();
+			try{
+				if(mRecordingHelper.isRecording()){
+					mRecordingHelper.stopRecording();
+				}
+			}catch(NullPointerException e){
+				e.printStackTrace();
 			}
 			
 			/////  *******   If Audio PlayBack is there stop playing audio   *******//////

@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener{
 	public static String mCurrentLocation;
@@ -74,7 +75,6 @@ public class MainActivity extends Activity implements OnClickListener{
 		Button main_text = (Button) findViewById(R.id.main_text);
 		main_text.setOnClickListener(this);
 		
-		
 		//opens voice Activity
 		Button main_voice = (Button) findViewById(R.id.main_voice);
 		main_voice.setOnClickListener(this);
@@ -83,6 +83,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		//opens Camera Activity
 		Button main_camera = (Button) findViewById(R.id.main_camera);
 		main_camera.setOnClickListener(this);
+		
 		
 		
 		//opens Favorite Activity
@@ -111,6 +112,9 @@ public class MainActivity extends Activity implements OnClickListener{
     	new LocationData(this);
     	LocationLast mLocationLast = new LocationLast(this);
 		mLocationLast.getLastLocation();
+		
+		
+		
     	super.onResume();
     }
     
@@ -133,23 +137,31 @@ public class MainActivity extends Activity implements OnClickListener{
 		
 		//////   *******    opens Voice Activity    ********    ///////////
 		else if (v.getId() == R.id.main_voice){
-			Intent intentVoice = new Intent(this, Voice.class);
-			long _id = insertToDatabase(R.string.voice);
-			Bundle bundle = new Bundle();
-			bundle.putLong("_id", _id);
-			intentVoice.putExtra("voiceBundle", bundle);
-			startActivity(intentVoice);
+			if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+				Intent intentVoice = new Intent(this, Voice.class);
+				long _id = insertToDatabase(R.string.voice);
+				Bundle bundle = new Bundle();
+				bundle.putLong("_id", _id);
+				intentVoice.putExtra("voiceBundle", bundle);
+				startActivity(intentVoice);
+			} else {
+				Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
+			}
 		}
 		
 		
 		//////   *******    opens Camera Activity    ********    ///////////
 		else if(v.getId() == R.id.main_camera){
-			Intent intentCamera = new Intent(this, CameraActivity.class);
-			long _id = insertToDatabase(R.string.camera);
-			Bundle bundle = new Bundle();
-			bundle.putLong("_id", _id);
-			intentCamera.putExtra("cameraBundle", bundle);
-			startActivity(intentCamera);
+			if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+				Intent intentCamera = new Intent(this, CameraActivity.class);
+				long _id = insertToDatabase(R.string.camera);
+				Bundle bundle = new Bundle();
+				bundle.putLong("_id", _id);
+				intentCamera.putExtra("cameraBundle", bundle);
+				startActivity(intentCamera);
+			} else {
+				Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
+			}
 		}
 
 		
