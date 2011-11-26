@@ -21,6 +21,8 @@ public class MainActivity extends Activity implements OnClickListener{
 	public static String mCurrentLocation;
 	public static Location mLocation;
 	private DatabaseAdapter mDatabaseAdapter;
+	private long timeInMillis = 0;
+	private Bundle bundle;
 	
     /** Called when the activity is first created. */
     @Override
@@ -33,8 +35,14 @@ public class MainActivity extends Activity implements OnClickListener{
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         
         setContentView(R.layout.main);
-        
-        
+        bundle = new Bundle();
+        if(getIntent().hasExtra("mainBundle")){
+        	Bundle tempBundle = getIntent().getBundleExtra("mainBundle");
+        	if(!tempBundle.isEmpty()){
+        		if(tempBundle.containsKey("timeInMillis"))
+        			timeInMillis = tempBundle.getLong("timeInMillis");
+        	}
+        }
         
         //temp view of graph
         //******start view******//
@@ -128,7 +136,6 @@ public class MainActivity extends Activity implements OnClickListener{
 		if(v.getId() == R.id.main_text){
 			Intent intentTextEntry = new Intent(this, TextEntry.class);
 			long _id = insertToDatabase(R.string.text);
-			Bundle bundle = new Bundle();
 			bundle.putLong("_id", _id);
 			intentTextEntry.putExtra("textEntryBundle", bundle);
 			startActivity(intentTextEntry);
@@ -140,7 +147,6 @@ public class MainActivity extends Activity implements OnClickListener{
 			if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
 				Intent intentVoice = new Intent(this, Voice.class);
 				long _id = insertToDatabase(R.string.voice);
-				Bundle bundle = new Bundle();
 				bundle.putLong("_id", _id);
 				intentVoice.putExtra("voiceBundle", bundle);
 				startActivity(intentVoice);
@@ -155,7 +161,6 @@ public class MainActivity extends Activity implements OnClickListener{
 			if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
 				Intent intentCamera = new Intent(this, CameraActivity.class);
 				long _id = insertToDatabase(R.string.camera);
-				Bundle bundle = new Bundle();
 				bundle.putLong("_id", _id);
 				intentCamera.putExtra("cameraBundle", bundle);
 				startActivity(intentCamera);
@@ -197,7 +202,14 @@ public class MainActivity extends Activity implements OnClickListener{
 	private long insertToDatabase(int type){
 		HashMap<String, String> _list = new HashMap<String, String>();
 		Calendar mCalendar = Calendar.getInstance();
-		_list.put(DatabaseAdapter.KEY_DATE_TIME, Long.toString(mCalendar.getTimeInMillis()));
+		if(timeInMillis == 0)
+			_list.put(DatabaseAdapter.KEY_DATE_TIME, Long.toString(mCalendar.getTimeInMillis()));
+		else {
+			bundle.putLong("timeInMillis", timeInMillis);
+			_list.put(DatabaseAdapter.KEY_DATE_TIME, Long.toString(timeInMillis));
+			finish();
+		}
+		
 		
 		if(MainActivity.mCurrentLocation != null){
 			_list.put(DatabaseAdapter.KEY_LOCATION, MainActivity.mCurrentLocation);

@@ -81,7 +81,11 @@ public class Voice extends Activity implements OnClickListener{
         
         
         ////////   ********  Handle Date Bar   *********   ////////
-        new DateHandler(this);
+        if(intentExtras.containsKey("timeInMillis")){
+        	new DateHandler(this ,intentExtras.getLong("timeInMillis"));
+        } else {
+        	new DateHandler(this);
+        }
         
         
         ////////   ********   Starts Recording each time activity starts   ******   ///////

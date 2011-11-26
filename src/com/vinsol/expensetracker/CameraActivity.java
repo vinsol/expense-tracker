@@ -69,7 +69,11 @@ public class CameraActivity extends Activity implements OnClickListener{
         
         
         ////////********    Handle Date Bar   *********   ////////
-        new DateHandler(this);
+        if(intentExtras.containsKey("timeInMillis")){
+        	new DateHandler(this ,intentExtras.getLong("timeInMillis"));
+        } else {
+        	new DateHandler(this);
+        }
         
         ////////*********     Get Last most accurate location info   *********   /////////
         LocationLast mLocationLast = new LocationLast(this);

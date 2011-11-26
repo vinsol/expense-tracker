@@ -38,6 +38,25 @@ public class DateHandler implements OnClickListener{
 		date_bar_dateview.setOnClickListener(this);
 	}
 
+	public DateHandler(Context mContext, long long1) {
+		activity = (mContext instanceof Activity) ? (Activity)mContext : null;
+		mCalendar = Calendar.getInstance();
+		mCalendar.setTimeInMillis(long1);
+		mDisplayDate = new DisplayDate(mCalendar);
+		date_bar_dateview = (TextView) activity.findViewById(R.id.text_voice_camera_date_bar_dateview);
+		date_bar_previous_arrow = (ImageButton) activity.findViewById(R.id.text_voice_camera_date_bar_previous_arrow);
+		date_bar_next_arrow = (ImageButton) activity.findViewById(R.id.text_voice_camera_date_bar_next_arrow);
+		
+		if(!beforeCurrentDate(mCalendar))
+			date_bar_next_arrow.setVisibility(View.INVISIBLE);
+		
+		date_bar_dateview.setText(mDisplayDate.getDisplayDate());
+		dialog = new DatePickerDialog(mContext , date_bar_dateview );
+		date_bar_previous_arrow.setOnClickListener(this);
+		date_bar_next_arrow.setOnClickListener(this);
+		date_bar_dateview.setOnClickListener(this);
+	}
+
 	@Override
 	public void onClick(View v) {
 		if(v.getId() == R.id.text_voice_camera_date_bar_next_arrow){

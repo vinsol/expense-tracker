@@ -314,7 +314,12 @@ class SeparatedListAdapter extends BaseAdapter{
 			
 			if(v.getId() == R.id.expense_listing_list_add_expenses){
 				Log.v("Position ", mPosition+"");
-				Log.v("mDataDateList", mDatadateList.get(mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
+				DateHelper mDateHelper = new DateHelper(mDatadateList.get(mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
+				Intent mMainIntent = new Intent(mContext,MainActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putLong("timeInMillis", mDateHelper.getTimeMillis());
+				mMainIntent.putExtra("mainBundle", bundle);
+				mContext.startActivity(mMainIntent);
 			}
 		}
 	}
