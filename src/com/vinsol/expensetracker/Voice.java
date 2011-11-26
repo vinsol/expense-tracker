@@ -307,8 +307,10 @@ public class Voice extends Activity implements OnClickListener{
 		mDatabaseAdapter.editDatabase(_list);
 		mDatabaseAdapter.close();
 		finish();
-		Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-		startActivity(intentExpenseListing);
+		if(!intentExtras.containsKey("timeInMillis")){
+			 Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			 startActivity(intentExpenseListing);
+		}
 	}
 
 

@@ -26,6 +26,7 @@ public class ExpenseListing extends Activity{
 //	private MyListAdapter mMyListAdapter;
 	private SeparatedListAdapter mSeparatedListAdapter;
 	List<HashMap<String, String>> mSubList;
+	private boolean setResume = true;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -388,7 +389,9 @@ public class ExpenseListing extends Activity{
 				}
 			});
 		} 
-		
+
+		mSeparatedListAdapter.notifyDataSetChanged();
+		setResume = false;
 	}
 	
 	private List<String> getListCurrentWeek(int j){
@@ -536,4 +539,12 @@ public class ExpenseListing extends Activity{
 		return null;
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(setResume){
+			mDataDateList = mConvertCursorToListString.getDateListString();
+			mSubList = mConvertCursorToListString.getListStringParticularDate();
+		}
+	}
 }
