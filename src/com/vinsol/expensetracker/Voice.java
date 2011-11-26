@@ -1,5 +1,8 @@
 package com.vinsol.expensetracker;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import com.vinsol.expensetracker.location.LocationLast;
@@ -46,6 +49,7 @@ public class Voice extends Activity implements OnClickListener{
 	private DatabaseAdapter mDatabaseAdapter;
 	private TextView text_voice_camera_date_bar_dateview;
 	private String dateViewString;
+	private ArrayList<String> mEditList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +57,7 @@ public class Voice extends Activity implements OnClickListener{
 		
 		///////   ****** No Title Bar   ********* /////////
         
-        
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        
         setContentView(R.layout.text_voice_camera);
         
         
@@ -77,11 +79,26 @@ public class Voice extends Activity implements OnClickListener{
         intentExtras = getIntent().getBundleExtra("voiceBundle");
         _id = intentExtras.getLong("_id");
     	
-        
+        if(intentExtras.containsKey("mDisplayList")){
+        	mEditList = new ArrayList<String>();
+        	mEditList = intentExtras.getStringArrayList("mDisplayList");
+        	_id = Long.parseLong(mEditList.get(0));
+        	String amount = mEditList.get(2);
+        	String tag = mEditList.get(1);
+        	if(!(amount.equals("") || amount == null)){
+        		if(!amount.contains("?"))
+        			text_voice_camera_amount.setText(amount);
+        	}
+        	if(!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_voiceentry)))){
+        		text_voice_camera_tag.setText(tag);
+        	}
+        }
         
         
         ////////   ********  Handle Date Bar   *********   ////////
-        if(intentExtras.containsKey("timeInMillis")){
+        if(intentExtras.containsKey("mDisplayList")){
+        	new DateHandler(this , Long.parseLong(mEditList.get(6)));
+        } else if(intentExtras.containsKey("timeInMillis")) {
         	new DateHandler(this ,intentExtras.getLong("timeInMillis"));
         } else {
         	new DateHandler(this);
@@ -91,9 +108,27 @@ public class Voice extends Activity implements OnClickListener{
         ////////   ********   Starts Recording each time activity starts   ******   ///////
         if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
         	setGraphicsVoice();
-        	controlVoiceChronometer();
-        	mRecordingHelper = new RecordingHelper(_id+"",this);
-        	mRecordingHelper.startRecording();
+        	
+        	if(intentExtras.containsKey("mDisplayList")){
+        		File tempFile = new File("/sdcard/ExpenseTracker/Audio/"+_id+".amr");
+        		
+        		if(tempFile.canRead()){
+        			mAudioPlay = new AudioPlay(Long.toString(_id), this);
+        			text_voice_camera_stop_button.setVisibility(View.GONE);
+        			text_voice_camera_play_button.setVisibility(View.VISIBLE);
+        			text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
+        			text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+        		} else {
+        			text_voice_camera_time_details_chronometer.setText("Audio File Missing");
+        			text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
+        			text_voice_camera_stop_button.setVisibility(View.GONE);
+        			text_voice_camera_play_button.setVisibility(View.GONE);
+        		}
+        	} else {
+        		mRecordingHelper = new RecordingHelper(_id+"",this);
+        		mRecordingHelper.startRecording();
+        		controlVoiceChronometer();
+        	}
         } 
         else {
         	Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
@@ -117,10 +152,14 @@ public class Voice extends Activity implements OnClickListener{
 		
 		//////   *****  Check whether audio is recording or not   *******   ///////
 		//////   ******   If audio recording started then stop recording audio   *****   ///////
-		if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
-			if(mRecordingHelper.isRecording()){
-				mRecordingHelper.stopRecording();
+		try{
+			if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
+				if(mRecordingHelper.isRecording()){
+					mRecordingHelper.stopRecording();
+				}
 			}
+		} catch(Exception e){
+			
 		}
 		super.onPause();
 	}
@@ -295,19 +334,27 @@ public class Voice extends Activity implements OnClickListener{
 			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
 		}
 		
-		if(!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString))	
-		try{
-			DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
-			_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
-		} catch (Exception e){
-			e.printStackTrace();
+		if(!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)){
+			try{
+				if(!intentExtras.containsKey("mDisplayList")){
+					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+					_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+				} else {
+					Calendar mCalendar = Calendar.getInstance();
+					mCalendar.setTimeInMillis(Long.parseLong(mEditList.get(6)));
+					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
+					_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+				}
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 		}
 		//////    *******   Update database if user added additional info   *******  ///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(_list);
 		mDatabaseAdapter.close();
 		finish();
-		if(!intentExtras.containsKey("timeInMillis")){
+		if(!intentExtras.containsKey("timeInMillis")  && !intentExtras.containsKey("mDisplayList")){
 			 Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			 startActivity(intentExpenseListing);
 		}

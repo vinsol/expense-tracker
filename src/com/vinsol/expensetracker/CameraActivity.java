@@ -1,6 +1,8 @@
 package com.vinsol.expensetracker;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import com.vinsol.expensetracker.location.LocationLast;
 import com.vinsol.expensetracker.utils.CameraFileSave;
@@ -11,6 +13,7 @@ import com.vinsol.expensetracker.utils.ImageGet;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,6 +41,8 @@ public class CameraActivity extends Activity implements OnClickListener{
 	private DatabaseAdapter mDatabaseAdapter;
 	private TextView text_voice_camera_date_bar_dateview;
 	private String dateViewString;
+	private ArrayList<String> mEditList;
+	private ImageView text_voice_camera_image_display;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +57,9 @@ public class CameraActivity extends Activity implements OnClickListener{
         
         ////////*********     Get id from intent extras     ********   ////////////
         intentExtras = getIntent().getBundleExtra("cameraBundle");
-        _id = intentExtras.getLong("_id");
+        if(intentExtras.containsKey("_id"))
+        	_id = intentExtras.getLong("_id");
+        
         
         ////////   ********    Initializing and assigning memory to UI Items **********    /////////
         
@@ -62,14 +69,38 @@ public class CameraActivity extends Activity implements OnClickListener{
         text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);
         text_voice_camera_tag = (EditText) findViewById(R.id.text_voice_camera_tag);
         text_voice_camera_date_bar_dateview = (TextView) findViewById(R.id.text_voice_camera_date_bar_dateview);
-        
+        text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
+        if(intentExtras.containsKey("mDisplayList")){
+        	mEditList = new ArrayList<String>();
+        	mEditList = intentExtras.getStringArrayList("mDisplayList");
+        	_id = Long.parseLong(mEditList.get(0));
+        	String amount = mEditList.get(2);
+        	String tag = mEditList.get(1);
+        	if(!(amount.equals("") || amount == null)){
+        		if(!amount.contains("?"))
+        			text_voice_camera_amount.setText(amount);
+        	}
+        	if(!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_cameraentry)))){
+        		text_voice_camera_tag.setText(tag);
+        	}
+        	File mFile = new File("/sdcard/ExpenseTracker/"+_id+"_small.jpg");
+        	System.gc();
+        	if(mFile.canRead()){
+        		Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
+        		text_voice_camera_image_display.setImageDrawable(mDrawable);
+        	} else {
+        		text_voice_camera_image_display.setImageResource(R.drawable.no_image_small);
+        	}
+        }
         setGraphicsCamera();
         setClickListeners();
-        startCamera();
-        
+        if(!intentExtras.containsKey("mDisplayList"))
+        	startCamera();
         
         ////////********    Handle Date Bar   *********   ////////
-        if(intentExtras.containsKey("timeInMillis")){
+        if(intentExtras.containsKey("mDisplayList")){
+        	new DateHandler(this , Long.parseLong(mEditList.get(6)));
+        } else if(intentExtras.containsKey("timeInMillis")) {
         	new DateHandler(this ,intentExtras.getLong("timeInMillis"));
         } else {
         	new DateHandler(this);
@@ -102,7 +133,7 @@ public class CameraActivity extends Activity implements OnClickListener{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
+		
 		if(PICTURE_RESULT == requestCode && Activity.RESULT_OK == resultCode){
 			if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
 				CameraFileSave cameraFileSave = new CameraFileSave(_id+"",this);
@@ -215,20 +246,27 @@ public class CameraActivity extends Activity implements OnClickListener{
 			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
 		}
 		
-		if(!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString))
-		try{
-			DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
-			_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
-		} catch (Exception e){
-			e.printStackTrace();
+		if(!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)){
+			try{
+				if(!intentExtras.containsKey("mDisplayList")){
+					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+					_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+				} else {
+					Calendar mCalendar = Calendar.getInstance();
+					mCalendar.setTimeInMillis(Long.parseLong(mEditList.get(6)));
+					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
+					_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+				}
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 		}
-				
 		//////    *******   Update database if user added additional info   *******  ///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(_list);
 		mDatabaseAdapter.close();
 		finish();
-		if(!intentExtras.containsKey("timeInMillis")){
+		if(!intentExtras.containsKey("timeInMillis")  && !intentExtras.containsKey("mDisplayList")){
 			 Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			 startActivity(intentExpenseListing);
 		}

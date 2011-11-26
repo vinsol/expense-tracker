@@ -212,6 +212,7 @@ class SeparatedListAdapter extends BaseAdapter{
 				}
 				
 				holderFooter.expenses_listing_add_expenses_textview.setText("Add expenses to "+mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
+				holderFooter.expense_listing_list_add_expenses.setFocusable(false);
 				holderFooter.expense_listing_list_add_expenses.setOnClickListener(new MyClickListener(sectionnum));
 				if(!isCurrentWeek(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME))){
 					holderFooter.expense_listing_list_add_expenses.setVisibility(View.GONE);

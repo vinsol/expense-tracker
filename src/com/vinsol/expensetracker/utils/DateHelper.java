@@ -20,6 +20,22 @@ public class DateHelper {
 		mCalendar.set(year, month, day);
 	}
 
+	public DateHelper(String dateViewString, Calendar mCalendar2) {
+		mCalendar = Calendar.getInstance();
+		int year, month, day ;
+		if(dateViewString.contains("Today")){
+			year = mCalendar.get(Calendar.YEAR);
+			dateViewString = (String) dateViewString.subSequence(7, dateViewString.length());
+		} else {
+			year = Integer.parseInt((String) dateViewString.subSequence(dateViewString.length()-4, dateViewString.length()));
+			dateViewString = (String) dateViewString.subSequence(0, dateViewString.length()-6);
+		}
+		month = getMonth((String) dateViewString.subSequence(0, 3));
+		dateViewString = (String) dateViewString.subSequence(4, dateViewString.length());
+		day = Integer.parseInt(dateViewString);
+		mCalendar.set(year, month, day, mCalendar2.get(Calendar.HOUR_OF_DAY), mCalendar2.get(Calendar.MINUTE),mCalendar2.get(Calendar.SECOND));
+	}
+
 	public long getTimeMillis(){
 		return mCalendar.getTimeInMillis();
 	}
