@@ -233,7 +233,11 @@ public class Voice extends Activity implements OnClickListener{
 				if(mAudioPlay.isAudioPlaying())
 					mAudioPlay.stopPlayBack();
 			} catch(Exception e){}
-			text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+			try{
+				text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+			}catch(NullPointerException e){
+				
+			}
 		}
 		
 		
@@ -400,6 +404,7 @@ public class Voice extends Activity implements OnClickListener{
 	public boolean onKeyDown(int keyCode, KeyEvent event)  {
 	     if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 	    	 onBackPressed();
+	    	 return true;
 	      }
 	    return super.onKeyDown(keyCode, event);
 	}
