@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-    
-    
+    android:orientation="vertical" >
+
+        
 	<!-- Header -->
     <RelativeLayout
-        android:id="@+id/text_voice_camera_header"
+        android:id="@+id/show_text_voice_camera_header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,7 +15,7 @@
         android:background="@drawable/topbar_bg" >
 
         <TextView
-            android:id="@+id/text_voice_camera_header_title"
+            android:id="@+id/show_text_voice_camera_header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -30,23 +30,16 @@
         
     <!-- Date Bar -->
     <LinearLayout  
-        android:id="@+id/text_voice_camera_date_bar"
+        android:id="@+id/show_text_voice_camera_date_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_voice_camera_header"
+        android:layout_below="@id/show_text_voice_camera_header"
         android:background="@drawable/date_bg_white_no_shadow"
         android:gravity="center"
         android:orientation="horizontal">
-    
-        <ImageButton
-            android:id="@+id/text_voice_camera_date_bar_previous_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/previous_arrow_states"
-            android:paddingRight="20dp"/>
         
         <TextView
-            android:id="@+id/text_voice_camera_date_bar_dateview"
+            android:id="@+id/show_text_voice_camera_date_bar_dateview"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="Nov 6, 2011"
@@ -56,23 +49,19 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
         
-        <ImageButton
-            android:id="@+id/text_voice_camera_date_bar_next_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/next_arrow_states"
-            android:paddingRight="20dp"/>
-        
     </LinearLayout>
-        
+    
+         
+    
+
     <!-- ScrollView for body -->
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/text_voice_camera_footer"
-        android:layout_below="@id/text_voice_camera_date_bar"
+        android:layout_below="@id/show_text_voice_camera_date_bar"
+        android:layout_above="@+id/show_text_voice_camera_footer"
         android:background="@drawable/text_entry_bg"
-        android:id="@+id/text_voice_camera_body">
+        android:id="@+id/show_text_voice_camera_body">
     
     	<!-- Body -->
         <RelativeLayout
@@ -84,12 +73,12 @@
             >
             
             <LinearLayout
-                android:id="@+id/text_voice_camera_data"
+                android:id="@+id/show_text_voice_camera_data"
             	android:layout_width="fill_parent"
            		android:layout_height="fill_parent">
             
             <LinearLayout
-                android:id="@+id/text_voice_camera_camera_details"
+                android:id="@+id/show_text_voice_camera_camera_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -98,7 +87,7 @@
                 >
                 
                 <ImageView 
-                    android:id="@+id/text_voice_camera_image_display"
+                    android:id="@+id/show_text_voice_camera_image_display"
                     android:layout_width="100dp"
                     android:layout_height="80dp"
                     android:background="@drawable/photo_frame"
@@ -109,24 +98,17 @@
                    	android:paddingBottom="8dp"
                    	android:scaleType="fitXY"/>
                 
-                <Button
-                    android:id="@+id/text_voice_camera_retake_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/largecamera_button_retake_states"
-                    android:layout_marginLeft="10dp"/>
-                
             </LinearLayout>
             
             <RelativeLayout
-                android:id="@+id/text_voice_camera_voice_details"
+                android:id="@+id/show_text_voice_camera_voice_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 >
                 
                 <LinearLayout
-                    android:id="@+id/text_voice_camera_time_details"
+                    android:id="@+id/show_text_voice_camera_time_details"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:orientation="horizontal"
@@ -134,7 +116,7 @@
                     >
                     
                     <Chronometer 
-                        android:id="@+id/text_voice_camera_time_details_chronometer"
+                        android:id="@+id/show_text_voice_camera_time_details_chronometer"
                         android:textSize="50sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -143,17 +125,17 @@
                 </LinearLayout>
                 
                 <LinearLayout
-                    android:id="@+id/text_voice_camera_voice_control_buttons"
+                    android:id="@+id/show_text_voice_camera_voice_control_buttons"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:layout_below="@id/text_voice_camera_time_details"
+                    android:layout_below="@id/show_text_voice_camera_time_details"
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp">
                     
                     <Button
-                        android:id="@+id/text_voice_camera_stop_button"
+                        android:id="@+id/show_text_voice_camera_stop_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -162,10 +144,11 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:background="@drawable/voice_stop"
+                        android:visibility="gone"
                        />
                     
                     <Button
-                        android:id="@+id/text_voice_camera_play_button"
+                        android:id="@+id/show_text_voice_camera_play_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -174,20 +157,6 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:background="@drawable/voice_play"
-                        android:visibility="gone"
-                       />
-                    
-                    <Button
-                        android:id="@+id/text_voice_camera_rerecord_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingRight="10dp"
-                        android:paddingLeft="10dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:background="@drawable/voice_rerecord_states"
-                        android:visibility="gone"
                        />
                     
                 </LinearLayout>
@@ -198,35 +167,54 @@
                 
                 
             <ImageView
-                    android:id="@+id/text_voice_camera_voice_details_separator"
+                    android:id="@+id/show_text_voice_camera_voice_details_separator"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:src="@drawable/list_divider"
-                    android:layout_below="@id/text_voice_camera_data"
+                    android:layout_below="@id/show_text_voice_camera_data"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
                     android:visibility="gone"
                     />
             
                 
-            <EditText 
-                android:id="@+id/text_voice_camera_amount"
+            <TextView
+                android:id="@+id/show_text_voice_camera_amount"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_voice_camera_voice_details_separator"
+                android:layout_below="@id/show_text_voice_camera_voice_details_separator"
                 android:hint="amount"
-                android:layout_marginBottom="20dp"
-                android:numeric="decimal"/>
+                android:layout_marginBottom="10dp"
+                android:numeric="decimal"
+                android:textColor="#4d4d4d"/>
             
-            <EditText 
-                android:id="@+id/text_voice_camera_tag"
+            <View 
+                android:layout_height="5dp"
+                android:layout_width="fill_parent"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@id/show_text_voice_camera_amount"
+                android:id="@+id/show_text_voice_camera_divider_amount_desc"
+                android:layout_marginBottom="10dp"/>
+            
+            <TextView 
+                android:id="@+id/show_text_voice_camera_tag_textview"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_voice_camera_amount"
+                android:layout_below="@id/show_text_voice_camera_divider_amount_desc"
                 android:minLines="3"
                 android:gravity="top"
-                android:hint="description"/>
+                android:hint="description"
+                android:textColor="#4d4d4d"/>
             
+            <EditText 
+                android:id="@+id/show_text_voice_camera_tag"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/show_text_voice_camera_amount"
+                android:minLines="3"
+                android:gravity="top"
+                android:hint="description"
+                android:visibility="gone"/>
             
         </RelativeLayout>
     
@@ -236,31 +224,30 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/text_voice_camera_footer"
-        android:layout_below="@+id/text_voice_camera_date_bar"
+        android:layout_above="@id/show_text_voice_camera_footer"
+        android:layout_below="@+id/show_text_voice_camera_date_bar"
         android:background="@drawable/text_entry_bg"
-        android:id="@+id/text_voice_camera_body_favorite"
+        android:id="@+id/show_text_voice_camera_body_favorite"
         android:visibility="gone">
         
         <ImageView 
-            android:id="@+id/text_voice_camera_body_favorite_tag"
+            android:id="@+id/show_text_voice_camera_body_favorite_tag"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:src="@drawable/favorite_tag"/>
         
         <ListView 
-            android:id="@+id/text_voice_camera_body_favorite_listview"
+            android:id="@+id/show_text_voice_camera_body_favorite_listview"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_voice_camera_body_favorite_tag"
+            android:layout_below="@id/show_text_voice_camera_body_favorite_tag"
             android:layout_width="fill_parent"/>
         
     </RelativeLayout>
-        
-    
-    
-    <!-- Footer -->
+
+   
+      <!-- Footer -->
     <LinearLayout
-        android:id="@id/text_voice_camera_footer"
+        android:id="@id/show_text_voice_camera_footer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -269,24 +256,22 @@
         >
 
         <Button
-            android:id="@+id/text_voice_camera_save_entry"
+            android:id="@+id/show_text_voice_camera_update_entry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/save_entry_states"
+            android:background="@drawable/update_entry_states"
             android:layout_marginRight="5dp"
+            android:visibility="gone"
             />
         
         <Button
-            android:id="@+id/text_voice_camera_delete"
+            android:id="@+id/show_text_voice_camera_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/delete_states"
             android:layout_marginLeft="5dp"
             />
 
-    </LinearLayout>
-
-
-    
-    
+    </LinearLayout>  
+        
 </RelativeLayout>

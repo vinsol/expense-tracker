@@ -158,6 +158,8 @@ public class Voice extends Activity implements OnClickListener{
 					mRecordingHelper.stopRecording();
 				}
 			}
+			if(mAudioPlay.isAudioPlaying())
+				mAudioPlay.stopPlayBack();
 		} catch(Exception e){
 			
 		}
@@ -222,8 +224,16 @@ public class Voice extends Activity implements OnClickListener{
 			text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
 			
 			//////  *******  Stop Recording Audio and stop chronometer  ********   ////////
-			mRecordingHelper.stopRecording();
+			try{
+				if(mRecordingHelper.isRecording())
+					mRecordingHelper.stopRecording();
+			} catch (Exception e){}
 			text_voice_camera_time_details_chronometer.stop();
+			try{
+				if(mAudioPlay.isAudioPlaying())
+					mAudioPlay.stopPlayBack();
+			} catch(Exception e){}
+			text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
 		}
 		
 		
@@ -390,7 +400,6 @@ public class Voice extends Activity implements OnClickListener{
 	public boolean onKeyDown(int keyCode, KeyEvent event)  {
 	     if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 	    	 onBackPressed();
-	         return true;
 	      }
 	    return super.onKeyDown(keyCode, event);
 	}
@@ -399,6 +408,10 @@ public class Voice extends Activity implements OnClickListener{
 	    // This will be called either automatically for you on 2.0    
 	    // or later, or by the code above on earlier versions of the platform.
 		saveEntry();
+		try{
+			if(mAudioPlay.isAudioPlaying())
+				mAudioPlay.stopPlayBack();
+		}catch(Exception e){}
 	    return;
 	}
 }

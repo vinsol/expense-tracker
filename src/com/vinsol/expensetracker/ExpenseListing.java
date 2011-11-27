@@ -509,6 +509,11 @@ public class ExpenseListing extends Activity implements OnItemClickListener{
 						Intent intentCamera = new Intent(this, CameraActivity.class);
 						intentCamera.putExtra("cameraBundle", bundle);
 						startActivity(intentCamera);
+					} else {
+						Intent intentCamera = new Intent(this, ShowCameraActivity.class);
+						intentCamera.putExtra("cameraShowBundle", bundle);
+						startActivity(intentCamera);
+						//TODO
 					}
 				} else {
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
@@ -518,6 +523,11 @@ public class ExpenseListing extends Activity implements OnItemClickListener{
 					Intent intentTextEntry = new Intent(this, TextEntry.class);
 					intentTextEntry.putExtra("textEntryBundle", bundle);
 					startActivity(intentTextEntry);
+				} else {
+					Intent intentTextShow = new Intent(this, ShowTextActivity.class);
+					intentTextShow.putExtra("textShowBundle", bundle);
+					startActivity(intentTextShow);
+					//TODO
 				}
 				
 			} else if(mTempClickedList.get(5).equals(getString(R.string.voice))){
@@ -526,6 +536,11 @@ public class ExpenseListing extends Activity implements OnItemClickListener{
 						Intent intentVoice = new Intent(this, Voice.class);
 						intentVoice.putExtra("voiceBundle", bundle);
 						startActivity(intentVoice);
+					} else {
+						Intent intentVoiceShow = new Intent(this, ShowVoiceActivity.class);
+						intentVoiceShow.putExtra("voiceShowBundle", bundle);
+						startActivity(intentVoiceShow);
+						//TODO
 					}
 				} else {
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
