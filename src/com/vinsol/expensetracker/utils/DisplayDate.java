@@ -155,7 +155,7 @@ public class DisplayDate {
 	public String getSubListTag() {
 		
 		if(isCurrentMonth()){
-			return getWeek(mCalendar.get(Calendar.DAY_OF_WEEK));
+			return getWeek(mCalendar.get(Calendar.DAY_OF_WEEK))+", "+getMonth(mCalendar.get(Calendar.MONTH))+" "+mCalendar.get(Calendar.DAY_OF_MONTH);
 		}
 		
 		if(isPrevMonths()){
