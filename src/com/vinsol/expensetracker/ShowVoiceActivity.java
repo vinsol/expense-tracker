@@ -39,6 +39,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener{
 	private Chronometer show_text_voice_camera_time_details_chronometer;
 	private MyCount countDownTimer;
 	private Button show_text_voice_camera_update_entry;
+	private TextView show_text_voice_camera_description_show;
 	
 	private AudioPlay mAudioPlay;
 	private Long _id = null;
@@ -64,6 +65,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener{
 		show_text_voice_camera_stop_button = (Button) findViewById(R.id.show_text_voice_camera_stop_button);
 		show_text_voice_camera_time_details_chronometer = (Chronometer) findViewById(R.id.show_text_voice_camera_time_details_chronometer);
 		show_text_voice_camera_update_entry = (Button) findViewById(R.id.show_text_voice_camera_update_entry);
+		show_text_voice_camera_description_show= (TextView) findViewById(R.id.show_text_voice_camera_description_show);
 		
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		
@@ -82,6 +84,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener{
         	if(!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_voiceentry)))){
         		show_text_voice_camera_tag_textview.setText(tag);
         	} else {
+        		show_text_voice_camera_description_show.setVisibility(View.GONE);
         		show_text_voice_camera_tag_textview.setVisibility(View.GONE);
         		show_text_voice_camera_tag.setVisibility(View.VISIBLE);
         		show_text_voice_camera_divider_amount_desc.setVisibility(View.GONE);

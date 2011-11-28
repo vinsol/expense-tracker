@@ -178,15 +178,25 @@
                     />
             
                 
+            <TextView 
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Amount:"
+                android:textColor="#4d4d4d"
+                android:textStyle="bold"
+                android:layout_below="@id/show_text_voice_camera_voice_details_separator"/>
+            
             <TextView
                 android:id="@+id/show_text_voice_camera_amount"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/show_text_voice_camera_voice_details_separator"
                 android:hint="amount"
                 android:layout_marginBottom="10dp"
                 android:numeric="decimal"
-                android:textColor="#4d4d4d"/>
+                android:textColor="#4d4d4d"
+                android:textStyle="bold"
+                android:layout_alignParentRight="true"/>
             
             <View 
                 android:layout_height="5dp"
@@ -197,10 +207,20 @@
                 android:layout_marginBottom="10dp"/>
             
             <TextView 
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Description:"
+                android:textColor="#4d4d4d"
+                android:textStyle="bold"
+                android:layout_below="@id/show_text_voice_camera_divider_amount_desc"
+                android:id="@+id/show_text_voice_camera_description_show"
+                android:layout_marginBottom="5dp"/>
+            
+            <TextView 
                 android:id="@+id/show_text_voice_camera_tag_textview"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/show_text_voice_camera_divider_amount_desc"
+                android:layout_below="@id/show_text_voice_camera_description_show"
                 android:minLines="3"
                 android:gravity="top"
                 android:hint="description"

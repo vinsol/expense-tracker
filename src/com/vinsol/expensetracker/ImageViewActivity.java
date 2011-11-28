@@ -34,6 +34,7 @@ public class ImageViewActivity extends Activity {
 				System.gc();
 				Drawable drawable = Drawable.createFromPath("/mnt/sdcard/ExpenseTracker/"+_id+".jpg");
 				mImageView.setImageDrawable(drawable);
+				System.gc();
 			} catch (Exception e){
 			}
 		} 
@@ -44,6 +45,7 @@ public class ImageViewActivity extends Activity {
 	
 	@Override
 	protected void onPause() {
+		System.gc();
 		super.onPause();
 	}
 	
