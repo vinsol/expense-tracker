@@ -12,8 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ShowTextActivity extends Activity implements OnClickListener{
-	
+public class ShowTextActivity extends Activity implements OnClickListener {
+
 	private ArrayList<String> mShowList;
 	private Bundle intentExtras;
 	private Long _id = null;
@@ -21,44 +21,44 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 	private TextView show_text_voice_camera_amount;
 	private TextView show_text_voice_camera_tag_textview;
 	private Button show_text_voice_camera_delete;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.show_text_voice_camera);
-		
-		///////   ******  Assigning memory    *******   /////////
+
+		// ///// ****** Assigning memory ******* /////////
 		show_text_voice_camera_amount = (TextView) findViewById(R.id.show_text_voice_camera_amount);
 		show_text_voice_camera_tag_textview = (TextView) findViewById(R.id.show_text_voice_camera_tag_textview);
 		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
 		mDatabaseAdapter = new DatabaseAdapter(this);
-		////////*********     Get id from intent extras     ********   ////////////
-        
-        intentExtras = getIntent().getBundleExtra("textShowBundle");
+		// //////********* Get id from intent extras ******** ////////////
+
+		intentExtras = getIntent().getBundleExtra("textShowBundle");
 		mShowList = new ArrayList<String>();
-		
-		if(intentExtras.containsKey("mDisplayList")){
+
+		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = intentExtras.getStringArrayList("mDisplayList");
 			_id = Long.parseLong(mShowList.get(0));
 			String amount = mShowList.get(2);
-        	String tag = mShowList.get(1);
-        	show_text_voice_camera_tag_textview.setText(tag);
-        	show_text_voice_camera_amount.setText(amount);
-        	Calendar mCalendar = Calendar.getInstance();
-        	mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
-        	new ShowDateHandler(this, mCalendar);
+			String tag = mShowList.get(1);
+			show_text_voice_camera_tag_textview.setText(tag);
+			show_text_voice_camera_amount.setText(amount);
+			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+			new ShowDateHandler(this, mCalendar);
 		}
-		
+
 		show_text_voice_camera_delete.setOnClickListener(this);
-		
+
 	}
 
 	@Override
 	public void onClick(View v) {
-		
-		if(v.getId() == R.id.show_text_voice_camera_delete){
-			if(_id != null){
+
+		if (v.getId() == R.id.show_text_voice_camera_delete) {
+			if (_id != null) {
 				mDatabaseAdapter.open();
 				mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(_id));
 				mDatabaseAdapter.close();

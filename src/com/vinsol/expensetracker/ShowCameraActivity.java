@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ShowCameraActivity extends Activity implements OnClickListener{
+public class ShowCameraActivity extends Activity implements OnClickListener {
 
 	private TextView show_text_voice_camera_amount;
 	private TextView show_text_voice_camera_tag_textview;
@@ -34,18 +34,18 @@ public class ShowCameraActivity extends Activity implements OnClickListener{
 	private ImageView show_text_voice_camera_voice_details_separator;
 	private LinearLayout show_text_voice_camera_camera_details;
 	private TextView show_text_voice_camera_description_show;
-	
+
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
 	private Long _id = null;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.show_text_voice_camera);
-		
-		///////   ******  Assigning memory    *******   /////////
+
+		// ///// ****** Assigning memory ******* /////////
 		show_text_voice_camera_amount = (TextView) findViewById(R.id.show_text_voice_camera_amount);
 		show_text_voice_camera_tag_textview = (TextView) findViewById(R.id.show_text_voice_camera_tag_textview);
 		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
@@ -57,86 +57,94 @@ public class ShowCameraActivity extends Activity implements OnClickListener{
 		show_text_voice_camera_voice_details_separator = (ImageView) findViewById(R.id.show_text_voice_camera_voice_details_separator);
 		show_text_voice_camera_camera_details = (LinearLayout) findViewById(R.id.show_text_voice_camera_camera_details);
 		show_text_voice_camera_description_show = (TextView) findViewById(R.id.show_text_voice_camera_description_show);
-		
+
 		mDatabaseAdapter = new DatabaseAdapter(this);
-		////////*********     Get id from intent extras     ********   ////////////
-		
+		// //////********* Get id from intent extras ******** ////////////
+
 		setGraphicsCamera();
-	        
-	    intentExtras = getIntent().getBundleExtra("cameraShowBundle");
+
+		intentExtras = getIntent().getBundleExtra("cameraShowBundle");
 		mShowList = new ArrayList<String>();
-		
-		if(intentExtras.containsKey("mDisplayList")){
-        	mShowList = new ArrayList<String>();
-        	mShowList = intentExtras.getStringArrayList("mDisplayList");
-        	_id = Long.parseLong(mShowList.get(0));
-        	String amount = mShowList.get(2);
-        	String tag = mShowList.get(1);
-        	if(!(amount.equals("") || amount == null)){
-        		if(!amount.contains("?"))
-        			show_text_voice_camera_amount.setText(amount);
-        	}
-        	if(!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_cameraentry)))){
-        		show_text_voice_camera_tag_textview.setText(tag);
-        	} else {
-        		show_text_voice_camera_description_show.setVisibility(View.GONE);
-        		show_text_voice_camera_tag_textview.setVisibility(View.GONE);
-        		show_text_voice_camera_tag.setVisibility(View.VISIBLE);
-        		show_text_voice_camera_divider_amount_desc.setVisibility(View.GONE);
-        		show_text_voice_camera_update_entry.setVisibility(View.VISIBLE);
-        		show_text_voice_camera_update_entry.setOnClickListener(this);
-        	}
-        	
-        	File mFile = new File("/sdcard/ExpenseTracker/"+_id+"_small.jpg");
-        	System.gc();
-        	if(mFile.canRead()){
-        		Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
-        		show_text_voice_camera_image_display.setImageDrawable(mDrawable);
-        	} else {
-        		show_text_voice_camera_image_display.setImageResource(R.drawable.no_image_small);
-        	}
-        	Calendar mCalendar = Calendar.getInstance();
-        	mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
-        	new ShowDateHandler(this, mCalendar);
-        }
-		
+
+		if (intentExtras.containsKey("mDisplayList")) {
+			mShowList = new ArrayList<String>();
+			mShowList = intentExtras.getStringArrayList("mDisplayList");
+			_id = Long.parseLong(mShowList.get(0));
+			String amount = mShowList.get(2);
+			String tag = mShowList.get(1);
+			if (!(amount.equals("") || amount == null)) {
+				if (!amount.contains("?"))
+					show_text_voice_camera_amount.setText(amount);
+			}
+			if (!(tag.equals("") || tag == null || tag
+					.equals(getString(R.string.unfinished_cameraentry)))) {
+				show_text_voice_camera_tag_textview.setText(tag);
+			} else {
+				show_text_voice_camera_description_show
+						.setVisibility(View.GONE);
+				show_text_voice_camera_tag_textview.setVisibility(View.GONE);
+				show_text_voice_camera_tag.setVisibility(View.VISIBLE);
+				show_text_voice_camera_divider_amount_desc
+						.setVisibility(View.GONE);
+				show_text_voice_camera_update_entry.setVisibility(View.VISIBLE);
+				show_text_voice_camera_update_entry.setOnClickListener(this);
+			}
+
+			File mFile = new File("/sdcard/ExpenseTracker/" + _id
+					+ "_small.jpg");
+			System.gc();
+			if (mFile.canRead()) {
+				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
+				show_text_voice_camera_image_display
+						.setImageDrawable(mDrawable);
+			} else {
+				show_text_voice_camera_image_display
+						.setImageResource(R.drawable.no_image_small);
+			}
+			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+			new ShowDateHandler(this, mCalendar);
+		}
+
 		show_text_voice_camera_image_display.setOnClickListener(this);
 		show_text_voice_camera_delete.setOnClickListener(this);
-		
+
 	}
-	
+
 	private void setGraphicsCamera() {
-		///////   ***** Sets Title Camera Entry *********///////
-        show_text_voice_camera_header_title.setText("Camera Entry");
-        
-        ///////   ***** Sets Title Camera Entry *********///////
-        show_text_voice_camera_voice_details_separator.setVisibility(View.VISIBLE);
-        
-        //////   ******  Shows Camera Details ********////////
-        show_text_voice_camera_camera_details.setVisibility(View.VISIBLE);
+		// ///// ***** Sets Title Camera Entry *********///////
+		show_text_voice_camera_header_title.setText("Camera Entry");
+
+		// ///// ***** Sets Title Camera Entry *********///////
+		show_text_voice_camera_voice_details_separator
+				.setVisibility(View.VISIBLE);
+
+		// //// ****** Shows Camera Details ********////////
+		show_text_voice_camera_camera_details.setVisibility(View.VISIBLE);
 	}
-	
 
 	public void onBackPressed() {
-	    // This will be called either automatically for you on 2.0    
-	    // or later, or by the code above on earlier versions of the platform.
-		if(show_text_voice_camera_tag.isShown()){
-			if(show_text_voice_camera_tag.getText().toString() != "")
+		// This will be called either automatically for you on 2.0
+		// or later, or by the code above on earlier versions of the platform.
+		if (show_text_voice_camera_tag.isShown()) {
+			if (show_text_voice_camera_tag.getText().toString() != "")
 				saveEntry();
 		}
-	    finish();
+		finish();
 	}
-	
+
 	private void saveEntry() {
-		///////    *******  Creating HashMap to update info   *******  ////////
+		// ///// ******* Creating HashMap to update info ******* ////////
 		HashMap<String, String> _list = new HashMap<String, String>();
 		_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
-		
-		if(show_text_voice_camera_tag.getText().toString() != ""){
-			_list.put(DatabaseAdapter.KEY_TAG, show_text_voice_camera_tag.getText().toString());
+
+		if (show_text_voice_camera_tag.getText().toString() != "") {
+			_list.put(DatabaseAdapter.KEY_TAG, show_text_voice_camera_tag
+					.getText().toString());
 		}
-		
-		//////    *******   Update database if user added additional info   *******  ///////
+
+		// //// ******* Update database if user added additional info *******
+		// ///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(_list);
 		mDatabaseAdapter.close();
@@ -145,25 +153,28 @@ public class ShowCameraActivity extends Activity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		
-		if(v.getId() == R.id.show_text_voice_camera_image_display){
-			if(_id != null){
-//				Intent intentImageViewActivity = new Intent(this, ImageViewActivity.class);
-//				Bundle intentImageViewActivityBundle = new Bundle();
-//				intentImageViewActivityBundle.putLong("_id", _id);
-//				intentImageViewActivity.putExtra("intentImageViewActivity", intentImageViewActivityBundle);
-//				startActivity(intentImageViewActivity);
-				new ImageViewDialog(this, _id); //MARK
-				
+
+		if (v.getId() == R.id.show_text_voice_camera_image_display) {
+			if (_id != null) {
+				// Intent intentImageViewActivity = new Intent(this,
+				// ImageViewActivity.class);
+				// Bundle intentImageViewActivityBundle = new Bundle();
+				// intentImageViewActivityBundle.putLong("_id", _id);
+				// intentImageViewActivity.putExtra("intentImageViewActivity",
+				// intentImageViewActivityBundle);
+				// startActivity(intentImageViewActivity);
+				new ImageViewDialog(this, _id); // MARK
+
 			} else {
-				Toast.makeText(this, "Error Opening Image", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "Error Opening Image", Toast.LENGTH_SHORT)
+						.show();
 			}
 		}
-		
-		if(v.getId() == R.id.show_text_voice_camera_delete){
-			if(_id != null){
+
+		if (v.getId() == R.id.show_text_voice_camera_delete) {
+			if (_id != null) {
 				new FileDelete(_id);
-				
+
 				mDatabaseAdapter.open();
 				mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(_id));
 				mDatabaseAdapter.close();
@@ -172,13 +183,13 @@ public class ShowCameraActivity extends Activity implements OnClickListener{
 			} else {
 				Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
 			}
-			
+
 		}
-		
-		if(v.getId() == R.id.show_text_voice_camera_update_entry){
+
+		if (v.getId() == R.id.show_text_voice_camera_update_entry) {
 			saveEntry();
 		}
-		
+
 	}
-	
+
 }

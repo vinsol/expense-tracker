@@ -14,7 +14,8 @@ public class GraphView extends View {
 	private String[] horlabels;
 	private String title;
 
-	public GraphView(Context context, float[] values, String title, String[] horlabels) {
+	public GraphView(Context context, float[] values, String title,
+			String[] horlabels) {
 		super(context);
 		if (values == null)
 			values = new float[0];
@@ -28,27 +29,27 @@ public class GraphView extends View {
 			this.horlabels = new String[0];
 		else
 			this.horlabels = horlabels;
-	
+
 		paint = new Paint();
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		float border = 0.042f*getWidth();
+		float border = 0.042f * getWidth();
 		float horstart = border * 2;
-		float height = getHeight()*0.5f;
+		float height = getHeight() * 0.5f;
 		float width = getWidth();
 		float max = getMax();
 		float min = getMin();
 		float diff = max - min;
 		float graphheight = height - (2 * border);
 		float graphwidth = width - (2 * border);
-		
 
 		paint.setTextAlign(Align.LEFT);
 		for (int i = 0; i < horlabels.length; i++) {
 			paint.setColor(Color.DKGRAY);
-			float x = ((graphwidth / horlabels.length) * i)+(0.0625f*graphwidth)+2*border;
+			float x = ((graphwidth / horlabels.length) * i)
+					+ (0.0625f * graphwidth) + 2 * border;
 			paint.setTextAlign(Align.CENTER);
 			paint.setColor(Color.WHITE);
 			paint.setTextScaleX(1.5f);
@@ -66,8 +67,10 @@ public class GraphView extends View {
 				float val = values[i] - min;
 				float rat = val / diff;
 				float h = graphheight * rat;
-				canvas.drawRect((i * colwidth) + horstart, (20 - h) + graphheight, ((i * colwidth) + horstart) + (colwidth - 1), (height) - (border - 1), paint);
-			} 
+				canvas.drawRect((i * colwidth) + horstart, (20 - h)
+						+ graphheight, ((i * colwidth) + horstart)
+						+ (colwidth - 1), (height) - (border - 1), paint);
+			}
 		}
 	}
 

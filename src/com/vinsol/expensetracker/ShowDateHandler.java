@@ -12,12 +12,14 @@ public class ShowDateHandler {
 
 	private TextView show_text_voice_camera_date_bar_dateview;
 	private Activity activity;
-	
-	public ShowDateHandler(Context mContext,Calendar mCalendar) {
-		activity = (mContext instanceof Activity) ? (Activity)mContext : null;
-		show_text_voice_camera_date_bar_dateview = (TextView) activity.findViewById(R.id.show_text_voice_camera_date_bar_dateview);
+
+	public ShowDateHandler(Context mContext, Calendar mCalendar) {
+		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
+		show_text_voice_camera_date_bar_dateview = (TextView) activity
+				.findViewById(R.id.show_text_voice_camera_date_bar_dateview);
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-		show_text_voice_camera_date_bar_dateview.setText(mDisplayDate.getDisplayDate());
+		show_text_voice_camera_date_bar_dateview.setText(mDisplayDate
+				.getDisplayDate());
 	}
-	
+
 }

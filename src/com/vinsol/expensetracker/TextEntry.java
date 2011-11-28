@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-public class TextEntry extends Activity implements OnClickListener{
+public class TextEntry extends Activity implements OnClickListener {
 
 	private DatabaseAdapter mDatabaseAdapter;
 	private Long _id;
@@ -30,169 +30,179 @@ public class TextEntry extends Activity implements OnClickListener{
 	private TextView text_voice_camera_date_bar_dateview;
 	private String dateViewString;
 	private ArrayList<String> mEditList;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 
-        ///////   ****** No Title Bar   ********* /////////
-        
-        
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        
-        setContentView(R.layout.text_voice_camera);
-        
-        mDatabaseAdapter = new DatabaseAdapter(this);
-        text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);
-        text_voice_camera_tag = (EditText) findViewById(R.id.text_voice_camera_tag);
-        text_voice_camera_date_bar_dateview = (TextView) findViewById(R.id.text_voice_camera_date_bar_dateview);
-        
-        ////////*********     Get id from intent extras     ********   ////////////
-        
-        intentExtras = getIntent().getBundleExtra("textEntryBundle");
-        if(intentExtras.containsKey("_id"))
-        	_id = intentExtras.getLong("_id");
-        
-        if(intentExtras.containsKey("mDisplayList")){
-        	mEditList = new ArrayList<String>();
-        	mEditList = intentExtras.getStringArrayList("mDisplayList");
-        	_id = Long.parseLong(mEditList.get(0));
-        	String amount = mEditList.get(2);
-        	String tag = mEditList.get(1);
-        	if(!(amount.equals("") || amount == null)){
-        		if(!amount.contains("?"))
-        			text_voice_camera_amount.setText(amount);
-        	}
-        	if(!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_textentry)))){
-        		text_voice_camera_tag.setText(tag);
-        	}
-        }
-        
-        ///////  ******* Sets Header Margin  ******* ////////
-        LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, 30, 0, 20);
-        
-        EditText text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);
-        text_voice_camera_amount.setLayoutParams(params);
-        
-        
-        ////////   ********    Handle Date Bar   *********   ////////
-        
-        if(intentExtras.containsKey("mDisplayList")){
-        	new DateHandler(this , Long.parseLong(mEditList.get(6)));
-        } else if(intentExtras.containsKey("timeInMillis")) {
-        	new DateHandler(this ,intentExtras.getLong("timeInMillis"));
-        } else {
-        	new DateHandler(this);
-        }
-        
-        ////////   *********     Get Last most accurate location info   *********   /////////
-        LocationLast mLocationLast = new LocationLast(this);
+		// ///// ****** No Title Bar ********* /////////
+
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+		setContentView(R.layout.text_voice_camera);
+
+		mDatabaseAdapter = new DatabaseAdapter(this);
+		text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);
+		text_voice_camera_tag = (EditText) findViewById(R.id.text_voice_camera_tag);
+		text_voice_camera_date_bar_dateview = (TextView) findViewById(R.id.text_voice_camera_date_bar_dateview);
+
+		// //////********* Get id from intent extras ******** ////////////
+
+		intentExtras = getIntent().getBundleExtra("textEntryBundle");
+		if (intentExtras.containsKey("_id"))
+			_id = intentExtras.getLong("_id");
+
+		if (intentExtras.containsKey("mDisplayList")) {
+			mEditList = new ArrayList<String>();
+			mEditList = intentExtras.getStringArrayList("mDisplayList");
+			_id = Long.parseLong(mEditList.get(0));
+			String amount = mEditList.get(2);
+			String tag = mEditList.get(1);
+			if (!(amount.equals("") || amount == null)) {
+				if (!amount.contains("?"))
+					text_voice_camera_amount.setText(amount);
+			}
+			if (!(tag.equals("") || tag == null || tag
+					.equals(getString(R.string.unfinished_textentry)))) {
+				text_voice_camera_tag.setText(tag);
+			}
+		}
+
+		// ///// ******* Sets Header Margin ******* ////////
+		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT);
+		params.setMargins(0, 30, 0, 20);
+
+		EditText text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);
+		text_voice_camera_amount.setLayoutParams(params);
+
+		// ////// ******** Handle Date Bar ********* ////////
+
+		if (intentExtras.containsKey("mDisplayList")) {
+			new DateHandler(this, Long.parseLong(mEditList.get(6)));
+		} else if (intentExtras.containsKey("timeInMillis")) {
+			new DateHandler(this, intentExtras.getLong("timeInMillis"));
+		} else {
+			new DateHandler(this);
+		}
+
+		// ////// ********* Get Last most accurate location info *********
+		// /////////
+		LocationLast mLocationLast = new LocationLast(this);
 		mLocationLast.getLastLocation();
-		
+
 		setClickListeners();
-		
-		
+
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		new LocationLast(this);
-		dateViewString = text_voice_camera_date_bar_dateview.getText().toString();
+		dateViewString = text_voice_camera_date_bar_dateview.getText()
+				.toString();
 	}
-	
+
 	private void setClickListeners() {
-		////////    *******    Adding Click Listeners to UI Items ******** //////////
-		
+		// ////// ******* Adding Click Listeners to UI Items ******** //////////
+
 		Button text_voice_camera_save_entry = (Button) findViewById(R.id.text_voice_camera_save_entry);
 		text_voice_camera_save_entry.setOnClickListener(this);
-		
+
 		Button text_voice_camera_delete = (Button) findViewById(R.id.text_voice_camera_delete);
 		text_voice_camera_delete.setOnClickListener(this);
-		
-		
+
 	}
 
 	@Override
 	public void onClick(View v) {
-		////////********  Adding Action to save entry     *********    ///////////
-		
-		if(v.getId() == R.id.text_voice_camera_save_entry){
+		// //////******** Adding Action to save entry ********* ///////////
+
+		if (v.getId() == R.id.text_voice_camera_save_entry) {
 			saveEntry();
 		}
-	
-	
-		/////////     *********   Adding action if delete button **********  /////////
-	
-		if(v.getId() == R.id.text_voice_camera_delete){
+
+		// /////// ********* Adding action if delete button ********** /////////
+
+		if (v.getId() == R.id.text_voice_camera_delete) {
 			new FileDelete(_id);
-			
-			//////   *******   Delete entry from database ********   /////////
+
+			// //// ******* Delete entry from database ******** /////////
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(_id));
 			mDatabaseAdapter.close();
 			finish();
 		}
 	}
-	
-	///// ******************  Handling back press of key   ********** ///////////
-	public boolean onKeyDown(int keyCode, KeyEvent event)  {
-	     if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-	    	 onBackPressed();
-	         return true;
-	      }
-	    return super.onKeyDown(keyCode, event);
+
+	// /// ****************** Handling back press of key ********** ///////////
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+			onBackPressed();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	public void onBackPressed() {
-	    // This will be called either automatically for you on 2.0    
-	    // or later, or by the code above on earlier versions of the platform.
+		// This will be called either automatically for you on 2.0
+		// or later, or by the code above on earlier versions of the platform.
 		saveEntry();
-	    return;
+		return;
 	}
-	
-	private void saveEntry(){
-		///////    *******  Creating HashMap to update info   *******  ////////
+
+	private void saveEntry() {
+		// ///// ******* Creating HashMap to update info ******* ////////
 		HashMap<String, String> _list = new HashMap<String, String>();
 		_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
-		
-		if(!text_voice_camera_amount.getText().toString().equals(".") && !text_voice_camera_amount.getText().toString().equals("")){
-			Double mAmount = Double.parseDouble(text_voice_camera_amount.getText().toString());
-			mAmount = (double)((int)((mAmount+0.005)*100.0)/100.0);
+
+		if (!text_voice_camera_amount.getText().toString().equals(".")
+				&& !text_voice_camera_amount.getText().toString().equals("")) {
+			Double mAmount = Double.parseDouble(text_voice_camera_amount
+					.getText().toString());
+			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 			_list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
 		} else {
 			_list.put(DatabaseAdapter.KEY_AMOUNT, null);
 		}
-		if(text_voice_camera_tag.getText().toString() != ""){
-			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
+		if (text_voice_camera_tag.getText().toString() != "") {
+			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText()
+					.toString());
 		}
-		
-		if(!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)){
-			try{
-				if(!intentExtras.containsKey("mDisplayList")){
-					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
-					_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+
+		if (!text_voice_camera_date_bar_dateview.getText().toString()
+				.equals(dateViewString)) {
+			try {
+				if (!intentExtras.containsKey("mDisplayList")) {
+					DateHelper mDateHelper = new DateHelper(
+							text_voice_camera_date_bar_dateview.getText()
+									.toString());
+					_list.put(DatabaseAdapter.KEY_DATE_TIME,
+							mDateHelper.getTimeMillis() + "");
 				} else {
 					Calendar mCalendar = Calendar.getInstance();
 					mCalendar.setTimeInMillis(Long.parseLong(mEditList.get(6)));
-					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
-					_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+					DateHelper mDateHelper = new DateHelper(
+							text_voice_camera_date_bar_dateview.getText()
+									.toString(), mCalendar);
+					_list.put(DatabaseAdapter.KEY_DATE_TIME,
+							mDateHelper.getTimeMillis() + "");
 				}
-			} catch (Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		//////    *******   Update database if user added additional info   *******  ///////
+		// //// ******* Update database if user added additional info *******
+		// ///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(_list);
 		mDatabaseAdapter.close();
-		
+
 		finish();
-		if(!intentExtras.containsKey("timeInMillis") && !intentExtras.containsKey("mDisplayList")){
-			 Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-			 startActivity(intentExpenseListing);
+		if (!intentExtras.containsKey("timeInMillis")
+				&& !intentExtras.containsKey("mDisplayList")) {
+			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			startActivity(intentExpenseListing);
 		}
 	}
 }
