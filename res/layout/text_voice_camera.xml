@@ -108,7 +108,23 @@
                    	android:paddingRight="5dp"
                    	android:paddingBottom="8dp"
                    	android:scaleType="fitXY"/>
-                
+                <RelativeLayout 
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:layout_marginRight="10dp"
+                    android:paddingTop="5dp"
+                   	android:paddingLeft="5dp"
+                   	android:paddingRight="5dp"
+                   	android:paddingBottom="8dp"
+                   	android:id="@+id/text_voice_camera_load_progress"
+                   	android:gravity="center"
+                   	android:visibility="gone"
+                   	>
+                	<ProgressBar 
+                	    android:layout_height="wrap_content"
+                	    android:layout_width="wrap_content"
+                	    />
+                </RelativeLayout>
                 <Button
                     android:id="@+id/text_voice_camera_retake_button"
                     android:layout_width="wrap_content"

@@ -295,11 +295,13 @@ class SeparatedListAdapter extends BaseAdapter{
 						else if(mListenerList.get(5).equals(mContext.getString(R.string.camera))) {
 							File mFile = new File("/sdcard/ExpenseTracker/"+mListenerList.get(0)+".jpg");
 							if(mFile.canRead()){
-								Intent intentImageViewActivity = new Intent(mContext, ImageViewActivity.class);
-								Bundle bundle = new Bundle();
-								bundle.putLong("_id", Long.parseLong(mListenerList.get(0)));
-								intentImageViewActivity.putExtra("intentImageViewActivity", bundle);
-								mContext.startActivity(intentImageViewActivity);
+//								Intent intentImageViewActivity = new Intent(mContext, ImageViewActivity.class);
+//								Bundle bundle = new Bundle();
+//								bundle.putLong("_id", Long.parseLong(mListenerList.get(0)));
+//								intentImageViewActivity.putExtra("intentImageViewActivity", bundle);
+//								mContext.startActivity(intentImageViewActivity);
+								new ImageViewDialog(mContext, Long.parseLong(mListenerList.get(0)));
+								
 							}
 							else {
 								//TODO if image not found

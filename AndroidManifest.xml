@@ -47,10 +47,6 @@
     		android:screenOrientation="portrait"
             ></activity>
         <activity 
-            android:name=".ImageViewActivity"
-        	android:configChanges="orientation"
-            ></activity>
-        <activity 
             android:name=".ShowVoiceActivity"
         	android:screenOrientation="portrait"
         	android:windowSoftInputMode="adjustPan"

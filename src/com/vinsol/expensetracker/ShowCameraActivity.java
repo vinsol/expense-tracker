@@ -8,7 +8,6 @@ import java.util.HashMap;
 import com.vinsol.expensetracker.utils.FileDelete;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -149,11 +148,13 @@ public class ShowCameraActivity extends Activity implements OnClickListener{
 		
 		if(v.getId() == R.id.show_text_voice_camera_image_display){
 			if(_id != null){
-				Intent intentImageViewActivity = new Intent(this, ImageViewActivity.class);
-				Bundle intentImageViewActivityBundle = new Bundle();
-				intentImageViewActivityBundle.putLong("_id", _id);
-				intentImageViewActivity.putExtra("intentImageViewActivity", intentImageViewActivityBundle);
-				startActivity(intentImageViewActivity);
+//				Intent intentImageViewActivity = new Intent(this, ImageViewActivity.class);
+//				Bundle intentImageViewActivityBundle = new Bundle();
+//				intentImageViewActivityBundle.putLong("_id", _id);
+//				intentImageViewActivity.putExtra("intentImageViewActivity", intentImageViewActivityBundle);
+//				startActivity(intentImageViewActivity);
+				new ImageViewDialog(this, _id); //MARK
+				
 			} else {
 				Toast.makeText(this, "Error Opening Image", Toast.LENGTH_SHORT).show();
 			}

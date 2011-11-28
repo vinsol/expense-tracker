@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
@@ -25,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +45,7 @@ public class CameraActivity extends Activity implements OnClickListener{
 	private String dateViewString;
 	private ArrayList<String> mEditList;
 	private ImageView text_voice_camera_image_display;
+	private RelativeLayout text_voice_camera_load_progress;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,8 @@ public class CameraActivity extends Activity implements OnClickListener{
         text_voice_camera_tag = (EditText) findViewById(R.id.text_voice_camera_tag);
         text_voice_camera_date_bar_dateview = (TextView) findViewById(R.id.text_voice_camera_date_bar_dateview);
         text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
+        text_voice_camera_load_progress = (RelativeLayout) findViewById(R.id.text_voice_camera_load_progress);
+        
         if(intentExtras.containsKey("mDisplayList")){
         	mEditList = new ArrayList<String>();
         	mEditList = intentExtras.getStringArrayList("mDisplayList");
@@ -136,11 +141,11 @@ public class CameraActivity extends Activity implements OnClickListener{
 		
 		if(PICTURE_RESULT == requestCode && Activity.RESULT_OK == resultCode){
 			if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)){
-				CameraFileSave cameraFileSave = new CameraFileSave(_id+"",this);
-				cameraFileSave.create();
-				ImageGet imageGet = new ImageGet(""+_id,this);
-				Bitmap bm = imageGet.getSmallImage();
-				text_voice_camera_image_display.setImageBitmap(bm);
+				
+				
+				new ImageViewCameraAsyncTask().execute();
+				
+			
 			} else {
 				text_voice_camera_image_display.setImageResource(R.drawable.no_image_small);
 				Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
@@ -162,6 +167,37 @@ public class CameraActivity extends Activity implements OnClickListener{
 		}
 	}
 
+	private class ImageViewCameraAsyncTask extends AsyncTask<Void, Void, Void>{
+
+		Bitmap bm;
+		
+		@Override
+		protected void onPreExecute() {
+			text_voice_camera_load_progress.setVisibility(View.VISIBLE);
+			text_voice_camera_image_display.setVisibility(View.GONE);
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			CameraFileSave cameraFileSave = new CameraFileSave(_id+"",CameraActivity.this);
+			cameraFileSave.create();
+			System.gc();
+			ImageGet imageGet = new ImageGet(""+_id,CameraActivity.this);
+			bm = imageGet.getSmallImage();
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			text_voice_camera_load_progress.setVisibility(View.GONE);
+			text_voice_camera_image_display.setVisibility(View.VISIBLE);
+			text_voice_camera_image_display.setImageBitmap(bm);
+			super.onPostExecute(result);
+		}
+		
+	} 
+	
 	private void setGraphicsCamera() {
 		///////   ***** Sets Title Camera Entry *********///////
         text_voice_camera_header_title.setText("Camera Entry");
@@ -216,11 +252,13 @@ public class CameraActivity extends Activity implements OnClickListener{
 		//////////      **********    Adding action if image is pressed   ******** ///////////
 		
 		if(v.getId() == R.id.text_voice_camera_image_display){
-			Intent intentImageViewActivity = new Intent(this, ImageViewActivity.class);
-			Bundle intentImageViewActivityBundle = new Bundle();
-			intentImageViewActivityBundle.putLong("_id", _id);
-			intentImageViewActivity.putExtra("intentImageViewActivity", intentImageViewActivityBundle);
-			startActivity(intentImageViewActivity);
+//			Intent intentImageViewActivity = new Intent(this, ImageViewActivity.class);
+//			Bundle intentImageViewActivityBundle = new Bundle();
+//			intentImageViewActivityBundle.putLong("_id", _id);
+//			intentImageViewActivity.putExtra("intentImageViewActivity", intentImageViewActivityBundle);
+//			startActivity(intentImageViewActivity);
+			new ImageViewDialog(this, _id);
+			
 		}
 		
 		/////////   **********   Adding action if retake button is pressed     ******  ////////
