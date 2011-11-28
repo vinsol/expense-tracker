@@ -53,7 +53,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener{
 //		mSubList = mConvertCursorToListString.getListStringParticularDate();
 		//////////     *********    Setting adapter to listview   ******   ///////////
 		
-		mSeparatedListAdapter = new SeparatedListAdapter(this);
+		
 		
 		
 //		setResume = false;
@@ -64,6 +64,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener{
 	@Override
 	protected void onResume() {
 //		if(setResume){
+		mSeparatedListAdapter = new SeparatedListAdapter(this);
 			mDataDateList = mConvertCursorToListString.getDateListString();
 			mSubList = mConvertCursorToListString.getListStringParticularDate();
 			int j = 0;
