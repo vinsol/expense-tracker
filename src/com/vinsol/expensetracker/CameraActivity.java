@@ -46,6 +46,8 @@ public class CameraActivity extends Activity implements OnClickListener{
 	private ArrayList<String> mEditList;
 	private ImageView text_voice_camera_image_display;
 	private RelativeLayout text_voice_camera_load_progress;
+	private Button text_voice_camera_delete;
+	private Button text_voice_camera_save_entry;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,8 @@ public class CameraActivity extends Activity implements OnClickListener{
         text_voice_camera_date_bar_dateview = (TextView) findViewById(R.id.text_voice_camera_date_bar_dateview);
         text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
         text_voice_camera_load_progress = (RelativeLayout) findViewById(R.id.text_voice_camera_load_progress);
+        text_voice_camera_save_entry = (Button) findViewById(R.id.text_voice_camera_save_entry);
+		text_voice_camera_delete = (Button) findViewById(R.id.text_voice_camera_delete);
         
         if(intentExtras.containsKey("mDisplayList")){
         	mEditList = new ArrayList<String>();
@@ -175,6 +179,8 @@ public class CameraActivity extends Activity implements OnClickListener{
 		protected void onPreExecute() {
 			text_voice_camera_load_progress.setVisibility(View.VISIBLE);
 			text_voice_camera_image_display.setVisibility(View.GONE);
+			text_voice_camera_delete.setEnabled(false);
+			text_voice_camera_save_entry.setEnabled(false);
 			super.onPreExecute();
 		}
 		
@@ -193,6 +199,8 @@ public class CameraActivity extends Activity implements OnClickListener{
 			text_voice_camera_load_progress.setVisibility(View.GONE);
 			text_voice_camera_image_display.setVisibility(View.VISIBLE);
 			text_voice_camera_image_display.setImageBitmap(bm);
+			text_voice_camera_delete.setEnabled(true);
+			text_voice_camera_save_entry.setEnabled(true);
 			super.onPostExecute(result);
 		}
 		
@@ -214,10 +222,9 @@ public class CameraActivity extends Activity implements OnClickListener{
 	private void setClickListeners() {
 		////////    *******    Adding Click Listeners to UI Items ******** //////////
 		
-		Button text_voice_camera_save_entry = (Button) findViewById(R.id.text_voice_camera_save_entry);
+		
 		text_voice_camera_save_entry.setOnClickListener(this);
 		
-		Button text_voice_camera_delete = (Button) findViewById(R.id.text_voice_camera_delete);
 		text_voice_camera_delete.setOnClickListener(this);
 		
 		ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
