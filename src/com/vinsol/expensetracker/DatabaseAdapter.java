@@ -15,6 +15,8 @@ public class DatabaseAdapter {
 	// database and table name
 	private final String DATABASE_NAME = "ExpenseTrackerDB";
 	private final String TABLE_NAME = "ExpenseTrackerTable";
+	private final String TABLE_NAME_FAVORITE = "FavoriteTable";
+	
 
 	// column index
 	public static final String KEY_ID = "_id";
@@ -24,15 +26,24 @@ public class DatabaseAdapter {
 	public static final String KEY_LOCATION = "LOCATION";
 	public static final String KEY_FAVORITE = "FAVORITE";
 	public static final String KEY_TYPE = "TYPE";
+	
 
 	// sql open or create database
 	private final String DATABASE_CREATE = "create table if not exists "
 			+ TABLE_NAME + "(" + KEY_ID
 			+ " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_TAG + " TEXT,"
 			+ KEY_AMOUNT + " TEXT, " + KEY_DATE_TIME + " TEXT NOT NULL,"
-			+ KEY_LOCATION + " TEXT, " + KEY_FAVORITE + " VARCHAR(1), "
+			+ KEY_LOCATION + " TEXT, " + KEY_FAVORITE + " INTEGER, "
 			+ KEY_TYPE + " VARCHAR(1) NOT NULL " + ")";
 
+	private final String DATABASE_CREATE_FAVORITE = "create table if not exists "
+			+ TABLE_NAME_FAVORITE + "(" 
+			+ KEY_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT ," 
+			+ KEY_TAG + " TEXT,"
+			+ KEY_AMOUNT + " TEXT, " 
+			+ KEY_TYPE + " VARCHAR(1) NOT NULL " + ")";
+	
+	
 	private SQLiteDatabase db;
 	private Context context;
 	private MyCreateOpenHelper createOpenHelper;
@@ -117,9 +128,14 @@ public class DatabaseAdapter {
 
 	protected Cursor getDateDatabase() {
 
-		return db.rawQuery("select * from " + TABLE_NAME + " order by "
-				+ KEY_DATE_TIME + " desc", null);
-
+		return db.query(TABLE_NAME, new String[] { KEY_ID, 
+				KEY_TAG, 
+				KEY_AMOUNT,
+				KEY_DATE_TIME, 
+				KEY_LOCATION, 
+				KEY_FAVORITE, 
+				KEY_TYPE }, null, null, null, null, KEY_DATE_TIME+" desc");
+		
 	}
 
 	private class MyCreateOpenHelper extends SQLiteOpenHelper {
@@ -131,6 +147,7 @@ public class DatabaseAdapter {
 		@Override
 		public void onCreate(SQLiteDatabase database) {
 			database.execSQL(DATABASE_CREATE);
+			database.execSQL(DATABASE_CREATE_FAVORITE);
 		}
 
 		@Override
@@ -141,5 +158,23 @@ public class DatabaseAdapter {
 		@Override
 		public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
 		}
+	}
+
+	public String getFavoriteId(String _id) {
+		String where = KEY_ID+" = "+_id;
+		
+		Cursor cr = db.query(TABLE_NAME,  new String[] {
+				KEY_FAVORITE}, where, null, null, null, null);
+		cr.moveToFirst();
+		String favId = cr.getString(cr.getColumnIndex(KEY_FAVORITE));
+		cr.close();
+		return favId;
+	}
+
+	public void editDatabaseFavorite(String favID) {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_FAVORITE, "");
+		String where = KEY_FAVORITE+" = "+favID;
+		db.update(TABLE_NAME, contentValues, where, null);
 	}
 }

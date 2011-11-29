@@ -198,43 +198,65 @@
                 android:textStyle="bold"
                 android:layout_alignParentRight="true"/>
             
-            <View 
-                android:layout_height="5dp"
-                android:layout_width="fill_parent"
-                android:background="@android:color/darker_gray"
-                android:layout_below="@id/show_text_voice_camera_amount"
-                android:id="@+id/show_text_voice_camera_divider_amount_desc"
-                android:layout_marginBottom="10dp"/>
             
-            <TextView 
+            
+            
+            
+            <RelativeLayout
+                android:layout_marginBottom="10dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/show_text_voice_camera_amount"
+                android:id="@+id/show_text_voice_camera_desc_details"
+                >
+            
+                <View 
+                	android:layout_height="5dp"
+                	android:layout_width="fill_parent"
+                	android:layout_alignParentTop="true"
+                	android:background="@android:color/darker_gray"
+                	android:id="@+id/show_text_voice_camera_divider_amount_desc"
+                	android:layout_marginBottom="10dp"/>
+                
+                <TextView 
+                	android:layout_height="wrap_content"
+                	android:layout_width="wrap_content"
+                	android:text="Description:"
+                	android:textColor="#4d4d4d"
+                	android:textStyle="bold"
+                	android:layout_below="@id/show_text_voice_camera_divider_amount_desc"
+                	android:id="@+id/show_text_voice_camera_description_show"
+                	android:layout_marginBottom="5dp"/>
+                
+           		<TextView 
+                	android:id="@+id/show_text_voice_camera_tag_textview"
+                	android:layout_width="fill_parent"
+                	android:layout_height="wrap_content"
+                	android:gravity="top"
+                	android:layout_below="@id/show_text_voice_camera_description_show"
+                	android:hint="description"
+                	android:textColor="#4d4d4d"/>
+            
+            	<EditText 
+            	    android:id="@+id/show_text_voice_camera_tag"
+                	android:layout_width="fill_parent"
+                	android:layout_height="wrap_content"
+                	android:layout_below="@id/show_text_voice_camera_amount"
+                	android:minLines="3"
+                	android:gravity="top"
+                	android:hint="description"
+                	android:visibility="gone"/>
+
+            </RelativeLayout>
+            
+            <ToggleButton
+                android:id="@+id/show_text_voice_camera_add_favorite"
                 android:layout_width="wrap_content"
-                android:text="Description:"
-                android:textColor="#4d4d4d"
-                android:textStyle="bold"
-                android:layout_below="@id/show_text_voice_camera_divider_amount_desc"
-                android:id="@+id/show_text_voice_camera_description_show"
-                android:layout_marginBottom="5dp"/>
-            
-            <TextView 
-                android:id="@+id/show_text_voice_camera_tag_textview"
-                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/show_text_voice_camera_description_show"
-                android:minLines="3"
-                android:gravity="top"
-                android:hint="description"
-                android:textColor="#4d4d4d"/>
-            
-            <EditText 
-                android:id="@+id/show_text_voice_camera_tag"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/show_text_voice_camera_amount"
-                android:minLines="3"
-                android:gravity="top"
-                android:hint="description"
-                android:visibility="gone"/>
+                android:layout_below="@id/show_text_voice_camera_desc_details"
+                android:layout_alignLeft="@+id/show_text_voice_camera_tag_textview"
+                android:text="Favorite"
+                android:visibility="gone" />
             
         </RelativeLayout>
     

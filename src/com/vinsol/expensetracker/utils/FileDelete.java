@@ -11,6 +11,7 @@ public class FileDelete {
 	public FileDelete(long _id) {
 		deleteAll(_id);
 	}
+	
 
 	private void deleteAll(long _id) {
 		if (android.os.Environment.getExternalStorageState().equals(

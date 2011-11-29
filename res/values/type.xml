@@ -10,8 +10,6 @@
     <string name="sublist_weekwise">6</string>
     <string name="sublist_monthwise">7</string>
     <string name="sublist_yearwise">8</string>
-    <string name="favorite">T</string>
-    <string name="favorite_not">F</string>
     <string name="unfinished_textentry">Unfinished Text Entry</string>
     <string name="unfinished_cameraentry">Unfinished Camera Entry</string>
     <string name="unfinished_voiceentry">Unfinished Voice Entry</string>

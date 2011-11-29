@@ -10,6 +10,7 @@ import com.vinsol.expensetracker.utils.FileDelete;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -76,22 +77,21 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 				if (!amount.contains("?"))
 					show_text_voice_camera_amount.setText(amount);
 			}
-			if (!(tag.equals("") || tag == null || tag
-					.equals(getString(R.string.unfinished_cameraentry)))) {
-				show_text_voice_camera_tag_textview.setText(tag);
-			} else {
-				show_text_voice_camera_description_show
-						.setVisibility(View.GONE);
+			
+			Log.v("tag", tag+" "+getString(R.string.unfinished_cameraentry));
+			if ((tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_cameraentry)))) {
+				show_text_voice_camera_description_show.setVisibility(View.GONE);
 				show_text_voice_camera_tag_textview.setVisibility(View.GONE);
 				show_text_voice_camera_tag.setVisibility(View.VISIBLE);
-				show_text_voice_camera_divider_amount_desc
-						.setVisibility(View.GONE);
+				show_text_voice_camera_divider_amount_desc.setVisibility(View.GONE);
 				show_text_voice_camera_update_entry.setVisibility(View.VISIBLE);
 				show_text_voice_camera_update_entry.setOnClickListener(this);
+				Log.v("true", true+"");
+			} else {
+				show_text_voice_camera_tag_textview.setText(tag);
 			}
 
-			File mFile = new File("/sdcard/ExpenseTracker/" + _id
-					+ "_small.jpg");
+			File mFile = new File("/sdcard/ExpenseTracker/" + _id+ "_small.jpg");
 			System.gc();
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
@@ -104,6 +104,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 			new ShowDateHandler(this, mCalendar);
+			new FavoriteHelper(this, mShowList);
 		}
 
 		show_text_voice_camera_image_display.setOnClickListener(this);

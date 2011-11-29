@@ -37,7 +37,7 @@ public class GraphView extends View {
 	protected void onDraw(Canvas canvas) {
 		float border = 0.042f * getWidth();
 		float horstart = border * 2;
-		float height = getHeight() * 0.5f;
+		float height = getHeight();
 		float width = getWidth();
 		float max = getMax();
 		float min = getMin();
@@ -54,6 +54,7 @@ public class GraphView extends View {
 			paint.setColor(Color.WHITE);
 			paint.setTextScaleX(1.5f);
 			canvas.drawText(horlabels[i], x, height - 4, paint);
+			
 		}
 
 		paint.setTextAlign(Align.CENTER);
@@ -79,6 +80,7 @@ public class GraphView extends View {
 		for (int i = 0; i < values.length; i++)
 			if (values[i] > largest)
 				largest = values[i];
+		
 		return largest;
 	}
 

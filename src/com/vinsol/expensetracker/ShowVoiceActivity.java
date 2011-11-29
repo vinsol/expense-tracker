@@ -124,12 +124,13 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 					show_text_voice_camera_stop_button.setVisibility(View.GONE);
 					show_text_voice_camera_play_button.setVisibility(View.GONE);
 				}
+				new FavoriteHelper(this, mShowList);
 			}
 		} else {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG)
 					.show();
 		}
-
+		
 	}
 
 	private void updateUI() {

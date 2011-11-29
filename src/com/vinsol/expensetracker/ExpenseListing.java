@@ -637,9 +637,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 					Toast.makeText(this, "sdcard not available",
 							Toast.LENGTH_SHORT).show();
 				}
-			} else if (mTempClickedList.get(5).equals(
-					getString(R.string.favorite))) {
-
+			} else if (mTempClickedList.get(5) != null && !mTempClickedList.get(5).equals("")) {
+				//TODO if fav entry
 			}
 		} else {
 		}

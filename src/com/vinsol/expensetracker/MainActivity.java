@@ -45,28 +45,31 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		// temp view of graph
 		// ******start view******//
-		// float[] values = new float[] { 200.0f,100.5f, 22.5f, 140.0f ,
-		// 3.0f,89.0f,72.0f };
-		// String[] horlabels = new String[] { "mon", "tue", "wed",
-		// "thu","fri","sat","sun" };
-		// GraphView graphView = new GraphView(this, values,
-		// "GraphTest",horlabels);
-		//
-		// LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-		// LinearLayout.LayoutParams.FILL_PARENT,
-		// LinearLayout.LayoutParams.WRAP_CONTENT
-		// );
-		//
-		// params.setMargins(20, 40, 40, 50);
-		//
-		// LinearLayout layout = (LinearLayout) findViewById(R.id.main_graph);
-		// layout.addView(graphView, params);
+//		 float[] values = new float[] { 200.0f,100.5f, 22.5f, 140.0f ,
+//		 3.0f,89.0f,72.0f };
+//		 String[] horlabels = new String[] { "mon", "tue", "wed",
+//		 "thu","fri","sat","sun" };
+//		 GraphView graphView = new GraphView(this, values,
+//		 "GraphTest",horlabels);
+//		 
+//		
+//		 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+//		 LinearLayout.LayoutParams.FILL_PARENT,
+//		 200
+//		 );
+//		
+//		 params.setMargins(20, 40, 40, 50);
+//		
+//		 LinearLayout layout = (LinearLayout) findViewById(R.id.main_graph);
+//		 layout.addView(graphView, params);
+//		 Log.v("height", graphView.getHeight()+"");
+		 
 		// ******stop view******//
 
-		// DatabaseAdapter adapter =new DatabaseAdapter(this);
-		// adapter.open();
-		// adapter.drop_table();
-		// adapter.close();
+//		 DatabaseAdapter adapter =new DatabaseAdapter(this);
+//		 adapter.open();
+//		 adapter.drop_table();
+//		 adapter.close();
 		//
 
 		// /////// ********* DatabaseAdaptor initialize ********* ////////
@@ -204,8 +207,6 @@ public class MainActivity extends Activity implements OnClickListener {
 					MainActivity.mCurrentLocation);
 		}
 		_list.put(DatabaseAdapter.KEY_TYPE, getString(type));
-		_list.put(DatabaseAdapter.KEY_FAVORITE,
-				getString(R.string.favorite_not));
 		mDatabaseAdapter.open();
 		long _id = mDatabaseAdapter.insert_to_database(_list);
 		mDatabaseAdapter.close();

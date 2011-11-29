@@ -2,7 +2,6 @@ package com.vinsol.expensetracker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ShowTextActivity extends Activity implements OnClickListener {
+public class ShowTextActivity extends Activity implements OnClickListener{
 
 	private ArrayList<String> mShowList;
 	private Bundle intentExtras;
@@ -21,7 +20,7 @@ public class ShowTextActivity extends Activity implements OnClickListener {
 	private TextView show_text_voice_camera_amount;
 	private TextView show_text_voice_camera_tag_textview;
 	private Button show_text_voice_camera_delete;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,7 +31,8 @@ public class ShowTextActivity extends Activity implements OnClickListener {
 		show_text_voice_camera_amount = (TextView) findViewById(R.id.show_text_voice_camera_amount);
 		show_text_voice_camera_tag_textview = (TextView) findViewById(R.id.show_text_voice_camera_tag_textview);
 		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
-		mDatabaseAdapter = new DatabaseAdapter(this);
+		
+		
 		// //////********* Get id from intent extras ******** ////////////
 
 		intentExtras = getIntent().getBundleExtra("textShowBundle");
@@ -48,15 +48,13 @@ public class ShowTextActivity extends Activity implements OnClickListener {
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 			new ShowDateHandler(this, mCalendar);
+			new FavoriteHelper(this, mShowList);
 		}
-
 		show_text_voice_camera_delete.setOnClickListener(this);
-
 	}
 
 	@Override
 	public void onClick(View v) {
-
 		if (v.getId() == R.id.show_text_voice_camera_delete) {
 			if (_id != null) {
 				mDatabaseAdapter.open();
