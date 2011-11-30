@@ -49,6 +49,28 @@ public class AudioPlayDialog extends Dialog implements
 		show();
 	}
 
+	public AudioPlayDialog(Context context, String id,String fav) {
+		super(context);
+		mContext = context;
+		mFile = id;
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.audio_play_dialog);
+		mAudioPlay = new AudioPlay(id, context,fav);
+		countDownTimer = new MyCount(mAudioPlay.getPlayBackTime(), 1000);
+		audio_play_dialog_stop_button = (Button) findViewById(R.id.audio_play_dialog_stop_button);
+		audio_play_dialog_play_button = (Button) findViewById(R.id.audio_play_dialog_play_button);
+		audio_play_dialog_cancel_button = (Button) findViewById(R.id.audio_play_dialog_cancel_button);
+		audio_play_dialog_time_details_chronometer = (Chronometer) findViewById(R.id.audio_play_dialog_time_details_chronometer);
+		audio_play_dialog_cancel_button.setOnClickListener(this);
+		audio_play_dialog_play_button.setOnClickListener(this);
+		audio_play_dialog_stop_button.setOnClickListener(this);
+		setOnDismissListener(this);
+		setOnCancelListener(this);
+		mAudioPlay.startPlayBack();
+		countDownTimer.start();
+		show();
+	}
+	
 	@Override
 	public void onClick(View v) {
 

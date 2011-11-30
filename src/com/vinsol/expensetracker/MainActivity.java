@@ -128,6 +128,15 @@ public class MainActivity extends Activity implements OnClickListener {
 			Intent intentTextEntry = new Intent(this, TextEntry.class);
 			long _id = insertToDatabase(R.string.text);
 			bundle.putLong("_id", _id);
+			if(mCurrentLocation != null){
+				if(!mCurrentLocation.equals("")){
+					bundle.putBoolean("setLocation", false);
+				} else {
+					bundle.putBoolean("setLocation", true);
+				}
+			} else {
+				bundle.putBoolean("setLocation", true);
+			}
 			intentTextEntry.putExtra("textEntryBundle", bundle);
 			startActivity(intentTextEntry);
 		}
@@ -139,6 +148,15 @@ public class MainActivity extends Activity implements OnClickListener {
 				Intent intentVoice = new Intent(this, Voice.class);
 				long _id = insertToDatabase(R.string.voice);
 				bundle.putLong("_id", _id);
+				if(mCurrentLocation != null){
+					if(!mCurrentLocation.equals("")){
+						bundle.putBoolean("setLocation", false);
+					} else {
+						bundle.putBoolean("setLocation", true);
+					}
+				} else {
+					bundle.putBoolean("setLocation", true);
+				}
 				intentVoice.putExtra("voiceBundle", bundle);
 				startActivity(intentVoice);
 			} else {
@@ -154,6 +172,15 @@ public class MainActivity extends Activity implements OnClickListener {
 				Intent intentCamera = new Intent(this, CameraActivity.class);
 				long _id = insertToDatabase(R.string.camera);
 				bundle.putLong("_id", _id);
+				if(mCurrentLocation != null){
+					if(!mCurrentLocation.equals("")){
+						bundle.putBoolean("setLocation", false);
+					} else {
+						bundle.putBoolean("setLocation", true);
+					}
+				} else {
+					bundle.putBoolean("setLocation", true);
+				}
 				intentCamera.putExtra("cameraBundle", bundle);
 				startActivity(intentCamera);
 			} else {

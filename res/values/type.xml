@@ -13,5 +13,8 @@
     <string name="unfinished_textentry">Unfinished Text Entry</string>
     <string name="unfinished_cameraentry">Unfinished Camera Entry</string>
     <string name="unfinished_voiceentry">Unfinished Voice Entry</string>
+    <string name="finished_textentry">Text Entry</string>
+    <string name="finished_cameraentry">Camera Entry</string>
+    <string name="finished_voiceentry">Voice Entry</string>
         
 </resources>

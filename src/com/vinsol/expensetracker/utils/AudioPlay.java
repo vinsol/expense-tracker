@@ -39,6 +39,30 @@ public class AudioPlay {
 					.show();
 		}
 	}
+	
+	public AudioPlay(String mFileName, Context _context,String fav) {
+		mContext = _context;
+		mPlayer = new MediaPlayer();
+		if (android.os.Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED)) {
+			File mDirectory = new File("/mnt/sdcard/ExpenseTracker/Favorite/Audio");
+			mDirectory.mkdirs();
+			mPath = new File(mDirectory, mFileName + ".amr");
+			mPlayer.setScreenOnWhilePlaying(true);
+			mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			try {
+				mPlayer.setDataSource(mPath.toString());
+				mPlayer.prepare();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
 
 	// ////// ********* Function to start audio playback ******** //////////////
 	public void startPlayBack() {

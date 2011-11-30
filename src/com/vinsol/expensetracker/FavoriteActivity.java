@@ -1,11 +1,13 @@
 package com.vinsol.expensetracker;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 import com.vinsol.expensetracker.location.LocationLast;
 import com.vinsol.expensetracker.utils.DateHelper;
+import com.vinsol.expensetracker.utils.FileCopyFavorite;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,8 +17,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,15 +29,15 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class FavoriteActivity extends Activity {
+public class FavoriteActivity extends Activity implements OnItemClickListener{
 	
 	private ListView text_voice_camera_body_favorite_listview;
 	private ConvertCursorToListString mConvertCursorToListString;
 	private List<HashMap<String, String>> mList;
 	private DatabaseAdapter mDatabaseAdapter;
 	private TextView text_voice_camera_date_bar_dateview;
-	private String dateViewString;
 	private Bundle intentExtras;
 	private MyAdapter mAdapter;
 	
@@ -68,11 +73,12 @@ public class FavoriteActivity extends Activity {
 	@Override
 	protected void onResume() {
 		
-		dateViewString = text_voice_camera_date_bar_dateview.getText().toString();
 		mList = mConvertCursorToListString.getFavoriteList();
 		mAdapter = new MyAdapter(this, R.layout.favorite_row , mList);
 		text_voice_camera_body_favorite_listview.setAdapter(mAdapter);
 		mAdapter.notifyDataSetChanged();
+		
+		text_voice_camera_body_favorite_listview.setOnItemClickListener(this);
 		super.onResume();
 	}
 	
@@ -106,6 +112,8 @@ public class FavoriteActivity extends Activity {
 			String amount = mList.get(position).get(DBAdapterFavorite.KEY_AMOUNT);
 			String type = mList.get(position).get(DBAdapterFavorite.KEY_TYPE);
 			String _id = mList.get(position).get(DBAdapterFavorite.KEY_ID);
+			viewHolder.favorite_row_imageview.setFocusable(false);
+			viewHolder.favorite_row_imageview.setOnClickListener(new MyClickListener(mList.get(position)));
 			
 			
 			if(type.equals(getString(R.string.voice))){
@@ -114,7 +122,7 @@ public class FavoriteActivity extends Activity {
 						viewHolder.favorite_row_tag.setText(tag);
 					}
 				} else {
-					viewHolder.favorite_row_tag.setText("Voice Entry");
+					viewHolder.favorite_row_tag.setText(getString(R.string.finished_voiceentry));
 				}
 				if(amount != null ){
 					if(!amount.equals("")){
@@ -148,7 +156,7 @@ public class FavoriteActivity extends Activity {
 						viewHolder.favorite_row_tag.setText(tag);
 					}
 				} else {
-					viewHolder.favorite_row_tag.setText("Camera Entry");
+					viewHolder.favorite_row_tag.setText(getString(R.string.finished_cameraentry));
 				}
 				if(amount != null ){
 					if(!amount.equals("")){
@@ -160,12 +168,12 @@ public class FavoriteActivity extends Activity {
 				//TODO image set for camera entry
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					try {
-						
 						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+ _id + "_thumbnail.jpg");
 						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+ _id + "_small.jpg");
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+ _id + ".jpg");
 						if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
-							Drawable drawable = Drawable.createFromPath(mFile.getPath());
+							System.gc();
+							Drawable drawable = Drawable.createFromPath(mFileThumbnail.getPath());
 							viewHolder.favorite_row_imageview.setImageDrawable(drawable);
 						} else {
 							viewHolder.favorite_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
@@ -188,7 +196,7 @@ public class FavoriteActivity extends Activity {
 						viewHolder.favorite_row_tag.setText(tag);
 					}
 				} else {
-					viewHolder.favorite_row_tag.setText("Text Entry");
+					viewHolder.favorite_row_tag.setText(getString(R.string.finished_textentry));
 				}
 				if(amount != null ){
 					if(!amount.equals("")){
@@ -229,5 +237,192 @@ public class FavoriteActivity extends Activity {
 		mRelativeLayout.setVisibility(View.VISIBLE);
 		LinearLayout text_voice_camera_footer = (LinearLayout) findViewById(R.id.text_voice_camera_footer);
 		text_voice_camera_footer.setVisibility(View.GONE);
+	}
+	
+	private class MyClickListener implements OnClickListener {
+
+		HashMap<String, String> mListenerList;
+
+		public MyClickListener(HashMap<String, String> mlist) {
+			mListenerList = mlist;
+		}
+
+		@Override
+		public void onClick(View v) {
+			if (v.getId() == R.id.favorite_row_imageview) {
+				Log.v("clicked", "clicked");
+				if (mListenerList != null)
+					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+						String id = mListenerList.get(DBAdapterFavorite.KEY_ID);
+						if (mListenerList.get(DBAdapterFavorite.KEY_TYPE).equals(getString(R.string.voice))) {
+							File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+ id + ".amr");
+							if (mFile.canRead()) {
+								new AudioPlayDialog(FavoriteActivity.this,id,"fav");
+							} else {
+								// TODO audio image change
+							}
+						} else if (mListenerList.get(DBAdapterFavorite.KEY_TYPE).equals(getString(R.string.camera))) {
+							File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+ id + ".jpg");
+							File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+ id + "_small.jpg");
+							File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+ id + "_thumbnail.jpg");
+							if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
+								new ImageViewDialog(FavoriteActivity.this,Long.parseLong(id),"fav");
+							} else {
+								// TODO if image not found
+							}
+						}
+					}
+				if (mListenerList.get(DBAdapterFavorite.KEY_TYPE).equals(getString(R.string.text))) {
+					if (!mListenerList.get(DBAdapterFavorite.KEY_TAG).equals(getString(R.string.unfinished_textentry))) {
+						new DescriptionDialog(FavoriteActivity.this, mListenerList.get(DBAdapterFavorite.KEY_TAG));
+					}
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
+		saveEntry((HashMap<String, String>) adapter.getItemAtPosition(position));
+	}
+
+	private void saveEntry(HashMap<String, String> adapterList) {
+		String favID = adapterList.get(DBAdapterFavorite.KEY_ID);
+		String type = adapterList.get(DBAdapterFavorite.KEY_TYPE);
+		String tag = adapterList.get(DBAdapterFavorite.KEY_TAG);
+		String amount = adapterList.get(DBAdapterFavorite.KEY_AMOUNT);
+		Long idCreated;
+		HashMap<String, String> toInsert = new HashMap<String, String>();
+		
+		if(amount != null){
+			if(!amount.contains("?") && !amount.equals(""))
+				toInsert.put(DatabaseAdapter.KEY_AMOUNT, amount);
+		}
+		
+		if(favID != null){
+			if(!favID.equals(""))
+				toInsert.put(DatabaseAdapter.KEY_FAVORITE, favID);
+		}
+		
+		if(type.equals(getString(R.string.camera))){
+			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+				try{
+					toInsert.put(DatabaseAdapter.KEY_TYPE, type);
+					if(tag != null){
+						if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_cameraentry)) && !tag.equals(getString(R.string.finished_cameraentry)))
+							toInsert.put(DatabaseAdapter.KEY_TAG, tag);
+					}
+					if(MainActivity.mCurrentLocation != null){
+						if(!MainActivity.mCurrentLocation.equals("")){
+							toInsert.put(DatabaseAdapter.KEY_LOCATION, MainActivity.mCurrentLocation);
+						}
+					}
+					if(!intentExtras.containsKey("timeInMillis")){
+						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+						toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+					} else {
+						Calendar mCalendar = Calendar.getInstance();
+						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
+						toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+					}
+					mDatabaseAdapter.open();
+					idCreated = mDatabaseAdapter.insert_to_database(toInsert);
+					mDatabaseAdapter.close();
+					new FileCopyFavorite(Long.parseLong(favID), idCreated,"from");
+					File mFile = new File("/sdcard/ExpenseTracker/"+idCreated+".jpg");
+					File mFileSmall = new File("/sdcard/ExpenseTracker/"+idCreated+"_small.jpg");
+					File mFileThumbnail = new File("/sdcard/ExpenseTracker/"+idCreated+"_thumbnail.jpg");
+					if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
+						Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
+						Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
+						startActivity(expenseListingIntent);
+					} else {
+						mDatabaseAdapter.open();
+						mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(idCreated));
+						mDatabaseAdapter.close();
+					}
+				}
+				catch (Exception e){
+					Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+				}
+			} else {
+				Toast.makeText(this, "you cannot use camera entry without sdcard", Toast.LENGTH_LONG).show();
+			}
+		} else if(type.equals(getString(R.string.voice))){
+			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+				try{
+					toInsert.put(DatabaseAdapter.KEY_TYPE, type);
+					if(tag != null){
+						if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_voiceentry)) && !tag.equals(getString(R.string.finished_voiceentry)))
+							toInsert.put(DatabaseAdapter.KEY_TAG, tag);
+					}
+					if(MainActivity.mCurrentLocation != null){
+						if(!MainActivity.mCurrentLocation.equals("")){
+							toInsert.put(DatabaseAdapter.KEY_LOCATION, MainActivity.mCurrentLocation);
+						}
+					}
+					
+					if(!intentExtras.containsKey("timeInMillis")){
+						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+						toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+					} else {
+						Calendar mCalendar = Calendar.getInstance();
+						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
+						toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+					}
+					
+					mDatabaseAdapter.open();
+					idCreated = mDatabaseAdapter.insert_to_database(toInsert);
+					mDatabaseAdapter.close();
+					new FileCopyFavorite(Long.parseLong(favID), idCreated,"from");
+					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+idCreated+".amr");
+					if(mFile.canRead()){
+						Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
+						Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
+						startActivity(expenseListingIntent);
+					} else {
+						mDatabaseAdapter.open();
+						mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(idCreated));
+						mDatabaseAdapter.close();
+					}
+				} catch(Exception e){
+					Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+				}
+			} else {
+				Toast.makeText(this, "you cannot use voice entry without sdcard", Toast.LENGTH_LONG).show();
+			}
+		} else if(type.equals(getString(R.string.text))){
+			try{
+				toInsert.put(DatabaseAdapter.KEY_TYPE, type);
+				if(tag != null){
+					if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_textentry)) && !tag.equals(getString(R.string.finished_textentry)))
+						toInsert.put(DatabaseAdapter.KEY_TAG, tag);
+				}
+				if(MainActivity.mCurrentLocation != null){
+					if(!MainActivity.mCurrentLocation.equals("")){
+						toInsert.put(DatabaseAdapter.KEY_LOCATION, MainActivity.mCurrentLocation);
+					}
+				}
+				if(!intentExtras.containsKey("timeInMillis")){
+					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+					toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+				} else {
+					Calendar mCalendar = Calendar.getInstance();
+					mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
+					toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+				}
+				mDatabaseAdapter.open();
+				mDatabaseAdapter.insert_to_database(toInsert);
+				mDatabaseAdapter.close();
+				Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
+				startActivity(expenseListingIntent);
+			} catch(Exception e){
+				Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+			}
+		}
 	}
 }

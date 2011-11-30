@@ -48,6 +48,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 	private RelativeLayout text_voice_camera_load_progress;
 	private Button text_voice_camera_delete;
 	private Button text_voice_camera_save_entry;
+	private boolean setLocation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,10 @@ public class CameraActivity extends Activity implements OnClickListener {
 		if (intentExtras.containsKey("_id"))
 			_id = intentExtras.getLong("_id");
 
+		if(intentExtras.containsKey("setLocation")){
+			setLocation = intentExtras.getBoolean("setLocation");
+		}
+		
 		// ////// ******** Initializing and assigning memory to UI Items
 		// ********** /////////
 
@@ -312,16 +317,24 @@ public class CameraActivity extends Activity implements OnClickListener {
 					_list.put(DatabaseAdapter.KEY_DATE_TIME,
 							mDateHelper.getTimeMillis() + "");
 				} else {
-					Calendar mCalendar = Calendar.getInstance();
-					mCalendar.setTimeInMillis(Long.parseLong(mEditList.get(6)));
-					DateHelper mDateHelper = new DateHelper(
-							text_voice_camera_date_bar_dateview.getText()
-									.toString(), mCalendar);
-					_list.put(DatabaseAdapter.KEY_DATE_TIME,
-							mDateHelper.getTimeMillis() + "");
+					if(!intentExtras.containsKey("timeInMillis")){
+						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+					} else {
+						Calendar mCalendar = Calendar.getInstance();
+						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
+						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+		}
+		
+		if(MainActivity.mCurrentLocation != null  && setLocation == true){
+			if (!MainActivity.mCurrentLocation.equals("")) {
+				_list.put(DatabaseAdapter.KEY_LOCATION,MainActivity.mCurrentLocation);
 			}
 		}
 		// //// ******* Update database if user added additional info *******

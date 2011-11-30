@@ -50,6 +50,7 @@ public class Voice extends Activity implements OnClickListener {
 	private TextView text_voice_camera_date_bar_dateview;
 	private String dateViewString;
 	private ArrayList<String> mEditList;
+	private boolean setLocation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +78,14 @@ public class Voice extends Activity implements OnClickListener {
 
 		// //////********* Get id from intent extras ******** ////////////
 		intentExtras = getIntent().getBundleExtra("voiceBundle");
-		_id = intentExtras.getLong("_id");
+		if(intentExtras.containsKey("_id")){
+			_id = intentExtras.getLong("_id");
+		}
 
+		if(intentExtras.containsKey("setLocation")){
+			setLocation = intentExtras.getBoolean("setLocation");
+		}
+		
 		if (intentExtras.containsKey("mDisplayList")) {
 			mEditList = new ArrayList<String>();
 			mEditList = intentExtras.getStringArrayList("mDisplayList");
@@ -391,16 +398,24 @@ public class Voice extends Activity implements OnClickListener {
 					_list.put(DatabaseAdapter.KEY_DATE_TIME,
 							mDateHelper.getTimeMillis() + "");
 				} else {
-					Calendar mCalendar = Calendar.getInstance();
-					mCalendar.setTimeInMillis(Long.parseLong(mEditList.get(6)));
-					DateHelper mDateHelper = new DateHelper(
-							text_voice_camera_date_bar_dateview.getText()
-									.toString(), mCalendar);
-					_list.put(DatabaseAdapter.KEY_DATE_TIME,
-							mDateHelper.getTimeMillis() + "");
+					if(!intentExtras.containsKey("timeInMillis")){
+						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+					} else {
+						Calendar mCalendar = Calendar.getInstance();
+						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
+						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+		}
+		
+		if(MainActivity.mCurrentLocation != null  && setLocation == true){
+			if (!MainActivity.mCurrentLocation.equals("")) {
+				_list.put(DatabaseAdapter.KEY_LOCATION,MainActivity.mCurrentLocation);
 			}
 		}
 		// //// ******* Update database if user added additional info *******

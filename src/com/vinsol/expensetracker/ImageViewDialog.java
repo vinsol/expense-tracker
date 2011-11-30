@@ -20,11 +20,41 @@ public class ImageViewDialog extends Dialog implements
 	private Long _id = null;
 	private android.widget.ImageView mImageView;
 	private LinearLayout image_view_full_screen_progress;
-
+	private String path;
+	
 	public ImageViewDialog(Context context, Long id) {
 		super(context);
 		_id = id;
 		mContext = context;
+		path = "/mnt/sdcard/ExpenseTracker/"+ _id + ".jpg";
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		// //// ******** Making Layout Visible ******* /////////
+		setContentView(R.layout.image_view_full_screen);
+
+		mImageView = (android.widget.ImageView) findViewById(R.id.image_view_full_screen_id);
+		image_view_full_screen_progress = (LinearLayout) findViewById(R.id.image_view_full_screen_progress);
+		// _id = getBundleExtras.getLong("_id");
+		if (android.os.Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED)) {
+			try {
+				new ImageViewAsyncTask().execute();
+			} catch (Exception e) {
+			}
+		} else {
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG)
+					.show();
+		}
+		setOnDismissListener(this);
+		setOnCancelListener(this);
+
+		show();
+	}
+	
+	public ImageViewDialog(Context context, Long id,String fav) {
+		super(context);
+		_id = id;
+		mContext = context;
+		path = "/mnt/sdcard/ExpenseTracker/Favorite/"+ _id + ".jpg";
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// //// ******** Making Layout Visible ******* /////////
 		setContentView(R.layout.image_view_full_screen);
@@ -61,8 +91,7 @@ public class ImageViewDialog extends Dialog implements
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			drawable = Drawable.createFromPath("/mnt/sdcard/ExpenseTracker/"
-					+ _id + ".jpg");
+			drawable = Drawable.createFromPath(path);
 			return null;
 		}
 

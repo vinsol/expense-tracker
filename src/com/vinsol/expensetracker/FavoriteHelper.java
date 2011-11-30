@@ -61,17 +61,20 @@ class FavoriteHelper implements OnCheckedChangeListener{
 						_list.put(DBAdapterFavorite.KEY_TAG, mShowList.get(1));
 					}
 					try{
-						new FileCopyFavorite(Long.parseLong(mShowList.get(0)));
-						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+mShowList.get(0)+".jpg");
-						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+mShowList.get(0)+".jpg");
-						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+mShowList.get(0)+".jpg");
+						mDbAdapterFavorite.open();
+						favID = mDbAdapterFavorite.insert_to_database(_list);
+						mDbAdapterFavorite.close();
+						new FileCopyFavorite(Long.parseLong(mShowList.get(0)), favID);
+						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+favID+".jpg");
+						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+favID+"_small.jpg");
+						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+favID+"_thumbnail.jpg");
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
 							Toast.makeText(mContext, "Exists", Toast.LENGTH_SHORT).show();
-							mDbAdapterFavorite.open();
-							favID = mDbAdapterFavorite.insert_to_database(_list);
-							mDbAdapterFavorite.close();
 						} else {
 							Toast.makeText(mContext, "Not Exists", Toast.LENGTH_SHORT).show();
+							mDbAdapterFavorite.open();
+							mDbAdapterFavorite.deleteDatabaseEntryID(Long.toString(favID));
+							mDbAdapterFavorite.close();
 						}
 					} catch (Exception e) {	
 					}
@@ -85,14 +88,18 @@ class FavoriteHelper implements OnCheckedChangeListener{
 						_list.put(DBAdapterFavorite.KEY_TAG, mShowList.get(1));
 					}
 					try{
-						new FileCopyFavorite(Long.parseLong(mShowList.get(0)));
-						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+mShowList.get(0)+".amr");
+						mDbAdapterFavorite.open();
+						favID = mDbAdapterFavorite.insert_to_database(_list);
+						mDbAdapterFavorite.close();
+						new FileCopyFavorite(Long.parseLong(mShowList.get(0)),favID);
+						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+favID+".amr");
 						if(mFile.canRead()){
 							Toast.makeText(mContext, "Exists", Toast.LENGTH_SHORT).show();
-							mDbAdapterFavorite.open();
-							favID = mDbAdapterFavorite.insert_to_database(_list);
-							mDbAdapterFavorite.close();
+							
 						} else {
+							mDbAdapterFavorite.open();
+							mDbAdapterFavorite.deleteDatabaseEntryID(Long.toString(favID));
+							mDbAdapterFavorite.close();
 							Toast.makeText(mContext, "Not Exists", Toast.LENGTH_SHORT).show();
 						}
 					} catch (Exception e) {	

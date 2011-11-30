@@ -11,7 +11,6 @@ import com.vinsol.expensetracker.utils.FileDelete;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +30,7 @@ public class TextEntry extends Activity implements OnClickListener {
 	private TextView text_voice_camera_date_bar_dateview;
 	private String dateViewString;
 	private ArrayList<String> mEditList;
+	private Boolean setLocation = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,10 @@ public class TextEntry extends Activity implements OnClickListener {
 		intentExtras = getIntent().getBundleExtra("textEntryBundle");
 		if (intentExtras.containsKey("_id"))
 			_id = intentExtras.getLong("_id");
-
+		if(intentExtras.containsKey("setLocation")){
+			setLocation = intentExtras.getBoolean("setLocation");
+		}
+		
 		if (intentExtras.containsKey("mDisplayList")) {
 			mEditList = new ArrayList<String>();
 			mEditList = intentExtras.getStringArrayList("mDisplayList");
@@ -91,17 +94,14 @@ public class TextEntry extends Activity implements OnClickListener {
 		// /////////
 		LocationLast mLocationLast = new LocationLast(this);
 		mLocationLast.getLastLocation();
-
 		setClickListeners();
-
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		new LocationLast(this);
-		dateViewString = text_voice_camera_date_bar_dateview.getText()
-				.toString();
+		dateViewString = text_voice_camera_date_bar_dateview.getText().toString();
 	}
 
 	private void setClickListeners() {
@@ -157,22 +157,18 @@ public class TextEntry extends Activity implements OnClickListener {
 		HashMap<String, String> _list = new HashMap<String, String>();
 		_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
 
-		if (!text_voice_camera_amount.getText().toString().equals(".")
-				&& !text_voice_camera_amount.getText().toString().equals("")) {
-			Double mAmount = Double.parseDouble(text_voice_camera_amount
-					.getText().toString());
+		if (!text_voice_camera_amount.getText().toString().equals(".")&& !text_voice_camera_amount.getText().toString().equals("")) {
+			Double mAmount = Double.parseDouble(text_voice_camera_amount.getText().toString());
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 			_list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
 		} else {
 			_list.put(DatabaseAdapter.KEY_AMOUNT, null);
 		}
 		if (text_voice_camera_tag.getText().toString() != "") {
-			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText()
-					.toString());
+			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
 		}
 
-		if (!text_voice_camera_date_bar_dateview.getText().toString()
-				.equals(dateViewString)) {
+		if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
 			try {
 				if (!intentExtras.containsKey("mDisplayList")) {
 					DateHelper mDateHelper = new DateHelper(
@@ -181,17 +177,24 @@ public class TextEntry extends Activity implements OnClickListener {
 					_list.put(DatabaseAdapter.KEY_DATE_TIME,
 							mDateHelper.getTimeMillis() + "");
 				} else {
-					Calendar mCalendar = Calendar.getInstance();
-					mCalendar.setTimeInMillis(Long.parseLong(mEditList.get(6)));
-					DateHelper mDateHelper = new DateHelper(
-							text_voice_camera_date_bar_dateview.getText()
-									.toString(), mCalendar);
-					Log.v("mEditList", mEditList.get(6)+" yo");
-					_list.put(DatabaseAdapter.KEY_DATE_TIME,
-							mDateHelper.getTimeMillis() + "");
+					if(!intentExtras.containsKey("timeInMillis")){
+						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+					} else {
+						Calendar mCalendar = Calendar.getInstance();
+						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
+						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+		}
+		
+		if(MainActivity.mCurrentLocation != null  && setLocation == true){
+			if (!MainActivity.mCurrentLocation.equals("")) {
+				_list.put(DatabaseAdapter.KEY_LOCATION,MainActivity.mCurrentLocation);
 			}
 		}
 		// //// ******* Update database if user added additional info *******

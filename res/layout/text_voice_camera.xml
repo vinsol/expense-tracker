@@ -268,7 +268,8 @@
             android:id="@+id/text_voice_camera_body_favorite_listview"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_voice_camera_body_favorite_tag"
-            android:layout_width="fill_parent"/>
+            android:layout_width="fill_parent"
+            android:cacheColorHint="#00000000"/>
         
     </RelativeLayout>
         
