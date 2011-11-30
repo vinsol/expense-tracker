@@ -62,7 +62,12 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		intentExtras = getIntent().getBundleExtra("favoriteBundle");
 		
 		// ///// ******* Handles Date Bar ******* ////////
-		new DateHandler(this);
+		if (intentExtras.containsKey("timeInMillis")) {
+			Log.v("true", "true");
+			new DateHandler(this, intentExtras.getLong("timeInMillis"));
+		} else {
+			new DateHandler(this);
+		}
 
 		// ////// ********* Get Last most accurate location info *********
 		// /////////
@@ -338,6 +343,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 						Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
 						startActivity(expenseListingIntent);
+						finish();
 					} else {
 						mDatabaseAdapter.open();
 						mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(idCreated));
@@ -383,6 +389,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 						Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
 						startActivity(expenseListingIntent);
+						finish();
 					} else {
 						mDatabaseAdapter.open();
 						mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(idCreated));
@@ -420,6 +427,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				mDatabaseAdapter.close();
 				Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
 				startActivity(expenseListingIntent);
+				finish();
 			} catch(Exception e){
 				Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
 			}

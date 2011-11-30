@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -292,7 +291,6 @@ class SeparatedListAdapter extends BaseAdapter {
 		try {
 			DateHelper mDateHelper = new DateHelper(dateViewString);
 			mDateHelper.getTimeMillis();
-			Log.v(dateViewString, mDateHelper.getTimeMillis() + "");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -378,7 +376,6 @@ class SeparatedListAdapter extends BaseAdapter {
 			}
 
 			if (v.getId() == R.id.expense_listing_list_add_expenses) {
-				Log.v("Position ", mPosition + "");
 				DateHelper mDateHelper = new DateHelper(mDatadateList.get(
 						mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
 				Intent mMainIntent = new Intent(mContext, MainActivity.class);

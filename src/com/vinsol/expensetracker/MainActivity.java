@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -192,6 +193,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		// //// ******* opens Favorite Activity ******** ///////////
 		else if (v.getId() == R.id.main_favorite) {
 			 Intent intentFavorite = new Intent(this, FavoriteActivity.class);
+			 if (timeInMillis != 0){
+				bundle.putLong("timeInMillis", timeInMillis);
+			 }
 //			 long _id = insertToDatabase(R.string.favorite_entry);
 //			 bundle.putLong("_id", _id);
 			 intentFavorite.putExtra("favoriteBundle", bundle);
@@ -223,6 +227,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			_list.put(DatabaseAdapter.KEY_DATE_TIME,
 					Long.toString(mCalendar.getTimeInMillis()));
 		else {
+			Log.d("long", timeInMillis+"");
 			bundle.putLong("timeInMillis", timeInMillis);
 			_list.put(DatabaseAdapter.KEY_DATE_TIME,
 					Long.toString(timeInMillis));

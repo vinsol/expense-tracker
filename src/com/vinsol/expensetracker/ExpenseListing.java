@@ -11,7 +11,6 @@ import com.vinsol.expensetracker.utils.DisplayDate;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -523,7 +522,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 		_templist.add(mSubList.get(j).get(
 				DatabaseAdapter.KEY_DATE_TIME + "Millis"));
-		Log.v("_templist " + j, _templist.toString());
 		return _templist;
 	}
 
