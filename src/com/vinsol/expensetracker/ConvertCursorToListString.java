@@ -17,6 +17,39 @@ public class ConvertCursorToListString {
 		context = _context;
 	}
 
+	List<HashMap<String, String>> getFavoriteList(){
+		List<HashMap<String, String>> mainlist = new ArrayList<HashMap<String, String>>();
+		HashMap<String, String> list;
+		
+		DBAdapterFavorite mDbAdapterFavorite = new DBAdapterFavorite(context);
+		mDbAdapterFavorite.open();
+		Cursor cursor = mDbAdapterFavorite.getCompleteDatabase();
+		if(cursor.getCount() >= 1){
+			cursor.moveToFirst();
+			do {
+			list = new HashMap<String, String>();
+			list.put(DBAdapterFavorite.KEY_AMOUNT, cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_AMOUNT)));
+			list.put(DBAdapterFavorite.KEY_ID, cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_ID)));
+			list.put(DBAdapterFavorite.KEY_TAG, cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_TAG)));
+			list.put(DBAdapterFavorite.KEY_TYPE, cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_TYPE)));
+
+//			Calendar calendar = Calendar.getInstance();
+//			calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+//			DisplayDate mDisplayDate = new DisplayDate(calendar);
+//			list.put(DatabaseAdapter.KEY_DATE_TIME,
+//					mDisplayDate.getHeaderFooterListDisplayDate()); // TODO
+//			list.put(DatabaseAdapter.KEY_DATE_TIME + "Millis", cursor
+//					.getString(cursor
+//							.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+			if (!list.isEmpty())
+				mainlist.add(list);
+			cursor.moveToNext();
+			} while (!cursor.isAfterLast());
+		}
+		mDbAdapterFavorite.close();
+		return mainlist;
+	}
+	
 	List<HashMap<String, String>> getDateListString() {
 		HashMap<String, String> list = new HashMap<String, String>();
 		DatabaseAdapter adapter = new DatabaseAdapter(context);
@@ -28,7 +61,6 @@ public class ConvertCursorToListString {
 		boolean isTempAmountNull = false;
 		if (cursor.getCount() >= 1) {
 			cursor.moveToFirst();
-
 			do {
 				Calendar mTempCalendar = Calendar.getInstance();
 				mTempCalendar.setTimeInMillis(cursor.getLong(cursor

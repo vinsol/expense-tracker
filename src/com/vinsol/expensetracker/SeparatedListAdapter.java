@@ -302,19 +302,19 @@ class SeparatedListAdapter extends BaseAdapter {
 		return false;
 	}
 
-	class ViewHolderBody {
+	private class ViewHolderBody {
 		TextView expense_listing_inflated_row_location_time;
 		TextView expense_listing_inflated_row_tag;
 		TextView expense_listing_inflated_row_amount;
 		ImageView expense_listing_inflated_row_imageview;
 	}
 
-	class ViewHolderHeader {
+	private class ViewHolderHeader {
 		TextView expenses_listing_list_date_view;
 		TextView expenses_listing_list_amount_view;
 	}
 
-	class ViewHolderFooter {
+	private class ViewHolderFooter {
 		TextView expenses_listing_add_expenses_textview;
 		LinearLayout expense_listing_list_add_expenses;
 	}

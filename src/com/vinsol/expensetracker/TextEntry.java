@@ -11,6 +11,7 @@ import com.vinsol.expensetracker.utils.FileDelete;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -185,6 +186,7 @@ public class TextEntry extends Activity implements OnClickListener {
 					DateHelper mDateHelper = new DateHelper(
 							text_voice_camera_date_bar_dateview.getText()
 									.toString(), mCalendar);
+					Log.v("mEditList", mEditList.get(6)+" yo");
 					_list.put(DatabaseAdapter.KEY_DATE_TIME,
 							mDateHelper.getTimeMillis() + "");
 				}

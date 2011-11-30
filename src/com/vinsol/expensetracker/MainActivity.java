@@ -164,11 +164,11 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		// //// ******* opens Favorite Activity ******** ///////////
 		else if (v.getId() == R.id.main_favorite) {
-			// Intent intentFavorite = new Intent(this, FavoriteActivity.class);
-			// long _id = insertToDatabase(R.string.favorite_entry);
-			// bundle.putLong("_id", _id);
-			// intentFavorite.putExtra("favoriteBundle", bundle);
-			// startActivity(intentFavorite);
+			 Intent intentFavorite = new Intent(this, FavoriteActivity.class);
+//			 long _id = insertToDatabase(R.string.favorite_entry);
+//			 bundle.putLong("_id", _id);
+			 intentFavorite.putExtra("favoriteBundle", bundle);
+			 startActivity(intentFavorite);
 		}
 
 		// //// ******* opens List Activity and adds unknown entry to database

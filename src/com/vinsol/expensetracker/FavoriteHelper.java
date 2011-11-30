@@ -28,7 +28,7 @@ class FavoriteHelper implements OnCheckedChangeListener{
 	FavoriteHelper(Context _context,ArrayList<String> _mShowList) {
 		mContext = _context;
 		mShowList = _mShowList;
-		activity = (mContext instanceof Activity) ? (Activity) mContext : null;;
+		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		show_text_voice_camera_add_favorite = (ToggleButton) activity.findViewById(R.id.show_text_voice_camera_add_favorite);
 		show_text_voice_camera_add_favorite.setVisibility(View.VISIBLE);
 		mDbAdapterFavorite = new DBAdapterFavorite(mContext);

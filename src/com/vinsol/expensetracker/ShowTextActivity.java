@@ -31,7 +31,7 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 		show_text_voice_camera_amount = (TextView) findViewById(R.id.show_text_voice_camera_amount);
 		show_text_voice_camera_tag_textview = (TextView) findViewById(R.id.show_text_voice_camera_tag_textview);
 		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
-		
+		mDatabaseAdapter = new DatabaseAdapter(this);
 		
 		// //////********* Get id from intent extras ******** ////////////
 
