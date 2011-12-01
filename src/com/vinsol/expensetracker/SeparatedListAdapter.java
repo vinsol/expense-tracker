@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -150,6 +151,8 @@ class SeparatedListAdapter extends BaseAdapter {
 				@SuppressWarnings("unchecked")
 				final List<String> mlist = (List<String>) adapter.getItem(position - 1);
 				
+				Log.v("mlist", mlist.toString());
+				
 				if (mlist.get(5).equals(mContext.getString(R.string.camera))) {
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						try {
@@ -208,18 +211,9 @@ class SeparatedListAdapter extends BaseAdapter {
 				holderBody.expense_listing_inflated_row_location_time.setText(mlist.get(3));
 				holderBody.expense_listing_inflated_row_tag.setText(mlist.get(1));
 				holderBody.expense_listing_inflated_row_amount.setText(mlist.get(2));
-				if ((mlist.get(5).equals(mContext
-						.getString(R.string.sublist_daywise)))
-						|| mlist.get(5).equals(
-								mContext.getString(R.string.sublist_monthwise))
-						|| mlist.get(5).equals(
-								mContext.getString(R.string.sublist_yearwise))
-						|| mlist.get(5).equals(
-								mContext.getString(R.string.sublist_weekwise))) {
-					holderBody.expense_listing_inflated_row_imageview
-							.setVisibility(View.GONE);
-					holderBody.expense_listing_inflated_row_location_time
-							.setVisibility(View.GONE);
+				if ((mlist.get(5).equals(mContext.getString(R.string.sublist_daywise))) || mlist.get(5).equals(mContext.getString(R.string.sublist_monthwise)) || mlist.get(5).equals(mContext.getString(R.string.sublist_yearwise))|| mlist.get(5).equals(mContext.getString(R.string.sublist_weekwise))) {
+					holderBody.expense_listing_inflated_row_imageview.setVisibility(View.GONE);
+					holderBody.expense_listing_inflated_row_location_time.setVisibility(View.GONE);
 				}
 				return convertView;
 			}
@@ -227,28 +221,18 @@ class SeparatedListAdapter extends BaseAdapter {
 			if (position < size) {
 				if (convertView == null || position < size) {
 					holderFooter = new ViewHolderFooter();
-					convertView = mInflater.inflate(
-							R.layout.main_list_footerview, null);
-					holderFooter.expenses_listing_add_expenses_textview = (TextView) convertView
-							.findViewById(R.id.expenses_listing_add_expenses_textview);
-					holderFooter.expense_listing_list_add_expenses = (LinearLayout) convertView
-							.findViewById(R.id.expense_listing_list_add_expenses);
+					convertView = mInflater.inflate(R.layout.main_list_footerview, null);
+					holderFooter.expenses_listing_add_expenses_textview = (TextView) convertView.findViewById(R.id.expenses_listing_add_expenses_textview);
+					holderFooter.expense_listing_list_add_expenses = (LinearLayout) convertView.findViewById(R.id.expense_listing_list_add_expenses);
 				} else {
 					holderFooter = (ViewHolderFooter) convertView.getTag();
 				}
 
-				holderFooter.expenses_listing_add_expenses_textview
-						.setText("Add expenses to "
-								+ mDatadateList.get(sectionnum).get(
-										DatabaseAdapter.KEY_DATE_TIME));
-				holderFooter.expense_listing_list_add_expenses
-						.setFocusable(false);
-				holderFooter.expense_listing_list_add_expenses
-						.setOnClickListener(new MyClickListener(sectionnum));
-				if (!isCurrentWeek(mDatadateList.get(sectionnum).get(
-						DatabaseAdapter.KEY_DATE_TIME))) {
-					holderFooter.expense_listing_list_add_expenses
-							.setVisibility(View.GONE);
+				holderFooter.expenses_listing_add_expenses_textview.setText("Add expenses to "+ mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
+				holderFooter.expense_listing_list_add_expenses.setFocusable(false);
+				holderFooter.expense_listing_list_add_expenses.setOnClickListener(new MyClickListener(sectionnum));
+				if (!isCurrentWeek(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME))) {
+					holderFooter.expense_listing_list_add_expenses.setVisibility(View.GONE);
 				}
 
 				return convertView;
@@ -351,8 +335,7 @@ class SeparatedListAdapter extends BaseAdapter {
 			}
 
 			if (v.getId() == R.id.expense_listing_list_add_expenses) {
-				DateHelper mDateHelper = new DateHelper(mDatadateList.get(
-						mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
+				DateHelper mDateHelper = new DateHelper(mDatadateList.get(mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
 				Intent mMainIntent = new Intent(mContext, MainActivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putLong("timeInMillis", mDateHelper.getTimeMillis());

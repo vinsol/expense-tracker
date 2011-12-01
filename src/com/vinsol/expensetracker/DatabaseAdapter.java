@@ -137,6 +137,18 @@ public class DatabaseAdapter {
 				KEY_TYPE }, null, null, null, null, KEY_DATE_TIME+" desc");
 		
 	}
+	
+	protected Cursor getDateDatabase(String id) {
+		String where = KEY_ID+" in ("+id +")";
+		return db.query(TABLE_NAME, new String[] { KEY_ID, 
+				KEY_TAG, 
+				KEY_AMOUNT,
+				KEY_DATE_TIME, 
+				KEY_LOCATION, 
+				KEY_FAVORITE, 
+				KEY_TYPE }, where, null, null, null, KEY_DATE_TIME+" desc");
+		
+	}
 
 	private class MyCreateOpenHelper extends SQLiteOpenHelper {
 

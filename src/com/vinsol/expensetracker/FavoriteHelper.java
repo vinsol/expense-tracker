@@ -82,7 +82,6 @@ class FavoriteHelper implements OnCheckedChangeListener{
 					Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_SHORT).show();
 				}
 			} else if(mShowList.get(5).equals(mContext.getString(R.string.voice))){
-				Log.d("voice", "voice");
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if(!mShowList.get(1).equals("") && !mShowList.get(1).equals(mContext.getString(R.string.unfinished_voiceentry)) && mShowList.get(1) != null){
 						_list.put(DBAdapterFavorite.KEY_TAG, mShowList.get(1));

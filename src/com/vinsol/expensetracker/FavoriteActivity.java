@@ -88,12 +88,20 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 
 	@Override
 	protected void onResume() {
-		
+		try{
+			mEditList.get(0);
+		} catch(Exception e){
+			_id = null;
+		}
 		mList = mConvertCursorToListString.getFavoriteList();
 		mAdapter = new MyAdapter(this, R.layout.favorite_row , mList);
 		text_voice_camera_body_favorite_listview.setAdapter(mAdapter);
 		mAdapter.notifyDataSetChanged();
-		dateViewString = text_voice_camera_date_bar_dateview.getText().toString();
+		if (intentExtras.containsKey("mDisplayList")){
+			dateViewString = text_voice_camera_date_bar_dateview.getText().toString();
+		} else {
+			dateViewString = "";
+		}
 		text_voice_camera_body_favorite_listview.setOnItemClickListener(this);
 		super.onResume();
 	}

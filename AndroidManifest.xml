@@ -43,6 +43,10 @@
     		android:screenOrientation="portrait"
             ></activity>
         <activity 
+            android:name=".ExpenseSubListing"
+    		android:screenOrientation="portrait"
+            ></activity>
+        <activity 
             android:name=".FavoriteActivity"
     		android:screenOrientation="portrait"
             ></activity>
