@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -123,7 +124,11 @@ public class MainActivity extends Activity implements OnClickListener {
 		new LocationData(this);
 		LocationLast mLocationLast = new LocationLast(this);
 		mLocationLast.getLastLocation();
-
+		try{
+			mTempClickedList.get(0);
+		} catch(Exception e){
+			_id = null;
+		}
 		super.onResume();
 	}
 
@@ -133,7 +138,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		// //// ******* opens TextEntry Activity ******** ///////////
 			if (v.getId() == R.id.main_text) {
 				Intent intentTextEntry = new Intent(this, TextEntry.class);
-				if(_id == null){
+				if(_id == null ){
 					_id = insertToDatabase(R.string.text);
 					bundle.putLong("_id", _id);
 					if(mCurrentLocation != null){
@@ -146,6 +151,7 @@ public class MainActivity extends Activity implements OnClickListener {
 						bundle.putBoolean("setLocation", true);
 					}
 				} else {
+					Log.v("_id", _id+" 56");
 					bundle.putStringArrayList("mDisplayList", mTempClickedList);
 					editDatabase(R.string.text);
 				}

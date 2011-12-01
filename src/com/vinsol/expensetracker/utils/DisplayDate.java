@@ -54,11 +54,7 @@ public class DisplayDate {
 			return month + " " + day + ", " + year;
 		}
 
-		if (isCurrentMonth()) {
-			return month + ", Week " + (mCalendar.get(Calendar.WEEK_OF_MONTH));
-		}
-
-		if (isPrevMonths()) {
+		if (isPrevMonths() || isCurrentMonth()) {
 			return month + " " + mCalendar.get(Calendar.YEAR);
 		}
 
@@ -141,32 +137,10 @@ public class DisplayDate {
 		return null;
 	}
 
-	private String getWeek(int i) {
-		switch (i) {
-		case 1:
-			return "Sunday";
-		case 2:
-			return "Monday";
-		case 3:
-			return "Tuesday";
-		case 4:
-			return "Wednesday";
-		case 5:
-			return "Thursday";
-		case 6:
-			return "Friday";
-		case 7:
-			return "Saturday";
-		}
-		return null;
-	}
-
 	public String getSubListTag() {
 
 		if (isCurrentMonth()) {
-			return getWeek(mCalendar.get(Calendar.DAY_OF_WEEK)) + ", "
-					+ getMonth(mCalendar.get(Calendar.MONTH)) + " "
-					+ mCalendar.get(Calendar.DAY_OF_MONTH);
+			return "Week " + mCalendar.get(Calendar.WEEK_OF_MONTH);
 		}
 
 		if (isPrevMonths()) {

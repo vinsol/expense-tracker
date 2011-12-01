@@ -76,6 +76,22 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 				} else if (mDisplayDate.isCurrentMonth()) {
 
 					while (mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME).equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
+//						// //// Adding i+" "+j as id
+//						List<String> mTempSubList = new ArrayList<String>();
+//						mTempSubList.add(i + " " + j);
+//
+//						// /// Adding tag
+//						Calendar tempCalendar = Calendar.getInstance();
+//						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+//						mDisplayDate = new DisplayDate(tempCalendar);
+//						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
+//						int isDayOfMonth = tempCalendar.get(Calendar.DAY_OF_MONTH);
+//						mTempSubList.add(tempDisplayDate.getSubListTag()); // TODO
+//
+//						// /// Adding Amount
+//						double temptotalAmount = 0;
+//						String totalAmountString = null;
+//						boolean isTempAmountNull = false;
 						// //// Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
 						mTempSubList.add(i + " " + j);
@@ -85,61 +101,109 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 						mDisplayDate = new DisplayDate(tempCalendar);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
-						int isDayOfMonth = tempCalendar.get(Calendar.DAY_OF_MONTH);
+						int isWeekOfMonth = tempCalendar.get(Calendar.WEEK_OF_MONTH);
+						int isCurrentMonth = tempCalendar.get(Calendar.MONTH);
+						int isCurrentYear = tempCalendar.get(Calendar.YEAR);
 						mTempSubList.add(tempDisplayDate.getSubListTag()); // TODO
 
 						// /// Adding Amount
 						double temptotalAmount = 0;
 						String totalAmountString = null;
 						boolean isTempAmountNull = false;
+//						do {
+//							String tempAmount = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
+//							if (tempAmount != null && !tempAmount.equals("")) {
+//								try {
+//									temptotalAmount += Double.parseDouble(tempAmount);
+//								} catch (NumberFormatException e) {
+//									
+//								}
+//							} else {
+//								isTempAmountNull = true;
+//							}
+//
+//							j++;
+//
+//							if (j < mSubList.size()) {tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+//								tempDisplayDate = new DisplayDate(tempCalendar);
+//							} else {
+//								break;
+//							}
+//
+//						} while (tempCalendar.get(Calendar.DAY_OF_MONTH) == isDayOfMonth);
 						do {
-							String tempAmount = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
+							String tempAmount = mSubList.get(j).get(
+									DatabaseAdapter.KEY_AMOUNT);
 							if (tempAmount != null && !tempAmount.equals("")) {
 								try {
-									temptotalAmount += Double.parseDouble(tempAmount);
+									temptotalAmount += Double
+											.parseDouble(tempAmount);
 								} catch (NumberFormatException e) {
-									
 								}
 							} else {
 								isTempAmountNull = true;
 							}
-
 							j++;
-
-							if (j < mSubList.size()) {tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+							if (j < mSubList.size()) {
+								tempCalendar.setTimeInMillis(Long
+										.parseLong(mSubList.get(j).get(
+												DatabaseAdapter.KEY_DATE_TIME
+														+ "Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
 							} else {
 								break;
 							}
 
-						} while (tempCalendar.get(Calendar.DAY_OF_MONTH) == isDayOfMonth);
+						} while (tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth
+								&& tempCalendar.get(Calendar.MONTH) == isCurrentMonth
+								&& tempCalendar.get(Calendar.YEAR) == isCurrentYear);
+//						if (isTempAmountNull) {
+//							if (temptotalAmount != 0) {
+//								String temp = Double.toString(temptotalAmount);
+//								Double mAmount = Double.parseDouble(temp);
+//								mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
+//								if (mAmount.toString().contains(".")) {
+//									if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
+//										totalAmountString = mAmount.toString()+ " ?";
+//									} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
+//										totalAmountString = mAmount.toString()+ "0 ?";
+//									}
+//								} else {
+//									totalAmountString = mAmount.toString()+ ".00 ?";
+//								}
+//							} else {
+//								totalAmountString = "?";
+//							}
+//						} else {
+//							totalAmountString = temptotalAmount + "";
+//						}
+//
+//						mTempSubList.add(getTotalAmountString(totalAmountString));
+//						mTempSubList.add("");
+//						mTempSubList.add("");
+//						mTempSubList.add(getString(R.string.sublist_daywise));
+//						mList.add(mTempSubList);
+//						if (j >= mSubList.size()) {
+//							break;
+//						}
+						
 						if (isTempAmountNull) {
 							if (temptotalAmount != 0) {
-								String temp = Double.toString(temptotalAmount);
-								Double mAmount = Double.parseDouble(temp);
-								mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-								if (mAmount.toString().contains(".")) {
-									if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
-										totalAmountString = mAmount.toString()+ " ?";
-									} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
-										totalAmountString = mAmount.toString()+ "0 ?";
-									}
-								} else {
-									totalAmountString = mAmount.toString()+ ".00 ?";
-								}
+								totalAmountString = temptotalAmount + " ?";
 							} else {
 								totalAmountString = "?";
 							}
 						} else {
 							totalAmountString = temptotalAmount + "";
 						}
+						mTempSubList
+								.add(getTotalAmountString(totalAmountString));
 
-						mTempSubList.add(getTotalAmountString(totalAmountString));
 						mTempSubList.add("");
 						mTempSubList.add("");
-						mTempSubList.add(getString(R.string.sublist_daywise));
+						mTempSubList.add(getString(R.string.sublist_weekwise));
 						mList.add(mTempSubList);
-						if (j >= mSubList.size()) {
+						if (j == mSubList.size()) {
 							break;
 						}
 					}

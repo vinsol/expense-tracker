@@ -32,15 +32,6 @@ public class ConvertCursorToListString {
 			list.put(DBAdapterFavorite.KEY_ID, cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_ID)));
 			list.put(DBAdapterFavorite.KEY_TAG, cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_TAG)));
 			list.put(DBAdapterFavorite.KEY_TYPE, cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_TYPE)));
-
-//			Calendar calendar = Calendar.getInstance();
-//			calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
-//			DisplayDate mDisplayDate = new DisplayDate(calendar);
-//			list.put(DatabaseAdapter.KEY_DATE_TIME,
-//					mDisplayDate.getHeaderFooterListDisplayDate()); // TODO
-//			list.put(DatabaseAdapter.KEY_DATE_TIME + "Millis", cursor
-//					.getString(cursor
-//							.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 			if (!list.isEmpty())
 				mainlist.add(list);
 			cursor.moveToNext();
@@ -63,16 +54,14 @@ public class ConvertCursorToListString {
 			cursor.moveToFirst();
 			do {
 				Calendar mTempCalendar = Calendar.getInstance();
-				mTempCalendar.setTimeInMillis(cursor.getLong(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 
 				DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
 				if (list.isEmpty()) {
 					list.put(DatabaseAdapter.KEY_DATE_TIME,
-							mDisplayDate.getHeaderFooterListDisplayDate()); // /TODO
+					mDisplayDate.getHeaderFooterListDisplayDate()); // /TODO
 				}
-				String tempAmount = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
+				String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
 				if (tempAmount != null && !tempAmount.equals("")) {
 					try {
 						temptotalAmount += Double.parseDouble(tempAmount);
@@ -85,12 +74,9 @@ public class ConvertCursorToListString {
 
 				if (!cursor.isAfterLast()) {
 					Calendar mTempSubCalendar = Calendar.getInstance();
-					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor
-							.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
-					DisplayDate mTempDisplayDate = new DisplayDate(
-							mTempSubCalendar);
-					if (!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(
-							mTempDisplayDate.getHeaderFooterListDisplayDate())) { // TODO
+					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
+					if (!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(mTempDisplayDate.getHeaderFooterListDisplayDate())) { // TODO
 						if (isTempAmountNull) {
 							if (temptotalAmount != 0) {
 								totalAmountString = temptotalAmount + " ?";
@@ -101,10 +87,8 @@ public class ConvertCursorToListString {
 							totalAmountString = temptotalAmount + "";
 						}
 						isTempAmountNull = false;
-						if (totalAmountString.contains("?")
-								&& totalAmountString.length() > 1) {
-							String temp = totalAmountString.substring(0,
-									totalAmountString.length() - 2);
+						if (totalAmountString.contains("?")&& totalAmountString.length() > 1) {
+							String temp = totalAmountString.substring(0,totalAmountString.length() - 2);
 							Double mAmount = Double.parseDouble(temp);
 							mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 							if (mAmount.toString().contains(".")) {
