@@ -11,6 +11,7 @@ import com.vinsol.expensetracker.utils.DisplayDate;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -27,7 +28,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 	private ListView mListView;
 	private ConvertCursorToListString mConvertCursorToListString;
 	private List<HashMap<String, String>> mDataDateList;
-	// private MyListAdapter mMyListAdapter;
 	private SeparatedListAdapter mSeparatedListAdapter;
 	List<HashMap<String, String>> mSubList;
 
@@ -41,7 +41,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		setContentView(R.layout.expense_listing);
 
 		// ////// ********* Get Last most accurate location info *********
-		// /////////
 		LocationLast mLocationLast = new LocationLast(this);
 		mLocationLast.getLastLocation();
 		mConvertCursorToListString = new ConvertCursorToListString(this);
@@ -59,19 +58,13 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		List listString = new ArrayList<List<List<String>>>();
 		for (int i = 0; i < mDataDateList.size(); i++) {
 			List<List<String>> mList = new ArrayList<List<String>>();
-			String date = mDataDateList.get(i).get(
-					DatabaseAdapter.KEY_DATE_TIME);
+			String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
 
-			while (j < mSubList.size()
-					&& date.equals(mSubList.get(j).get(
-							DatabaseAdapter.KEY_DATE_TIME))) {
-
+			while (j < mSubList.size()&& date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
 				List<String> _templist = new ArrayList<String>();
 				Calendar mCalendar = Calendar.getInstance();
-				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(
-						DatabaseAdapter.KEY_DATE_TIME + "Millis")));
+				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
 				DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-
 				if (mDisplayDate.isCurrentWeek()) {
 					_templist = getListCurrentWeek(j);
 					mList.add(_templist);
@@ -82,26 +75,17 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 					}
 				} else if (mDisplayDate.isCurrentMonth()) {
 
-					while (mDataDateList
-							.get(i)
-							.get(DatabaseAdapter.KEY_DATE_TIME)
-							.equals(mSubList.get(j).get(
-									DatabaseAdapter.KEY_DATE_TIME))) {
+					while (mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME).equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
 						// //// Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
 						mTempSubList.add(i + " " + j);
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
-						tempCalendar.setTimeInMillis(Long.parseLong(mSubList
-								.get(j).get(
-										DatabaseAdapter.KEY_DATE_TIME
-												+ "Millis")));
+						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 						mDisplayDate = new DisplayDate(tempCalendar);
-						DisplayDate tempDisplayDate = new DisplayDate(
-								tempCalendar);
-						int isDayOfMonth = tempCalendar
-								.get(Calendar.DAY_OF_MONTH);
+						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
+						int isDayOfMonth = tempCalendar.get(Calendar.DAY_OF_MONTH);
 						mTempSubList.add(tempDisplayDate.getSubListTag()); // TODO
 
 						// /// Adding Amount
@@ -109,13 +93,12 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						String totalAmountString = null;
 						boolean isTempAmountNull = false;
 						do {
-							String tempAmount = mSubList.get(j).get(
-									DatabaseAdapter.KEY_AMOUNT);
+							String tempAmount = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
 							if (tempAmount != null && !tempAmount.equals("")) {
 								try {
-									temptotalAmount += Double
-											.parseDouble(tempAmount);
+									temptotalAmount += Double.parseDouble(tempAmount);
 								} catch (NumberFormatException e) {
+									
 								}
 							} else {
 								isTempAmountNull = true;
@@ -123,11 +106,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 							j++;
 
-							if (j < mSubList.size()) {
-								tempCalendar.setTimeInMillis(Long
-										.parseLong(mSubList.get(j).get(
-												DatabaseAdapter.KEY_DATE_TIME
-														+ "Millis")));
+							if (j < mSubList.size()) {tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
 							} else {
 								break;
@@ -140,18 +119,13 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 								Double mAmount = Double.parseDouble(temp);
 								mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 								if (mAmount.toString().contains(".")) {
-									if (mAmount.toString().charAt(
-											mAmount.toString().length() - 3) == '.') {
-										totalAmountString = mAmount.toString()
-												+ " ?";
-									} else if (mAmount.toString().charAt(
-											mAmount.toString().length() - 2) == '.') {
-										totalAmountString = mAmount.toString()
-												+ "0 ?";
+									if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
+										totalAmountString = mAmount.toString()+ " ?";
+									} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
+										totalAmountString = mAmount.toString()+ "0 ?";
 									}
 								} else {
-									totalAmountString = mAmount.toString()
-											+ ".00 ?";
+									totalAmountString = mAmount.toString()+ ".00 ?";
 								}
 							} else {
 								totalAmountString = "?";
@@ -160,9 +134,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							totalAmountString = temptotalAmount + "";
 						}
 
-						mTempSubList
-								.add(getTotalAmountString(totalAmountString));
-
+						mTempSubList.add(getTotalAmountString(totalAmountString));
 						mTempSubList.add("");
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_daywise));
@@ -173,26 +145,17 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 					}
 
 				} else if (mDisplayDate.isPrevMonths()) {
-					while (mDataDateList
-							.get(i)
-							.get(DatabaseAdapter.KEY_DATE_TIME)
-							.equals(mSubList.get(j).get(
-									DatabaseAdapter.KEY_DATE_TIME))) {
+					while (mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME).equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
 						// //// Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
 						mTempSubList.add(i + " " + j);
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
-						tempCalendar.setTimeInMillis(Long.parseLong(mSubList
-								.get(j).get(
-										DatabaseAdapter.KEY_DATE_TIME
-												+ "Millis")));
+						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 						mDisplayDate = new DisplayDate(tempCalendar);
-						DisplayDate tempDisplayDate = new DisplayDate(
-								tempCalendar);
-						int isWeekOfMonth = tempCalendar
-								.get(Calendar.WEEK_OF_MONTH);
+						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
+						int isWeekOfMonth = tempCalendar.get(Calendar.WEEK_OF_MONTH);
 						int isCurrentMonth = tempCalendar.get(Calendar.MONTH);
 						int isCurrentYear = tempCalendar.get(Calendar.YEAR);
 						mTempSubList.add(tempDisplayDate.getSubListTag()); // TODO
@@ -394,27 +357,36 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 	}
 
 	private List<String> getListCurrentWeek(int j) {
+		
 		List<String> _templist = new ArrayList<String>();
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
-		if (mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null
-				&& !mSubList.get(j).get(DatabaseAdapter.KEY_TAG).equals("")) {
+		if (mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null&& !mSubList.get(j).get(DatabaseAdapter.KEY_TAG).equals("")) {
 			_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TAG));
 		} else {
-			if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE)
-					.equals(getString(R.string.camera))) {
-				_templist.add("Unfinished Camera Entry");
-			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE)
-					.equals(getString(R.string.voice))) {
-				_templist.add("Unfinished Voice Entry");
-			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE)
-					.equals(getString(R.string.text))) {
-				_templist.add("Unfinished Text Entry");
-			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE)
-					.equals(getString(R.string.favorite_entry))) {
+			if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))) {
+				if(isEntryComplete(mSubList.get(j))){
+					_templist.add(getString(R.string.finished_cameraentry));
+				} else {
+					_templist.add(getString(R.string.unfinished_cameraentry));
+				}
+			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.voice))) {
+				if(isEntryComplete(mSubList.get(j))){
+					_templist.add(getString(R.string.finished_voiceentry));
+				} else {
+					_templist.add(getString(R.string.unfinished_voiceentry));
+				}
+			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.text))) {
+				Log.v("asd", mSubList.get(j)+"");
+				if(isEntryComplete(mSubList.get(j))){
+					
+					_templist.add(getString(R.string.finished_textentry));
+				} else {
+					_templist.add(getString(R.string.unfinished_textentry));
+				}
+			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.favorite_entry))) {
 				_templist.add("Unfinished Favorite Entry");
-			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE)
-					.equals(getString(R.string.unknown))) {
-				_templist.add("Unknown Entry");
+			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.unknown))) {
+				_templist.add(getString(R.string.unknown_entry));
 			}
 		}
 
@@ -523,6 +495,56 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		_templist.add(mSubList.get(j).get(
 				DatabaseAdapter.KEY_DATE_TIME + "Millis"));
 		return _templist;
+	}
+
+	private boolean isEntryComplete(HashMap<String, String> hashMap) {
+		if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))) {
+			if(hashMap.get(DatabaseAdapter.KEY_AMOUNT) != null){
+				if (hashMap.get(DatabaseAdapter.KEY_AMOUNT).contains("?")) {
+					return false;
+				}
+			}
+			File mFileSmall = new File("/sdcard/ExpenseTracker/"
+					+ hashMap.get(DatabaseAdapter.KEY_ID) + "_small.jpg");
+			File mFile = new File("/sdcard/ExpenseTracker/"
+					+ hashMap.get(DatabaseAdapter.KEY_ID) + ".jpg");
+			File mFileThumbnail = new File("/sdcard/ExpenseTracker/"
+					+ hashMap.get(DatabaseAdapter.KEY_ID) + "_thumbnail.jpg");
+			if (mFile.canRead() && mFileSmall.canRead()
+					&& mFileThumbnail.canRead()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.voice))) {
+			if(hashMap.get(DatabaseAdapter.KEY_AMOUNT) != null){
+				if (hashMap.get(DatabaseAdapter.KEY_AMOUNT).contains("?")) {
+					return false;
+				}
+			}
+			File mFile = new File("/sdcard/ExpenseTracker/Audio/"
+					+ hashMap.get(DatabaseAdapter.KEY_ID) + ".amr");
+			if (mFile.canRead()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.text))) {
+			if(hashMap.get(DatabaseAdapter.KEY_AMOUNT) != null){
+				if (hashMap.get(DatabaseAdapter.KEY_AMOUNT).contains("?")) {
+					return false;
+				}
+			}
+			if(hashMap.get(DatabaseAdapter.KEY_TAG) != null){
+				if (hashMap.get(DatabaseAdapter.KEY_TAG).equals("")) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		
+		}
+		return false;
 	}
 
 	private String getLocationDateDate(String dateInMillis) {
@@ -656,8 +678,10 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 	private boolean isEntryComplete(ArrayList<String> toCheckList) {
 
 		if (toCheckList.get(5).equals(getString(R.string.camera))) {
-			if (toCheckList.get(2).contains("?")) {
-				return false;
+			if(toCheckList.get(2) != null){
+				if (toCheckList.get(2).contains("?")) {
+					return false;
+				}
 			}
 			File mFileSmall = new File("/sdcard/ExpenseTracker/"
 					+ toCheckList.get(0) + "_small.jpg");
@@ -672,8 +696,10 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 				return false;
 			}
 		} else if (toCheckList.get(5).equals(getString(R.string.voice))) {
-			if (toCheckList.get(2).contains("?")) {
-				return false;
+			if(toCheckList.get(2) != null){
+				if (toCheckList.get(2).contains("?")) {
+					return false;
+				}
 			}
 			File mFile = new File("/sdcard/ExpenseTracker/Audio/"
 					+ toCheckList.get(0) + ".amr");
@@ -683,14 +709,17 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 				return false;
 			}
 		} else if (toCheckList.get(5).equals(getString(R.string.text))) {
-			if (toCheckList.get(2).contains("?")) {
-				return false;
+			if(toCheckList.get(2) != null){
+				if (toCheckList.get(2).contains("?")) {
+					return false;
+				}
 			}
-			if (toCheckList.get(1).equals(
-					getString(R.string.unfinished_textentry))) {
-				return false;
-			} else {
-				return true;
+			if(toCheckList.get(1) != null){
+				if (toCheckList.get(1).equals(getString(R.string.unfinished_textentry)) || toCheckList.get(1).equals(getString(R.string.finished_textentry))) {
+					return false;
+				} else {
+					return true;
+				}
 			}
 		}
 

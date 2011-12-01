@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,16 +37,12 @@ class SeparatedListAdapter extends BaseAdapter {
 
 	public SeparatedListAdapter(Context context) {
 		mContext = context;
-		headers = new ArrayAdapter<String>(context,
-				R.layout.mainlist_header_view);
-		footers = new ArrayAdapter<String>(context,
-				R.layout.main_list_footerview);
-		mInflater = (LayoutInflater) mContext
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		headers = new ArrayAdapter<String>(context,R.layout.mainlist_header_view);
+		footers = new ArrayAdapter<String>(context,R.layout.main_list_footerview);
+		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
-	public void addSection(String section, Adapter adapter,
-			List<HashMap<String, String>> _mDataDateList) {
+	public void addSection(String section, Adapter adapter,List<HashMap<String, String>> _mDataDateList) {
 		mDatadateList = _mDataDateList;
 		this.headers.add(section);
 		this.footers.add(section);
@@ -208,17 +203,11 @@ class SeparatedListAdapter extends BaseAdapter {
 					}
 					// ///TODO if favorite entry
 				}
-				Log.v("hj", mlist.toString()+" mlist 4 "+mlist.get(4));
-				holderBody.expense_listing_inflated_row_imageview
-						.setFocusable(false);
-				holderBody.expense_listing_inflated_row_imageview
-						.setOnClickListener(new MyClickListener(mlist));
-				holderBody.expense_listing_inflated_row_location_time
-						.setText(mlist.get(3));
-				holderBody.expense_listing_inflated_row_tag.setText(mlist
-						.get(1));
-				holderBody.expense_listing_inflated_row_amount.setText(mlist
-						.get(2));
+				holderBody.expense_listing_inflated_row_imageview.setFocusable(false);
+				holderBody.expense_listing_inflated_row_imageview.setOnClickListener(new MyClickListener(mlist));
+				holderBody.expense_listing_inflated_row_location_time.setText(mlist.get(3));
+				holderBody.expense_listing_inflated_row_tag.setText(mlist.get(1));
+				holderBody.expense_listing_inflated_row_amount.setText(mlist.get(2));
 				if ((mlist.get(5).equals(mContext
 						.getString(R.string.sublist_daywise)))
 						|| mlist.get(5).equals(

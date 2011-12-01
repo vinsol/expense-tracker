@@ -11,6 +11,7 @@
     <string name="sublist_monthwise">7</string>
     <string name="sublist_yearwise">8</string>
     <string name="unfinished_textentry">Unfinished Text Entry</string>
+    <string name="unknown_entry">Unknown Entry</string>
     <string name="unfinished_cameraentry">Unfinished Camera Entry</string>
     <string name="unfinished_voiceentry">Unfinished Voice Entry</string>
     <string name="finished_textentry">Text Entry</string>
