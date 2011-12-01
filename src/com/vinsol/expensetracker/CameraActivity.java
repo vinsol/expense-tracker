@@ -48,7 +48,8 @@ public class CameraActivity extends Activity implements OnClickListener {
 	private RelativeLayout text_voice_camera_load_progress;
 	private Button text_voice_camera_delete;
 	private Button text_voice_camera_save_entry;
-	private boolean setLocation;
+	private boolean setLocation = false;
+	private boolean setUnknown = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +94,12 @@ public class CameraActivity extends Activity implements OnClickListener {
 				if (!amount.contains("?"))
 					text_voice_camera_amount.setText(amount);
 			}
-			if (!(tag.equals("") || tag == null || tag
-					.equals(getString(R.string.unfinished_cameraentry)))) {
+			if(tag.equals(getString(R.string.unknown_entry))){
+				setUnknown = true;
+				startCamera();
+			}
+			
+			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_cameraentry)) || tag.equals(getString(R.string.unknown_entry)))) {
 				text_voice_camera_tag.setText(tag);
 			}
 			File mFile = new File("/sdcard/ExpenseTracker/" + _id
@@ -168,19 +173,20 @@ public class CameraActivity extends Activity implements OnClickListener {
 						.show();
 			}
 		} else {
-			File mFile = new File("/sdcard/ExpenseTracker/" + _id
-					+ "_small.jpg");
-			if (mFile.canRead()) {
-				ImageGet imageGet = new ImageGet("" + _id, this);
-				Bitmap bm = imageGet.getSmallImage();
-				text_voice_camera_image_display.setImageBitmap(bm);
-			} else {
-				DatabaseAdapter adapter = new DatabaseAdapter(this);
-				adapter.open();
-				adapter.deleteDatabaseEntryID(_id + "");
-				adapter.close();
-				finish();
+			if(!setUnknown){
+				File mFile = new File("/sdcard/ExpenseTracker/" + _id+ "_small.jpg");
+				if (mFile.canRead()) {
+					ImageGet imageGet = new ImageGet("" + _id, this);
+					Bitmap bm = imageGet.getSmallImage();
+					text_voice_camera_image_display.setImageBitmap(bm);
+				} else {
+					DatabaseAdapter adapter = new DatabaseAdapter(this);
+					adapter.open();
+					adapter.deleteDatabaseEntryID(_id + "");
+					adapter.close();
+				}
 			}
+			finish();
 		}
 	}
 
@@ -293,29 +299,22 @@ public class CameraActivity extends Activity implements OnClickListener {
 		HashMap<String, String> _list = new HashMap<String, String>();
 		_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
 
-		if (!text_voice_camera_amount.getText().toString().equals(".")
-				&& !text_voice_camera_amount.getText().toString().equals("")) {
-			Double mAmount = Double.parseDouble(text_voice_camera_amount
-					.getText().toString());
+		if (!text_voice_camera_amount.getText().toString().equals(".")&& !text_voice_camera_amount.getText().toString().equals("")) {
+			Double mAmount = Double.parseDouble(text_voice_camera_amount.getText().toString());
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 			_list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
 		} else {
 			_list.put(DatabaseAdapter.KEY_AMOUNT, null);
 		}
 		if (text_voice_camera_tag.getText().toString() != "") {
-			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText()
-					.toString());
+			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
 		}
 
-		if (!text_voice_camera_date_bar_dateview.getText().toString()
-				.equals(dateViewString)) {
+		if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
 			try {
 				if (!intentExtras.containsKey("mDisplayList")) {
-					DateHelper mDateHelper = new DateHelper(
-							text_voice_camera_date_bar_dateview.getText()
-									.toString());
-					_list.put(DatabaseAdapter.KEY_DATE_TIME,
-							mDateHelper.getTimeMillis() + "");
+					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+					_list.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
 				} else {
 					if(!intentExtras.containsKey("timeInMillis")){
 						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());

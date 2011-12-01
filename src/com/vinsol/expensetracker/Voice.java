@@ -50,7 +50,8 @@ public class Voice extends Activity implements OnClickListener {
 	private TextView text_voice_camera_date_bar_dateview;
 	private String dateViewString;
 	private ArrayList<String> mEditList;
-	private boolean setLocation;
+	private boolean setLocation = false; 
+	private boolean setUnknown = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +97,11 @@ public class Voice extends Activity implements OnClickListener {
 				if (!amount.contains("?"))
 					text_voice_camera_amount.setText(amount);
 			}
-			if (!(tag.equals("") || tag == null || tag
-					.equals(getString(R.string.unfinished_voiceentry)))) {
+			if(tag.equals(getString(R.string.unknown_entry))){
+				//TODO 
+				setUnknown = true;
+			}
+			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_voiceentry)) || tag.equals(getString(R.string.unknown_entry)))) {
 				text_voice_camera_tag.setText(tag);
 			}
 		}
@@ -117,25 +121,18 @@ public class Voice extends Activity implements OnClickListener {
 				android.os.Environment.MEDIA_MOUNTED)) {
 			setGraphicsVoice();
 
-			if (intentExtras.containsKey("mDisplayList")) {
-				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + _id
-						+ ".amr");
+			if (intentExtras.containsKey("mDisplayList") && !setUnknown) {
+				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + _id+ ".amr");
 
 				if (tempFile.canRead()) {
 					mAudioPlay = new AudioPlay(Long.toString(_id), this);
 					text_voice_camera_stop_button.setVisibility(View.GONE);
 					text_voice_camera_play_button.setVisibility(View.VISIBLE);
-					text_voice_camera_rerecord_button
-							.setVisibility(View.VISIBLE);
-					text_voice_camera_time_details_chronometer
-							.setText(new DisplayTime()
-									.getDisplayTime(mAudioPlay
-											.getPlayBackTime()));
+					text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
+					text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
 				} else {
-					text_voice_camera_time_details_chronometer
-							.setText("Audio File Missing");
-					text_voice_camera_rerecord_button
-							.setVisibility(View.VISIBLE);
+					text_voice_camera_time_details_chronometer.setText("Audio File Missing");
+					text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
 					text_voice_camera_stop_button.setVisibility(View.GONE);
 					text_voice_camera_play_button.setVisibility(View.GONE);
 				}
@@ -145,8 +142,7 @@ public class Voice extends Activity implements OnClickListener {
 				controlVoiceChronometer();
 			}
 		} else {
-			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 		setClickListeners();
 

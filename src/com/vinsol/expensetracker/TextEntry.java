@@ -30,7 +30,7 @@ public class TextEntry extends Activity implements OnClickListener {
 	private TextView text_voice_camera_date_bar_dateview;
 	private String dateViewString;
 	private ArrayList<String> mEditList;
-	private Boolean setLocation = true;
+	private Boolean setLocation = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +66,7 @@ public class TextEntry extends Activity implements OnClickListener {
 				if (!amount.contains("?"))
 					text_voice_camera_amount.setText(amount);
 			}
-			if (!(tag.equals("") || tag == null || tag
-					.equals(getString(R.string.unfinished_textentry)))) {
+			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_textentry)) || tag.equals(getString(R.string.unknown_entry)))) {
 				text_voice_camera_tag.setText(tag);
 			}
 		}

@@ -1,5 +1,6 @@
 package com.vinsol.expensetracker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -10,7 +11,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -24,7 +24,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	private DatabaseAdapter mDatabaseAdapter;
 	private long timeInMillis = 0;
 	private Bundle bundle;
-
+	private Long _id = null; 
+	private ArrayList<String> mTempClickedList;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,9 +43,13 @@ public class MainActivity extends Activity implements OnClickListener {
 			if (!tempBundle.isEmpty()) {
 				if (tempBundle.containsKey("timeInMillis"))
 					timeInMillis = tempBundle.getLong("timeInMillis");
+				if(tempBundle.containsKey("mDisplayList")){
+					mTempClickedList = tempBundle.getStringArrayList("mDisplayList");
+					_id = Long.parseLong(mTempClickedList.get(0));
+				}
 			}
 		}
-
+		
 		// temp view of graph
 		// ******start view******//
 //		 float[] values = new float[] { 200.0f,100.5f, 22.5f, 140.0f ,
@@ -108,6 +114,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	}
 
+
 	@Override
 	protected void onResume() {
 
@@ -124,98 +131,114 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 
 		// //// ******* opens TextEntry Activity ******** ///////////
-
-		if (v.getId() == R.id.main_text) {
-			Intent intentTextEntry = new Intent(this, TextEntry.class);
-			long _id = insertToDatabase(R.string.text);
-			bundle.putLong("_id", _id);
-			if(mCurrentLocation != null){
-				if(!mCurrentLocation.equals("")){
-					bundle.putBoolean("setLocation", false);
-				} else {
-					bundle.putBoolean("setLocation", true);
-				}
-			} else {
-				bundle.putBoolean("setLocation", true);
-			}
-			intentTextEntry.putExtra("textEntryBundle", bundle);
-			startActivity(intentTextEntry);
-		}
-
-		// //// ******* opens Voice Activity ******** ///////////
-		else if (v.getId() == R.id.main_voice) {
-			if (android.os.Environment.getExternalStorageState().equals(
-					android.os.Environment.MEDIA_MOUNTED)) {
-				Intent intentVoice = new Intent(this, Voice.class);
-				long _id = insertToDatabase(R.string.voice);
-				bundle.putLong("_id", _id);
-				if(mCurrentLocation != null){
-					if(!mCurrentLocation.equals("")){
-						bundle.putBoolean("setLocation", false);
+			if (v.getId() == R.id.main_text) {
+				Intent intentTextEntry = new Intent(this, TextEntry.class);
+				if(_id == null){
+					_id = insertToDatabase(R.string.text);
+					bundle.putLong("_id", _id);
+					if(mCurrentLocation != null){
+						if(!mCurrentLocation.equals("")){
+							bundle.putBoolean("setLocation", false);
+						} else {
+							bundle.putBoolean("setLocation", true);
+						}
 					} else {
 						bundle.putBoolean("setLocation", true);
 					}
 				} else {
-					bundle.putBoolean("setLocation", true);
+					bundle.putStringArrayList("mDisplayList", mTempClickedList);
+					editDatabase(R.string.text);
 				}
-				intentVoice.putExtra("voiceBundle", bundle);
-				startActivity(intentVoice);
-			} else {
-				Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT)
-						.show();
+				intentTextEntry.putExtra("textEntryBundle", bundle);
+				startActivity(intentTextEntry);
 			}
-		}
-
-		// //// ******* opens Camera Activity ******** ///////////
-		else if (v.getId() == R.id.main_camera) {
-			if (android.os.Environment.getExternalStorageState().equals(
-					android.os.Environment.MEDIA_MOUNTED)) {
-				Intent intentCamera = new Intent(this, CameraActivity.class);
-				long _id = insertToDatabase(R.string.camera);
-				bundle.putLong("_id", _id);
-				if(mCurrentLocation != null){
-					if(!mCurrentLocation.equals("")){
-						bundle.putBoolean("setLocation", false);
+			
+			// //// ******* opens Voice Activity ******** ///////////
+			else if (v.getId() == R.id.main_voice) {
+				if (android.os.Environment.getExternalStorageState().equals(
+						android.os.Environment.MEDIA_MOUNTED)) {
+					Intent intentVoice = new Intent(this, Voice.class);
+					if(_id == null){
+						_id = insertToDatabase(R.string.voice);
+						bundle.putLong("_id", _id);
+						if(mCurrentLocation != null){
+							if(!mCurrentLocation.equals("")){
+								bundle.putBoolean("setLocation", false);
+							} else {
+								bundle.putBoolean("setLocation", true);
+							}
+						} else {
+							bundle.putBoolean("setLocation", true);
+						}
 					} else {
-						bundle.putBoolean("setLocation", true);
+						bundle.putStringArrayList("mDisplayList", mTempClickedList);
+						editDatabase(R.string.voice);
+					}
+					intentVoice.putExtra("voiceBundle", bundle);
+					startActivity(intentVoice);
+				} else {
+					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
+				}
+			}
+
+			// //// ******* opens Camera Activity ******** ///////////
+			else if (v.getId() == R.id.main_camera) {
+				if (android.os.Environment.getExternalStorageState().equals(
+						android.os.Environment.MEDIA_MOUNTED)) {
+					Intent intentCamera = new Intent(this, CameraActivity.class);
+					if(_id == null) {
+						_id = insertToDatabase(R.string.camera);
+						bundle.putLong("_id", _id);
+						if(mCurrentLocation != null){
+							if(!mCurrentLocation.equals("")){
+								bundle.putBoolean("setLocation", false);
+							} else {
+								bundle.putBoolean("setLocation", true);
+							}
+						} else {
+							bundle.putBoolean("setLocation", true);
+						}
+					} else {
+						bundle.putStringArrayList("mDisplayList", mTempClickedList);
+						editDatabase(R.string.camera);
+					}
+					intentCamera.putExtra("cameraBundle", bundle);
+					startActivity(intentCamera);
+				} else {
+					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
+				}
+			}
+			
+			// //// ******* opens Favorite Activity ******** ///////////
+			else if (v.getId() == R.id.main_favorite) {
+				Intent intentFavorite = new Intent(this, FavoriteActivity.class);
+				if(_id == null) {
+					if (timeInMillis != 0){
+						bundle.putLong("timeInMillis", timeInMillis);
 					}
 				} else {
-					bundle.putBoolean("setLocation", true);
+					bundle.putStringArrayList("mDisplayList", mTempClickedList);
 				}
-				intentCamera.putExtra("cameraBundle", bundle);
-				startActivity(intentCamera);
-			} else {
-				Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT)
-						.show();
+				// long _id = insertToDatabase(R.string.favorite_entry);
+				// bundle.putLong("_id", _id);
+				intentFavorite.putExtra("favoriteBundle", bundle);
+				startActivity(intentFavorite);	
 			}
-		}
 
-		// //// ******* opens Favorite Activity ******** ///////////
-		else if (v.getId() == R.id.main_favorite) {
-			 Intent intentFavorite = new Intent(this, FavoriteActivity.class);
-			 if (timeInMillis != 0){
-				bundle.putLong("timeInMillis", timeInMillis);
-			 }
-//			 long _id = insertToDatabase(R.string.favorite_entry);
-//			 bundle.putLong("_id", _id);
-			 intentFavorite.putExtra("favoriteBundle", bundle);
-			 startActivity(intentFavorite);
-		}
-
-		// //// ******* opens List Activity and adds unknown entry to database
-		// ******** ///////////
-		else if (v.getId() == R.id.main_save_reminder) {
-			insertToDatabase(R.string.unknown);
-			Intent intentListView = new Intent(this, ExpenseListing.class);
-			startActivity(intentListView);
-		}
-
-		// //// ******* opens ListView Activity ******** ///////////
-		else if (v.getId() == R.id.main_listview) {
-			Intent intentListView = new Intent(this, ExpenseListing.class);
-			startActivity(intentListView);
-		}
-
+			// //// ******* opens List Activity and adds unknown entry to database
+			// ******** ///////////
+			else if (v.getId() == R.id.main_save_reminder) {
+				if(_id == null)
+					insertToDatabase(R.string.unknown);
+				Intent intentListView = new Intent(this, ExpenseListing.class);
+				startActivity(intentListView);
+			}
+			
+			// //// ******* opens ListView Activity ******** ///////////
+			else if (v.getId() == R.id.main_listview) {
+				Intent intentListView = new Intent(this, ExpenseListing.class);
+				startActivity(intentListView);
+			}
 	}
 
 	// /////// ******** function to mark entry into the database and returns the
@@ -224,19 +247,15 @@ public class MainActivity extends Activity implements OnClickListener {
 		HashMap<String, String> _list = new HashMap<String, String>();
 		Calendar mCalendar = Calendar.getInstance();
 		if (timeInMillis == 0)
-			_list.put(DatabaseAdapter.KEY_DATE_TIME,
-					Long.toString(mCalendar.getTimeInMillis()));
+			_list.put(DatabaseAdapter.KEY_DATE_TIME,Long.toString(mCalendar.getTimeInMillis()));
 		else {
-			Log.d("long", timeInMillis+"");
 			bundle.putLong("timeInMillis", timeInMillis);
-			_list.put(DatabaseAdapter.KEY_DATE_TIME,
-					Long.toString(timeInMillis));
+			_list.put(DatabaseAdapter.KEY_DATE_TIME,Long.toString(timeInMillis));
 			finish();
 		}
 
 		if (MainActivity.mCurrentLocation != null) {
-			_list.put(DatabaseAdapter.KEY_LOCATION,
-					MainActivity.mCurrentLocation);
+			_list.put(DatabaseAdapter.KEY_LOCATION,MainActivity.mCurrentLocation);
 		}
 		_list.put(DatabaseAdapter.KEY_TYPE, getString(type));
 		mDatabaseAdapter.open();
@@ -244,7 +263,30 @@ public class MainActivity extends Activity implements OnClickListener {
 		mDatabaseAdapter.close();
 		return _id;
 	}
+	
+	private void editDatabase(int type) {
+		HashMap<String, String> _list = new HashMap<String, String>();
+		_list.put(DatabaseAdapter.KEY_ID,mTempClickedList.get(0));
+		_list.put(DatabaseAdapter.KEY_TYPE, getString(type));
+		mDatabaseAdapter.open();
+		mDatabaseAdapter.editDatabase(_list);
+		mDatabaseAdapter.close();
 
+	}
+
+	@Override
+	protected void onPause() {
+		if(getIntent().hasExtra("mainBundle")){
+			Bundle tempBundle = getIntent().getBundleExtra("mainBundle");
+			if (!tempBundle.isEmpty()) {
+				if(tempBundle.containsKey("mDisplayList")){
+					finish();
+				}
+			}
+		}
+		super.onPause();
+	}
+	
 	@Override
 	protected void onStop() {
 		mLocation = null;

@@ -494,6 +494,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 		_templist.add(mSubList.get(j).get(
 				DatabaseAdapter.KEY_DATE_TIME + "Millis"));
+		_templist.add(mSubList.get(j).get(
+				DatabaseAdapter.KEY_LOCATION));
 		return _templist;
 	}
 
@@ -618,23 +620,19 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 			Bundle bundle = new Bundle();
 			bundle.putStringArrayList("mDisplayList", mTempClickedList);
 			if (mTempClickedList.get(5).equals(getString(R.string.camera))) {
-				if (android.os.Environment.getExternalStorageState().equals(
-						android.os.Environment.MEDIA_MOUNTED)) {
+				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if (!isEntryComplete(mTempClickedList)) {
-						Intent intentCamera = new Intent(this,
-								CameraActivity.class);
+						Intent intentCamera = new Intent(this,CameraActivity.class);
 						intentCamera.putExtra("cameraBundle", bundle);
 						startActivity(intentCamera);
 					} else {
-						Intent intentCamera = new Intent(this,
-								ShowCameraActivity.class);
+						Intent intentCamera = new Intent(this,ShowCameraActivity.class);
 						intentCamera.putExtra("cameraShowBundle", bundle);
 						startActivity(intentCamera);
 						// TODO
 					}
 				} else {
-					Toast.makeText(this, "sdcard not available",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
 				}
 			} else if (mTempClickedList.get(5).equals(getString(R.string.text))) {
 				if (!isEntryComplete(mTempClickedList)) {
@@ -642,24 +640,20 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 					intentTextEntry.putExtra("textEntryBundle", bundle);
 					startActivity(intentTextEntry);
 				} else {
-					Intent intentTextShow = new Intent(this,
-							ShowTextActivity.class);
+					Intent intentTextShow = new Intent(this,ShowTextActivity.class);
 					intentTextShow.putExtra("textShowBundle", bundle);
 					startActivity(intentTextShow);
 					// TODO
 				}
 
-			} else if (mTempClickedList.get(5)
-					.equals(getString(R.string.voice))) {
-				if (android.os.Environment.getExternalStorageState().equals(
-						android.os.Environment.MEDIA_MOUNTED)) {
+			} else if (mTempClickedList.get(5).equals(getString(R.string.voice))) {
+				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if (!isEntryComplete(mTempClickedList)) {
 						Intent intentVoice = new Intent(this, Voice.class);
 						intentVoice.putExtra("voiceBundle", bundle);
 						startActivity(intentVoice);
 					} else {
-						Intent intentVoiceShow = new Intent(this,
-								ShowVoiceActivity.class);
+						Intent intentVoiceShow = new Intent(this,ShowVoiceActivity.class);
 						intentVoiceShow.putExtra("voiceShowBundle", bundle);
 						startActivity(intentVoiceShow);
 						// TODO
@@ -668,8 +662,12 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 					Toast.makeText(this, "sdcard not available",
 							Toast.LENGTH_SHORT).show();
 				}
-			} else if (mTempClickedList.get(5) != null && !mTempClickedList.get(5).equals("")) {
-				//TODO if fav entry
+			} else if (mTempClickedList.get(5).equals(getString(R.string.unknown))) {
+				Intent intentMain = new Intent(this, MainActivity.class);
+				
+				intentMain.putExtra("mainBundle", bundle);
+				startActivity(intentMain);
+				//TODO if unknown entry
 			}
 		} else {
 		}
