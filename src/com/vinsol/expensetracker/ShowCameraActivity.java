@@ -8,6 +8,7 @@ import java.util.HashMap;
 import com.vinsol.expensetracker.utils.FileDelete;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 	private ImageView show_text_voice_camera_voice_details_separator;
 	private LinearLayout show_text_voice_camera_camera_details;
 	private TextView show_text_voice_camera_description_show;
+	private ImageView show_text_voice_camera_edit;
 
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
@@ -58,7 +60,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		show_text_voice_camera_voice_details_separator = (ImageView) findViewById(R.id.show_text_voice_camera_voice_details_separator);
 		show_text_voice_camera_camera_details = (LinearLayout) findViewById(R.id.show_text_voice_camera_camera_details);
 		show_text_voice_camera_description_show = (TextView) findViewById(R.id.show_text_voice_camera_description_show);
-
+		show_text_voice_camera_edit = (ImageView) findViewById(R.id.show_text_voice_camera_edit);
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		// //////********* Get id from intent extras ******** ////////////
 
@@ -86,7 +88,6 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 				show_text_voice_camera_divider_amount_desc.setVisibility(View.GONE);
 				show_text_voice_camera_update_entry.setVisibility(View.VISIBLE);
 				show_text_voice_camera_update_entry.setOnClickListener(this);
-				Log.v("true", true+"");
 			} else {
 				show_text_voice_camera_tag_textview.setText(tag);
 			}
@@ -109,6 +110,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 
 		show_text_voice_camera_image_display.setOnClickListener(this);
 		show_text_voice_camera_delete.setOnClickListener(this);
+		show_text_voice_camera_edit.setOnClickListener(this);
 
 	}
 
@@ -189,6 +191,13 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 
 		if (v.getId() == R.id.show_text_voice_camera_update_entry) {
 			saveEntry();
+		}
+		
+		if(v.getId() == R.id.show_text_voice_camera_edit){
+			Intent editIntent = new Intent(this, CameraActivity.class);
+			editIntent.putExtra("cameraBundle", intentExtras);
+			startActivity(editIntent);
+			finish();
 		}
 
 	}

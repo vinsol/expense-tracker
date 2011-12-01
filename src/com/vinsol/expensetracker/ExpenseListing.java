@@ -536,18 +536,22 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		if (hour == 0) {
 			hour = 12;
 		}
-		if (tempCalendar.get(Calendar.MINUTE) != 0)
-			if (tempCalendar.get(Calendar.AM_PM) == 1)
-				return hour + ":" + minute + " " + "PM"
-						+ " at Unknown location";
-		if (tempCalendar.get(Calendar.AM_PM) == 0)
-			return hour + ":" + minute + " " + "AM" + " at Unknown location";
-
-		else if (tempCalendar.get(Calendar.AM_PM) == 1)
-			return hour + ":" + " " + "PM" + " at Unknown location";
-		if (tempCalendar.get(Calendar.AM_PM) == 0)
-			return hour + ":" + " " + "AM" + " at Unknown location";
-
+		if (tempCalendar.get(Calendar.MINUTE) != 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + ":" + minute + " " + "PM"+ " at Unknown location";
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + minute + " " + "AM" + " at Unknown location";
+			}
+		}
+		else{ 
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + "" + " " + "PM" + " at Unknown location";
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + "" + " " + "AM" + " at Unknown location";
+			}
+		}
 		return null;
 	}
 
@@ -562,15 +566,22 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		if (hour == 0) {
 			hour = 12;
 		}
-		if (tempCalendar.get(Calendar.MINUTE) != 0)
-			if (tempCalendar.get(Calendar.AM_PM) == 1)
+		if (tempCalendar.get(Calendar.MINUTE) != 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
 				return hour + ":" + minute + " " + "PM" + " at " + locationData;
-		if (tempCalendar.get(Calendar.AM_PM) == 0)
-			return hour + ":" + minute + " " + "AM" + " at " + locationData;
-		else if (tempCalendar.get(Calendar.AM_PM) == 1)
-			return hour + ":" + " " + "PM" + " at " + locationData;
-		if (tempCalendar.get(Calendar.AM_PM) == 0)
-			return hour + ":" + " " + "AM" + " at " + locationData;
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + minute + " " + "AM" + " at " + locationData;
+			}
+		}
+		else{
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + "" + " " + "PM" + " at " + locationData;
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + " " + "AM" + " at " + locationData;
+			}
+		}
 		return null;
 	}
 

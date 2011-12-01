@@ -18,7 +18,6 @@ public class DisplayTime {
 		if ((timeinmillis % 60000) / 1000 < 10) {
 			seconds = "0" + seconds;
 		}
-
 		return minutes + ":" + seconds;
 	}
 

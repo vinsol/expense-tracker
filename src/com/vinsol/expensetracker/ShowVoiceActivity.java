@@ -10,6 +10,7 @@ import com.vinsol.expensetracker.utils.DisplayTime;
 import com.vinsol.expensetracker.utils.FileDelete;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.KeyEvent;
@@ -40,6 +41,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 	private MyCount countDownTimer;
 	private Button show_text_voice_camera_update_entry;
 	private TextView show_text_voice_camera_description_show;
+	private ImageView show_text_voice_camera_edit;
 
 	private AudioPlay mAudioPlay;
 	private Long _id = null;
@@ -66,6 +68,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		show_text_voice_camera_time_details_chronometer = (Chronometer) findViewById(R.id.show_text_voice_camera_time_details_chronometer);
 		show_text_voice_camera_update_entry = (Button) findViewById(R.id.show_text_voice_camera_update_entry);
 		show_text_voice_camera_description_show = (TextView) findViewById(R.id.show_text_voice_camera_description_show);
+		show_text_voice_camera_edit = (ImageView) findViewById(R.id.show_text_voice_camera_edit);
 
 		mDatabaseAdapter = new DatabaseAdapter(this);
 
@@ -101,6 +104,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		show_text_voice_camera_play_button.setOnClickListener(this);
 		show_text_voice_camera_stop_button.setOnClickListener(this);
 		show_text_voice_camera_update_entry.setOnClickListener(this);
+		show_text_voice_camera_edit.setOnClickListener(this);
 
 		if (android.os.Environment.getExternalStorageState().equals(
 				android.os.Environment.MEDIA_MOUNTED)) {
@@ -227,6 +231,13 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 				if (show_text_voice_camera_tag.getText().toString() != "")
 					saveEntry();
 			}
+		}
+		
+		if(v.getId() == R.id.show_text_voice_camera_edit){
+			Intent editIntent = new Intent(this, Voice.class);
+			editIntent.putExtra("voiceBundle", intentExtras);
+			startActivity(editIntent);
+			finish();
 		}
 	}
 

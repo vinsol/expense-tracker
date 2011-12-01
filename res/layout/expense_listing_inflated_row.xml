@@ -73,8 +73,17 @@
     	    android:layout_alignParentRight="true"
     	    android:layout_height="fill_parent"
     	   >
+    	    <ImageView 
+    	        android:id="@+id/expense_listing_inflated_row_favorite_icon"
+    	        android:layout_width="fill_parent"
+    	        android:layout_height="15dp"
+    	        android:visibility="invisible"
+    	        android:layout_alignParentTop="true"
+    	        android:layout_alignParentRight="true"
+    	        android:src="@android:drawable/star_on"/>
     	    <TextView
     	        android:id="@+id/expense_listing_inflated_row_amount"
+    	        android:layout_below="@id/expense_listing_inflated_row_favorite_icon"
     	        android:layout_width="50dp"
     	        android:layout_height="wrap_content"
     	    	android:gravity="right"    

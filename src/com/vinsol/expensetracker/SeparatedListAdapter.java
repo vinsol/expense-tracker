@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -132,98 +133,82 @@ class SeparatedListAdapter extends BaseAdapter {
 			// check if position inside this section
 			if (position == 0) {
 				holderHeader = new ViewHolderHeader();
-				convertView = mInflater.inflate(R.layout.mainlist_header_view,
-						null);
-				holderHeader.expenses_listing_list_date_view = (TextView) convertView
-						.findViewById(R.id.expenses_listing_list_date_view);
-				holderHeader.expenses_listing_list_amount_view = (TextView) convertView
-						.findViewById(R.id.expenses_listing_list_amount_view);
-				holderHeader.expenses_listing_list_date_view
-						.setText(mDatadateList.get(sectionnum).get(
-								DatabaseAdapter.KEY_DATE_TIME));
-				holderHeader.expenses_listing_list_amount_view
-						.setText(mDatadateList.get(sectionnum).get(
-								DatabaseAdapter.KEY_AMOUNT));
+				convertView = mInflater.inflate(R.layout.mainlist_header_view,null);
+				holderHeader.expenses_listing_list_date_view = (TextView) convertView.findViewById(R.id.expenses_listing_list_date_view);
+				holderHeader.expenses_listing_list_amount_view = (TextView) convertView.findViewById(R.id.expenses_listing_list_amount_view);
+				holderHeader.expenses_listing_list_date_view.setText(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
+				holderHeader.expenses_listing_list_amount_view.setText(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_AMOUNT));
 				return convertView;
 			}
 			if (position < size - 1) {
 				if (convertView == null || position != 0) {
 					holderBody = new ViewHolderBody();
-					convertView = mInflater.inflate(
-							R.layout.expense_listing_inflated_row, null);
-					holderBody.expense_listing_inflated_row_location_time = (TextView) convertView
-							.findViewById(R.id.expense_listing_inflated_row_location_time);
-					holderBody.expense_listing_inflated_row_tag = (TextView) convertView
-							.findViewById(R.id.expense_listing_inflated_row_tag);
-					holderBody.expense_listing_inflated_row_amount = (TextView) convertView
-							.findViewById(R.id.expense_listing_inflated_row_amount);
-					holderBody.expense_listing_inflated_row_imageview = (ImageView) convertView
-							.findViewById(R.id.expense_listing_inflated_row_imageview);
+					convertView = mInflater.inflate(R.layout.expense_listing_inflated_row, null);
+					holderBody.expense_listing_inflated_row_location_time = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_location_time);
+					holderBody.expense_listing_inflated_row_tag = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_tag);
+					holderBody.expense_listing_inflated_row_amount = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_amount);
+					holderBody.expense_listing_inflated_row_imageview = (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_imageview);
+					holderBody.expense_listing_inflated_row_favorite_icon = (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_favorite_icon);
 				} else {
 					holderBody = (ViewHolderBody) convertView.getTag();
 				}
 				@SuppressWarnings("unchecked")
-				final List<String> mlist = (List<String>) adapter
-						.getItem(position - 1);
+				final List<String> mlist = (List<String>) adapter.getItem(position - 1);
+				
 				if (mlist.get(5).equals(mContext.getString(R.string.camera))) {
-					if (android.os.Environment.getExternalStorageState()
-							.equals(android.os.Environment.MEDIA_MOUNTED)) {
+					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						try {
-							File mFile = new File("/sdcard/ExpenseTracker/"
-									+ mlist.get(0) + "_thumbnail.jpg");
+							File mFile = new File("/sdcard/ExpenseTracker/"+ mlist.get(0) + "_thumbnail.jpg");
 							if (mFile.canRead()) {
-								Drawable drawable = Drawable
-										.createFromPath(mFile.getPath());
-								holderBody.expense_listing_inflated_row_imageview
-										.setImageDrawable(drawable);
+								Drawable drawable = Drawable.createFromPath(mFile.getPath());
+								holderBody.expense_listing_inflated_row_imageview.setImageDrawable(drawable);
 							} else {
-								holderBody.expense_listing_inflated_row_imageview
-										.setImageResource(R.drawable.no_image_thumbnail);
+								holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
 							}
 						} catch (Exception e) {
 							// TODO if image not available on sdcard
-							holderBody.expense_listing_inflated_row_imageview
-									.setImageResource(R.drawable.no_image_thumbnail);
+							holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
 							e.printStackTrace();
 						}
 					} else {
-						holderBody.expense_listing_inflated_row_imageview
-								.setImageResource(R.drawable.no_image_thumbnail);
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
 						// TODO if sdcard not available
 					}
-				} else if (mlist.get(5).equals(
-						mContext.getString(R.string.text))) {
+				} else if (mlist.get(5).equals(mContext.getString(R.string.text))) {
 
-					if (!mlist.get(1).equals(
-							mContext.getString(R.string.unfinished_textentry))) {
-						holderBody.expense_listing_inflated_row_imageview
-								.setImageResource(R.drawable.text_list_icon);
+					if (!mlist.get(1).equals(mContext.getString(R.string.unfinished_textentry))) {
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.text_list_icon);
 					} else {
-						holderBody.expense_listing_inflated_row_imageview
-								.setImageResource(R.drawable.text_list_icon_no_tag);
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.text_list_icon_no_tag);
 					}
 
-				} else if (mlist.get(5).equals(
-						mContext.getString(R.string.unknown))) {
-					holderBody.expense_listing_inflated_row_imageview
-							.setImageResource(R.drawable.unknown_list_icon);
-				} else if (mlist.get(5).equals(
-						mContext.getString(R.string.voice))) {
-					File mFile = new File("/sdcard/ExpenseTracker/Audio/"
-							+ mlist.get(0) + ".amr");
+				} else if (mlist.get(5).equals(mContext.getString(R.string.unknown))) {
+					holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.unknown_list_icon);
+				} else if (mlist.get(5).equals(mContext.getString(R.string.voice))) {
+					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+ mlist.get(0) + ".amr");
 					if (mFile.canRead()) {
-						holderBody.expense_listing_inflated_row_imageview
-								.setImageResource(R.drawable.audio_play_list_icon);
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.audio_play_list_icon);
 					} else {
-						holderBody.expense_listing_inflated_row_imageview
-								.setImageResource(R.drawable.no_voice_file_thumbnail);
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 					}
 
-				} else if (mlist.get(5).equals(
-						mContext.getString(R.string.favorite_entry))) {
+				} 
+				
+				
+				if (mlist.get(4) != null) {
+					
+					if(!mlist.get(4).equals("")){
+						try{
+							if(isCurrentWeek(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME))){
+								holderBody.expense_listing_inflated_row_favorite_icon.setVisibility(View.VISIBLE);
+							}
+						}catch(Exception e){
+							
+						}
+					}
 					// ///TODO if favorite entry
 				}
-
+				Log.v("hj", mlist.toString()+" mlist 4 "+mlist.get(4));
 				holderBody.expense_listing_inflated_row_imageview
 						.setFocusable(false);
 				holderBody.expense_listing_inflated_row_imageview
@@ -305,6 +290,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		TextView expense_listing_inflated_row_tag;
 		TextView expense_listing_inflated_row_amount;
 		ImageView expense_listing_inflated_row_imageview;
+		ImageView expense_listing_inflated_row_favorite_icon;
 	}
 
 	private class ViewHolderHeader {
