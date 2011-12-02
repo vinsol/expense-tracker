@@ -81,7 +81,7 @@
         		    android:layout_width="wrap_content"
         		    android:layout_height="wrap_content"
         		    android:layout_marginRight="40dp"
-        		    android:background="@drawable/text_entry_states" 
+        		    android:background="@drawable/home_text_states" 
         		    >
        		    </Button>
        		    
@@ -89,7 +89,7 @@
         		    android:id="@+id/main_voice"
         		    android:layout_width="wrap_content"
         		    android:layout_height="wrap_content"
-        		    android:background="@drawable/voice_states" 
+        		    android:background="@drawable/home_voice_states" 
         		    android:layout_marginLeft="40dp"
         		    >
 				</Button>
@@ -109,7 +109,7 @@
             		android:id="@+id/main_camera"
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
-            		android:background="@drawable/camera_states" 
+            		android:background="@drawable/home_camera_states" 
             		android:layout_marginRight="40dp"
             		>
            		</Button>
@@ -118,7 +118,7 @@
             		android:id="@+id/main_favorite"
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
-            		android:background="@drawable/favorites_states"
+            		android:background="@drawable/home_favorites_states"
             		android:layout_marginLeft="40dp" 
             		>
            		</Button>
