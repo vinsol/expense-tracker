@@ -63,17 +63,16 @@
         		android:layout_height="wrap_content"
         		android:orientation="horizontal" 
         		android:background="@drawable/graph"
-        		android:layout_marginBottom="20dp"
+        		android:layout_marginBottom="10dp"
         		>
        		</LinearLayout>
 
     		<!-- text and voice button -->
     		<LinearLayout
-        		android:layout_width="wrap_content"
+        		android:layout_width="fill_parent"
         		android:layout_height="wrap_content"
         		android:layout_below="@id/main_graph"
         		android:id="@+id/main_text_voice"
-        		android:background="@drawable/text_voice"
         		android:layout_marginBottom="20dp"
         		android:gravity="center"
         		>
@@ -81,10 +80,7 @@
         		    android:id="@+id/main_text"
         		    android:layout_width="wrap_content"
         		    android:layout_height="wrap_content"
-        		    android:layout_alignParentLeft="true"
-        		    android:layout_centerVertical="true"
-        		    android:layout_marginLeft="5dp"
-        		    android:layout_marginRight="5dp"
+        		    android:layout_marginRight="40dp"
         		    android:background="@drawable/text_entry_states" 
         		    >
        		    </Button>
@@ -93,9 +89,8 @@
         		    android:id="@+id/main_voice"
         		    android:layout_width="wrap_content"
         		    android:layout_height="wrap_content"
-        		    android:layout_centerVertical="true"
         		    android:background="@drawable/voice_states" 
-        		    android:layout_marginRight="5dp"
+        		    android:layout_marginLeft="40dp"
         		    >
 				</Button>
 				
@@ -107,7 +102,6 @@
      		    android:id="@+id/main_camera_favorites"
         		android:layout_width="fill_parent"
         		android:layout_height="wrap_content"
-        		android:layout_below="@id/main_text_voice"
         		android:gravity="center" 
         		>
 
@@ -116,7 +110,7 @@
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
             		android:background="@drawable/camera_states" 
-            		android:layout_marginRight="10dp"
+            		android:layout_marginRight="40dp"
             		>
            		</Button>
 
@@ -125,7 +119,7 @@
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
             		android:background="@drawable/favorites_states"
-            		android:layout_marginLeft="10dp" 
+            		android:layout_marginLeft="40dp" 
             		>
            		</Button>
     		</LinearLayout>

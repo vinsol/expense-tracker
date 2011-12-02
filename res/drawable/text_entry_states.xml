@@ -6,6 +6,6 @@
     <item android:state_pressed="true" android:state_selected="false"
         android:drawable="@drawable/text_pressed" />
     <item android:state_selected="false"
-        android:drawable="@drawable/text_entry" />
+        android:drawable="@drawable/text" />
 
 </selector>
