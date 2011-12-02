@@ -72,7 +72,7 @@
         android:layout_height="fill_parent"
         android:layout_below="@id/show_text_voice_camera_date_bar"
         android:layout_above="@+id/show_text_voice_camera_footer"
-        android:background="@drawable/text_entry_bg"
+        android:background="@drawable/home_bg"
         android:id="@+id/show_text_voice_camera_body">
     
     	<!-- Body -->
@@ -280,7 +280,7 @@
         android:layout_height="fill_parent"
         android:layout_above="@id/show_text_voice_camera_footer"
         android:layout_below="@+id/show_text_voice_camera_date_bar"
-        android:background="@drawable/text_entry_bg"
+        android:background="@drawable/home_bg"
         android:id="@+id/show_text_voice_camera_body_favorite"
         android:visibility="gone">
         
