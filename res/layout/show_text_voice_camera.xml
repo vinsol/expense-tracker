@@ -46,7 +46,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/show_text_voice_camera_header"
-        android:background="@drawable/date_bg_white_no_shadow"
+        android:background="@drawable/date_bar_bg"
         android:gravity="center"
         android:orientation="horizontal">
         
