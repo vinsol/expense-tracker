@@ -114,6 +114,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							if (j < mSubList.size()) {
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
+								if(tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth
+										&& tempCalendar.get(Calendar.MONTH) == isCurrentMonth
+										&& tempCalendar.get(Calendar.YEAR) == isCurrentYear)
 								mTempSubList.set(0, mTempSubList.get(0)+mSubList.get(j).get(DatabaseAdapter.KEY_ID)+",");
 							} else {
 								break;
@@ -176,7 +179,10 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							if (j < mSubList.size()) {
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
-								mTempSubList.set(0, mTempSubList.get(0)+mSubList.get(j).get(DatabaseAdapter.KEY_ID)+",");
+								if(tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth
+										&& tempCalendar.get(Calendar.MONTH) == isCurrentMonth
+										&& tempCalendar.get(Calendar.YEAR) == isCurrentYear)
+									mTempSubList.set(0, mTempSubList.get(0)+mSubList.get(j).get(DatabaseAdapter.KEY_ID)+",");
 							} else {
 								break;
 							}
@@ -239,7 +245,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							if (j < mSubList.size()) {
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
-								mTempSubList.set(0, mTempSubList.get(0)+mSubList.get(j).get(DatabaseAdapter.KEY_ID)+",");
+								if((tempCalendar.get(Calendar.MONTH) == isMonth)
+										&& (tempCalendar.get(Calendar.YEAR) == isYear))
+									mTempSubList.set(0, mTempSubList.get(0)+mSubList.get(j).get(DatabaseAdapter.KEY_ID)+",");
 							} else {
 								break;
 							}
