@@ -8,8 +8,6 @@
         android:id="@+id/main_header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:background="@drawable/topbar_bg" 
         >
 
@@ -18,10 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
             android:src="@drawable/list_icon_states" 
-            android:paddingRight="5dp"
-            android:paddingLeft="10dp"
             >
         </ImageView>
 
@@ -30,11 +25,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:hapticFeedbackEnabled="false"
             android:text="Expense Tracker"
-            android:textAppearance="?android:attr/textAppearanceLarge" 
-            android:textStyle="bold" 
-            android:typeface="sans"
+            android:textSize="20dip"
+            android:textStyle="bold"
+            android:textColor="@color/white" 
+            android:layout_marginLeft="10dip"
             >
         </TextView>
     </RelativeLayout>    
