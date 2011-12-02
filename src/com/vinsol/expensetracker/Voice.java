@@ -5,13 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import com.vinsol.expensetracker.location.LocationLast;
-import com.vinsol.expensetracker.utils.AudioPlay;
-import com.vinsol.expensetracker.utils.DateHelper;
-import com.vinsol.expensetracker.utils.DisplayTime;
-import com.vinsol.expensetracker.utils.FileDelete;
-import com.vinsol.expensetracker.utils.RecordingHelper;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +21,13 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.vinsol.expensetracker.location.LocationLast;
+import com.vinsol.expensetracker.utils.AudioPlay;
+import com.vinsol.expensetracker.utils.DateHelper;
+import com.vinsol.expensetracker.utils.DisplayTime;
+import com.vinsol.expensetracker.utils.FileDelete;
+import com.vinsol.expensetracker.utils.RecordingHelper;
 
 public class Voice extends Activity implements OnClickListener {
 
