@@ -84,39 +84,40 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:background="@drawable/audio_play_dialog_bg"
                 android:gravity="center"
                 android:visibility="gone"
                 >
                 <ImageView 
                     android:id="@+id/text_voice_camera_image_display"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="111dp"
+                    android:layout_height="84dp"
                     android:background="@drawable/photo_frame"
                     android:layout_marginRight="10dp"
-                    android:paddingTop="5dp"
-                   	android:paddingLeft="5dp"
-                   	android:paddingRight="5dp"
-                   	android:paddingBottom="8dp"
+                    android:paddingTop="2dp"
+                   	android:paddingLeft="2.5dp"
+                   	android:paddingRight="2.5dp"
+                   	android:paddingBottom="2dp"
                    	android:scaleType="fitXY"
                    	>
                	</ImageView>
+                
                 <RelativeLayout 
-                    android:layout_width="100dp"
-                    android:layout_height="80dp"
+                    android:id="@+id/text_voice_camera_load_progress"
+                    android:layout_width="111dp"
+                    android:layout_height="84dp"
                     android:layout_marginRight="10dp"
-                    android:paddingTop="5dp"
-                   	android:paddingLeft="5dp"
-                   	android:paddingRight="5dp"
-                   	android:paddingBottom="8dp"
-                   	android:id="@+id/text_voice_camera_load_progress"
+                    android:background="@drawable/photo_frame"
                    	android:gravity="center"
                    	android:visibility="gone"
                    	>
                 	<ProgressBar 
                 	    android:layout_height="wrap_content"
                 	    android:layout_width="wrap_content"
-                	    />
+                	    >
+               	    </ProgressBar>
                 </RelativeLayout>
+                
                 <Button
                     android:id="@+id/text_voice_camera_retake_button"
                     android:layout_width="wrap_content"
