@@ -1,6 +1,7 @@
 package com.vinsol.expensetracker;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 class SeparatedListAdapter extends BaseAdapter {
@@ -145,15 +147,19 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderBody.expense_listing_inflated_row_amount = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_amount);
 					holderBody.expense_listing_inflated_row_imageview = (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_imageview);
 					holderBody.expense_listing_inflated_row_favorite_icon = (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_favorite_icon);
+					holderBody.expense_listing_inflated_row_listview = (RelativeLayout) convertView.findViewById(R.id.expense_listing_inflated_row_listview);
 				} else {
 					holderBody = (ViewHolderBody) convertView.getTag();
 				}
 				@SuppressWarnings("unchecked")
 				final List<String> mlist = (List<String>) adapter.getItem(position - 1);
 				
-				Log.v("mlist", mlist.toString());
-				
 				if (mlist.get(5).equals(mContext.getString(R.string.camera))) {
+					
+					if(!isEntryComplete((ArrayList<String>) mlist)){
+						holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.bg_unfinished_entry);
+					}
+					
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						try {
 							File mFile = new File("/sdcard/ExpenseTracker/"+ mlist.get(0) + "_thumbnail.jpg");
@@ -174,7 +180,10 @@ class SeparatedListAdapter extends BaseAdapter {
 					}
 				} else if (mlist.get(5).equals(mContext.getString(R.string.text))) {
 
-					if (!mlist.get(1).equals(mContext.getString(R.string.unfinished_textentry))) {
+					if(!isEntryComplete((ArrayList<String>) mlist)){
+						holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.bg_unfinished_entry);
+					}
+					if (!mlist.get(1).equals(mContext.getString(R.string.unfinished_textentry)) && !mlist.get(1).equals(mContext.getString(R.string.finished_textentry))) {
 						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.text_list_icon);
 					} else {
 						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.text_list_icon_no_tag);
@@ -182,17 +191,19 @@ class SeparatedListAdapter extends BaseAdapter {
 
 				} else if (mlist.get(5).equals(mContext.getString(R.string.unknown))) {
 					holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.unknown_list_icon);
+					holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.bg_save_reminder);
 				} else if (mlist.get(5).equals(mContext.getString(R.string.voice))) {
+
+					if(!isEntryComplete((ArrayList<String>) mlist)){
+						holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.bg_unfinished_entry);
+					}
 					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+ mlist.get(0) + ".amr");
 					if (mFile.canRead()) {
 						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.audio_play_list_icon);
 					} else {
 						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 					}
-
 				} 
-				
-				
 				if (mlist.get(4) != null) {
 					
 					if(!mlist.get(4).equals("")){
@@ -206,6 +217,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					}
 					// ///TODO if favorite entry
 				}
+				
 				holderBody.expense_listing_inflated_row_imageview.setFocusable(false);
 				holderBody.expense_listing_inflated_row_imageview.setOnClickListener(new MyClickListener(mlist));
 				holderBody.expense_listing_inflated_row_location_time.setText(mlist.get(3));
@@ -264,6 +276,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		TextView expense_listing_inflated_row_amount;
 		ImageView expense_listing_inflated_row_imageview;
 		ImageView expense_listing_inflated_row_favorite_icon;
+		RelativeLayout expense_listing_inflated_row_listview;
 	}
 
 	private class ViewHolderHeader {
@@ -343,6 +356,57 @@ class SeparatedListAdapter extends BaseAdapter {
 				mContext.startActivity(mMainIntent);
 			}
 		}
+	}
+	
+	private boolean isEntryComplete(ArrayList<String> toCheckList) {
+		Log.v("mlist", toCheckList.toString());
+		if (toCheckList.get(5).equals(mContext.getString(R.string.camera))) {
+			if(toCheckList.get(2) != null){
+				if (toCheckList.get(2).contains("?")) {
+					return false;
+				}
+			}
+			File mFileSmall = new File("/sdcard/ExpenseTracker/"
+					+ toCheckList.get(0) + "_small.jpg");
+			File mFile = new File("/sdcard/ExpenseTracker/"
+					+ toCheckList.get(0) + ".jpg");
+			File mFileThumbnail = new File("/sdcard/ExpenseTracker/"
+					+ toCheckList.get(0) + "_thumbnail.jpg");
+			if (mFile.canRead() && mFileSmall.canRead()
+					&& mFileThumbnail.canRead()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else if (toCheckList.get(5).equals(mContext.getString(R.string.voice))) {
+			if(toCheckList.get(2) != null){
+				if (toCheckList.get(2).contains("?")) {
+					return false;
+				}
+			}
+			File mFile = new File("/sdcard/ExpenseTracker/Audio/"
+					+ toCheckList.get(0) + ".amr");
+			if (mFile.canRead()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else if (toCheckList.get(5).equals(mContext.getString(R.string.text))) {
+			if(toCheckList.get(2) != null){
+				if (toCheckList.get(2).contains("?")) {
+					return false;
+				}
+			}
+			if(toCheckList.get(1) != null){
+				if (toCheckList.get(1).equals(mContext.getString(R.string.unfinished_textentry)) || toCheckList.get(1).equals(mContext.getString(R.string.finished_textentry))) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }
