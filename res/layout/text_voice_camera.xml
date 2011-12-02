@@ -97,7 +97,7 @@
                     android:paddingTop="2dp"
                    	android:paddingLeft="2.5dp"
                    	android:paddingRight="2.5dp"
-                   	android:paddingBottom="2dp"
+                   	android:paddingBottom="3dp"
                    	android:scaleType="fitXY"
                    	>
                	</ImageView>
@@ -107,8 +107,7 @@
                     android:layout_width="111dp"
                     android:layout_height="84dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/photo_frame"
-                   	android:gravity="center"
+                    android:gravity="center"
                    	android:visibility="gone"
                    	>
                 	<ProgressBar 
