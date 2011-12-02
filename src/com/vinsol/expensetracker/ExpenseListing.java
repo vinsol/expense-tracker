@@ -84,7 +84,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 					while (mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME).equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
 //						// //// Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
-						mTempSubList.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
+						mTempSubList.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID) +",");
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
@@ -114,7 +114,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							if (j < mSubList.size()) {
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
-								mTempSubList.set(0, mTempSubList.get(0)+","+mSubList.get(j).get(DatabaseAdapter.KEY_ID));
+								mTempSubList.set(0, mTempSubList.get(0)+mSubList.get(j).get(DatabaseAdapter.KEY_ID)+",");
 							} else {
 								break;
 							}
@@ -146,7 +146,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 					while (mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME).equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
 						// //// Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
-						mTempSubList.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
+						mTempSubList.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID)+",");
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
@@ -176,7 +176,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							if (j < mSubList.size()) {
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
-								mTempSubList.set(0, mTempSubList.get(0)+","+mSubList.get(j).get(DatabaseAdapter.KEY_ID));
+								mTempSubList.set(0, mTempSubList.get(0)+mSubList.get(j).get(DatabaseAdapter.KEY_ID)+",");
 							} else {
 								break;
 							}
@@ -208,7 +208,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 					while (mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME).equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
 						// //// Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
-						mTempSubList.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
+						mTempSubList.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID)+",");
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
@@ -239,7 +239,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							if (j < mSubList.size()) {
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 								tempDisplayDate = new DisplayDate(tempCalendar);
-								mTempSubList.set(0, mTempSubList.get(0)+","+mSubList.get(j).get(DatabaseAdapter.KEY_ID));
+								mTempSubList.set(0, mTempSubList.get(0)+mSubList.get(j).get(DatabaseAdapter.KEY_ID)+",");
 							} else {
 								break;
 							}

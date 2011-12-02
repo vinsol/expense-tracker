@@ -82,6 +82,7 @@ public class DatabaseAdapter {
 
 	protected boolean deleteDatabaseEntryID(String id) {
 		String where = KEY_ID + "=" + id;
+		
 		try {
 			Log.v("com.vinsol.expensetracker", "Deleting");
 			db.delete(TABLE_NAME, where, null);
@@ -139,6 +140,10 @@ public class DatabaseAdapter {
 	}
 	
 	protected Cursor getDateDatabase(String id) {
+		if(id != null){
+			if(id.length() > 1)
+				id = id.substring(0, id.length()-1);
+		}
 		String where = KEY_ID+" in ("+id +")";
 		return db.query(TABLE_NAME, new String[] { KEY_ID, 
 				KEY_TAG, 
