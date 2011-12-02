@@ -42,6 +42,7 @@ public class TextEntry extends Activity implements OnClickListener {
 		setContentView(R.layout.text_voice_camera);
 
 		mDatabaseAdapter = new DatabaseAdapter(this);
+		findViewById(R.id.text_voice_camera_date_bar).setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg));
 		text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);
 		text_voice_camera_tag = (EditText) findViewById(R.id.text_voice_camera_tag);
 		text_voice_camera_date_bar_dateview = (TextView) findViewById(R.id.text_voice_camera_date_bar_dateview);
