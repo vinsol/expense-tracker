@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import com.vinsol.android.graph.BarGraph;
 import com.vinsol.expensetracker.location.LocationData;
 import com.vinsol.expensetracker.location.LocationLast;
 
@@ -17,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -53,24 +55,18 @@ public class MainActivity extends Activity implements OnClickListener {
 		
 		// temp view of graph
 		// ******start view******//
-//		 float[] values = new float[] { 200.0f,100.5f, 22.5f, 140.0f ,
-//		 3.0f,89.0f,72.0f };
-//		 String[] horlabels = new String[] { "mon", "tue", "wed",
-//		 "thu","fri","sat","sun" };
-//		 GraphView graphView = new GraphView(this, values,
-//		 "GraphTest",horlabels);
-//		 
-//		
-//		 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-//		 LinearLayout.LayoutParams.FILL_PARENT,
-//		 200
-//		 );
-//		
-//		 params.setMargins(20, 40, 40, 50);
-//		
-//		 LinearLayout layout = (LinearLayout) findViewById(R.id.main_graph);
-//		 layout.addView(graphView, params);
-//		 Log.v("height", graphView.getHeight()+"");
+		Double[] values = new Double[] { 400.0,100.5, 56.0, 140.0 ,
+			 78.0,89.0,72.0 };
+			 String[] horlabels = new String[] { "mon", "tue", "wed",
+			 "thu","fri","sat","sun" };
+		LinearLayout main_graph = (LinearLayout) findViewById(R.id.main_graph);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+		LinearLayout.LayoutParams.FILL_PARENT,
+		main_graph.getBackground().getIntrinsicHeight()
+		);
+		
+		BarGraph barGraph = new BarGraph(this,values,horlabels,"Nov 21 2011");
+		main_graph.addView(barGraph, params);
 		 
 		// ******stop view******//
 
