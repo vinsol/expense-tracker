@@ -44,7 +44,7 @@
         
         <TextView
             android:id="@+id/text_voice_camera_date_bar_dateview"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="Nov 6, 2011"
             android:textColor="@color/black"
