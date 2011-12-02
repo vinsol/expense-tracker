@@ -33,7 +33,6 @@ import android.widget.Toast;
 public class Voice extends Activity implements OnClickListener {
 
 	private TextView text_voice_camera_header_title;
-	private ImageView text_voice_camera_voice_details_separator;
 	private RelativeLayout text_voice_camera_voice_details;
 	private Chronometer text_voice_camera_time_details_chronometer;
 	private Button text_voice_camera_stop_button;
@@ -66,7 +65,6 @@ public class Voice extends Activity implements OnClickListener {
 		// ********** /////////
 
 		text_voice_camera_header_title = (TextView) findViewById(R.id.text_voice_camera_header_title);
-		text_voice_camera_voice_details_separator = (ImageView) findViewById(R.id.text_voice_camera_voice_details_separator);
 		text_voice_camera_voice_details = (RelativeLayout) findViewById(R.id.text_voice_camera_voice_details);
 		text_voice_camera_time_details_chronometer = (Chronometer) findViewById(R.id.text_voice_camera_time_details_chronometer);
 		text_voice_camera_stop_button = (Button) findViewById(R.id.text_voice_camera_stop_button);
@@ -218,9 +216,6 @@ public class Voice extends Activity implements OnClickListener {
 	private void setGraphicsVoice() {
 		// ///// ***** Sets Title Voice Entry *********///////
 		text_voice_camera_header_title.setText("Voice Entry");
-
-		// ///// ***** Sets Title Voice Entry *********///////
-		text_voice_camera_voice_details_separator.setVisibility(View.VISIBLE);
 
 		// //// ****** Shows Voice Details ********////////
 		text_voice_camera_voice_details.setVisibility(View.VISIBLE);

@@ -34,7 +34,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 
 	private static final int PICTURE_RESULT = 35;
 	private TextView text_voice_camera_header_title;
-	private ImageView text_voice_camera_voice_details_separator;
 	private LinearLayout text_voice_camera_camera_details;
 	private long _id;
 	private Bundle intentExtras;
@@ -74,7 +73,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 		// ********** /////////
 
 		text_voice_camera_header_title = (TextView) findViewById(R.id.text_voice_camera_header_title);
-		text_voice_camera_voice_details_separator = (ImageView) findViewById(R.id.text_voice_camera_voice_details_separator);
 		text_voice_camera_camera_details = (LinearLayout) findViewById(R.id.text_voice_camera_camera_details);
 		text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);
 		text_voice_camera_tag = (EditText) findViewById(R.id.text_voice_camera_tag);
@@ -229,9 +227,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 	private void setGraphicsCamera() {
 		// ///// ***** Sets Title Camera Entry *********///////
 		text_voice_camera_header_title.setText("Camera Entry");
-
-		// ///// ***** Sets Title Camera Entry *********///////
-		text_voice_camera_voice_details_separator.setVisibility(View.VISIBLE);
 
 		// //// ****** Shows Camera Details ********////////
 		text_voice_camera_camera_details.setVisibility(View.VISIBLE);

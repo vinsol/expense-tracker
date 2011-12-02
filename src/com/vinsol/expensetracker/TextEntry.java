@@ -17,7 +17,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 public class TextEntry extends Activity implements OnClickListener {
@@ -70,14 +69,6 @@ public class TextEntry extends Activity implements OnClickListener {
 				text_voice_camera_tag.setText(tag);
 			}
 		}
-
-		// ///// ******* Sets Header Margin ******* ////////
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT);
-		params.setMargins(0, 30, 0, 20);
-
-		EditText text_voice_camera_amount = (EditText) findViewById(R.id.text_voice_camera_amount);
-		text_voice_camera_amount.setLayoutParams(params);
 
 		// ////// ******** Handle Date Bar ********* ////////
 
