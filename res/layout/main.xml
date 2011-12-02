@@ -29,7 +29,6 @@
             android:id="@+id/main_header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:hapticFeedbackEnabled="false"
             android:text="Expense Tracker"
@@ -54,7 +53,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-           	android:paddingTop="15dp"
             android:orientation="vertical"
             android:gravity="center_horizontal"
             >
