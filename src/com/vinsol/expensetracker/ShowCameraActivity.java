@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +23,13 @@ import com.vinsol.expensetracker.utils.FileDelete;
 
 public class ShowCameraActivity extends Activity implements OnClickListener {
 
+	private RelativeLayout dateBarRelativeLayout;
 	private TextView show_text_voice_camera_amount;
 	private TextView show_text_voice_camera_tag_textview;
 	private Button show_text_voice_camera_delete;
 	private DatabaseAdapter mDatabaseAdapter;
 	private ImageView show_text_voice_camera_image_display;
 	private TextView show_text_voice_camera_header_title;
-	private ImageView show_text_voice_camera_voice_details_separator;
 	private LinearLayout show_text_voice_camera_camera_details;
 	private Button show_text_voice_camera_edit;
 	private Bundle intentExtras;
@@ -42,15 +43,19 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.show_text_voice_camera);
 
 		// ///// ****** Assigning memory ******* /////////
+		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_text_voice_camera_date_bar); 
 		show_text_voice_camera_amount = (TextView) findViewById(R.id.show_text_voice_camera_amount);
 		show_text_voice_camera_tag_textview = (TextView) findViewById(R.id.show_text_voice_camera_tag_textview);
 		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
 		show_text_voice_camera_image_display = (ImageView) findViewById(R.id.show_text_voice_camera_image_display);
 		show_text_voice_camera_header_title = (TextView) findViewById(R.id.show_text_voice_camera_header_title);
-		show_text_voice_camera_voice_details_separator = (ImageView) findViewById(R.id.show_text_voice_camera_voice_details_separator);
 		show_text_voice_camera_camera_details = (LinearLayout) findViewById(R.id.show_text_voice_camera_camera_details);
 		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
 		mDatabaseAdapter = new DatabaseAdapter(this);
+		
+		
+		dateBarRelativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg_wo_shadow));
+		
 		// //////********* Get id from intent extras ******** ////////////
 
 		setGraphicsCamera();
@@ -101,10 +106,6 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 	private void setGraphicsCamera() {
 		// ///// ***** Sets Title Camera Entry *********///////
 		show_text_voice_camera_header_title.setText("Camera Entry");
-
-		// ///// ***** Sets Title Camera Entry *********///////
-		show_text_voice_camera_voice_details_separator
-				.setVisibility(View.VISIBLE);
 
 		// //// ****** Shows Camera Details ********////////
 		show_text_voice_camera_camera_details.setVisibility(View.VISIBLE);

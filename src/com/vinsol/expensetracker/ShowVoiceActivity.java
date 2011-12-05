@@ -13,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,8 +23,8 @@ import com.vinsol.expensetracker.utils.FileDelete;
 
 public class ShowVoiceActivity extends Activity implements OnClickListener {
 
+	private RelativeLayout dateBarRelativeLayout;
 	private TextView show_text_voice_camera_header_title;
-	private ImageView show_text_voice_camera_voice_details_separator;
 	private RelativeLayout show_text_voice_camera_voice_details;
 	private TextView show_text_voice_camera_amount;
 	private TextView show_text_voice_camera_tag_textview;
@@ -47,9 +46,9 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.show_text_voice_camera);
-
+		
+		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_text_voice_camera_date_bar); 
 		show_text_voice_camera_header_title = (TextView) findViewById(R.id.show_text_voice_camera_header_title);
-		show_text_voice_camera_voice_details_separator = (ImageView) findViewById(R.id.show_text_voice_camera_voice_details_separator);
 		show_text_voice_camera_voice_details = (RelativeLayout) findViewById(R.id.show_text_voice_camera_voice_details);
 		show_text_voice_camera_amount = (TextView) findViewById(R.id.show_text_voice_camera_amount);
 		show_text_voice_camera_tag_textview = (TextView) findViewById(R.id.show_text_voice_camera_tag_textview);
@@ -59,6 +58,8 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		show_text_voice_camera_time_details_chronometer = (Chronometer) findViewById(R.id.show_text_voice_camera_time_details_chronometer);
 		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
 
+		dateBarRelativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg_wo_shadow));
+		
 		mDatabaseAdapter = new DatabaseAdapter(this);
 
 		intentExtras = getIntent().getBundleExtra("voiceShowBundle");
@@ -122,10 +123,6 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 	private void updateUI() {
 		// ///// ***** Sets Title Voice Entry *********///////
 		show_text_voice_camera_header_title.setText("Voice Entry");
-
-		// ///// ***** Sets Title Voice Entry *********///////
-		show_text_voice_camera_voice_details_separator
-				.setVisibility(View.VISIBLE);
 
 		// //// ****** Shows Voice Details ********////////
 		show_text_voice_camera_voice_details.setVisibility(View.VISIBLE);
