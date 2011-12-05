@@ -238,18 +238,6 @@
               	>
             </TextView>
             
-      		<!-- description edit text -->
-           	<EditText 
-           	    android:id="@+id/show_text_voice_camera_tag"
-               	android:layout_width="fill_parent"
-               	android:layout_height="wrap_content"
-               	android:minLines="4"
-               	android:gravity="top"
-               	android:hint="description"
-               	android:visibility="gone"
-               	>
-            </EditText>
-            
            	<!-- divider -->    
             <View 
 	           	android:layout_width="fill_parent"
