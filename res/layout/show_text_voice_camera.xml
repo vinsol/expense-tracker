@@ -242,33 +242,8 @@
             </ToggleButton>
         </LinearLayout>
     </ScrollView>
-    
-    <!-- Body for favorite entry -->
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@id/show_text_voice_camera_footer"
-        android:layout_below="@+id/show_text_voice_camera_date_bar"
-        android:background="@drawable/home_bg"
-        android:id="@+id/show_text_voice_camera_body_favorite"
-        android:visibility="gone">
-        
-        <ImageView 
-            android:id="@+id/show_text_voice_camera_body_favorite_tag"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:src="@drawable/favorite_tag"/>
-        
-        <ListView 
-            android:id="@+id/show_text_voice_camera_body_favorite_listview"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/show_text_voice_camera_body_favorite_tag"
-            android:layout_width="fill_parent"/>
-        
-    </RelativeLayout>
-
    
-      <!-- Footer -->
+    <!-- Footer -->
     <LinearLayout
         android:id="@id/show_text_voice_camera_footer"
         android:layout_width="fill_parent"
