@@ -6,8 +6,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import com.vinsol.expensetracker.location.LocationLast;
-import com.vinsol.expensetracker.utils.DisplayDate;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,10 +15,13 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.vinsol.expensetracker.location.LocationLast;
+import com.vinsol.expensetracker.utils.DisplayDate;
 
 public class ExpenseListing extends Activity implements OnItemClickListener {
 
@@ -291,7 +292,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 			mListView.setVisibility(View.GONE);
 			RelativeLayout mRelativeLayout = (RelativeLayout) findViewById(R.id.expense_listing_listview_no_item);
 			mRelativeLayout.setVisibility(View.VISIBLE);
-			ImageButton expense_listing_listview_no_item_button = (ImageButton) findViewById(R.id.expense_listing_listview_no_item_button);
+			Button expense_listing_listview_no_item_button = (Button) findViewById(R.id.expense_listing_listview_no_item_button);
 			expense_listing_listview_no_item_button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {

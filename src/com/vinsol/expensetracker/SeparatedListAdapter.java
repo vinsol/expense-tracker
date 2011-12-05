@@ -184,13 +184,13 @@ class SeparatedListAdapter extends BaseAdapter {
 						holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.bg_unfinished_entry);
 					}
 					if (!mlist.get(1).equals(mContext.getString(R.string.unfinished_textentry)) && !mlist.get(1).equals(mContext.getString(R.string.finished_textentry))) {
-						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.text_list_icon);
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.listing_text_entry_icon);
 					} else {
 						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.text_list_icon_no_tag);
 					}
 
 				} else if (mlist.get(5).equals(mContext.getString(R.string.unknown))) {
-					holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.unknown_list_icon);
+					holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.listing_reminder_icon);
 					holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.bg_save_reminder);
 				} else if (mlist.get(5).equals(mContext.getString(R.string.voice))) {
 
@@ -199,7 +199,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					}
 					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+ mlist.get(0) + ".amr");
 					if (mFile.canRead()) {
-						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.audio_play_list_icon);
+						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.listing_voice_entry_icon);
 					} else {
 						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 					}
