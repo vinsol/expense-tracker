@@ -1,94 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-        
-	<!-- Header -->
+    android:background="@drawable/home_bg"
+    >
+    <!-- Header -->
     <RelativeLayout
         android:id="@+id/show_text_voice_camera_header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/topbar_bg" >
-        
-        <ImageView
-            android:id="@+id/show_text_voice_camera_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/list_icon_states" 
-            android:paddingRight="5dp"
-            android:paddingLeft="10dp"
-            >
-        </ImageView>
-
+        android:background="@drawable/topbar_bg" 
+        android:gravity="center"
+        >
         <TextView
             android:id="@+id/show_text_voice_camera_header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:hapticFeedbackEnabled="false"
             android:text="Text Entry"
-            android:textAppearance="?android:attr/textAppearanceLarge" 
-            android:textStyle="bold" 
-            android:typeface="sans"/>
-    </RelativeLayout>
-    
+            android:textSize="20dip"
+            android:textStyle="bold"
+            android:textColor="@color/white" 
+            >
+        </TextView>
+    </RelativeLayout>   
         
     <!-- Date Bar -->
-    <LinearLayout  
+    <RelativeLayout  
         android:id="@+id/show_text_voice_camera_date_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/show_text_voice_camera_header"
-        android:background="@drawable/date_bar_bg"
-        android:gravity="center"
-        android:orientation="horizontal">
-        
-        <TextView
+        android:background="@drawable/date_bar_bg_wo_shadow"
+        > 
+		<TextView
             android:id="@+id/show_text_voice_camera_date_bar_dateview"
-            android:layout_width="120dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nov 6, 2011"
-            android:textColor="@android:color/black"
-            android:textAppearance="?android:attr/textAppearanceMedium" 
-            android:gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
+            android:textColor="@color/black"
+            android:textSize="16dip"
+            android:textStyle="bold"
+            android:layout_marginBottom="1dip"
+            android:layout_marginLeft="7dip"
+            >
+        </TextView>
         
-    </LinearLayout>
+		<TextView
+            android:id="@+id/show_text_voice_camera_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="unknown location"
+            android:textColor="@color/black"
+            android:textSize="16dip"
+            android:textStyle="bold"
+            android:layout_marginBottom="1dip"
+            android:layout_marginLeft="15dip"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:layout_toRightOf="@id/show_text_voice_camera_date_bar_dateview"
+            android:ellipsize="end"
+            android:layout_marginRight="7dip"
+            android:singleLine="true"
+            >
+        </TextView>            
+    </RelativeLayout>
     
-         
-    
-
     <!-- ScrollView for body -->
     <ScrollView
+        android:id="@+id/show_text_voice_camera_body"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/show_text_voice_camera_date_bar"
         android:layout_above="@+id/show_text_voice_camera_footer"
-        android:background="@drawable/home_bg"
-        android:id="@+id/show_text_voice_camera_body">
-    
-    	<!-- Body -->
-        <RelativeLayout
+        >
+    	<LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-           	android:paddingTop="15dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            >
+           	android:paddingTop="10dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:orientation="vertical"
+            >          
             
-            <LinearLayout
-                android:id="@+id/show_text_voice_camera_data"
-            	android:layout_width="fill_parent"
-           		android:layout_height="fill_parent">
-            
+    	    <!-- camera entry -->
             <LinearLayout
                 android:id="@+id/show_text_voice_camera_camera_details"
                 android:layout_width="fill_parent"
@@ -97,7 +92,6 @@
                 android:gravity="center"
                 android:visibility="gone"
                 >
-                
                 <ImageView 
                     android:id="@+id/show_text_voice_camera_image_display"
                     android:layout_width="100dp"
@@ -108,34 +102,34 @@
                    	android:paddingLeft="5dp"
                    	android:paddingRight="5dp"
                    	android:paddingBottom="8dp"
-                   	android:scaleType="fitXY"/>
-                
+                   	android:scaleType="fitXY"
+                   	>
+            	</ImageView>
             </LinearLayout>
             
+            <!-- voice entry -->    
             <RelativeLayout
                 android:id="@+id/show_text_voice_camera_voice_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 >
-                
                 <LinearLayout
                     android:id="@+id/show_text_voice_camera_time_details"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    >
-                    
+                    >   
                     <Chronometer 
                         android:id="@+id/show_text_voice_camera_time_details_chronometer"
                         android:textSize="50sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#4d4d4d"/>
-                
+                        android:textColor="#4d4d4d"
+                        >
+                	</Chronometer>
                 </LinearLayout>
-                
                 <LinearLayout
                     android:id="@+id/show_text_voice_camera_voice_control_buttons"
                     android:layout_width="fill_parent"
@@ -157,7 +151,8 @@
                         android:layout_marginRight="5dp"
                         android:background="@drawable/voice_stop"
                         android:visibility="gone"
-                       />
+                       	>
+                    </Button>
                     
                     <Button
                         android:id="@+id/show_text_voice_camera_play_button"
@@ -169,109 +164,111 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:background="@drawable/voice_play"
-                       />
-                    
-                </LinearLayout>
-                    
+                       	>
+                    </Button>
+              	</LinearLayout>    
             </RelativeLayout>
-            
-            </LinearLayout>
-                
-                
+               
             <ImageView
-                    android:id="@+id/show_text_voice_camera_voice_details_separator"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:src="@drawable/list_divider"
-                    android:layout_below="@id/show_text_voice_camera_data"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone"
-                    />
+	            android:id="@+id/show_text_voice_camera_voice_details_separator"
+	            android:layout_height="wrap_content"
+	            android:layout_width="fill_parent"
+	            android:src="@drawable/list_divider"
+	            android:layout_marginBottom="10dp"
+	            android:layout_marginTop="10dp"
+	            android:visibility="gone"
+	            >
+           	</ImageView>
             
-                
+            <!--common amount and description field -->     
+            <!-- amount header -->
             <TextView 
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="Amount:"
-                android:textColor="#4d4d4d"
+                android:textColor="@color/black"
+                android:textSize="18dp"
                 android:textStyle="bold"
-                android:layout_below="@id/show_text_voice_camera_voice_details_separator"/>
-            
+                android:layout_below="@id/show_text_voice_camera_voice_details_separator"
+                >
+           	</TextView>
+            <!-- amount value -->
             <TextView
                 android:id="@+id/show_text_voice_camera_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/show_text_voice_camera_voice_details_separator"
-                android:hint="amount"
+                android:textColor="@color/black"
+                android:textSize="20dip"
                 android:layout_marginBottom="10dp"
-                android:numeric="decimal"
-                android:textColor="#4d4d4d"
-                android:textStyle="bold"
-                android:layout_alignParentRight="true"/>
-            
-            
-            
-            
-            
-            <RelativeLayout
-                android:layout_marginBottom="10dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/show_text_voice_camera_amount"
-                android:id="@+id/show_text_voice_camera_desc_details"
                 >
+           	</TextView>
             
-                <View 
-                	android:layout_height="5dp"
-                	android:layout_width="fill_parent"
-                	android:layout_alignParentTop="true"
-                	android:background="@android:color/darker_gray"
-                	android:id="@+id/show_text_voice_camera_divider_amount_desc"
-                	android:layout_marginBottom="10dp"/>
+            <!-- divider -->    
+            <View 
+                android:id="@+id/show_text_voice_camera_divider_amount_desc"
+	           	android:layout_width="fill_parent"
+	           	android:layout_height="wrap_content"
+	           	android:background="@drawable/list_divider"
+	           	android:layout_marginBottom="10dp"
+	           	>
+            </View>
                 
-                <TextView 
-                	android:layout_height="wrap_content"
-                	android:layout_width="wrap_content"
-                	android:text="Description:"
-                	android:textColor="#4d4d4d"
-                	android:textStyle="bold"
-                	android:layout_below="@id/show_text_voice_camera_divider_amount_desc"
-                	android:id="@+id/show_text_voice_camera_description_show"
-                	android:layout_marginBottom="5dp"/>
+            <!-- description header -->
+            <TextView 
+            	android:id="@+id/show_text_voice_camera_description_show"
+            	android:layout_height="wrap_content"
+            	android:layout_width="wrap_content"
+            	android:text="Description:"
+            	android:textColor="@color/black"
+            	android:textSize="18dip"
+            	android:textStyle="bold"
+            	android:layout_marginBottom="5dp"
+            	>
+            </TextView>
                 
-           		<TextView 
-                	android:id="@+id/show_text_voice_camera_tag_textview"
-                	android:layout_width="fill_parent"
-                	android:layout_height="wrap_content"
-                	android:gravity="top"
-                	android:layout_below="@id/show_text_voice_camera_description_show"
-                	android:hint="description"
-                	android:textColor="#4d4d4d"/>
+            <!-- description text view -->    
+       		<TextView 
+              	android:id="@+id/show_text_voice_camera_tag_textview"
+              	android:layout_width="fill_parent"
+              	android:layout_height="wrap_content"
+              	android:gravity="top"
+              	android:textSize="20dip"
+              	android:textColor="@color/black"
+              	>
+            </TextView>
             
-            	<EditText 
-            	    android:id="@+id/show_text_voice_camera_tag"
-                	android:layout_width="fill_parent"
-                	android:layout_height="wrap_content"
-                	android:layout_below="@id/show_text_voice_camera_amount"
-                	android:minLines="3"
-                	android:gravity="top"
-                	android:hint="description"
-                	android:visibility="gone"/>
-
-            </RelativeLayout>
+      		<!-- description edit text -->
+           	<EditText 
+           	    android:id="@+id/show_text_voice_camera_tag"
+               	android:layout_width="fill_parent"
+               	android:layout_height="wrap_content"
+               	android:minLines="4"
+               	android:gravity="top"
+               	android:hint="description"
+               	android:visibility="gone"
+               	>
+            </EditText>
             
+           	<!-- divider -->    
+            <View 
+	           	android:layout_width="fill_parent"
+	           	android:layout_height="wrap_content"
+	           	android:background="@drawable/list_divider"
+	           	android:layout_marginTop="10dp"
+	           	android:layout_marginBottom="10dp"
+	           	>
+            </View>    
+           	    
             <ToggleButton
                 android:id="@+id/show_text_voice_camera_add_favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/show_text_voice_camera_desc_details"
-                android:layout_alignLeft="@+id/show_text_voice_camera_tag_textview"
-                android:text="Favorite"
-                android:visibility="gone" />
-            
-        </RelativeLayout>
-    
+                android:background="@drawable/add_to_favorite"
+                android:visibility="gone" 
+                >
+            </ToggleButton>
+        </LinearLayout>
     </ScrollView>
     
     <!-- Body for favorite entry -->
@@ -316,7 +313,8 @@
             android:background="@drawable/update_entry_states"
             android:layout_marginRight="5dp"
             android:visibility="gone"
-            />
+            >
+       	</Button>
         
         <Button
             android:id="@+id/show_text_voice_camera_delete"
@@ -324,7 +322,20 @@
             android:layout_height="wrap_content"
             android:background="@drawable/delete_states"
             android:layout_marginLeft="5dp"
-            />
+            >
+       	</Button>
+        
+        <ImageView
+            android:id="@+id/show_text_voice_camera_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/list_icon_states" 
+            android:paddingRight="5dp"
+            android:paddingLeft="10dp"
+            >
+        </ImageView>
 
     </LinearLayout>  
         
