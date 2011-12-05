@@ -293,38 +293,23 @@
         android:background="@drawable/bottom_bar_bg"
         android:gravity="center"
         >
-
+        <!-- edit button -->
         <Button
-            android:id="@+id/show_text_voice_camera_update_entry"
+            android:id="@+id/show_text_voice_camera_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/update_entry_states"
-            android:layout_marginRight="5dp"
-            android:visibility="gone"
+            android:background="@drawable/edit_states"
+            android:layout_marginRight="7dp"
             >
        	</Button>
-        
-        <Button
+       	<!-- delete button -->
+       	<Button
             android:id="@+id/show_text_voice_camera_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/delete_states"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="7dp"
             >
-       	</Button>
-        
-        <ImageView
-            android:id="@+id/show_text_voice_camera_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/list_icon_states" 
-            android:paddingRight="5dp"
-            android:paddingLeft="10dp"
-            >
-        </ImageView>
-
+       	</Button>  
     </LinearLayout>  
-        
 </RelativeLayout>

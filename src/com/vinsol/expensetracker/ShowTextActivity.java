@@ -22,7 +22,7 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 	private TextView show_text_voice_camera_amount;
 	private TextView show_text_voice_camera_tag_textview;
 	private Button show_text_voice_camera_delete;
-	private ImageView show_text_voice_camera_edit;
+	private Button show_text_voice_camera_edit;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 		show_text_voice_camera_amount = (TextView) findViewById(R.id.show_text_voice_camera_amount);
 		show_text_voice_camera_tag_textview = (TextView) findViewById(R.id.show_text_voice_camera_tag_textview);
 		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
-		show_text_voice_camera_edit = (ImageView) findViewById(R.id.show_text_voice_camera_edit);
+		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		
 		// //////********* Get id from intent extras ******** ////////////

@@ -34,7 +34,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 	private Button show_text_voice_camera_stop_button;
 	private Chronometer show_text_voice_camera_time_details_chronometer;
 	private MyCount countDownTimer;
-	private ImageView show_text_voice_camera_edit;
+	private Button show_text_voice_camera_edit;
 
 	private AudioPlay mAudioPlay;
 	private Long _id = null;
@@ -57,7 +57,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		show_text_voice_camera_play_button = (Button) findViewById(R.id.show_text_voice_camera_play_button);
 		show_text_voice_camera_stop_button = (Button) findViewById(R.id.show_text_voice_camera_stop_button);
 		show_text_voice_camera_time_details_chronometer = (Chronometer) findViewById(R.id.show_text_voice_camera_time_details_chronometer);
-		show_text_voice_camera_edit = (ImageView) findViewById(R.id.show_text_voice_camera_edit);
+		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
 
 		mDatabaseAdapter = new DatabaseAdapter(this);
 

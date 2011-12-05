@@ -30,7 +30,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 	private TextView show_text_voice_camera_header_title;
 	private ImageView show_text_voice_camera_voice_details_separator;
 	private LinearLayout show_text_voice_camera_camera_details;
-	private ImageView show_text_voice_camera_edit;
+	private Button show_text_voice_camera_edit;
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
 	private Long _id = null;
@@ -49,7 +49,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		show_text_voice_camera_header_title = (TextView) findViewById(R.id.show_text_voice_camera_header_title);
 		show_text_voice_camera_voice_details_separator = (ImageView) findViewById(R.id.show_text_voice_camera_voice_details_separator);
 		show_text_voice_camera_camera_details = (LinearLayout) findViewById(R.id.show_text_voice_camera_camera_details);
-		show_text_voice_camera_edit = (ImageView) findViewById(R.id.show_text_voice_camera_edit);
+		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		// //////********* Get id from intent extras ******** ////////////
 
