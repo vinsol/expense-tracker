@@ -49,7 +49,7 @@
                         android:paddingLeft="10dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/voice_stop"
+                        android:background="@drawable/voice_stop_states"
                        />
                     
                     <Button
@@ -61,7 +61,7 @@
                         android:paddingLeft="10dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/voice_play"
+                        android:background="@drawable/voice_play_states"
                         android:visibility="gone"
                        />
                     
@@ -74,7 +74,7 @@
                         android:paddingLeft="10dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/cancel"
+                        android:background="@drawable/cancel_states"
                         android:visibility="visible"
                        />
                     
