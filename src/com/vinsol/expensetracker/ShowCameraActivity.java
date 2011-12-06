@@ -3,9 +3,6 @@ package com.vinsol.expensetracker;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-
-import com.vinsol.expensetracker.utils.FileDelete;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,28 +13,25 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.utils.FileDelete;
+
 public class ShowCameraActivity extends Activity implements OnClickListener {
 
+	private RelativeLayout dateBarRelativeLayout;
 	private TextView show_text_voice_camera_amount;
 	private TextView show_text_voice_camera_tag_textview;
 	private Button show_text_voice_camera_delete;
 	private DatabaseAdapter mDatabaseAdapter;
-	private EditText show_text_voice_camera_tag;
-	private View show_text_voice_camera_divider_amount_desc;
-	private Button show_text_voice_camera_update_entry;
 	private ImageView show_text_voice_camera_image_display;
 	private TextView show_text_voice_camera_header_title;
-	private ImageView show_text_voice_camera_voice_details_separator;
 	private LinearLayout show_text_voice_camera_camera_details;
-	private TextView show_text_voice_camera_description_show;
-	private ImageView show_text_voice_camera_edit;
-
+	private Button show_text_voice_camera_edit;
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
 	private Long _id = null;
@@ -49,19 +43,19 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.show_text_voice_camera);
 
 		// ///// ****** Assigning memory ******* /////////
+		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_text_voice_camera_date_bar); 
 		show_text_voice_camera_amount = (TextView) findViewById(R.id.show_text_voice_camera_amount);
 		show_text_voice_camera_tag_textview = (TextView) findViewById(R.id.show_text_voice_camera_tag_textview);
 		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
-		show_text_voice_camera_tag = (EditText) findViewById(R.id.show_text_voice_camera_tag);
-		show_text_voice_camera_divider_amount_desc = findViewById(R.id.show_text_voice_camera_divider_amount_desc);
-		show_text_voice_camera_update_entry = (Button) findViewById(R.id.show_text_voice_camera_update_entry);
 		show_text_voice_camera_image_display = (ImageView) findViewById(R.id.show_text_voice_camera_image_display);
 		show_text_voice_camera_header_title = (TextView) findViewById(R.id.show_text_voice_camera_header_title);
-		show_text_voice_camera_voice_details_separator = (ImageView) findViewById(R.id.show_text_voice_camera_voice_details_separator);
 		show_text_voice_camera_camera_details = (LinearLayout) findViewById(R.id.show_text_voice_camera_camera_details);
-		show_text_voice_camera_description_show = (TextView) findViewById(R.id.show_text_voice_camera_description_show);
-		show_text_voice_camera_edit = (ImageView) findViewById(R.id.show_text_voice_camera_edit);
+		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
 		mDatabaseAdapter = new DatabaseAdapter(this);
+		
+		
+		dateBarRelativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg_wo_shadow));
+		
 		// //////********* Get id from intent extras ******** ////////////
 
 		setGraphicsCamera();
@@ -82,12 +76,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 			
 			Log.v("tag", tag+" "+getString(R.string.unfinished_cameraentry));
 			if ((tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_cameraentry)))) {
-				show_text_voice_camera_description_show.setVisibility(View.GONE);
-				show_text_voice_camera_tag_textview.setVisibility(View.GONE);
-				show_text_voice_camera_tag.setVisibility(View.VISIBLE);
-				show_text_voice_camera_divider_amount_desc.setVisibility(View.GONE);
-				show_text_voice_camera_update_entry.setVisibility(View.VISIBLE);
-				show_text_voice_camera_update_entry.setOnClickListener(this);
+				show_text_voice_camera_tag_textview.setText("description");
 			} else {
 				show_text_voice_camera_tag_textview.setText(tag);
 			}
@@ -118,40 +107,8 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		// ///// ***** Sets Title Camera Entry *********///////
 		show_text_voice_camera_header_title.setText("Camera Entry");
 
-		// ///// ***** Sets Title Camera Entry *********///////
-		show_text_voice_camera_voice_details_separator
-				.setVisibility(View.VISIBLE);
-
 		// //// ****** Shows Camera Details ********////////
 		show_text_voice_camera_camera_details.setVisibility(View.VISIBLE);
-	}
-
-	public void onBackPressed() {
-		// This will be called either automatically for you on 2.0
-		// or later, or by the code above on earlier versions of the platform.
-		if (show_text_voice_camera_tag.isShown()) {
-			if (show_text_voice_camera_tag.getText().toString() != "")
-				saveEntry();
-		}
-		finish();
-	}
-
-	private void saveEntry() {
-		// ///// ******* Creating HashMap to update info ******* ////////
-		HashMap<String, String> _list = new HashMap<String, String>();
-		_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
-
-		if (show_text_voice_camera_tag.getText().toString() != "") {
-			_list.put(DatabaseAdapter.KEY_TAG, show_text_voice_camera_tag
-					.getText().toString());
-		}
-
-		// //// ******* Update database if user added additional info *******
-		// ///////
-		mDatabaseAdapter.open();
-		mDatabaseAdapter.editDatabase(_list);
-		mDatabaseAdapter.close();
-		finish();
 	}
 
 	@Override
@@ -187,10 +144,6 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 				Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
 			}
 
-		}
-
-		if (v.getId() == R.id.show_text_voice_camera_update_entry) {
-			saveEntry();
 		}
 		
 		if(v.getId() == R.id.show_text_voice_camera_edit){

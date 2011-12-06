@@ -3,45 +3,37 @@ package com.vinsol.expensetracker;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-
-import com.vinsol.expensetracker.utils.AudioPlay;
-import com.vinsol.expensetracker.utils.DisplayTime;
-import com.vinsol.expensetracker.utils.FileDelete;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.utils.AudioPlay;
+import com.vinsol.expensetracker.utils.DisplayTime;
+import com.vinsol.expensetracker.utils.FileDelete;
+
 public class ShowVoiceActivity extends Activity implements OnClickListener {
 
+	private RelativeLayout dateBarRelativeLayout;
 	private TextView show_text_voice_camera_header_title;
-	private ImageView show_text_voice_camera_voice_details_separator;
 	private RelativeLayout show_text_voice_camera_voice_details;
 	private TextView show_text_voice_camera_amount;
 	private TextView show_text_voice_camera_tag_textview;
-	private EditText show_text_voice_camera_tag;
 	private Button show_text_voice_camera_delete;
-	private View show_text_voice_camera_divider_amount_desc;
 	private Button show_text_voice_camera_play_button;
 	private Button show_text_voice_camera_stop_button;
 	private Chronometer show_text_voice_camera_time_details_chronometer;
 	private MyCount countDownTimer;
-	private Button show_text_voice_camera_update_entry;
-	private TextView show_text_voice_camera_description_show;
-	private ImageView show_text_voice_camera_edit;
+	private Button show_text_voice_camera_edit;
 
 	private AudioPlay mAudioPlay;
 	private Long _id = null;
@@ -54,22 +46,20 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.show_text_voice_camera);
-
+		
+		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_text_voice_camera_date_bar); 
 		show_text_voice_camera_header_title = (TextView) findViewById(R.id.show_text_voice_camera_header_title);
-		show_text_voice_camera_voice_details_separator = (ImageView) findViewById(R.id.show_text_voice_camera_voice_details_separator);
 		show_text_voice_camera_voice_details = (RelativeLayout) findViewById(R.id.show_text_voice_camera_voice_details);
 		show_text_voice_camera_amount = (TextView) findViewById(R.id.show_text_voice_camera_amount);
-		show_text_voice_camera_tag = (EditText) findViewById(R.id.show_text_voice_camera_tag);
 		show_text_voice_camera_tag_textview = (TextView) findViewById(R.id.show_text_voice_camera_tag_textview);
-		show_text_voice_camera_divider_amount_desc = findViewById(R.id.show_text_voice_camera_divider_amount_desc);
 		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
 		show_text_voice_camera_play_button = (Button) findViewById(R.id.show_text_voice_camera_play_button);
 		show_text_voice_camera_stop_button = (Button) findViewById(R.id.show_text_voice_camera_stop_button);
 		show_text_voice_camera_time_details_chronometer = (Chronometer) findViewById(R.id.show_text_voice_camera_time_details_chronometer);
-		show_text_voice_camera_update_entry = (Button) findViewById(R.id.show_text_voice_camera_update_entry);
-		show_text_voice_camera_description_show = (TextView) findViewById(R.id.show_text_voice_camera_description_show);
-		show_text_voice_camera_edit = (ImageView) findViewById(R.id.show_text_voice_camera_edit);
+		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
 
+		dateBarRelativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg_wo_shadow));
+		
 		mDatabaseAdapter = new DatabaseAdapter(this);
 
 		intentExtras = getIntent().getBundleExtra("voiceShowBundle");
@@ -88,13 +78,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 					.equals(getString(R.string.unfinished_voiceentry)))) {
 				show_text_voice_camera_tag_textview.setText(tag);
 			} else {
-				show_text_voice_camera_description_show
-						.setVisibility(View.GONE);
-				show_text_voice_camera_tag_textview.setVisibility(View.GONE);
-				show_text_voice_camera_tag.setVisibility(View.VISIBLE);
-				show_text_voice_camera_divider_amount_desc
-						.setVisibility(View.GONE);
-				show_text_voice_camera_update_entry.setVisibility(View.VISIBLE);
+				show_text_voice_camera_tag_textview.setText("description");
 			}
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
@@ -103,7 +87,6 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		show_text_voice_camera_delete.setOnClickListener(this);
 		show_text_voice_camera_play_button.setOnClickListener(this);
 		show_text_voice_camera_stop_button.setOnClickListener(this);
-		show_text_voice_camera_update_entry.setOnClickListener(this);
 		show_text_voice_camera_edit.setOnClickListener(this);
 
 		if (android.os.Environment.getExternalStorageState().equals(
@@ -140,10 +123,6 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 	private void updateUI() {
 		// ///// ***** Sets Title Voice Entry *********///////
 		show_text_voice_camera_header_title.setText("Voice Entry");
-
-		// ///// ***** Sets Title Voice Entry *********///////
-		show_text_voice_camera_voice_details_separator
-				.setVisibility(View.VISIBLE);
 
 		// //// ****** Shows Voice Details ********////////
 		show_text_voice_camera_voice_details.setVisibility(View.VISIBLE);
@@ -225,13 +204,6 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 					.setText(new DisplayTime().getDisplayTime(mAudioPlay
 							.getPlayBackTime()));
 		}
-
-		if (v.getId() == R.id.show_text_voice_camera_update_entry) {
-			if (show_text_voice_camera_tag.isShown()) {
-				if (show_text_voice_camera_tag.getText().toString() != "")
-					saveEntry();
-			}
-		}
 		
 		if(v.getId() == R.id.show_text_voice_camera_edit){
 			Intent editIntent = new Intent(this, Voice.class);
@@ -268,31 +240,6 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	// /// ****************** Handling back press of key ********** ///////////
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			onBackPressed();
-			return super.onKeyDown(keyCode, event);
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	public void onBackPressed() {
-		// This will be called either automatically for you on 2.0
-		// or later, or by the code above on earlier versions of the platform.
-		if (show_text_voice_camera_tag.isShown()) {
-			if (show_text_voice_camera_tag.getText().toString() != "")
-				saveEntry();
-		}
-
-		try {
-			if (mAudioPlay.isAudioPlaying())
-				mAudioPlay.stopPlayBack();
-		} catch (Exception e) {
-		}
-		finish();
-	}
-
 	@Override
 	protected void onPause() {
 
@@ -306,23 +253,5 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 
 		}
 		super.onPause();
-	}
-
-	private void saveEntry() {
-		// ///// ******* Creating HashMap to update info ******* ////////
-		HashMap<String, String> _list = new HashMap<String, String>();
-		_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
-
-		if (show_text_voice_camera_tag.getText().toString() != "") {
-			_list.put(DatabaseAdapter.KEY_TAG, show_text_voice_camera_tag
-					.getText().toString());
-		}
-
-		// //// ******* Update database if user added additional info *******
-		// ///////
-		mDatabaseAdapter.open();
-		mDatabaseAdapter.editDatabase(_list);
-		mDatabaseAdapter.close();
-		finish();
 	}
 }

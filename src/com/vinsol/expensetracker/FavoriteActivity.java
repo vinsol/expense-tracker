@@ -161,7 +161,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						//TODO image set for voice entry
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+ _id + ".amr");
 						if (mFile.canRead()) {
-							viewHolder.favorite_row_imageview.setImageResource(R.drawable.audio_play_list_icon);
+							viewHolder.favorite_row_imageview.setImageResource(R.drawable.listing_voice_entry_icon);
 						} else {
 							viewHolder.favorite_row_imageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 						}
@@ -233,7 +233,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				
 				if(tag != null){
 					if (!tag.equals("") && !tag.equals(getString(R.string.unfinished_textentry)) ) {
-						viewHolder.favorite_row_imageview.setImageResource(R.drawable.text_list_icon);
+						viewHolder.favorite_row_imageview.setImageResource(R.drawable.listing_text_entry_icon);
 					} else {
 						viewHolder.favorite_row_imageview.setImageResource(R.drawable.text_list_icon_no_tag);
 					}
