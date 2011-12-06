@@ -67,6 +67,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		
 		BarGraph barGraph = new BarGraph(this,values,horlabels,"Nov 21 2011");
 		main_graph.addView(barGraph, params);
+		
+		
 		 
 		// ******stop view******//
 
@@ -125,6 +127,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		} catch(Exception e){
 			_id = null;
 		}
+		new HandleGraph(this).execute();
 		super.onResume();
 	}
 
