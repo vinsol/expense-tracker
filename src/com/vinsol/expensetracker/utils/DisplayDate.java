@@ -59,6 +59,22 @@ public class DisplayDate {
 		}
 		return null;
 	}
+	
+	public String getDisplayDateHeaderGraph() {
+		String month, year;
+		month = getMonth(mCalendar.get(Calendar.MONTH));
+		year = mCalendar.get(Calendar.YEAR) + "";
+		
+		if(isCurrentMonth()){
+			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
+		}
+		
+		if (isPrevMonths()) {
+			return month + " " + year;
+		}
+		
+		return null;
+	}
 
 	public boolean isPrevYears() {
 		Calendar mTempCalendar = Calendar.getInstance();
