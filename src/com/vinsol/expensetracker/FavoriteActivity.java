@@ -33,6 +33,7 @@ import com.vinsol.expensetracker.utils.FileCopyFavorite;
 
 public class FavoriteActivity extends Activity implements OnItemClickListener{
 	
+	private TextView header_title;
 	private ListView text_voice_camera_body_favorite_listview;
 	private ConvertCursorToListString mConvertCursorToListString;
 	private List<HashMap<String, String>> mList;
@@ -54,11 +55,14 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		// ******* ///////
 		handleUI();
 		
+		header_title = (TextView) findViewById(R.id.text_voice_camera_header_title);
 		text_voice_camera_body_favorite_listview = (ListView) findViewById(R.id.text_voice_camera_body_favorite_listview);
 		text_voice_camera_date_bar_dateview = (TextView) findViewById(R.id.text_voice_camera_date_bar_dateview);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		intentExtras = getIntent().getBundleExtra("favoriteBundle");
+		
+		header_title.setText("Favorite Entry");
 		
 		if (intentExtras.containsKey("mDisplayList")) {
 			mEditList = new ArrayList<String>();
