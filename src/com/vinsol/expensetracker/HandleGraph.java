@@ -19,7 +19,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 	private Context mContext;
 	private List<HashMap<String, String>> mSubList;
 	private DisplayDate mDisplayDate;
-	private List<List<String>> idList;
+	private List<List<String>> mGraphList;
 	private Calendar lastDateCalendar;
 	
 	public HandleGraph(Context _context) {
@@ -37,7 +37,9 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 
 		if (mDataDateListGraph.size() >= 1) {
 			lastDateCalendar.setTimeInMillis(Long.parseLong(mSubList.get(mSubList.size()-1).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
-			idList = getDateIDList();
+			List<List<String>> mTempList = getDateIDList();
+			mGraphList = getGraphList(mTempList);
+			Log.v("mGraphList", mGraphList.toString());
 		} else {
 //			TODO if no entry
 		}
@@ -49,20 +51,50 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 		super.onPostExecute(result);
 	}
 	
+	private List<List<String>> getGraphList(List<List<String>> idList){
+		List<List<String>> listString = new ArrayList<List<String>>();
+		Calendar currentDateCalendar = Calendar.getInstance();
+		DisplayDate currentDateDisplayDate = new DisplayDate(currentDateCalendar);
+		int j = 0;
+		while(lastDateCalendar.before(currentDateCalendar) || lastDateCalendar.equals(currentDateCalendar)){
+			ArrayList<String> mList = new ArrayList<String>();
+			if(idList.get(j).get(2).equals(currentDateDisplayDate.getDisplayDateGraph())){
+				listString.add(idList.get(j));
+				j++;
+			} else {
+				mList.add("");
+				mList.add("?");
+				if(currentDateDisplayDate.isCurrentMonth()){
+					mList.add(currentDateDisplayDate.getDisplayDateGraph());
+				} else {
+					mList.add(currentDateDisplayDate.getDisplayDateGraph());
+				}
+				listString.add(mList);
+			}
+			if(currentDateDisplayDate.isCurrentMonth()){
+				currentDateCalendar.add(Calendar.DATE, -1);
+				currentDateDisplayDate = new DisplayDate(currentDateCalendar);
+			} else {
+				currentDateCalendar.add(Calendar.WEEK_OF_MONTH, -1);
+				currentDateDisplayDate = new DisplayDate(currentDateCalendar);
+			}
+		}
+		return listString;
+	}
+	
 	private List<List<String>> getDateIDList() {
 		List<List<String>> listString = new ArrayList<List<String>>();
 		Calendar mTempCalender = Calendar.getInstance();
 		DisplayDate mTempDisplayDate = new DisplayDate(mTempCalender);
 		int j = 0;
-		boolean isAdd = false;
 		while(lastDateCalendar.before(mTempCalender) || lastDateCalendar.equals(mTempCalender)){
 			ArrayList<String> mList = new ArrayList<String>();
 			String idList = "";
-			String tempDisplayDate = mTempDisplayDate.getDisplayDate();
+			String tempDisplayDate = mTempDisplayDate.getDisplayDateGraph();
 			Double temptotalAmount = 0.0;
 			String totalAmountString = null;
 			boolean isTempAmountNull = false;
-			while(mTempDisplayDate.getDisplayDate().equals(tempDisplayDate)){
+			while(mTempDisplayDate.getDisplayDateGraph().equals(tempDisplayDate)){
 				String tempAmount = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
 				if (tempAmount != null && !tempAmount.equals("")) {
 					try {
@@ -77,46 +109,28 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 				if (j < mSubList.size()) {
 					mTempCalender.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 					mTempDisplayDate = new DisplayDate(mTempCalender);
-					if(!mTempDisplayDate.getDisplayDate().equals(tempDisplayDate)){
-						mTempCalender.setTimeInMillis(Long.parseLong(mSubList.get(1-j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
-						mTempCalender.add(Calendar.DATE, -1);
-						Calendar mTempCurrentCalendar = Calendar.getInstance();
-						mTempCurrentCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
-						if(!new DisplayDate(mTempCalender).equals(new DisplayDate(mTempCurrentCalendar))){
-							mList.add(idList);
-							mList.add(totalAmountString);
-							mList.add(tempDisplayDate);
-							listString.add(mList);
-							isAdd = false;
-						} else {
-							isAdd = true;
-						}
-					}
 				} else {
 					break;
 				}
 			}
-			if(isAdd){
-				if (isTempAmountNull) {
-					if (temptotalAmount != 0) {
-						totalAmountString = temptotalAmount + " ?";
-					} else {
-						totalAmountString = "?";
-					}
+			if (isTempAmountNull) {
+				if (temptotalAmount != 0) {
+					totalAmountString = temptotalAmount + " ?";
 				} else {
-					totalAmountString = temptotalAmount + "";
+					totalAmountString = "?";
 				}
-			
-				mList.add(idList);
-				mList.add(totalAmountString);
-				mList.add(tempDisplayDate);
-				listString.add(mList);
+			} else {
+				totalAmountString = temptotalAmount + "";
 			}
+			
+			mList.add(idList);
+			mList.add(totalAmountString);
+			mList.add(tempDisplayDate);
+			listString.add(mList);
 			if (j >= mSubList.size()) {
 				break;
 			}
 		}
-		Log.v("listString", listString.toString()+" asdf");
 		return listString;
 	}
 

@@ -60,6 +60,22 @@ public class DisplayDate {
 		return null;
 	}
 	
+	public String getDisplayDateGraph() {
+		String month, year;
+		month = getMonth(mCalendar.get(Calendar.MONTH));
+		year = mCalendar.get(Calendar.YEAR) + "";
+		
+		if(isCurrentMonth()){
+			return getDisplayDate();
+		}
+		
+		if (isPrevMonths()) {
+			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
+		}
+		
+		return null;
+	}
+	
 	public String getDisplayDateHeaderGraph() {
 		String month, year;
 		month = getMonth(mCalendar.get(Calendar.MONTH));
