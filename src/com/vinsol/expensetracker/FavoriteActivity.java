@@ -6,10 +6,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import com.vinsol.expensetracker.location.LocationLast;
-import com.vinsol.expensetracker.utils.DateHelper;
-import com.vinsol.expensetracker.utils.FileCopyFavorite;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -31,6 +26,10 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.vinsol.expensetracker.location.LocationLast;
+import com.vinsol.expensetracker.utils.DateHelper;
+import com.vinsol.expensetracker.utils.FileCopyFavorite;
 
 public class FavoriteActivity extends Activity implements OnItemClickListener{
 	
@@ -48,10 +47,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// ///// ****** No Title Bar ********* /////////
-
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.text_voice_camera);
 

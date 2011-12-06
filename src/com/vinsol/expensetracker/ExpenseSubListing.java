@@ -6,21 +6,21 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import com.vinsol.expensetracker.location.LocationLast;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.vinsol.expensetracker.location.LocationLast;
 
 public class ExpenseSubListing extends Activity implements OnItemClickListener{
 
@@ -35,10 +35,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// ///// ****** No Title Bar ********* /////////
-
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		setContentView(R.layout.expense_listing);
 		idList = getIntent().getStringExtra("idList");
 		// ////// ********* Get Last most accurate location info *********

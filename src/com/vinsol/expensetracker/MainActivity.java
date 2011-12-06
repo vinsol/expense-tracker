@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import com.vinsol.android.graph.BarGraph;
-import com.vinsol.expensetracker.location.LocationData;
-import com.vinsol.expensetracker.location.LocationLast;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
@@ -15,11 +11,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.vinsol.android.graph.BarGraph;
+import com.vinsol.expensetracker.location.LocationData;
+import com.vinsol.expensetracker.location.LocationLast;
 
 public class MainActivity extends Activity implements OnClickListener {
 	public static String mCurrentLocation;
@@ -34,10 +33,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// ///// ****** No Title Bar ********* /////////
-
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.main);
 		bundle = new Bundle();
