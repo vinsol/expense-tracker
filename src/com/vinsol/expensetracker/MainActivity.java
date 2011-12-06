@@ -48,20 +48,6 @@ public class MainActivity extends Activity implements OnClickListener {
 			}
 		}
 		
-		// temp view of graph
-		// ******start view******//
-		Double[] values = new Double[] { 400.0,100.5, 56.0, 140.0 ,
-			 78.0,89.0,72.0 };
-			 String[] horlabels = new String[] { "mon", "tue", "wed",
-			 "thu","fri","sat","sun" };
-		LinearLayout main_graph = (LinearLayout) findViewById(R.id.main_graph);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-		LinearLayout.LayoutParams.FILL_PARENT,
-		main_graph.getBackground().getIntrinsicHeight()
-		);
-		
-		BarGraph barGraph = new BarGraph(this,values,horlabels,"Nov 21 2011");
-		main_graph.addView(barGraph, params);
 		
 		
 		 
@@ -122,7 +108,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		} catch(Exception e){
 			_id = null;
 		}
-		new HandleGraph(this).execute();
+//		new HandleGraph(this).execute();
 		super.onResume();
 	}
 

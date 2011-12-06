@@ -1,5 +1,7 @@
 package com.vinsol.android.graph;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -7,26 +9,27 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.View;
 
 public class BarGraph extends View {
 
 	private Paint paint;
 	private Double max;
-	private Double[] values;
+	private ArrayList<String> values;
 	private int height;
 	private int width;
 	private int verDiff;
 	private int horDiff;
-	private String[] horLabels;
+	private ArrayList<String> horLabels;
 	
-	public BarGraph(Context context,Double[] _values,String[] _horLabels,String title) {
+	public BarGraph(Context context,ArrayList<String> valueList,ArrayList<String> _horLabels,String title) {
 		super(context);
-		values = _values;
+		values = valueList;
 		paint = new Paint();
 		horLabels = _horLabels;
 	}
-	
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		max = getMax();
@@ -60,7 +63,7 @@ public class BarGraph extends View {
 		int barWidth = (int) ((6.04/100)*width);
 		int topY = (int) ((Double)(85.76/100)*height);
 		int originX = (int) ((15.83/100)*width);
-		int interval = (int) (horDiff/values.length);
+		int interval = (int) (horDiff/values.size());
 		int value = 0;
 		int finalValue;
 		Paint textPaint = new Paint();
@@ -68,12 +71,16 @@ public class BarGraph extends View {
 		textPaint.setTextSize(16.0f);
 		textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 		
-		for(int i = 0 ;i<values.length;i++){
+		for(int i = 0 ;i<values.size();i++){
 			finalValue = value+originX+barWidth;
 			value = value + interval;
-			RectF mRectF = new RectF(originX+value, topY-(int)((values[i]/max)*verDiff), finalValue, topY);
+			Double tempDouble = getDouble(i);
+			RectF mRectF = new RectF(originX+value, topY-(int)((tempDouble/max)*verDiff), finalValue, topY);
 			canvas.drawRect(mRectF,paint);
-			canvas.drawText(horLabels[i], originX+value, topY+20, textPaint);
+			canvas.drawText(horLabels.get(i), originX+value, topY+20, textPaint);
+			if(values.get(i).contains("?")){
+				canvas.drawText("?", originX+value, (float) (topY-max-20), textPaint);	
+			}
 		}
 	}
 
@@ -94,11 +101,35 @@ public class BarGraph extends View {
 		verDiff = topY - originY;
 		canvas.drawLine(originX, originY, topX, topY, paint);
 	}
+	
 	private Double getMax() {
 		Double largest = 0.0;
-		for (int i = 0; i < values.length; i++)
-			if (values[i] > largest)
-				largest = values[i];
+		for (int i = 0; i < values.size(); i++){
+			Double tempDouble = getDouble(i);
+			if (tempDouble > largest)
+				largest = tempDouble;
+		}
 		return largest;
+	}
+	
+	private Double getDouble(int i){
+		Log.v("asdsd", values.toString());
+		Double tempDouble = null;
+		if(values.get(1).contains("?")){
+			try{
+			if(values.get(i).length() > 1){
+				String tempString = (String) values.get(i).subSequence(0, values.get(i).length()-1);
+				return Double.parseDouble(tempString);
+			}
+			} catch (Exception e){
+				e.printStackTrace();
+				return 0.00;
+			}
+		} else {
+			Log.v("asd", values.get(i));
+			return Double.parseDouble(values.get(i));
+		}
+		
+		return tempDouble;
 	}
 }

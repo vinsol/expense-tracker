@@ -5,12 +5,16 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import com.vinsol.android.graph.BarGraph;
 import com.vinsol.expensetracker.ConvertCursorToListString;
+import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.DisplayDate;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 public class HandleGraph extends AsyncTask<Void, Void, Void> {
 
@@ -18,13 +22,16 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 	private ConvertCursorToListString mConvertCursorToListString;
 	private Context mContext;
 	private List<HashMap<String, String>> mSubList;
-	private DisplayDate mDisplayDate;
-	private List<List<String>> mGraphList;
+	private ArrayList<ArrayList<ArrayList<String>>> mGraphList;
 	private Calendar lastDateCalendar;
+	private Activity activity;
+	private ArrayList<String> horlabels;
 	
 	public HandleGraph(Context _context) {
 		mContext = _context;
+		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		lastDateCalendar = Calendar.getInstance();
+		horlabels = new ArrayList<String>();
 	}
 	
 	
@@ -39,27 +46,41 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 			lastDateCalendar.setTimeInMillis(Long.parseLong(mSubList.get(mSubList.size()-1).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 			List<List<String>> mTempList = getDateIDList();
 			mGraphList = getGraphList(mTempList);
-			Log.v("mGraphList", mGraphList.toString());
 		} else {
 //			TODO if no entry
 		}
 		return null;
 	}
 	
+	
+	
 	@Override
 	protected void onPostExecute(Void result) {
+		//view of graph
+		// ******start view******//
+		LinearLayout main_graph = (LinearLayout) activity.findViewById(R.id.main_graph);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.FILL_PARENT,
+				main_graph.getBackground().getIntrinsicHeight()
+				);
+//		DateHelper mDateHelper = new DateHelper(mGraphList.get(0).get(2).get(0));
+		Log.v("mGraphList", mGraphList.toString());
+		
+		BarGraph barGraph = new BarGraph(mContext,mGraphList.get(0).get(0),getHorLabelList(mDataDateListGraph.get(0).get(DatabaseAdapter.KEY_DATE_TIME)),mDataDateListGraph.get(0).get(DatabaseAdapter.KEY_DATE_TIME));
+		main_graph.addView(barGraph, params);
+				
 		super.onPostExecute(result);
 	}
 	
-	private List<List<String>> getGraphList(List<List<String>> idList){
-		List<List<String>> listString = new ArrayList<List<String>>();
+	private ArrayList<ArrayList<ArrayList<String>>> getGraphList(List<List<String>> idList){
+		ArrayList<ArrayList<String>> listString = new ArrayList<ArrayList<String>>();
 		Calendar currentDateCalendar = Calendar.getInstance();
 		DisplayDate currentDateDisplayDate = new DisplayDate(currentDateCalendar);
 		int j = 0;
 		while(lastDateCalendar.before(currentDateCalendar) || lastDateCalendar.equals(currentDateCalendar)){
 			ArrayList<String> mList = new ArrayList<String>();
 			if(idList.get(j).get(2).equals(currentDateDisplayDate.getDisplayDateGraph())){
-				listString.add(idList.get(j));
+				listString.add((ArrayList<String>) idList.get(j));
 				j++;
 			} else {
 				mList.add("");
@@ -79,7 +100,15 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 				currentDateDisplayDate = new DisplayDate(currentDateCalendar);
 			}
 		}
-		return listString;
+		
+		for(int i = 0;i<mDataDateListGraph.size();i++){
+			Log.v("mDataDateListGraph "+i, mDataDateListGraph.get(i)+" /t uio");
+			ArrayList<ArrayList<String>> arrayArrayList = new ArrayList<ArrayList<String>>();
+			ArrayList<String> arrayList = new ArrayList<String>();
+			
+		}
+//		return listString;
+		return null;
 	}
 	
 	private List<List<String>> getDateIDList() {
@@ -132,6 +161,37 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 			}
 		}
 		return listString;
+	}
+	
+	private ArrayList<String> getHorLabelList(String str){
+		ArrayList<String> mList = new ArrayList<String>();
+		if(str.contains("Week")){
+			for(int i = 0 ;i<7 ;i++){
+				mList.add(getWeekDay(i));
+			}
+		}
+		return mList;
+	}
+
+
+	private String getWeekDay(int i) {
+		switch(i){
+		case 0:
+			return "Sun";
+		case 1:
+			return "Mon";
+		case 2:
+			return "Tue";
+		case 3:
+			return "Wed";
+		case 4:
+			return "Thu";
+		case 5:
+			return "Fri";
+		case 6:
+			return "Sat";
+		}
+		return null;
 	}
 
 }
