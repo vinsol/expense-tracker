@@ -4,11 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import com.vinsol.expensetracker.location.LocationLast;
-import com.vinsol.expensetracker.utils.CameraFileSave;
-import com.vinsol.expensetracker.utils.DateHelper;
-import com.vinsol.expensetracker.utils.FileDelete;
-import com.vinsol.expensetracker.utils.ImageGet;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,7 +16,6 @@ import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,6 +23,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.vinsol.expensetracker.location.LocationLast;
+import com.vinsol.expensetracker.utils.CameraFileSave;
+import com.vinsol.expensetracker.utils.DateHelper;
+import com.vinsol.expensetracker.utils.FileDelete;
+import com.vinsol.expensetracker.utils.ImageGet;
 
 public class CameraActivity extends Activity implements OnClickListener {
 
@@ -53,10 +53,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// ///// ****** No Title Bar ********* /////////
-
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.text_voice_camera);
 

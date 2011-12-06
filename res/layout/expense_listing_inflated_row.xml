@@ -1,99 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/expense_listing_inflated_row_listview"
     android:layout_height="fill_parent"
-    >
-
-    <RelativeLayout 
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:id="@+id/expense_listing_inflated_row_listview"
-        android:orientation="horizontal"
-        android:paddingTop="10dp"
-    	android:paddingBottom="10dp"
-    	android:paddingLeft="5dp"
-    	android:paddingRight="10dp"
+    android:layout_width="fill_parent"
+    android:paddingBottom="7dip"
+    >   
+  	<!-- type of expense icon -->
+	<ImageView 
+  		android:id="@+id/expense_listing_inflated_row_imageview"
+  		android:background="@drawable/photo_frame"
+  		android:layout_width="44dip"
+  		android:layout_height="44dip"
+		android:scaleType="fitXY"
+ 		android:layout_marginTop="7dip"
+ 		android:layout_marginLeft="7dip"
+ 		>
+ 	</ImageView>
+   	
+	<!-- description and time-location relative layout -->
+   	<RelativeLayout
+   	    android:id="@+id/expense_listing_inflated_row_realtivelayout_tag_location"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content"
+   	    android:layout_marginLeft="10dp"
+   	    android:layout_marginRight="10dp"
+   	    android:layout_toRightOf="@id/expense_listing_inflated_row_imageview"
+   	    android:layout_toLeftOf="@+id/expense_listing_inflated_row_amount"
+   	    >
+   		<!-- description -->
+   	    <TextView
+   	        android:id="@+id/expense_listing_inflated_row_tag"
+   	        android:layout_width="fill_parent"
+   	        android:layout_height="wrap_content"
+   	        android:layout_alignParentTop="true"
+   	        android:text="Dinner at Sai Guru Dhaba: Dal, chabal and roti "
+   	        android:textColor="@color/black"
+           	android:textSize="16sp"
+   	        android:singleLine="true"
+   	        android:ellipsize="end"
+   	        android:layout_marginTop="3dip"
+   	        >
+   	    </TextView>
+   	    
+   	    <!-- time and location -->    
+   	    <TextView 
+   	        android:id="@+id/expense_listing_inflated_row_location_time"
+   	        android:layout_width="fill_parent"
+   	        android:layout_height="wrap_content"
+   	        android:textSize="14sp"
+   	        android:textColor="@color/grey"
+   	        android:text="2 PM at East patel nagar, Delhi."
+   	        android:singleLine="true"
+   	        android:ellipsize="end"
+   	        android:layout_below="@id/expense_listing_inflated_row_tag"
+   	        android:layout_marginTop="5dip"
+   	        >
+        </TextView>
+   	</RelativeLayout>
+   	    
+   	<!-- favorite -->
+   	<ImageView 
+  		android:id="@+id/expense_listing_inflated_row_favorite_icon"
+       	android:layout_width="wrap_content"
+       	android:layout_height="wrap_content"
+       	android:visibility="invisible"
+       	android:layout_alignParentTop="true"
+       	android:layout_alignParentRight="true"
+       	android:src="@drawable/listing_favorite_icon"
+       	>
+   	</ImageView>
+	
+	<!-- amount -->
+    <TextView
+        android:id="@id/expense_listing_inflated_row_amount"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+    	android:layout_alignParentRight="true"
+    	android:gravity="right"    
+        android:maxLength="12"
+        android:maxLines="2"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginRight="7dip"
+        android:layout_centerVertical="true"
         >
-        
-        <RelativeLayout
-            android:layout_height="fill_parent"
-            android:layout_width="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:id="@+id/expense_listing_inflated_row_realtivelayout_imageview"
-        	>
-    
-    		<ImageView 
-        		android:id="@+id/expense_listing_inflated_row_imageview"
-        		android:background="@drawable/photo_frame"
-        		android:layout_width="57dp"
-        		android:layout_height="60dp"
-       			android:scaleType="fitXY"/>
-    	
-    	</RelativeLayout>
-    	
-    	<RelativeLayout
-    	    android:layout_width="185dp"
-    	    android:layout_height="wrap_content"
-    	    android:layout_marginLeft="10dp"
-    	    android:id="@+id/expense_listing_inflated_row_realtivelayout_tag_location"
-    	    android:layout_toRightOf="@id/expense_listing_inflated_row_realtivelayout_imageview"
-    	    android:layout_toLeftOf="@+id/expense_listing_inflated_amountview"
-    	    >
-    	    
-    	    <TextView
-    	        android:id="@+id/expense_listing_inflated_row_tag"
-    	        android:layout_width="fill_parent"
-    	        android:layout_height="wrap_content"
-    	        android:maxLines="2"
-    	        android:minLines="2"
-    	        android:layout_alignParentTop="true"
-    	        android:textStyle="bold" 
-            	android:typeface="sans"
-            	android:textColor="#4d4d4d"
-            	android:textSize="14sp"
-    	        android:text="Dinner at Sai Guru Dhaba: Dal, chabal and roti "/>
-    	    
-    	    <TextView 
-    	        android:id="@+id/expense_listing_inflated_row_location_time"
-    	        android:layout_width="fill_parent"
-    	        android:layout_height="wrap_content"
-    	        android:maxLines="1"
-    	        android:minLines="1"
-    	        android:textSize="12sp"
-    	        android:textColor="#00539f"
-    	        android:text="2 PM at East patel nagar, Delhi."
-    	        android:layout_below="@id/expense_listing_inflated_row_tag"
-            	android:typeface="sans"/>
-    	    
-    	</RelativeLayout>
-
-    	<RelativeLayout
-    	    android:id="@id/expense_listing_inflated_amountview"
-    	    android:layout_width="50dp"
-    	    android:layout_alignParentRight="true"
-    	    android:layout_height="fill_parent"
-    	   >
-    	    <ImageView 
-    	        android:id="@+id/expense_listing_inflated_row_favorite_icon"
-    	        android:layout_width="fill_parent"
-    	        android:layout_height="15dp"
-    	        android:visibility="invisible"
-    	        android:layout_alignParentTop="true"
-    	        android:layout_alignParentRight="true"
-    	        android:src="@android:drawable/star_on"/>
-    	    <TextView
-    	        android:id="@+id/expense_listing_inflated_row_amount"
-    	        android:layout_below="@id/expense_listing_inflated_row_favorite_icon"
-    	        android:layout_width="50dp"
-    	        android:layout_height="wrap_content"
-    	    	android:gravity="right"    
-    	        android:maxLength="12"
-    	        android:maxLines="2"
-    	        android:text="999.099999999999"
-    	        android:textColor="#333333"
-    	        android:textStyle="bold"
-    	        android:typeface="sans" />
-    	</RelativeLayout>
-    	
-    </RelativeLayout>
+	</TextView>
 </RelativeLayout>

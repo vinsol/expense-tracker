@@ -122,7 +122,7 @@
                     android:id="@+id/text_voice_camera_retake_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/largecamera_button_retake_states"
+                    android:background="@drawable/retake_states"
                     android:layout_marginLeft="10dp"
                     >
                	</Button>

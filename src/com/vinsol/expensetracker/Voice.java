@@ -13,7 +13,6 @@ import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Chronometer.OnChronometerTickListener;
@@ -55,9 +54,6 @@ public class Voice extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// ///// ****** No Title Bar ********* /////////
-
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.text_voice_camera);
 
 		// ////// ******** Initializing and assigning memory to UI Items
