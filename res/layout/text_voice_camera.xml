@@ -235,22 +235,26 @@
         android:id="@+id/text_voice_camera_body_favorite"
         android:visibility="gone"
         >
-        
-        <ImageView 
+        <TextView 
             android:id="@+id/text_voice_camera_body_favorite_tag"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:src="@drawable/favorite_tag"
+            android:background="@drawable/notification_bg"
+            android:text="Choose an entry to add to expenses"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:paddingLeft="7dip"
             >
-        </ImageView>
-        
+        </TextView>
         <ListView 
             android:id="@+id/text_voice_camera_body_favorite_listview"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_voice_camera_body_favorite_tag"
             android:layout_width="fill_parent"
-            android:cacheColorHint="#00000000"/>
-        
+            android:cacheColorHint="#00000000"
+            >
+	    </ListView>
     </RelativeLayout>
         
     <!-- Footer -->
