@@ -82,7 +82,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 				} else if (mDisplayDate.isCurrentMonth()) {
 
 					while (mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME).equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
-//						// //// Adding i+" "+j as id
+						// //// Adding i+" "+j as id
 						List<String> mTempSubList = new ArrayList<String>();
 						mTempSubList.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID) +",");
 
