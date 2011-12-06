@@ -163,7 +163,7 @@
                         android:id="@+id/text_voice_camera_stop_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/voice_stop"
+                        android:background="@drawable/voice_stop_states"
                         android:layout_marginLeft="5dip"
                         android:layout_marginRight="5dip"
                        	>
@@ -174,7 +174,7 @@
                         android:id="@+id/text_voice_camera_play_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/voice_play"
+                        android:background="@drawable/voice_play_states"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:visibility="gone"
