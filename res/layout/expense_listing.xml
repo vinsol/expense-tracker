@@ -59,7 +59,7 @@
     	    android:id="@+id/expense_listing_listview_no_item_button"
         	android:layout_height="wrap_content"
         	android:layout_width="wrap_content"
-        	android:background="@drawable/list_view_no_item"
+        	android:background="@drawable/add_expenses_with_text_states"
        		android:layout_below="@id/expense_listing_listview_no_item_textview"
        		android:layout_centerHorizontal="true"
        		>
