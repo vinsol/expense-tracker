@@ -83,6 +83,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		// /////////
 		LocationLast mLocationLast = new LocationLast(this);
 		mLocationLast.getLastLocation();
+		
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 			_id = null;
 		}
 		mList = mConvertCursorToListString.getFavoriteList();
-		mAdapter = new MyAdapter(this, R.layout.favorite_row , mList);
+		mAdapter = new MyAdapter(this, R.layout.expense_listing_inflated_row , mList);
 		text_voice_camera_body_favorite_listview.setAdapter(mAdapter);
 		mAdapter.notifyDataSetChanged();
 		if (intentExtras.containsKey("mDisplayList")){
@@ -122,11 +123,13 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder viewHolder;
 			if (convertView == null) {
-				convertView = mInflater.inflate(R.layout.favorite_row, null);
+				convertView = mInflater.inflate(R.layout.expense_listing_inflated_row, null);
 				viewHolder = new ViewHolder();
-				viewHolder.favorite_row_tag = (TextView) convertView.findViewById(R.id.favorite_row_tag);
-				viewHolder.favorite_row_amount = (TextView) convertView.findViewById(R.id.favorite_row_amount);
-				viewHolder.favorite_row_imageview = (ImageView) convertView.findViewById(R.id.favorite_row_imageview);
+				viewHolder.expense_listing_row_tag = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_tag);
+				viewHolder.expense_listing_row_amount = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_amount);
+				viewHolder.expense_listing_row_imageview = (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_imageview);
+				viewHolder.expense_listing_inflated_row_location_time = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_location_time);
+				viewHolder.expense_listing_inflated_row_favorite_icon= (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_favorite_icon);
 				convertView.setTag(viewHolder);
 			} else {
 				viewHolder = (ViewHolder) convertView.getTag();
@@ -135,24 +138,24 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 			String amount = mList.get(position).get(DBAdapterFavorite.KEY_AMOUNT);
 			String type = mList.get(position).get(DBAdapterFavorite.KEY_TYPE);
 			String _id = mList.get(position).get(DBAdapterFavorite.KEY_ID);
-			viewHolder.favorite_row_imageview.setFocusable(false);
-			viewHolder.favorite_row_imageview.setOnClickListener(new MyClickListener(mList.get(position)));
-			
-			
+			viewHolder.expense_listing_row_imageview.setFocusable(false);
+			viewHolder.expense_listing_row_imageview.setOnClickListener(new MyClickListener(mList.get(position)));
+			viewHolder.expense_listing_inflated_row_favorite_icon.setVisibility(View.INVISIBLE);
+			viewHolder.expense_listing_inflated_row_location_time.setVisibility(View.GONE);
 			if(type.equals(getString(R.string.voice))){
 				if(tag != null){
 					if(!tag.equals("") &&!tag.equals(R.string.unfinished_voiceentry)){
-						viewHolder.favorite_row_tag.setText(tag);
+						viewHolder.expense_listing_row_tag.setText(tag);
 					}
 				} else {
-					viewHolder.favorite_row_tag.setText(getString(R.string.finished_voiceentry));
+					viewHolder.expense_listing_row_tag.setText(getString(R.string.finished_voiceentry));
 				}
 				if(amount != null ){
 					if(!amount.equals("")){
-						viewHolder.favorite_row_amount.setText(amount);
+						viewHolder.expense_listing_row_amount.setText(amount);
 					}
 				} else {
-					viewHolder.favorite_row_amount.setText("?");
+					viewHolder.expense_listing_row_amount.setText("?");
 				}
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					try {
@@ -160,15 +163,15 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						//TODO image set for voice entry
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+ _id + ".amr");
 						if (mFile.canRead()) {
-							viewHolder.favorite_row_imageview.setImageResource(R.drawable.listing_voice_entry_icon);
+							viewHolder.expense_listing_row_imageview.setImageResource(R.drawable.listing_voice_entry_icon);
 						} else {
-							viewHolder.favorite_row_imageview.setImageResource(R.drawable.no_voice_file_thumbnail);
+							viewHolder.expense_listing_row_imageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 						}
 					}catch(Exception e){
-						viewHolder.favorite_row_imageview.setImageResource(R.drawable.no_voice_file_thumbnail);
+						viewHolder.expense_listing_row_imageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 					}
 				} else {
-					viewHolder.favorite_row_imageview.setImageResource(R.drawable.no_voice_file_thumbnail);
+					viewHolder.expense_listing_row_imageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 					return convertView;
 				}
 			}
@@ -176,17 +179,17 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				
 				if(tag != null){
 					if(!tag.equals("") && !tag.equals(R.string.unfinished_cameraentry)){
-						viewHolder.favorite_row_tag.setText(tag);
+						viewHolder.expense_listing_row_tag.setText(tag);
 					}
 				} else {
-					viewHolder.favorite_row_tag.setText(getString(R.string.finished_cameraentry));
+					viewHolder.expense_listing_row_tag.setText(getString(R.string.finished_cameraentry));
 				}
 				if(amount != null ){
 					if(!amount.equals("")){
-						viewHolder.favorite_row_amount.setText(amount);
+						viewHolder.expense_listing_row_amount.setText(amount);
 					}
 				} else {
-					viewHolder.favorite_row_amount.setText("?");
+					viewHolder.expense_listing_row_amount.setText("?");
 				}
 				//TODO image set for camera entry
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
@@ -197,17 +200,17 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							System.gc();
 							Drawable drawable = Drawable.createFromPath(mFileThumbnail.getPath());
-							viewHolder.favorite_row_imageview.setImageDrawable(drawable);
+							viewHolder.expense_listing_row_imageview.setImageDrawable(drawable);
 						} else {
-							viewHolder.favorite_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
+							viewHolder.expense_listing_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
 						}
 					} catch (Exception e) {
 						// TODO if image not available on sdcard
-						viewHolder.favorite_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
+						viewHolder.expense_listing_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
 						e.printStackTrace();
 					}
 				} else {
-					viewHolder.favorite_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
+					viewHolder.expense_listing_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
 					return convertView;
 					// TODO if sdcard not available
 				}
@@ -216,28 +219,28 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				Log.v("text", "text");
 				if(tag != null){
 					if(!tag.equals("") && !tag.equals(R.string.unfinished_textentry)){
-						viewHolder.favorite_row_tag.setText(tag);
+						viewHolder.expense_listing_row_tag.setText(tag);
 					}
 				} else {
-					viewHolder.favorite_row_tag.setText(getString(R.string.finished_textentry));
+					viewHolder.expense_listing_row_tag.setText(getString(R.string.finished_textentry));
 				}
 				if(amount != null ){
 					if(!amount.equals("")){
-						viewHolder.favorite_row_amount.setText(amount);
+						viewHolder.expense_listing_row_amount.setText(amount);
 					}
 				} else {
-					viewHolder.favorite_row_amount.setText("?");
+					viewHolder.expense_listing_row_amount.setText("?");
 				}
 				//TODO image set for camera entry
 				
 				if(tag != null){
 					if (!tag.equals("") && !tag.equals(getString(R.string.unfinished_textentry)) ) {
-						viewHolder.favorite_row_imageview.setImageResource(R.drawable.listing_text_entry_icon);
+						viewHolder.expense_listing_row_imageview.setImageResource(R.drawable.listing_text_entry_icon);
 					} else {
-						viewHolder.favorite_row_imageview.setImageResource(R.drawable.text_list_icon_no_tag);
+						viewHolder.expense_listing_row_imageview.setImageResource(R.drawable.text_list_icon_no_tag);
 					}
 				} else {
-					viewHolder.favorite_row_imageview.setImageResource(R.drawable.text_list_icon_no_tag);
+					viewHolder.expense_listing_row_imageview.setImageResource(R.drawable.text_list_icon_no_tag);
 				}
 			}
 			return convertView;
@@ -246,9 +249,11 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 	}
 	
 	private class ViewHolder {
-		TextView favorite_row_tag;
-		TextView favorite_row_amount;
-		ImageView favorite_row_imageview;
+		TextView expense_listing_row_tag;
+		TextView expense_listing_row_amount;
+		ImageView expense_listing_row_imageview;
+		ImageView expense_listing_inflated_row_favorite_icon;
+		TextView expense_listing_inflated_row_location_time;
 	}
 	
 	private void handleUI() {
@@ -272,7 +277,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 
 		@Override
 		public void onClick(View v) {
-			if (v.getId() == R.id.favorite_row_imageview) {
+			if (v.getId() == R.id.expense_listing_inflated_row_imageview) {
 				Log.v("clicked", "clicked");
 				if (mListenerList != null)
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
