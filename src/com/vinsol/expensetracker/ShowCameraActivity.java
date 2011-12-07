@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -34,7 +33,6 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
 	private Long _id = null;
-	private TextView show_text_voice_camera_location;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,6 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		show_text_voice_camera_header_title = (TextView) findViewById(R.id.show_text_voice_camera_header_title);
 		show_text_voice_camera_camera_details = (LinearLayout) findViewById(R.id.show_text_voice_camera_camera_details);
 		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
-		show_text_voice_camera_location = (TextView) findViewById(R.id.show_text_voice_camera_location);
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		
 		
@@ -93,9 +90,9 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 			}
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
-			new ShowDateHandler(this, mCalendar);
+			if(mShowList.get(7) != null)
+				new ShowLocationHandler(this, mShowList.get(7));
 			new FavoriteHelper(this, mShowList);
-			Log.v("mShowList", mShowList.toString());
 		}
 
 		show_text_voice_camera_image_display.setOnClickListener(this);
