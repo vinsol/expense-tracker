@@ -36,7 +36,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 	private static final int PICTURE_RESULT = 35;
 	private TextView text_voice_camera_header_title;
 	private LinearLayout text_voice_camera_camera_details;
-	private long _id;
+	private Long _id = null;
 	private Bundle intentExtras;
 	private EditText text_voice_camera_amount;
 	private EditText text_voice_camera_tag;
@@ -66,7 +66,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 			setLocation = intentExtras.getBoolean("setLocation");
 		}
 		
-		Log.v("intentExtras", _id+"");
 		// ////// ******** Initializing and assigning memory to UI Items
 		// ********** /////////
 
@@ -111,6 +110,11 @@ public class CameraActivity extends Activity implements OnClickListener {
 		}
 		setGraphicsCamera();
 		setClickListeners();
+		
+//		if(_id == null ) {
+//			_id = insertToDatabase(R.string.camera);
+//		}
+		
 		if (!intentExtras.containsKey("mDisplayList"))
 			startCamera();
 
@@ -127,7 +131,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 		// //////////
 		mDatabaseAdapter = new DatabaseAdapter(this);
 	}
-
+	
 	private void startCamera() {
 
 		// ///// ******* Starting Camera to capture Image ******** //////////
@@ -263,13 +267,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 		// ///////////
 
 		if (v.getId() == R.id.text_voice_camera_image_display) {
-			// Intent intentImageViewActivity = new Intent(this,
-			// ImageViewActivity.class);
-			// Bundle intentImageViewActivityBundle = new Bundle();
-			// intentImageViewActivityBundle.putLong("_id", _id);
-			// intentImageViewActivity.putExtra("intentImageViewActivity",
-			// intentImageViewActivityBundle);
-			// startActivity(intentImageViewActivity);
+			
 			new ImageViewDialog(this, _id);
 
 		}

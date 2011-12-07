@@ -122,7 +122,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.main_camera:
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				Intent intentCamera = new Intent(this, CameraActivity.class);
-				createDatabaseEntry(R.string.camera);
+//				createDatabaseEntry(R.string.camera);
 				intentCamera.putExtra("cameraBundle", bundle);
 				startActivity(intentCamera);
 			} else {
