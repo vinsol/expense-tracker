@@ -69,9 +69,7 @@ class FavoriteHelper implements OnCheckedChangeListener{
 						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+favID+"_small.jpg");
 						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+favID+"_thumbnail.jpg");
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
-							Toast.makeText(mContext, "Exists", Toast.LENGTH_SHORT).show();
 						} else {
-							Toast.makeText(mContext, "Not Exists", Toast.LENGTH_SHORT).show();
 							mDbAdapterFavorite.open();
 							mDbAdapterFavorite.deleteDatabaseEntryID(Long.toString(favID));
 							mDbAdapterFavorite.close();
@@ -108,7 +106,6 @@ class FavoriteHelper implements OnCheckedChangeListener{
 				}
 			}
 			
-			Log.d("Fac", favID+"");
 			_list = new HashMap<String, String>();
 			_list.put(DatabaseAdapter.KEY_ID, mShowList.get(0));
 			_list.put(DatabaseAdapter.KEY_FAVORITE, Long.toString(favID));
