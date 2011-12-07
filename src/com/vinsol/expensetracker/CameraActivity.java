@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.DateHelper;
+import com.vinsol.expensetracker.utils.FileCopyFavorite;
 import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.ImageGet;
 
@@ -111,9 +112,16 @@ public class CameraActivity extends Activity implements OnClickListener {
 		setGraphicsCamera();
 		setClickListeners();
 		
-//		if(_id == null ) {
-//			_id = insertToDatabase(R.string.camera);
-//		}
+		if(_id == null ) {
+			_id = insertToDatabase(R.string.camera);
+			
+			
+			
+			
+			
+			
+			
+		}
 		
 		if (!intentExtras.containsKey("mDisplayList"))
 			startCamera();

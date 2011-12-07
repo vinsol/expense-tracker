@@ -210,7 +210,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				}
 			}
 			else if(type.equals(getString(R.string.text))){
-				Log.v("text", "text");
 				if(tag != null){
 					if(!tag.equals("") && !tag.equals(R.string.unfinished_textentry)){
 						viewHolder.expense_listing_row_tag.setText(tag);
@@ -272,7 +271,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		@Override
 		public void onClick(View v) {
 			if (v.getId() == R.id.expense_listing_inflated_row_imageview) {
-				Log.v("clicked", "clicked");
 				if (mListenerList != null)
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						String id = mListenerList.get(DBAdapterFavorite.KEY_ID);
