@@ -112,19 +112,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 		setGraphicsCamera();
 		setClickListeners();
 		
-		if(_id == null ) {
-			_id = insertToDatabase(R.string.camera);
-			
-			
-			
-			
-			
-			
-			
-		}
-		
-		if (!intentExtras.containsKey("mDisplayList"))
-			startCamera();
 
 		// //////******** Handle Date Bar ********* ////////
 		if (intentExtras.containsKey("mDisplayList")) {
@@ -138,6 +125,49 @@ public class CameraActivity extends Activity implements OnClickListener {
 		// ////// *********** Initializing Database Adaptor **********
 		// //////////
 		mDatabaseAdapter = new DatabaseAdapter(this);
+		
+		dateViewString = text_voice_camera_date_bar_dateview.getText().toString();
+		
+		if(_id == null ) {
+			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+				mDatabaseAdapter.open();
+				HashMap<String, String> _list = new HashMap<String, String>();
+				if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
+					try {
+						if (!intentExtras.containsKey("mDisplayList")) {
+							DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+							_list.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
+						} else {
+							if(!intentExtras.containsKey("timeInMillis")){
+								DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+								_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+							} else {
+								Calendar mCalendar = Calendar.getInstance();
+								mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+								DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
+								_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					Calendar mCalendar = Calendar.getInstance();
+					_list.put(DatabaseAdapter.KEY_DATE_TIME, mCalendar.getTimeInMillis()+"");
+				}
+				
+				if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+					_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+				}
+				
+				_list.put(DatabaseAdapter.KEY_TYPE, getString(R.string.camera));
+				_id = mDatabaseAdapter.insert_to_database(_list);
+				mDatabaseAdapter.close();
+			}
+		}
+		
+		if (!intentExtras.containsKey("mDisplayList"))
+			startCamera();
 	}
 	
 	private void startCamera() {
