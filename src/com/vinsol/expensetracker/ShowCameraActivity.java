@@ -34,6 +34,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
 	private Long _id = null;
+	private TextView show_text_voice_camera_location;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		show_text_voice_camera_header_title = (TextView) findViewById(R.id.show_text_voice_camera_header_title);
 		show_text_voice_camera_camera_details = (LinearLayout) findViewById(R.id.show_text_voice_camera_camera_details);
 		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
+		show_text_voice_camera_location = (TextView) findViewById(R.id.show_text_voice_camera_location);
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		
 		
@@ -73,7 +75,6 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 					show_text_voice_camera_amount.setText(amount);
 			}
 			
-			Log.v("tag", tag+" "+getString(R.string.unfinished_cameraentry));
 			if ((tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_cameraentry)))) {
 				show_text_voice_camera_tag_textview.setText("description");
 			} else {
@@ -94,6 +95,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 			new ShowDateHandler(this, mCalendar);
 			new FavoriteHelper(this, mShowList);
+			Log.v("mShowList", mShowList.toString());
 		}
 
 		show_text_voice_camera_image_display.setOnClickListener(this);
@@ -115,13 +117,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 
 		if (v.getId() == R.id.show_text_voice_camera_image_display) {
 			if (_id != null) {
-				// Intent intentImageViewActivity = new Intent(this,
-				// ImageViewActivity.class);
-				// Bundle intentImageViewActivityBundle = new Bundle();
-				// intentImageViewActivityBundle.putLong("_id", _id);
-				// intentImageViewActivity.putExtra("intentImageViewActivity",
-				// intentImageViewActivityBundle);
-				// startActivity(intentImageViewActivity);
+				
 				new ImageViewDialog(this, _id); // MARK
 
 			} else {
