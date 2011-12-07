@@ -13,6 +13,7 @@
         android:background="@drawable/topbar_bg" 
         android:gravity="center"
         >
+
         <TextView
             android:id="@+id/show_text_voice_camera_header_title"
             android:layout_width="wrap_content"
@@ -23,6 +24,7 @@
             android:textColor="@color/white" 
             >
         </TextView>
+        
     </RelativeLayout>   
         
     <!-- Date and location Bar -->
@@ -32,19 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/show_text_voice_camera_header"
         android:background="@drawable/date_bar_bg_wo_shadow"
+        android:gravity="center"
         > 
-		<TextView
-            android:id="@+id/show_text_voice_camera_date_bar_dateview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nov 6, 2011"
-            android:textColor="@color/black"
-            android:textSize="16dip"
-            android:textStyle="bold"
-            android:layout_marginBottom="1dip"
-            android:layout_marginLeft="7dip"
-            >
-        </TextView>
         
 		<TextView
             android:id="@+id/show_text_voice_camera_location"
@@ -52,18 +43,16 @@
             android:layout_height="wrap_content"
             android:text="unknown location"
             android:textColor="@color/black"
-            android:textSize="16dip"
-            android:textStyle="bold"
+            android:textSize="14dip"
+            android:gravity="center"
             android:layout_marginBottom="1dip"
             android:layout_marginLeft="15dip"
-            android:layout_alignParentRight="true"
-            android:gravity="right"
-            android:layout_toRightOf="@id/show_text_voice_camera_date_bar_dateview"
             android:ellipsize="end"
             android:layout_marginRight="7dip"
             android:singleLine="true"
             >
         </TextView>            
+        
     </RelativeLayout>
     
     <!-- ScrollView for body -->

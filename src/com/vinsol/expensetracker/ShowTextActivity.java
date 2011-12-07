@@ -50,7 +50,8 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 			show_text_voice_camera_amount.setText(amount);
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
-			new ShowDateHandler(this, mCalendar);
+			if(mShowList.get(7) != null)
+				new ShowLocationHandler(this, mShowList.get(7));
 			new FavoriteHelper(this, mShowList);
 		}
 		show_text_voice_camera_delete.setOnClickListener(this);
