@@ -247,8 +247,8 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderFooter.expenses_listing_add_expenses_button.setVisibility(View.GONE);
 				} else {
 					holderFooter.expenses_listing_add_expenses_button.setText("Add expenses to "+ mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
-					holderFooter.expense_listing_list_add_expenses.setFocusable(false);
-					holderFooter.expense_listing_list_add_expenses.setOnClickListener(new MyClickListener(sectionnum));
+					holderFooter.expenses_listing_add_expenses_button.setFocusable(false);
+					holderFooter.expenses_listing_add_expenses_button.setOnClickListener(new MyClickListener(sectionnum));
 				}
 
 				return convertView;
@@ -351,7 +351,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				}
 			}
 
-			if (v.getId() == R.id.expense_listing_list_add_expenses) {
+			if (v.getId() == R.id.expenses_listing_add_expenses_button) {
 				DateHelper mDateHelper = new DateHelper(mDatadateList.get(mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
 				Intent mMainIntent = new Intent(mContext, MainActivity.class);
 				Bundle bundle = new Bundle();
