@@ -14,12 +14,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.location.LocationData;
-import com.vinsol.expensetracker.location.LocationLast;
+import com.vinsol.expensetracker.helpers.LocationHelper;
 
 public class MainActivity extends Activity implements OnClickListener {
-	public static String mCurrentLocation;
-	public static Location mLocation;
 	private DatabaseAdapter mDatabaseAdapter;
 	private long timeInMillis = 0;
 	private Bundle bundle;
@@ -72,28 +69,18 @@ public class MainActivity extends Activity implements OnClickListener {
 		// opens ListView
 		ImageView showListingButton = (ImageView) findViewById(R.id.main_listview);
 		showListingButton.setOnClickListener(this);
-
 	}
-
 
 	@Override
 	protected void onResume() {
-
-		// /////// ******** Starts GPS and Check for Location each time Activity
-		// Resumes ******* ////////
-		new LocationData(this);
-		LocationLast mLocationLast = new LocationLast(this);
-		mLocationLast.getLastLocation();
-		try{
-			mTempClickedList.get(0);
-		} catch(Exception e){
-			_id = null;
-		}
-//		new HandleGraph(this).execute();
 		super.onResume();
+		//finding current location
+		Location location = LocationHelper.getBestAvailableLocation();
+		if(location == null) {
+			LocationHelper.requestLocationUpdate();
+		}
 	}
 
-	
 	@Override
 	protected void onPause() {
 		if(getIntent().hasExtra("mainBundle")) {
@@ -105,13 +92,6 @@ public class MainActivity extends Activity implements OnClickListener {
 			}
 		}
 		super.onPause();
-	}
-	
-	@Override
-	protected void onStop() {
-		mLocation = null;
-		mCurrentLocation = null;
-		super.onStop();
 	}
 	
 	@Override
@@ -185,12 +165,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		if(_id == null ) {
 			_id = insertToDatabase(typeOfEntry);
 			bundle.putLong("_id", _id);
-			if(mCurrentLocation != null) {
-				if(!mCurrentLocation.equals("")) {
-					bundle.putBoolean("setLocation", false);
-				} else {
-					bundle.putBoolean("setLocation", true);
-				}
+			
+			if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+				bundle.putBoolean("setLocation", false);
 			} else {
 				bundle.putBoolean("setLocation", true);
 			}
@@ -213,8 +190,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			finish();
 		}
 
-		if (MainActivity.mCurrentLocation != null) {
-			_list.put(DatabaseAdapter.KEY_LOCATION,MainActivity.mCurrentLocation);
+		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+			_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
 		_list.put(DatabaseAdapter.KEY_TYPE, getString(type));
 		mDatabaseAdapter.open();

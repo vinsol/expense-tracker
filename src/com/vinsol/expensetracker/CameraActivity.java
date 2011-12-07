@@ -24,7 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.location.LocationLast;
+import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.FileDelete;
@@ -120,11 +120,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 		} else {
 			new DateHandler(this);
 		}
-
-		// //////********* Get Last most accurate location info *********
-		// /////////
-		LocationLast mLocationLast = new LocationLast(this);
-		mLocationLast.getLastLocation();
 
 		// ////// *********** Initializing Database Adaptor **********
 		// //////////
@@ -322,10 +317,8 @@ public class CameraActivity extends Activity implements OnClickListener {
 			}
 		}
 		
-		if(MainActivity.mCurrentLocation != null  && setLocation == true){
-			if (!MainActivity.mCurrentLocation.equals("")) {
-				_list.put(DatabaseAdapter.KEY_LOCATION,MainActivity.mCurrentLocation);
-			}
+		if(setLocation == true && LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+				_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
 		// //// ******* Update database if user added additional info *******
 		// ///////

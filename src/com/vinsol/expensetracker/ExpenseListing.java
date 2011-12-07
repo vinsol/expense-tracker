@@ -19,7 +19,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.location.LocationLast;
 import com.vinsol.expensetracker.utils.DisplayDate;
 
 public class ExpenseListing extends Activity implements OnItemClickListener {
@@ -37,9 +36,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 		setContentView(R.layout.expense_listing);
 
-		// ////// ********* Get Last most accurate location info *********
-		LocationLast mLocationLast = new LocationLast(this);
-		mLocationLast.getLastLocation();
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 	}
 

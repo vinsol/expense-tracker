@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.vinsol.expensetracker.location.LocationLast;
+import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.FileDelete;
 
@@ -76,17 +76,12 @@ public class TextEntry extends Activity implements OnClickListener {
 			new DateHandler(this);
 		}
 
-		// ////// ********* Get Last most accurate location info *********
-		// /////////
-		LocationLast mLocationLast = new LocationLast(this);
-		mLocationLast.getLastLocation();
 		setClickListeners();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		new LocationLast(this);
 		dateViewString = text_voice_camera_date_bar_dateview.getText().toString();
 	}
 
@@ -178,10 +173,8 @@ public class TextEntry extends Activity implements OnClickListener {
 			}
 		}
 		
-		if(MainActivity.mCurrentLocation != null  && setLocation == true){
-			if (!MainActivity.mCurrentLocation.equals("")) {
-				_list.put(DatabaseAdapter.KEY_LOCATION,MainActivity.mCurrentLocation);
-			}
+		if(setLocation == true && LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+			_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
 		// //// ******* Update database if user added additional info *******
 		// ///////

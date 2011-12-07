@@ -27,7 +27,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.location.LocationLast;
+import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.FileCopyFavorite;
 
@@ -78,12 +78,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		} else {
 			new DateHandler(this);
 		}
-
-		// ////// ********* Get Last most accurate location info *********
-		// /////////
-		LocationLast mLocationLast = new LocationLast(this);
-		mLocationLast.getLastLocation();
-		
 	}
 
 	@Override
@@ -332,24 +326,22 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				toInsert.put(DatabaseAdapter.KEY_AMOUNT, amount);
 		}
 		
-		if(favID != null){
+		if(favID != null) {
 			if(!favID.equals(""))
 				toInsert.put(DatabaseAdapter.KEY_FAVORITE, favID);
 		}
 		
-		if(type.equals(getString(R.string.camera))){
+		if(type.equals(getString(R.string.camera))) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				try{
 					toInsert.put(DatabaseAdapter.KEY_TYPE, type);
-					if(tag != null){
+					if(tag != null) {
 						if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_cameraentry)) && !tag.equals(getString(R.string.finished_cameraentry)))
 							toInsert.put(DatabaseAdapter.KEY_TAG, tag);
 					}
-					if(_id == null){
-						if(MainActivity.mCurrentLocation != null){
-							if(!MainActivity.mCurrentLocation.equals("")){
-								toInsert.put(DatabaseAdapter.KEY_LOCATION, MainActivity.mCurrentLocation);
-							}
+					if(_id == null) {
+						if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+							toInsert.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 						}
 					}
 					if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
@@ -426,10 +418,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 							toInsert.put(DatabaseAdapter.KEY_TAG, tag);
 					}
 					if(_id == null){
-						if(MainActivity.mCurrentLocation != null){
-							if(!MainActivity.mCurrentLocation.equals("")){
-								toInsert.put(DatabaseAdapter.KEY_LOCATION, MainActivity.mCurrentLocation);
-							}
+						if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+							toInsert.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 						}
 					}
 					if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
@@ -492,7 +482,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 			} else {
 				Toast.makeText(this, "you cannot use voice entry without sdcard", Toast.LENGTH_LONG).show();
 			}
-		} else if(type.equals(getString(R.string.text))){
+		} else if(type.equals(getString(R.string.text))) {
 			try{
 				toInsert.put(DatabaseAdapter.KEY_TYPE, type);
 				if(tag != null){
@@ -500,10 +490,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						toInsert.put(DatabaseAdapter.KEY_TAG, tag);
 				}
 				if(_id == null){
-					if(MainActivity.mCurrentLocation != null){
-						if(!MainActivity.mCurrentLocation.equals("")){
-							toInsert.put(DatabaseAdapter.KEY_LOCATION, MainActivity.mCurrentLocation);
-						}
+					if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+						toInsert.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 					}
 				}
 				if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {

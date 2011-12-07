@@ -21,7 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.location.LocationLast;
+import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.AudioPlay;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.DisplayTime;
@@ -138,11 +138,6 @@ public class Voice extends Activity implements OnClickListener {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 		setClickListeners();
-
-		// //////********* Get Last most accurate location info *********
-		// /////////
-		LocationLast mLocationLast = new LocationLast(this);
-		mLocationLast.getLastLocation();
 	}
 
 	@Override
@@ -399,11 +394,10 @@ public class Voice extends Activity implements OnClickListener {
 			}
 		}
 		
-		if(MainActivity.mCurrentLocation != null  && setLocation == true){
-			if (!MainActivity.mCurrentLocation.equals("")) {
-				_list.put(DatabaseAdapter.KEY_LOCATION,MainActivity.mCurrentLocation);
-			}
+		if(setLocation == true && LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+			_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
+		
 		// //// ******* Update database if user added additional info *******
 		// ///////
 		mDatabaseAdapter.open();
