@@ -27,7 +27,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	private Long _id = null; 
 	private ArrayList<String> mTempClickedList;
 	
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,50 +44,35 @@ public class MainActivity extends Activity implements OnClickListener {
 				}
 			}
 		}
-		
-		
-		
-		 
-		// ******stop view******//
-
-//		 DatabaseAdapter adapter =new DatabaseAdapter(this);
-//		 adapter.open();
-//		 adapter.drop_table();
-//		 adapter.close();
-		//
 
 		// /////// ********* DatabaseAdaptor initialize ********* ////////
 		mDatabaseAdapter = new DatabaseAdapter(this);
 
-		// //// ********* Adding Click Listeners to MainActivity **********
-		// /////////
+		// //// ********* Adding Click Listeners to MainActivity ********** /////////
 
 		// opens text entry Activity
-		Button main_text = (Button) findViewById(R.id.main_text);
-		main_text.setOnClickListener(this);
+		Button textButton = (Button) findViewById(R.id.main_text);
+		textButton.setOnClickListener(this);
 
 		// opens voice Activity
-		Button main_voice = (Button) findViewById(R.id.main_voice);
-		main_voice.setOnClickListener(this);
+		Button voiceButton = (Button) findViewById(R.id.main_voice);
+		voiceButton.setOnClickListener(this);
 
 		// opens Camera Activity
-		Button main_camera = (Button) findViewById(R.id.main_camera);
-		main_camera.setOnClickListener(this);
+		Button cameraButton = (Button) findViewById(R.id.main_camera);
+		cameraButton.setOnClickListener(this);
 
 		// opens Favorite Activity
-		Button main_favorite = (Button) findViewById(R.id.main_favorite);
-		main_favorite.setOnClickListener(this);
+		Button favoriteButton = (Button) findViewById(R.id.main_favorite);
+		favoriteButton.setOnClickListener(this);
 
 		// opens Save Reminder Activity
-		Button main_save_reminder = (Button) findViewById(R.id.main_save_reminder);
-		main_save_reminder.setOnClickListener(this);
+		Button saveReminderButton = (Button) findViewById(R.id.main_save_reminder);
+		saveReminderButton.setOnClickListener(this);
 
 		// opens ListView
-		ImageView main_listview = (ImageView) findViewById(R.id.main_listview);
-		main_listview.setOnClickListener(this);
-
-		// /////// ******** Finished Adding Click Listeners *********
-		// ///////////
+		ImageView showListingButton = (ImageView) findViewById(R.id.main_listview);
+		showListingButton.setOnClickListener(this);
 
 	}
 
@@ -110,6 +94,27 @@ public class MainActivity extends Activity implements OnClickListener {
 		super.onResume();
 	}
 
+	
+	@Override
+	protected void onPause() {
+		if(getIntent().hasExtra("mainBundle")) {
+			Bundle tempBundle = getIntent().getBundleExtra("mainBundle");
+			if (!tempBundle.isEmpty()) {
+				if(tempBundle.containsKey("mDisplayList")) {
+					finish();
+				}
+			}
+		}
+		super.onPause();
+	}
+	
+	@Override
+	protected void onStop() {
+		mLocation = null;
+		mCurrentLocation = null;
+		super.onStop();
+	}
+	
 	@Override
 	public void onClick(View v) {
 
@@ -119,8 +124,8 @@ public class MainActivity extends Activity implements OnClickListener {
 				if(_id == null ){
 					_id = insertToDatabase(R.string.text);
 					bundle.putLong("_id", _id);
-					if(mCurrentLocation != null){
-						if(!mCurrentLocation.equals("")){
+					if(mCurrentLocation != null) {
+						if(!mCurrentLocation.equals("")) {
 							bundle.putBoolean("setLocation", false);
 						} else {
 							bundle.putBoolean("setLocation", true);
@@ -255,27 +260,5 @@ public class MainActivity extends Activity implements OnClickListener {
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(_list);
 		mDatabaseAdapter.close();
-
 	}
-
-	@Override
-	protected void onPause() {
-		if(getIntent().hasExtra("mainBundle")){
-			Bundle tempBundle = getIntent().getBundleExtra("mainBundle");
-			if (!tempBundle.isEmpty()) {
-				if(tempBundle.containsKey("mDisplayList")){
-					finish();
-				}
-			}
-		}
-		super.onPause();
-	}
-	
-	@Override
-	protected void onStop() {
-		mLocation = null;
-		mCurrentLocation = null;
-		super.onStop();
-	}
-
 }
