@@ -30,18 +30,23 @@ public class DatabaseAdapter {
 
 	// sql open or create database
 	private final String DATABASE_CREATE = "create table if not exists "
-			+ TABLE_NAME + "(" + KEY_ID
-			+ " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_TAG + " TEXT,"
-			+ KEY_AMOUNT + " TEXT, " + KEY_DATE_TIME + " TEXT NOT NULL,"
-			+ KEY_LOCATION + " TEXT, " + KEY_FAVORITE + " INTEGER, "
-			+ KEY_TYPE + " VARCHAR(1) NOT NULL " + ")";
+			+ TABLE_NAME + "(" 
+			+ KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," 
+			+ KEY_TAG + " TEXT,"
+			+ KEY_AMOUNT + " TEXT, " 
+			+ KEY_DATE_TIME + " TEXT NOT NULL,"
+			+ KEY_LOCATION + " TEXT, " 
+			+ KEY_FAVORITE + " INTEGER, "
+			+ KEY_TYPE + " VARCHAR(1) NOT NULL " 
+			+ ")";
 
 	private final String DATABASE_CREATE_FAVORITE = "create table if not exists "
 			+ TABLE_NAME_FAVORITE + "(" 
-			+ KEY_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT ," 
+			+ KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," 
 			+ KEY_TAG + " TEXT,"
 			+ KEY_AMOUNT + " TEXT, " 
-			+ KEY_TYPE + " VARCHAR(1) NOT NULL " + ")";
+			+ KEY_TYPE + " VARCHAR(1) NOT NULL " 
+			+ ")";
 	
 	
 	private SQLiteDatabase db;
@@ -154,6 +159,24 @@ public class DatabaseAdapter {
 				KEY_TYPE }, where, null, null, null, KEY_DATE_TIME+" desc");
 		
 	}
+	
+	public String getFavoriteId(String _id) {
+		String where = KEY_ID+" = "+_id;
+		
+		Cursor cr = db.query(TABLE_NAME,  new String[] {
+				KEY_FAVORITE}, where, null, null, null, null);
+		cr.moveToFirst();
+		String favId = cr.getString(cr.getColumnIndex(KEY_FAVORITE));
+		cr.close();
+		return favId;
+	}
+
+	public void editDatabaseFavorite(String favID) {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_FAVORITE, "");
+		String where = KEY_FAVORITE+" = "+favID;
+		db.update(TABLE_NAME, contentValues, where, null);
+	}
 
 	private class MyCreateOpenHelper extends SQLiteOpenHelper {
 
@@ -175,23 +198,5 @@ public class DatabaseAdapter {
 		@Override
 		public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
 		}
-	}
-
-	public String getFavoriteId(String _id) {
-		String where = KEY_ID+" = "+_id;
-		
-		Cursor cr = db.query(TABLE_NAME,  new String[] {
-				KEY_FAVORITE}, where, null, null, null, null);
-		cr.moveToFirst();
-		String favId = cr.getString(cr.getColumnIndex(KEY_FAVORITE));
-		cr.close();
-		return favId;
-	}
-
-	public void editDatabaseFavorite(String favID) {
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(KEY_FAVORITE, "");
-		String where = KEY_FAVORITE+" = "+favID;
-		db.update(TABLE_NAME, contentValues, where, null);
 	}
 }
