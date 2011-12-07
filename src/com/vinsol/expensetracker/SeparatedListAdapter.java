@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -157,7 +158,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				if (mlist.get(5).equals(mContext.getString(R.string.camera))) {
 					
 					if(!isEntryComplete((ArrayList<String>) mlist)){
-						holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.bg_unfinished_entry);
+						holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					}
 					
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
@@ -181,7 +182,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				} else if (mlist.get(5).equals(mContext.getString(R.string.text))) {
 
 					if(!isEntryComplete((ArrayList<String>) mlist)){
-						holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.bg_unfinished_entry);
+						holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					}
 					if (!mlist.get(1).equals(mContext.getString(R.string.unfinished_textentry)) && !mlist.get(1).equals(mContext.getString(R.string.finished_textentry))) {
 						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.listing_text_entry_icon);
@@ -191,11 +192,11 @@ class SeparatedListAdapter extends BaseAdapter {
 
 				} else if (mlist.get(5).equals(mContext.getString(R.string.unknown))) {
 					holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.listing_reminder_icon);
-					holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.bg_save_reminder);
+					holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.listing_row_unknown_states);
 				} else if (mlist.get(5).equals(mContext.getString(R.string.voice))) {
 
 					if(!isEntryComplete((ArrayList<String>) mlist)){
-						holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.bg_unfinished_entry);
+						holderBody.expense_listing_inflated_row_listview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					}
 					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+ mlist.get(0) + ".amr");
 					if (mFile.canRead()) {
@@ -234,17 +235,20 @@ class SeparatedListAdapter extends BaseAdapter {
 				if (convertView == null || position < size) {
 					holderFooter = new ViewHolderFooter();
 					convertView = mInflater.inflate(R.layout.main_list_footerview, null);
-					holderFooter.expenses_listing_add_expenses_textview = (TextView) convertView.findViewById(R.id.expenses_listing_add_expenses_textview);
+					holderFooter.expenses_listing_add_expenses_button = (Button) convertView.findViewById(R.id.expenses_listing_add_expenses_button);
 					holderFooter.expense_listing_list_add_expenses = (LinearLayout) convertView.findViewById(R.id.expense_listing_list_add_expenses);
 				} else {
 					holderFooter = (ViewHolderFooter) convertView.getTag();
 				}
 
-				holderFooter.expenses_listing_add_expenses_textview.setText("Add expenses to "+ mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
-				holderFooter.expense_listing_list_add_expenses.setFocusable(false);
-				holderFooter.expense_listing_list_add_expenses.setOnClickListener(new MyClickListener(sectionnum));
 				if (!isCurrentWeek(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME))) {
+					holderFooter.expense_listing_list_add_expenses.setBackgroundResource(0);
 					holderFooter.expense_listing_list_add_expenses.setVisibility(View.GONE);
+					holderFooter.expenses_listing_add_expenses_button.setVisibility(View.GONE);
+				} else {
+					holderFooter.expenses_listing_add_expenses_button.setText("Add expenses to "+ mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
+					holderFooter.expense_listing_list_add_expenses.setFocusable(false);
+					holderFooter.expense_listing_list_add_expenses.setOnClickListener(new MyClickListener(sectionnum));
 				}
 
 				return convertView;
@@ -285,7 +289,7 @@ class SeparatedListAdapter extends BaseAdapter {
 	}
 
 	private class ViewHolderFooter {
-		TextView expenses_listing_add_expenses_textview;
+		Button expenses_listing_add_expenses_button;
 		LinearLayout expense_listing_list_add_expenses;
 	}
 
