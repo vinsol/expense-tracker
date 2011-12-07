@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -122,48 +121,16 @@ public class MainActivity extends Activity implements OnClickListener {
 		// //// ******* opens TextEntry Activity ******** ///////////
 		case R.id.main_text:
 			Intent intentTextEntry = new Intent(this, TextEntry.class);
-			if(_id == null ) {
-				_id = insertToDatabase(R.string.text);
-				bundle.putLong("_id", _id);
-				if(mCurrentLocation != null) {
-					if(!mCurrentLocation.equals("")) {
-						bundle.putBoolean("setLocation", false);
-					} else {
-						bundle.putBoolean("setLocation", true);
-					}
-				} else {
-					bundle.putBoolean("setLocation", true);
-				}
-			} else {
-				Log.v("_id", _id+" 56");
-				bundle.putStringArrayList("mDisplayList", mTempClickedList);
-				editDatabase(R.string.text);
-			}
+			createDatabaseEntry(R.string.text);
 			intentTextEntry.putExtra("textEntryBundle", bundle);
 			startActivity(intentTextEntry);
 			break;
 			
 		// //// ******* opens Voice Activity ******** ///////////
 		case R.id.main_voice:
-			if (android.os.Environment.getExternalStorageState().equals(
-					android.os.Environment.MEDIA_MOUNTED)) {
+			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				Intent intentVoice = new Intent(this, Voice.class);
-				if(_id == null){
-					_id = insertToDatabase(R.string.voice);
-					bundle.putLong("_id", _id);
-					if(mCurrentLocation != null){
-						if(!mCurrentLocation.equals("")){
-							bundle.putBoolean("setLocation", false);
-						} else {
-							bundle.putBoolean("setLocation", true);
-						}
-					} else {
-						bundle.putBoolean("setLocation", true);
-					}
-				} else {
-					bundle.putStringArrayList("mDisplayList", mTempClickedList);
-					editDatabase(R.string.voice);
-				}
+				createDatabaseEntry(R.string.voice);
 				intentVoice.putExtra("voiceBundle", bundle);
 				startActivity(intentVoice);
 			} else {
@@ -173,25 +140,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		// //// ******* opens Camera Activity ******** ///////////
 		case R.id.main_camera:
-			if (android.os.Environment.getExternalStorageState().equals(
-					android.os.Environment.MEDIA_MOUNTED)) {
+			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				Intent intentCamera = new Intent(this, CameraActivity.class);
-				if(_id == null) {
-					_id = insertToDatabase(R.string.camera);
-					bundle.putLong("_id", _id);
-					if(mCurrentLocation != null){
-						if(!mCurrentLocation.equals("")){
-							bundle.putBoolean("setLocation", false);
-						} else {
-							bundle.putBoolean("setLocation", true);
-						}
-					} else {
-						bundle.putBoolean("setLocation", true);
-					}
-				} else {
-					bundle.putStringArrayList("mDisplayList", mTempClickedList);
-					editDatabase(R.string.camera);
-				}
+				createDatabaseEntry(R.string.camera);
 				intentCamera.putExtra("cameraBundle", bundle);
 				startActivity(intentCamera);
 			} else {
@@ -203,14 +154,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.main_favorite:
 			Intent intentFavorite = new Intent(this, FavoriteActivity.class);
 			if(_id == null) {
-				if (timeInMillis != 0){
+				if (timeInMillis != 0) {
 					bundle.putLong("timeInMillis", timeInMillis);
 				}
 			} else {
 				bundle.putStringArrayList("mDisplayList", mTempClickedList);
 			}
-			// long _id = insertToDatabase(R.string.favorite_entry);
-			// bundle.putLong("_id", _id);
 			intentFavorite.putExtra("favoriteBundle", bundle);
 			startActivity(intentFavorite);	
 			break;
@@ -229,6 +178,26 @@ public class MainActivity extends Activity implements OnClickListener {
 			startActivity(intentListView2);
 			break;
 		}//end switch
+	}//end onClick
+	
+	private void createDatabaseEntry(int typeOfEntry) {	
+		Bundle bundle = new Bundle();
+		if(_id == null ) {
+			_id = insertToDatabase(typeOfEntry);
+			bundle.putLong("_id", _id);
+			if(mCurrentLocation != null) {
+				if(!mCurrentLocation.equals("")) {
+					bundle.putBoolean("setLocation", false);
+				} else {
+					bundle.putBoolean("setLocation", true);
+				}
+			} else {
+				bundle.putBoolean("setLocation", true);
+			}
+		} else {
+			bundle.putStringArrayList("mDisplayList", mTempClickedList);
+			editDatabase(typeOfEntry);
+		}		
 	}
 
 	// /////// ******** function to mark entry into the database and returns the
