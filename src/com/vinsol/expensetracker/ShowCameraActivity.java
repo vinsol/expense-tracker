@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -92,6 +93,15 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
+			if(mShowList.get(6) != null)
+				new ShowDateHandler(this, mShowList.get(6));
+			else {
+				new ShowDateHandler(this);
+			}
+//			for(int i = 0;i<mShowList.size();i++){
+//				Log.v("mShowList "+i, mShowList.get(i));
+//			}
+			Log.v("mShowList ", mShowList.toString());
 			new FavoriteHelper(this, mShowList);
 		}
 
