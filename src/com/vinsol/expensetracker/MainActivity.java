@@ -161,7 +161,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	}//end onClick
 	
 	private void createDatabaseEntry(int typeOfEntry) {	
-//		Bundle bundle = new Bundle();     ///////////
 		if(_id == null ) {
 			_id = insertToDatabase(typeOfEntry);
 			bundle.putLong("_id", _id);

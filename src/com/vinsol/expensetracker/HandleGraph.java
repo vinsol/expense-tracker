@@ -5,16 +5,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import com.vinsol.android.graph.BarGraph;
-import com.vinsol.expensetracker.ConvertCursorToListString;
-import com.vinsol.expensetracker.utils.DateHelper;
-import com.vinsol.expensetracker.utils.DisplayDate;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.LinearLayout;
+
+import com.vinsol.android.graph.BarGraph;
+import com.vinsol.expensetracker.utils.DisplayDate;
 
 public class HandleGraph extends AsyncTask<Void, Void, Void> {
 
