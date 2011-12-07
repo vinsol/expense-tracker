@@ -5,6 +5,7 @@
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
     android:paddingBottom="7dip"
+    android:background="@drawable/listing_row_states"
     >   
   	<!-- type of expense icon -->
 	<ImageView 

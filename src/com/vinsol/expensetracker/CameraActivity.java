@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -65,6 +66,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 			setLocation = intentExtras.getBoolean("setLocation");
 		}
 		
+		Log.v("intentExtras", _id+"");
 		// ////// ******** Initializing and assigning memory to UI Items
 		// ********** /////////
 
