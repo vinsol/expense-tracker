@@ -93,7 +93,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 				startCamera();
 			}
 			
-			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_cameraentry)) || tag.equals(getString(R.string.unknown_entry)))) {
+			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_cameraentry)) || tag.equals(getString(R.string.finished_cameraentry))  || tag.equals(getString(R.string.unknown_entry)))) {
 				text_voice_camera_tag.setText(tag);
 			}
 			File mFile = new File("/sdcard/ExpenseTracker/" + _id

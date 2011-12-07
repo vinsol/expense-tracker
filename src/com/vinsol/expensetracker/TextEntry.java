@@ -61,7 +61,7 @@ public class TextEntry extends Activity implements OnClickListener {
 				if (!amount.contains("?"))
 					text_voice_camera_amount.setText(amount);
 			}
-			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_textentry)) || tag.equals(getString(R.string.unknown_entry)))) {
+			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_textentry)) || tag.equals(getString(R.string.finished_textentry)) || tag.equals(getString(R.string.unknown_entry)))) {
 				text_voice_camera_tag.setText(tag);
 			}
 		}

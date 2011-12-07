@@ -343,7 +343,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		
 		List<String> _templist = new ArrayList<String>();
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
-		if (mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null&& !mSubList.get(j).get(DatabaseAdapter.KEY_TAG).equals("")) {
+		if (mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_TAG).equals("")) {
 			_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TAG));
 		} else {
 			if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))) {
@@ -468,6 +468,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 				if (hashMap.get(DatabaseAdapter.KEY_AMOUNT).contains("?")) {
 					return false;
 				}
+			} else {
+				return false;
 			}
 			File mFileSmall = new File("/sdcard/ExpenseTracker/"
 					+ hashMap.get(DatabaseAdapter.KEY_ID) + "_small.jpg");
@@ -486,6 +488,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 				if (hashMap.get(DatabaseAdapter.KEY_AMOUNT).contains("?")) {
 					return false;
 				}
+			} else {
+				return false;
 			}
 			File mFile = new File("/sdcard/ExpenseTracker/Audio/"
 					+ hashMap.get(DatabaseAdapter.KEY_ID) + ".amr");
