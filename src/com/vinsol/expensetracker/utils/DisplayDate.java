@@ -15,6 +15,10 @@ public class DisplayDate {
 	public DisplayDate(Calendar calendar) {
 		mCalendar = calendar;
 	}
+	
+	public Calendar getCalendar(){
+		return mCalendar;
+	}
 
 	// ////// ******** Function to get date in proper format to display in
 	// various activities ****** ///////
@@ -106,9 +110,7 @@ public class DisplayDate {
 	public boolean isPrevMonths() {
 		Calendar mTempCalender = Calendar.getInstance();
 		mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
-		if ((mTempCalender.get(Calendar.MONTH) > mCalendar.get(Calendar.MONTH))
-				&& (mTempCalender.get(Calendar.YEAR) == mCalendar
-						.get(Calendar.YEAR))) {
+		if ((mTempCalender.get(Calendar.MONTH) > mCalendar.get(Calendar.MONTH)) && (mTempCalender.get(Calendar.YEAR) == mCalendar.get(Calendar.YEAR))) {
 			return true;
 		}
 		return false;
@@ -117,9 +119,7 @@ public class DisplayDate {
 	public boolean isCurrentMonth() {
 		Calendar mTempCalendar = Calendar.getInstance();
 		mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if ((mTempCalendar.get(Calendar.MONTH) == mCalendar.get(Calendar.MONTH))
-				&& (mTempCalendar.get(Calendar.YEAR) == mCalendar
-						.get(Calendar.YEAR))) {
+		if ((mTempCalendar.get(Calendar.MONTH) == mCalendar.get(Calendar.MONTH)) && (mTempCalendar.get(Calendar.YEAR) == mCalendar.get(Calendar.YEAR))) {
 			return true;
 		}
 		return false;
