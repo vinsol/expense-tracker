@@ -154,6 +154,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 			} else if (mTempClickedList.get(5).equals(getString(R.string.unknown))) {
 				Intent intentMain = new Intent(this, MainActivity.class);
 				intentMain.putExtra("mainBundle", bundle);
+				intentMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intentMain);
 				//TODO if unknown entry
 			}

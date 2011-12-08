@@ -7,12 +7,14 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.DateHelper;
@@ -183,10 +185,9 @@ public class TextEntry extends Activity implements OnClickListener {
 		mDatabaseAdapter.close();
 
 		finish();
-		if (!intentExtras.containsKey("timeInMillis")
-				&& !intentExtras.containsKey("mDisplayList")) {
-			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-			startActivity(intentExpenseListing);
-		}
+		
+		Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+		intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		startActivity(intentExpenseListing);
 	}
 }
