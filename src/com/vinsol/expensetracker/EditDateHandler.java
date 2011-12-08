@@ -20,7 +20,7 @@ public class EditDateHandler {
 		
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
 		//TODO
-		text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+"at "+getDate(mCalendar));
+		text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+" at "+getDate(mCalendar));
 	}
 
 	public EditDateHandler(Context mContext) {

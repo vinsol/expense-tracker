@@ -3,6 +3,7 @@ package com.vinsol.expensetracker;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.View;
@@ -28,6 +29,7 @@ public class EditLocationHandler {
 		text_voice_camera_location.setLayoutParams(params);
 		text_voice_camera_location.setTypeface(Typeface.DEFAULT);
 		text_voice_camera_location.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+		text_voice_camera_location.setTextColor(Color.BLACK);
 		text_voice_camera_location.setMaxLines(1);
 		text_voice_camera_location.setText(location);
 	}

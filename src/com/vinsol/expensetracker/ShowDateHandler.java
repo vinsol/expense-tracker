@@ -20,7 +20,7 @@ public class ShowDateHandler {
 		
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
 		//TODO
-		show_text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+"at "+getDate(mCalendar));
+		show_text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+" at "+getDate(mCalendar));
 	}
 
 	public ShowDateHandler(Context mContext,int typeOfEntry) {
