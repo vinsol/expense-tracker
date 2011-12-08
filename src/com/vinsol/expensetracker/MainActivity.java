@@ -79,6 +79,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		if(location == null) {
 			LocationHelper.requestLocationUpdate();
 		}
+		new HandleGraph(this).execute();
 	}
 
 	@Override
@@ -182,6 +183,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private long insertToDatabase(int type) {
 		HashMap<String, String> _list = new HashMap<String, String>();
 		Calendar mCalendar = Calendar.getInstance();
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if (timeInMillis == 0)
 			_list.put(DatabaseAdapter.KEY_DATE_TIME,Long.toString(mCalendar.getTimeInMillis()));
 		else {

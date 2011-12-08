@@ -26,6 +26,7 @@ public class DateHandler implements OnClickListener {
 	protected DateHandler(Context mContext) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		mCalendar = Calendar.getInstance();
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mDisplayDate = new DisplayDate(mCalendar);
 		date_bar_dateview = (TextView) activity
 				.findViewById(R.id.text_voice_camera_date_bar_dateview);
@@ -44,6 +45,7 @@ public class DateHandler implements OnClickListener {
 	public DateHandler(Context mContext, long long1) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		mCalendar = Calendar.getInstance();
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mCalendar.setTimeInMillis(long1);
 		mDisplayDate = new DisplayDate(mCalendar);
 		date_bar_dateview = (TextView) activity
@@ -108,6 +110,7 @@ public class DateHandler implements OnClickListener {
 
 	private boolean beforeCurrentDate(Calendar pCalendar) {
 		Calendar mCalendar = Calendar.getInstance();
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if (mCalendar.get(Calendar.YEAR) > pCalendar.get(Calendar.YEAR)) {
 			return true;
 		} else if ((mCalendar.get(Calendar.MONTH) > pCalendar
@@ -123,6 +126,7 @@ public class DateHandler implements OnClickListener {
 
 	private boolean isCurrentDate(Calendar pCalendar) {
 		Calendar mCalendar = Calendar.getInstance();
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if ((mCalendar.get(Calendar.MONTH) == pCalendar.get(Calendar.MONTH))
 				&& (mCalendar.get(Calendar.YEAR) == pCalendar
 						.get(Calendar.YEAR))

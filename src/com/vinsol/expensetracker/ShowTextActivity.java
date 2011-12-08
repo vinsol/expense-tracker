@@ -49,13 +49,14 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 			show_text_voice_camera_tag_textview.setText(tag);
 			show_text_voice_camera_amount.setText(amount);
 			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
 			if(mShowList.get(6) != null)
 				new ShowDateHandler(this, mShowList.get(6));
 			else {
-				new ShowDateHandler(this);
+				new ShowDateHandler(this,R.string.text);
 			}
 			new FavoriteHelper(this, mShowList);
 		}
@@ -79,6 +80,7 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 		
 		if(v.getId() == R.id.show_text_voice_camera_edit){
 			Intent editIntent = new Intent(this, TextEntry.class);
+			intentExtras.putBoolean("isFromShowPage", true);
 			editIntent.putExtra("textEntryBundle", intentExtras);
 			startActivity(editIntent);
 			finish();

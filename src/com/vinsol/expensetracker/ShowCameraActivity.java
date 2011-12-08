@@ -90,13 +90,14 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 						.setImageResource(R.drawable.no_image_small);
 			}
 			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
 			if(mShowList.get(6) != null)
 				new ShowDateHandler(this, mShowList.get(6));
 			else {
-				new ShowDateHandler(this);
+				new ShowDateHandler(this,R.string.camera);
 			}
 //			for(int i = 0;i<mShowList.size();i++){
 //				Log.v("mShowList "+i, mShowList.get(i));
@@ -152,6 +153,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		
 		if(v.getId() == R.id.show_text_voice_camera_edit){
 			Intent editIntent = new Intent(this, CameraActivity.class);
+			intentExtras.putBoolean("isFromShowPage", true);
 			editIntent.putExtra("cameraBundle", intentExtras);
 			startActivity(editIntent);
 			finish();

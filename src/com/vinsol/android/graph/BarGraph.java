@@ -9,8 +9,9 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.TextView;
 
 public class BarGraph extends View {
 
@@ -23,7 +24,7 @@ public class BarGraph extends View {
 	private int horDiff;
 	private ArrayList<String> horLabels;
 	
-	public BarGraph(Context context,ArrayList<String> valueList,ArrayList<String> _horLabels,String title) {
+	public BarGraph(Context context,ArrayList<String> valueList,ArrayList<String> _horLabels) {
 		super(context);
 		values = valueList;
 		paint = new Paint();
@@ -48,7 +49,10 @@ public class BarGraph extends View {
 		int interval = (int) (max/5);
 		int value = 0;
 		paint.setTextAlign(Align.RIGHT);
-		paint.setTextSize(16.0f);
+		TextView mTextView = new TextView(getContext());
+		mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+		paint.setTextSize(mTextView.getTextSize());
+		
 		paint.setTypeface(Typeface.DEFAULT_BOLD);
 		for(int i=0;i<6;i++){
 			canvas.drawText(value+"", originX-5, topY+5, paint);
@@ -68,7 +72,9 @@ public class BarGraph extends View {
 		int finalValue;
 		Paint textPaint = new Paint();
 		textPaint.setTextAlign(Align.RIGHT);
-		textPaint.setTextSize(16.0f);
+		TextView mTextView = new TextView(getContext());
+		mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
+		textPaint.setTextSize(mTextView.getTextSize());
 		textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 		
 		for(int i = 0 ;i<values.size();i++){
@@ -79,7 +85,9 @@ public class BarGraph extends View {
 			canvas.drawRect(mRectF,paint);
 			canvas.drawText(horLabels.get(i), originX+value, topY+20, textPaint);
 			if(values.get(i).contains("?")){
-				canvas.drawText("?", originX+value, (float) (topY-max-20), textPaint);	
+				textPaint.setTextAlign(Align.LEFT);
+				canvas.drawText("?", originX+value-(barWidth/2), topY-(int)((tempDouble/max)*verDiff)-5, textPaint);
+				textPaint.setTextAlign(Align.RIGHT);
 			}
 		}
 	}
@@ -113,20 +121,18 @@ public class BarGraph extends View {
 	}
 	
 	private Double getDouble(int i){
-		Log.v("asdsd", values.toString());
 		Double tempDouble = null;
-		if(values.get(1).contains("?")){
+		if(values.get(i).contains("?")){
 			try{
-			if(values.get(i).length() > 1){
-				String tempString = (String) values.get(i).subSequence(0, values.get(i).length()-1);
+				if(values.get(i).length() > 1){
+					String tempString = (String) values.get(i).subSequence(0, values.get(i).length()-1);
 				return Double.parseDouble(tempString);
-			}
+				}
 			} catch (Exception e){
 				e.printStackTrace();
 				return 0.00;
 			}
 		} else {
-			Log.v("asd", values.get(i));
 			return Double.parseDouble(values.get(i));
 		}
 		

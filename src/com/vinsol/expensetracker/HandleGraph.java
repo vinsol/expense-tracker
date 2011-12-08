@@ -9,7 +9,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.vinsol.android.graph.BarGraph;
 import com.vinsol.expensetracker.utils.DisplayDate;
@@ -29,6 +32,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 		mContext = _context;
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		lastDateCalendar = Calendar.getInstance();
+		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		horlabels = new ArrayList<String>();
 	}
 	
@@ -43,7 +47,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 		if (mDataDateListGraph.size() >= 1) {
 			lastDateCalendar.setTimeInMillis(Long.parseLong(mSubList.get(mSubList.size()-1).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 			List<List<String>> mTempList = getDateIDList();
-			mGraphList = getGraphList(mTempList);
+			new com.vinsol.expensetracker.utils.Log().d(mTempList);
+//			mGraphList = getGraphList(mTempList);
 		} else {
 //			TODO if no entry
 		}
@@ -56,23 +61,53 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 	protected void onPostExecute(Void result) {
 		//view of graph
 		// ******start view******//
-		LinearLayout main_graph = (LinearLayout) activity.findViewById(R.id.main_graph);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+		RelativeLayout main_graph = (RelativeLayout) activity.findViewById(R.id.main_graph);
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT,
 				main_graph.getBackground().getIntrinsicHeight()
 				);
 //		DateHelper mDateHelper = new DateHelper(mGraphList.get(0).get(2).get(0));
-		Log.v("mGraphList", mGraphList.toString());
+//		Log.v("mGraphList", mGraphList.toString());
 		
-		BarGraph barGraph = new BarGraph(mContext,mGraphList.get(0).get(0),getHorLabelList(mDataDateListGraph.get(0).get(DatabaseAdapter.KEY_DATE_TIME)),mDataDateListGraph.get(0).get(DatabaseAdapter.KEY_DATE_TIME));
-		main_graph.addView(barGraph, params);
-				
+//		BarGraph barGraph = new BarGraph(mContext,mGraphList.get(0).get(0),getHorLabelList(mDataDateListGraph.get(0).get(DatabaseAdapter.KEY_DATE_TIME)));
+//		main_graph.addView(barGraph, params);
+//				
+//		ArrayList<String> valueList = new ArrayList<String>();
+//		valueList.add("2.20");
+//		valueList.add("52.20");
+//		valueList.add("32.20");
+//		valueList.add("222.20?");
+//		valueList.add("342.20?");
+//		valueList.add("92.20");
+//		valueList.add("12.20");
+//		
+//		ArrayList<String> _horLabels = new ArrayList<String>();
+//		_horLabels.add("Sun");
+//		_horLabels.add("Mon");
+//		_horLabels.add("Tue");
+//		_horLabels.add("Wed");
+//		_horLabels.add("Thu");
+//		_horLabels.add("Fri");
+//		_horLabels.add("Sat");
+//		RelativeLayout main_graph = (RelativeLayout) activity.findViewById(R.id.main_graph);
+//		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+//				LinearLayout.LayoutParams.FILL_PARENT,
+//				main_graph.getBackground().getIntrinsicHeight()
+//				);
+		
+//		BarGraph barGraph = new BarGraph(mContext, valueList, _horLabels);
+//		main_graph.addView(barGraph, params);
+		
+		
+		TextView main_graph_header_textview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
+		main_graph_header_textview.setText(mDataDateListGraph.get(0).get(DatabaseAdapter.KEY_DATE_TIME));
 		super.onPostExecute(result);
 	}
 	
 	private ArrayList<ArrayList<ArrayList<String>>> getGraphList(List<List<String>> idList){
 		ArrayList<ArrayList<String>> listString = new ArrayList<ArrayList<String>>();
 		Calendar currentDateCalendar = Calendar.getInstance();
+		currentDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		DisplayDate currentDateDisplayDate = new DisplayDate(currentDateCalendar);
 		int j = 0;
 		while(lastDateCalendar.before(currentDateCalendar) || lastDateCalendar.equals(currentDateCalendar)){
@@ -100,7 +135,6 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 		}
 		
 		for(int i = 0;i<mDataDateListGraph.size();i++){
-			Log.v("mDataDateListGraph "+i, mDataDateListGraph.get(i)+" /t uio");
 			ArrayList<ArrayList<String>> arrayArrayList = new ArrayList<ArrayList<String>>();
 			ArrayList<String> arrayList = new ArrayList<String>();
 			
@@ -112,6 +146,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 	private List<List<String>> getDateIDList() {
 		List<List<String>> listString = new ArrayList<List<String>>();
 		Calendar mTempCalender = Calendar.getInstance();
+		mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 		DisplayDate mTempDisplayDate = new DisplayDate(mTempCalender);
 		int j = 0;
 		while(lastDateCalendar.before(mTempCalender) || lastDateCalendar.equals(mTempCalender)){
@@ -175,19 +210,19 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 	private String getWeekDay(int i) {
 		switch(i){
 		case 0:
-			return "Sun";
-		case 1:
 			return "Mon";
-		case 2:
+		case 1:
 			return "Tue";
-		case 3:
+		case 2:
 			return "Wed";
-		case 4:
+		case 3:
 			return "Thu";
-		case 5:
+		case 4:
 			return "Fri";
-		case 6:
+		case 5:
 			return "Sat";
+		case 6:
+			return "Sun";
 		}
 		return null;
 	}

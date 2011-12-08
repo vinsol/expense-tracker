@@ -52,7 +52,17 @@
             android:gravity="center_horizontal"
             >
         
-       		<LinearLayout
+            <TextView 
+                android:id="@+id/main_graph_header_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/graph_header"
+                android:textColor="@color/black"
+            	android:textSize="16sp"
+            	android:textStyle="bold"
+            	android:gravity="center"/>
+            
+       		<RelativeLayout
         		android:id="@+id/main_graph"
         		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
@@ -60,7 +70,7 @@
         		android:background="@drawable/graph"
         		android:layout_marginBottom="10dp"
         		>
-       		</LinearLayout>
+       		</RelativeLayout>
 
     		<!-- text and voice button -->
     		<LinearLayout
