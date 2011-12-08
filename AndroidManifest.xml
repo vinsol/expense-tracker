@@ -79,5 +79,11 @@
         	android:screenOrientation="portrait"
             >
         </activity>
+        <activity 
+            android:theme="@android:style/Theme.Dialog"
+            android:name=".ImagePreview"
+    		android:screenOrientation="portrait"
+    		>
+        </activity>
     </application>
 </manifest>
