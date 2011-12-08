@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.ImageGet;
+import com.vinsol.expensetracker.utils.Log;
 
 public class CameraActivity extends Activity implements OnClickListener {
 
@@ -96,11 +98,19 @@ public class CameraActivity extends Activity implements OnClickListener {
 			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_cameraentry)) || tag.equals(getString(R.string.finished_cameraentry))  || tag.equals(getString(R.string.unknown_entry)))) {
 				text_voice_camera_tag.setText(tag);
 			}
-			File mFile = new File("/sdcard/ExpenseTracker/" + _id
-					+ "_small.jpg");
-			System.gc();
+			File mFile = new File("/sdcard/ExpenseTracker/" + _id + "_small.jpg");
+			
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
+				
+				if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
+					final float scale = this.getResources().getDisplayMetrics().density;
+					int width = (int) (84 * scale + 0.5f);
+					int height = (int) (111 * scale + 0.5f);
+
+					text_voice_camera_image_display.setLayoutParams(new LayoutParams(width, height));
+				}
+				
 				text_voice_camera_image_display.setImageDrawable(mDrawable);
 			} else {
 				text_voice_camera_image_display

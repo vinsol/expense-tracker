@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.vinsol.expensetracker.utils.FileDelete;
 
@@ -83,8 +84,16 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 			System.gc();
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
-				show_text_voice_camera_image_display
-						.setImageDrawable(mDrawable);
+				
+				if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
+					final float scale = this.getResources().getDisplayMetrics().density;
+					int width = (int) (84 * scale + 0.5f);
+					int height = (int) (111 * scale + 0.5f);
+
+					show_text_voice_camera_image_display.setLayoutParams(new LayoutParams(width, height));
+				}
+				
+				show_text_voice_camera_image_display.setImageDrawable(mDrawable);
 			} else {
 				show_text_voice_camera_image_display
 						.setImageResource(R.drawable.no_image_small);
