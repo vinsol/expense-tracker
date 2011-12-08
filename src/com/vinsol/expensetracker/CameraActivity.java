@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -29,8 +28,6 @@ import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.FileDelete;
-import com.vinsol.expensetracker.utils.ImageGet;
-import com.vinsol.expensetracker.utils.Log;
 
 public class CameraActivity extends Activity implements OnClickListener {
 
@@ -102,19 +99,9 @@ public class CameraActivity extends Activity implements OnClickListener {
 			
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
-				
-				if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
-					final float scale = this.getResources().getDisplayMetrics().density;
-					int width = (int) (84 * scale + 0.5f);
-					int height = (int) (111 * scale + 0.5f);
-
-					text_voice_camera_image_display.setLayoutParams(new LayoutParams(width, height));
-				}
-				
-				text_voice_camera_image_display.setImageDrawable(mDrawable);
+				setImageResource(mDrawable);
 			} else {
-				text_voice_camera_image_display
-						.setImageResource(R.drawable.no_image_small);
+				text_voice_camera_image_display.setImageResource(R.drawable.no_image_small);
 			}
 		}
 		setGraphicsCamera();
@@ -180,6 +167,19 @@ public class CameraActivity extends Activity implements OnClickListener {
 			startCamera();
 	}
 	
+	private void setImageResource(Drawable mDrawable) {
+		if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
+			final float scale = this.getResources().getDisplayMetrics().density;
+			int width = (int) (84 * scale + 0.5f);
+			int height = (int) (111 * scale + 0.5f);
+			
+			text_voice_camera_image_display.setLayoutParams(new LayoutParams(width, height));
+		}
+		
+		text_voice_camera_image_display.setImageDrawable(mDrawable);
+		
+	}
+	
 	private void startCamera() {
 
 		// ///// ******* Starting Camera to capture Image ******** //////////
@@ -199,40 +199,29 @@ public class CameraActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
-		if (PICTURE_RESULT == requestCode && Activity.RESULT_OK == resultCode) {
-			if (android.os.Environment.getExternalStorageState().equals(
-					android.os.Environment.MEDIA_MOUNTED)) {
-
-				new ImageViewCameraAsyncTask().execute();
-
+		
+		if (PICTURE_RESULT == requestCode) {
+			if(Activity.RESULT_OK == resultCode) {
+				new SaveAndDisplayImage().execute();
 			} else {
-				text_voice_camera_image_display
-						.setImageResource(R.drawable.no_image_small);
-				Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG)
-						.show();
-			}
-		} else {
-			if(!setUnknown){
-				File mFile = new File("/sdcard/ExpenseTracker/" + _id+ "_small.jpg");
-				if (mFile.canRead()) {
-					ImageGet imageGet = new ImageGet("" + _id, this);
-					Bitmap bm = imageGet.getSmallImage();
-					text_voice_camera_image_display.setImageBitmap(bm);
-				} else {
-					DatabaseAdapter adapter = new DatabaseAdapter(this);
-					adapter.open();
-					adapter.deleteDatabaseEntryID(_id + "");
-					adapter.close();
+				if(!setUnknown) {
+					File mFile = new File("/sdcard/ExpenseTracker/" + _id+ "_small.jpg");
+					if (mFile.canRead()) {
+						Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
+						setImageResource(mDrawable);
+					} else {
+						DatabaseAdapter adapter = new DatabaseAdapter(this);
+						adapter.open();
+						adapter.deleteDatabaseEntryID(_id + "");
+						adapter.close();
+					}
 				}
+				finish();
 			}
-			finish();
 		}
 	}
 
-	private class ImageViewCameraAsyncTask extends AsyncTask<Void, Void, Void> {
-
-		Bitmap bm;
+	private class SaveAndDisplayImage extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected void onPreExecute() {
@@ -246,8 +235,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 		@Override
 		protected Void doInBackground(Void... params) {
 			new CameraFileSave(CameraActivity.this).resizeImageAndSaveThumbnails(_id + "");
-			ImageGet imageGet = new ImageGet("" + _id, CameraActivity.this);
-			bm = imageGet.getSmallImage();
 			return null;
 		}
 
@@ -255,7 +242,9 @@ public class CameraActivity extends Activity implements OnClickListener {
 		protected void onPostExecute(Void result) {
 			text_voice_camera_load_progress.setVisibility(View.GONE);
 			text_voice_camera_image_display.setVisibility(View.VISIBLE);
-			text_voice_camera_image_display.setImageBitmap(bm);
+			File mFile = new File("/sdcard/ExpenseTracker/" + _id+ "_small.jpg");
+			Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
+			setImageResource(mDrawable);
 			text_voice_camera_delete.setEnabled(true);
 			text_voice_camera_save_entry.setEnabled(true);
 			super.onPostExecute(result);

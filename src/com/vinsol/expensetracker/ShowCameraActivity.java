@@ -140,8 +140,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 				startActivity(intent);
 
 			} else {
-				Toast.makeText(this, "Error Opening Image", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(this, "Error Opening Image", Toast.LENGTH_SHORT).show();
 			}
 		}
 

@@ -73,7 +73,6 @@ public class ImagePreview extends Activity {
 		
 		imageDrawable = null;
 		mImageView.setImageDrawable(null);
-		System.gc();
 	}
 	
 	

@@ -62,6 +62,8 @@ public class CameraFileSave {
 			FULL_SIZE_IMAGE_WIDTH = fullSizeImageBitmap.getWidth();
 			FULL_SIZE_IMAGE_HEIGHT = fullSizeImageBitmap.getHeight();		
 			
+			fullSizeImageBitmap.recycle();
+			
 			// //////// ******* To handle Portrait Layout ******* /////////
 			if (FULL_SIZE_IMAGE_HEIGHT > FULL_SIZE_IMAGE_WIDTH) {
 				SMALL_MAX_WIDTH = 120;
