@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.LinearLayout;
 
 import com.vinsol.android.graph.BarGraph;
@@ -36,17 +37,17 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected Void doInBackground(Void... arg0) {
 		
-		mConvertCursorToListString = new ConvertCursorToListString(mContext);
-		mDataDateListGraph = mConvertCursorToListString.getDateListStringGraph();
-		mSubList = mConvertCursorToListString.getListStringParticularDate();
-
-		if (mDataDateListGraph.size() >= 1) {
-			lastDateCalendar.setTimeInMillis(Long.parseLong(mSubList.get(mSubList.size()-1).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
-			List<List<String>> mTempList = getDateIDList();
-			mGraphList = getGraphList(mTempList);
-		} else {
-//			TODO if no entry
-		}
+//		mConvertCursorToListString = new ConvertCursorToListString(mContext);
+//		mDataDateListGraph = mConvertCursorToListString.getDateListStringGraph();
+//		mSubList = mConvertCursorToListString.getListStringParticularDate();
+//
+//		if (mDataDateListGraph.size() >= 1) {
+//			lastDateCalendar.setTimeInMillis(Long.parseLong(mSubList.get(mSubList.size()-1).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+//			List<List<String>> mTempList = getDateIDList();
+//			mGraphList = getGraphList(mTempList);
+//		} else {
+////			TODO if no entry
+//		}
 		return null;
 	}
 	
@@ -56,17 +57,42 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 	protected void onPostExecute(Void result) {
 		//view of graph
 		// ******start view******//
+//		LinearLayout main_graph = (LinearLayout) activity.findViewById(R.id.main_graph);
+//		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+//				LinearLayout.LayoutParams.FILL_PARENT,
+//				main_graph.getBackground().getIntrinsicHeight()
+//				);
+////		DateHelper mDateHelper = new DateHelper(mGraphList.get(0).get(2).get(0));
+//		Log.v("mGraphList", mGraphList.toString());
+//		
+//		BarGraph barGraph = new BarGraph(mContext,mGraphList.get(0).get(0),getHorLabelList(mDataDateListGraph.get(0).get(DatabaseAdapter.KEY_DATE_TIME)),mDataDateListGraph.get(0).get(DatabaseAdapter.KEY_DATE_TIME));
+//		main_graph.addView(barGraph, params);
+//				
+		ArrayList<String> valueList = new ArrayList<String>();
+		valueList.add("2.20");
+		valueList.add("52.20");
+		valueList.add("32.20");
+		valueList.add("222.20?");
+		valueList.add("342.20");
+		valueList.add("92.20");
+		valueList.add("12.20");
+		
+		ArrayList<String> _horLabels = new ArrayList<String>();
+		_horLabels.add("Sun");
+		_horLabels.add("Mon");
+		_horLabels.add("Tue");
+		_horLabels.add("Wed");
+		_horLabels.add("Thu");
+		_horLabels.add("Fri");
+		_horLabels.add("Sat");
 		LinearLayout main_graph = (LinearLayout) activity.findViewById(R.id.main_graph);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT,
 				main_graph.getBackground().getIntrinsicHeight()
 				);
-//		DateHelper mDateHelper = new DateHelper(mGraphList.get(0).get(2).get(0));
-		Log.v("mGraphList", mGraphList.toString());
 		
-		BarGraph barGraph = new BarGraph(mContext,mGraphList.get(0).get(0),getHorLabelList(mDataDateListGraph.get(0).get(DatabaseAdapter.KEY_DATE_TIME)),mDataDateListGraph.get(0).get(DatabaseAdapter.KEY_DATE_TIME));
+		BarGraph barGraph = new BarGraph(mContext, valueList, _horLabels, "tyu");
 		main_graph.addView(barGraph, params);
-				
 		super.onPostExecute(result);
 	}
 	

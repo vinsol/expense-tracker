@@ -86,7 +86,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			if(mShowList.get(6) != null)
 				new ShowDateHandler(this, mShowList.get(6));
 			else {
-				new ShowDateHandler(this);
+				new ShowDateHandler(this,R.string.voice);
 			}
 		}
 		show_text_voice_camera_delete.setOnClickListener(this);
@@ -212,6 +212,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		
 		if(v.getId() == R.id.show_text_voice_camera_edit){
 			Intent editIntent = new Intent(this, Voice.class);
+			intentExtras.putBoolean("isFromShowPage", true);
 			editIntent.putExtra("voiceBundle", intentExtras);
 			startActivity(editIntent);
 			finish();

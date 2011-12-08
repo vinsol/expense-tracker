@@ -79,6 +79,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		if(location == null) {
 			LocationHelper.requestLocationUpdate();
 		}
+		new HandleGraph(this).execute();
 	}
 
 	@Override
