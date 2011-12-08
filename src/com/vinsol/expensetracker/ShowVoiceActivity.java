@@ -83,6 +83,11 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
+			if(mShowList.get(6) != null)
+				new ShowDateHandler(this, mShowList.get(6));
+			else {
+				new ShowDateHandler(this);
+			}
 		}
 		show_text_voice_camera_delete.setOnClickListener(this);
 		show_text_voice_camera_play_button.setOnClickListener(this);
