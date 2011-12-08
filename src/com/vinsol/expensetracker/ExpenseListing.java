@@ -62,6 +62,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 			while (j < mSubList.size()&& date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
 				List<String> _templist = new ArrayList<String>();
 				Calendar mCalendar = Calendar.getInstance();
+				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
 				DisplayDate mDisplayDate = new DisplayDate(mCalendar);
 				if (mDisplayDate.isCurrentWeek()) {
@@ -81,6 +82,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
+						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 						mDisplayDate = new DisplayDate(tempCalendar);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
@@ -146,6 +148,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
+						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 						mDisplayDate = new DisplayDate(tempCalendar);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
@@ -211,6 +214,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
+						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
 						int isMonth = tempCalendar.get(Calendar.MONTH);
@@ -514,6 +518,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 	private String getLocationDateDate(String dateInMillis) {
 		Calendar tempCalendar = Calendar.getInstance();
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
 		int hour = tempCalendar.get(Calendar.HOUR);
 		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
@@ -544,6 +549,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 	private String getLocationDate(String dateInMillis, String locationData) {
 		Calendar tempCalendar = Calendar.getInstance();
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
 		int hour = tempCalendar.get(Calendar.HOUR);
 		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));

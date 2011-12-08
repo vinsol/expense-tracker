@@ -15,6 +15,7 @@ public class EditDateHandler {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		text_voice_camera_header_title = (TextView) activity.findViewById(R.id.text_voice_camera_header_title);
 		Calendar mCalendar = Calendar.getInstance();
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
 		
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);

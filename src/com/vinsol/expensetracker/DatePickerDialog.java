@@ -40,6 +40,7 @@ public class DatePickerDialog extends Dialog implements
 		int year, month, day;
 		if (dateViewString.contains("Today")) {
 			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			year = mCalendar.get(Calendar.YEAR);
 			dateViewString = (String) dateViewString.subSequence(7,
 					dateViewString.length());
@@ -68,10 +69,12 @@ public class DatePickerDialog extends Dialog implements
 	public void onClick(View v) {
 		if (v.getId() == R.id.new_date_dialog_ok_button) {
 			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mCalendar.set(datePicker.getYear(), datePicker.getMonth(),
 					datePicker.getDayOfMonth());
 			dateView.setText(new DisplayDate(mCalendar).getDisplayDate());
 			DateHandler.tempCalenderOnCancel = Calendar.getInstance();
+			DateHandler.tempCalenderOnCancel.setFirstDayOfWeek(Calendar.MONDAY);
 			DateHandler.tempCalenderOnCancel.setTime(mCalendar.getTime());
 			dismiss();
 		}
@@ -127,6 +130,7 @@ public class DatePickerDialog extends Dialog implements
 			textViewVisible();
 			// textViewVisible();
 			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			if (color) {
 				view.init(mCalendar.get(Calendar.YEAR),
 						mCalendar.get(Calendar.MONTH),
@@ -145,7 +149,9 @@ public class DatePickerDialog extends Dialog implements
 
 	private boolean isDateAfter(DatePicker tempView) {
 		Calendar mCalendar = Calendar.getInstance();
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		Calendar tempCalendar = Calendar.getInstance();
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		tempCalendar.set(tempView.getYear(), tempView.getMonth(),
 				tempView.getDayOfMonth(), 0, 0, 0);
 		if (tempCalendar.after(mCalendar))

@@ -90,6 +90,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 						.setImageResource(R.drawable.no_image_small);
 			}
 			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));

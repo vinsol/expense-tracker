@@ -355,6 +355,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 									toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 								} else {
 									Calendar mCalendar = Calendar.getInstance();
+									mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 									mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
 									DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
 									toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
@@ -433,6 +434,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 									toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 								} else {
 									Calendar mCalendar = Calendar.getInstance();
+									mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 									mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
 									DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
 									toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
@@ -505,6 +507,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 								toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 							} else {
 								Calendar mCalendar = Calendar.getInstance();
+								mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
 								DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
 								toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");

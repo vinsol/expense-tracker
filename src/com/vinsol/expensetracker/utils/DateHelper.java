@@ -7,6 +7,7 @@ public class DateHelper {
 
 	public DateHelper(String dateViewString) {
 		mCalendar = Calendar.getInstance();
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		int year, month, day;
 		if (dateViewString.contains("Today")) {
 			year = mCalendar.get(Calendar.YEAR);
@@ -27,6 +28,7 @@ public class DateHelper {
 
 	public DateHelper(String dateViewString, Calendar mCalendar2) {
 		mCalendar = Calendar.getInstance();
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		int year, month, day;
 		if (dateViewString.contains("Today")) {
 			year = mCalendar.get(Calendar.YEAR);

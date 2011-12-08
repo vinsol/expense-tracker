@@ -24,6 +24,7 @@ public class DisplayDate {
 		day = mCalendar.get(Calendar.DAY_OF_MONTH) + "";
 		year = mCalendar.get(Calendar.YEAR) + "";
 		Calendar currentDate = Calendar.getInstance();
+		currentDate.setFirstDayOfWeek(Calendar.MONDAY);
 		if (Integer.parseInt(day) == currentDate.get(Calendar.DAY_OF_MONTH)&& mCalendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH)&& Integer.parseInt(year) == currentDate.get(Calendar.YEAR)) {
 			return "Today, " + month + " " + day;
 		}
@@ -39,6 +40,7 @@ public class DisplayDate {
 		day = mCalendar.get(Calendar.DAY_OF_MONTH) + "";
 		year = mCalendar.get(Calendar.YEAR) + "";
 		Calendar currentDate = Calendar.getInstance();
+		currentDate.setFirstDayOfWeek(Calendar.MONDAY);
 		if (Integer.parseInt(day) == currentDate.get(Calendar.DAY_OF_MONTH)
 				&& mCalendar.get(Calendar.MONTH) == currentDate
 						.get(Calendar.MONTH)
@@ -94,6 +96,7 @@ public class DisplayDate {
 
 	public boolean isPrevYears() {
 		Calendar mTempCalendar = Calendar.getInstance();
+		mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if (mTempCalendar.get(Calendar.YEAR) > mCalendar.get(Calendar.YEAR)) {
 			return true;
 		}
@@ -102,6 +105,7 @@ public class DisplayDate {
 
 	public boolean isPrevMonths() {
 		Calendar mTempCalender = Calendar.getInstance();
+		mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 		if ((mTempCalender.get(Calendar.MONTH) > mCalendar.get(Calendar.MONTH))
 				&& (mTempCalender.get(Calendar.YEAR) == mCalendar
 						.get(Calendar.YEAR))) {
@@ -112,6 +116,7 @@ public class DisplayDate {
 
 	public boolean isCurrentMonth() {
 		Calendar mTempCalendar = Calendar.getInstance();
+		mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if ((mTempCalendar.get(Calendar.MONTH) == mCalendar.get(Calendar.MONTH))
 				&& (mTempCalendar.get(Calendar.YEAR) == mCalendar
 						.get(Calendar.YEAR))) {
@@ -122,6 +127,7 @@ public class DisplayDate {
 
 	public boolean isCurrentWeek() {
 		Calendar mTempCalendar = Calendar.getInstance();
+		mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if ((mTempCalendar.get(Calendar.WEEK_OF_MONTH) == mCalendar
 				.get(Calendar.WEEK_OF_MONTH))
 				&& (mTempCalendar.get(Calendar.MONTH) == mCalendar
