@@ -365,11 +365,9 @@ public class CameraActivity extends Activity implements OnClickListener {
 		mDatabaseAdapter.editDatabase(_list);
 		mDatabaseAdapter.close();
 		finish();
-		if (!intentExtras.containsKey("timeInMillis")
-				&& !intentExtras.containsKey("mDisplayList")) {
-			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-			startActivity(intentExpenseListing);
-		}
+		Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+		intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		startActivity(intentExpenseListing);
 	}
 
 	// /// ****************** Handling back press of key ********** ///////////

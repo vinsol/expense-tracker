@@ -10,6 +10,7 @@ import java.util.Map;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.utils.DateHelper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -358,6 +359,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				Bundle bundle = new Bundle();
 				bundle.putLong("timeInMillis", mDateHelper.getTimeMillis());
 				mMainIntent.putExtra("mainBundle", bundle);
+				mMainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				mContext.startActivity(mMainIntent);
 			}
 		}

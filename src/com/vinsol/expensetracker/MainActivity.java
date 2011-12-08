@@ -83,14 +83,15 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onPause() {
-		if(getIntent().hasExtra("mainBundle")) {
-			Bundle tempBundle = getIntent().getBundleExtra("mainBundle");
-			if (!tempBundle.isEmpty()) {
-				if(tempBundle.containsKey("mDisplayList")) {
-					finish();
-				}
-			}
-		}
+//		if(getIntent().hasExtra("mainBundle")) {
+//			Bundle tempBundle = getIntent().getBundleExtra("mainBundle");
+//			if (!tempBundle.isEmpty()) {
+//				if(tempBundle.containsKey("mDisplayList")) {
+//					finish();
+//				}
+//			}
+//		}
+		_id = null;
 		super.onPause();
 	}
 	
