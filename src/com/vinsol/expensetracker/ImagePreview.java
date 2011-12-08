@@ -1,7 +1,6 @@
 package com.vinsol.expensetracker;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.widget.Toast;
 
 public class ImagePreview extends Activity {
 
-	private Context mContext;
 	private Long _id = null;
 	private android.widget.ImageView mImageView;
 	private LinearLayout image_view_full_screen_progress;
@@ -39,7 +37,7 @@ public class ImagePreview extends Activity {
 			} catch (Exception e) {
 			}
 		} else {
-			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -63,8 +61,6 @@ public class ImagePreview extends Activity {
 			image_view_full_screen_progress.setVisibility(View.GONE);
 
 			mImageView.setVisibility(View.VISIBLE);
-//			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			mImageView.setImageDrawable(imageDrawable);
 
 			super.onPostExecute(result);

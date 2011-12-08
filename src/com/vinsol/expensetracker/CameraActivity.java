@@ -1,7 +1,6 @@
 package com.vinsol.expensetracker;
 
 import java.io.File;
-import java.io.ObjectOutputStream.PutField;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -172,19 +171,16 @@ public class CameraActivity extends Activity implements OnClickListener {
 	private void startCamera() {
 
 		// ///// ******* Starting Camera to capture Image ******** //////////
-		if (android.os.Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED)) {
+		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			File path = new File("/mnt/sdcard/ExpenseTracker");
 			path.mkdirs();
 			String name = _id + ".jpg";
 			File file = new File(path, name);
-			camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-					Uri.fromFile(file));
+			camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
 			startActivityForResult(camera, PICTURE_RESULT);
 		} else {
-			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -237,10 +233,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			CameraFileSave cameraFileSave = new CameraFileSave(_id + "",
-					CameraActivity.this);
-			cameraFileSave.create();
-			System.gc();
+			new CameraFileSave(CameraActivity.this).resizeImageAndSaveThumbnails(_id + "");
 			ImageGet imageGet = new ImageGet("" + _id, CameraActivity.this);
 			bm = imageGet.getSmallImage();
 			return null;
