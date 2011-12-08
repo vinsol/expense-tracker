@@ -191,7 +191,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+ _id + "_small.jpg");
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+ _id + ".jpg");
 						if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
-							System.gc();
 							Drawable drawable = Drawable.createFromPath(mFileThumbnail.getPath());
 							viewHolder.expense_listing_row_imageview.setImageDrawable(drawable);
 						} else {

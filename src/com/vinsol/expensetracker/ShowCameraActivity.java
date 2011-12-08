@@ -81,7 +81,6 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 			}
 
 			File mFile = new File("/sdcard/ExpenseTracker/" + _id+ "_small.jpg");
-			System.gc();
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 				
