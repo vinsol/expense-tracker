@@ -24,7 +24,7 @@ public class BarGraph extends View {
 	private int horDiff;
 	private ArrayList<String> horLabels;
 	
-	public BarGraph(Context context,ArrayList<String> valueList,ArrayList<String> _horLabels,String title) {
+	public BarGraph(Context context,ArrayList<String> valueList,ArrayList<String> _horLabels) {
 		super(context);
 		values = valueList;
 		paint = new Paint();
@@ -50,7 +50,7 @@ public class BarGraph extends View {
 		int value = 0;
 		paint.setTextAlign(Align.RIGHT);
 		TextView mTextView = new TextView(getContext());
-		mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+		mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
 		paint.setTextSize(mTextView.getTextSize());
 		
 		paint.setTypeface(Typeface.DEFAULT_BOLD);

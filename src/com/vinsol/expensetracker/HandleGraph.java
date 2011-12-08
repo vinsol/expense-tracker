@@ -11,6 +11,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.vinsol.android.graph.BarGraph;
 import com.vinsol.expensetracker.utils.DisplayDate;
@@ -73,7 +75,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 		valueList.add("52.20");
 		valueList.add("32.20");
 		valueList.add("222.20?");
-		valueList.add("342.20");
+		valueList.add("342.20?");
 		valueList.add("92.20");
 		valueList.add("12.20");
 		
@@ -85,14 +87,16 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 		_horLabels.add("Thu");
 		_horLabels.add("Fri");
 		_horLabels.add("Sat");
-		LinearLayout main_graph = (LinearLayout) activity.findViewById(R.id.main_graph);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+		RelativeLayout main_graph = (RelativeLayout) activity.findViewById(R.id.main_graph);
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT,
 				main_graph.getBackground().getIntrinsicHeight()
 				);
 		
-		BarGraph barGraph = new BarGraph(mContext, valueList, _horLabels, "tyu");
+		BarGraph barGraph = new BarGraph(mContext, valueList, _horLabels);
 		main_graph.addView(barGraph, params);
+		TextView main_graph_header_textview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
+		main_graph_header_textview.setText("tyu");
 		super.onPostExecute(result);
 	}
 	
