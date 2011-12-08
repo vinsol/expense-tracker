@@ -1,6 +1,7 @@
 package com.vinsol.expensetracker;
 
 import java.io.File;
+import java.io.ObjectOutputStream.PutField;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -304,7 +305,9 @@ public class CameraActivity extends Activity implements OnClickListener {
 
 		if (v.getId() == R.id.text_voice_camera_image_display) {
 			
-			new ImageViewDialog(this, _id);
+			Intent intent = new Intent(this, ImagePreview.class);
+			intent.putExtra("id", _id);
+			startActivity(intent);
 
 		}
 

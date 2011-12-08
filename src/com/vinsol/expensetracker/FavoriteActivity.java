@@ -285,7 +285,10 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 							File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+ id + "_small.jpg");
 							File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+ id + "_thumbnail.jpg");
 							if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
-								new ImageViewDialog(FavoriteActivity.this,Long.parseLong(id),"fav");
+								Intent intent = new Intent(FavoriteActivity.this, ImagePreview.class);
+								intent.putExtra("id", Long.parseLong(id));
+								intent.putExtra("isFavorite", true);
+								startActivity(intent);
 							} else {
 								// TODO if image not found
 							}

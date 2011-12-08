@@ -125,7 +125,9 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		if (v.getId() == R.id.show_text_voice_camera_image_display) {
 			if (_id != null) {
 				
-				new ImageViewDialog(this, _id); // MARK
+				Intent intent = new Intent(this, ImagePreview.class);
+				intent.putExtra("id", _id);
+				startActivity(intent);
 
 			} else {
 				Toast.makeText(this, "Error Opening Image", Toast.LENGTH_SHORT)

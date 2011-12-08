@@ -334,8 +334,9 @@ class SeparatedListAdapter extends BaseAdapter {
 									+ mListenerList.get(0) + ".jpg");
 							if (mFile.canRead()) {
 								
-								new ImageViewDialog(mContext,
-										Long.parseLong(mListenerList.get(0)));
+								Intent intent = new Intent(mContext, ImagePreview.class);
+								intent.putExtra("id", Long.parseLong(mListenerList.get(0)));
+								mContext.startActivity(intent);
 
 							} else {
 								// TODO if image not found
