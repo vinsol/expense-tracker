@@ -7,10 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.utils.DateHelper;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -28,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.vinsol.expensetracker.utils.DateHelper;
 
 class SeparatedListAdapter extends BaseAdapter {
 
@@ -316,23 +314,16 @@ class SeparatedListAdapter extends BaseAdapter {
 		public void onClick(View v) {
 			if (v.getId() == R.id.expense_listing_inflated_row_imageview) {
 				if (mListenerList != null)
-					if (android.os.Environment.getExternalStorageState()
-							.equals(android.os.Environment.MEDIA_MOUNTED)) {
-						if (mListenerList.get(5).equals(
-								mContext.getString(R.string.voice))) {
-							File mFile = new File(
-									"/sdcard/ExpenseTracker/Audio/"
-											+ mListenerList.get(0) + ".amr");
+					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+						if (mListenerList.get(5).equals(mContext.getString(R.string.voice))) {
+							File mFile = new File("/sdcard/ExpenseTracker/Audio/" + mListenerList.get(0) + ".amr");
 							if (mFile.canRead()) {
-								new AudioPlayDialog(mContext,
-										mListenerList.get(0));
+								new AudioPlayDialog(mContext, mListenerList.get(0));
 							} else {
 								// TODO audio image change
 							}
-						} else if (mListenerList.get(5).equals(
-								mContext.getString(R.string.camera))) {
-							File mFile = new File("/sdcard/ExpenseTracker/"
-									+ mListenerList.get(0) + ".jpg");
+						} else if (mListenerList.get(5).equals(mContext.getString(R.string.camera))) {
+							File mFile = new File("/sdcard/ExpenseTracker/" + mListenerList.get(0) + ".jpg");
 							if (mFile.canRead()) {
 								
 								Intent intent = new Intent(mContext, ImagePreview.class);
@@ -344,10 +335,8 @@ class SeparatedListAdapter extends BaseAdapter {
 							}
 						}
 					}
-				if (mListenerList.get(5).equals(
-						mContext.getString(R.string.text))) {
-					if (!mListenerList.get(1).equals(
-							mContext.getString(R.string.unfinished_textentry))) {
+				if (mListenerList.get(5).equals(mContext.getString(R.string.text))) {
+					if (!mListenerList.get(1).equals(mContext.getString(R.string.unfinished_textentry))) {
 						new DescriptionDialog(mContext, mListenerList.get(1));
 					}
 				}
