@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -143,7 +142,6 @@ public class BarGraph extends View {
 					return 0.00;
 				}
 			} else {
-				Log.v("asd", values.get(i));
 				return Double.parseDouble(values.get(i));
 			}
 			

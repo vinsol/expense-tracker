@@ -8,13 +8,16 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
-import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.vinsol.android.graph.BarGraph;
@@ -46,7 +49,11 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,main_graph.getBackground().getIntrinsicHeight());
 	}
 	
-	
+	@Override
+	protected void onPreExecute() {
+		main_graph.removeAllViews();
+		super.onPreExecute();
+	}
 	
 	@Override
 	protected Void doInBackground(Void... arg0) {
@@ -54,24 +61,18 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		mConvertCursorToListString = new ConvertCursorToListString(mContext);
 		mDataDateListGraph = mConvertCursorToListString.getDateListStringGraph();
 		mSubList = mConvertCursorToListString.getListStringParticularDate();
-		Log.v("mDataDateListGraph", mDataDateListGraph.toString());
 		if (mDataDateListGraph.size() >= 1) {
 			lastDateCalendar.setTimeInMillis(Long.parseLong(mSubList.get(mSubList.size()-1).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 			mGraphList = getGraphList();
-		} else {
-//			TODO if no entry
 		}
 		return null;
 	}
-	
-	
 	
 	@Override
 	protected void onPostExecute(Void result) {
 		//view of graph
 		// ******start view******//
 		
-		main_graph.removeAllViews();
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
 				BarGraph barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
@@ -89,7 +90,14 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			}
 			
 		} else {
-			//TODO no entry
+			TextView graph_no_item = new TextView(mContext);
+			graph_no_item.setGravity(Gravity.CENTER);
+			graph_no_item.setText("No Items to Show");
+			LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
+			graph_no_item.setTextColor(Color.BLACK);
+			graph_no_item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+			graph_no_item.setLayoutParams(textParams);
+			main_graph.addView(graph_no_item);
 		}
 		super.onPostExecute(result);
 	}
@@ -242,7 +250,6 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		return graphList;
 	}
 
-
 	private boolean isNotNullAll(ArrayList<String> mArrayIDList) {
 		for(int i = 0;i<mArrayIDList.size();i++){
 			if(mArrayIDList.get(i) != null){
@@ -251,8 +258,6 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		}
 		return false;
 	}
-
-
 
 	private List<List<String>> getDateIDList() {
 		List<List<String>> listString = new ArrayList<List<String>>();
@@ -323,6 +328,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		}
 		return null;
 	}
+	
 
 
 
