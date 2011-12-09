@@ -95,7 +95,7 @@ public class DisplayDate {
 			return month + " " + year;
 		}
 		
-		return null;
+		return year;
 	}
 
 	public boolean isPrevYears() {
