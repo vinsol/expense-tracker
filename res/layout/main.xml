@@ -70,6 +70,26 @@
         		android:background="@drawable/graph"
         		android:layout_marginBottom="10dp"
         		>
+        		
+       		    <ImageView 
+       		        android:id="@+id/main_graph_previous_arrow"
+       		        android:layout_width="wrap_content"
+       		        android:layout_height="wrap_content"
+       		        android:src="@drawable/graph_previous_arrow"
+       		        android:layout_alignParentLeft="true"
+       		        android:layout_centerVertical="true"
+       		        android:paddingBottom="15dp"
+       		        />
+       		    
+       		    <ImageView 
+       		        android:id="@+id/main_graph_next_arrow"
+       		        android:layout_width="wrap_content"
+       		        android:layout_height="wrap_content"
+       		        android:src="@drawable/graph_next_arrow"
+       		        android:layout_alignParentRight="true"
+       		        android:layout_centerVertical="true"
+       		        android:paddingBottom="15dp"/>
+       		    
        		</RelativeLayout>
 
     		<!-- text and voice button -->
