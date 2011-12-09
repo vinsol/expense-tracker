@@ -2,45 +2,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
-    	<ScrollView
+    android:background="@drawable/audio_play_dialog_bg"
+    >
+    <ScrollView
 	    android:id="@+id/description_dialog_textview_scroll"
-	    android:layout_height="wrap_content"
-	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_width="wrap_content"
 	    >
 	    <RelativeLayout
-	        android:layout_height="fill_parent"
-	        android:layout_width="fill_parent">
-		<TextView
-   		    android:id="@+id/description_dialog_textview"
-   		    android:layout_height="wrap_content"
-		    android:layout_width="wrap_content"
-		   	android:text="text"
-		   	android:layout_alignParentTop="true"
-		   	android:paddingLeft="10dp"
-		   	android:paddingRight="10dp"
-		   	android:paddingTop="10dp"
-		   	android:textSize="18sp"
-		/>
-	
-		<LinearLayout
-		    android:id="@+id/description_dialog_cancel_button_view"
-		    android:layout_below="@id/description_dialog_textview"
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-			android:layout_marginTop="10dp"
-			android:layout_marginBottom="10dp"
-			android:gravity="center">
-	    
-			<Button 
-			    android:id="@+id/description_dialog_cancel_button"
-			    android:background="@drawable/cancel_states"
+	        android:layout_height="wrap_content"
+	        android:layout_width="fill_parent"
+	        >
+			<TextView
+	   		    android:id="@+id/description_dialog_textview"
+	   		    android:layout_height="wrap_content"
 			    android:layout_width="wrap_content"
+			   	android:text="text"
+			   	android:layout_alignParentTop="true"
+			   	android:padding="10dp"
+			   	android:textSize="18sp"
+				android:textColor="@color/black"
+				>
+			</TextView>
+	
+			<LinearLayout
+			    android:id="@+id/description_dialog_cancel_button_view"
+			    android:layout_below="@id/description_dialog_textview"
+			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
-			    />
-			
-		</LinearLayout>
+				android:layout_marginBottom="10dp"
+				android:gravity="center"
+				>
+				<Button 
+				    android:id="@+id/description_dialog_cancel_button"
+				    android:background="@drawable/cancel_states"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    >
+			    </Button>
+			</LinearLayout>
 		</RelativeLayout>
 	</ScrollView>
-	
 </RelativeLayout>
