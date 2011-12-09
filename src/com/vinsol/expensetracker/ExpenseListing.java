@@ -579,8 +579,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> adapter, View v, int position,
-			long arg3) {
+	public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
 		@SuppressWarnings("unchecked")
 		ArrayList<String> mTempClickedList = (ArrayList<String>) adapter.getItemAtPosition(position);
 		String _id = mTempClickedList.get(0);
@@ -627,8 +626,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						// TODO
 					}
 				} else {
-					Toast.makeText(this, "sdcard not available",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
 				}
 			} else if (mTempClickedList.get(5).equals(getString(R.string.unknown))) {
 				Intent intentMain = new Intent(this, MainActivity.class);

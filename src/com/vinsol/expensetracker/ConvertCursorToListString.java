@@ -17,7 +17,7 @@ public class ConvertCursorToListString {
 		context = _context;
 	}
 
-	List<HashMap<String, String>> getFavoriteList(){
+	List<HashMap<String, String>> getFavoriteList() {
 		List<HashMap<String, String>> mainlist = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> list;
 		
