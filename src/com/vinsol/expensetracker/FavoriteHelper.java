@@ -91,13 +91,11 @@ class FavoriteHelper implements OnCheckedChangeListener{
 						new FileCopyFavorite(Long.parseLong(mShowList.get(0)),favID);
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+favID+".amr");
 						if(mFile.canRead()){
-							Toast.makeText(mContext, "Exists", Toast.LENGTH_SHORT).show();
 							
 						} else {
 							mDbAdapterFavorite.open();
 							mDbAdapterFavorite.deleteDatabaseEntryID(Long.toString(favID));
 							mDbAdapterFavorite.close();
-							Toast.makeText(mContext, "Not Exists", Toast.LENGTH_SHORT).show();
 						}
 					} catch (Exception e) {	
 					}
