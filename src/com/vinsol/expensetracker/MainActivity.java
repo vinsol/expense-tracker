@@ -84,14 +84,6 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onPause() {
-//		if(getIntent().hasExtra("mainBundle")) {
-//			Bundle tempBundle = getIntent().getBundleExtra("mainBundle");
-//			if (!tempBundle.isEmpty()) {
-//				if(tempBundle.containsKey("mDisplayList")) {
-//					finish();
-//				}
-//			}
-//		}
 		_id = null;
 		super.onPause();
 	}
@@ -124,7 +116,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.main_camera:
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				Intent intentCamera = new Intent(this, CameraActivity.class);
-//				createDatabaseEntry(R.string.camera);
 				intentCamera.putExtra("cameraBundle", bundle);
 				startActivity(intentCamera);
 			} else {
@@ -134,16 +125,22 @@ public class MainActivity extends Activity implements OnClickListener {
 			
 		// //// ******* opens Favorite Activity ******** ///////////
 		case R.id.main_favorite:
-			Intent intentFavorite = new Intent(this, FavoriteActivity.class);
-			if(_id == null) {
-				if (timeInMillis != 0) {
-					bundle.putLong("timeInMillis", timeInMillis);
+			
+			if(new ConvertCursorToListString(this).getFavoriteList().size() >=1){
+				Intent intentFavorite = new Intent(this, FavoriteActivity.class);
+				if(_id == null) {
+					if (timeInMillis != 0) {
+						bundle.putLong("timeInMillis", timeInMillis);
+					}
+				} else {
+					bundle.putStringArrayList("mDisplayList", mTempClickedList);
 				}
-			} else {
-				bundle.putStringArrayList("mDisplayList", mTempClickedList);
+				intentFavorite.putExtra("favoriteBundle", bundle);
+				startActivity(intentFavorite);	
 			}
-			intentFavorite.putExtra("favoriteBundle", bundle);
-			startActivity(intentFavorite);	
+			else {
+				Toast.makeText(this, "no favorite added", Toast.LENGTH_SHORT).show();
+			}
 			break;
 			
 		// //// ******* opens List Activity and adds unknown entry to database ******** ///////////
