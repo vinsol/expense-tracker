@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -67,7 +68,7 @@ public class BarGraph extends View {
 		int barWidth = (int) ((6.04/100)*width);
 		int topY = (int) ((Double)(85.76/100)*height);
 		int originX = (int) ((15.83/100)*width);
-		int interval = (int) (horDiff/values.size());
+		int interval = (int) (horDiff/7);
 		int value = 0;
 		int finalValue;
 		Paint textPaint = new Paint();
@@ -84,10 +85,12 @@ public class BarGraph extends View {
 			RectF mRectF = new RectF(originX+value, topY-(int)((tempDouble/max)*verDiff), finalValue, topY);
 			canvas.drawRect(mRectF,paint);
 			canvas.drawText(horLabels.get(i), originX+value, topY+20, textPaint);
-			if(values.get(i).contains("?")){
-				textPaint.setTextAlign(Align.LEFT);
-				canvas.drawText("?", originX+value-(barWidth/2), topY-(int)((tempDouble/max)*verDiff)-5, textPaint);
-				textPaint.setTextAlign(Align.RIGHT);
+			if(values.get(i) != null) {
+				if(values.get(i).contains("?")){
+					textPaint.setTextAlign(Align.LEFT);
+					canvas.drawText("?", originX+value-(barWidth/2), topY-(int)((tempDouble/max)*verDiff)-5, textPaint);
+					textPaint.setTextAlign(Align.RIGHT);
+				}
 			}
 		}
 	}
@@ -117,25 +120,36 @@ public class BarGraph extends View {
 			if (tempDouble > largest)
 				largest = tempDouble;
 		}
-		return largest;
+		if(largest != 0.0)
+			return largest;
+		else 
+			return 100.0;
 	}
 	
 	private Double getDouble(int i){
 		Double tempDouble = null;
-		if(values.get(i).contains("?")){
-			try{
-				if(values.get(i).length() > 1){
-					String tempString = (String) values.get(i).subSequence(0, values.get(i).length()-1);
-				return Double.parseDouble(tempString);
-				}
-			} catch (Exception e){
-				e.printStackTrace();
-				return 0.00;
+		if(values.get(i) != null) {
+			if(values.get(i).equals("?")){
+				return 0.0;
 			}
+			if(values.get(i).contains("?")){
+				try{
+					if(values.get(i).length() > 1){
+						String tempString = (String) values.get(i).subSequence(0, values.get(i).length()-1);
+					return Double.parseDouble(tempString);
+					}
+				} catch (Exception e){
+					e.printStackTrace();
+					return 0.00;
+				}
+			} else {
+				Log.v("asd", values.get(i));
+				return Double.parseDouble(values.get(i));
+			}
+			
+			return tempDouble;
 		} else {
-			return Double.parseDouble(values.get(i));
+			return 0.0;
 		}
-		
-		return tempDouble;
 	}
 }
