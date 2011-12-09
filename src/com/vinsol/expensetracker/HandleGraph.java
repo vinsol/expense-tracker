@@ -93,9 +93,10 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			TextView graph_no_item = new TextView(mContext);
 			graph_no_item.setGravity(Gravity.CENTER);
 			graph_no_item.setText("No Items to Show");
-			LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
+			LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, main_graph.getBackground().getIntrinsicHeight());
 			graph_no_item.setTextColor(Color.BLACK);
-			graph_no_item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+			graph_no_item.setPadding(0, 0, 0, 15);
+			graph_no_item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 			graph_no_item.setLayoutParams(textParams);
 			main_graph.addView(graph_no_item);
 		}
