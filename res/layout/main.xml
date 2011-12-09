@@ -89,7 +89,7 @@
        		        android:layout_alignParentRight="true"
        		        android:layout_centerVertical="true"
        		        android:paddingBottom="15dp"/>
-       		    
+       		          		    
        		</RelativeLayout>
 
     		<!-- text and voice button -->
