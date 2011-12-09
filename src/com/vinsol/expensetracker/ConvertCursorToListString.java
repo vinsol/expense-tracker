@@ -136,7 +136,7 @@ public class ConvertCursorToListString {
 						totalAmountString = temptotalAmount + "";
 					}
 					isTempAmountNull = false;
-					if (totalAmountString.contains("?")&& totalAmountString.length() > 1) {
+					if (totalAmountString.contains("?") && totalAmountString.length() > 1) {
 						String temp = totalAmountString.substring(0,totalAmountString.length() - 2);
 						Double mAmount = Double.parseDouble(temp);
 						mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
@@ -151,8 +151,7 @@ public class ConvertCursorToListString {
 							totalAmountString = mAmount.toString() + ".00 ?";
 						}
 					} else if (!totalAmountString.contains("?")) {
-						String temp = totalAmountString.substring(0,
-								totalAmountString.length());
+						String temp = totalAmountString.substring(0,totalAmountString.length());
 						Double mAmount = Double.parseDouble(temp);
 						mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 						if (mAmount.toString().contains(".")) {

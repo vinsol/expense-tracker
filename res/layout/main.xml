@@ -69,7 +69,26 @@
         		android:orientation="horizontal" 
         		android:background="@drawable/graph"
         		android:layout_marginBottom="10dp"
+        		android:gravity="center"
         		>
+        		
+       		    <ImageView 
+       		        android:id="@+id/main_graph_previous_arrow"
+       		        android:layout_width="wrap_content"
+       		        android:layout_height="wrap_content"
+       		        android:src="@drawable/previous_arrow_states"
+       		        android:layout_alignParentLeft="true"
+       		        android:layout_centerVertical="true"
+       		        />
+       		    
+       		    <ImageView 
+       		        android:id="@+id/main_graph_next_arrow"
+       		        android:layout_width="wrap_content"
+       		        android:layout_height="wrap_content"
+       		        android:src="@drawable/next_arrow_states"
+       		        android:layout_alignParentRight="true"
+       		        android:layout_centerVertical="true"/>
+       		    
        		</RelativeLayout>
 
     		<!-- text and voice button -->

@@ -60,16 +60,17 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 		// ******start view******//
 		RelativeLayout main_graph = (RelativeLayout) activity.findViewById(R.id.main_graph);
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,main_graph.getBackground().getIntrinsicHeight());
-		main_graph.removeAllViews();
-		if(mGraphList != null)
+//		main_graph.removeAllViews();
+		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
 				BarGraph barGraph = new BarGraph(mContext,mGraphList.get(0).get(1),mGraphList.get(0).get(2));
 				main_graph.addView(barGraph, params);
 				TextView main_graph_header_textview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
-				
-				if(mDataDateListGraph.size() > 0)
-					main_graph_header_textview.setText(mDataDateListGraph.get(0).get(DatabaseAdapter.KEY_DATE_TIME));
+				main_graph_header_textview.setText(mGraphList.get(0).get(3).get(0));
 			}
+		} else {
+			//TODO no entry
+		}
 		super.onPostExecute(result);
 	}
 	
@@ -88,6 +89,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 		while(lastDateCalendar.before(mTempCalender) || lastDateDisplayDate.getDisplayDateGraph().equals(new DisplayDate(mTempCalender).getDisplayDateGraph())){
 			DisplayDate mDisplayDate = new DisplayDate(mTempCalender);
 			while(mDisplayDate.isCurrentWeek()){
+				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				if(j < mList.size()) {
 					if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
 						mArrayIDList.add(mList.get(j).get(0));
@@ -114,6 +116,9 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 						subGraphList.add(mArrayIDList);
 						subGraphList.add(mArrayValues);
 						subGraphList.add(mArrayHorLabels);
+						ArrayList<String> displayDate = new ArrayList<String>();
+						displayDate.add(toCheckGraphDate);
+						subGraphList.add(displayDate);
 						graphList.add(subGraphList);
 						mArrayIDList = new ArrayList<String>();
 						mArrayValues = new ArrayList<String>();
@@ -124,7 +129,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 			} 
 
 			while(!mDisplayDate.isCurrentWeek() && mDisplayDate.isCurrentMonth()){
-				
+				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				if(j < mList.size()) {
 					if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
 						mArrayIDList.add(mList.get(j).get(0));
@@ -152,6 +157,9 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 						subGraphList.add(mArrayIDList);
 						subGraphList.add(mArrayValues);
 						subGraphList.add(mArrayHorLabels);
+						ArrayList<String> displayDate = new ArrayList<String>();
+						displayDate.add(toCheckGraphDate);
+						subGraphList.add(displayDate);
 						graphList.add(subGraphList);
 						mArrayIDList = new ArrayList<String>();
 						mArrayValues = new ArrayList<String>();
@@ -173,17 +181,17 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 						if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
 							mArrayIDList.add(mList.get(j).get(0));
 							mArrayValues.add(mList.get(j).get(1));
-							mArrayHorLabels.add("Week "+mTempCalender.get(Calendar.WEEK_OF_MONTH));
+							mArrayHorLabels.add("W "+mTempCalender.get(Calendar.WEEK_OF_MONTH));
 							j++;
 						} else {
 							mArrayIDList.add(null);
 							mArrayValues.add(null);
-							mArrayHorLabels.add("Week "+mTempCalender.get(Calendar.WEEK_OF_MONTH));
+							mArrayHorLabels.add("W "+mTempCalender.get(Calendar.WEEK_OF_MONTH));
 						}
 					} else {
 						mArrayIDList.add(null);
 						mArrayValues.add(null);
-						mArrayHorLabels.add("Week "+mTempCalender.get(Calendar.WEEK_OF_MONTH));
+						mArrayHorLabels.add("W "+mTempCalender.get(Calendar.WEEK_OF_MONTH));
 					}
 					mTempCalender.add(Calendar.WEEK_OF_MONTH, -1);
 					mTempCalender.set(Calendar.DAY_OF_WEEK, mTempCalender.getActualMinimum(Calendar.DAY_OF_WEEK));
@@ -196,6 +204,9 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 							subGraphList.add(mArrayIDList);
 							subGraphList.add(mArrayValues);
 							subGraphList.add(mArrayHorLabels);
+							ArrayList<String> displayDate = new ArrayList<String>();
+							displayDate.add(toCheckGraphDate);
+							subGraphList.add(displayDate);
 							graphList.add(subGraphList);
 							mArrayIDList = new ArrayList<String>();
 							mArrayValues = new ArrayList<String>();
@@ -204,17 +215,15 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> {
 						}
 					}
 				}
-				
 			} 
 		}
+		Log.v("mGraphList", graphList.toString());
 		return graphList;
 	}
 
 
 	private List<List<String>> getDateIDList() {
 		List<List<String>> listString = new ArrayList<List<String>>();
-		
-		Log.v("mSubList", mSubList.toString());
 		for(int i = 0 ;i < mSubList.size(); ) {
 			ArrayList<String> mList = new ArrayList<String>();
 			String tempDisplayDate = mSubList.get(i).get(DatabaseAdapter.KEY_DATE_TIME+"Millis");
