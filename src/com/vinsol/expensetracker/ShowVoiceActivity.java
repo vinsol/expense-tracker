@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.vinsol.expensetracker.utils.FileDelete;
 
 public class ShowVoiceActivity extends Activity implements OnClickListener {
 
+	private static final int EDIT_RESULT = 35;
 	private RelativeLayout dateBarRelativeLayout;
 	private TextView show_text_voice_camera_header_title;
 	private RelativeLayout show_text_voice_camera_voice_details;
@@ -69,59 +71,57 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			_id = Long.parseLong(mShowList.get(0));
 			String amount = mShowList.get(2);
 			String tag = mShowList.get(1);
+			
 			if (!(amount.equals("") || amount == null)) {
 				if (!amount.contains("?"))
 					show_text_voice_camera_amount.setText(amount);
 			}
+			
 			if (!(tag.equals("") || tag == null || tag
 					.equals(getString(R.string.unfinished_voiceentry)))) {
 				show_text_voice_camera_tag_textview.setText(tag);
 			} else {
 				show_text_voice_camera_tag_textview.setText("description");
 			}
+			
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+			
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
+			
 			if(mShowList.get(6) != null)
 				new ShowDateHandler(this, mShowList.get(6));
 			else {
 				new ShowDateHandler(this,R.string.voice);
 			}
+			
 		}
 		show_text_voice_camera_delete.setOnClickListener(this);
 		show_text_voice_camera_play_button.setOnClickListener(this);
 		show_text_voice_camera_stop_button.setOnClickListener(this);
 		show_text_voice_camera_edit.setOnClickListener(this);
 
-		if (android.os.Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED)) {
+		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			updateUI();
 			if (intentExtras.containsKey("mDisplayList")) {
-				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + _id
-						+ ".amr");
+				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + _id+ ".amr");
 
 				if (tempFile.canRead()) {
 					mAudioPlay = new AudioPlay(Long.toString(_id), this);
 					show_text_voice_camera_stop_button.setVisibility(View.GONE);
-					show_text_voice_camera_play_button
-							.setVisibility(View.VISIBLE);
-					show_text_voice_camera_time_details_chronometer
-							.setText(new DisplayTime()
-									.getDisplayTime(mAudioPlay
-											.getPlayBackTime()));
+					show_text_voice_camera_play_button.setVisibility(View.VISIBLE);
+					show_text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
 				} else {
-					show_text_voice_camera_time_details_chronometer
-							.setText("Audio File Missing");
+					show_text_voice_camera_time_details_chronometer.setText("Audio File Missing");
 					show_text_voice_camera_stop_button.setVisibility(View.GONE);
 					show_text_voice_camera_play_button.setVisibility(View.GONE);
 				}
 				new FavoriteHelper(this, mShowList);
 			}
 		} else {
-			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 		
 	}
@@ -202,21 +202,20 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			// ////////
 			show_text_voice_camera_time_details_chronometer.stop();
 			try {
-				if (mAudioPlay.isAudioPlaying())
+				if (mAudioPlay.isAudioPlaying()) {
 					mAudioPlay.stopPlayBack();
+				}
 			} catch (Exception e) {
 			}
-			show_text_voice_camera_time_details_chronometer
-					.setText(new DisplayTime().getDisplayTime(mAudioPlay
-							.getPlayBackTime()));
+			show_text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
 		}
 		
 		if(v.getId() == R.id.show_text_voice_camera_edit){
 			Intent editIntent = new Intent(this, Voice.class);
 			intentExtras.putBoolean("isFromShowPage", true);
 			editIntent.putExtra("voiceBundle", intentExtras);
-			startActivity(editIntent);
-			finish();
+			startActivityForResult(editIntent, EDIT_RESULT);
+//			finish();
 		}
 	}
 
@@ -261,4 +260,81 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		}
 		super.onPause();
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		super.onActivityResult(requestCode, resultCode, data);
+		if (EDIT_RESULT == requestCode) {
+			if(Activity.RESULT_OK == resultCode) {
+				
+				intentExtras = data.getBundleExtra("voiceShowBundle");
+				
+				
+				if (intentExtras.containsKey("mDisplayList")) {
+					Log.v("yo true", true+"");
+					mShowList = new ArrayList<String>();
+					mShowList = intentExtras.getStringArrayList("mDisplayList");
+					Log.v("mShowListOnResult", mShowList.toString());
+					_id = Long.parseLong(mShowList.get(0));
+					String amount = mShowList.get(2);
+					String tag = mShowList.get(1);
+					
+					if (!(amount.equals("") || amount == null)) {
+						if (!amount.contains("?"))
+							show_text_voice_camera_amount.setText(amount);
+					}
+					
+					if (!(tag.equals("") || tag == null || tag
+							.equals(getString(R.string.unfinished_voiceentry)))) {
+						show_text_voice_camera_tag_textview.setText(tag);
+					} else {
+						show_text_voice_camera_tag_textview.setText("description");
+					}
+					
+					Calendar mCalendar = Calendar.getInstance();
+					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+					mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+					
+					if(mShowList.get(7) != null)
+						new ShowLocationHandler(this, mShowList.get(7));
+					
+					if(mShowList.get(6) != null)
+						new ShowDateHandler(this, mShowList.get(6));
+					else {
+						new ShowDateHandler(this,R.string.voice);
+					}
+					
+				}
+				show_text_voice_camera_delete.setOnClickListener(this);
+				show_text_voice_camera_play_button.setOnClickListener(this);
+				show_text_voice_camera_stop_button.setOnClickListener(this);
+				show_text_voice_camera_edit.setOnClickListener(this);
+
+				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+					updateUI();
+					if (intentExtras.containsKey("mDisplayList")) {
+						File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + _id+ ".amr");
+
+						if (tempFile.canRead()) {
+							mAudioPlay = new AudioPlay(Long.toString(_id), this);
+							show_text_voice_camera_stop_button.setVisibility(View.GONE);
+							show_text_voice_camera_play_button.setVisibility(View.VISIBLE);
+							show_text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+						} else {
+							show_text_voice_camera_time_details_chronometer.setText("Audio File Missing");
+							show_text_voice_camera_stop_button.setVisibility(View.GONE);
+							show_text_voice_camera_play_button.setVisibility(View.GONE);
+						}
+						new FavoriteHelper(this, mShowList);
+					}
+				} else {
+					Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
+				}
+			}
+		}
+		
+		
+	}
+	
 }

@@ -33,9 +33,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.expense_listing);
-
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 	}
 

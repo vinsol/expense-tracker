@@ -1,11 +1,16 @@
 package com.vinsol.expensetracker;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import com.vinsol.expensetracker.utils.AudioPlay;
+import com.vinsol.expensetracker.utils.DisplayTime;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,6 +19,7 @@ import android.widget.Toast;
 
 public class ShowTextActivity extends Activity implements OnClickListener{
 
+	private static final int EDIT_RESULT = 35;
 	private ArrayList<String> mShowList;
 	private Bundle intentExtras;
 	private Long _id = null;
@@ -82,8 +88,44 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 			Intent editIntent = new Intent(this, TextEntry.class);
 			intentExtras.putBoolean("isFromShowPage", true);
 			editIntent.putExtra("textEntryBundle", intentExtras);
-			startActivity(editIntent);
+			startActivityForResult(editIntent,EDIT_RESULT);
 			finish();
 		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		super.onActivityResult(requestCode, resultCode, data);
+		if (EDIT_RESULT == requestCode) {
+			if(Activity.RESULT_OK == resultCode) {
+				intentExtras = data.getBundleExtra("textShowBundle");
+				mShowList = new ArrayList<String>();
+
+				if (intentExtras.containsKey("mDisplayList")) {
+					mShowList = intentExtras.getStringArrayList("mDisplayList");
+					_id = Long.parseLong(mShowList.get(0));
+					String amount = mShowList.get(2);
+					String tag = mShowList.get(1);
+					show_text_voice_camera_tag_textview.setText(tag);
+					show_text_voice_camera_amount.setText(amount);
+					Calendar mCalendar = Calendar.getInstance();
+					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+					mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+					if(mShowList.get(7) != null)
+						new ShowLocationHandler(this, mShowList.get(7));
+					if(mShowList.get(6) != null)
+						new ShowDateHandler(this, mShowList.get(6));
+					else {
+						new ShowDateHandler(this,R.string.text);
+					}
+					new FavoriteHelper(this, mShowList);
+				}
+				show_text_voice_camera_delete.setOnClickListener(this);
+				show_text_voice_camera_edit.setOnClickListener(this);
+			}
+		}
+		
+		
 	}
 }

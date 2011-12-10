@@ -12,8 +12,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.DateHelper;
+import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.FileDelete;
 
 public class CameraActivity extends Activity implements OnClickListener {
@@ -107,6 +110,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 		setGraphicsCamera();
 		setClickListeners();
 		
+		
 
 		// //////******** Handle Date Bar ********* ////////
 		if (intentExtras.containsKey("mDisplayList")) {
@@ -165,6 +169,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 		
 		if (!intentExtras.containsKey("mDisplayList"))
 			startCamera();
+		
 	}
 	
 	private void setImageResource(Drawable mDrawable) {
@@ -359,10 +364,40 @@ public class CameraActivity extends Activity implements OnClickListener {
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(_list);
 		mDatabaseAdapter.close();
+		if(!intentExtras.containsKey("isFromShowPage")){
+			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			startActivity(intentExpenseListing);
+		} else {
+			Intent mIntent = new Intent(this, ShowCameraActivity.class);
+			Bundle tempBundle = new Bundle();
+			ArrayList<String> listOnResult = new ArrayList<String>();
+			listOnResult.add(mEditList.get(0));
+			listOnResult.add(_list.get(DatabaseAdapter.KEY_TAG));
+			listOnResult.add(_list.get(DatabaseAdapter.KEY_AMOUNT));
+			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
+				listOnResult.add(new DisplayDate().getLocationDate(_list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.get(7)));
+			} else if (_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) == null){
+				listOnResult.add(new DisplayDate().getLocationDateDate(_list.get(DatabaseAdapter.KEY_DATE_TIME)));
+			} else {
+				listOnResult.add(mEditList.get(3));
+			}				
+			listOnResult.add(mEditList.get(4));
+			listOnResult.add(mEditList.get(5));
+			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
+				listOnResult.add(_list.get(DatabaseAdapter.KEY_DATE_TIME));
+			} else {
+				listOnResult.add(mEditList.get(6));
+			}
+			listOnResult.add(mEditList.get(7));
+			listOnResult.add(mEditList.get(8));
+			mEditList = new ArrayList<String>();
+			mEditList.addAll(listOnResult);
+			tempBundle.putStringArrayList("mDisplayList", listOnResult);
+			mIntent.putExtra("cameraShowBundle", tempBundle);
+			setResult(Activity.RESULT_OK, mIntent);
+		}
 		finish();
-		Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-		intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		startActivity(intentExpenseListing);
 	}
 
 	// /// ****************** Handling back press of key ********** ///////////

@@ -187,4 +187,66 @@ public class DisplayDate {
 		}
 		return null;
 	}
+	
+	public String getLocationDateDate(String dateInMillis) {
+		Calendar tempCalendar = Calendar.getInstance();
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		int hour = tempCalendar.get(Calendar.HOUR);
+		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
+		if (minute.length() == 1) {
+			minute = "0" + minute;
+		}
+		if (hour == 0) {
+			hour = 12;
+		}
+		if (tempCalendar.get(Calendar.MINUTE) != 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + ":" + minute + " " + "PM"+ " at Unknown location";
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + minute + " " + "AM" + " at Unknown location";
+			}
+		}
+		else{ 
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + "" + " " + "PM" + " at Unknown location";
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + "" + " " + "AM" + " at Unknown location";
+			}
+		}
+		return null;
+	}
+
+	public String getLocationDate(String dateInMillis, String locationData) {
+		Calendar tempCalendar = Calendar.getInstance();
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		int hour = tempCalendar.get(Calendar.HOUR);
+		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
+		if (minute.length() == 1) {
+			minute = "0" + minute;
+		}
+		if (hour == 0) {
+			hour = 12;
+		}
+		if (tempCalendar.get(Calendar.MINUTE) != 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + ":" + minute + " " + "PM" + " at " + locationData;
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + minute + " " + "AM" + " at " + locationData;
+			}
+		}
+		else{
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + "" + " " + "PM" + " at " + locationData;
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + " " + "AM" + " at " + locationData;
+			}
+		}
+		return null;
+	}
 }

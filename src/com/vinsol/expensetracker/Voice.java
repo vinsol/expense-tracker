@@ -3,6 +3,7 @@ package com.vinsol.expensetracker;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -10,8 +11,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.AudioPlay;
 import com.vinsol.expensetracker.utils.DateHelper;
+import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.DisplayTime;
 import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.RecordingHelper;
@@ -50,14 +54,14 @@ public class Voice extends Activity implements OnClickListener {
 	private boolean setLocation = false; 
 	private boolean setUnknown = false;
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.text_voice_camera);
 
-		// ////// ******** Initializing and assigning memory to UI Items
-		// ********** /////////
+		// ////// ******** Initializing and assigning memory to UI Items ********** /////////
 
 		text_voice_camera_header_title = (TextView) findViewById(R.id.text_voice_camera_header_title);
 		text_voice_camera_voice_details = (RelativeLayout) findViewById(R.id.text_voice_camera_voice_details);
@@ -87,8 +91,9 @@ public class Voice extends Activity implements OnClickListener {
 			String amount = mEditList.get(2);
 			String tag = mEditList.get(1);
 			if (!(amount.equals("") || amount == null)) {
-				if (!amount.contains("?"))
+				if (!amount.contains("?")) {
 					text_voice_camera_amount.setText(amount);
+				}
 			}
 			if(tag.equals(getString(R.string.unknown_entry))){
 				//TODO 
@@ -98,7 +103,7 @@ public class Voice extends Activity implements OnClickListener {
 				text_voice_camera_tag.setText(tag);
 			}
 		}
-
+		
 		// ////// ******** Handle Date Bar ********* ////////
 		if (intentExtras.containsKey("mDisplayList")) {
 			new DateHandler(this, Long.parseLong(mEditList.get(6)));
@@ -110,8 +115,7 @@ public class Voice extends Activity implements OnClickListener {
 
 		// ////// ******** Starts Recording each time activity starts ******
 		// ///////
-		if (android.os.Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED)) {
+		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			setGraphicsVoice();
 
 			if (intentExtras.containsKey("mDisplayList") && !setUnknown) {
@@ -143,10 +147,9 @@ public class Voice extends Activity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		dateViewString = text_voice_camera_date_bar_dateview.getText()
-				.toString();
+		dateViewString = text_voice_camera_date_bar_dateview.getText().toString();
 	}
-
+	
 	@Override
 	protected void onPause() {
 
@@ -184,20 +187,16 @@ public class Voice extends Activity implements OnClickListener {
 
 	private void controlVoiceChronometer() {
 		text_voice_camera_time_details_chronometer.start();
-		text_voice_camera_time_details_chronometer
-				.setOnChronometerTickListener(new OnChronometerTickListener() {
+		text_voice_camera_time_details_chronometer.setOnChronometerTickListener(new OnChronometerTickListener() {
 
 					@Override
 					public void onChronometerTick(Chronometer chronometer) {
-						if (text_voice_camera_time_details_chronometer
-								.getText().length() > 5) {
+						if (text_voice_camera_time_details_chronometer.getText().length() > 5) {
+							
 							text_voice_camera_time_details_chronometer.stop();
-							text_voice_camera_stop_button
-									.setVisibility(View.GONE);
-							text_voice_camera_play_button
-									.setVisibility(View.VISIBLE);
-							text_voice_camera_rerecord_button
-									.setVisibility(View.VISIBLE);
+							text_voice_camera_stop_button.setVisibility(View.GONE);
+							text_voice_camera_play_button.setVisibility(View.VISIBLE);
+							text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
 						}
 					}
 				});
@@ -222,7 +221,7 @@ public class Voice extends Activity implements OnClickListener {
 				countDownTimer.cancel();
 			} catch (NullPointerException e) {
 			}
-			;
+			
 
 			// //// ****** Handles UI items on button click ****** ///////
 			text_voice_camera_stop_button.setVisibility(View.GONE);
@@ -243,9 +242,8 @@ public class Voice extends Activity implements OnClickListener {
 			} catch (Exception e) {
 			}
 			try {
-				text_voice_camera_time_details_chronometer
-						.setText(new DisplayTime().getDisplayTime(mAudioPlay
-								.getPlayBackTime()));
+				mAudioPlay = new AudioPlay(_id + "", this);
+				text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
 			} catch (NullPointerException e) {
 
 			}
@@ -299,12 +297,12 @@ public class Voice extends Activity implements OnClickListener {
 			text_voice_camera_rerecord_button.setVisibility(View.GONE);
 
 			// //// ****** Restarts chronometer and recording ******* ////////
-			if (mRecordingHelper.isRecording())
-				mRecordingHelper.stopRecording();
+			if(mRecordingHelper != null)
+				if (mRecordingHelper.isRecording())
+					mRecordingHelper.stopRecording();
 			mRecordingHelper = new RecordingHelper(_id + "", this);
 			mRecordingHelper.startRecording();
-			text_voice_camera_time_details_chronometer.setBase(SystemClock
-					.elapsedRealtime());
+			text_voice_camera_time_details_chronometer.setBase(SystemClock.elapsedRealtime());
 			text_voice_camera_time_details_chronometer.start();
 		}
 
@@ -350,34 +348,29 @@ public class Voice extends Activity implements OnClickListener {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void saveEntry() {
+		
 		// ///// ******* Creating HashMap to update info ******* ////////
 		HashMap<String, String> _list = new HashMap<String, String>();
 		_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
 
-		if (!text_voice_camera_amount.getText().toString().equals(".")
-				&& !text_voice_camera_amount.getText().toString().equals("")) {
-			Double mAmount = Double.parseDouble(text_voice_camera_amount
-					.getText().toString());
+		if (!text_voice_camera_amount.getText().toString().equals(".") && !text_voice_camera_amount.getText().toString().equals("")) {
+			Double mAmount = Double.parseDouble(text_voice_camera_amount.getText().toString());
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 			_list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
 		} else {
 			_list.put(DatabaseAdapter.KEY_AMOUNT, null);
 		}
 		if (text_voice_camera_tag.getText().toString() != "") {
-			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText()
-					.toString());
+			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
 		}
 
-		if (!text_voice_camera_date_bar_dateview.getText().toString()
-				.equals(dateViewString)) {
+		if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
 			try {
 				if (!intentExtras.containsKey("mDisplayList")) {
-					DateHelper mDateHelper = new DateHelper(
-							text_voice_camera_date_bar_dateview.getText()
-									.toString());
-					_list.put(DatabaseAdapter.KEY_DATE_TIME,
-							mDateHelper.getTimeMillis() + "");
+					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+					_list.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
 				} else {
 					if(!intentExtras.containsKey("timeInMillis")){
 						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
@@ -399,15 +392,47 @@ public class Voice extends Activity implements OnClickListener {
 			_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
 		
-		// //// ******* Update database if user added additional info *******
-		// ///////
+		// //// ******* Update database if user added additional info *******		 ///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(_list);
 		mDatabaseAdapter.close();
+		
+		
+		if(!intentExtras.containsKey("isFromShowPage")){
+			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			startActivity(intentExpenseListing);
+		} else {
+			
+			Intent mIntent = new Intent(this, ShowVoiceActivity.class);
+			Bundle tempBundle = new Bundle();
+			ArrayList<String> listOnResult = new ArrayList<String>();
+			listOnResult.add(mEditList.get(0));
+			listOnResult.add(_list.get(DatabaseAdapter.KEY_TAG));
+			listOnResult.add(_list.get(DatabaseAdapter.KEY_AMOUNT));
+			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
+				listOnResult.add(new DisplayDate().getLocationDate(_list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.get(7)));
+			} else if (_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) == null){
+				listOnResult.add(new DisplayDate().getLocationDateDate(_list.get(DatabaseAdapter.KEY_DATE_TIME)));
+			} else {
+				listOnResult.add(mEditList.get(3));
+			}				
+			listOnResult.add(mEditList.get(4));
+			listOnResult.add(mEditList.get(5));
+			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
+				listOnResult.add(_list.get(DatabaseAdapter.KEY_DATE_TIME));
+			} else {
+				listOnResult.add(mEditList.get(6));
+			}
+			listOnResult.add(mEditList.get(7));
+			listOnResult.add(mEditList.get(8));
+			mEditList = new ArrayList<String>();
+			mEditList.addAll(listOnResult);
+			tempBundle.putStringArrayList("mDisplayList", listOnResult);
+			mIntent.putExtra("voiceShowBundle", tempBundle);
+			setResult(Activity.RESULT_OK, mIntent);
+		}
 		finish();
-		Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-		intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		startActivity(intentExpenseListing);
 	}
 
 	// /////// ********* CountdownTimer for Chronometer ********* //////////
@@ -423,16 +448,14 @@ public class Voice extends Activity implements OnClickListener {
 
 		@Override
 		public void onFinish() {
-			text_voice_camera_time_details_chronometer.setText(mDisplayTime
-					.getDisplayTime(mAudioPlay.getPlayBackTime()));
+			text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(mAudioPlay.getPlayBackTime()));
 			text_voice_camera_stop_button.setVisibility(View.GONE);
 			text_voice_camera_play_button.setVisibility(View.VISIBLE);
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
-			text_voice_camera_time_details_chronometer.setText(mDisplayTime
-					.getDisplayTime(millisUntilFinished));
+			text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(millisUntilFinished));
 		}
 	}
 
@@ -456,4 +479,5 @@ public class Voice extends Activity implements OnClickListener {
 		}
 		return;
 	}
+	
 }
