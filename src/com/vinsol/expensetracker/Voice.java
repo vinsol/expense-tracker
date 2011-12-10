@@ -3,7 +3,6 @@ package com.vinsol.expensetracker;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -11,10 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -348,7 +345,6 @@ public class Voice extends Activity implements OnClickListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void saveEntry() {
 		
 		// ///// ******* Creating HashMap to update info ******* ////////

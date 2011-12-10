@@ -192,8 +192,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 				countDownTimer.cancel();
 			} catch (NullPointerException e) {
 			}
-			;
-
+			
 			// //// ****** Handles UI items on button click ****** ///////
 			show_text_voice_camera_stop_button.setVisibility(View.GONE);
 			show_text_voice_camera_play_button.setVisibility(View.VISIBLE);
@@ -232,17 +231,14 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 
 		@Override
 		public void onFinish() {
-			show_text_voice_camera_time_details_chronometer
-					.setText(mDisplayTime.getDisplayTime(mAudioPlay
-							.getPlayBackTime()));
+			show_text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(mAudioPlay.getPlayBackTime()));
 			show_text_voice_camera_stop_button.setVisibility(View.GONE);
 			show_text_voice_camera_play_button.setVisibility(View.VISIBLE);
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
-			show_text_voice_camera_time_details_chronometer
-					.setText(mDisplayTime.getDisplayTime(millisUntilFinished));
+			show_text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(millisUntilFinished));
 		}
 	}
 
@@ -250,8 +246,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 	protected void onPause() {
 
 		// //// ***** Check whether audio is recording or not ******* ///////
-		// //// ****** If audio recording started then stop recording audio
-		// ***** ///////
+		// //// ****** If audio recording started then stop recording audio ***** ///////
 		try {
 			if (mAudioPlay.isAudioPlaying())
 				mAudioPlay.stopPlayBack();
@@ -285,8 +280,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 							show_text_voice_camera_amount.setText(amount);
 					}
 					
-					if (!(tag.equals("") || tag == null || tag
-							.equals(getString(R.string.unfinished_voiceentry)))) {
+					if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_voiceentry)))) {
 						show_text_voice_camera_tag_textview.setText(tag);
 					} else {
 						show_text_voice_camera_tag_textview.setText("description");

@@ -1,16 +1,11 @@
 package com.vinsol.expensetracker;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import com.vinsol.expensetracker.utils.AudioPlay;
-import com.vinsol.expensetracker.utils.DisplayTime;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -89,7 +84,6 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 			intentExtras.putBoolean("isFromShowPage", true);
 			editIntent.putExtra("textEntryBundle", intentExtras);
 			startActivityForResult(editIntent,EDIT_RESULT);
-			finish();
 		}
 	}
 	
@@ -101,7 +95,6 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getBundleExtra("textShowBundle");
 				mShowList = new ArrayList<String>();
-
 				if (intentExtras.containsKey("mDisplayList")) {
 					mShowList = intentExtras.getStringArrayList("mDisplayList");
 					_id = Long.parseLong(mShowList.get(0));
@@ -125,7 +118,5 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 				show_text_voice_camera_edit.setOnClickListener(this);
 			}
 		}
-		
-		
 	}
 }

@@ -5,15 +5,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -177,9 +174,7 @@ public class TextEntry extends Activity implements OnClickListener {
 		if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
 			try {
 				if (!intentExtras.containsKey("mDisplayList")) {
-					DateHelper mDateHelper = new DateHelper(
-							text_voice_camera_date_bar_dateview.getText()
-									.toString());
+					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
 					_list.put(DatabaseAdapter.KEY_DATE_TIME,
 							mDateHelper.getTimeMillis() + "");
 				} else {
