@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -27,7 +28,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 
 	private List<HashMap<String, String>> mDataDateListGraph;
 	private ConvertCursorToListString mConvertCursorToListString;
-	private Context mContext;
+	static private Context mContext;
 	private List<HashMap<String, String>> mSubList;
 	private ArrayList<ArrayList<ArrayList<String>>> mGraphList;
 	private Calendar lastDateCalendar;
@@ -157,48 +158,53 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				}
 			} 
 
-			while(!mDisplayDate.isCurrentWeek() && mDisplayDate.isCurrentMonth()){
+
+			
+			
+			if(!mDisplayDate.isCurrentWeek() && mDisplayDate.isCurrentMonth()){
+				
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
-				if(j < mList.size()) {
-					if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
-						mArrayIDList.add(mList.get(j).get(0));
-						mArrayValues.add(mList.get(j).get(1));
-						mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
-						j++;
+				while(mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
+					if(j < mList.size()) {
+						if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
+							mArrayIDList.add(mList.get(j).get(0));
+							mArrayValues.add(mList.get(j).get(1));
+							mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
+							j++;
+						} else {
+							mArrayIDList.add(null);
+							mArrayValues.add(null);
+							mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
+						}
 					} else {
 						mArrayIDList.add(null);
 						mArrayValues.add(null);
 						mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
 					}
-				} else {
-					mArrayIDList.add(null);
-					mArrayValues.add(null);
-					mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
-				}
-				
-				mTempCalender.add(Calendar.DATE, -1);
-				mDisplayDate = new DisplayDate(mTempCalender);
-				if(!mDisplayDate.isCurrentMonth()){
-					if(mArrayIDList.size() >= 1){
-						Collections.reverse(mArrayIDList);
-						Collections.reverse(mArrayValues);
-						Collections.reverse(mArrayHorLabels);
-						subGraphList.add(mArrayIDList);
-						subGraphList.add(mArrayValues);
-						subGraphList.add(mArrayHorLabels);
-						ArrayList<String> displayDate = new ArrayList<String>();
-						displayDate.add(toCheckGraphDate);
-						subGraphList.add(displayDate);
-						if(isNotNullAll(mArrayIDList))
-							graphList.add(subGraphList);
-						mArrayIDList = new ArrayList<String>();
-						mArrayValues = new ArrayList<String>();
-						mArrayHorLabels = new ArrayList<String>();
-						subGraphList = new ArrayList<ArrayList<String>>();
+					mTempCalender.add(Calendar.DATE, -1);
+					mDisplayDate = new DisplayDate(mTempCalender);
+					if(!mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
+						if(mArrayIDList.size() >= 1){
+							Collections.reverse(mArrayIDList);
+							Collections.reverse(mArrayValues);
+							Collections.reverse(mArrayHorLabels);
+							subGraphList.add(mArrayIDList);
+							subGraphList.add(mArrayValues);
+							subGraphList.add(mArrayHorLabels);
+							ArrayList<String> displayDate = new ArrayList<String>();
+							displayDate.add(toCheckGraphDate);
+							subGraphList.add(displayDate);
+							if(isNotNullAll(mArrayIDList))
+								graphList.add(subGraphList);
+							mArrayIDList = new ArrayList<String>();
+							mArrayValues = new ArrayList<String>();
+							mArrayHorLabels = new ArrayList<String>();
+							subGraphList = new ArrayList<ArrayList<String>>();
+						}
 					}
 				}
-				
-			} 
+			}
+			
 			
 			if(mDisplayDate.isPrevMonths() || mDisplayDate.isPrevYears()){
 				
@@ -353,6 +359,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			if(mGraphList.size() >= 1 ) {
 				BarGraph barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
 				main_graph.addView(barGraph, params);
+				
+				Log.v("Yo!!!", main_graph.toString() + " "+main_graph_next_arrow+" "+main_graph_previous_arrow+" "+j);
 				if(j != mGraphList.size()-1){
 					main_graph.addView(main_graph_next_arrow);
 					main_graph_next_arrow.setOnClickListener(this);
@@ -366,6 +374,12 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				main_graph_header_textview.setText(mGraphList.get(j).get(3).get(0));
 			}
 		} 
+	}
+	
+	@Override
+	protected void onCancelled() {
+		j = 0;
+		super.onCancelled();
 	}
 
 }
