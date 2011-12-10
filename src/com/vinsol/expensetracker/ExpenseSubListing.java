@@ -63,7 +63,6 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 				Calendar mCalendar = Calendar.getInstance();
 				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
-//				DisplayDate mDisplayDate = new DisplayDate(mCalendar);
 				_templist = getList(j);
 				Log.v("_templist", _templist.toString());
 				mList.add(_templist);
@@ -96,13 +95,11 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 					});
 		}
 		mSeparatedListAdapter.notifyDataSetChanged();
-		// TODO Auto-generated method stub
 		super.onResume();
 	}
 	
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
-		// TODO Auto-generated method stub
 		@SuppressWarnings("unchecked")
 		ArrayList<String> mTempClickedList = (ArrayList<String>) adapter.getItemAtPosition(position);
 		String _id = mTempClickedList.get(0);
@@ -149,8 +146,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 						// TODO
 					}
 				} else {
-					Toast.makeText(this, "sdcard not available",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
 				}
 			} else if (mTempClickedList.get(5).equals(getString(R.string.unknown))) {
 				Intent intentMain = new Intent(this, MainActivity.class);
@@ -204,11 +200,9 @@ private List<String> getList(int j) {
 				Double mAmount = Double.parseDouble(temp);
 				mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 				if (mAmount.toString().contains(".")) {
-					if (mAmount.toString().charAt(
-							mAmount.toString().length() - 3) == '.') {
+					if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
 						totalAmountString = mAmount.toString() + " ?";
-					} else if (mAmount.toString().charAt(
-							mAmount.toString().length() - 2) == '.') {
+					} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
 						totalAmountString = mAmount.toString() + "0 ?";
 					}
 
@@ -216,17 +210,14 @@ private List<String> getList(int j) {
 					totalAmountString = mAmount.toString() + ".00 ?";
 				}
 			} else if (!totalAmountString.contains("?")) {
-				String temp = totalAmountString.substring(0,
-						totalAmountString.length());
+				String temp = totalAmountString.substring(0,totalAmountString.length());
 				Double mAmount = Double.parseDouble(temp);
 				mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 
 				if (mAmount.toString().contains(".")) {
-					if (mAmount.toString().charAt(
-							mAmount.toString().length() - 3) == '.') {
+					if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
 						totalAmountString = mAmount.toString() + "";
-					} else if (mAmount.toString().charAt(
-							mAmount.toString().length() - 2) == '.') {
+					} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
 						totalAmountString = mAmount.toString() + "0";
 					}
 
@@ -245,6 +236,7 @@ private List<String> getList(int j) {
 				&& !mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis").equals("")
 				&& mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null
 				&& !mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals("")) {
+			
 			_templist.add(getLocationDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"), mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
 		}
 

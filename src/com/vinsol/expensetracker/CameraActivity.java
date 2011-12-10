@@ -174,17 +174,13 @@ public class CameraActivity extends Activity implements OnClickListener {
 		if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
 			final float scale = this.getResources().getDisplayMetrics().density;
 			int width = (int) (84 * scale + 0.5f);
-			int height = (int) (111 * scale + 0.5f);
-			
+			int height = (int) (111 * scale + 0.5f);			
 			text_voice_camera_image_display.setLayoutParams(new LayoutParams(width, height));
 		}
-		
 		text_voice_camera_image_display.setImageDrawable(mDrawable);
-		
 	}
 	
 	private void startCamera() {
-
 		// ///// ******* Starting Camera to capture Image ******** //////////
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -202,7 +198,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		
 		if (PICTURE_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
 				new SaveAndDisplayImage().execute();
@@ -225,7 +220,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 	}
 
 	private class SaveAndDisplayImage extends AsyncTask<Void, Void, Void> {
-
 		@Override
 		protected void onPreExecute() {
 			text_voice_camera_load_progress.setVisibility(View.VISIBLE);
@@ -252,7 +246,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 			text_voice_camera_save_entry.setEnabled(true);
 			super.onPostExecute(result);
 		}
-
 	}
 
 	private void setGraphicsCamera() {
@@ -265,14 +258,10 @@ public class CameraActivity extends Activity implements OnClickListener {
 
 	private void setClickListeners() {
 		// ////// ******* Adding Click Listeners to UI Items ******** //////////
-
 		text_voice_camera_save_entry.setOnClickListener(this);
-
 		text_voice_camera_delete.setOnClickListener(this);
-
 		ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
 		text_voice_camera_image_display.setOnClickListener(this);
-
 		Button text_voice_camera_retake_button = (Button) findViewById(R.id.text_voice_camera_retake_button);
 		text_voice_camera_retake_button.setOnClickListener(this);
 	}
@@ -280,13 +269,11 @@ public class CameraActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		// ////// ******** Adding Action to save entry ********* ///////////
-
 		if (v.getId() == R.id.text_voice_camera_save_entry) {
 			saveEntry();
 		}
 
 		// /////// ********* Adding action if delete button ********** /////////
-
 		if (v.getId() == R.id.text_voice_camera_delete) {
 			new FileDelete(_id);
 
@@ -297,20 +284,14 @@ public class CameraActivity extends Activity implements OnClickListener {
 			finish();
 		}
 
-		// //////// ********** Adding action if image is pressed ********
-		// ///////////
-
+		// //////// ********** Adding action if image is pressed ********		 ///////////
 		if (v.getId() == R.id.text_voice_camera_image_display) {
-			
 			Intent intent = new Intent(this, ImagePreview.class);
 			intent.putExtra("id", _id);
 			startActivity(intent);
-
 		}
 
-		// /////// ********** Adding action if retake button is pressed ******
-		// ////////
-
+		// /////// ********** Adding action if retake button is pressed ******//////////
 		if (v.getId() == R.id.text_voice_camera_retake_button) {
 			startCamera();
 		}
@@ -357,8 +338,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 		if(setLocation == true && LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 				_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
-		// //// ******* Update database if user added additional info *******
-		// ///////
+		// //// ******* Update database if user added additional info *******		 ///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(_list);
 		mDatabaseAdapter.close();

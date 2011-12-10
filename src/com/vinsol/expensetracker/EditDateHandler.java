@@ -17,9 +17,7 @@ public class EditDateHandler {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
-		
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-		//TODO
 		text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+" at "+getDate(mCalendar));
 	}
 

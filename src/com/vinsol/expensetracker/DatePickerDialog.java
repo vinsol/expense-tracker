@@ -6,7 +6,6 @@ import com.vinsol.expensetracker.utils.DisplayDate;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -15,8 +14,7 @@ import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-public class DatePickerDialog extends Dialog implements
-		android.view.View.OnClickListener, OnDateChangedListener {
+public class DatePickerDialog extends Dialog implements android.view.View.OnClickListener, OnDateChangedListener {
 
 	private DatePicker datePicker;
 	private TimePicker timePicker;
@@ -42,26 +40,19 @@ public class DatePickerDialog extends Dialog implements
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			year = mCalendar.get(Calendar.YEAR);
-			dateViewString = (String) dateViewString.subSequence(7,
-					dateViewString.length());
+			dateViewString = (String) dateViewString.subSequence(7,dateViewString.length());
 		} else {
-			year = Integer.parseInt((String) dateViewString.subSequence(
-					dateViewString.length() - 4, dateViewString.length()));
-			dateViewString = (String) dateViewString.subSequence(0,
-					dateViewString.length() - 6);
+			year = Integer.parseInt((String) dateViewString.subSequence(dateViewString.length() - 4, dateViewString.length()));
+			dateViewString = (String) dateViewString.subSequence(0,dateViewString.length() - 6);
 		}
 		month = getMonth((String) dateViewString.subSequence(0, 3));
-		dateViewString = (String) dateViewString.subSequence(4,
-				dateViewString.length());
+		dateViewString = (String) dateViewString.subSequence(4,dateViewString.length());
 		day = Integer.parseInt(dateViewString);
-
 		datePicker.init(year, month, day, this);
-
 		Button okDateButton = (Button) findViewById(R.id.new_date_dialog_ok_button);
 		Button cancelDateButton = (Button) findViewById(R.id.new_date_dialog_cancel_button);
 		okDateButton.setOnClickListener(this);
 		cancelDateButton.setOnClickListener(this);
-		// textView.setBackgroundColor(Color.RED);
 		super.show();
 	}
 
@@ -70,8 +61,7 @@ public class DatePickerDialog extends Dialog implements
 		if (v.getId() == R.id.new_date_dialog_ok_button) {
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-			mCalendar.set(datePicker.getYear(), datePicker.getMonth(),
-					datePicker.getDayOfMonth());
+			mCalendar.set(datePicker.getYear(), datePicker.getMonth(),datePicker.getDayOfMonth());
 			dateView.setText(new DisplayDate(mCalendar).getDisplayDate());
 			DateHandler.tempCalenderOnCancel = Calendar.getInstance();
 			DateHandler.tempCalenderOnCancel.setFirstDayOfWeek(Calendar.MONDAY);
@@ -109,7 +99,6 @@ public class DatePickerDialog extends Dialog implements
 			return 10;
 		if (i.equals("Dec"))
 			return 11;
-
 		return 0;
 	}
 
@@ -122,19 +111,15 @@ public class DatePickerDialog extends Dialog implements
 	}
 
 	@Override
-	public void onDateChanged(DatePicker view, int year, int monthOfYear,
-			int dayOfMonth) {
+	public void onDateChanged(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
 		boolean color = true;
 		if (isDateAfter(view)) {
-			Log.v("true", "true");
 			textViewVisible();
 			// textViewVisible();
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			if (color) {
-				view.init(mCalendar.get(Calendar.YEAR),
-						mCalendar.get(Calendar.MONTH),
-						mCalendar.get(Calendar.DAY_OF_MONTH), this);
+				view.init(mCalendar.get(Calendar.YEAR),mCalendar.get(Calendar.MONTH),mCalendar.get(Calendar.DAY_OF_MONTH), this);
 				color = false;
 			} else {
 				view.init(year, monthOfYear, dayOfMonth, null);
@@ -144,7 +129,6 @@ public class DatePickerDialog extends Dialog implements
 			textViewInvisible();
 		}
 
-		// textViewInvisible();
 	}
 
 	private boolean isDateAfter(DatePicker tempView) {
@@ -152,8 +136,7 @@ public class DatePickerDialog extends Dialog implements
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		Calendar tempCalendar = Calendar.getInstance();
 		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		tempCalendar.set(tempView.getYear(), tempView.getMonth(),
-				tempView.getDayOfMonth(), 0, 0, 0);
+		tempCalendar.set(tempView.getYear(), tempView.getMonth(),tempView.getDayOfMonth(), 0, 0, 0);
 		if (tempCalendar.after(mCalendar))
 			return true;
 		else
