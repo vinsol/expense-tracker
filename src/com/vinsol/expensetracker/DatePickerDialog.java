@@ -60,8 +60,8 @@ public class DatePickerDialog extends Dialog implements android.view.View.OnClic
 	public void onClick(View v) {
 		if (v.getId() == R.id.new_date_dialog_ok_button) {
 			Calendar mCalendar = Calendar.getInstance();
-			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mCalendar.set(datePicker.getYear(), datePicker.getMonth(),datePicker.getDayOfMonth());
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			dateView.setText(new DisplayDate(mCalendar).getDisplayDate());
 			DateHandler.tempCalenderOnCancel = Calendar.getInstance();
 			DateHandler.tempCalenderOnCancel.setFirstDayOfWeek(Calendar.MONDAY);
@@ -135,8 +135,8 @@ public class DatePickerDialog extends Dialog implements android.view.View.OnClic
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		Calendar tempCalendar = Calendar.getInstance();
-		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		tempCalendar.set(tempView.getYear(), tempView.getMonth(),tempView.getDayOfMonth(), 0, 0, 0);
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if (tempCalendar.after(mCalendar))
 			return true;
 		else

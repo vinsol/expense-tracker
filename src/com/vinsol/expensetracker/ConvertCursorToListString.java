@@ -52,8 +52,8 @@ public class ConvertCursorToListString {
 			cursor.moveToFirst();
 			do {
 				Calendar mTempCalendar = Calendar.getInstance();
-				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
 				if (list.isEmpty()) {
 					list.put(DatabaseAdapter.KEY_DATE_TIME,
@@ -72,8 +72,8 @@ public class ConvertCursorToListString {
 
 				if (!cursor.isAfterLast()) {
 					Calendar mTempSubCalendar = Calendar.getInstance();
-					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
 					if (!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(mTempDisplayDate.getDisplayDateHeaderGraph())) { // TODO
 						if (isTempAmountNull) {
@@ -188,8 +188,8 @@ public class ConvertCursorToListString {
 			cursor.moveToFirst();
 			do {
 				Calendar mTempCalendar = Calendar.getInstance();
-				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
 				if (list.isEmpty()) {
 					list.put(DatabaseAdapter.KEY_DATE_TIME,
@@ -208,8 +208,8 @@ public class ConvertCursorToListString {
 
 				if (!cursor.isAfterLast()) {
 					Calendar mTempSubCalendar = Calendar.getInstance();
-					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
 					if (!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(mTempDisplayDate.getHeaderFooterListDisplayDate())) { // TODO
 						if (isTempAmountNull) {
@@ -326,8 +326,8 @@ public class ConvertCursorToListString {
 			cursor.moveToFirst();
 			do {
 				Calendar mTempCalendar = Calendar.getInstance();
-				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
 				if (list.isEmpty()) {
 					list.put(DatabaseAdapter.KEY_DATE_TIME,
@@ -346,8 +346,8 @@ public class ConvertCursorToListString {
 
 				if (!cursor.isAfterLast()) {
 					Calendar mTempSubCalendar = Calendar.getInstance();
-					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
 					if (!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(mTempDisplayDate.getDisplayDate())) { // TODO
 						if (isTempAmountNull) {
@@ -468,8 +468,8 @@ public class ConvertCursorToListString {
 				tempList.add(DatabaseAdapter.KEY_TYPE);
 				HashMap<String, String> list = getHashMap(tempList, cursor);
 				Calendar calendar = Calendar.getInstance();
-				calendar.setFirstDayOfWeek(Calendar.MONDAY);
 				calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				calendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(calendar);
 				list.put(DatabaseAdapter.KEY_DATE_TIME,mDisplayDate.getDisplayDate()); // TODO
 				list.put(DatabaseAdapter.KEY_DATE_TIME + "Millis", cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
@@ -516,8 +516,8 @@ public class ConvertCursorToListString {
 
 				HashMap<String, String> list = getHashMap(tempList, cursor);
 				Calendar calendar = Calendar.getInstance();
-				calendar.setFirstDayOfWeek(Calendar.MONDAY);
 				calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				calendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(calendar);
 				list.put(DatabaseAdapter.KEY_DATE_TIME,mDisplayDate.getHeaderFooterListDisplayDate()); // TODO
 				list.put(DatabaseAdapter.KEY_DATE_TIME + "Millis", cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));

@@ -23,6 +23,7 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 	private TextView show_text_voice_camera_tag_textview;
 	private Button show_text_voice_camera_delete;
 	private Button show_text_voice_camera_edit;
+	protected static String favID = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,8 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 			show_text_voice_camera_tag_textview.setText(tag);
 			show_text_voice_camera_amount.setText(amount);
 			Calendar mCalendar = Calendar.getInstance();
-			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
 			if(mShowList.get(6) != null)
@@ -82,6 +83,9 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 		if(v.getId() == R.id.show_text_voice_camera_edit){
 			Intent editIntent = new Intent(this, TextEntry.class);
 			intentExtras.putBoolean("isFromShowPage", true);
+			mShowList.set(4, favID);
+			intentExtras.remove("mDisplayList");
+			intentExtras.putStringArrayList("mDisplayList", mShowList);
 			editIntent.putExtra("textEntryBundle", intentExtras);
 			startActivityForResult(editIntent,EDIT_RESULT);
 		}
@@ -103,8 +107,8 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 					show_text_voice_camera_tag_textview.setText(tag);
 					show_text_voice_camera_amount.setText(amount);
 					Calendar mCalendar = Calendar.getInstance();
-					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					if(mShowList.get(7) != null)
 						new ShowLocationHandler(this, mShowList.get(7));
 					if(mShowList.get(6) != null)

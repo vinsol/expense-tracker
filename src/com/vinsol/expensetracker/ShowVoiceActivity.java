@@ -41,6 +41,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
 	private DatabaseAdapter mDatabaseAdapter;
+	protected static String favID = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +86,8 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			}
 			
 			Calendar mCalendar = Calendar.getInstance();
-			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
@@ -212,6 +213,10 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		if(v.getId() == R.id.show_text_voice_camera_edit){
 			Intent editIntent = new Intent(this, Voice.class);
 			intentExtras.putBoolean("isFromShowPage", true);
+
+			mShowList.set(4, favID);
+			intentExtras.remove("mDisplayList");
+			intentExtras.putStringArrayList("mDisplayList", mShowList);
 			editIntent.putExtra("voiceBundle", intentExtras);
 			startActivityForResult(editIntent, EDIT_RESULT);
 //			finish();
@@ -287,8 +292,8 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 					}
 					
 					Calendar mCalendar = Calendar.getInstance();
-					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					
 					if(mShowList.get(7) != null)
 						new ShowLocationHandler(this, mShowList.get(7));

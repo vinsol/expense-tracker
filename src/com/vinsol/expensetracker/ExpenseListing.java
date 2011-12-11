@@ -9,6 +9,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -60,8 +61,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 			while (j < mSubList.size()&& date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
 				List<String> _templist = new ArrayList<String>();
 				Calendar mCalendar = Calendar.getInstance();
-				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
+				mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mCalendar);
 				if (mDisplayDate.isCurrentWeek()) {
 					_templist = getListCurrentWeek(j);
@@ -80,8 +82,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
-						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						mDisplayDate = new DisplayDate(tempCalendar);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
 						int isWeekOfMonth = tempCalendar.get(Calendar.WEEK_OF_MONTH);
@@ -146,8 +148,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
-						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						mDisplayDate = new DisplayDate(tempCalendar);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
 						int isWeekOfMonth = tempCalendar.get(Calendar.WEEK_OF_MONTH);
@@ -212,8 +214,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
-						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+						
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
 						int isMonth = tempCalendar.get(Calendar.MONTH);
 						int isYear = tempCalendar.get(Calendar.YEAR);
@@ -281,6 +284,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setOnItemClickListener(this);
 		mListView.setAdapter(mSeparatedListAdapter);
+		Log.v("listString", listString.toString());
 
 		if (mDataDateList.size() < 1) {
 			mListView.setVisibility(View.GONE);
@@ -516,8 +520,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 	private String getLocationDateDate(String dateInMillis) {
 		Calendar tempCalendar = Calendar.getInstance();
-		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		int hour = tempCalendar.get(Calendar.HOUR);
 		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
 		if (minute.length() == 1) {
@@ -547,8 +551,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 	private String getLocationDate(String dateInMillis, String locationData) {
 		Calendar tempCalendar = Calendar.getInstance();
-		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		int hour = tempCalendar.get(Calendar.HOUR);
 		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
 		if (minute.length() == 1) {

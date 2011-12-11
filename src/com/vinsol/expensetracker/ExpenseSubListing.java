@@ -61,8 +61,8 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 			while (j < mSubList.size()&& date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
 				List<String> _templist = new ArrayList<String>();
 				Calendar mCalendar = Calendar.getInstance();
-				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
+				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				_templist = getList(j);
 				Log.v("_templist", _templist.toString());
 				mList.add(_templist);
@@ -331,8 +331,8 @@ private boolean isEntryComplete(HashMap<String, String> hashMap) {
 
 private String getLocationDateDate(String dateInMillis) {
 	Calendar tempCalendar = Calendar.getInstance();
-	tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 	tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+	tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 	int hour = tempCalendar.get(Calendar.HOUR);
 	String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
 	if (minute.length() == 1) {
@@ -362,8 +362,8 @@ private String getLocationDateDate(String dateInMillis) {
 
 private String getLocationDate(String dateInMillis, String locationData) {
 	Calendar tempCalendar = Calendar.getInstance();
-	tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 	tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+	tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 	int hour = tempCalendar.get(Calendar.HOUR);
 	String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
 	if (minute.length() == 1) {

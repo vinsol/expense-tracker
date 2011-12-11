@@ -14,6 +14,7 @@ public class DisplayDate {
 
 	public DisplayDate(Calendar calendar) {
 		mCalendar = calendar;
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 	}
 	
 	public Calendar getCalendar(){
@@ -75,7 +76,7 @@ public class DisplayDate {
 			return getDisplayDate();
 		}
 		
-		if (isPrevMonths()) {
+		if (isPrevMonths() || isPrevYears()) {
 			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
 		}
 		
@@ -91,7 +92,7 @@ public class DisplayDate {
 			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
 		}
 		
-		if (isPrevMonths()) {
+		if (isPrevMonths() || isPrevYears()) {
 			return month + " " + year;
 		}
 		
@@ -127,13 +128,12 @@ public class DisplayDate {
 
 	public boolean isCurrentWeek() {
 		Calendar mTempCalendar = Calendar.getInstance();
+		mTempCalendar.set(mTempCalendar.get(Calendar.YEAR), mTempCalendar.get(Calendar.MONTH), mTempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 		mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if ((mTempCalendar.get(Calendar.WEEK_OF_MONTH) == mCalendar
-				.get(Calendar.WEEK_OF_MONTH))
-				&& (mTempCalendar.get(Calendar.MONTH) == mCalendar
-						.get(Calendar.MONTH))
-				&& (mTempCalendar.get(Calendar.YEAR) == mCalendar
-						.get(Calendar.YEAR))) {
+		
+		if ((mTempCalendar.get(Calendar.WEEK_OF_MONTH) == mCalendar.get(Calendar.WEEK_OF_MONTH))
+				&& (mTempCalendar.get(Calendar.MONTH) == mCalendar.get(Calendar.MONTH))
+				&& (mTempCalendar.get(Calendar.YEAR) == mCalendar.get(Calendar.YEAR))) {
 			return true;
 		}
 		return false;
@@ -190,8 +190,8 @@ public class DisplayDate {
 	
 	public String getLocationDateDate(String dateInMillis) {
 		Calendar tempCalendar = Calendar.getInstance();
-		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		int hour = tempCalendar.get(Calendar.HOUR);
 		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
 		if (minute.length() == 1) {
@@ -221,8 +221,8 @@ public class DisplayDate {
 
 	public String getLocationDate(String dateInMillis, String locationData) {
 		Calendar tempCalendar = Calendar.getInstance();
-		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		int hour = tempCalendar.get(Calendar.HOUR);
 		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
 		if (minute.length() == 1) {

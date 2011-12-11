@@ -38,6 +38,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	private ImageView main_graph_previous_arrow ;
 	private ImageView main_graph_next_arrow ;
 	private RelativeLayout.LayoutParams params ;
+
 	
 	public HandleGraph(Context _context) {
 		mContext = _context;
@@ -64,6 +65,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		mSubList = mConvertCursorToListString.getListStringParticularDate();
 		if (mDataDateListGraph.size() >= 1) {
 			lastDateCalendar.setTimeInMillis(Long.parseLong(mSubList.get(mSubList.size()-1).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+			lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mGraphList = getGraphList();
 		}
 		return null;
@@ -108,6 +110,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		DisplayDate lastDateDisplayDate = new DisplayDate(lastDateCalendar);
 		ArrayList<ArrayList<ArrayList<String>>> graphList = new ArrayList<ArrayList<ArrayList<String>>>();
 		Calendar mTempCalender = Calendar.getInstance();
+		mTempCalender.set(mTempCalender.get(Calendar.YEAR), mTempCalender.get(Calendar.MONTH), mTempCalender.get(Calendar.DAY_OF_MONTH
+				),0,0,0);
 		mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 		
 		int j = 0;
@@ -119,6 +123,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		while(lastDateCalendar.before(mTempCalender) || lastDateDisplayDate.getDisplayDateGraph().equals(new DisplayDate(mTempCalender).getDisplayDateGraph())){
 			DisplayDate mDisplayDate = new DisplayDate(mTempCalender);
 			while(mDisplayDate.isCurrentWeek()){
+				Log.v("mDisplayDate.getDisplayDateHeaderGraph()", mDisplayDate.getDisplayDateHeaderGraph()+" "+ mList.get(j).get(2)+" " + mDisplayDate.getDisplayDateGraph());
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				if(j < mList.size()) {
 					if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
@@ -158,9 +163,6 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				}
 			} 
 
-
-			
-			
 			if(!mDisplayDate.isCurrentWeek() && mDisplayDate.isCurrentMonth()){
 				
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
@@ -209,7 +211,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			if(mDisplayDate.isPrevMonths() || mDisplayDate.isPrevYears()){
 				
 				mTempCalender.set(Calendar.DAY_OF_MONTH, mTempCalender.getActualMaximum(Calendar.DAY_OF_MONTH));
-				
+				mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 				mDisplayDate = new DisplayDate(mTempCalender);
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				while(mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
@@ -231,6 +233,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 					}
 					mTempCalender.add(Calendar.WEEK_OF_MONTH, -1);
 					mTempCalender.set(Calendar.DAY_OF_WEEK, mTempCalender.getActualMinimum(Calendar.DAY_OF_WEEK));
+					mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 					mDisplayDate = new DisplayDate(mTempCalender);
 					if(!mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
 						if(mArrayIDList.size() >= 1){
@@ -272,8 +275,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			ArrayList<String> mList = new ArrayList<String>();
 			String tempDisplayDate = mSubList.get(i).get(DatabaseAdapter.KEY_DATE_TIME+"Millis");
 			Calendar mTCalendar = Calendar.getInstance();
-			mTCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mTCalendar.setTimeInMillis(Long.parseLong(tempDisplayDate));
+			mTCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			String tempDisplayDateGraph = new DisplayDate(mTCalendar).getDisplayDateGraph();
 			String idList = "";
 			Double temptotalAmount = 0.0;
@@ -294,6 +297,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				
 				if (i < mSubList.size()) {
 					mTCalendar.setTimeInMillis(Long.parseLong(mSubList.get(i).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+					mTCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				} else {
 					break;
 				}
@@ -318,27 +322,24 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 
 	private String getWeekDay(int i) {
 		switch(i){
-		case 2:
+		case Calendar.MONDAY:
 			return "Mon";
-		case 3:
+		case Calendar.TUESDAY:
 			return "Tue";
-		case 4:
+		case Calendar.WEDNESDAY:
 			return "Wed";
-		case 5:
+		case Calendar.THURSDAY:
 			return "Thu";
-		case 6:
+		case Calendar.FRIDAY:
 			return "Fri";
-		case 7:
+		case Calendar.SATURDAY:
 			return "Sat";
-		case 1:
+		case Calendar.SUNDAY:
 			return "Sun";
 		}
 		return null;
 	}
 	
-
-
-
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -359,8 +360,6 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			if(mGraphList.size() >= 1 ) {
 				BarGraph barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
 				main_graph.addView(barGraph, params);
-				
-				Log.v("Yo!!!", main_graph.toString() + " "+main_graph_next_arrow+" "+main_graph_previous_arrow+" "+j);
 				if(j != mGraphList.size()-1){
 					main_graph.addView(main_graph_next_arrow);
 					main_graph_next_arrow.setOnClickListener(this);
@@ -374,12 +373,6 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				main_graph_header_textview.setText(mGraphList.get(j).get(3).get(0));
 			}
 		} 
-	}
-	
-	@Override
-	protected void onCancelled() {
-		j = 0;
-		super.onCancelled();
 	}
 
 }

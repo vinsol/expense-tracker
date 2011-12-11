@@ -42,8 +42,8 @@ public class DateHandler implements OnClickListener {
 	public DateHandler(Context mContext, long long1) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		mCalendar = Calendar.getInstance();
-		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mCalendar.setTimeInMillis(long1);
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mDisplayDate = new DisplayDate(mCalendar);
 		date_bar_dateview = (TextView) activity.findViewById(R.id.text_voice_camera_date_bar_dateview);
 		date_bar_previous_arrow = (ImageButton) activity.findViewById(R.id.text_voice_camera_date_bar_previous_arrow);
@@ -91,6 +91,7 @@ public class DateHandler implements OnClickListener {
 							date_bar_next_arrow.setVisibility(View.INVISIBLE);
 						}
 						mCalendar.setTime(tempCalenderOnCancel.getTime());
+						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						tempCalenderOnCancel = null;
 					}
 				}

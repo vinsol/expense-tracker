@@ -266,8 +266,6 @@ class SeparatedListAdapter extends BaseAdapter {
 			mDateHelper.getTimeMillis();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
-
 		}
 
 		return false;

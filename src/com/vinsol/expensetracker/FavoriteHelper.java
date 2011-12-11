@@ -9,7 +9,6 @@ import com.vinsol.expensetracker.utils.FileDeleteFavorite;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
@@ -55,6 +54,7 @@ class FavoriteHelper implements OnCheckedChangeListener{
 				mDbAdapterFavorite.open();
 				favID = mDbAdapterFavorite.insert_to_database(_list);
 				mDbAdapterFavorite.close();
+				ShowTextActivity.favID = Long.toString(favID);
 			} else if(mShowList.get(5).equals(mContext.getString(R.string.camera))){
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if(!mShowList.get(1).equals("") && !mShowList.get(1).equals(mContext.getString(R.string.unfinished_cameraentry)) && mShowList.get(1) != null){
@@ -74,6 +74,7 @@ class FavoriteHelper implements OnCheckedChangeListener{
 							mDbAdapterFavorite.deleteDatabaseEntryID(Long.toString(favID));
 							mDbAdapterFavorite.close();
 						}
+						ShowCameraActivity.favID = Long.toString(favID);
 					} catch (Exception e) {	
 					}
 				} else {
@@ -97,6 +98,7 @@ class FavoriteHelper implements OnCheckedChangeListener{
 							mDbAdapterFavorite.deleteDatabaseEntryID(Long.toString(favID));
 							mDbAdapterFavorite.close();
 						}
+						ShowVoiceActivity.favID = Long.toString(favID);
 					} catch (Exception e) {	
 					}
 				} else {
@@ -111,14 +113,31 @@ class FavoriteHelper implements OnCheckedChangeListener{
 			mDatabaseAdapter.editDatabase(_list);
 			mDatabaseAdapter.close();
 			Toast.makeText(mContext, "Added to Favorites", Toast.LENGTH_SHORT).show();
-		} else {
-			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+		} else if(mShowList.get(5).equals(mContext.getString(R.string.text))){
+			
+				ShowTextActivity.favID = null;
 				String favID = null;
 				mDatabaseAdapter.open();
 				favID = mDatabaseAdapter.getFavoriteId(mShowList.get(0));
 				mDatabaseAdapter.close();
 				
-				Log.v("favID", favID);
+				
+				mDbAdapterFavorite.open();
+				mDbAdapterFavorite.deleteDatabaseEntryID(favID);
+				mDbAdapterFavorite.close();
+				
+				mDatabaseAdapter.open();
+				mDatabaseAdapter.editDatabaseFavorite(favID);
+				mDatabaseAdapter.close();
+				Toast.makeText(mContext, "Deleted from Favorites", Toast.LENGTH_SHORT).show();
+				
+			} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+				ShowVoiceActivity.favID = null;
+				ShowCameraActivity.favID = null;
+				String favID = null;
+				mDatabaseAdapter.open();
+				favID = mDatabaseAdapter.getFavoriteId(mShowList.get(0));
+				mDatabaseAdapter.close();
 				new FileDeleteFavorite(Long.parseLong(favID));
 				mDbAdapterFavorite.open();
 				mDbAdapterFavorite.deleteDatabaseEntryID(favID);
@@ -135,7 +154,7 @@ class FavoriteHelper implements OnCheckedChangeListener{
 			
 			//TODO if deleted from favorites
 			
-		}	
+			
 	}
 	
 	

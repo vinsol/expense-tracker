@@ -36,6 +36,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 	private ArrayList<String> mShowList;
 	private Long _id = null;
 	private static final int EDIT_RESULT = 35;
+	protected static String favID = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +100,8 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 						.setImageResource(R.drawable.no_image_small);
 			}
 			Calendar mCalendar = Calendar.getInstance();
-			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
 			if(mShowList.get(6) != null)
@@ -162,6 +163,9 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		if(v.getId() == R.id.show_text_voice_camera_edit){
 			Intent editIntent = new Intent(this, CameraActivity.class);
 			intentExtras.putBoolean("isFromShowPage", true);
+			mShowList.set(4, favID);
+			intentExtras.remove("mDisplayList");
+			intentExtras.putStringArrayList("mDisplayList", mShowList);
 			editIntent.putExtra("cameraBundle", intentExtras);
 			startActivityForResult(editIntent,EDIT_RESULT);
 		}
@@ -213,8 +217,8 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 								.setImageResource(R.drawable.no_image_small);
 					}
 					Calendar mCalendar = Calendar.getInstance();
-					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					if(mShowList.get(7) != null)
 						new ShowLocationHandler(this, mShowList.get(7));
 					if(mShowList.get(6) != null)

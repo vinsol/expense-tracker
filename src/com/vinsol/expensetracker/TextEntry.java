@@ -183,8 +183,8 @@ public class TextEntry extends Activity implements OnClickListener {
 						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					} else {
 						Calendar mCalendar = Calendar.getInstance();
-						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
 						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					}
@@ -222,7 +222,10 @@ public class TextEntry extends Activity implements OnClickListener {
 			} else {
 				listOnResult.add(mEditList.get(3));
 			}				
-			listOnResult.add(mEditList.get(4));
+			if(ShowTextActivity.favID == null)
+				listOnResult.add(mEditList.get(4));
+			else 
+				listOnResult.add(ShowTextActivity.favID);
 			listOnResult.add(mEditList.get(5));
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
 				listOnResult.add(_list.get(DatabaseAdapter.KEY_DATE_TIME));

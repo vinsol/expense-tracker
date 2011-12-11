@@ -140,8 +140,8 @@ public class CameraActivity extends Activity implements OnClickListener {
 								_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 							} else {
 								Calendar mCalendar = Calendar.getInstance();
-								mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+								mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
 								_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 							}
@@ -324,8 +324,8 @@ public class CameraActivity extends Activity implements OnClickListener {
 						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					} else {
 						Calendar mCalendar = Calendar.getInstance();
-						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
 						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					}

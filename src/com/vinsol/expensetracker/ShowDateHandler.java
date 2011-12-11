@@ -15,8 +15,8 @@ public class ShowDateHandler {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		show_text_voice_camera_header_title = (TextView) activity.findViewById(R.id.show_text_voice_camera_header_title);
 		Calendar mCalendar = Calendar.getInstance();
-		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
 		//TODO
