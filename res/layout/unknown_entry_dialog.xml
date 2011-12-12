@@ -5,20 +5,86 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" 
     android:background="@drawable/unknown_entry_dialog_bg"
-    android:padding="10dip"
     >
+    
+    <!-- Header -->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/topbar_bg" 
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/unknown_entry_dialog_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text Entry"
+            android:textSize="20dip"
+            android:textStyle="bold"
+            android:textColor="@color/white" 
+            >
+        </TextView>
+        
+    </RelativeLayout>
+    
+    <!-- Date and location Bar -->
+    <RelativeLayout  
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/date_bar_bg_wo_shadow"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        > 
+        
+		<TextView
+            android:id="@+id/unknown_entry_dialog_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="unknown location"
+            android:textColor="@color/black"
+            android:textSize="14dip"
+            android:gravity="center"
+            android:layout_marginBottom="1dip"
+            android:layout_marginLeft="15dip"
+            android:ellipsize="end"
+            android:layout_marginRight="7dip"
+            android:singleLine="true"
+            >
+        </TextView>            
+        
+    </RelativeLayout>
+    
 	<include 
         layout="@layout/new_entry_icons_grid"
         android:layout_width="fill_parent"
         >
     </include>
     
-    <Button 
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
+	<LinearLayout
+	    android:layout_height="wrap_content"
+	    android:layout_width="wrap_content"
     	android:layout_marginTop="20dip"
+    	android:orientation="horizontal"
     	android:layout_gravity="center_horizontal"
-        android:background="@drawable/delete_states"
-        >
-    </Button>   
+    	android:padding="10dip">
+    	<Button 
+    	    android:id="@+id/unknown_entry_dialog_cancel"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    	    android:background="@drawable/cancel_states"
+    	    android:layout_marginRight="10dp"
+    	    >
+    	</Button>
+    	
+    	<Button 
+        	android:id="@+id/unknown_entry_dialog_delete"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+        	android:background="@drawable/delete_states"
+        	android:layout_marginLeft="10dp"
+        	>
+   		</Button>
+    	   
+    </LinearLayout>
 </LinearLayout>
