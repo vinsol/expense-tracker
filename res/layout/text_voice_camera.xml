@@ -253,6 +253,7 @@
             android:layout_below="@id/text_voice_camera_body_favorite_tag"
             android:layout_width="fill_parent"
             android:cacheColorHint="#00000000"
+            android:divider="@drawable/list_divider"
             >
 	    </ListView>
     </RelativeLayout>
