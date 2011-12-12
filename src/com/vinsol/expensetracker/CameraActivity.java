@@ -347,7 +347,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 		mDatabaseAdapter.close();
 		if(!intentExtras.containsKey("isFromShowPage")){
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intentExpenseListing);
 		} else {
 			Intent mIntent = new Intent(this, ShowCameraActivity.class);

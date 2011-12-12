@@ -11,8 +11,7 @@ public class ShowLocationHandler {
 
 	public ShowLocationHandler(Context mContext, String location) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		show_text_voice_camera_location = (TextView) activity
-				.findViewById(R.id.show_text_voice_camera_location);
+		show_text_voice_camera_location = (TextView) activity.findViewById(R.id.show_text_voice_camera_location);
 		show_text_voice_camera_location.setText(location);
 	}
 

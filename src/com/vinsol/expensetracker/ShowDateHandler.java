@@ -29,6 +29,22 @@ public class ShowDateHandler {
 		show_text_voice_camera_header_title.setText(activity.getString(typeOfEntry));
 	}
 	
+	public ShowDateHandler(Context mContext,TextView resource ,String timeInMillis) {
+		show_text_voice_camera_header_title = resource;
+		Calendar mCalendar = Calendar.getInstance();
+		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		
+		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
+		//TODO
+		show_text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+" at "+getDate(mCalendar));
+	}
+
+	public ShowDateHandler(Context mContext,TextView resource,int typeOfEntry) {
+		show_text_voice_camera_header_title = resource;
+		show_text_voice_camera_header_title.setText(mContext.getString(typeOfEntry));
+	}
+	
 	private String getDate(Calendar tempCalendar) {
 		int hour = tempCalendar.get(Calendar.HOUR);
 		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));

@@ -378,6 +378,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 							Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
+							expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(expenseListingIntent);
 							finish();
 						} else {
@@ -393,6 +394,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 							Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
+							expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
 							mDatabaseAdapter.editDatabase(toInsert);
@@ -425,11 +427,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
 						try {
 							if (!intentExtras.containsKey("mDisplayList")) {
-								DateHelper mDateHelper = new DateHelper(
-										text_voice_camera_date_bar_dateview.getText()
-												.toString());
-								toInsert.put(DatabaseAdapter.KEY_DATE_TIME,
-										mDateHelper.getTimeMillis() + "");
+								DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+								toInsert.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
 							} else {
 								if(!intentExtras.containsKey("timeInMillis")){
 									DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
@@ -455,6 +454,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						if(mFile.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 							Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
+							expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(expenseListingIntent);
 							finish();
 						} else {
@@ -468,6 +468,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						if(mFile.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 							Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
+							expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
 							mDatabaseAdapter.editDatabase(toInsert);
@@ -498,11 +499,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
 					try {
 						if (!intentExtras.containsKey("mDisplayList")) {
-							DateHelper mDateHelper = new DateHelper(
-									text_voice_camera_date_bar_dateview.getText()
-											.toString());
-							toInsert.put(DatabaseAdapter.KEY_DATE_TIME,
-									mDateHelper.getTimeMillis() + "");
+							DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+							toInsert.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
 						} else {
 							if(!intentExtras.containsKey("timeInMillis")){
 								DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
@@ -524,6 +522,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					mDatabaseAdapter.insert_to_database(toInsert);
 					mDatabaseAdapter.close();
 					Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
+					expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(expenseListingIntent);
 					finish();
 				} else {
@@ -531,6 +530,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					mDatabaseAdapter.editDatabase(toInsert);
 					mDatabaseAdapter.close();
 					Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
+					expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(expenseListingIntent);
 					finish();
 				}
