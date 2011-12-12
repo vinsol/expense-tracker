@@ -276,7 +276,15 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 					mShowList = new ArrayList<String>();
 					mShowList = intentExtras.getStringArrayList("mDisplayList");
 					Log.v("mShowListOnResult", mShowList.toString());
-					_id = Long.parseLong(mShowList.get(0));
+					if(mShowList.get(0) != null){
+						if(mShowList.get(0) != ""){
+							_id = Long.parseLong(mShowList.get(0));
+						} else {
+							finish();
+						}
+					} else {
+						finish();
+					}
 					String amount = mShowList.get(2);
 					String tag = mShowList.get(1);
 					
@@ -333,7 +341,10 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			}
 		}
 		
-		
+
+		if(resultCode == Activity.RESULT_CANCELED){
+			finish();
+		}
 	}
 	
 }

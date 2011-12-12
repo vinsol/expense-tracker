@@ -6,6 +6,7 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -102,7 +103,17 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 				mShowList = new ArrayList<String>();
 				if (intentExtras.containsKey("mDisplayList")) {
 					mShowList = intentExtras.getStringArrayList("mDisplayList");
-					_id = Long.parseLong(mShowList.get(0));
+					Log.v("mShowList", mShowList.toString());
+					if(mShowList.get(0) != null){
+						if(!mShowList.get(0).equals("")){
+							_id = Long.parseLong(mShowList.get(0));
+						} else {
+							finish();
+						}
+					} else {
+						finish();
+					}
+					
 					String amount = mShowList.get(2);
 					String tag = mShowList.get(1);
 					show_text_voice_camera_tag_textview.setText(tag);
@@ -123,5 +134,9 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 				show_text_voice_camera_edit.setOnClickListener(this);
 			}
 		}
+		if(resultCode == Activity.RESULT_CANCELED){
+			finish();
+		}
 	}
+	
 }

@@ -52,7 +52,6 @@ public class Voice extends Activity implements OnClickListener {
 	private boolean setUnknown = false;
 	private Boolean isChanged = false;
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -338,6 +337,18 @@ public class Voice extends Activity implements OnClickListener {
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(_id));
 			mDatabaseAdapter.close();
+			
+			if(intentExtras.containsKey("isFromShowPage")){
+				Intent mIntent = new Intent(this, ShowTextActivity.class);
+				ArrayList<String> listOnResult = new ArrayList<String>();
+				listOnResult.add("");
+				Bundle tempBundle = new Bundle();
+				tempBundle.putStringArrayList("mDisplayList", listOnResult);
+				mEditList = new ArrayList<String>();
+				mEditList.addAll(listOnResult);
+				mIntent.putExtra("textShowBundle", tempBundle);
+				setResult(Activity.RESULT_CANCELED, mIntent);
+			}
 			finish();
 		}
 	}

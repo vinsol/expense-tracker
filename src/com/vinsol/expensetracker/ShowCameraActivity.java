@@ -177,7 +177,15 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 				if (intentExtras.containsKey("mDisplayList")) {
 					mShowList = new ArrayList<String>();
 					mShowList = intentExtras.getStringArrayList("mDisplayList");
-					_id = Long.parseLong(mShowList.get(0));
+					if(mShowList.get(0) != null){
+						if(mShowList.get(0) != ""){
+							_id = Long.parseLong(mShowList.get(0));
+						} else {
+							finish();
+						}
+					} else {
+						finish();
+					}
 					String amount = mShowList.get(2);
 					String tag = mShowList.get(1);
 					if (!(amount.equals("") || amount == null)) {
@@ -220,6 +228,11 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 				show_text_voice_camera_delete.setOnClickListener(this);
 				show_text_voice_camera_edit.setOnClickListener(this);
 			}
+		}
+		
+
+		if(resultCode == Activity.RESULT_CANCELED){
+			finish();
 		}
 	}
 

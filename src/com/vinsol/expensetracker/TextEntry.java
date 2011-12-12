@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.DisplayDate;
@@ -135,6 +136,17 @@ public class TextEntry extends Activity implements OnClickListener {
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(_id));
 			mDatabaseAdapter.close();
+			if(intentExtras.containsKey("isFromShowPage")){
+				Intent mIntent = new Intent(this, ShowTextActivity.class);
+				ArrayList<String> listOnResult = new ArrayList<String>();
+				listOnResult.add("");
+				Bundle tempBundle = new Bundle();
+				tempBundle.putStringArrayList("mDisplayList", listOnResult);
+				mEditList = new ArrayList<String>();
+				mEditList.addAll(listOnResult);
+				mIntent.putExtra("textShowBundle", tempBundle);
+				setResult(Activity.RESULT_CANCELED, mIntent);
+			}
 			finish();
 		}
 	}
@@ -175,8 +187,7 @@ public class TextEntry extends Activity implements OnClickListener {
 			try {
 				if (!intentExtras.containsKey("mDisplayList")) {
 					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
-					_list.put(DatabaseAdapter.KEY_DATE_TIME,
-							mDateHelper.getTimeMillis() + "");
+					_list.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
 				} else {
 					if(!intentExtras.containsKey("timeInMillis")){
 						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
@@ -208,7 +219,6 @@ public class TextEntry extends Activity implements OnClickListener {
 			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intentExpenseListing);
 		} else {
-			
 			Intent mIntent = new Intent(this, ShowTextActivity.class);
 			Bundle tempBundle = new Bundle();
 			ArrayList<String> listOnResult = new ArrayList<String>();
