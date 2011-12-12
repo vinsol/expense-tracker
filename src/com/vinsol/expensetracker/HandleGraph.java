@@ -10,7 +10,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -38,6 +37,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	private ImageView main_graph_previous_arrow ;
 	private ImageView main_graph_next_arrow ;
 	private RelativeLayout.LayoutParams params ;
+	private BarGraph barGraph;
 
 	
 	public HandleGraph(Context _context) {
@@ -53,7 +53,9 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	
 	@Override
 	protected void onPreExecute() {
-		main_graph.removeAllViews();
+		main_graph_previous_arrow.setVisibility(View.INVISIBLE);
+		main_graph_next_arrow.setVisibility(View.INVISIBLE);
+		main_graph.removeView(barGraph);
 		super.onPreExecute();
 	}
 	
@@ -75,19 +77,23 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	protected void onPostExecute(Void result) {
 		//view of graph
 		// ******start view******//
-		
+
+		main_graph_previous_arrow.setVisibility(View.VISIBLE);
+		main_graph_next_arrow.setVisibility(View.VISIBLE);
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
-				BarGraph barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
+				barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
 				main_graph.addView(barGraph, params);
-				if(j != mGraphList.size()-1){
-					main_graph.addView(main_graph_next_arrow);
-					main_graph_next_arrow.setOnClickListener(this);
+				if(j == mGraphList.size()-1){
+					main_graph_next_arrow.setVisibility(View.INVISIBLE);
+					
 				}
-				if(j != 0){
-					main_graph.addView(main_graph_previous_arrow);
-					main_graph_previous_arrow.setOnClickListener(this);
+				if(j == 0){
+					main_graph_previous_arrow.setVisibility(View.INVISIBLE);
+					
 				}
+				main_graph_next_arrow.setOnClickListener(this);
+				main_graph_previous_arrow.setOnClickListener(this);
 				TextView main_graph_header_textview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
 				main_graph_header_textview.setText(mGraphList.get(j).get(3).get(0));
 			}
@@ -123,7 +129,6 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		while(lastDateCalendar.before(mTempCalender) || lastDateDisplayDate.getDisplayDateGraph().equals(new DisplayDate(mTempCalender).getDisplayDateGraph())){
 			DisplayDate mDisplayDate = new DisplayDate(mTempCalender);
 			while(mDisplayDate.isCurrentWeek()){
-				Log.v("mDisplayDate.getDisplayDateHeaderGraph()", mDisplayDate.getDisplayDateHeaderGraph()+" "+ mList.get(j).get(2)+" " + mDisplayDate.getDisplayDateGraph());
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				if(j < mList.size()) {
 					if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
@@ -355,24 +360,34 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			break;
 		}
 		
-		main_graph.removeAllViews();
+		main_graph.removeView(barGraph);
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
-				BarGraph barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
+				barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
 				main_graph.addView(barGraph, params);
-				if(j != mGraphList.size()-1){
-					main_graph.addView(main_graph_next_arrow);
-					main_graph_next_arrow.setOnClickListener(this);
-				}
-				if(j != 0){
-					main_graph.addView(main_graph_previous_arrow);
-					main_graph_previous_arrow.setOnClickListener(this);
-				}
+				main_graph_previous_arrow.setVisibility(View.VISIBLE);
+				main_graph_next_arrow.setVisibility(View.VISIBLE);
 				
+				if(j == mGraphList.size()-1){
+					main_graph_next_arrow.setVisibility(View.INVISIBLE);
+				}
+				if(j == 0){
+					main_graph_previous_arrow.setVisibility(View.INVISIBLE);
+				}
+
+				main_graph_next_arrow.setOnClickListener(this);
+				main_graph_previous_arrow.setOnClickListener(this);
 				TextView main_graph_header_textview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
 				main_graph_header_textview.setText(mGraphList.get(j).get(3).get(0));
 			}
 		} 
+	}
+	
+	@Override
+	protected void onCancelled() {
+		main_graph_previous_arrow.setOnClickListener(null);
+		main_graph_next_arrow.setOnClickListener(null);
+		super.onCancelled();
 	}
 
 }
