@@ -7,16 +7,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Chronometer;
 
-public class AudioPlayDialog extends Dialog implements
-		android.view.View.OnClickListener,
-		android.content.DialogInterface.OnDismissListener,
-		android.content.DialogInterface.OnCancelListener {
+public class AudioPlayDialog extends Dialog implements android.view.View.OnClickListener,android.content.DialogInterface.OnDismissListener,android.content.DialogInterface.OnCancelListener {
 
 	private Button audio_play_dialog_stop_button;
 	private Button audio_play_dialog_play_button;
@@ -98,9 +94,7 @@ public class AudioPlayDialog extends Dialog implements
 			audio_play_dialog_stop_button.setVisibility(View.GONE);
 			mAudioPlay.stopPlayBack();
 			countDownTimer.cancel();
-			audio_play_dialog_time_details_chronometer
-					.setText(new DisplayTime().getDisplayTime(mAudioPlay
-							.getPlayBackTime()));
+			audio_play_dialog_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
 			audio_play_dialog_play_button.setVisibility(View.VISIBLE);
 		}
 
@@ -119,23 +113,19 @@ public class AudioPlayDialog extends Dialog implements
 
 		@Override
 		public void onFinish() {
-			audio_play_dialog_time_details_chronometer.setText(mDisplayTime
-					.getDisplayTime(mAudioPlay.getPlayBackTime()));
+			audio_play_dialog_time_details_chronometer.setText(mDisplayTime.getDisplayTime(mAudioPlay.getPlayBackTime()));
 			audio_play_dialog_stop_button.setVisibility(View.GONE);
 			audio_play_dialog_play_button.setVisibility(View.VISIBLE);
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
-			audio_play_dialog_time_details_chronometer.setText(mDisplayTime
-					.getDisplayTime(millisUntilFinished));
+			audio_play_dialog_time_details_chronometer.setText(mDisplayTime.getDisplayTime(millisUntilFinished));
 		}
 	}
 
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		Log.v("mAudioPlay.isAudioPlaying() dismiss",
-				mAudioPlay.isAudioPlaying() + "");
 		if (mAudioPlay.isAudioPlaying()) {
 			mAudioPlay.stopPlayBack();
 		}
@@ -143,8 +133,6 @@ public class AudioPlayDialog extends Dialog implements
 
 	@Override
 	public void onCancel(DialogInterface dialog) {
-		Log.v("mAudioPlay.isAudioPlaying() cancel", mAudioPlay.isAudioPlaying()
-				+ "");
 		if (mAudioPlay.isAudioPlaying()) {
 			mAudioPlay.stopPlayBack();
 		}

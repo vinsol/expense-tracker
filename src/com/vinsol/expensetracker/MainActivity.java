@@ -73,13 +73,14 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onResume() {
-		super.onResume();
+		
 		//finding current location
 		Location location = LocationHelper.getBestAvailableLocation();
 		if(location == null) {
 			LocationHelper.requestLocationUpdate();
 		}
 		new HandleGraph(this).execute();
+		super.onResume();
 	}
 
 	@Override

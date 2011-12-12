@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.DateHelper;
+import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.FileDelete;
 
 public class CameraActivity extends Activity implements OnClickListener {
@@ -107,6 +108,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 		setGraphicsCamera();
 		setClickListeners();
 		
+		
 
 		// //////******** Handle Date Bar ********* ////////
 		if (intentExtras.containsKey("mDisplayList")) {
@@ -138,8 +140,8 @@ public class CameraActivity extends Activity implements OnClickListener {
 								_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 							} else {
 								Calendar mCalendar = Calendar.getInstance();
-								mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+								mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
 								_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 							}
@@ -165,23 +167,20 @@ public class CameraActivity extends Activity implements OnClickListener {
 		
 		if (!intentExtras.containsKey("mDisplayList"))
 			startCamera();
+		
 	}
 	
 	private void setImageResource(Drawable mDrawable) {
 		if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
 			final float scale = this.getResources().getDisplayMetrics().density;
 			int width = (int) (84 * scale + 0.5f);
-			int height = (int) (111 * scale + 0.5f);
-			
+			int height = (int) (111 * scale + 0.5f);			
 			text_voice_camera_image_display.setLayoutParams(new LayoutParams(width, height));
 		}
-		
 		text_voice_camera_image_display.setImageDrawable(mDrawable);
-		
 	}
 	
 	private void startCamera() {
-
 		// ///// ******* Starting Camera to capture Image ******** //////////
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -199,7 +198,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		
 		if (PICTURE_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
 				new SaveAndDisplayImage().execute();
@@ -222,7 +220,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 	}
 
 	private class SaveAndDisplayImage extends AsyncTask<Void, Void, Void> {
-
 		@Override
 		protected void onPreExecute() {
 			text_voice_camera_load_progress.setVisibility(View.VISIBLE);
@@ -249,7 +246,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 			text_voice_camera_save_entry.setEnabled(true);
 			super.onPostExecute(result);
 		}
-
 	}
 
 	private void setGraphicsCamera() {
@@ -262,14 +258,10 @@ public class CameraActivity extends Activity implements OnClickListener {
 
 	private void setClickListeners() {
 		// ////// ******* Adding Click Listeners to UI Items ******** //////////
-
 		text_voice_camera_save_entry.setOnClickListener(this);
-
 		text_voice_camera_delete.setOnClickListener(this);
-
 		ImageView text_voice_camera_image_display = (ImageView) findViewById(R.id.text_voice_camera_image_display);
 		text_voice_camera_image_display.setOnClickListener(this);
-
 		Button text_voice_camera_retake_button = (Button) findViewById(R.id.text_voice_camera_retake_button);
 		text_voice_camera_retake_button.setOnClickListener(this);
 	}
@@ -277,13 +269,11 @@ public class CameraActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		// ////// ******** Adding Action to save entry ********* ///////////
-
 		if (v.getId() == R.id.text_voice_camera_save_entry) {
 			saveEntry();
 		}
 
 		// /////// ********* Adding action if delete button ********** /////////
-
 		if (v.getId() == R.id.text_voice_camera_delete) {
 			new FileDelete(_id);
 
@@ -294,20 +284,14 @@ public class CameraActivity extends Activity implements OnClickListener {
 			finish();
 		}
 
-		// //////// ********** Adding action if image is pressed ********
-		// ///////////
-
+		// //////// ********** Adding action if image is pressed ********		 ///////////
 		if (v.getId() == R.id.text_voice_camera_image_display) {
-			
 			Intent intent = new Intent(this, ImagePreview.class);
 			intent.putExtra("id", _id);
 			startActivity(intent);
-
 		}
 
-		// /////// ********** Adding action if retake button is pressed ******
-		// ////////
-
+		// /////// ********** Adding action if retake button is pressed ******//////////
 		if (v.getId() == R.id.text_voice_camera_retake_button) {
 			startCamera();
 		}
@@ -340,8 +324,8 @@ public class CameraActivity extends Activity implements OnClickListener {
 						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					} else {
 						Calendar mCalendar = Calendar.getInstance();
-						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
 						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					}
@@ -354,15 +338,44 @@ public class CameraActivity extends Activity implements OnClickListener {
 		if(setLocation == true && LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 				_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
-		// //// ******* Update database if user added additional info *******
-		// ///////
+		// //// ******* Update database if user added additional info *******		 ///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(_list);
 		mDatabaseAdapter.close();
+		if(!intentExtras.containsKey("isFromShowPage")){
+			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			startActivity(intentExpenseListing);
+		} else {
+			Intent mIntent = new Intent(this, ShowCameraActivity.class);
+			Bundle tempBundle = new Bundle();
+			ArrayList<String> listOnResult = new ArrayList<String>();
+			listOnResult.add(mEditList.get(0));
+			listOnResult.add(_list.get(DatabaseAdapter.KEY_TAG));
+			listOnResult.add(_list.get(DatabaseAdapter.KEY_AMOUNT));
+			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
+				listOnResult.add(new DisplayDate().getLocationDate(_list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.get(7)));
+			} else if (_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) == null){
+				listOnResult.add(new DisplayDate().getLocationDateDate(_list.get(DatabaseAdapter.KEY_DATE_TIME)));
+			} else {
+				listOnResult.add(mEditList.get(3));
+			}				
+			listOnResult.add(mEditList.get(4));
+			listOnResult.add(mEditList.get(5));
+			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
+				listOnResult.add(_list.get(DatabaseAdapter.KEY_DATE_TIME));
+			} else {
+				listOnResult.add(mEditList.get(6));
+			}
+			listOnResult.add(mEditList.get(7));
+			listOnResult.add(mEditList.get(8));
+			mEditList = new ArrayList<String>();
+			mEditList.addAll(listOnResult);
+			tempBundle.putStringArrayList("mDisplayList", listOnResult);
+			mIntent.putExtra("cameraShowBundle", tempBundle);
+			setResult(Activity.RESULT_OK, mIntent);
+		}
 		finish();
-		Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-		intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		startActivity(intentExpenseListing);
 	}
 
 	// /// ****************** Handling back press of key ********** ///////////

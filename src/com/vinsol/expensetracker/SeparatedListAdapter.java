@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,6 +46,7 @@ class SeparatedListAdapter extends BaseAdapter {
 
 	public void addSection(String section, Adapter adapter,List<HashMap<String, String>> _mDataDateList) {
 		mDatadateList = _mDataDateList;
+		notifyDataSetChanged();
 		this.headers.add(section);
 		this.footers.add(section);
 		this.sections.put(section, adapter);
@@ -266,8 +266,6 @@ class SeparatedListAdapter extends BaseAdapter {
 			mDateHelper.getTimeMillis();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
-
 		}
 
 		return false;
@@ -355,7 +353,6 @@ class SeparatedListAdapter extends BaseAdapter {
 	}
 	
 	private boolean isEntryComplete(ArrayList<String> toCheckList) {
-		Log.v("mlist", toCheckList.toString());
 		if (toCheckList.get(5).equals(mContext.getString(R.string.camera))) {
 			if(toCheckList.get(2) != null){
 				if (toCheckList.get(2).contains("?")) {

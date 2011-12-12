@@ -51,11 +51,13 @@ public class BarGraph extends View {
 		paint.setTextAlign(Align.RIGHT);
 		TextView mTextView = new TextView(getContext());
 		mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
-		paint.setTextSize(mTextView.getTextSize());
 		
+		paint.setTextSize(mTextView.getTextSize());
+		TextView mTextViewTemp = new TextView(getContext());
+		mTextViewTemp.setTextSize(TypedValue.COMPLEX_UNIT_DIP,5);
 		paint.setTypeface(Typeface.DEFAULT_BOLD);
 		for(int i=0;i<6;i++){
-			canvas.drawText(value+"", originX-5, topY+5, paint);
+			canvas.drawText(value+"", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
 			value = value + interval;
 			topY = (int) (topY-(verDiff/5));
 		}
@@ -81,9 +83,11 @@ public class BarGraph extends View {
 			finalValue = value+originX+barWidth;
 			value = value + interval;
 			Double tempDouble = getDouble(i);
+			TextView mTextViewTemp = new TextView(getContext());
+			mTextViewTemp.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
 			RectF mRectF = new RectF(originX+value, topY-(int)((tempDouble/max)*verDiff), finalValue, topY);
 			canvas.drawRect(mRectF,paint);
-			canvas.drawText(horLabels.get(i), originX+value, topY+20, textPaint);
+			canvas.drawText(horLabels.get(i), originX+value, topY+mTextViewTemp.getTextSize(), textPaint);
 			if(values.get(i) != null) {
 				if(values.get(i).contains("?")){
 					textPaint.setTextAlign(Align.LEFT);

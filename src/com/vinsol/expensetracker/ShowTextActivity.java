@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 public class ShowTextActivity extends Activity implements OnClickListener{
 
+	private static final int EDIT_RESULT = 35;
 	private ArrayList<String> mShowList;
 	private Bundle intentExtras;
 	private Long _id = null;
@@ -22,6 +23,7 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 	private TextView show_text_voice_camera_tag_textview;
 	private Button show_text_voice_camera_delete;
 	private Button show_text_voice_camera_edit;
+	protected static String favID = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +51,8 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 			show_text_voice_camera_tag_textview.setText(tag);
 			show_text_voice_camera_amount.setText(amount);
 			Calendar mCalendar = Calendar.getInstance();
-			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
 			if(mShowList.get(6) != null)
@@ -81,9 +83,44 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 		if(v.getId() == R.id.show_text_voice_camera_edit){
 			Intent editIntent = new Intent(this, TextEntry.class);
 			intentExtras.putBoolean("isFromShowPage", true);
+			mShowList.set(4, favID);
+			intentExtras.remove("mDisplayList");
+			intentExtras.putStringArrayList("mDisplayList", mShowList);
 			editIntent.putExtra("textEntryBundle", intentExtras);
-			startActivity(editIntent);
-			finish();
+			startActivityForResult(editIntent,EDIT_RESULT);
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		super.onActivityResult(requestCode, resultCode, data);
+		if (EDIT_RESULT == requestCode) {
+			if(Activity.RESULT_OK == resultCode) {
+				intentExtras = data.getBundleExtra("textShowBundle");
+				mShowList = new ArrayList<String>();
+				if (intentExtras.containsKey("mDisplayList")) {
+					mShowList = intentExtras.getStringArrayList("mDisplayList");
+					_id = Long.parseLong(mShowList.get(0));
+					String amount = mShowList.get(2);
+					String tag = mShowList.get(1);
+					show_text_voice_camera_tag_textview.setText(tag);
+					show_text_voice_camera_amount.setText(amount);
+					Calendar mCalendar = Calendar.getInstance();
+					mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+					if(mShowList.get(7) != null)
+						new ShowLocationHandler(this, mShowList.get(7));
+					if(mShowList.get(6) != null)
+						new ShowDateHandler(this, mShowList.get(6));
+					else {
+						new ShowDateHandler(this,R.string.text);
+					}
+					new FavoriteHelper(this, mShowList);
+				}
+				show_text_voice_camera_delete.setOnClickListener(this);
+				show_text_voice_camera_edit.setOnClickListener(this);
+			}
 		}
 	}
 }

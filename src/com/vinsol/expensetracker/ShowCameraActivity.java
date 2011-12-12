@@ -35,6 +35,8 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
 	private Long _id = null;
+	private static final int EDIT_RESULT = 35;
+	protected static String favID = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +100,8 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 						.setImageResource(R.drawable.no_image_small);
 			}
 			Calendar mCalendar = Calendar.getInstance();
-			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
 			if(mShowList.get(6) != null)
@@ -161,11 +163,77 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		if(v.getId() == R.id.show_text_voice_camera_edit){
 			Intent editIntent = new Intent(this, CameraActivity.class);
 			intentExtras.putBoolean("isFromShowPage", true);
+			mShowList.set(4, favID);
+			intentExtras.remove("mDisplayList");
+			intentExtras.putStringArrayList("mDisplayList", mShowList);
 			editIntent.putExtra("cameraBundle", intentExtras);
-			startActivity(editIntent);
-			finish();
+			startActivityForResult(editIntent,EDIT_RESULT);
 		}
 
+	}
+	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		super.onActivityResult(requestCode, resultCode, data);
+		if (EDIT_RESULT == requestCode) {
+			if(Activity.RESULT_OK == resultCode) {
+				
+				intentExtras = data.getBundleExtra("cameraShowBundle");
+				if (intentExtras.containsKey("mDisplayList")) {
+					
+					mShowList = new ArrayList<String>();
+					mShowList = intentExtras.getStringArrayList("mDisplayList");
+					_id = Long.parseLong(mShowList.get(0));
+					String amount = mShowList.get(2);
+					String tag = mShowList.get(1);
+					if (!(amount.equals("") || amount == null)) {
+						if (!amount.contains("?"))
+							show_text_voice_camera_amount.setText(amount);
+					}
+					
+					if ((tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_cameraentry)))) {
+						show_text_voice_camera_tag_textview.setText("description");
+					} else {
+						show_text_voice_camera_tag_textview.setText(tag);
+					}
+
+					File mFile = new File("/sdcard/ExpenseTracker/" + _id+ "_small.jpg");
+					if (mFile.canRead()) {
+						Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
+						
+						if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
+							final float scale = this.getResources().getDisplayMetrics().density;
+							int width = (int) (84 * scale + 0.5f);
+							int height = (int) (111 * scale + 0.5f);
+
+							show_text_voice_camera_image_display.setLayoutParams(new LayoutParams(width, height));
+						}
+						
+						show_text_voice_camera_image_display.setImageDrawable(mDrawable);
+					} else {
+						show_text_voice_camera_image_display
+								.setImageResource(R.drawable.no_image_small);
+					}
+					Calendar mCalendar = Calendar.getInstance();
+					mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
+					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+					if(mShowList.get(7) != null)
+						new ShowLocationHandler(this, mShowList.get(7));
+					if(mShowList.get(6) != null)
+						new ShowDateHandler(this, mShowList.get(6));
+					else {
+						new ShowDateHandler(this,R.string.camera);
+					}
+					new FavoriteHelper(this, mShowList);
+				}
+
+				show_text_voice_camera_image_display.setOnClickListener(this);
+				show_text_voice_camera_delete.setOnClickListener(this);
+				show_text_voice_camera_edit.setOnClickListener(this);
+			}
+		}
 	}
 
 }

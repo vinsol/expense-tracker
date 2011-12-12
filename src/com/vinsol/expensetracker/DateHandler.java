@@ -28,12 +28,9 @@ public class DateHandler implements OnClickListener {
 		mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mDisplayDate = new DisplayDate(mCalendar);
-		date_bar_dateview = (TextView) activity
-				.findViewById(R.id.text_voice_camera_date_bar_dateview);
-		date_bar_previous_arrow = (ImageButton) activity
-				.findViewById(R.id.text_voice_camera_date_bar_previous_arrow);
-		date_bar_next_arrow = (ImageButton) activity
-				.findViewById(R.id.text_voice_camera_date_bar_next_arrow);
+		date_bar_dateview = (TextView) activity.findViewById(R.id.text_voice_camera_date_bar_dateview);
+		date_bar_previous_arrow = (ImageButton) activity.findViewById(R.id.text_voice_camera_date_bar_previous_arrow);
+		date_bar_next_arrow = (ImageButton) activity.findViewById(R.id.text_voice_camera_date_bar_next_arrow);
 		date_bar_next_arrow.setVisibility(View.INVISIBLE);
 		date_bar_dateview.setText(mDisplayDate.getDisplayDate());
 		dialog = new DatePickerDialog(mContext, date_bar_dateview);
@@ -45,15 +42,12 @@ public class DateHandler implements OnClickListener {
 	public DateHandler(Context mContext, long long1) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		mCalendar = Calendar.getInstance();
-		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mCalendar.setTimeInMillis(long1);
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mDisplayDate = new DisplayDate(mCalendar);
-		date_bar_dateview = (TextView) activity
-				.findViewById(R.id.text_voice_camera_date_bar_dateview);
-		date_bar_previous_arrow = (ImageButton) activity
-				.findViewById(R.id.text_voice_camera_date_bar_previous_arrow);
-		date_bar_next_arrow = (ImageButton) activity
-				.findViewById(R.id.text_voice_camera_date_bar_next_arrow);
+		date_bar_dateview = (TextView) activity.findViewById(R.id.text_voice_camera_date_bar_dateview);
+		date_bar_previous_arrow = (ImageButton) activity.findViewById(R.id.text_voice_camera_date_bar_previous_arrow);
+		date_bar_next_arrow = (ImageButton) activity.findViewById(R.id.text_voice_camera_date_bar_next_arrow);
 
 		if (!beforeCurrentDate(mCalendar))
 			date_bar_next_arrow.setVisibility(View.INVISIBLE);
@@ -87,9 +81,7 @@ public class DateHandler implements OnClickListener {
 		}
 
 		if (v.getId() == R.id.text_voice_camera_date_bar_dateview) {
-
 			dialog.setOnDismissListener(new OnDismissListener() {
-
 				@Override
 				public void onDismiss(DialogInterface dialog) {
 					if (tempCalenderOnCancel != null) {
@@ -99,6 +91,7 @@ public class DateHandler implements OnClickListener {
 							date_bar_next_arrow.setVisibility(View.INVISIBLE);
 						}
 						mCalendar.setTime(tempCalenderOnCancel.getTime());
+						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						tempCalenderOnCancel = null;
 					}
 				}
@@ -113,11 +106,9 @@ public class DateHandler implements OnClickListener {
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if (mCalendar.get(Calendar.YEAR) > pCalendar.get(Calendar.YEAR)) {
 			return true;
-		} else if ((mCalendar.get(Calendar.MONTH) > pCalendar
-				.get(Calendar.MONTH))) {
+		} else if ((mCalendar.get(Calendar.MONTH) > pCalendar.get(Calendar.MONTH))) {
 			return true;
-		} else if ((mCalendar.get(Calendar.DAY_OF_MONTH) > pCalendar
-				.get(Calendar.DAY_OF_MONTH))) {
+		} else if ((mCalendar.get(Calendar.DAY_OF_MONTH) > pCalendar.get(Calendar.DAY_OF_MONTH))) {
 			return true;
 		} else {
 			return false;
@@ -127,14 +118,9 @@ public class DateHandler implements OnClickListener {
 	private boolean isCurrentDate(Calendar pCalendar) {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if ((mCalendar.get(Calendar.MONTH) == pCalendar.get(Calendar.MONTH))
-				&& (mCalendar.get(Calendar.YEAR) == pCalendar
-						.get(Calendar.YEAR))
-				&& (mCalendar.get(Calendar.DAY_OF_MONTH) == pCalendar
-						.get(Calendar.DAY_OF_MONTH))) {
+		if ((mCalendar.get(Calendar.MONTH) == pCalendar.get(Calendar.MONTH))&& (mCalendar.get(Calendar.YEAR) == pCalendar.get(Calendar.YEAR))&& (mCalendar.get(Calendar.DAY_OF_MONTH) == pCalendar.get(Calendar.DAY_OF_MONTH))) {
 			return true;
 		}
 		return false;
 	}
-
 }

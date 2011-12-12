@@ -24,6 +24,7 @@ public class DateHelper {
 				dateViewString.length());
 		day = Integer.parseInt(dateViewString);
 		mCalendar.set(year, month, day);
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 	}
 
 	public DateHelper(String dateViewString, Calendar mCalendar2) {
@@ -47,6 +48,7 @@ public class DateHelper {
 		mCalendar.set(year, month, day, mCalendar2.get(Calendar.HOUR_OF_DAY),
 				mCalendar2.get(Calendar.MINUTE),
 				mCalendar2.get(Calendar.SECOND));
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 	}
 
 	public long getTimeMillis() {

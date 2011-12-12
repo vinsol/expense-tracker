@@ -30,5 +30,4 @@ public class DescriptionDialog extends Dialog implements
 			dismiss();
 		}
 	}
-
 }

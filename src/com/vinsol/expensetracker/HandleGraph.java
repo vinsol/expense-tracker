@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -27,7 +28,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 
 	private List<HashMap<String, String>> mDataDateListGraph;
 	private ConvertCursorToListString mConvertCursorToListString;
-	private Context mContext;
+	static private Context mContext;
 	private List<HashMap<String, String>> mSubList;
 	private ArrayList<ArrayList<ArrayList<String>>> mGraphList;
 	private Calendar lastDateCalendar;
@@ -37,6 +38,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	private ImageView main_graph_previous_arrow ;
 	private ImageView main_graph_next_arrow ;
 	private RelativeLayout.LayoutParams params ;
+
 	
 	public HandleGraph(Context _context) {
 		mContext = _context;
@@ -63,6 +65,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		mSubList = mConvertCursorToListString.getListStringParticularDate();
 		if (mDataDateListGraph.size() >= 1) {
 			lastDateCalendar.setTimeInMillis(Long.parseLong(mSubList.get(mSubList.size()-1).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+			lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mGraphList = getGraphList();
 		}
 		return null;
@@ -107,6 +110,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		DisplayDate lastDateDisplayDate = new DisplayDate(lastDateCalendar);
 		ArrayList<ArrayList<ArrayList<String>>> graphList = new ArrayList<ArrayList<ArrayList<String>>>();
 		Calendar mTempCalender = Calendar.getInstance();
+		mTempCalender.set(mTempCalender.get(Calendar.YEAR), mTempCalender.get(Calendar.MONTH), mTempCalender.get(Calendar.DAY_OF_MONTH
+				),0,0,0);
 		mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 		
 		int j = 0;
@@ -118,6 +123,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		while(lastDateCalendar.before(mTempCalender) || lastDateDisplayDate.getDisplayDateGraph().equals(new DisplayDate(mTempCalender).getDisplayDateGraph())){
 			DisplayDate mDisplayDate = new DisplayDate(mTempCalender);
 			while(mDisplayDate.isCurrentWeek()){
+				Log.v("mDisplayDate.getDisplayDateHeaderGraph()", mDisplayDate.getDisplayDateHeaderGraph()+" "+ mList.get(j).get(2)+" " + mDisplayDate.getDisplayDateGraph());
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				if(j < mList.size()) {
 					if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
@@ -157,53 +163,55 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				}
 			} 
 
-			while(!mDisplayDate.isCurrentWeek() && mDisplayDate.isCurrentMonth()){
+			if(!mDisplayDate.isCurrentWeek() && mDisplayDate.isCurrentMonth()){
+				
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
-				if(j < mList.size()) {
-					if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
-						mArrayIDList.add(mList.get(j).get(0));
-						mArrayValues.add(mList.get(j).get(1));
-						mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
-						j++;
+				while(mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
+					if(j < mList.size()) {
+						if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
+							mArrayIDList.add(mList.get(j).get(0));
+							mArrayValues.add(mList.get(j).get(1));
+							mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
+							j++;
+						} else {
+							mArrayIDList.add(null);
+							mArrayValues.add(null);
+							mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
+						}
 					} else {
 						mArrayIDList.add(null);
 						mArrayValues.add(null);
 						mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
 					}
-				} else {
-					mArrayIDList.add(null);
-					mArrayValues.add(null);
-					mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
-				}
-				
-				mTempCalender.add(Calendar.DATE, -1);
-				mDisplayDate = new DisplayDate(mTempCalender);
-				if(!mDisplayDate.isCurrentMonth()){
-					if(mArrayIDList.size() >= 1){
-						Collections.reverse(mArrayIDList);
-						Collections.reverse(mArrayValues);
-						Collections.reverse(mArrayHorLabels);
-						subGraphList.add(mArrayIDList);
-						subGraphList.add(mArrayValues);
-						subGraphList.add(mArrayHorLabels);
-						ArrayList<String> displayDate = new ArrayList<String>();
-						displayDate.add(toCheckGraphDate);
-						subGraphList.add(displayDate);
-						if(isNotNullAll(mArrayIDList))
-							graphList.add(subGraphList);
-						mArrayIDList = new ArrayList<String>();
-						mArrayValues = new ArrayList<String>();
-						mArrayHorLabels = new ArrayList<String>();
-						subGraphList = new ArrayList<ArrayList<String>>();
+					mTempCalender.add(Calendar.DATE, -1);
+					mDisplayDate = new DisplayDate(mTempCalender);
+					if(!mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
+						if(mArrayIDList.size() >= 1){
+							Collections.reverse(mArrayIDList);
+							Collections.reverse(mArrayValues);
+							Collections.reverse(mArrayHorLabels);
+							subGraphList.add(mArrayIDList);
+							subGraphList.add(mArrayValues);
+							subGraphList.add(mArrayHorLabels);
+							ArrayList<String> displayDate = new ArrayList<String>();
+							displayDate.add(toCheckGraphDate);
+							subGraphList.add(displayDate);
+							if(isNotNullAll(mArrayIDList))
+								graphList.add(subGraphList);
+							mArrayIDList = new ArrayList<String>();
+							mArrayValues = new ArrayList<String>();
+							mArrayHorLabels = new ArrayList<String>();
+							subGraphList = new ArrayList<ArrayList<String>>();
+						}
 					}
 				}
-				
-			} 
+			}
+			
 			
 			if(mDisplayDate.isPrevMonths() || mDisplayDate.isPrevYears()){
 				
 				mTempCalender.set(Calendar.DAY_OF_MONTH, mTempCalender.getActualMaximum(Calendar.DAY_OF_MONTH));
-				
+				mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 				mDisplayDate = new DisplayDate(mTempCalender);
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				while(mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
@@ -225,6 +233,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 					}
 					mTempCalender.add(Calendar.WEEK_OF_MONTH, -1);
 					mTempCalender.set(Calendar.DAY_OF_WEEK, mTempCalender.getActualMinimum(Calendar.DAY_OF_WEEK));
+					mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 					mDisplayDate = new DisplayDate(mTempCalender);
 					if(!mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
 						if(mArrayIDList.size() >= 1){
@@ -266,8 +275,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			ArrayList<String> mList = new ArrayList<String>();
 			String tempDisplayDate = mSubList.get(i).get(DatabaseAdapter.KEY_DATE_TIME+"Millis");
 			Calendar mTCalendar = Calendar.getInstance();
-			mTCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mTCalendar.setTimeInMillis(Long.parseLong(tempDisplayDate));
+			mTCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			String tempDisplayDateGraph = new DisplayDate(mTCalendar).getDisplayDateGraph();
 			String idList = "";
 			Double temptotalAmount = 0.0;
@@ -288,6 +297,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				
 				if (i < mSubList.size()) {
 					mTCalendar.setTimeInMillis(Long.parseLong(mSubList.get(i).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+					mTCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				} else {
 					break;
 				}
@@ -312,27 +322,24 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 
 	private String getWeekDay(int i) {
 		switch(i){
-		case 2:
+		case Calendar.MONDAY:
 			return "Mon";
-		case 3:
+		case Calendar.TUESDAY:
 			return "Tue";
-		case 4:
+		case Calendar.WEDNESDAY:
 			return "Wed";
-		case 5:
+		case Calendar.THURSDAY:
 			return "Thu";
-		case 6:
+		case Calendar.FRIDAY:
 			return "Fri";
-		case 7:
+		case Calendar.SATURDAY:
 			return "Sat";
-		case 1:
+		case Calendar.SUNDAY:
 			return "Sun";
 		}
 		return null;
 	}
 	
-
-
-
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {

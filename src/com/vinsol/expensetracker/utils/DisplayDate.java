@@ -14,6 +14,7 @@ public class DisplayDate {
 
 	public DisplayDate(Calendar calendar) {
 		mCalendar = calendar;
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 	}
 	
 	public Calendar getCalendar(){
@@ -75,7 +76,7 @@ public class DisplayDate {
 			return getDisplayDate();
 		}
 		
-		if (isPrevMonths()) {
+		if (isPrevMonths() || isPrevYears()) {
 			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
 		}
 		
@@ -91,7 +92,7 @@ public class DisplayDate {
 			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
 		}
 		
-		if (isPrevMonths()) {
+		if (isPrevMonths() || isPrevYears()) {
 			return month + " " + year;
 		}
 		
@@ -127,13 +128,12 @@ public class DisplayDate {
 
 	public boolean isCurrentWeek() {
 		Calendar mTempCalendar = Calendar.getInstance();
+		mTempCalendar.set(mTempCalendar.get(Calendar.YEAR), mTempCalendar.get(Calendar.MONTH), mTempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 		mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if ((mTempCalendar.get(Calendar.WEEK_OF_MONTH) == mCalendar
-				.get(Calendar.WEEK_OF_MONTH))
-				&& (mTempCalendar.get(Calendar.MONTH) == mCalendar
-						.get(Calendar.MONTH))
-				&& (mTempCalendar.get(Calendar.YEAR) == mCalendar
-						.get(Calendar.YEAR))) {
+		
+		if ((mTempCalendar.get(Calendar.WEEK_OF_MONTH) == mCalendar.get(Calendar.WEEK_OF_MONTH))
+				&& (mTempCalendar.get(Calendar.MONTH) == mCalendar.get(Calendar.MONTH))
+				&& (mTempCalendar.get(Calendar.YEAR) == mCalendar.get(Calendar.YEAR))) {
 			return true;
 		}
 		return false;
@@ -184,6 +184,68 @@ public class DisplayDate {
 		if (isPrevYears()) {
 			return getMonth(mCalendar.get(Calendar.MONTH)) + " "
 					+ mCalendar.get(Calendar.YEAR) + "";
+		}
+		return null;
+	}
+	
+	public String getLocationDateDate(String dateInMillis) {
+		Calendar tempCalendar = Calendar.getInstance();
+		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		int hour = tempCalendar.get(Calendar.HOUR);
+		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
+		if (minute.length() == 1) {
+			minute = "0" + minute;
+		}
+		if (hour == 0) {
+			hour = 12;
+		}
+		if (tempCalendar.get(Calendar.MINUTE) != 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + ":" + minute + " " + "PM"+ " at Unknown location";
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + minute + " " + "AM" + " at Unknown location";
+			}
+		}
+		else{ 
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + "" + " " + "PM" + " at Unknown location";
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + "" + " " + "AM" + " at Unknown location";
+			}
+		}
+		return null;
+	}
+
+	public String getLocationDate(String dateInMillis, String locationData) {
+		Calendar tempCalendar = Calendar.getInstance();
+		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		int hour = tempCalendar.get(Calendar.HOUR);
+		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
+		if (minute.length() == 1) {
+			minute = "0" + minute;
+		}
+		if (hour == 0) {
+			hour = 12;
+		}
+		if (tempCalendar.get(Calendar.MINUTE) != 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + ":" + minute + " " + "PM" + " at " + locationData;
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + minute + " " + "AM" + " at " + locationData;
+			}
+		}
+		else{
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + "" + " " + "PM" + " at " + locationData;
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + " " + "AM" + " at " + locationData;
+			}
 		}
 		return null;
 	}

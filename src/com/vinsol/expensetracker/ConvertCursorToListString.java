@@ -8,7 +8,6 @@ import java.util.List;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 public class ConvertCursorToListString {
 	Context context;
@@ -20,7 +19,6 @@ public class ConvertCursorToListString {
 	List<HashMap<String, String>> getFavoriteList() {
 		List<HashMap<String, String>> mainlist = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> list;
-		
 		DBAdapterFavorite mDbAdapterFavorite = new DBAdapterFavorite(context);
 		mDbAdapterFavorite.open();
 		Cursor cursor = mDbAdapterFavorite.getCompleteDatabase();
@@ -54,8 +52,8 @@ public class ConvertCursorToListString {
 			cursor.moveToFirst();
 			do {
 				Calendar mTempCalendar = Calendar.getInstance();
-				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
 				if (list.isEmpty()) {
 					list.put(DatabaseAdapter.KEY_DATE_TIME,
@@ -74,8 +72,8 @@ public class ConvertCursorToListString {
 
 				if (!cursor.isAfterLast()) {
 					Calendar mTempSubCalendar = Calendar.getInstance();
-					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
 					if (!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(mTempDisplayDate.getDisplayDateHeaderGraph())) { // TODO
 						if (isTempAmountNull) {
@@ -93,11 +91,9 @@ public class ConvertCursorToListString {
 							Double mAmount = Double.parseDouble(temp);
 							mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 							if (mAmount.toString().contains(".")) {
-								if (mAmount.toString().charAt(
-										mAmount.toString().length() - 3) == '.') {
+								if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
 									totalAmountString = mAmount.toString()+ " ?";
-								} else if (mAmount.toString().charAt(
-										mAmount.toString().length() - 2) == '.') {
+								} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
 									totalAmountString = mAmount.toString()+ "0 ?";
 								}
 
@@ -105,15 +101,13 @@ public class ConvertCursorToListString {
 								totalAmountString = mAmount.toString()+ ".00 ?";
 							}
 						} else if (!totalAmountString.contains("?")) {
-							String temp = totalAmountString.substring(0,
-									totalAmountString.length());
+							String temp = totalAmountString.substring(0,totalAmountString.length());
 							Double mAmount = Double.parseDouble(temp);
 							mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 							if (mAmount.toString().contains(".")) {
 								if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
 									totalAmountString = mAmount.toString() + "";
-								} else if (mAmount.toString().charAt(
-										mAmount.toString().length() - 2) == '.') {
+								} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
 									totalAmountString = mAmount.toString()+ "0";
 								}
 
@@ -177,7 +171,6 @@ public class ConvertCursorToListString {
 			} while (!cursor.isAfterLast());
 		}
 		
-		
 		adapter.close();
 		return mainlist;
 	}
@@ -195,9 +188,8 @@ public class ConvertCursorToListString {
 			cursor.moveToFirst();
 			do {
 				Calendar mTempCalendar = Calendar.getInstance();
-				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
-
+				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
 				if (list.isEmpty()) {
 					list.put(DatabaseAdapter.KEY_DATE_TIME,
@@ -216,8 +208,8 @@ public class ConvertCursorToListString {
 
 				if (!cursor.isAfterLast()) {
 					Calendar mTempSubCalendar = Calendar.getInstance();
-					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
 					if (!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(mTempDisplayDate.getHeaderFooterListDisplayDate())) { // TODO
 						if (isTempAmountNull) {
@@ -235,44 +227,25 @@ public class ConvertCursorToListString {
 							Double mAmount = Double.parseDouble(temp);
 							mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 							if (mAmount.toString().contains(".")) {
-								if (mAmount.toString().charAt(
-										mAmount.toString().length() - 3) == '.') {
-									totalAmountString = mAmount.toString()
-											+ " ?";
-								} else if (mAmount.toString().charAt(
-										mAmount.toString().length() - 2) == '.') {
-									totalAmountString = mAmount.toString()
-											+ "0 ?";
+								if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
+									totalAmountString = mAmount.toString()+ " ?";
+								} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
+									totalAmountString = mAmount.toString()+ "0 ?";
 								}
 
 							} else {
-								totalAmountString = mAmount.toString()
-										+ ".00 ?";
+								totalAmountString = mAmount.toString()+ ".00 ?";
 							}
 						} else if (!totalAmountString.contains("?")) {
-							String temp = totalAmountString.substring(0,
-									totalAmountString.length());
+							String temp = totalAmountString.substring(0,totalAmountString.length());
 							Double mAmount = Double.parseDouble(temp);
 							mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-							Log.v("mAmount",
-									mAmount.toString()
-											+ " "
-											+ mAmount.toString()
-													.charAt(mAmount.toString()
-															.length() - 3)
-											+ " "
-											+ mAmount.toString()
-													.charAt(mAmount.toString()
-															.length() - 2));
 
 							if (mAmount.toString().contains(".")) {
-								if (mAmount.toString().charAt(
-										mAmount.toString().length() - 3) == '.') {
+								if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
 									totalAmountString = mAmount.toString() + "";
-								} else if (mAmount.toString().charAt(
-										mAmount.toString().length() - 2) == '.') {
-									totalAmountString = mAmount.toString()
-											+ "0";
+								} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
+									totalAmountString = mAmount.toString()+ "0";
 								}
 
 							} else {
@@ -294,18 +267,14 @@ public class ConvertCursorToListString {
 						totalAmountString = temptotalAmount + "";
 					}
 					isTempAmountNull = false;
-					if (totalAmountString.contains("?")
-							&& totalAmountString.length() > 1) {
-						String temp = totalAmountString.substring(0,
-								totalAmountString.length() - 2);
+					if (totalAmountString.contains("?") && totalAmountString.length() > 1) {
+						String temp = totalAmountString.substring(0,totalAmountString.length() - 2);
 						Double mAmount = Double.parseDouble(temp);
 						mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 						if (mAmount.toString().contains(".")) {
-							if (mAmount.toString().charAt(
-									mAmount.toString().length() - 3) == '.') {
+							if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
 								totalAmountString = mAmount.toString() + " ?";
-							} else if (mAmount.toString().charAt(
-									mAmount.toString().length() - 2) == '.') {
+							} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
 								totalAmountString = mAmount.toString() + "0 ?";
 							}
 
@@ -313,27 +282,14 @@ public class ConvertCursorToListString {
 							totalAmountString = mAmount.toString() + ".00 ?";
 						}
 					} else if (!totalAmountString.contains("?")) {
-						String temp = totalAmountString.substring(0,
-								totalAmountString.length());
+						String temp = totalAmountString.substring(0,totalAmountString.length());
 						Double mAmount = Double.parseDouble(temp);
 						mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-						Log.v("mAmount",
-								mAmount.toString()
-										+ " "
-										+ mAmount.toString()
-												.charAt(mAmount.toString()
-														.length() - 3)
-										+ " "
-										+ mAmount.toString()
-												.charAt(mAmount.toString()
-														.length() - 2));
 
 						if (mAmount.toString().contains(".")) {
-							if (mAmount.toString().charAt(
-									mAmount.toString().length() - 3) == '.') {
+							if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
 								totalAmountString = mAmount.toString() + "";
-							} else if (mAmount.toString().charAt(
-									mAmount.toString().length() - 2) == '.') {
+							} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
 								totalAmountString = mAmount.toString() + "0";
 							}
 
@@ -370,9 +326,8 @@ public class ConvertCursorToListString {
 			cursor.moveToFirst();
 			do {
 				Calendar mTempCalendar = Calendar.getInstance();
-				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
-
+				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
 				if (list.isEmpty()) {
 					list.put(DatabaseAdapter.KEY_DATE_TIME,
@@ -391,8 +346,8 @@ public class ConvertCursorToListString {
 
 				if (!cursor.isAfterLast()) {
 					Calendar mTempSubCalendar = Calendar.getInstance();
-					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
 					if (!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(mTempDisplayDate.getDisplayDate())) { // TODO
 						if (isTempAmountNull) {
@@ -410,44 +365,25 @@ public class ConvertCursorToListString {
 							Double mAmount = Double.parseDouble(temp);
 							mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 							if (mAmount.toString().contains(".")) {
-								if (mAmount.toString().charAt(
-										mAmount.toString().length() - 3) == '.') {
-									totalAmountString = mAmount.toString()
-											+ " ?";
-								} else if (mAmount.toString().charAt(
-										mAmount.toString().length() - 2) == '.') {
-									totalAmountString = mAmount.toString()
-											+ "0 ?";
+								if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
+									totalAmountString = mAmount.toString()+ " ?";
+								} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
+									totalAmountString = mAmount.toString()+ "0 ?";
 								}
 
 							} else {
-								totalAmountString = mAmount.toString()
-										+ ".00 ?";
+								totalAmountString = mAmount.toString()+ ".00 ?";
 							}
 						} else if (!totalAmountString.contains("?")) {
-							String temp = totalAmountString.substring(0,
-									totalAmountString.length());
+							String temp = totalAmountString.substring(0,totalAmountString.length());
 							Double mAmount = Double.parseDouble(temp);
 							mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-							Log.v("mAmount",
-									mAmount.toString()
-											+ " "
-											+ mAmount.toString()
-													.charAt(mAmount.toString()
-															.length() - 3)
-											+ " "
-											+ mAmount.toString()
-													.charAt(mAmount.toString()
-															.length() - 2));
 
 							if (mAmount.toString().contains(".")) {
-								if (mAmount.toString().charAt(
-										mAmount.toString().length() - 3) == '.') {
+								if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
 									totalAmountString = mAmount.toString() + "";
-								} else if (mAmount.toString().charAt(
-										mAmount.toString().length() - 2) == '.') {
-									totalAmountString = mAmount.toString()
-											+ "0";
+								} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
+									totalAmountString = mAmount.toString()+ "0";
 								}
 
 							} else {
@@ -469,18 +405,14 @@ public class ConvertCursorToListString {
 						totalAmountString = temptotalAmount + "";
 					}
 					isTempAmountNull = false;
-					if (totalAmountString.contains("?")
-							&& totalAmountString.length() > 1) {
-						String temp = totalAmountString.substring(0,
-								totalAmountString.length() - 2);
+					if (totalAmountString.contains("?")&& totalAmountString.length() > 1) {
+						String temp = totalAmountString.substring(0,totalAmountString.length() - 2);
 						Double mAmount = Double.parseDouble(temp);
 						mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 						if (mAmount.toString().contains(".")) {
-							if (mAmount.toString().charAt(
-									mAmount.toString().length() - 3) == '.') {
+							if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
 								totalAmountString = mAmount.toString() + " ?";
-							} else if (mAmount.toString().charAt(
-									mAmount.toString().length() - 2) == '.') {
+							} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
 								totalAmountString = mAmount.toString() + "0 ?";
 							}
 
@@ -488,27 +420,14 @@ public class ConvertCursorToListString {
 							totalAmountString = mAmount.toString() + ".00 ?";
 						}
 					} else if (!totalAmountString.contains("?")) {
-						String temp = totalAmountString.substring(0,
-								totalAmountString.length());
+						String temp = totalAmountString.substring(0,totalAmountString.length());
 						Double mAmount = Double.parseDouble(temp);
 						mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-						Log.v("mAmount",
-								mAmount.toString()
-										+ " "
-										+ mAmount.toString()
-												.charAt(mAmount.toString()
-														.length() - 3)
-										+ " "
-										+ mAmount.toString()
-												.charAt(mAmount.toString()
-														.length() - 2));
 
 						if (mAmount.toString().contains(".")) {
-							if (mAmount.toString().charAt(
-									mAmount.toString().length() - 3) == '.') {
+							if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
 								totalAmountString = mAmount.toString() + "";
-							} else if (mAmount.toString().charAt(
-									mAmount.toString().length() - 2) == '.') {
+							} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
 								totalAmountString = mAmount.toString() + "0";
 							}
 
@@ -529,7 +448,6 @@ public class ConvertCursorToListString {
 
 		}
 		adapter.close();
-		Log.v("mainlist", mainlist.toString());
 		return mainlist;
 	}
 	
@@ -548,18 +466,13 @@ public class ConvertCursorToListString {
 				tempList.add(DatabaseAdapter.KEY_LOCATION);
 				tempList.add(DatabaseAdapter.KEY_TAG);
 				tempList.add(DatabaseAdapter.KEY_TYPE);
-
 				HashMap<String, String> list = getHashMap(tempList, cursor);
 				Calendar calendar = Calendar.getInstance();
+				calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				calendar.setFirstDayOfWeek(Calendar.MONDAY);
-				calendar.setTimeInMillis(cursor.getLong(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				DisplayDate mDisplayDate = new DisplayDate(calendar);
-				list.put(DatabaseAdapter.KEY_DATE_TIME,
-						mDisplayDate.getDisplayDate()); // TODO
-				list.put(DatabaseAdapter.KEY_DATE_TIME + "Millis", cursor
-						.getString(cursor
-								.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				list.put(DatabaseAdapter.KEY_DATE_TIME,mDisplayDate.getDisplayDate()); // TODO
+				list.put(DatabaseAdapter.KEY_DATE_TIME + "Millis", cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				if (!list.isEmpty())
 					mainlist.add(list);
 				cursor.moveToNext();
@@ -569,14 +482,12 @@ public class ConvertCursorToListString {
 		return mainlist;
 	}
 
-	private HashMap<String, String> getHashMap(List<String> tempList,
-			Cursor cursor) {
+	private HashMap<String, String> getHashMap(List<String> tempList,Cursor cursor) {
 		HashMap<String, String> list = new HashMap<String, String>();
 		try {
 			for (int i = 0, j = tempList.size(); i < j; i++) {
 				try {
-					list.put(tempList.get(i), cursor.getString(cursor
-							.getColumnIndex(tempList.get(i))));
+					list.put(tempList.get(i), cursor.getString(cursor.getColumnIndex(tempList.get(i))));
 				} catch (NullPointerException e) {
 					e.printStackTrace();
 				}
@@ -605,15 +516,11 @@ public class ConvertCursorToListString {
 
 				HashMap<String, String> list = getHashMap(tempList, cursor);
 				Calendar calendar = Calendar.getInstance();
+				calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				calendar.setFirstDayOfWeek(Calendar.MONDAY);
-				calendar.setTimeInMillis(cursor.getLong(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				DisplayDate mDisplayDate = new DisplayDate(calendar);
-				list.put(DatabaseAdapter.KEY_DATE_TIME,
-						mDisplayDate.getHeaderFooterListDisplayDate()); // TODO
-				list.put(DatabaseAdapter.KEY_DATE_TIME + "Millis", cursor
-						.getString(cursor
-								.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				list.put(DatabaseAdapter.KEY_DATE_TIME,mDisplayDate.getHeaderFooterListDisplayDate()); // TODO
+				list.put(DatabaseAdapter.KEY_DATE_TIME + "Millis", cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				if (!list.isEmpty())
 					mainlist.add(list);
 				cursor.moveToNext();
