@@ -24,6 +24,7 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 	private Button show_text_voice_camera_delete;
 	private Button show_text_voice_camera_edit;
 	protected static String favID = null;
+	private FavoriteHelper mFavoriteHelper;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 			else {
 				new ShowDateHandler(this,R.string.text);
 			}
-			new FavoriteHelper(this, mShowList);
+			mFavoriteHelper = new FavoriteHelper(this, mShowList);
 		}
 		show_text_voice_camera_delete.setOnClickListener(this);
 		show_text_voice_camera_edit.setOnClickListener(this);
@@ -116,7 +117,7 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 					else {
 						new ShowDateHandler(this,R.string.text);
 					}
-					new FavoriteHelper(this, mShowList);
+					mFavoriteHelper.setShowList(mShowList);
 				}
 				show_text_voice_camera_delete.setOnClickListener(this);
 				show_text_voice_camera_edit.setOnClickListener(this);

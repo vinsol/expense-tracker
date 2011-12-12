@@ -23,10 +23,12 @@ class FavoriteHelper implements OnCheckedChangeListener{
 	private DBAdapterFavorite mDbAdapterFavorite;
 	private Activity activity;
 	private DatabaseAdapter mDatabaseAdapter;
+	private Boolean isFromFunc = false;
 	
 	FavoriteHelper(Context _context,ArrayList<String> _mShowList) {
 		mContext = _context;
 		mShowList = _mShowList;
+		isFromFunc = false;
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		show_text_voice_camera_add_favorite = (ToggleButton) activity.findViewById(R.id.show_text_voice_camera_add_favorite);
 		show_text_voice_camera_add_favorite.setVisibility(View.VISIBLE);
@@ -38,6 +40,8 @@ class FavoriteHelper implements OnCheckedChangeListener{
 			} else {
 				show_text_voice_camera_add_favorite.setChecked(false);
 			}
+		} else {
+			show_text_voice_camera_add_favorite.setChecked(false);
 		}
 		show_text_voice_camera_add_favorite.setOnCheckedChangeListener(this);
 	}
@@ -113,7 +117,9 @@ class FavoriteHelper implements OnCheckedChangeListener{
 			mDatabaseAdapter.editDatabase(_list);
 			mDatabaseAdapter.close();
 			Toast.makeText(mContext, "Added to Favorites", Toast.LENGTH_SHORT).show();
-		} else if(mShowList.get(5).equals(mContext.getString(R.string.text))){
+		} else if(!isFromFunc) 
+		{
+			if(mShowList.get(5).equals(mContext.getString(R.string.text))){
 			
 				ShowTextActivity.favID = null;
 				String favID = null;
@@ -153,10 +159,21 @@ class FavoriteHelper implements OnCheckedChangeListener{
 			}
 			
 			//TODO if deleted from favorites
-			
+		}	
 			
 	}
-	
-	
-	
+
+	public void setShowList(ArrayList<String> mShowList2) {
+		mShowList = mShowList2;
+		isFromFunc = true;
+		if(mShowList.get(4) != null) {
+			if(mShowList.get(4).equals("")){
+				show_text_voice_camera_add_favorite.setChecked(false);
+			} else {
+				show_text_voice_camera_add_favorite.setChecked(true);
+			}
+		} else {
+			show_text_voice_camera_add_favorite.setChecked(false);
+		}
+	}
 }

@@ -49,6 +49,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 	private Button text_voice_camera_save_entry;
 	private boolean setLocation = false;
 	private boolean setUnknown = false;
+	private boolean isChanged = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -200,8 +201,10 @@ public class CameraActivity extends Activity implements OnClickListener {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (PICTURE_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
+				isChanged = true;
 				new SaveAndDisplayImage().execute();
 			} else {
+				isChanged = false;
 				if(!setUnknown) {
 					File mFile = new File("/sdcard/ExpenseTracker/" + _id+ "_small.jpg");
 					if (mFile.canRead()) {
@@ -360,7 +363,21 @@ public class CameraActivity extends Activity implements OnClickListener {
 			} else {
 				listOnResult.add(mEditList.get(3));
 			}				
-			listOnResult.add(mEditList.get(4));
+			if((mEditList.get(1) != listOnResult.get(1)) || (mEditList.get(2) != listOnResult.get(2)) || isChanged) {
+				ShowTextActivity.favID = null;
+				HashMap<String, String> listForFav = new HashMap<String, String>();
+				listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
+				listForFav.put(DatabaseAdapter.KEY_ID, mEditList.get(0));
+				mDatabaseAdapter.open();
+				mDatabaseAdapter.editDatabase(listForFav);
+				mDatabaseAdapter.close();
+				listOnResult.add("");
+			} else if(ShowCameraActivity.favID == null) {
+					listOnResult.add(mEditList.get(4));
+				}
+				else { 
+					listOnResult.add(ShowCameraActivity.favID);
+			}
 			listOnResult.add(mEditList.get(5));
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
 				listOnResult.add(_list.get(DatabaseAdapter.KEY_DATE_TIME));
@@ -368,7 +385,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 				listOnResult.add(mEditList.get(6));
 			}
 			listOnResult.add(mEditList.get(7));
-			listOnResult.add(mEditList.get(8));
 			mEditList = new ArrayList<String>();
 			mEditList.addAll(listOnResult);
 			tempBundle.putStringArrayList("mDisplayList", listOnResult);

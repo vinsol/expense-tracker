@@ -50,7 +50,8 @@ public class Voice extends Activity implements OnClickListener {
 	private ArrayList<String> mEditList;
 	private boolean setLocation = false; 
 	private boolean setUnknown = false;
-
+	private Boolean isChanged = false;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,6 @@ public class Voice extends Activity implements OnClickListener {
 				}
 			}
 			if(tag.equals(getString(R.string.unknown_entry))){
-				//TODO 
 				setUnknown = true;
 			}
 			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_voiceentry)) || tag.equals(getString(R.string.finished_voiceentry)) || tag.equals(getString(R.string.unknown_entry)))) {
@@ -110,8 +110,7 @@ public class Voice extends Activity implements OnClickListener {
 			new DateHandler(this);
 		}
 
-		// ////// ******** Starts Recording each time activity starts ******
-		// ///////
+		// ////// ******** Starts Recording each time activity starts ****** ///////
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			setGraphicsVoice();
 
@@ -151,11 +150,9 @@ public class Voice extends Activity implements OnClickListener {
 	protected void onPause() {
 
 		// //// ***** Check whether audio is recording or not ******* ///////
-		// //// ****** If audio recording started then stop recording audio
-		// ***** ///////
+		// //// ****** If audio recording started then stop recording audio  ***** ///////
 		try {
-			if (android.os.Environment.getExternalStorageState().equals(
-					android.os.Environment.MEDIA_MOUNTED)) {
+			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				if (mRecordingHelper.isRecording()) {
 					mRecordingHelper.stopRecording();
 				}
@@ -273,11 +270,11 @@ public class Voice extends Activity implements OnClickListener {
 
 		// // ***** if rerecord button pressed ****** //////
 		else if (v.getId() == R.id.text_voice_camera_rerecord_button) {
+			isChanged = true;
 			try {
 				countDownTimer.cancel();
 			} catch (NullPointerException e) {
 			}
-			;
 
 			// /// ******* If Audio PlayBack is there stop playing audio
 			// *******//////
@@ -413,7 +410,21 @@ public class Voice extends Activity implements OnClickListener {
 			} else {
 				listOnResult.add(mEditList.get(3));
 			}				
-			listOnResult.add(mEditList.get(4));
+			if((mEditList.get(1) != listOnResult.get(1)) || (mEditList.get(2) != listOnResult.get(2)) || isChanged ) {
+				ShowTextActivity.favID = null;
+				HashMap<String, String> listForFav = new HashMap<String, String>();
+				listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
+				listForFav.put(DatabaseAdapter.KEY_ID, mEditList.get(0));
+				mDatabaseAdapter.open();
+				mDatabaseAdapter.editDatabase(listForFav);
+				mDatabaseAdapter.close();
+				listOnResult.add("");
+			} else if(ShowVoiceActivity.favID == null) {
+					listOnResult.add(mEditList.get(4));
+				}
+				else { 
+					listOnResult.add(ShowVoiceActivity.favID);
+			}
 			listOnResult.add(mEditList.get(5));
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
 				listOnResult.add(_list.get(DatabaseAdapter.KEY_DATE_TIME));
@@ -421,7 +432,6 @@ public class Voice extends Activity implements OnClickListener {
 				listOnResult.add(mEditList.get(6));
 			}
 			listOnResult.add(mEditList.get(7));
-			listOnResult.add(mEditList.get(8));
 			mEditList = new ArrayList<String>();
 			mEditList.addAll(listOnResult);
 			tempBundle.putStringArrayList("mDisplayList", listOnResult);

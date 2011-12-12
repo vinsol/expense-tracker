@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,6 +36,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 	private Long _id = null;
 	private static final int EDIT_RESULT = 35;
 	protected static String favID = null;
+	private FavoriteHelper mFavoriteHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,14 +90,12 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 					final float scale = this.getResources().getDisplayMetrics().density;
 					int width = (int) (84 * scale + 0.5f);
 					int height = (int) (111 * scale + 0.5f);
-
 					show_text_voice_camera_image_display.setLayoutParams(new LayoutParams(width, height));
 				}
 				
 				show_text_voice_camera_image_display.setImageDrawable(mDrawable);
 			} else {
-				show_text_voice_camera_image_display
-						.setImageResource(R.drawable.no_image_small);
+				show_text_voice_camera_image_display.setImageResource(R.drawable.no_image_small);
 			}
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
@@ -109,11 +107,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 			else {
 				new ShowDateHandler(this,R.string.camera);
 			}
-//			for(int i = 0;i<mShowList.size();i++){
-//				Log.v("mShowList "+i, mShowList.get(i));
-//			}
-			Log.v("mShowList ", mShowList.toString());
-			new FavoriteHelper(this, mShowList);
+			mFavoriteHelper = new FavoriteHelper(this, mShowList);
 		}
 
 		show_text_voice_camera_image_display.setOnClickListener(this);
@@ -179,10 +173,8 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (EDIT_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
-				
 				intentExtras = data.getBundleExtra("cameraShowBundle");
 				if (intentExtras.containsKey("mDisplayList")) {
-					
 					mShowList = new ArrayList<String>();
 					mShowList = intentExtras.getStringArrayList("mDisplayList");
 					_id = Long.parseLong(mShowList.get(0));
@@ -200,21 +192,16 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 					}
 
 					File mFile = new File("/sdcard/ExpenseTracker/" + _id+ "_small.jpg");
-					if (mFile.canRead()) {
-						Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
-						
+					if (mFile.canRead()) {Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 						if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
 							final float scale = this.getResources().getDisplayMetrics().density;
 							int width = (int) (84 * scale + 0.5f);
 							int height = (int) (111 * scale + 0.5f);
-
 							show_text_voice_camera_image_display.setLayoutParams(new LayoutParams(width, height));
 						}
-						
 						show_text_voice_camera_image_display.setImageDrawable(mDrawable);
 					} else {
-						show_text_voice_camera_image_display
-								.setImageResource(R.drawable.no_image_small);
+						show_text_voice_camera_image_display.setImageResource(R.drawable.no_image_small);
 					}
 					Calendar mCalendar = Calendar.getInstance();
 					mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
@@ -226,7 +213,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 					else {
 						new ShowDateHandler(this,R.string.camera);
 					}
-					new FavoriteHelper(this, mShowList);
+					mFavoriteHelper.setShowList(mShowList);
 				}
 
 				show_text_voice_camera_image_display.setOnClickListener(this);

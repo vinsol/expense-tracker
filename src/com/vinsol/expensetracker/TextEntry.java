@@ -221,11 +221,23 @@ public class TextEntry extends Activity implements OnClickListener {
 				listOnResult.add(new DisplayDate().getLocationDateDate(_list.get(DatabaseAdapter.KEY_DATE_TIME)));
 			} else {
 				listOnResult.add(mEditList.get(3));
-			}				
-			if(ShowTextActivity.favID == null)
-				listOnResult.add(mEditList.get(4));
-			else 
-				listOnResult.add(ShowTextActivity.favID);
+			}
+			
+			if((mEditList.get(1) != listOnResult.get(1)) || (mEditList.get(2) != listOnResult.get(2))) {
+				ShowTextActivity.favID = null;
+				HashMap<String, String> listForFav = new HashMap<String, String>();
+				listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
+				listForFav.put(DatabaseAdapter.KEY_ID, mEditList.get(0));
+				mDatabaseAdapter.open();
+				mDatabaseAdapter.editDatabase(listForFav);
+				mDatabaseAdapter.close();
+				listOnResult.add("");
+			} else if(ShowTextActivity.favID == null) {
+					listOnResult.add(mEditList.get(4));
+				}
+				else { 
+					listOnResult.add(ShowTextActivity.favID);
+			}
 			listOnResult.add(mEditList.get(5));
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
 				listOnResult.add(_list.get(DatabaseAdapter.KEY_DATE_TIME));
@@ -233,7 +245,7 @@ public class TextEntry extends Activity implements OnClickListener {
 				listOnResult.add(mEditList.get(6));
 			}
 			listOnResult.add(mEditList.get(7));
-			listOnResult.add(mEditList.get(8));
+			
 			mEditList = new ArrayList<String>();
 			mEditList.addAll(listOnResult);
 			tempBundle.putStringArrayList("mDisplayList", listOnResult);
