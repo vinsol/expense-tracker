@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -68,9 +67,9 @@ public class TextEntry extends Activity implements OnClickListener {
 			}
 		}
 
-		if (!intentExtras.containsKey("mDisplayList")) {
-			getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-		}
+//		if (!intentExtras.containsKey("mDisplayList")) {
+//			getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+//		}
 		
 		// ////// ******** Handle Date Bar ********* ////////
 		if(!intentExtras.containsKey("isFromShowPage")){
@@ -90,7 +89,6 @@ public class TextEntry extends Activity implements OnClickListener {
 			else 
 				new EditLocationHandler(this, "unknown location");
 			
-			
 			if(mEditList.get(6) != null)
 				new EditDateHandler(this, mEditList.get(6));
 			else {
@@ -98,8 +96,6 @@ public class TextEntry extends Activity implements OnClickListener {
 			}
 		}
 		setClickListeners();
-		
-		
 	}
 
 	@Override
@@ -216,6 +212,9 @@ public class TextEntry extends Activity implements OnClickListener {
 
 		if(!intentExtras.containsKey("isFromShowPage")){
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			Bundle mToHighLight = new Bundle();
+			mToHighLight.putString("toHighLight", _list.get(DatabaseAdapter.KEY_ID));
+			intentExpenseListing.putExtras(mToHighLight);
 			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intentExpenseListing);
 		} else {
@@ -260,8 +259,10 @@ public class TextEntry extends Activity implements OnClickListener {
 			mEditList.addAll(listOnResult);
 			tempBundle.putStringArrayList("mDisplayList", listOnResult);
 			mIntent.putExtra("textShowBundle", tempBundle);
+			mIntent.putExtra("toHighLight", listOnResult.get(0));
 			setResult(Activity.RESULT_OK, mIntent);
 		}
 		finish();
 	}
+
 }

@@ -38,7 +38,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	private ImageView main_graph_next_arrow ;
 	private RelativeLayout.LayoutParams params ;
 	static private BarGraph barGraph;
-
+	static private TextView graph_no_item;
+	private TextView main_graph_header_textview;
 	
 	public HandleGraph(Context _context) {
 		mContext = _context;
@@ -56,6 +57,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		main_graph_previous_arrow.setVisibility(View.INVISIBLE);
 		main_graph_next_arrow.setVisibility(View.INVISIBLE);
 		main_graph.removeView(barGraph);
+		main_graph.removeView(graph_no_item);
 		super.onPreExecute();
 	}
 	
@@ -94,12 +96,12 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				}
 				main_graph_next_arrow.setOnClickListener(this);
 				main_graph_previous_arrow.setOnClickListener(this);
-				TextView main_graph_header_textview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
+				main_graph_header_textview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
 				main_graph_header_textview.setText(mGraphList.get(j).get(3).get(0));
 			}
 			
 		} else {
-			TextView graph_no_item = new TextView(mContext);
+			graph_no_item = new TextView(mContext);
 			graph_no_item.setGravity(Gravity.CENTER);
 			graph_no_item.setText("No Items to Show");
 			LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, main_graph.getBackground().getIntrinsicHeight());
@@ -108,6 +110,9 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			graph_no_item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 			graph_no_item.setLayoutParams(textParams);
 			main_graph.addView(graph_no_item);
+			main_graph_next_arrow.setVisibility(View.INVISIBLE);
+			main_graph_previous_arrow.setVisibility(View.INVISIBLE);
+			main_graph_header_textview.setText("");
 		}
 		super.onPostExecute(result);
 	}

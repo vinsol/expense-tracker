@@ -404,6 +404,9 @@ public class Voice extends Activity implements OnClickListener {
 		
 		if(!intentExtras.containsKey("isFromShowPage")){
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			Bundle mToHighLight = new Bundle();
+			mToHighLight.putString("toHighLight", _list.get(DatabaseAdapter.KEY_ID));
+			intentExpenseListing.putExtras(mToHighLight);
 			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intentExpenseListing);
 		} else {

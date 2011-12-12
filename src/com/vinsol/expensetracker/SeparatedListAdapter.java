@@ -45,6 +45,7 @@ class SeparatedListAdapter extends BaseAdapter {
 	}
 
 	public void addSection(String section, Adapter adapter,List<HashMap<String, String>> _mDataDateList) {
+		
 		mDatadateList = _mDataDateList;
 		notifyDataSetChanged();
 		this.headers.add(section);
@@ -151,8 +152,11 @@ class SeparatedListAdapter extends BaseAdapter {
 				} else {
 					holderBody = (ViewHolderBody) convertView.getTag();
 				}
+				
+				
 				@SuppressWarnings("unchecked")
-				final List<String> mlist = (List<String>) adapter.getItem(position - 1);
+				List<String> mlist = (List<String>) adapter.getItem(position - 1);
+				
 				
 				if (mlist.get(5).equals(mContext.getString(R.string.camera))) {
 					
@@ -170,13 +174,11 @@ class SeparatedListAdapter extends BaseAdapter {
 								holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
 							}
 						} catch (Exception e) {
-							// TODO if image not available on sdcard
 							holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
 							e.printStackTrace();
 						}
 					} else {
 						holderBody.expense_listing_inflated_row_imageview.setImageResource(R.drawable.no_image_thumbnail);
-						// TODO if sdcard not available
 					}
 				} else if (mlist.get(5).equals(mContext.getString(R.string.text))) {
 
@@ -215,7 +217,6 @@ class SeparatedListAdapter extends BaseAdapter {
 							
 						}
 					}
-					// ///TODO if favorite entry
 				}
 				
 				holderBody.expense_listing_inflated_row_imageview.setFocusable(false);
@@ -252,7 +253,6 @@ class SeparatedListAdapter extends BaseAdapter {
 
 				return convertView;
 			}
-			// otherwise jump into next section
 			position -= size;
 			sectionnum++;
 
@@ -317,8 +317,6 @@ class SeparatedListAdapter extends BaseAdapter {
 							File mFile = new File("/sdcard/ExpenseTracker/Audio/" + mListenerList.get(0) + ".amr");
 							if (mFile.canRead()) {
 								new AudioPlayDialog(mContext, mListenerList.get(0));
-							} else {
-								// TODO audio image change
 							}
 						} else if (mListenerList.get(5).equals(mContext.getString(R.string.camera))) {
 							File mFile = new File("/sdcard/ExpenseTracker/" + mListenerList.get(0) + ".jpg");
@@ -328,8 +326,6 @@ class SeparatedListAdapter extends BaseAdapter {
 								intent.putExtra("id", Long.parseLong(mListenerList.get(0)));
 								mContext.startActivity(intent);
 
-							} else {
-								// TODO if image not found
 							}
 						}
 					}

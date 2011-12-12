@@ -6,10 +6,11 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import com.vinsol.expensetracker.utils.DisplayDate;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ExpenseSubListing extends Activity implements OnItemClickListener{
@@ -30,14 +32,15 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 	private Long highlightID = null;
 	private String idList;
 	private UnknownEntryDialog unknownDialog;
+	private TextView expense_listing_header;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setContentView(R.layout.expense_listing);
 		idList = getIntent().getStringExtra("idList");
 		mConvertCursorToListString = new ConvertCursorToListString(this);
+		expense_listing_header = (TextView) findViewById(R.id.text_voice_camera_header_title);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -46,26 +49,34 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 		mSeparatedListAdapter = new SeparatedListAdapter(this);
 		mDataDateList = mConvertCursorToListString.getDateListString(idList);
 		mSubList = mConvertCursorToListString.getListStringParticularDate(idList);
+		
 		Bundle intentExtras = getIntent().getExtras();
 		if(intentExtras != null){
 			if(intentExtras.containsKey("toHighLight")){
 				highlightID = intentExtras.getLong("toHighLight");
 			}
 		}
+		
+		Calendar mTempCalendar = Calendar.getInstance();
+		mTempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(0).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
+		mTempCalendar.set(mTempCalendar.get(Calendar.YEAR),mTempCalendar.get(Calendar.MONTH),mTempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+		mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		
+		expense_listing_header.setText(new DisplayDate(mTempCalendar).getDisplayDateHeaderGraph());
+		
+		
 		int j = 0;
 		@SuppressWarnings("rawtypes")
 		List listString = new ArrayList<List<List<String>>>();
 		for (int i = 0; i < mDataDateList.size(); i++) {
 			List<List<String>> mList = new ArrayList<List<String>>();
 			String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
-			Log.v("asd", mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME) +"   "+mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME));
 			while (j < mSubList.size()&& date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
 				List<String> _templist = new ArrayList<String>();
 				Calendar mCalendar = Calendar.getInstance();
 				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
 				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				_templist = getList(j);
-				Log.v("_templist", _templist.toString());
 				mList.add(_templist);
 				j++;
 				if (j < mSubList.size()) {
@@ -74,7 +85,6 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 				}
 			}
 			listString.add(mList);
-			Log.v("listString", listString.toString());
 			@SuppressWarnings("rawtypes")
 			List tt = (List) listString.get(i);
 			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<String>(this, R.layout.expense_listing, tt), mDataDateList);

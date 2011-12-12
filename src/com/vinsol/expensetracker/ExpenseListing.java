@@ -20,7 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.utils.DisplayDate;
-import com.vinsol.expensetracker.utils.Log;
+import com.vinsol.expensetracker.utils.GetArrayListFromString;
 
 public class ExpenseListing extends Activity implements OnItemClickListener {
 
@@ -29,7 +29,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 	private List<HashMap<String, String>> mDataDateList;
 	private SeparatedListAdapter mSeparatedListAdapter;
 	private List<HashMap<String, String>> mSubList;
-	private Long highlightID = null;
+	private String highlightID = null;
 	private UnknownEntryDialog unknownDialog;
 	private static int firstVisiblePosition;
 	
@@ -50,7 +50,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		Bundle intentExtras = getIntent().getExtras();
 		if(intentExtras != null){
 			if(intentExtras.containsKey("toHighLight")){
-				highlightID = intentExtras.getLong("toHighLight");
+				highlightID = intentExtras.getString("toHighLight");
 			}
 		}
 		int j = 0;
@@ -139,6 +139,32 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						mTempSubList.add("");
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_weekwise));
+						mTempSubList.add("");
+						mTempSubList.add("");
+						if(highlightID != null){
+							if (j < mSubList.size()) {
+								if(mTempSubList.get(0).contains(highlightID)){
+									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
+									for(int checkI=0;checkI<mArrayList.size();checkI++){
+										if(mArrayList.get(checkI).equals(highlightID)){
+											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
+											expenseSubListing.putExtra("idList", mTempSubList.get(0));
+											expenseSubListing.putExtra("title", mTempSubList.get(1));
+											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+											startActivity(expenseSubListing);
+											finish();
+										}
+									}
+									mTempSubList.add(highlightID);
+								} else {
+									mTempSubList.add("");
+								}
+							} else {
+								mTempSubList.add("");
+							}
+						} else {
+							mTempSubList.add("");
+						}
 						mList.add(mTempSubList);
 						if (j == mSubList.size()) {
 							break;
@@ -209,6 +235,32 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						mTempSubList.add("");
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_weekwise));
+						mTempSubList.add("");
+						mTempSubList.add("");
+						if(highlightID != null){
+							if (j < mSubList.size()) {
+								if(mTempSubList.get(0).contains(highlightID)){
+									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
+									for(int checkI=0;checkI<mArrayList.size();checkI++){
+										if(mArrayList.get(checkI).equals(highlightID)){
+											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
+											expenseSubListing.putExtra("idList", mTempSubList.get(0));
+											expenseSubListing.putExtra("title", mTempSubList.get(1));
+											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+											startActivity(expenseSubListing);
+											finish();
+										}
+									}
+									mTempSubList.add(highlightID);
+								} else {
+									mTempSubList.add("");
+								}
+							} else {
+								mTempSubList.add("");
+							}
+						} else {
+							mTempSubList.add("");
+						}
 						mList.add(mTempSubList);
 						if (j == mSubList.size()) {
 							break;
@@ -277,6 +329,32 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						mTempSubList.add("");
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_monthwise));
+						mTempSubList.add("");
+						mTempSubList.add("");
+						if(highlightID != null){
+							if (j < mSubList.size()) {
+								if(mTempSubList.get(0).contains(highlightID)){
+									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
+									for(int checkI=0;checkI<mArrayList.size();checkI++){
+										if(mArrayList.get(checkI).equals(highlightID)){
+											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
+											expenseSubListing.putExtra("idList", mTempSubList.get(0));
+											expenseSubListing.putExtra("title", mTempSubList.get(1));
+											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+											startActivity(expenseSubListing);
+											finish();
+										}
+									}
+									mTempSubList.add(highlightID);
+								} else {
+									mTempSubList.add("");
+								}
+							} else {
+								mTempSubList.add("");
+							}
+						} else {
+							mTempSubList.add("");
+						}
 						mList.add(mTempSubList);
 						if (j >= mSubList.size()) {
 							break;
@@ -287,14 +365,12 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 			listString.add(mList);
 			@SuppressWarnings("rawtypes")
 			List tt = (List) listString.get(i);
-			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<String>(
-					this, R.layout.expense_listing, tt), mDataDateList);
+			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<String>(this, R.layout.expense_listing, tt), mDataDateList);
 
 		}
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setOnItemClickListener(this);
 		mListView.setAdapter(mSeparatedListAdapter);
-		Log.d(listString.toString());
 
 		if (mDataDateList.size() < 1) {
 			mListView.setVisibility(View.GONE);
@@ -308,8 +384,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						}
 					});
 		}
-		mSeparatedListAdapter.notifyDataSetChanged();
-		
 		mListView.setSelection(firstVisiblePosition);
 		super.onResume();
 	}
@@ -473,9 +547,17 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"));
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
 		if(highlightID != null){
-			if(mSubList.get(j).get(DatabaseAdapter.KEY_ID).equals(Long.toString(highlightID))){
-				_templist.add(Long.toString(highlightID));
+			if (j < mSubList.size()) {
+				if(mSubList.get(j).get(DatabaseAdapter.KEY_ID).equals(highlightID)){
+					_templist.add(highlightID);
+				} else {
+					_templist.add("");
+				}
+			} else {
+				_templist.add("");
 			}
+		} else {
+			_templist.add("");
 		}
 		return _templist;
 	}
@@ -662,6 +744,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		} else {
 			Intent mSubListIntent = new Intent(this, ExpenseSubListing.class);
 			mSubListIntent.putExtra("idList", mTempClickedList.get(0));
+			mSubListIntent.putExtra("title", mTempClickedList.get(1));
+			mSubListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(mSubListIntent);
 		}
 	}
