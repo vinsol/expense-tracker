@@ -92,7 +92,6 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				}
 				if(j == 0){
 					main_graph_previous_arrow.setVisibility(View.INVISIBLE);
-					
 				}
 				main_graph_next_arrow.setOnClickListener(this);
 				main_graph_previous_arrow.setOnClickListener(this);

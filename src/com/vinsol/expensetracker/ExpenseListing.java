@@ -142,14 +142,13 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						mTempSubList.add("");
 						mTempSubList.add("");
 						if(highlightID != null){
-							if (j < mSubList.size()) {
+							if (j <= mSubList.size()) {
 								if(mTempSubList.get(0).contains(highlightID)){
 									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
 									for(int checkI=0;checkI<mArrayList.size();checkI++){
 										if(mArrayList.get(checkI).equals(highlightID)){
 											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
 											expenseSubListing.putExtra("idList", mTempSubList.get(0));
-											expenseSubListing.putExtra("title", mTempSubList.get(1));
 											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 											startActivity(expenseSubListing);
 											finish();
@@ -238,14 +237,13 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						mTempSubList.add("");
 						mTempSubList.add("");
 						if(highlightID != null){
-							if (j < mSubList.size()) {
+							if (j <= mSubList.size()) {
 								if(mTempSubList.get(0).contains(highlightID)){
 									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
 									for(int checkI=0;checkI<mArrayList.size();checkI++){
 										if(mArrayList.get(checkI).equals(highlightID)){
 											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
 											expenseSubListing.putExtra("idList", mTempSubList.get(0));
-											expenseSubListing.putExtra("title", mTempSubList.get(1));
 											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 											startActivity(expenseSubListing);
 											finish();
@@ -332,14 +330,13 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						mTempSubList.add("");
 						mTempSubList.add("");
 						if(highlightID != null){
-							if (j < mSubList.size()) {
+							if (j <= mSubList.size()) {
 								if(mTempSubList.get(0).contains(highlightID)){
 									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
 									for(int checkI=0;checkI<mArrayList.size();checkI++){
 										if(mArrayList.get(checkI).equals(highlightID)){
 											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
 											expenseSubListing.putExtra("idList", mTempSubList.get(0));
-											expenseSubListing.putExtra("title", mTempSubList.get(1));
 											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 											startActivity(expenseSubListing);
 											finish();
