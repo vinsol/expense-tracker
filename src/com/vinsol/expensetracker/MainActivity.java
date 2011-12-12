@@ -87,9 +87,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onPause() {
+
 		_id = null;
-		if(!mHandleGraph.isCancelled())
-			mHandleGraph.cancel(true);
 		super.onPause();
 	}
 	

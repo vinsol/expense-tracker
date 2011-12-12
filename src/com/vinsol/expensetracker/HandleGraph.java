@@ -37,7 +37,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	private ImageView main_graph_previous_arrow ;
 	private ImageView main_graph_next_arrow ;
 	private RelativeLayout.LayoutParams params ;
-	private BarGraph barGraph;
+	static private BarGraph barGraph;
 
 	
 	public HandleGraph(Context _context) {
@@ -381,13 +381,6 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				main_graph_header_textview.setText(mGraphList.get(j).get(3).get(0));
 			}
 		} 
-	}
-	
-	@Override
-	protected void onCancelled() {
-		main_graph_previous_arrow.setOnClickListener(null);
-		main_graph_next_arrow.setOnClickListener(null);
-		super.onCancelled();
 	}
 
 }

@@ -463,7 +463,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"));
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
-		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
 		if(highlightID != null){
 			if(mSubList.get(j).get(DatabaseAdapter.KEY_ID).equals(Long.toString(highlightID))){
 				_templist.add(Long.toString(highlightID));
