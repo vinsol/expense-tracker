@@ -9,7 +9,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -21,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.utils.DisplayDate;
+import com.vinsol.expensetracker.utils.Log;
 
 public class ExpenseListing extends Activity implements OnItemClickListener {
 
@@ -30,6 +30,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 	private SeparatedListAdapter mSeparatedListAdapter;
 	private List<HashMap<String, String>> mSubList;
 	private Long highlightID = null;
+	
+	private static int firstVisiblePosition;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -292,7 +294,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setOnItemClickListener(this);
 		mListView.setAdapter(mSeparatedListAdapter);
-		Log.v("listString", listString.toString());
+		Log.d(listString.toString());
 
 		if (mDataDateList.size() < 1) {
 			mListView.setVisibility(View.GONE);
@@ -308,8 +310,16 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		}
 		mSeparatedListAdapter.notifyDataSetChanged();
 		
+		mListView.setSelection(firstVisiblePosition);
 		super.onResume();
 	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		firstVisiblePosition = mListView.getFirstVisiblePosition();
+	}
+	
 
 	private String getTotalAmountString(String totalAmountString) {
 		if (totalAmountString.contains("?") && totalAmountString.length() > 1) {
