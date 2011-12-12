@@ -638,10 +638,11 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
 				}
 			} else if (mTempClickedList.get(5).equals(getString(R.string.unknown))) {
-				Intent intentMain = new Intent(this, MainActivity.class);
-				intentMain.putExtra("mainBundle", bundle);
-				intentMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intentMain);
+				new UnknownEntryDialog(this);
+//				Intent intentMain = new Intent(this, MainActivity.class);
+//				intentMain.putExtra("mainBundle", bundle);
+//				intentMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//				startActivity(intentMain);
 				//TODO if unknown entry
 			}
 		} else {
