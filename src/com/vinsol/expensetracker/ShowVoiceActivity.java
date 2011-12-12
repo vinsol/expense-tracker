@@ -272,7 +272,6 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 				
 				
 				if (intentExtras.containsKey("mDisplayList")) {
-					Log.v("yo true", true+"");
 					mShowList = new ArrayList<String>();
 					mShowList = intentExtras.getStringArrayList("mDisplayList");
 					Log.v("mShowListOnResult", mShowList.toString());

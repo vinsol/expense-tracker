@@ -22,6 +22,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private Bundle bundle;
 	private Long _id = null; 
 	private ArrayList<String> mTempClickedList;
+	private HandleGraph mHandleGraph;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,12 +80,14 @@ public class MainActivity extends Activity implements OnClickListener {
 		if(location == null) {
 			LocationHelper.requestLocationUpdate();
 		}
-		new HandleGraph(this).execute();
+		mHandleGraph = new HandleGraph(this);
+		mHandleGraph.execute();
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
+
 		_id = null;
 		super.onPause();
 	}

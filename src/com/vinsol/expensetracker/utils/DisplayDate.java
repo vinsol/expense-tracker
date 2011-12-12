@@ -41,10 +41,14 @@ public class DisplayDate {
 	// various activities ****** ///////
 	public String getHeaderFooterListDisplayDate() {
 		String month, day, year;
+		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		
 		month = getMonth(mCalendar.get(Calendar.MONTH));
 		day = mCalendar.get(Calendar.DAY_OF_MONTH) + "";
 		year = mCalendar.get(Calendar.YEAR) + "";
 		Calendar currentDate = Calendar.getInstance();
+		currentDate.set(currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH),0,0,0);
 		currentDate.setFirstDayOfWeek(Calendar.MONDAY);
 		if (Integer.parseInt(day) == currentDate.get(Calendar.DAY_OF_MONTH)
 				&& mCalendar.get(Calendar.MONTH) == currentDate

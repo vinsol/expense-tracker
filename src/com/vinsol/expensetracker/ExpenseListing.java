@@ -83,6 +83,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+						tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						mDisplayDate = new DisplayDate(tempCalendar);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
@@ -108,6 +109,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							j++;
 							if (j < mSubList.size()) {
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+								tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+								tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								tempDisplayDate = new DisplayDate(tempCalendar);
 								if(tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth
 										&& tempCalendar.get(Calendar.MONTH) == isCurrentMonth
@@ -149,6 +152,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+						mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						mDisplayDate = new DisplayDate(tempCalendar);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
@@ -174,6 +178,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							j++;
 							if (j < mSubList.size()) {
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+								tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+								tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								tempDisplayDate = new DisplayDate(tempCalendar);
 								if(tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth
 										&& tempCalendar.get(Calendar.MONTH) == isCurrentMonth
@@ -216,6 +222,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						Calendar tempCalendar = Calendar.getInstance();
 						
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+						tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
 						int isMonth = tempCalendar.get(Calendar.MONTH);
@@ -227,8 +234,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						String totalAmountString = null;
 						boolean isTempAmountNull = false;
 						do {
-							String tempAmount = mSubList.get(j).get(
-									DatabaseAdapter.KEY_AMOUNT);
+							String tempAmount = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
 							if (tempAmount != null && !tempAmount.equals("")) {
 								try {
 									temptotalAmount += Double
@@ -242,6 +248,8 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 							if (j < mSubList.size()) {
 								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+								tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+								tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								tempDisplayDate = new DisplayDate(tempCalendar);
 								if((tempCalendar.get(Calendar.MONTH) == isMonth)
 										&& (tempCalendar.get(Calendar.YEAR) == isYear))
@@ -454,7 +462,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		}
 
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"));
-		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
 		if(highlightID != null){
 			if(mSubList.get(j).get(DatabaseAdapter.KEY_ID).equals(Long.toString(highlightID))){
