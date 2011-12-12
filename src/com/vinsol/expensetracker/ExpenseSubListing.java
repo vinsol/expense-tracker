@@ -29,6 +29,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 	private List<HashMap<String, String>> mSubList;
 	private Long highlightID = null;
 	private String idList;
+	private UnknownEntryDialog unknownDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +77,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 			Log.v("listString", listString.toString());
 			@SuppressWarnings("rawtypes")
 			List tt = (List) listString.get(i);
-			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<String>(
-					this, R.layout.expense_listing, tt), mDataDateList);
+			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<String>(this, R.layout.expense_listing, tt), mDataDateList);
 		}
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setOnItemClickListener(this);
@@ -101,7 +101,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
 		@SuppressWarnings("unchecked")
-		ArrayList<String> mTempClickedList = (ArrayList<String>) adapter.getItemAtPosition(position);
+		final ArrayList<String> mTempClickedList = (ArrayList<String>) adapter.getItemAtPosition(position);
 		String _id = mTempClickedList.get(0);
 		if (!_id.contains(",")) {
 			Bundle bundle = new Bundle();
@@ -149,14 +149,23 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 					Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
 				}
 			} else if (mTempClickedList.get(5).equals(getString(R.string.unknown))) {
-				Intent intentMain = new Intent(this, MainActivity.class);
-				intentMain.putExtra("mainBundle", bundle);
-				intentMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intentMain);
-				//TODO if unknown entry
+				unknownDialog = new UnknownEntryDialog(this,mTempClickedList,new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(ExpenseSubListing.this);
+						mDatabaseAdapter.open();
+						mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.get(0));
+						mDatabaseAdapter.close();
+						unknownDialog.dismiss();
+						
+						Intent intentExpenseListing = new Intent(ExpenseSubListing.this, ExpenseSubListing.class);
+						intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(intentExpenseListing);
+						Toast.makeText(ExpenseSubListing.this, "Deleted", Toast.LENGTH_SHORT).show();
+					}
+				});
 			}
-		} else {
-			
 		}
 	}
 	

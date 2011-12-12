@@ -27,7 +27,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	private TextView headerTextView;
 	private TextView locationTextView;
 	
-	public UnknownEntryDialog(Context mContext,ArrayList<String> _list) {
+	public UnknownEntryDialog(Context mContext,ArrayList<String> _list,android.view.View.OnClickListener deleteClickListener) {
 		super(mContext);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.unknown_entry_dialog);
@@ -40,7 +40,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		headerTextView = (TextView) findViewById(R.id.unknown_entry_dialog_header_title);
 		locationTextView = (TextView) findViewById(R.id.unknown_entry_dialog_location);
 		textEntryButton.setOnClickListener(this);
-		deleteButton.setOnClickListener(this);
+		deleteButton.setOnClickListener(deleteClickListener);
 		voiceEntryButton.setOnClickListener(this);
 		cameraEntryButton.setOnClickListener(this);
 		favoriteEntryButton.setOnClickListener(this);
@@ -77,6 +77,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				mDatabaseAdapter.open();
 				mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.get(0));
 				mDatabaseAdapter.close();
+				
 				dismiss();
 				break;
 				

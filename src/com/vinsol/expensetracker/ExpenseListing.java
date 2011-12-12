@@ -30,7 +30,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 	private SeparatedListAdapter mSeparatedListAdapter;
 	private List<HashMap<String, String>> mSubList;
 	private Long highlightID = null;
-	
+	private UnknownEntryDialog unknownDialog;
 	private static int firstVisiblePosition;
 	
 	@Override
@@ -161,7 +161,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						int isWeekOfMonth = tempCalendar.get(Calendar.WEEK_OF_MONTH);
 						int isCurrentMonth = tempCalendar.get(Calendar.MONTH);
 						int isCurrentYear = tempCalendar.get(Calendar.YEAR);
-						mTempSubList.add(tempDisplayDate.getSubListTag()); // TODO
+						mTempSubList.add(tempDisplayDate.getSubListTag());
 
 						// /// Adding Amount
 						double temptotalAmount = 0;
@@ -229,7 +229,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
 						int isMonth = tempCalendar.get(Calendar.MONTH);
 						int isYear = tempCalendar.get(Calendar.YEAR);
-						mTempSubList.add(tempDisplayDate.getSubListTag()); // TODO
+						mTempSubList.add(tempDisplayDate.getSubListTag());
 
 						// /// Adding Amount
 						double temptotalAmount = 0;
@@ -320,7 +320,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		firstVisiblePosition = mListView.getFirstVisiblePosition();
 	}
 	
-
 	private String getTotalAmountString(String totalAmountString) {
 		if (totalAmountString.contains("?") && totalAmountString.length() > 1) {
 			String temp = totalAmountString.substring(0,
@@ -598,9 +597,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
+	public void onItemClick(final AdapterView<?> adapter, View v,final int position, long arg3) {
 		@SuppressWarnings("unchecked")
-		ArrayList<String> mTempClickedList = (ArrayList<String>) adapter.getItemAtPosition(position);
+		final ArrayList<String> mTempClickedList = (ArrayList<String>) adapter.getItemAtPosition(position);
 		String _id = mTempClickedList.get(0);
 		if (!_id.contains(",")) {
 			Bundle bundle = new Bundle();
@@ -615,7 +614,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						Intent intentCamera = new Intent(this,ShowCameraActivity.class);
 						intentCamera.putExtra("cameraShowBundle", bundle);
 						startActivity(intentCamera);
-						// TODO
 					}
 				} else {
 					Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
@@ -629,7 +627,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 					Intent intentTextShow = new Intent(this,ShowTextActivity.class);
 					intentTextShow.putExtra("textShowBundle", bundle);
 					startActivity(intentTextShow);
-					// TODO
 				}
 
 			} else if (mTempClickedList.get(5).equals(getString(R.string.voice))) {
@@ -642,21 +639,27 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						Intent intentVoiceShow = new Intent(this,ShowVoiceActivity.class);
 						intentVoiceShow.putExtra("voiceShowBundle", bundle);
 						startActivity(intentVoiceShow);
-						// TODO
 					}
 				} else {
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
 				}
 			} else if (mTempClickedList.get(5).equals(getString(R.string.unknown))) {
-				new UnknownEntryDialog(this,mTempClickedList);
-//				Intent intentMain = new Intent(this, MainActivity.class);
-//				intentMain.putExtra("mainBundle", bundle);
-//				intentMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//				startActivity(intentMain);
-				//TODO if unknown entry
+				unknownDialog = new UnknownEntryDialog(this,mTempClickedList,new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(ExpenseListing.this);
+						mDatabaseAdapter.open();
+						mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.get(0));
+						mDatabaseAdapter.close();
+						unknownDialog.dismiss();
+						Intent intentExpenseListing = new Intent(ExpenseListing.this, ExpenseListing.class);
+						intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(intentExpenseListing);
+						Toast.makeText(ExpenseListing.this, "Deleted", Toast.LENGTH_SHORT).show();
+					}
+				});
 			}
 		} else {
-//			ArrayList<String> idList = new GetArrayListFromString().getListFromTextArea(mTempClickedList.get(0));
 			Intent mSubListIntent = new Intent(this, ExpenseSubListing.class);
 			mSubListIntent.putExtra("idList", mTempClickedList.get(0));
 			startActivity(mSubListIntent);

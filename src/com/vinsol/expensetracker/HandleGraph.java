@@ -260,7 +260,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 						}
 					}
 				}
-			} 
+			}
+			
 		}
 		return graphList;
 	}
