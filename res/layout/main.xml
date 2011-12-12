@@ -79,7 +79,8 @@
        		        android:layout_alignParentLeft="true"
        		        android:layout_centerVertical="true"
        		        android:paddingBottom="15dp"
-       		        />
+       		        >
+     		    </ImageView>
        		    
        		    <ImageView 
        		        android:id="@+id/main_graph_next_arrow"
@@ -88,67 +89,17 @@
        		        android:src="@drawable/graph_next_arrow"
        		        android:layout_alignParentRight="true"
        		        android:layout_centerVertical="true"
-       		        android:paddingBottom="15dp"/>
-       		          		    
+       		        android:paddingBottom="15dp"
+       		        >
+      		    </ImageView>   
        		</RelativeLayout>
-
-    		<!-- text and voice button -->
-    		<LinearLayout
-        		android:layout_width="fill_parent"
-        		android:layout_height="wrap_content"
-        		android:layout_below="@id/main_graph"
-        		android:id="@+id/main_text_voice"
-        		android:layout_marginBottom="20dp"
-        		android:gravity="center"
-        		>
-        		<Button
-        		    android:id="@+id/main_text"
-        		    android:layout_width="wrap_content"
-        		    android:layout_height="wrap_content"
-        		    android:layout_marginRight="40dp"
-        		    android:background="@drawable/home_text_states" 
-        		    >
-       		    </Button>
-       		    
-       		    <Button
-        		    android:id="@+id/main_voice"
-        		    android:layout_width="wrap_content"
-        		    android:layout_height="wrap_content"
-        		    android:background="@drawable/home_voice_states" 
-        		    android:layout_marginLeft="40dp"
-        		    >
-				</Button>
-				
-
-    		</LinearLayout>
     		
-    		<!-- camera and favorite button -->    
-    	    <LinearLayout
-     		    android:id="@+id/main_camera_favorites"
-        		android:layout_width="fill_parent"
-        		android:layout_height="wrap_content"
-        		android:gravity="center" 
-        		>
-
-        		<Button
-            		android:id="@+id/main_camera"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:background="@drawable/home_camera_states" 
-            		android:layout_marginRight="40dp"
-            		>
-           		</Button>
-
-        		<Button
-            		android:id="@+id/main_favorite"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:background="@drawable/home_favorites_states"
-            		android:layout_marginLeft="40dp" 
-            		>
-           		</Button>
-    		</LinearLayout>
-   	  	</LinearLayout>  
+    		<include 
+     			layout="@layout/new_entry_icons_grid"
+    		    android:layout_below="@id/main_graph"
+     		    >
+    		</include>
+		</LinearLayout>  
     </ScrollView>
     
     <!-- Footer -->
