@@ -182,18 +182,16 @@ public class Voice extends Activity implements OnClickListener {
 	private void controlVoiceChronometer() {
 		text_voice_camera_time_details_chronometer.start();
 		text_voice_camera_time_details_chronometer.setOnChronometerTickListener(new OnChronometerTickListener() {
-
-					@Override
-					public void onChronometerTick(Chronometer chronometer) {
-						if (text_voice_camera_time_details_chronometer.getText().length() > 5) {
-							
-							text_voice_camera_time_details_chronometer.stop();
-							text_voice_camera_stop_button.setVisibility(View.GONE);
-							text_voice_camera_play_button.setVisibility(View.VISIBLE);
-							text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
-						}
-					}
-				});
+			@Override
+			public void onChronometerTick(Chronometer chronometer) {
+				if (text_voice_camera_time_details_chronometer.getText().length() > 5) {
+					text_voice_camera_time_details_chronometer.stop();
+					text_voice_camera_stop_button.setVisibility(View.GONE);
+					text_voice_camera_play_button.setVisibility(View.VISIBLE);
+					text_voice_camera_rerecord_button.setVisibility(View.VISIBLE);
+				}
+			}
+		});
 	}
 
 	private void setGraphicsVoice() {
@@ -371,6 +369,8 @@ public class Voice extends Activity implements OnClickListener {
 			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
 		}
 
+		
+		
 		if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
 			try {
 				if (!intentExtras.containsKey("mDisplayList")) {
@@ -421,6 +421,11 @@ public class Voice extends Activity implements OnClickListener {
 			if(listOnResult.get(2) == null || listOnResult.get(2) == ""){
 				listOnResult.set(2, "?");
 			}
+			
+			if (listOnResult.get(1) == null || listOnResult.get(1).equals("") || listOnResult.get(1).equals(getString(R.string.unfinished_voiceentry)) || listOnResult.get(1).equals(getString(R.string.finished_voiceentry)) || listOnResult.get(1).equals(getString(R.string.unknown_entry))) {
+				listOnResult.set(1, mEditList.get(1));
+			}
+			
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
 				listOnResult.add(new DisplayDate().getLocationDate(_list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.get(7)));
 			} else if (_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) == null){

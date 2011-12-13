@@ -301,9 +301,14 @@ public class CameraActivity extends Activity implements OnClickListener {
 
 		// //////// ********** Adding action if image is pressed ********		 ///////////
 		if (v.getId() == R.id.text_voice_camera_image_display) {
-			Intent intent = new Intent(this, ImagePreview.class);
-			intent.putExtra("id", _id);
-			startActivity(intent);
+			File mFile = new File("/sdcard/ExpenseTracker/" + _id + ".jpg");
+			if(mFile.canRead()) {
+				Intent intent = new Intent(this, ImagePreview.class);
+				intent.putExtra("id", _id);
+				startActivity(intent);
+			} else {
+				Toast.makeText(this, "no image to preview", Toast.LENGTH_SHORT).show();
+			}
 		}
 
 		// /////// ********** Adding action if retake button is pressed ******//////////
@@ -374,13 +379,19 @@ public class CameraActivity extends Activity implements OnClickListener {
 			if(listOnResult.get(2) == null || listOnResult.get(2) == "") {
 				listOnResult.set(2, "?");
 			}
+			
+			if (listOnResult.get(1) == null || listOnResult.get(1).equals("") || listOnResult.get(1).equals(getString(R.string.unfinished_cameraentry)) || listOnResult.get(1).equals(getString(R.string.finished_cameraentry)) || listOnResult.get(1).equals(getString(R.string.unknown_entry))) {
+				listOnResult.set(1, mEditList.get(1));
+			}
+			
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
 				listOnResult.add(new DisplayDate().getLocationDate(_list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.get(7)));
 			} else if (_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) == null){
 				listOnResult.add(new DisplayDate().getLocationDateDate(_list.get(DatabaseAdapter.KEY_DATE_TIME)));
 			} else {
 				listOnResult.add(mEditList.get(3));
-			}				
+			}		
+			
 			if((!mEditList.get(1).equals(listOnResult.get(1))) || (!mEditList.get(2).equals(new StringProcessing().getStringDoubleDecimal(listOnResult.get(2)))) || isChanged) {
 				ShowTextActivity.favID = null;
 				HashMap<String, String> listForFav = new HashMap<String, String>();
@@ -427,4 +438,5 @@ public class CameraActivity extends Activity implements OnClickListener {
 		saveEntry();
 		return;
 	}
+
 }

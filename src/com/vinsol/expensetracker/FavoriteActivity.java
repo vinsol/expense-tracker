@@ -519,9 +519,9 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				}
 				if(_id == null){
 					mDatabaseAdapter.open();
-					mDatabaseAdapter.insert_to_database(toInsert);
+					idCreated = mDatabaseAdapter.insert_to_database(toInsert);
 					mDatabaseAdapter.close();
-					bundle.putString("toHighLight", toInsert.get(DatabaseAdapter.KEY_ID));
+					bundle.putString("toHighLight", idCreated+"");
 					expenseListingIntent.putExtras(bundle);
 					startActivity(expenseListingIntent);
 					finish();

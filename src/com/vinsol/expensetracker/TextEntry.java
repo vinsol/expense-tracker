@@ -224,6 +224,11 @@ public class TextEntry extends Activity implements OnClickListener {
 			if(listOnResult.get(2) == null || listOnResult.get(2) == ""){
 				listOnResult.set(2, "?");
 			}
+			
+			if (listOnResult.get(1) == null || listOnResult.get(1).equals("") || listOnResult.get(1).equals(getString(R.string.unfinished_textentry)) || listOnResult.get(1).equals(getString(R.string.finished_textentry)) || listOnResult.get(1).equals(getString(R.string.unknown_entry))) {
+				listOnResult.set(1, mEditList.get(1));
+			}
+			
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
 				listOnResult.add(new DisplayDate().getLocationDate(_list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.get(7)));
 			} else if (_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) == null){
