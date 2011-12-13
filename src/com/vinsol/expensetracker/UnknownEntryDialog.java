@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -56,7 +55,6 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 			}
 		
 		if(mTempClickedList.get(6) != null){
-			Log.v("mTempClickedList.get(6)", mTempClickedList.get(6)+"");
 			new ShowDateHandler(getContext(),headerTextView, mTempClickedList.get(6));
 		}
 		else {
@@ -113,15 +111,19 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				break;
 				
 			case R.id.main_favorite:
-				Intent intentFavorite = new Intent(getContext(), FavoriteActivity.class);
-				bundle.putStringArrayList("mDisplayList", mTempClickedList);
-				intentFavorite.putExtra("favoriteBundle", bundle);
-				getContext().startActivity(intentFavorite);
-				dismiss();
+				if(new ConvertCursorToListString(getContext()).getFavoriteList().size() >=1){
+					Intent intentFavorite = new Intent(getContext(), FavoriteActivity.class);
+					bundle.putStringArrayList("mDisplayList", mTempClickedList);
+					intentFavorite.putExtra("favoriteBundle", bundle);
+					getContext().startActivity(intentFavorite);
+					dismiss();
+				} else {
+					Toast.makeText(getContext(), "no favorite added", Toast.LENGTH_SHORT).show();
+				}
 				break;
 				
 			case R.id.unknown_entry_dialog_cancel:
-				dismiss();
+				cancel();
 				break;
 				
 			default:
