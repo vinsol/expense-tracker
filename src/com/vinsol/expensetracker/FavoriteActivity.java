@@ -315,11 +315,14 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		String amount = adapterList.get(DBAdapterFavorite.KEY_AMOUNT);
 		Long idCreated;
 		HashMap<String, String> toInsert = new HashMap<String, String>();
+		Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
+		expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Bundle bundle = new Bundle();
 		
 		if(_id != null){
 			toInsert.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
 		}
-		
+
 		if(amount != null){
 			if(!amount.contains("?") && !amount.equals(""))
 				toInsert.put(DatabaseAdapter.KEY_AMOUNT, amount);
@@ -346,11 +349,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
 						try {
 							if (!intentExtras.containsKey("mDisplayList")) {
-								DateHelper mDateHelper = new DateHelper(
-										text_voice_camera_date_bar_dateview.getText()
-												.toString());
-								toInsert.put(DatabaseAdapter.KEY_DATE_TIME,
-										mDateHelper.getTimeMillis() + "");
+								DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
+								toInsert.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
 							} else {
 								if(!intentExtras.containsKey("timeInMillis")){
 									DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
@@ -377,8 +377,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						File mFileThumbnail = new File("/sdcard/ExpenseTracker/"+idCreated+"_thumbnail.jpg");
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
-							expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							bundle.putString("toHighLight", idCreated+"");
+							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							finish();
 						} else {
@@ -393,8 +393,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						File mFileThumbnail = new File("/sdcard/ExpenseTracker/"+_id+"_thumbnail.jpg");
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
-							expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							bundle.putString("toHighLight", toInsert.get(DatabaseAdapter.KEY_ID));
+							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
 							mDatabaseAdapter.editDatabase(toInsert);
@@ -453,8 +453,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						File mFile = new File("/sdcard/ExpenseTracker/Audio/"+idCreated+".amr");
 						if(mFile.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
-							expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							bundle.putString("toHighLight", idCreated+"");
+							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							finish();
 						} else {
@@ -467,8 +467,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						File mFile = new File("/sdcard/ExpenseTracker/Audio/"+_id+".amr");
 						if(mFile.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
-							expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							bundle.putString("toHighLight", toInsert.get(DatabaseAdapter.KEY_ID));
+							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
 							mDatabaseAdapter.editDatabase(toInsert);
@@ -521,16 +521,16 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					mDatabaseAdapter.open();
 					mDatabaseAdapter.insert_to_database(toInsert);
 					mDatabaseAdapter.close();
-					Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
-					expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					bundle.putString("toHighLight", toInsert.get(DatabaseAdapter.KEY_ID));
+					expenseListingIntent.putExtras(bundle);
 					startActivity(expenseListingIntent);
 					finish();
 				} else {
 					mDatabaseAdapter.open();
 					mDatabaseAdapter.editDatabase(toInsert);
 					mDatabaseAdapter.close();
-					Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
-					expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					bundle.putString("toHighLight", toInsert.get(DatabaseAdapter.KEY_ID));
+					expenseListingIntent.putExtras(bundle);
 					startActivity(expenseListingIntent);
 					finish();
 				}
