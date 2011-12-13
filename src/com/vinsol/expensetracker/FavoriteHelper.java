@@ -9,6 +9,7 @@ import com.vinsol.expensetracker.utils.FileDeleteFavorite;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
@@ -117,8 +118,8 @@ class FavoriteHelper implements OnCheckedChangeListener{
 			mDatabaseAdapter.editDatabase(_list);
 			mDatabaseAdapter.close();
 			Toast.makeText(mContext, "Added to Favorites", Toast.LENGTH_SHORT).show();
-		} else if(!isFromFunc) 
-		{
+		} else if(!isFromFunc) {
+			
 			if(mShowList.get(5).equals(mContext.getString(R.string.text))){
 			
 				ShowTextActivity.favID = null;
@@ -164,10 +165,13 @@ class FavoriteHelper implements OnCheckedChangeListener{
 	}
 
 	public void setShowList(ArrayList<String> mShowList2) {
+
+		
 		mShowList = mShowList2;
 		isFromFunc = true;
 		if(mShowList.get(4) != null) {
 			if(mShowList.get(4).equals("")){
+				Log.v("mShowList", mShowList.get(4)+" 4");
 				show_text_voice_camera_add_favorite.setChecked(false);
 			} else {
 				show_text_voice_camera_add_favorite.setChecked(true);

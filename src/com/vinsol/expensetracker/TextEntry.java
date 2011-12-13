@@ -226,11 +226,11 @@ public class TextEntry extends Activity implements OnClickListener {
 			}
 			
 			if (listOnResult.get(1) == null || listOnResult.get(1).equals("") || listOnResult.get(1).equals(getString(R.string.unfinished_textentry)) || listOnResult.get(1).equals(getString(R.string.finished_textentry)) || listOnResult.get(1).equals(getString(R.string.unknown_entry))) {
-				if(listOnResult.get(1).equals(getString(R.string.unfinished_textentry)) || listOnResult.get(1).equals(getString(R.string.finished_textentry))) {
-					listOnResult.set(1, mEditList.get(1));
-				} else {
-					listOnResult.set(1, "");
-				}
+				listOnResult.set(1, getString(R.string.finished_textentry));
+			}
+			
+			if (mEditList.get(1) == null || mEditList.get(1).equals("") || mEditList.get(1).equals(getString(R.string.unfinished_textentry)) || mEditList.get(1).equals(getString(R.string.finished_textentry)) || mEditList.get(1).equals(getString(R.string.unknown_entry))) {
+				mEditList.set(1, getString(R.string.finished_textentry));
 			}
 			
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
@@ -241,7 +241,14 @@ public class TextEntry extends Activity implements OnClickListener {
 				listOnResult.add(mEditList.get(3));
 			}
 			
-			if((!mEditList.get(1).equals(listOnResult.get(1))) || (!mEditList.get(2).equals(new StringProcessing().getStringDoubleDecimal(listOnResult.get(2))))) {
+			Boolean isAmountNotEqual = false;
+			try{
+				isAmountNotEqual = Double.parseDouble(new StringProcessing().getStringDoubleDecimal(listOnResult.get(2))) != Double.parseDouble(mEditList.get(2));
+			}catch(Exception e){
+				isAmountNotEqual = true;
+			}
+			
+			if((!mEditList.get(1).equals(listOnResult.get(1))) || isAmountNotEqual) {
 				ShowTextActivity.favID = null;
 				HashMap<String, String> listForFav = new HashMap<String, String>();
 				listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");

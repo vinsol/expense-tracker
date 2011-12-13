@@ -124,11 +124,19 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 					if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_textentry)) || tag.equals(getString(R.string.finished_textentry)))) {
 						show_text_voice_camera_tag_textview.setText(tag);
 					} else {
-						show_text_voice_camera_tag_textview.setText(getString(R.string.finished_textentry));
+						finish();
 					}
+					
 					if (amount != null) {
-						show_text_voice_camera_amount.setText(amount);
+						if(!amount.equals("") && !amount.equals("?")){
+							show_text_voice_camera_amount.setText(amount);
+						} else {
+							finish();
+						}
+					} else {
+						finish();
 					}
+					
 					Calendar mCalendar = Calendar.getInstance();
 					mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);

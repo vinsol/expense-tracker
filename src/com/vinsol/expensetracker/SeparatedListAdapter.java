@@ -2,15 +2,12 @@ package com.vinsol.expensetracker;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -25,9 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.DateHelper;
 
 class SeparatedListAdapter extends BaseAdapter {
@@ -253,7 +247,8 @@ class SeparatedListAdapter extends BaseAdapter {
 				} else {
 					holderFooter.expenses_listing_add_expenses_button.setText("Add expenses to "+ mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
 					holderFooter.expenses_listing_add_expenses_button.setFocusable(false);
-					holderFooter.expenses_listing_add_expenses_button.setOnClickListener(new MyClickListener(sectionnum));
+					DateHelper mDateHelper = new DateHelper(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
+					holderFooter.expenses_listing_add_expenses_button.setOnClickListener(new MyClickListenerGroupedIcons(unknownEntryDialog, mContext, null, mDateHelper.getTimeMillis()));
 				}
 
 				return convertView;
@@ -303,16 +298,11 @@ class SeparatedListAdapter extends BaseAdapter {
 	private class MyClickListener implements OnClickListener {
 
 		List<String> mListenerList;
-		int mPosition;
 
 		public MyClickListener(List<String> mlist) {
 			mListenerList = mlist;
 		}
-
-		public MyClickListener(int position) {
-			mPosition = position;
-		}
-
+		
 		@Override
 		public void onClick(View v) {
 			if (v.getId() == R.id.expense_listing_inflated_row_imageview) {
@@ -340,65 +330,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					}
 				}
 			}
-
-			if (v.getId() == R.id.expenses_listing_add_expenses_button) {
-				
-				DateHelper mDateHelper = new DateHelper(mDatadateList.get(mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
-				final ArrayList<String> mArrayList = insertToDatabase(mDateHelper.getTimeMillis());
-				unknownEntryDialog = new UnknownEntryDialog(mContext, mArrayList, new android.view.View.OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
-						mDatabaseAdapter.open();
-						mDatabaseAdapter.deleteDatabaseEntryID(mArrayList.get(0));
-						mDatabaseAdapter.close();
-						unknownEntryDialog.dismiss();
-						Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
-					}
-				});
-				
-				unknownEntryDialog.setOnCancelListener(new OnCancelListener() {
-					
-					@Override
-					public void onCancel(DialogInterface dialog) {
-						DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
-						mDatabaseAdapter.open();
-						mDatabaseAdapter.deleteDatabaseEntryID(mArrayList.get(0));
-						mDatabaseAdapter.close();
-						unknownEntryDialog.dismiss();
-					}
-				});
-			}
 		}
-	}
-	
-	private ArrayList<String> insertToDatabase(Long timeInMillis) {
-		ArrayList<String> mArrayList = new ArrayList<String>();
-		for(int i = 0;i<8;i++){
-			mArrayList.add("");
-		}
-		DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
-		HashMap<String, String> _list = new HashMap<String, String>();
-		Calendar mCalendar = Calendar.getInstance();
-		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if(timeInMillis != null){
-			_list.put(DatabaseAdapter.KEY_DATE_TIME,Long.toString(timeInMillis));
-		} else {
-			_list.put(DatabaseAdapter.KEY_DATE_TIME,mCalendar.getTimeInMillis()+"");
-		}
-		mArrayList.set(6, _list.get(DatabaseAdapter.KEY_DATE_TIME));
-		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-			_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
-			mArrayList.set(7, LocationHelper.currentAddress);
-		}
-		_list.put(DatabaseAdapter.KEY_TYPE, mContext.getString(R.string.unknown));
-		mArrayList.set(5, _list.get(DatabaseAdapter.KEY_TYPE));
-		mDatabaseAdapter.open();
-		long _id = mDatabaseAdapter.insert_to_database(_list);
-		mDatabaseAdapter.close();
-		mArrayList.set(0,Long.toString(_id));
-		return mArrayList;
 	}
 	
 	private boolean isEntryComplete(ArrayList<String> toCheckList) {

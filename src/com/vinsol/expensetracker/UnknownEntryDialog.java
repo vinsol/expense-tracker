@@ -1,7 +1,10 @@
 package com.vinsol.expensetracker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+
+import com.vinsol.expensetracker.utils.DisplayDate;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -26,6 +29,43 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	private ArrayList<String> mTempClickedList;
 	private TextView headerTextView;
 	private TextView locationTextView;
+	
+	public UnknownEntryDialog(Context mContext,HashMap<String, String> toInsert, android.view.View.OnClickListener myClickListener) {
+		super(mContext);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.unknown_entry_dialog);
+		textEntryButton = (Button) findViewById(R.id.main_text);
+		deleteButton = (Button) findViewById(R.id.unknown_entry_dialog_delete);
+		voiceEntryButton = (Button) findViewById(R.id.main_voice);
+		cameraEntryButton = (Button) findViewById(R.id.main_camera);
+		favoriteEntryButton = (Button) findViewById(R.id.main_favorite);
+		cancelButton = (Button) findViewById(R.id.unknown_entry_dialog_cancel);
+		headerTextView = (TextView) findViewById(R.id.unknown_entry_dialog_header_title);
+		locationTextView = (TextView) findViewById(R.id.unknown_entry_dialog_location);
+		textEntryButton.setOnClickListener(myClickListener);
+		deleteButton.setVisibility(View.GONE);
+		voiceEntryButton.setOnClickListener(myClickListener);
+		cameraEntryButton.setOnClickListener(myClickListener);
+		favoriteEntryButton.setOnClickListener(myClickListener);
+		cancelButton.setOnClickListener(myClickListener);
+		bundle = new Bundle();
+		
+		if(toInsert.containsKey(DatabaseAdapter.KEY_LOCATION))
+			if(toInsert.get(DatabaseAdapter.KEY_LOCATION) != ""){
+				locationTextView.setText(toInsert.get(DatabaseAdapter.KEY_LOCATION));
+			}
+		
+		if(toInsert.containsKey(DatabaseAdapter.KEY_DATE_TIME)){
+			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.setTimeInMillis(Long.parseLong(toInsert.get(DatabaseAdapter.KEY_DATE_TIME)));
+			headerTextView.setText(new DisplayDate(mCalendar).getDisplayDate());
+//			new ShowDateHandler(getContext(),headerTextView, toInsert.get(DatabaseAdapter.KEY_DATE_TIME));
+		}
+//		else {
+//			new ShowDateHandler(getContext(),headerTextView, Integer.parseInt(mTempClickedList.get(5)));
+//		}
+		show();
+	}
 	
 	public UnknownEntryDialog(Context mContext,ArrayList<String> _list,android.view.View.OnClickListener deleteClickListener) {
 		super(mContext);
@@ -55,11 +95,14 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 			}
 		
 		if(mTempClickedList.get(6) != null){
-			new ShowDateHandler(getContext(),headerTextView, mTempClickedList.get(6));
+			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.setTimeInMillis(Long.parseLong(mTempClickedList.get(6)));
+			headerTextView.setText(new DisplayDate(mCalendar).getDisplayDate());
+//			new ShowDateHandler(getContext(),headerTextView, mTempClickedList.get(6));
 		}
-		else {
-			new ShowDateHandler(getContext(),headerTextView, Integer.parseInt(mTempClickedList.get(5)));
-		}
+//		else {
+//			new ShowDateHandler(getContext(),headerTextView, Integer.parseInt(mTempClickedList.get(5)));
+//		}
 		show();
 	}
 

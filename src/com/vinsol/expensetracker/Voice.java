@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -422,11 +423,14 @@ public class Voice extends Activity implements OnClickListener {
 				listOnResult.set(2, "?");
 			}
 			
-			if (listOnResult.get(1) == null || listOnResult.get(1).equals("") || listOnResult.get(1).equals(getString(R.string.unfinished_voiceentry)) || listOnResult.get(1).equals(getString(R.string.finished_voiceentry)) || listOnResult.get(1).equals(getString(R.string.unknown_entry))) {
-				if(listOnResult.get(1).equals(getString(R.string.unfinished_voiceentry)) || listOnResult.get(1).equals(getString(R.string.finished_voiceentry))) {
-					listOnResult.set(1, mEditList.get(1));
-				} else {
-					listOnResult.set(1, "");
+			if(!mEditList.get(1).equals(listOnResult.get(1))) {
+			
+				if (listOnResult.get(1) == null || listOnResult.get(1).equals("") || listOnResult.get(1).equals(getString(R.string.unfinished_voiceentry)) || listOnResult.get(1).equals(getString(R.string.finished_voiceentry)) || listOnResult.get(1).equals(getString(R.string.unknown_entry))) {
+					listOnResult.set(1, getString(R.string.finished_voiceentry));
+				}
+				
+				if (mEditList.get(1) == null || mEditList.get(1).equals("") || mEditList.get(1).equals(getString(R.string.unfinished_voiceentry)) || mEditList.get(1).equals(getString(R.string.finished_voiceentry)) || mEditList.get(1).equals(getString(R.string.unknown_entry))) {
+					mEditList.set(1, getString(R.string.finished_voiceentry));
 				}
 			}
 			
@@ -436,9 +440,17 @@ public class Voice extends Activity implements OnClickListener {
 				listOnResult.add(new DisplayDate().getLocationDateDate(_list.get(DatabaseAdapter.KEY_DATE_TIME)));
 			} else {
 				listOnResult.add(mEditList.get(3));
-			}				
-			if((!mEditList.get(1).equals(listOnResult.get(1))) || (!mEditList.get(2).equals(new StringProcessing().getStringDoubleDecimal(listOnResult.get(2)))) || isChanged ) {
+			}
+			Boolean isAmountNotEqual = false;
+			try{
+				isAmountNotEqual = Double.parseDouble(new StringProcessing().getStringDoubleDecimal(listOnResult.get(2))) != Double.parseDouble(mEditList.get(2));
+			}catch(Exception e){
+				isAmountNotEqual = true;
+			}
+			if((!mEditList.get(1).equals(listOnResult.get(1))) || isAmountNotEqual || isChanged ) {
+				isChanged = false;
 				ShowVoiceActivity.favID = null;
+				Log.v("isChanged", isChanged+" "+ShowVoiceActivity.favID);
 				HashMap<String, String> listForFav = new HashMap<String, String>();
 				listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
 				listForFav.put(DatabaseAdapter.KEY_ID, mEditList.get(0));
@@ -446,10 +458,11 @@ public class Voice extends Activity implements OnClickListener {
 				mDatabaseAdapter.editDatabase(listForFav);
 				mDatabaseAdapter.close();
 				listOnResult.add("");
-			} else if(ShowVoiceActivity.favID == null) {
+			} else 
+				if(ShowVoiceActivity.favID == null) {
 					listOnResult.add(mEditList.get(4));
 				}
-				else { 
+				else {
 					listOnResult.add(ShowVoiceActivity.favID);
 			}
 			listOnResult.add(mEditList.get(5));
