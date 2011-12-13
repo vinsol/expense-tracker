@@ -194,9 +194,8 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 					}
 					String amount = mShowList.get(2);
 					String tag = mShowList.get(1);
-					if (!(amount.equals("") || amount == null)) {
-						if (!amount.contains("?"))
-							show_text_voice_camera_amount.setText(amount);
+					if (amount != null) {
+						show_text_voice_camera_amount.setText(amount);
 					}
 					
 					if ((tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_cameraentry)))) {

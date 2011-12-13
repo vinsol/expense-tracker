@@ -122,7 +122,9 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 					String amount = mShowList.get(2);
 					String tag = mShowList.get(1);
 					show_text_voice_camera_tag_textview.setText(tag);
-					show_text_voice_camera_amount.setText(amount);
+					if (amount != null) {
+						show_text_voice_camera_amount.setText(amount);
+					}
 					Calendar mCalendar = Calendar.getInstance();
 					mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);

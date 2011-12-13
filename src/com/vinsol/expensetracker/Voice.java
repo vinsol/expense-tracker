@@ -365,7 +365,7 @@ public class Voice extends Activity implements OnClickListener {
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 			_list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
 		} else {
-			_list.put(DatabaseAdapter.KEY_AMOUNT, null);
+			_list.put(DatabaseAdapter.KEY_AMOUNT, "");
 		}
 		if (text_voice_camera_tag.getText().toString() != "") {
 			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
@@ -418,6 +418,9 @@ public class Voice extends Activity implements OnClickListener {
 			listOnResult.add(mEditList.get(0));
 			listOnResult.add(_list.get(DatabaseAdapter.KEY_TAG));
 			listOnResult.add(_list.get(DatabaseAdapter.KEY_AMOUNT));
+			if(listOnResult.get(2) == null || listOnResult.get(2) == ""){
+				listOnResult.set(2, "?");
+			}
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
 				listOnResult.add(new DisplayDate().getLocationDate(_list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.get(7)));
 			} else if (_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) == null){
