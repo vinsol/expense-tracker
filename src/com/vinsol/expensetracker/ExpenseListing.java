@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
+import com.vinsol.expensetracker.utils.StringProcessing;
 
 public class ExpenseListing extends Activity implements OnItemClickListener {
 
@@ -32,11 +33,13 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 	private String highlightID = null;
 	private UnknownEntryDialog unknownDialog;
 	private static int firstVisiblePosition;
+	private StringProcessing mStringProcessing;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.expense_listing);
+		mStringProcessing = new StringProcessing();
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 	}
 
@@ -134,7 +137,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						} else {
 							totalAmountString = temptotalAmount + "";
 						}
-						mTempSubList.add(getTotalAmountString(totalAmountString));
+						mTempSubList.add(mStringProcessing.getStringDoubleDecimal(totalAmountString));
 
 						mTempSubList.add("");
 						mTempSubList.add("");
@@ -230,7 +233,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							totalAmountString = temptotalAmount + "";
 						}
 						
-						mTempSubList.add(getTotalAmountString(totalAmountString));
+						mTempSubList.add(mStringProcessing.getStringDoubleDecimal(totalAmountString));
 						mTempSubList.add("");
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_weekwise));
@@ -322,7 +325,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							totalAmountString = temptotalAmount + "";
 						}
 
-						mTempSubList.add(getTotalAmountString(totalAmountString));
+						mTempSubList.add(mStringProcessing.getStringDoubleDecimal(totalAmountString));
 
 						mTempSubList.add("");
 						mTempSubList.add("");
@@ -390,44 +393,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		super.onPause();
 		firstVisiblePosition = mListView.getFirstVisiblePosition();
 	}
-	
-	private String getTotalAmountString(String totalAmountString) {
-		if (totalAmountString.contains("?") && totalAmountString.length() > 1) {
-			String temp = totalAmountString.substring(0,
-					totalAmountString.length() - 2);
-			Double mAmount = Double.parseDouble(temp);
-			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-			if (mAmount.toString().contains(".")) {
-				if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
-					totalAmountString = mAmount.toString() + " ?";
-				} else if (mAmount.toString().charAt(
-						mAmount.toString().length() - 2) == '.') {
-					totalAmountString = mAmount.toString() + "0 ?";
-				}
-
-			} else {
-				totalAmountString = mAmount.toString() + ".00 ?";
-			}
-		} else if (!totalAmountString.contains("?")) {
-			String temp = totalAmountString.substring(0,
-					totalAmountString.length());
-			Double mAmount = Double.parseDouble(temp);
-			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-			if (mAmount.toString().contains(".")) {
-				if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
-					totalAmountString = mAmount.toString() + "";
-				} else if (mAmount.toString().charAt(
-						mAmount.toString().length() - 2) == '.') {
-					totalAmountString = mAmount.toString() + "0";
-				}
-
-			} else {
-				totalAmountString = mAmount.toString() + ".00";
-			}
-		}
-
-		return totalAmountString;
-	}
 
 	private List<String> getListCurrentWeek(int j) {
 		
@@ -462,44 +427,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		}
 
 		if (mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != null&& !mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT).equals("")) {
-			String totalAmountString = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
-
-			if (totalAmountString.contains("?")&& totalAmountString.length() > 1) {
-				String temp = totalAmountString.substring(0,totalAmountString.length() - 2);
-				Double mAmount = Double.parseDouble(temp);
-				mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-				if (mAmount.toString().contains(".")) {
-					if (mAmount.toString().charAt(
-							mAmount.toString().length() - 3) == '.') {
-						totalAmountString = mAmount.toString() + " ?";
-					} else if (mAmount.toString().charAt(
-							mAmount.toString().length() - 2) == '.') {
-						totalAmountString = mAmount.toString() + "0 ?";
-					}
-
-				} else {
-					totalAmountString = mAmount.toString() + ".00 ?";
-				}
-			} else if (!totalAmountString.contains("?")) {
-				String temp = totalAmountString.substring(0,
-						totalAmountString.length());
-				Double mAmount = Double.parseDouble(temp);
-				mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-
-				if (mAmount.toString().contains(".")) {
-					if (mAmount.toString().charAt(
-							mAmount.toString().length() - 3) == '.') {
-						totalAmountString = mAmount.toString() + "";
-					} else if (mAmount.toString().charAt(
-							mAmount.toString().length() - 2) == '.') {
-						totalAmountString = mAmount.toString() + "0";
-					}
-
-				} else {
-					totalAmountString = mAmount.toString() + ".00";
-				}
-			}
-			_templist.add(totalAmountString);
+			_templist.add(mStringProcessing.getStringDoubleDecimal(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT)));
 		} else {
 			_templist.add("?");
 		}

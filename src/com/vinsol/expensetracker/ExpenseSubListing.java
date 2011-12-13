@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.vinsol.expensetracker.utils.DisplayDate;
+import com.vinsol.expensetracker.utils.StringProcessing;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,6 +34,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 	private String idList;
 	private UnknownEntryDialog unknownDialog;
 	private TextView expense_listing_header;
+	private StringProcessing mStringProcessing;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 		idList = getIntent().getStringExtra("idList");
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		expense_listing_header = (TextView) findViewById(R.id.text_voice_camera_header_title);
+		mStringProcessing = new StringProcessing();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -186,7 +189,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 		}
 	}
 	
-private List<String> getList(int j) {
+	private List<String> getList(int j) {
 		
 		List<String> _templist = new ArrayList<String>();
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
@@ -219,39 +222,7 @@ private List<String> getList(int j) {
 		}
 
 		if (mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != null&& !mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT).equals("")) {
-			String totalAmountString = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
-
-			if (totalAmountString.contains("?")&& totalAmountString.length() > 1) {
-				String temp = totalAmountString.substring(0,totalAmountString.length() - 2);
-				Double mAmount = Double.parseDouble(temp);
-				mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-				if (mAmount.toString().contains(".")) {
-					if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
-						totalAmountString = mAmount.toString() + " ?";
-					} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
-						totalAmountString = mAmount.toString() + "0 ?";
-					}
-
-				} else {
-					totalAmountString = mAmount.toString() + ".00 ?";
-				}
-			} else if (!totalAmountString.contains("?")) {
-				String temp = totalAmountString.substring(0,totalAmountString.length());
-				Double mAmount = Double.parseDouble(temp);
-				mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-
-				if (mAmount.toString().contains(".")) {
-					if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
-						totalAmountString = mAmount.toString() + "";
-					} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
-						totalAmountString = mAmount.toString() + "0";
-					}
-
-				} else {
-					totalAmountString = mAmount.toString() + ".00";
-				}
-			}
-			_templist.add(totalAmountString);
+			_templist.add(mStringProcessing.getStringDoubleDecimal(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT)));
 		} else {
 			_templist.add("?");
 		}
@@ -280,8 +251,7 @@ private List<String> getList(int j) {
 			_templist.add("Unknown Location and Date");
 		}
 
-		if (mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE) != null
-				&& !mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE).equals("")) {
+		if (mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE).equals("")) {
 			_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE));
 		} else {
 			_templist.add("");
@@ -305,167 +275,167 @@ private List<String> getList(int j) {
 		return _templist;
 	}
 
-private boolean isEntryComplete(HashMap<String, String> hashMap) {
-	if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))) {
-		if(hashMap.get(DatabaseAdapter.KEY_AMOUNT) != null){
-			if (hashMap.get(DatabaseAdapter.KEY_AMOUNT).contains("?")) {
-				return false;
+	private boolean isEntryComplete(HashMap<String, String> hashMap) {
+		if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))) {
+			if(hashMap.get(DatabaseAdapter.KEY_AMOUNT) != null){
+				if (hashMap.get(DatabaseAdapter.KEY_AMOUNT).contains("?")) {
+					return false;
+				}
 			}
-		}
-		File mFileSmall = new File("/sdcard/ExpenseTracker/"
-				+ hashMap.get(DatabaseAdapter.KEY_ID) + "_small.jpg");
-		File mFile = new File("/sdcard/ExpenseTracker/"
-				+ hashMap.get(DatabaseAdapter.KEY_ID) + ".jpg");
-		File mFileThumbnail = new File("/sdcard/ExpenseTracker/"
-				+ hashMap.get(DatabaseAdapter.KEY_ID) + "_thumbnail.jpg");
-		if (mFile.canRead() && mFileSmall.canRead()
-				&& mFileThumbnail.canRead()) {
-			return true;
-		} else {
-			return false;
-		}
-	} else if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.voice))) {
-		if(hashMap.get(DatabaseAdapter.KEY_AMOUNT) != null){
-			if (hashMap.get(DatabaseAdapter.KEY_AMOUNT).contains("?")) {
-				return false;
-			}
-		}
-		File mFile = new File("/sdcard/ExpenseTracker/Audio/"
-				+ hashMap.get(DatabaseAdapter.KEY_ID) + ".amr");
-		if (mFile.canRead()) {
-			return true;
-		} else {
-			return false;
-		}
-	} else if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.text))) {
-		if(hashMap.get(DatabaseAdapter.KEY_AMOUNT) != null){
-			if (hashMap.get(DatabaseAdapter.KEY_AMOUNT).contains("?")) {
-				return false;
-			}
-		}
-		if(hashMap.get(DatabaseAdapter.KEY_TAG) != null){
-			if (hashMap.get(DatabaseAdapter.KEY_TAG).equals("")) {
-				return false;
-			} else {
+			File mFileSmall = new File("/sdcard/ExpenseTracker/"
+					+ hashMap.get(DatabaseAdapter.KEY_ID) + "_small.jpg");
+			File mFile = new File("/sdcard/ExpenseTracker/"
+					+ hashMap.get(DatabaseAdapter.KEY_ID) + ".jpg");
+			File mFileThumbnail = new File("/sdcard/ExpenseTracker/"
+					+ hashMap.get(DatabaseAdapter.KEY_ID) + "_thumbnail.jpg");
+			if (mFile.canRead() && mFileSmall.canRead()
+					&& mFileThumbnail.canRead()) {
 				return true;
+			} else {
+				return false;
+			}
+		} else if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.voice))) {
+			if(hashMap.get(DatabaseAdapter.KEY_AMOUNT) != null){
+				if (hashMap.get(DatabaseAdapter.KEY_AMOUNT).contains("?")) {
+					return false;
+				}
+			}
+			File mFile = new File("/sdcard/ExpenseTracker/Audio/"
+					+ hashMap.get(DatabaseAdapter.KEY_ID) + ".amr");
+			if (mFile.canRead()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.text))) {
+			if(hashMap.get(DatabaseAdapter.KEY_AMOUNT) != null){
+				if (hashMap.get(DatabaseAdapter.KEY_AMOUNT).contains("?")) {
+					return false;
+				}
+			}
+			if(hashMap.get(DatabaseAdapter.KEY_TAG) != null){
+				if (hashMap.get(DatabaseAdapter.KEY_TAG).equals("")) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		
+		}
+		return false;
+	}
+
+	private String getLocationDateDate(String dateInMillis) {
+		Calendar tempCalendar = Calendar.getInstance();
+		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		int hour = tempCalendar.get(Calendar.HOUR);
+		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
+		if (minute.length() == 1) {
+			minute = "0" + minute;
+		}
+		if (hour == 0) {
+			hour = 12;
+		}
+		if (tempCalendar.get(Calendar.MINUTE) != 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + ":" + minute + " " + "PM"+ " at Unknown location";
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + minute + " " + "AM" + " at Unknown location";
+			}
+		}
+		else{ 
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + "" + " " + "PM" + " at Unknown location";
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + "" + " " + "AM" + " at Unknown location";
+			}
+		}
+		return null;
+	}
+
+	private String getLocationDate(String dateInMillis, String locationData) {
+		Calendar tempCalendar = Calendar.getInstance();
+		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		int hour = tempCalendar.get(Calendar.HOUR);
+		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
+		if (minute.length() == 1) {
+			minute = "0" + minute;
+		}
+		if (hour == 0) {
+			hour = 12;
+		}
+		if (tempCalendar.get(Calendar.MINUTE) != 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + ":" + minute + " " + "PM" + " at " + locationData;
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + minute + " " + "AM" + " at " + locationData;
+			}
+		}
+		else{
+			if (tempCalendar.get(Calendar.AM_PM) == 1){
+				return hour + "" + " " + "PM" + " at " + locationData;
+			}
+			if (tempCalendar.get(Calendar.AM_PM) == 0){
+				return hour + ":" + " " + "AM" + " at " + locationData;
+			}
+		}
+		return null;
+	}
+
+	private boolean isEntryComplete(ArrayList<String> toCheckList) {
+	
+		if (toCheckList.get(5).equals(getString(R.string.camera))) {
+			if(toCheckList.get(2) != null){
+				if (toCheckList.get(2).contains("?")) {
+					return false;
+				}
+			}
+			File mFileSmall = new File("/sdcard/ExpenseTracker/"
+					+ toCheckList.get(0) + "_small.jpg");
+			File mFile = new File("/sdcard/ExpenseTracker/"
+					+ toCheckList.get(0) + ".jpg");
+			File mFileThumbnail = new File("/sdcard/ExpenseTracker/"
+					+ toCheckList.get(0) + "_thumbnail.jpg");
+			if (mFile.canRead() && mFileSmall.canRead()
+					&& mFileThumbnail.canRead()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else if (toCheckList.get(5).equals(getString(R.string.voice))) {
+			if(toCheckList.get(2) != null){
+				if (toCheckList.get(2).contains("?")) {
+					return false;
+				}
+			}
+			File mFile = new File("/sdcard/ExpenseTracker/Audio/"
+					+ toCheckList.get(0) + ".amr");
+			if (mFile.canRead()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else if (toCheckList.get(5).equals(getString(R.string.text))) {
+			if(toCheckList.get(2) != null){
+				if (toCheckList.get(2).contains("?")) {
+					return false;
+				}
+			}
+			if(toCheckList.get(1) != null){
+				if (toCheckList.get(1).equals(getString(R.string.unfinished_textentry)) || toCheckList.get(1).equals(getString(R.string.finished_textentry))) {
+					return false;
+				} else {
+					return true;
+				}
 			}
 		}
 	
+		return false;
 	}
-	return false;
-}
-
-private String getLocationDateDate(String dateInMillis) {
-	Calendar tempCalendar = Calendar.getInstance();
-	tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
-	tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-	int hour = tempCalendar.get(Calendar.HOUR);
-	String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
-	if (minute.length() == 1) {
-		minute = "0" + minute;
-	}
-	if (hour == 0) {
-		hour = 12;
-	}
-	if (tempCalendar.get(Calendar.MINUTE) != 0){
-		if (tempCalendar.get(Calendar.AM_PM) == 1){
-			return hour + ":" + minute + " " + "PM"+ " at Unknown location";
-		}
-		if (tempCalendar.get(Calendar.AM_PM) == 0){
-			return hour + ":" + minute + " " + "AM" + " at Unknown location";
-		}
-	}
-	else{ 
-		if (tempCalendar.get(Calendar.AM_PM) == 1){
-			return hour + "" + " " + "PM" + " at Unknown location";
-		}
-		if (tempCalendar.get(Calendar.AM_PM) == 0){
-			return hour + "" + " " + "AM" + " at Unknown location";
-		}
-	}
-	return null;
-}
-
-private String getLocationDate(String dateInMillis, String locationData) {
-	Calendar tempCalendar = Calendar.getInstance();
-	tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
-	tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-	int hour = tempCalendar.get(Calendar.HOUR);
-	String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
-	if (minute.length() == 1) {
-		minute = "0" + minute;
-	}
-	if (hour == 0) {
-		hour = 12;
-	}
-	if (tempCalendar.get(Calendar.MINUTE) != 0){
-		if (tempCalendar.get(Calendar.AM_PM) == 1){
-			return hour + ":" + minute + " " + "PM" + " at " + locationData;
-		}
-		if (tempCalendar.get(Calendar.AM_PM) == 0){
-			return hour + ":" + minute + " " + "AM" + " at " + locationData;
-		}
-	}
-	else{
-		if (tempCalendar.get(Calendar.AM_PM) == 1){
-			return hour + "" + " " + "PM" + " at " + locationData;
-		}
-		if (tempCalendar.get(Calendar.AM_PM) == 0){
-			return hour + ":" + " " + "AM" + " at " + locationData;
-		}
-	}
-	return null;
-}
-
-private boolean isEntryComplete(ArrayList<String> toCheckList) {
-
-	if (toCheckList.get(5).equals(getString(R.string.camera))) {
-		if(toCheckList.get(2) != null){
-			if (toCheckList.get(2).contains("?")) {
-				return false;
-			}
-		}
-		File mFileSmall = new File("/sdcard/ExpenseTracker/"
-				+ toCheckList.get(0) + "_small.jpg");
-		File mFile = new File("/sdcard/ExpenseTracker/"
-				+ toCheckList.get(0) + ".jpg");
-		File mFileThumbnail = new File("/sdcard/ExpenseTracker/"
-				+ toCheckList.get(0) + "_thumbnail.jpg");
-		if (mFile.canRead() && mFileSmall.canRead()
-				&& mFileThumbnail.canRead()) {
-			return true;
-		} else {
-			return false;
-		}
-	} else if (toCheckList.get(5).equals(getString(R.string.voice))) {
-		if(toCheckList.get(2) != null){
-			if (toCheckList.get(2).contains("?")) {
-				return false;
-			}
-		}
-		File mFile = new File("/sdcard/ExpenseTracker/Audio/"
-				+ toCheckList.get(0) + ".amr");
-		if (mFile.canRead()) {
-			return true;
-		} else {
-			return false;
-		}
-	} else if (toCheckList.get(5).equals(getString(R.string.text))) {
-		if(toCheckList.get(2) != null){
-			if (toCheckList.get(2).contains("?")) {
-				return false;
-			}
-		}
-		if(toCheckList.get(1) != null){
-			if (toCheckList.get(1).equals(getString(R.string.unfinished_textentry)) || toCheckList.get(1).equals(getString(R.string.finished_textentry))) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
 
 }

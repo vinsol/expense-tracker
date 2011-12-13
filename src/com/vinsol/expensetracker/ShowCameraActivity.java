@@ -107,6 +107,12 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 			else {
 				new ShowDateHandler(this,R.string.camera);
 			}
+			
+			if(mShowList.get(4) != null){
+				if(!mShowList.get(4).equals("")){
+					favID = mShowList.get(4);
+				}
+			}
 			mFavoriteHelper = new FavoriteHelper(this, mShowList);
 		}
 
