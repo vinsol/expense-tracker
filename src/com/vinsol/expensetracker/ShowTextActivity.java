@@ -62,6 +62,11 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 			else {
 				new ShowDateHandler(this,R.string.text);
 			}
+			if(mShowList.get(4) != null){
+				if(!mShowList.get(4).equals("")){
+					favID = mShowList.get(4);
+				}
+			}
 			mFavoriteHelper = new FavoriteHelper(this, mShowList);
 		}
 		show_text_voice_camera_delete.setOnClickListener(this);

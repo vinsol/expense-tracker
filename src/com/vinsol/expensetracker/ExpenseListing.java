@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
+import com.vinsol.expensetracker.utils.StringProcessing;
 
 public class ExpenseListing extends Activity implements OnItemClickListener {
 
@@ -32,11 +33,13 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 	private String highlightID = null;
 	private UnknownEntryDialog unknownDialog;
 	private static int firstVisiblePosition;
+	private StringProcessing mStringProcessing;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.expense_listing);
+		mStringProcessing = new StringProcessing();
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 	}
 
@@ -134,7 +137,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						} else {
 							totalAmountString = temptotalAmount + "";
 						}
-						mTempSubList.add(getTotalAmountString(totalAmountString));
+						mTempSubList.add(mStringProcessing.getStringDoubleDecimal(totalAmountString));
 
 						mTempSubList.add("");
 						mTempSubList.add("");
@@ -144,25 +147,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						if(highlightID != null){
 							if (j <= mSubList.size()) {
 								if(mTempSubList.get(0).contains(highlightID)){
-									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
-									for(int checkI=0;checkI<mArrayList.size();checkI++){
-										if(mArrayList.get(checkI).equals(highlightID)){
-											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
-											expenseSubListing.putExtra("idList", mTempSubList.get(0));
-											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-											startActivity(expenseSubListing);
-											finish();
-										}
-									}
-									mTempSubList.add(highlightID);
-								} else {
-									mTempSubList.add("");
-								}
-							} else {
-								mTempSubList.add("");
+									startSubListing(mTempSubList.get(0));
+								} 
 							}
-						} else {
-							mTempSubList.add("");
 						}
 						mList.add(mTempSubList);
 						if (j == mSubList.size()) {
@@ -179,7 +166,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
 						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
-						mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+						tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						mDisplayDate = new DisplayDate(tempCalendar);
 						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
@@ -230,7 +217,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							totalAmountString = temptotalAmount + "";
 						}
 						
-						mTempSubList.add(getTotalAmountString(totalAmountString));
+						mTempSubList.add(mStringProcessing.getStringDoubleDecimal(totalAmountString));
 						mTempSubList.add("");
 						mTempSubList.add("");
 						mTempSubList.add(getString(R.string.sublist_weekwise));
@@ -239,25 +226,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						if(highlightID != null){
 							if (j <= mSubList.size()) {
 								if(mTempSubList.get(0).contains(highlightID)){
-									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
-									for(int checkI=0;checkI<mArrayList.size();checkI++){
-										if(mArrayList.get(checkI).equals(highlightID)){
-											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
-											expenseSubListing.putExtra("idList", mTempSubList.get(0));
-											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-											startActivity(expenseSubListing);
-											finish();
-										}
-									}
-									mTempSubList.add(highlightID);
-								} else {
-									mTempSubList.add("");
-								}
-							} else {
-								mTempSubList.add("");
+									startSubListing(mTempSubList.get(0));
+								} 
 							}
-						} else {
-							mTempSubList.add("");
 						}
 						mList.add(mTempSubList);
 						if (j == mSubList.size()) {
@@ -322,7 +293,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 							totalAmountString = temptotalAmount + "";
 						}
 
-						mTempSubList.add(getTotalAmountString(totalAmountString));
+						mTempSubList.add(mStringProcessing.getStringDoubleDecimal(totalAmountString));
 
 						mTempSubList.add("");
 						mTempSubList.add("");
@@ -332,25 +303,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						if(highlightID != null){
 							if (j <= mSubList.size()) {
 								if(mTempSubList.get(0).contains(highlightID)){
-									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
-									for(int checkI=0;checkI<mArrayList.size();checkI++){
-										if(mArrayList.get(checkI).equals(highlightID)){
-											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
-											expenseSubListing.putExtra("idList", mTempSubList.get(0));
-											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-											startActivity(expenseSubListing);
-											finish();
-										}
-									}
-									mTempSubList.add(highlightID);
-								} else {
-									mTempSubList.add("");
-								}
-							} else {
-								mTempSubList.add("");
+									startSubListing(mTempSubList.get(0));
+								} 
 							}
-						} else {
-							mTempSubList.add("");
 						}
 						mList.add(mTempSubList);
 						if (j >= mSubList.size()) {
@@ -385,48 +340,24 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		super.onResume();
 	}
 	
+	private void startSubListing(String string) {
+		ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(string);
+		for(int checkI=0;checkI<mArrayList.size();checkI++){
+			if(mArrayList.get(checkI).equals(highlightID)){
+				Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
+				expenseSubListing.putExtra("idList", string);
+				expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(expenseSubListing);
+				finish();
+			}
+		}
+		
+	}
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 		firstVisiblePosition = mListView.getFirstVisiblePosition();
-	}
-	
-	private String getTotalAmountString(String totalAmountString) {
-		if (totalAmountString.contains("?") && totalAmountString.length() > 1) {
-			String temp = totalAmountString.substring(0,
-					totalAmountString.length() - 2);
-			Double mAmount = Double.parseDouble(temp);
-			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-			if (mAmount.toString().contains(".")) {
-				if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
-					totalAmountString = mAmount.toString() + " ?";
-				} else if (mAmount.toString().charAt(
-						mAmount.toString().length() - 2) == '.') {
-					totalAmountString = mAmount.toString() + "0 ?";
-				}
-
-			} else {
-				totalAmountString = mAmount.toString() + ".00 ?";
-			}
-		} else if (!totalAmountString.contains("?")) {
-			String temp = totalAmountString.substring(0,
-					totalAmountString.length());
-			Double mAmount = Double.parseDouble(temp);
-			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-			if (mAmount.toString().contains(".")) {
-				if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
-					totalAmountString = mAmount.toString() + "";
-				} else if (mAmount.toString().charAt(
-						mAmount.toString().length() - 2) == '.') {
-					totalAmountString = mAmount.toString() + "0";
-				}
-
-			} else {
-				totalAmountString = mAmount.toString() + ".00";
-			}
-		}
-
-		return totalAmountString;
 	}
 
 	private List<String> getListCurrentWeek(int j) {
@@ -462,44 +393,7 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		}
 
 		if (mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != null&& !mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT).equals("")) {
-			String totalAmountString = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
-
-			if (totalAmountString.contains("?")&& totalAmountString.length() > 1) {
-				String temp = totalAmountString.substring(0,totalAmountString.length() - 2);
-				Double mAmount = Double.parseDouble(temp);
-				mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-				if (mAmount.toString().contains(".")) {
-					if (mAmount.toString().charAt(
-							mAmount.toString().length() - 3) == '.') {
-						totalAmountString = mAmount.toString() + " ?";
-					} else if (mAmount.toString().charAt(
-							mAmount.toString().length() - 2) == '.') {
-						totalAmountString = mAmount.toString() + "0 ?";
-					}
-
-				} else {
-					totalAmountString = mAmount.toString() + ".00 ?";
-				}
-			} else if (!totalAmountString.contains("?")) {
-				String temp = totalAmountString.substring(0,
-						totalAmountString.length());
-				Double mAmount = Double.parseDouble(temp);
-				mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-
-				if (mAmount.toString().contains(".")) {
-					if (mAmount.toString().charAt(
-							mAmount.toString().length() - 3) == '.') {
-						totalAmountString = mAmount.toString() + "";
-					} else if (mAmount.toString().charAt(
-							mAmount.toString().length() - 2) == '.') {
-						totalAmountString = mAmount.toString() + "0";
-					}
-
-				} else {
-					totalAmountString = mAmount.toString() + ".00";
-				}
-			}
-			_templist.add(totalAmountString);
+			_templist.add(mStringProcessing.getStringDoubleDecimal(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT)));
 		} else {
 			_templist.add("?");
 		}
@@ -543,19 +437,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"));
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
-		if(highlightID != null){
-			if (j < mSubList.size()) {
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_ID).equals(highlightID)){
-					_templist.add(highlightID);
-				} else {
-					_templist.add("");
-				}
-			} else {
-				_templist.add("");
-			}
-		} else {
-			_templist.add("");
-		}
 		return _templist;
 	}
 

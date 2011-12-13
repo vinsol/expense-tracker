@@ -18,6 +18,7 @@ import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.FileDelete;
+import com.vinsol.expensetracker.utils.StringProcessing;
 
 public class TextEntry extends Activity implements OnClickListener {
 
@@ -66,10 +67,6 @@ public class TextEntry extends Activity implements OnClickListener {
 				text_voice_camera_tag.setText(tag);
 			}
 		}
-
-//		if (!intentExtras.containsKey("mDisplayList")) {
-//			getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-//		}
 		
 		// ////// ******** Handle Date Bar ********* ////////
 		if(!intentExtras.containsKey("isFromShowPage")){
@@ -232,7 +229,7 @@ public class TextEntry extends Activity implements OnClickListener {
 				listOnResult.add(mEditList.get(3));
 			}
 			
-			if((mEditList.get(1) != listOnResult.get(1)) || (mEditList.get(2) != listOnResult.get(2))) {
+			if((!mEditList.get(1).equals(listOnResult.get(1))) || (!mEditList.get(2).equals(new StringProcessing().getStringDoubleDecimal(listOnResult.get(2))))) {
 				ShowTextActivity.favID = null;
 				HashMap<String, String> listForFav = new HashMap<String, String>();
 				listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");

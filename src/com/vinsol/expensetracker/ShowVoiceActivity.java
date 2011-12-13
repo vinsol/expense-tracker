@@ -86,6 +86,12 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 				show_text_voice_camera_tag_textview.setText("description");
 			}
 			
+			if(mShowList.get(4) != null){
+				if(!mShowList.get(4).equals("")){
+					favID = mShowList.get(4);
+				}
+			}
+			
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);

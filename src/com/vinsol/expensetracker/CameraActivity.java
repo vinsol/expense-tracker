@@ -29,6 +29,7 @@ import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.FileDelete;
+import com.vinsol.expensetracker.utils.StringProcessing;
 
 public class CameraActivity extends Activity implements OnClickListener {
 
@@ -377,7 +378,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 			} else {
 				listOnResult.add(mEditList.get(3));
 			}				
-			if((mEditList.get(1) != listOnResult.get(1)) || (mEditList.get(2) != listOnResult.get(2)) || isChanged) {
+			if((!mEditList.get(1).equals(listOnResult.get(1))) || (!mEditList.get(2).equals(new StringProcessing().getStringDoubleDecimal(listOnResult.get(2)))) || isChanged) {
 				ShowTextActivity.favID = null;
 				HashMap<String, String> listForFav = new HashMap<String, String>();
 				listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");

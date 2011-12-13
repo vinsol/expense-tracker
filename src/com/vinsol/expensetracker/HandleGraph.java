@@ -89,9 +89,13 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				main_graph.addView(barGraph, params);
 				if(j == mGraphList.size()-1){
 					main_graph_next_arrow.setVisibility(View.INVISIBLE);
-					
 				}
 				if(j == 0){
+					if(!isNotNullAll(mGraphList.get(j).get(0))){
+						main_graph.removeView(barGraph);
+						graphNoItem();
+						main_graph.addView(graph_no_item);
+					}
 					main_graph_previous_arrow.setVisibility(View.INVISIBLE);
 				}
 				main_graph_next_arrow.setOnClickListener(this);
@@ -100,20 +104,24 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			}
 			
 		} else {
-			graph_no_item = new TextView(mContext);
-			graph_no_item.setGravity(Gravity.CENTER);
-			graph_no_item.setText("No Items to Show");
-			LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, main_graph.getBackground().getIntrinsicHeight());
-			graph_no_item.setTextColor(Color.BLACK);
-			graph_no_item.setPadding(0, 0, 0, 15);
-			graph_no_item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-			graph_no_item.setLayoutParams(textParams);
+			graphNoItem();
 			main_graph.addView(graph_no_item);
 			main_graph_next_arrow.setVisibility(View.INVISIBLE);
 			main_graph_previous_arrow.setVisibility(View.INVISIBLE);
 			main_graph_header_textview.setText("");
 		}
 		super.onPostExecute(result);
+	}
+	
+	private void graphNoItem(){
+		graph_no_item = new TextView(mContext);
+		graph_no_item.setGravity(Gravity.CENTER);
+		graph_no_item.setText("No Items to Show");
+		LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, main_graph.getBackground().getIntrinsicHeight());
+		graph_no_item.setTextColor(Color.BLACK);
+		graph_no_item.setPadding(0, 0, 0, 15);
+		graph_no_item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+		graph_no_item.setLayoutParams(textParams);
 	}
 	
 	private ArrayList<ArrayList<ArrayList<String>>> getGraphList(){
@@ -365,6 +373,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			break;
 		}
 		
+		main_graph.removeView(graph_no_item);
 		main_graph.removeView(barGraph);
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
@@ -377,6 +386,11 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 					main_graph_next_arrow.setVisibility(View.INVISIBLE);
 				}
 				if(j == 0){
+					if(!isNotNullAll(mGraphList.get(j).get(0))){
+						main_graph.removeView(barGraph);
+						graphNoItem();
+						main_graph.addView(graph_no_item);
+					}
 					main_graph_previous_arrow.setVisibility(View.INVISIBLE);
 				}
 
