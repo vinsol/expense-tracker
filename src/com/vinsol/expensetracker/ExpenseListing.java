@@ -147,25 +147,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						if(highlightID != null){
 							if (j <= mSubList.size()) {
 								if(mTempSubList.get(0).contains(highlightID)){
-									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
-									for(int checkI=0;checkI<mArrayList.size();checkI++){
-										if(mArrayList.get(checkI).equals(highlightID)){
-											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
-											expenseSubListing.putExtra("idList", mTempSubList.get(0));
-											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-											startActivity(expenseSubListing);
-											finish();
-										}
-									}
-									mTempSubList.add(highlightID);
-								} else {
-									mTempSubList.add("");
-								}
-							} else {
-								mTempSubList.add("");
+									startSubListing(mTempSubList.get(0));
+								} 
 							}
-						} else {
-							mTempSubList.add("");
 						}
 						mList.add(mTempSubList);
 						if (j == mSubList.size()) {
@@ -242,25 +226,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						if(highlightID != null){
 							if (j <= mSubList.size()) {
 								if(mTempSubList.get(0).contains(highlightID)){
-									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
-									for(int checkI=0;checkI<mArrayList.size();checkI++){
-										if(mArrayList.get(checkI).equals(highlightID)){
-											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
-											expenseSubListing.putExtra("idList", mTempSubList.get(0));
-											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-											startActivity(expenseSubListing);
-											finish();
-										}
-									}
-									mTempSubList.add(highlightID);
-								} else {
-									mTempSubList.add("");
-								}
-							} else {
-								mTempSubList.add("");
+									startSubListing(mTempSubList.get(0));
+								} 
 							}
-						} else {
-							mTempSubList.add("");
 						}
 						mList.add(mTempSubList);
 						if (j == mSubList.size()) {
@@ -335,25 +303,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						if(highlightID != null){
 							if (j <= mSubList.size()) {
 								if(mTempSubList.get(0).contains(highlightID)){
-									ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(mTempSubList.get(0));
-									for(int checkI=0;checkI<mArrayList.size();checkI++){
-										if(mArrayList.get(checkI).equals(highlightID)){
-											Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
-											expenseSubListing.putExtra("idList", mTempSubList.get(0));
-											expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-											startActivity(expenseSubListing);
-											finish();
-										}
-									}
-									mTempSubList.add(highlightID);
-								} else {
-									mTempSubList.add("");
-								}
-							} else {
-								mTempSubList.add("");
+									startSubListing(mTempSubList.get(0));
+								} 
 							}
-						} else {
-							mTempSubList.add("");
 						}
 						mList.add(mTempSubList);
 						if (j >= mSubList.size()) {
@@ -388,6 +340,20 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		super.onResume();
 	}
 	
+	private void startSubListing(String string) {
+		ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(string);
+		for(int checkI=0;checkI<mArrayList.size();checkI++){
+			if(mArrayList.get(checkI).equals(highlightID)){
+				Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
+				expenseSubListing.putExtra("idList", string);
+				expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(expenseSubListing);
+				finish();
+			}
+		}
+		
+	}
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -471,19 +437,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"));
 		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
-		if(highlightID != null){
-			if (j < mSubList.size()) {
-				if(mSubList.get(j).get(DatabaseAdapter.KEY_ID).equals(highlightID)){
-					_templist.add(highlightID);
-				} else {
-					_templist.add("");
-				}
-			} else {
-				_templist.add("");
-			}
-		} else {
-			_templist.add("");
-		}
 		return _templist;
 	}
 
