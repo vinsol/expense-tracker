@@ -46,7 +46,43 @@ public class BarGraph extends View {
 	private void drawVerticalLabels(Canvas canvas) {
 		int originX = (int) ((15.83/100)*width);
 		int topY = (int) ((Double)(85.76/100)*height);
-		int interval = (int) (max/5);
+		double interval = max/5;
+		double calculatedInterval = interval;
+		int multiplier = 1;
+		while(calculatedInterval > 1) {
+			calculatedInterval /= 10;
+			multiplier *= 10; 
+		}
+
+		
+		if(calculatedInterval < .1) {
+			calculatedInterval = .1;
+		} else if(calculatedInterval < .2) {
+			calculatedInterval = .2;
+		} else if(calculatedInterval < .25) {
+			calculatedInterval = .25;
+		} else if(calculatedInterval < .3) {
+			calculatedInterval = .3;
+		} else if(calculatedInterval < .4) {
+			calculatedInterval = .4;
+		} else if(calculatedInterval < .5) {
+			calculatedInterval = .5;
+		} else if(calculatedInterval < .6) {
+			calculatedInterval = .6;
+		} else if(calculatedInterval < .7) {
+			calculatedInterval = .7;
+		} else if(calculatedInterval < .75) {
+			calculatedInterval = .75;
+		} else if(calculatedInterval < .8) {
+			calculatedInterval = .8;
+		} else if(calculatedInterval < .9) {
+			calculatedInterval = .9;
+		} else if(calculatedInterval < 1.0) {
+			calculatedInterval = 1.0;
+		} 
+		
+		interval = calculatedInterval * multiplier;
+		
 		int value = 0;
 		paint.setTextAlign(Align.RIGHT);
 		TextView mTextView = new TextView(getContext());
@@ -58,7 +94,7 @@ public class BarGraph extends View {
 		paint.setTypeface(Typeface.DEFAULT_BOLD);
 		for(int i=0;i<6;i++){
 			canvas.drawText(value+"", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
-			value = value + interval;
+			value = (int) (value + interval);
 			topY = (int) (topY-(verDiff/5));
 		}
 		paint = new Paint();
