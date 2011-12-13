@@ -21,7 +21,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.utils.DateHelper;
+import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
 import com.vinsol.expensetracker.utils.StringProcessing;
@@ -335,37 +335,60 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 			expense_listing_listview_no_item_button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
-//							DateHelper mDateHelper = new DateHelper(mDatadateList.get(mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
-//							final ArrayList<String> mArrayList = insertToDatabase(mDateHelper.getTimeMillis());
-//							unknownDialog = new UnknownEntryDialog(ExpenseListing.this, mTempSubList, new android.view.View.OnClickListener() {
-//								
-//								@Override
-//								public void onClick(View v) {
-//									DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
-//									mDatabaseAdapter.open();
-//									mDatabaseAdapter.deleteDatabaseEntryID(mArrayList.get(0));
-//									mDatabaseAdapter.close();
-//									unknownEntryDialog.dismiss();
-//									Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
-//								}
-//							});
-//							
-//							unknownEntryDialog.setOnCancelListener(new OnCancelListener() {
-//								
-//								@Override
-//								public void onCancel(DialogInterface dialog) {
-//									DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
-//									mDatabaseAdapter.open();
-//									mDatabaseAdapter.deleteDatabaseEntryID(mArrayList.get(0));
-//									mDatabaseAdapter.close();
-//									unknownEntryDialog.dismiss();
-//								}
-//							});
+							final ArrayList<String> mArrayList = insertToDatabase();
+							unknownDialog = new UnknownEntryDialog(ExpenseListing.this, mArrayList, new android.view.View.OnClickListener() {
+								
+								@Override
+								public void onClick(View v) {
+									DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(ExpenseListing.this);
+									mDatabaseAdapter.open();
+									mDatabaseAdapter.deleteDatabaseEntryID(mArrayList.get(0));
+									mDatabaseAdapter.close();
+									unknownDialog.dismiss();
+									Toast.makeText(ExpenseListing.this, "Deleted", Toast.LENGTH_SHORT).show();
+								}
+							});
+							
+							unknownDialog.setOnCancelListener(new OnCancelListener() {
+								
+								@Override
+								public void onCancel(DialogInterface dialog) {
+									DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(ExpenseListing.this);
+									mDatabaseAdapter.open();
+									mDatabaseAdapter.deleteDatabaseEntryID(mArrayList.get(0));
+									mDatabaseAdapter.close();
+									unknownDialog.dismiss();
+								}
+							});
 						}
 					});
 		}
 		mListView.setSelection(firstVisiblePosition);
 		super.onResume();
+	}
+	
+	private ArrayList<String> insertToDatabase() {
+		ArrayList<String> mArrayList = new ArrayList<String>();
+		for(int i = 0;i<8;i++){
+			mArrayList.add("");
+		}
+		DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(ExpenseListing.this);
+		HashMap<String, String> _list = new HashMap<String, String>();
+		Calendar mCalendar = Calendar.getInstance();
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		_list.put(DatabaseAdapter.KEY_DATE_TIME,mCalendar.getTimeInMillis()+"");
+		mArrayList.set(6, _list.get(DatabaseAdapter.KEY_DATE_TIME));
+		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+			_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+			mArrayList.set(7, LocationHelper.currentAddress);
+		}
+		_list.put(DatabaseAdapter.KEY_TYPE, getString(R.string.unknown));
+		mArrayList.set(5, _list.get(DatabaseAdapter.KEY_TYPE));
+		mDatabaseAdapter.open();
+		long _id = mDatabaseAdapter.insert_to_database(_list);
+		mDatabaseAdapter.close();
+		mArrayList.set(0,Long.toString(_id));
+		return mArrayList;
 	}
 	
 	private void startSubListing(String string) {
