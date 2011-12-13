@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +21,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
 import com.vinsol.expensetracker.utils.StringProcessing;
@@ -332,7 +335,32 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 			expense_listing_listview_no_item_button.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							finish();
+//							DateHelper mDateHelper = new DateHelper(mDatadateList.get(mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
+//							final ArrayList<String> mArrayList = insertToDatabase(mDateHelper.getTimeMillis());
+//							unknownDialog = new UnknownEntryDialog(ExpenseListing.this, mTempSubList, new android.view.View.OnClickListener() {
+//								
+//								@Override
+//								public void onClick(View v) {
+//									DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
+//									mDatabaseAdapter.open();
+//									mDatabaseAdapter.deleteDatabaseEntryID(mArrayList.get(0));
+//									mDatabaseAdapter.close();
+//									unknownEntryDialog.dismiss();
+//									Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
+//								}
+//							});
+//							
+//							unknownEntryDialog.setOnCancelListener(new OnCancelListener() {
+//								
+//								@Override
+//								public void onCancel(DialogInterface dialog) {
+//									DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
+//									mDatabaseAdapter.open();
+//									mDatabaseAdapter.deleteDatabaseEntryID(mArrayList.get(0));
+//									mDatabaseAdapter.close();
+//									unknownEntryDialog.dismiss();
+//								}
+//							});
 						}
 					});
 		}

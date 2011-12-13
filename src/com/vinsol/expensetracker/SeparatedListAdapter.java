@@ -342,13 +342,6 @@ class SeparatedListAdapter extends BaseAdapter {
 			}
 
 			if (v.getId() == R.id.expenses_listing_add_expenses_button) {
-//				DateHelper mDateHelper = new DateHelper(mDatadateList.get(mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
-//				Intent mMainIntent = new Intent(mContext, MainActivity.class);
-//				Bundle bundle = new Bundle();
-//				bundle.putLong("timeInMillis", mDateHelper.getTimeMillis());
-//				mMainIntent.putExtra("mainBundle", bundle);
-//				mMainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//				mContext.startActivity(mMainIntent);
 				
 				DateHelper mDateHelper = new DateHelper(mDatadateList.get(mPosition).get(DatabaseAdapter.KEY_DATE_TIME));
 				final ArrayList<String> mArrayList = insertToDatabase(mDateHelper.getTimeMillis());
@@ -361,12 +354,6 @@ class SeparatedListAdapter extends BaseAdapter {
 						mDatabaseAdapter.deleteDatabaseEntryID(mArrayList.get(0));
 						mDatabaseAdapter.close();
 						unknownEntryDialog.dismiss();
-//						Intent intentExpenseListing = new Intent(mContext, ExpenseListing.class);
-//						intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//						Bundle mToHighLight = new Bundle();
-//						mToHighLight.putString("toHighLight", mArrayList.get(0));
-//						intentExpenseListing.putExtras(mToHighLight);
-//						mContext.startActivity(intentExpenseListing);
 						Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
 					}
 				});

@@ -82,7 +82,7 @@ public class BarGraph extends View {
 		} 
 		
 		interval = calculatedInterval * multiplier;
-		
+		max =interval*5;
 		int value = 0;
 		paint.setTextAlign(Align.RIGHT);
 		TextView mTextView = new TextView(getContext());
