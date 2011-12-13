@@ -49,62 +49,69 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 		mSeparatedListAdapter = new SeparatedListAdapter(this);
 		mDataDateList = mConvertCursorToListString.getDateListString(idList);
 		mSubList = mConvertCursorToListString.getListStringParticularDate(idList);
+		if(mSubList.size() > 0){
 		
-		Bundle intentExtras = getIntent().getExtras();
-		if(intentExtras != null){
-			if(intentExtras.containsKey("toHighLight")){
-				highlightID = intentExtras.getLong("toHighLight");
-			}
-		}
-		
-		Calendar mTempCalendar = Calendar.getInstance();
-		mTempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(0).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
-		mTempCalendar.set(mTempCalendar.get(Calendar.YEAR),mTempCalendar.get(Calendar.MONTH),mTempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
-		mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		
-		expense_listing_header.setText(new DisplayDate(mTempCalendar).getDisplayDateHeaderGraph());
-		
-		
-		int j = 0;
-		@SuppressWarnings("rawtypes")
-		List listString = new ArrayList<List<List<String>>>();
-		for (int i = 0; i < mDataDateList.size(); i++) {
-			List<List<String>> mList = new ArrayList<List<String>>();
-			String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
-			while (j < mSubList.size()&& date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
-				List<String> _templist = new ArrayList<String>();
-				Calendar mCalendar = Calendar.getInstance();
-				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
-				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-				_templist = getList(j);
-				mList.add(_templist);
-				j++;
-				if (j < mSubList.size()) {
-				} else {
-					break;
+			Bundle intentExtras = getIntent().getExtras();
+			if(intentExtras != null){
+				if(intentExtras.containsKey("toHighLight")){
+					highlightID = intentExtras.getLong("toHighLight");
 				}
 			}
-			listString.add(mList);
+			
+			Calendar mTempCalendar = Calendar.getInstance();
+			mTempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(0).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
+			mTempCalendar.set(mTempCalendar.get(Calendar.YEAR),mTempCalendar.get(Calendar.MONTH),mTempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+			mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			
+			expense_listing_header.setText(new DisplayDate(mTempCalendar).getDisplayDateSubListingHeader());
+			
+			int j = 0;
 			@SuppressWarnings("rawtypes")
-			List tt = (List) listString.get(i);
-			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<String>(this, R.layout.expense_listing, tt), mDataDateList);
+			List listString = new ArrayList<List<List<String>>>();
+			for (int i = 0; i < mDataDateList.size(); i++) {
+				List<List<String>> mList = new ArrayList<List<String>>();
+				String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
+				while (j < mSubList.size()&& date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
+					List<String> _templist = new ArrayList<String>();
+					Calendar mCalendar = Calendar.getInstance();
+					mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
+					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+					_templist = getList(j);
+					mList.add(_templist);
+					j++;
+					if (j < mSubList.size()) {
+					} else {
+						break;
+					}
+				}
+				listString.add(mList);
+				@SuppressWarnings("rawtypes")
+				List tt = (List) listString.get(i);
+				mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<String>(this, R.layout.expense_listing, tt), mDataDateList);
+			}
+			mListView = (ListView) findViewById(R.id.expense_listing_listview);
+			mListView.setOnItemClickListener(this);
+			mListView.setAdapter(mSeparatedListAdapter);
+			if (mDataDateList.size() < 1) {
+				mListView.setVisibility(View.GONE);
+				RelativeLayout mRelativeLayout = (RelativeLayout) findViewById(R.id.expense_listing_listview_no_item);
+				mRelativeLayout.setVisibility(View.VISIBLE);
+				Button expense_listing_listview_no_item_button = (Button) findViewById(R.id.expense_listing_listview_no_item_button);
+				expense_listing_listview_no_item_button.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								finish();
+							}
+						});
+			}
+			mSeparatedListAdapter.notifyDataSetChanged();
+		} else {
+			Intent mIntent = new Intent(this, ExpenseListing.class);
+			mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(mIntent);
+			finish();
+		
 		}
-		mListView = (ListView) findViewById(R.id.expense_listing_listview);
-		mListView.setOnItemClickListener(this);
-		mListView.setAdapter(mSeparatedListAdapter);
-		if (mDataDateList.size() < 1) {
-			mListView.setVisibility(View.GONE);
-			RelativeLayout mRelativeLayout = (RelativeLayout) findViewById(R.id.expense_listing_listview_no_item);
-			mRelativeLayout.setVisibility(View.VISIBLE);
-			Button expense_listing_listview_no_item_button = (Button) findViewById(R.id.expense_listing_listview_no_item_button);
-			expense_listing_listview_no_item_button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							finish();
-						}
-					});
-		}
-		mSeparatedListAdapter.notifyDataSetChanged();
 		super.onResume();
 	}
 	
