@@ -614,6 +614,9 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 						unknownDialog.dismiss();
 						Intent intentExpenseListing = new Intent(ExpenseListing.this, ExpenseListing.class);
 						intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						Bundle mToHighLight = new Bundle();
+						mToHighLight.putString("toHighLight", mTempClickedList.get(0));
+						intentExpenseListing.putExtras(mToHighLight);
 						startActivity(intentExpenseListing);
 						Toast.makeText(ExpenseListing.this, "Deleted", Toast.LENGTH_SHORT).show();
 					}
@@ -622,7 +625,6 @@ public class ExpenseListing extends Activity implements OnItemClickListener {
 		} else {
 			Intent mSubListIntent = new Intent(this, ExpenseSubListing.class);
 			mSubListIntent.putExtra("idList", mTempClickedList.get(0));
-			mSubListIntent.putExtra("title", mTempClickedList.get(1));
 			mSubListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(mSubListIntent);
 		}

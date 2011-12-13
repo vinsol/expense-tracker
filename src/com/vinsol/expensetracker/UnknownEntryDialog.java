@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -50,10 +51,14 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		mTempClickedList = _list;
 		
 		if(mTempClickedList.get(7) != null)
-			locationTextView.setText(mTempClickedList.get(7));
+			if(mTempClickedList.get(7) != ""){
+				locationTextView.setText(mTempClickedList.get(7));
+			}
 		
-		if(mTempClickedList.get(6) != null)
+		if(mTempClickedList.get(6) != null){
+			Log.v("mTempClickedList.get(6)", mTempClickedList.get(6)+"");
 			new ShowDateHandler(getContext(),headerTextView, mTempClickedList.get(6));
+		}
 		else {
 			new ShowDateHandler(getContext(),headerTextView, Integer.parseInt(mTempClickedList.get(5)));
 		}

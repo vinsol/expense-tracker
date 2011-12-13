@@ -181,6 +181,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 						
 						Intent intentExpenseListing = new Intent(ExpenseSubListing.this, ExpenseSubListing.class);
 						intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						intentExpenseListing.putExtra("idList", idList);
 						startActivity(intentExpenseListing);
 						Toast.makeText(ExpenseSubListing.this, "Deleted", Toast.LENGTH_SHORT).show();
 					}

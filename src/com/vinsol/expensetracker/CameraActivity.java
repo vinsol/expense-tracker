@@ -90,7 +90,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 				if (!amount.contains("?"))
 					text_voice_camera_amount.setText(amount);
 			}
-			if(tag.equals(getString(R.string.unknown_entry))){
+			if(tag.equals(getString(R.string.unknown_entry)) || mEditList.get(5).equals(getString(R.string.unknown))){
 				setUnknown = true;
 				startCamera();
 			}

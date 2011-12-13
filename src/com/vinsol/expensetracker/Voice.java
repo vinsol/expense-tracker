@@ -93,7 +93,7 @@ public class Voice extends Activity implements OnClickListener {
 					text_voice_camera_amount.setText(amount);
 				}
 			}
-			if(tag.equals(getString(R.string.unknown_entry))){
+			if(tag.equals(getString(R.string.unknown_entry)) || mEditList.get(5).equals(getString(R.string.unknown))){
 				setUnknown = true;
 			}
 			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_voiceentry)) || tag.equals(getString(R.string.finished_voiceentry)) || tag.equals(getString(R.string.unknown_entry)))) {
