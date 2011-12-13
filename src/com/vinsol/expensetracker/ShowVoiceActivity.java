@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -67,6 +66,8 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 
 		intentExtras = getIntent().getBundleExtra("voiceShowBundle");
 
+		show_text_voice_camera_header_title.setText(getString(R.string.finished_voiceentry));
+		
 		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = new ArrayList<String>();
 			mShowList = intentExtras.getStringArrayList("mDisplayList");
@@ -82,7 +83,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_voiceentry)))) {
 				show_text_voice_camera_tag_textview.setText(tag);
 			} else {
-				show_text_voice_camera_tag_textview.setText("description");
+				show_text_voice_camera_tag_textview.setText(getString(R.string.finished_voiceentry));
 			}
 			
 			if(mShowList.get(4) != null){
@@ -98,8 +99,10 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
 			
-			if(mShowList.get(6) != null)
+			
+			if(mShowList.get(6) != null) {
 				new ShowDateHandler(this, mShowList.get(6));
+			}
 			else {
 				new ShowDateHandler(this,R.string.voice);
 			}
@@ -134,9 +137,6 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 	}
 
 	private void updateUI() {
-		// ///// ***** Sets Title Voice Entry *********///////
-		show_text_voice_camera_header_title.setText("Voice Entry");
-
 		// //// ****** Shows Voice Details ********////////
 		show_text_voice_camera_voice_details.setVisibility(View.VISIBLE);
 	}
@@ -293,7 +293,6 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 					String amount = mShowList.get(2);
 					String tag = mShowList.get(1);
 
-					Log.v("amount", amount +" am");
 					if (amount != null) {
 						if(!amount.equals("") && !amount.equals("?")){
 							show_text_voice_camera_amount.setText(amount);

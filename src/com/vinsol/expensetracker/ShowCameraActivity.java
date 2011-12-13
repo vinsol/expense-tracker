@@ -100,8 +100,10 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
+			
 			if(mShowList.get(6) != null)
 				new ShowDateHandler(this, mShowList.get(6));
 			else {

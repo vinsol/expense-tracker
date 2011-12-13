@@ -6,7 +6,6 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -55,13 +54,16 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			
 			if(mShowList.get(7) != null)
 				new ShowLocationHandler(this, mShowList.get(7));
+			
 			if(mShowList.get(6) != null)
 				new ShowDateHandler(this, mShowList.get(6));
 			else {
 				new ShowDateHandler(this,R.string.text);
 			}
+			
 			if(mShowList.get(4) != null){
 				if(!mShowList.get(4).equals("")){
 					favID = mShowList.get(4);
@@ -108,7 +110,6 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 				mShowList = new ArrayList<String>();
 				if (intentExtras.containsKey("mDisplayList")) {
 					mShowList = intentExtras.getStringArrayList("mDisplayList");
-					Log.v("mShowList", mShowList.toString());
 					if(mShowList.get(0) != null){
 						if(!mShowList.get(0).equals("")){
 							_id = Long.parseLong(mShowList.get(0));

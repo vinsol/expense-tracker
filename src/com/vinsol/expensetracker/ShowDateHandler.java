@@ -5,6 +5,7 @@ import java.util.Calendar;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.widget.TextView;
 
 public class ShowDateHandler {
@@ -16,11 +17,10 @@ public class ShowDateHandler {
 		show_text_voice_camera_header_title = (TextView) activity.findViewById(R.id.show_text_voice_camera_header_title);
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
-		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		
+		Log.v("calendr", mCalendar.get(Calendar.HOUR)+"");
+		String date = getDate(mCalendar);
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-		//TODO
-		show_text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+" at "+getDate(mCalendar));
+		show_text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+" at "+date);
 	}
 
 	public ShowDateHandler(Context mContext,int typeOfEntry) {
@@ -34,10 +34,10 @@ public class ShowDateHandler {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		
+		String date = getDate(mCalendar);
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
 		//TODO
-		show_text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+" at "+getDate(mCalendar));
+		show_text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+" at "+date);
 	}
 
 	public ShowDateHandler(Context mContext,TextView resource,int typeOfEntry) {
