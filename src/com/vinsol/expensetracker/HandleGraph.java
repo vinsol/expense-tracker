@@ -47,6 +47,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		lastDateCalendar = Calendar.getInstance();
 		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		main_graph = (RelativeLayout) activity.findViewById(R.id.main_graph);
+		main_graph_header_textview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
 		main_graph_previous_arrow = (ImageView) activity.findViewById(R.id.main_graph_previous_arrow);
 		main_graph_next_arrow = (ImageView) activity.findViewById(R.id.main_graph_next_arrow);
 		params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,main_graph.getBackground().getIntrinsicHeight());
