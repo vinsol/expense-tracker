@@ -298,10 +298,10 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 							show_text_voice_camera_amount.setText(amount);
 					}
 					
-					if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_voiceentry)))) {
+					if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_voiceentry)) || tag.equals(getString(R.string.finished_voiceentry)))) {
 						show_text_voice_camera_tag_textview.setText(tag);
 					} else {
-						show_text_voice_camera_tag_textview.setText("description");
+						show_text_voice_camera_tag_textview.setText(getString(R.string.finished_voiceentry));
 					}
 					
 					Calendar mCalendar = Calendar.getInstance();

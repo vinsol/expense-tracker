@@ -423,7 +423,11 @@ public class Voice extends Activity implements OnClickListener {
 			}
 			
 			if (listOnResult.get(1) == null || listOnResult.get(1).equals("") || listOnResult.get(1).equals(getString(R.string.unfinished_voiceentry)) || listOnResult.get(1).equals(getString(R.string.finished_voiceentry)) || listOnResult.get(1).equals(getString(R.string.unknown_entry))) {
-				listOnResult.set(1, mEditList.get(1));
+				if(listOnResult.get(1).equals(getString(R.string.unfinished_voiceentry)) || listOnResult.get(1).equals(getString(R.string.finished_voiceentry))) {
+					listOnResult.set(1, mEditList.get(1));
+				} else {
+					listOnResult.set(1, "");
+				}
 			}
 			
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
@@ -434,7 +438,7 @@ public class Voice extends Activity implements OnClickListener {
 				listOnResult.add(mEditList.get(3));
 			}				
 			if((!mEditList.get(1).equals(listOnResult.get(1))) || (!mEditList.get(2).equals(new StringProcessing().getStringDoubleDecimal(listOnResult.get(2)))) || isChanged ) {
-				ShowTextActivity.favID = null;
+				ShowVoiceActivity.favID = null;
 				HashMap<String, String> listForFav = new HashMap<String, String>();
 				listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
 				listForFav.put(DatabaseAdapter.KEY_ID, mEditList.get(0));

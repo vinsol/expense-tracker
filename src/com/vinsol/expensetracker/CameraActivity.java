@@ -381,7 +381,11 @@ public class CameraActivity extends Activity implements OnClickListener {
 			}
 			
 			if (listOnResult.get(1) == null || listOnResult.get(1).equals("") || listOnResult.get(1).equals(getString(R.string.unfinished_cameraentry)) || listOnResult.get(1).equals(getString(R.string.finished_cameraentry)) || listOnResult.get(1).equals(getString(R.string.unknown_entry))) {
-				listOnResult.set(1, mEditList.get(1));
+				if(listOnResult.get(1).equals(getString(R.string.unfinished_cameraentry)) || listOnResult.get(1).equals(getString(R.string.finished_cameraentry))) {
+					listOnResult.set(1, mEditList.get(1));
+				} else {
+					listOnResult.set(1, "");
+				}
 			}
 			
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
@@ -393,7 +397,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 			}		
 			
 			if((!mEditList.get(1).equals(listOnResult.get(1))) || (!mEditList.get(2).equals(new StringProcessing().getStringDoubleDecimal(listOnResult.get(2)))) || isChanged) {
-				ShowTextActivity.favID = null;
+				ShowCameraActivity.favID = null;
 				HashMap<String, String> listForFav = new HashMap<String, String>();
 				listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
 				listForFav.put(DatabaseAdapter.KEY_ID, mEditList.get(0));

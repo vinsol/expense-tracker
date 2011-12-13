@@ -121,7 +121,11 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 					
 					String amount = mShowList.get(2);
 					String tag = mShowList.get(1);
-					show_text_voice_camera_tag_textview.setText(tag);
+					if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_textentry)) || tag.equals(getString(R.string.finished_textentry)))) {
+						show_text_voice_camera_tag_textview.setText(tag);
+					} else {
+						show_text_voice_camera_tag_textview.setText(getString(R.string.finished_textentry));
+					}
 					if (amount != null) {
 						show_text_voice_camera_amount.setText(amount);
 					}
