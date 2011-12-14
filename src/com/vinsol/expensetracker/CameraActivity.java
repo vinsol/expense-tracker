@@ -218,7 +218,9 @@ public class CameraActivity extends Activity implements OnClickListener {
 						adapter.close();
 					}
 				}
-				finish();
+				if(!intentExtras.containsKey("isFromShowPage")) {
+					finish();
+				}
 			}
 		}
 	}
