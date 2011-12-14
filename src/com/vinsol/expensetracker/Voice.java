@@ -463,8 +463,9 @@ public class Voice extends Activity implements OnClickListener {
 					listOnResult.add(mEditList.get(4));
 				}
 				else {
+					Log.v("ShowVoiceActivity.favID", ShowVoiceActivity.favID+" fav");
 					listOnResult.add(ShowVoiceActivity.favID);
-			}
+				}
 			listOnResult.add(mEditList.get(5));
 			if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
 				listOnResult.add(_list.get(DatabaseAdapter.KEY_DATE_TIME));
