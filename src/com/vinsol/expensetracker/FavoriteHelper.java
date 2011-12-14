@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -24,7 +23,6 @@ class FavoriteHelper implements OnClickListener{
 	private DBAdapterFavorite mDbAdapterFavorite;
 	private Activity activity;
 	private DatabaseAdapter mDatabaseAdapter;
-	private LinearLayout show_text_voice_camera_add_favorite_layout;
 	private TextView show_text_voice_camera_add_favorite_textView;
 	
 	FavoriteHelper(Context _context,ArrayList<String> _mShowList) {
@@ -32,7 +30,6 @@ class FavoriteHelper implements OnClickListener{
 		mShowList = _mShowList;
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		show_text_voice_camera_add_favorite = (ToggleButton) activity.findViewById(R.id.show_text_voice_camera_add_favorite);
-		show_text_voice_camera_add_favorite_layout = (LinearLayout) activity.findViewById(R.id.show_text_voice_camera_add_favorite_layout);
 		show_text_voice_camera_add_favorite_textView = (TextView) activity.findViewById(R.id.show_text_voice_camera_add_favorite_textView);
 		
 		show_text_voice_camera_add_favorite.setVisibility(View.VISIBLE);
@@ -51,7 +48,8 @@ class FavoriteHelper implements OnClickListener{
 			show_text_voice_camera_add_favorite_textView.setText("Add to Favorite");
 			show_text_voice_camera_add_favorite.setChecked(false);
 		}
-		show_text_voice_camera_add_favorite_layout.setOnClickListener(this);
+		show_text_voice_camera_add_favorite.setOnClickListener(this);
+		show_text_voice_camera_add_favorite_textView.setOnClickListener(this);
 	}
 
 	public void setShowList(ArrayList<String> mShowList2) {
@@ -73,8 +71,15 @@ class FavoriteHelper implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
+		Boolean toCheck;
+		if(v.getId() == R.id.show_text_voice_camera_add_favorite){
+			toCheck = show_text_voice_camera_add_favorite.isChecked();
+		} else {
+			toCheck = !show_text_voice_camera_add_favorite.isChecked();
+		}
 		
-		if(!show_text_voice_camera_add_favorite.isChecked()){
+		if(toCheck){
+			
 			HashMap<String, String> _list = new HashMap<String, String>();
 			Long favID = null;
 			_list.put(DBAdapterFavorite.KEY_AMOUNT, mShowList.get(2));
@@ -182,8 +187,7 @@ class FavoriteHelper implements OnClickListener{
 			} else {
 				Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_SHORT).show();
 			}
-			
-			//TODO if deleted from favorites
+		
 		}	
 		
 }
