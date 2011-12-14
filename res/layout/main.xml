@@ -79,6 +79,9 @@
        		        android:layout_alignParentLeft="true"
        		        android:layout_centerVertical="true"
        		        android:paddingBottom="15dp"
+       		        android:paddingRight="5dp"
+       		        android:paddingLeft="5dp"
+       		        android:paddingTop="5dp"
        		        android:visibility="invisible"
        		        >
      		    </ImageView>
@@ -91,6 +94,9 @@
        		        android:layout_alignParentRight="true"
        		        android:layout_centerVertical="true"
        		        android:paddingBottom="15dp"
+       		        android:paddingRight="5dp"
+       		        android:paddingLeft="5dp"
+       		        android:paddingTop="5dp"
        		        android:visibility="invisible"
        		        >
       		    </ImageView>   
