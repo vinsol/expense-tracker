@@ -69,28 +69,12 @@ public class TextEntry extends Activity implements OnClickListener {
 		}
 		
 		// ////// ******** Handle Date Bar ********* ////////
-		if(!intentExtras.containsKey("isFromShowPage")){
-			if (intentExtras.containsKey("mDisplayList")) {
-				new DateHandler(this, Long.parseLong(mEditList.get(6)));
-			} else if (intentExtras.containsKey("timeInMillis")) {
-				new DateHandler(this, intentExtras.getLong("timeInMillis"));
-			} else {
-				new DateHandler(this);
-			}
-		}
-		
-		if(intentExtras.containsKey("isFromShowPage")){
-			
-			if(mEditList.get(7) != null)
-				new EditLocationHandler(this, mEditList.get(7));
-			else 
-				new EditLocationHandler(this, "unknown location");
-			
-			if(mEditList.get(6) != null)
-				new EditDateHandler(this, mEditList.get(6));
-			else {
-				new EditDateHandler(this);
-			}
+		if (intentExtras.containsKey("mDisplayList")) {
+			new DateHandler(this, Long.parseLong(mEditList.get(6)));
+		} else if (intentExtras.containsKey("timeInMillis")) {
+			new DateHandler(this, intentExtras.getLong("timeInMillis"));
+		} else {
+			new DateHandler(this);
 		}
 		setClickListeners();
 	}

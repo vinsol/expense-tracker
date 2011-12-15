@@ -219,7 +219,12 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		if(v.getId() == R.id.show_text_voice_camera_edit){
 			Intent editIntent = new Intent(this, Voice.class);
 			intentExtras.putBoolean("isFromShowPage", true);
+			try {
+				if (mAudioPlay.isAudioPlaying())
+					mAudioPlay.stopPlayBack();
+			} catch (Exception e) {
 
+			}
 			mShowList.set(4, favID);
 			intentExtras.remove("mDisplayList");
 			intentExtras.putStringArrayList("mDisplayList", mShowList);

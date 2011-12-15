@@ -88,14 +88,14 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
 				main_graph.addView(barGraph, params);
 				if(j == mGraphList.size()-1){
+					main_graph_previous_arrow.setVisibility(View.INVISIBLE);
+				}
+				if(j == 0){
 					if(!isNotNullAll(mGraphList.get(j).get(0))){
 						main_graph.removeView(barGraph);
 						graphNoItem();
 						main_graph.addView(graph_no_item);
 					}
-					main_graph_previous_arrow.setVisibility(View.INVISIBLE);
-				}
-				if(j == 0){
 					main_graph_next_arrow.setVisibility(View.INVISIBLE);
 				}
 				main_graph_next_arrow.setOnClickListener(this);
@@ -383,14 +383,14 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				main_graph_next_arrow.setVisibility(View.VISIBLE);
 				
 				if(j == mGraphList.size()-1){
+					main_graph_previous_arrow.setVisibility(View.INVISIBLE);
+				}
+				if(j == 0){
 					if(!isNotNullAll(mGraphList.get(j).get(0))){
 						main_graph.removeView(barGraph);
 						graphNoItem();
 						main_graph.addView(graph_no_item);
 					}
-					main_graph_previous_arrow.setVisibility(View.INVISIBLE);
-				}
-				if(j == 0){
 					main_graph_next_arrow.setVisibility(View.INVISIBLE);
 				}
 

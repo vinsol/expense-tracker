@@ -98,7 +98,21 @@ public class BarGraph extends View {
 		mTextViewTemp.setTextSize(TypedValue.COMPLEX_UNIT_DIP,5);
 		paint.setTypeface(Typeface.DEFAULT_BOLD);
 		for(int i=0;i<6;i++){
-			canvas.drawText(value+"", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
+			if(value % 1000000000 == 0){
+				value = value/1000000000;
+				canvas.drawText(value+"B", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
+				value = value * 1000000000;
+			} else if(value % 1000000 == 0){
+				value = value/1000000;
+				canvas.drawText(value+"M", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
+				value = value*1000000;
+			} else if(value % 1000 == 0){
+				value = value/1000;
+				canvas.drawText(value+"K", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
+				value = value*1000;
+			} else {
+				canvas.drawText(value+"", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
+			}
 			value = (int) (value + interval);
 			topY = (int) (topY-(verDiff/5));
 		}
