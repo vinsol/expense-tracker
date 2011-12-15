@@ -14,6 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBAdapterFavorite {
 	// database and table name
+		private static int 	  DB_VERSION = 1;
 		private final String DATABASE_NAME = "ExpenseTrackerDB";
 		private final String TABLE_NAME = "FavoriteTable";
 
@@ -107,7 +108,7 @@ public class DBAdapterFavorite {
 		private class MyCreateOpenHelper extends SQLiteOpenHelper {
 
 			public MyCreateOpenHelper(Context context) {
-				super(context, DATABASE_NAME, null, 1);
+				super(context, DATABASE_NAME, null, DB_VERSION);
 			}
 
 			@Override
