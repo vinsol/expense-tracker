@@ -3,7 +3,7 @@ package com.vinsol.expensetracker.utils;
 public class Log  {
 	
     private static String app = "ExpenseTracker";
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
     
     public static final void d(Throwable throwable) {
     	if (DEBUG)

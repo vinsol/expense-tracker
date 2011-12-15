@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -450,7 +449,6 @@ public class Voice extends Activity implements OnClickListener {
 			if((!mEditList.get(1).equals(listOnResult.get(1))) || isAmountNotEqual || isChanged ) {
 				isChanged = false;
 				ShowVoiceActivity.favID = null;
-				Log.v("isChanged", isChanged+" "+ShowVoiceActivity.favID);
 				HashMap<String, String> listForFav = new HashMap<String, String>();
 				listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
 				listForFav.put(DatabaseAdapter.KEY_ID, mEditList.get(0));
@@ -463,7 +461,6 @@ public class Voice extends Activity implements OnClickListener {
 					listOnResult.add(mEditList.get(4));
 				}
 				else {
-					Log.v("ShowVoiceActivity.favID", ShowVoiceActivity.favID+" fav");
 					listOnResult.add(ShowVoiceActivity.favID);
 				}
 			listOnResult.add(mEditList.get(5));

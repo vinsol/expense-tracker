@@ -85,6 +85,10 @@ public class BarGraph extends View {
 		
 		if(interval < 1) {
 			interval = 1;
+		} 
+		
+		if (interval == 2.5){
+			interval = 3;
 		}
 		
 		max =interval*5;
@@ -98,15 +102,15 @@ public class BarGraph extends View {
 		mTextViewTemp.setTextSize(TypedValue.COMPLEX_UNIT_DIP,5);
 		paint.setTypeface(Typeface.DEFAULT_BOLD);
 		for(int i=0;i<6;i++){
-			if(value % 1000000000 == 0){
+			if(value % 1000000000 == 0 && i != 0){
 				value = value/1000000000;
 				canvas.drawText(value+"B", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
 				value = value * 1000000000;
-			} else if(value % 1000000 == 0){
+			} else if(value % 1000000 == 0 && i != 0){
 				value = value/1000000;
 				canvas.drawText(value+"M", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
 				value = value*1000000;
-			} else if(value % 1000 == 0){
+			} else if(value % 1000 == 0 && i != 0){
 				value = value/1000;
 				canvas.drawText(value+"K", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
 				value = value*1000;

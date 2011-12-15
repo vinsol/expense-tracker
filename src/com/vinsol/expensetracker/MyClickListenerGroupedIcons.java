@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -136,7 +135,6 @@ public class MyClickListenerGroupedIcons implements OnClickListener{
 		HashMap<String, String> _list = new HashMap<String, String>();
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		Log.v("bundle", bundle+" "+toInsert+" ");
 		if(timeInMillis != 0)
 			bundle.putLong("timeInMillis", Long.parseLong(toInsert.get(DatabaseAdapter.KEY_DATE_TIME)));
 		else 

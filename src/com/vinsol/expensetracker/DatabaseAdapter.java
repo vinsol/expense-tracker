@@ -1,6 +1,9 @@
 package com.vinsol.expensetracker;
 
 import java.util.HashMap;
+
+import com.vinsol.expensetracker.utils.Log;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +11,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class DatabaseAdapter {
 
@@ -79,9 +81,9 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_LOCATION, _list.get(KEY_LOCATION));
 		contentValues.put(KEY_FAVORITE, _list.get(KEY_FAVORITE));
 		contentValues.put(KEY_TYPE, _list.get(KEY_TYPE));
-		Log.v("com.vinsol.expensetracker", "TRYING");
+		Log.d("TRYING");
 		long _id = db.insert(TABLE_NAME, null, contentValues);
-		Log.v("com.vinsol.expensetracker", "ADDED");
+		Log.d("ADDED");
 		return _id;
 	}
 
@@ -89,9 +91,9 @@ public class DatabaseAdapter {
 		String where = KEY_ID + "=" + id;
 		
 		try {
-			Log.v("com.vinsol.expensetracker", "Deleting");
+			Log.d("Deleting");
 			db.delete(TABLE_NAME, where, null);
-			Log.v("com.vinsol.expensetracker", "Deleted");
+			Log.d("Deleted");
 		} catch (SQLiteException e) {
 			return false;
 		}
@@ -114,9 +116,9 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_TYPE, _list.get(KEY_TYPE));
 		String where = KEY_ID + "=" + _list.get(KEY_ID);
 		try {
-			Log.v("com.vinsol.expensetracker", "EDITING");
+			Log.d("EDITING");
 			db.update(TABLE_NAME, contentValues, where, null);
-			Log.v("com.vinsol.expensetracker", "EDITED");
+			Log.d("EDITED");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
