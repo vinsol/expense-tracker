@@ -35,7 +35,9 @@ class SeparatedListAdapter extends BaseAdapter {
 	private List<HashMap<String, String>> mDatadateList;
 	private LayoutInflater mInflater;
 	private UnknownEntryDialog unknownEntryDialog;
-
+	private View viewHeader = null;
+	private View viewFooter = null;
+	
 	public SeparatedListAdapter(Context context) {
 		mContext = context;
 		headers = new ArrayAdapter<String>(context,R.layout.mainlist_header_view);
@@ -121,9 +123,9 @@ class SeparatedListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		int sectionnum = 0;
 		ViewHolderHeader holderHeader;
-		final ViewHolderBody holderBody;
+		ViewHolderBody holderBody;
 		ViewHolderFooter holderFooter;
-
+		
 		for (Object section : this.sections.keySet()) {
 			Adapter adapter = sections.get(section);
 			int size = adapter.getCount() + 2;
@@ -131,15 +133,37 @@ class SeparatedListAdapter extends BaseAdapter {
 			// check if position inside this section
 			if (position == 0) {
 				holderHeader = new ViewHolderHeader();
-				convertView = mInflater.inflate(R.layout.mainlist_header_view,null);
-				holderHeader.expenses_listing_list_date_view = (TextView) convertView.findViewById(R.id.expenses_listing_list_date_view);
-				holderHeader.expenses_listing_list_amount_view = (TextView) convertView.findViewById(R.id.expenses_listing_list_amount_view);
+				viewHeader = mInflater.inflate(R.layout.mainlist_header_view,null);
+				holderHeader.expenses_listing_list_date_view = (TextView) viewHeader.findViewById(R.id.expenses_listing_list_date_view);
+				holderHeader.expenses_listing_list_amount_view = (TextView) viewHeader.findViewById(R.id.expenses_listing_list_amount_view);
 				holderHeader.expenses_listing_list_date_view.setText(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
 				holderHeader.expenses_listing_list_amount_view.setText(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_AMOUNT));
-				return convertView;
+				return viewHeader;
 			}
-			if (position < size - 1) {
-				if (convertView == null || position != 0) {
+			
+
+			if (position == size-1) {
+				holderFooter = new ViewHolderFooter();
+				viewFooter = mInflater.inflate(R.layout.main_list_footerview, null);
+				holderFooter.expenses_listing_add_expenses_button = (Button) viewFooter.findViewById(R.id.expenses_listing_add_expenses_button);
+				holderFooter.expense_listing_list_add_expenses = (LinearLayout) viewFooter.findViewById(R.id.expense_listing_list_add_expenses);
+
+				if (!isCurrentWeek(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME))) {
+					holderFooter.expense_listing_list_add_expenses.setBackgroundResource(0);
+					holderFooter.expense_listing_list_add_expenses.setVisibility(View.GONE);
+					holderFooter.expenses_listing_add_expenses_button.setVisibility(View.GONE);
+				} else {
+					holderFooter.expenses_listing_add_expenses_button.setText("Add expenses to "+ mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
+					holderFooter.expenses_listing_add_expenses_button.setFocusable(false);
+					DateHelper mDateHelper = new DateHelper(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
+					holderFooter.expenses_listing_add_expenses_button.setOnClickListener(new MyClickListenerGroupedIcons(unknownEntryDialog, mContext, null, mDateHelper.getTimeMillis()));
+				}
+
+				return viewFooter;
+			}
+			
+			if (position > 0 && position < size - 1) {
+				if (convertView == null) {
 					holderBody = new ViewHolderBody();
 					convertView = mInflater.inflate(R.layout.expense_listing_inflated_row, null);
 					holderBody.expense_listing_inflated_row_location_time = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_location_time);
@@ -148,6 +172,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderBody.expense_listing_inflated_row_imageview = (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_imageview);
 					holderBody.expense_listing_inflated_row_favorite_icon = (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_favorite_icon);
 					holderBody.expense_listing_inflated_row_listview = (RelativeLayout) convertView.findViewById(R.id.expense_listing_inflated_row_listview);
+					convertView.setTag(holderBody);
 				} else {
 					holderBody = (ViewHolderBody) convertView.getTag();
 				}
@@ -155,8 +180,6 @@ class SeparatedListAdapter extends BaseAdapter {
 				
 				@SuppressWarnings("unchecked")
 				List<String> mlist = (List<String>) adapter.getItem(position - 1);
-				
-				
 				if (mlist.get(5).equals(mContext.getString(R.string.camera))) {
 					
 					if(!isEntryComplete((ArrayList<String>) mlist)){
@@ -230,29 +253,6 @@ class SeparatedListAdapter extends BaseAdapter {
 				return convertView;
 			}
 
-			if (position < size) {
-				if (convertView == null || position < size) {
-					holderFooter = new ViewHolderFooter();
-					convertView = mInflater.inflate(R.layout.main_list_footerview, null);
-					holderFooter.expenses_listing_add_expenses_button = (Button) convertView.findViewById(R.id.expenses_listing_add_expenses_button);
-					holderFooter.expense_listing_list_add_expenses = (LinearLayout) convertView.findViewById(R.id.expense_listing_list_add_expenses);
-				} else {
-					holderFooter = (ViewHolderFooter) convertView.getTag();
-				}
-
-				if (!isCurrentWeek(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME))) {
-					holderFooter.expense_listing_list_add_expenses.setBackgroundResource(0);
-					holderFooter.expense_listing_list_add_expenses.setVisibility(View.GONE);
-					holderFooter.expenses_listing_add_expenses_button.setVisibility(View.GONE);
-				} else {
-					holderFooter.expenses_listing_add_expenses_button.setText("Add expenses to "+ mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
-					holderFooter.expenses_listing_add_expenses_button.setFocusable(false);
-					DateHelper mDateHelper = new DateHelper(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
-					holderFooter.expenses_listing_add_expenses_button.setOnClickListener(new MyClickListenerGroupedIcons(unknownEntryDialog, mContext, null, mDateHelper.getTimeMillis()));
-				}
-
-				return convertView;
-			}
 			position -= size;
 			sectionnum++;
 
