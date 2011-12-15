@@ -29,7 +29,6 @@ import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.FileDelete;
-import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.StringProcessing;
 
 public class CameraActivity extends Activity implements OnClickListener {
@@ -61,6 +60,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 
 		// //////********* Get id from intent extras ******** ////////////
 		intentExtras = getIntent().getBundleExtra("cameraBundle");
+		
 		if (intentExtras.containsKey("_id"))
 			_id = intentExtras.getLong("_id");
 
@@ -127,7 +127,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		
 		dateViewString = text_voice_camera_date_bar_dateview.getText().toString();
-		Log.d(_id);
+		
 		if(_id == null ) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				

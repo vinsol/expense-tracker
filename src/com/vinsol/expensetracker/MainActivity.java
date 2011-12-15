@@ -120,6 +120,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.main_camera:
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				Intent intentCamera = new Intent(this, CameraActivity.class);
+				bundle = new Bundle();
 				intentCamera.putExtra("cameraBundle", bundle);
 				startActivity(intentCamera);
 			} else {
@@ -139,6 +140,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				} else {
 					bundle.putStringArrayList("mDisplayList", mTempClickedList);
 				}
+				bundle = new Bundle();
 				intentFavorite.putExtra("favoriteBundle", bundle);
 				startActivity(intentFavorite);	
 			}
