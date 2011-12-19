@@ -2,7 +2,6 @@ package com.vinsol.expensetracker;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,8 +25,6 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 	private RelativeLayout dateBarRelativeLayout;
 	private TextView show_text_voice_camera_header_title;
 	private RelativeLayout show_text_voice_camera_voice_details;
-	private TextView show_text_voice_camera_amount;
-	private TextView show_text_voice_camera_tag_textview;
 	private Button show_text_voice_camera_delete;
 	private Button show_text_voice_camera_play_button;
 	private Button show_text_voice_camera_stop_button;
@@ -42,6 +39,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 	private DatabaseAdapter mDatabaseAdapter;
 	protected static String favID = null;
 	private FavoriteHelper mFavoriteHelper;
+	private ShowHelper mShowHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +50,6 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_text_voice_camera_date_bar); 
 		show_text_voice_camera_header_title = (TextView) findViewById(R.id.show_text_voice_camera_header_title);
 		show_text_voice_camera_voice_details = (RelativeLayout) findViewById(R.id.show_text_voice_camera_voice_details);
-		show_text_voice_camera_amount = (TextView) findViewById(R.id.show_text_voice_camera_amount);
-		show_text_voice_camera_tag_textview = (TextView) findViewById(R.id.show_text_voice_camera_tag_textview);
 		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
 		show_text_voice_camera_play_button = (Button) findViewById(R.id.show_text_voice_camera_play_button);
 		show_text_voice_camera_stop_button = (Button) findViewById(R.id.show_text_voice_camera_stop_button);
@@ -68,45 +64,9 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 
 		show_text_voice_camera_header_title.setText(getString(R.string.finished_voiceentry));
 		
+		mShowHelper = new ShowHelper(this, intentExtras,R.string.voice,R.string.finished_voiceentry,R.string.unfinished_voiceentry);
 		if (intentExtras.containsKey("mDisplayList")) {
-			mShowList = new ArrayList<String>();
-			mShowList = intentExtras.getStringArrayList("mDisplayList");
-			_id = Long.parseLong(mShowList.get(0));
-			String amount = mShowList.get(2);
-			String tag = mShowList.get(1);
-			
-			if (!(amount.equals("") || amount == null)) {
-				if (!amount.contains("?"))
-					show_text_voice_camera_amount.setText(amount);
-			}
-			
-			if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_voiceentry)))) {
-				show_text_voice_camera_tag_textview.setText(tag);
-			} else {
-				show_text_voice_camera_tag_textview.setText(getString(R.string.finished_voiceentry));
-			}
-			
-			if(mShowList.get(4) != null){
-				if(!mShowList.get(4).equals("")){
-					favID = mShowList.get(4);
-				}
-			}
-			
-			Calendar mCalendar = Calendar.getInstance();
-			mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
-			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-			
-			if(mShowList.get(7) != null)
-				new ShowLocationHandler(this, mShowList.get(7));
-			
-			
-			if(mShowList.get(6) != null) {
-				new ShowDateHandler(this, mShowList.get(6));
-			}
-			else {
-				new ShowDateHandler(this,R.string.voice);
-			}
-			
+			getData();
 		}
 		show_text_voice_camera_delete.setOnClickListener(this);
 		show_text_voice_camera_play_button.setOnClickListener(this);
@@ -253,55 +213,10 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (EDIT_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
-				
 				intentExtras = data.getBundleExtra("voiceShowBundle");
-				
-				
+				mShowHelper.doTaskOnActivityResult(intentExtras);
 				if (intentExtras.containsKey("mDisplayList")) {
-					mShowList = new ArrayList<String>();
-					mShowList = intentExtras.getStringArrayList("mDisplayList");
-					
-					if(mShowList.get(0) != null){
-						if(mShowList.get(0) != ""){
-							_id = Long.parseLong(mShowList.get(0));
-						} else {
-							finish();
-						}
-					} else {
-						finish();
-					}
-					String amount = mShowList.get(2);
-					String tag = mShowList.get(1);
-
-					if (amount != null) {
-						if(!amount.equals("") && !amount.equals("?")){
-							show_text_voice_camera_amount.setText(amount);
-						} else {
-							finish();
-						}
-					} else {
-						finish();
-					}
-					
-					if (!(tag.equals("") || tag == null || tag.equals(getString(R.string.unfinished_voiceentry)) || tag.equals(getString(R.string.finished_voiceentry)))) {
-						show_text_voice_camera_tag_textview.setText(tag);
-					} else {
-						show_text_voice_camera_tag_textview.setText(getString(R.string.finished_voiceentry));
-					}
-					
-					Calendar mCalendar = Calendar.getInstance();
-					mCalendar.setTimeInMillis(Long.parseLong(mShowList.get(6)));
-					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-					
-					if(mShowList.get(7) != null)
-						new ShowLocationHandler(this, mShowList.get(7));
-					
-					if(mShowList.get(6) != null)
-						new ShowDateHandler(this, mShowList.get(6));
-					else {
-						new ShowDateHandler(this,R.string.voice);
-					}
-					
+					getData();
 				}
 				show_text_voice_camera_delete.setOnClickListener(this);
 				show_text_voice_camera_play_button.setOnClickListener(this);
@@ -330,11 +245,16 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 				}
 			}
 		}
-		
 
 		if(resultCode == Activity.RESULT_CANCELED){
 			finish();
 		}
+	}
+	
+	private void getData(){
+		favID = mShowHelper.getFavID();
+		_id = mShowHelper.getId();
+		mShowList = mShowHelper.getShowList();
 	}
 	
 }

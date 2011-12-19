@@ -176,6 +176,10 @@ public class DatabaseAdapter {
 	public void editDatabaseFavorite(String favID) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_FAVORITE, "");
+		
+		if(favID.equals("") || favID == null){
+			favID = "";
+		}
 		String where = KEY_FAVORITE+" = "+favID;
 		db.update(TABLE_NAME, contentValues, where, null);
 	}
