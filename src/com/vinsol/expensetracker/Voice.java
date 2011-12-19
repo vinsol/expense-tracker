@@ -8,7 +8,6 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,6 +26,7 @@ import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.DisplayTime;
 import com.vinsol.expensetracker.utils.FileDelete;
+import com.vinsol.expensetracker.utils.MyCountDownTimer;
 import com.vinsol.expensetracker.utils.RecordingHelper;
 import com.vinsol.expensetracker.utils.StringProcessing;
 
@@ -40,7 +40,7 @@ public class Voice extends Activity implements OnClickListener {
 	private Button text_voice_camera_rerecord_button;
 	private EditText text_voice_camera_amount;
 	private EditText text_voice_camera_tag;
-	private MyCount countDownTimer;
+	private MyCountDownTimer countDownTimer;
 	private RecordingHelper mRecordingHelper;
 	private AudioPlay mAudioPlay;
 	private long _id;
@@ -248,7 +248,7 @@ public class Voice extends Activity implements OnClickListener {
 			mAudioPlay = new AudioPlay(_id + "", this);
 
 			// ///// ******* Chronometer Starts Countdown ****** ///////
-			countDownTimer = new MyCount(mAudioPlay.getPlayBackTime(), 1000);
+			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, text_voice_camera_time_details_chronometer,text_voice_camera_stop_button,text_voice_camera_play_button,mAudioPlay);
 
 			// //// ****** Handles UI items on button click ****** ///////
 			text_voice_camera_play_button.setVisibility(View.GONE);
@@ -477,30 +477,6 @@ public class Voice extends Activity implements OnClickListener {
 			setResult(Activity.RESULT_OK, mIntent);
 		}
 		finish();
-	}
-
-	// /////// ********* CountdownTimer for Chronometer ********* //////////
-	// countdowntimer is an abstract class, so extend it and fill in methods
-	private class MyCount extends CountDownTimer {
-
-		DisplayTime mDisplayTime;
-
-		public MyCount(long millisInFuture, long countDownInterval) {
-			super(millisInFuture, countDownInterval);
-			mDisplayTime = new DisplayTime();
-		}
-
-		@Override
-		public void onFinish() {
-			text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(mAudioPlay.getPlayBackTime()));
-			text_voice_camera_stop_button.setVisibility(View.GONE);
-			text_voice_camera_play_button.setVisibility(View.VISIBLE);
-		}
-
-		@Override
-		public void onTick(long millisUntilFinished) {
-			text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(millisUntilFinished));
-		}
 	}
 
 	// /// ****************** Handling back press of key ********** ///////////

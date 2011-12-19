@@ -7,7 +7,6 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.utils.AudioPlay;
 import com.vinsol.expensetracker.utils.DisplayTime;
 import com.vinsol.expensetracker.utils.FileDelete;
+import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
 public class ShowVoiceActivity extends Activity implements OnClickListener {
 
@@ -32,7 +32,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 	private Button show_text_voice_camera_play_button;
 	private Button show_text_voice_camera_stop_button;
 	private Chronometer show_text_voice_camera_time_details_chronometer;
-	private MyCount countDownTimer;
+	private MyCountDownTimer countDownTimer;
 	private Button show_text_voice_camera_edit;
 
 	private AudioPlay mAudioPlay;
@@ -177,7 +177,7 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			mAudioPlay = new AudioPlay(_id + "", this);
 
 			// ///// ******* Chronometer Starts Countdown ****** ///////
-			countDownTimer = new MyCount(mAudioPlay.getPlayBackTime(), 1000);
+			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, show_text_voice_camera_time_details_chronometer, show_text_voice_camera_stop_button ,show_text_voice_camera_play_button, mAudioPlay);
 
 			// //// ****** Handles UI items on button click ****** ///////
 			show_text_voice_camera_play_button.setVisibility(View.GONE);
@@ -230,31 +230,6 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			intentExtras.putStringArrayList("mDisplayList", mShowList);
 			editIntent.putExtra("voiceBundle", intentExtras);
 			startActivityForResult(editIntent, EDIT_RESULT);
-//			finish();
-		}
-	}
-
-	// /////// ********* CountdownTimer for Chronometer ********* //////////
-	// countdowntimer is an abstract class, so extend it and fill in methods
-	private class MyCount extends CountDownTimer {
-
-		DisplayTime mDisplayTime;
-
-		public MyCount(long millisInFuture, long countDownInterval) {
-			super(millisInFuture, countDownInterval);
-			mDisplayTime = new DisplayTime();
-		}
-
-		@Override
-		public void onFinish() {
-			show_text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(mAudioPlay.getPlayBackTime()));
-			show_text_voice_camera_stop_button.setVisibility(View.GONE);
-			show_text_voice_camera_play_button.setVisibility(View.VISIBLE);
-		}
-
-		@Override
-		public void onTick(long millisUntilFinished) {
-			show_text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(millisUntilFinished));
 		}
 	}
 

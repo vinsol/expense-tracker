@@ -213,4 +213,5 @@ public class BarGraph extends View {
 			return 0.0;
 		}
 	}
+
 }
