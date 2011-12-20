@@ -37,10 +37,10 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 		intentExtras = getIntent().getBundleExtra("textShowBundle");
 		mShowHelper = new ShowHelper(this, intentExtras,R.string.text,R.string.finished_textentry,R.string.unfinished_textentry);
 		if (intentExtras.containsKey("mDisplayList")) {
-			mFavoriteHelper = new FavoriteHelper(this, mShowList);
+			getData();
 		}
 		if (intentExtras.containsKey("mDisplayList")) {
-			getData();
+			mFavoriteHelper = new FavoriteHelper(this, mShowList);
 		}
 		show_text_voice_camera_delete.setOnClickListener(this);
 		show_text_voice_camera_edit.setOnClickListener(this);
