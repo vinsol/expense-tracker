@@ -42,7 +42,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 		setContentView(R.layout.expense_listing);
 		idList = getIntent().getStringExtra("idList");
 		mConvertCursorToListString = new ConvertCursorToListString(this);
-		listingHeader = (TextView) findViewById(R.id.edit_header_title);
+		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
 		mStringProcessing = new StringProcessing();
 	}
 	

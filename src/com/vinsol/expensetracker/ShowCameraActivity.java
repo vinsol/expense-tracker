@@ -19,36 +19,35 @@ import android.widget.LinearLayout.LayoutParams;
 
 import com.vinsol.expensetracker.utils.FileDelete;
 
-public class ShowCameraActivity extends Activity implements OnClickListener {
+public class ShowCameraActivity extends ShowAbstract implements OnClickListener {
 
 	private RelativeLayout dateBarRelativeLayout;
-	private Button show_text_voice_camera_delete;
+	private Button showCameraDelete;
 	private DatabaseAdapter mDatabaseAdapter;
-	private ImageView show_text_voice_camera_image_display;
-	private TextView show_text_voice_camera_header_title;
-	private LinearLayout show_text_voice_camera_camera_details;
-	private Button show_text_voice_camera_edit;
+	private ImageView showImageDisplay;
+	private TextView showHeaderTitle;
+	private LinearLayout showCameraDetails;
+	private Button showCameraEdit;
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
-	private Long _id = null;
+	private Long userId = null;
 	private static final int EDIT_RESULT = 35;
 	protected static String favID = null;
 	private FavoriteHelper mFavoriteHelper;
-	private ShowHelper mShowHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.show_text_voice_camera);
+		setContentView(R.layout.show_page);
 
 		// ///// ****** Assigning memory ******* /////////
-		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_text_voice_camera_date_bar); 
-		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
-		show_text_voice_camera_image_display = (ImageView) findViewById(R.id.show_text_voice_camera_image_display);
-		show_text_voice_camera_header_title = (TextView) findViewById(R.id.show_text_voice_camera_header_title);
-		show_text_voice_camera_camera_details = (LinearLayout) findViewById(R.id.show_text_voice_camera_camera_details);
-		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
+		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_date_bar); 
+		showCameraDelete = (Button) findViewById(R.id.show_delete);
+		showImageDisplay = (ImageView) findViewById(R.id.show_image_display);
+		showHeaderTitle = (TextView) findViewById(R.id.show_header_title);
+		showCameraDetails = (LinearLayout) findViewById(R.id.show_camera_details);
+		showCameraEdit = (Button) findViewById(R.id.show_edit);
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		
 		
@@ -59,48 +58,48 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		setGraphicsCamera();
 
 		intentExtras = getIntent().getBundleExtra("cameraShowBundle");
-		mShowHelper = new ShowHelper(this, intentExtras,R.string.voice,R.string.finished_voiceentry,R.string.unfinished_voiceentry);
+		showHelper(intentExtras,R.string.voice,R.string.finished_voiceentry,R.string.unfinished_voiceentry);
 		if (intentExtras.containsKey("mDisplayList")) {
 			getData();
-			File mFile = new File("/sdcard/ExpenseTracker/" + _id+ "_small.jpg");
+			File mFile = new File("/sdcard/ExpenseTracker/" + userId+ "_small.jpg");
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 				if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
 					final float scale = this.getResources().getDisplayMetrics().density;
 					int width = (int) (84 * scale + 0.5f);
 					int height = (int) (111 * scale + 0.5f);
-					show_text_voice_camera_image_display.setLayoutParams(new LayoutParams(width, height));
+					showImageDisplay.setLayoutParams(new LayoutParams(width, height));
 				}
 				
-				show_text_voice_camera_image_display.setImageDrawable(mDrawable);
+				showImageDisplay.setImageDrawable(mDrawable);
 			} else {
-				show_text_voice_camera_image_display.setImageResource(R.drawable.no_image_small);
+				showImageDisplay.setImageResource(R.drawable.no_image_small);
 			}
 			mFavoriteHelper = new FavoriteHelper(this, mShowList);
 		}
 
-		show_text_voice_camera_image_display.setOnClickListener(this);
-		show_text_voice_camera_delete.setOnClickListener(this);
-		show_text_voice_camera_edit.setOnClickListener(this);
+		showImageDisplay.setOnClickListener(this);
+		showCameraDelete.setOnClickListener(this);
+		showCameraEdit.setOnClickListener(this);
 
 	}
 
 	private void setGraphicsCamera() {
 		// ///// ***** Sets Title Camera Entry *********///////
-		show_text_voice_camera_header_title.setText("Camera Entry");
+		showHeaderTitle.setText("Camera Entry");
 
 		// //// ****** Shows Camera Details ********////////
-		show_text_voice_camera_camera_details.setVisibility(View.VISIBLE);
+		showCameraDetails.setVisibility(View.VISIBLE);
 	}
 
 	@Override
 	public void onClick(View v) {
 
-		if (v.getId() == R.id.show_text_voice_camera_image_display) {
-			if (_id != null) {
+		if (v.getId() == R.id.show_image_display) {
+			if (userId != null) {
 				
 				Intent intent = new Intent(this, ImagePreview.class);
-				intent.putExtra("id", _id);
+				intent.putExtra("id", userId);
 				startActivity(intent);
 
 			} else {
@@ -108,12 +107,12 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 			}
 		}
 
-		if (v.getId() == R.id.show_text_voice_camera_delete) {
-			if (_id != null) {
-				new FileDelete(_id);
+		if (v.getId() == R.id.show_delete) {
+			if (userId != null) {
+				new FileDelete(userId);
 
 				mDatabaseAdapter.open();
-				mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(_id));
+				mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(userId));
 				mDatabaseAdapter.close();
 				Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
 				finish();
@@ -123,7 +122,7 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 
 		}
 		
-		if(v.getId() == R.id.show_text_voice_camera_edit){
+		if(v.getId() == R.id.show_edit){
 			Intent editIntent = new Intent(this, CameraActivity.class);
 			intentExtras.putBoolean("isFromShowPage", true);
 			mShowList.set(4, favID);
@@ -143,27 +142,27 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 		if (EDIT_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getBundleExtra("cameraShowBundle");
-				mShowHelper.doTaskOnActivityResult(intentExtras);
+				doTaskOnActivityResult(intentExtras);
 				if (intentExtras.containsKey("mDisplayList")) {
 					getData();
-					File mFile = new File("/sdcard/ExpenseTracker/" + _id+ "_small.jpg");
+					File mFile = new File("/sdcard/ExpenseTracker/" + userId + "_small.jpg");
 					if (mFile.canRead()) {Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 						if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
 							final float scale = this.getResources().getDisplayMetrics().density;
 							int width = (int) (84 * scale + 0.5f);
 							int height = (int) (111 * scale + 0.5f);
-							show_text_voice_camera_image_display.setLayoutParams(new LayoutParams(width, height));
+							showImageDisplay.setLayoutParams(new LayoutParams(width, height));
 						}
-						show_text_voice_camera_image_display.setImageDrawable(mDrawable);
+						showImageDisplay.setImageDrawable(mDrawable);
 					} else {
-						show_text_voice_camera_image_display.setImageResource(R.drawable.no_image_small);
+						showImageDisplay.setImageResource(R.drawable.no_image_small);
 					}
 					mFavoriteHelper.setShowList(mShowList);
 				}
 
-				show_text_voice_camera_image_display.setOnClickListener(this);
-				show_text_voice_camera_delete.setOnClickListener(this);
-				show_text_voice_camera_edit.setOnClickListener(this);
+				showImageDisplay.setOnClickListener(this);
+				showCameraDelete.setOnClickListener(this);
+				showCameraEdit.setOnClickListener(this);
 			}
 		}
 		
@@ -174,9 +173,9 @@ public class ShowCameraActivity extends Activity implements OnClickListener {
 	}
 	
 	private void getData(){
-		favID = mShowHelper.getFavID();
-		_id = mShowHelper.getId();
-		mShowList = mShowHelper.getShowList();
+		favID = getFavID();
+		userId = getId();
+		mShowList = getShowList();
 	}
 
 }

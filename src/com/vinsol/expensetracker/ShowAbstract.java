@@ -4,51 +4,47 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-public class ShowHelper{
+abstract class ShowAbstract extends Activity implements OnClickListener{
 
-	private TextView show_text_voice_camera_amount;
-	private TextView show_text_voice_camera_tag_textview;
+	private TextView showAmount;
+	private TextView showTextview;
 	private String favID;
-	private Long _id = null;
-	private Activity mActivity;
+	private Long userId = null;
 	private ArrayList<String> mShowList;
-	private Context mContext;
 	private Bundle intentExtras;
 	private int typeOfEntryFinished;
 	private int typeOfEntryUnfinished;
 	private int typeOfEntry;
 	
-	public ShowHelper(Context _mContext,Bundle _intentExtras,int _typeOfEntry,int _typeOfEntryFinished,int _typeOfEntryUnfinished) {
+	public void showHelper(Bundle intentExtras,int typeOfEntry,int typeOfEntryFinished,int typeOfEntryUnfinished) {
 		// ///// ****** Assigning memory ******* /////////
-		mContext = _mContext;
-		typeOfEntry = _typeOfEntry;
-		typeOfEntryFinished = _typeOfEntryFinished;
-		typeOfEntryUnfinished = _typeOfEntryUnfinished;
-		intentExtras = _intentExtras;
-		mActivity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		show_text_voice_camera_amount = (TextView) mActivity.findViewById(R.id.show_text_voice_camera_amount);
-		show_text_voice_camera_tag_textview = (TextView) mActivity.findViewById(R.id.show_text_voice_camera_tag_textview);
+		this.typeOfEntry = typeOfEntry;
+		this.typeOfEntryFinished = typeOfEntryFinished;
+		this.typeOfEntryUnfinished = typeOfEntryUnfinished;
+		this.intentExtras = intentExtras;
+		showAmount = (TextView) findViewById(R.id.show_amount);
+		showTextview = (TextView) findViewById(R.id.show_tag_textview);
 		mShowList = new ArrayList<String>();
 		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = new ArrayList<String>();
 			mShowList = intentExtras.getStringArrayList("mDisplayList");
-			_id = Long.parseLong(mShowList.get(0));
+			userId = Long.parseLong(mShowList.get(0));
 			String amount = mShowList.get(2);
 			String tag = mShowList.get(1);
 			
 			if (!(amount.equals("") || amount == null)) {
 				if (!amount.contains("?"))
-					show_text_voice_camera_amount.setText(amount);
+					showAmount.setText(amount);
 			}
 			
-			if (!(tag.equals("") || tag == null || tag.equals(mContext.getString(typeOfEntryUnfinished)))) {
-				show_text_voice_camera_tag_textview.setText(tag);
+			if (!(tag.equals("") || tag == null || tag.equals(getString(typeOfEntryUnfinished)))) {
+				showTextview.setText(tag);
 			} else {
-				show_text_voice_camera_tag_textview.setText(mContext.getString(typeOfEntryFinished));
+				showTextview.setText(getString(typeOfEntryFinished));
 			}
 			
 			if(mShowList.get(4) != null){
@@ -62,14 +58,14 @@ public class ShowHelper{
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			
 			if(mShowList.get(7) != null)
-				new ShowLocationHandler(mContext, mShowList.get(7));
+				new ShowLocationHandler(this, mShowList.get(7));
 			
 			
 			if(mShowList.get(6) != null) {
-				new ShowDateHandler(mContext, mShowList.get(6));
+				new ShowDateHandler(this, mShowList.get(6));
 			}
 			else {
-				new ShowDateHandler(mContext,typeOfEntry);
+				new ShowDateHandler(this,typeOfEntry);
 			}
 			
 		}
@@ -80,7 +76,7 @@ public class ShowHelper{
 	}
 	
 	public long getId() {
-		return _id;
+		return userId;
 	}
 	
 	public ArrayList<String> getShowList() {
@@ -96,30 +92,30 @@ public class ShowHelper{
 			
 			if(mShowList.get(0) != null){
 				if(mShowList.get(0) != ""){
-					_id = Long.parseLong(mShowList.get(0));
+					userId = Long.parseLong(mShowList.get(0));
 				} else {
-					mActivity.finish();
+					finish();
 				}
 			} else {
-				mActivity.finish();
+				finish();
 			}
 			String amount = mShowList.get(2);
 			String tag = mShowList.get(1);
 
 			if (amount != null) {
 				if(!amount.equals("") && !amount.equals("?")){
-					show_text_voice_camera_amount.setText(amount);
+					showAmount.setText(amount);
 				} else {
-					mActivity.finish();
+					finish();
 				}
 			} else {
-				mActivity.finish();
+				finish();
 			}
 			
-			if (!(tag.equals("") || tag == null || tag.equals(mContext.getString(typeOfEntryUnfinished)) || tag.equals(mContext.getString(typeOfEntryFinished)))) {
-				show_text_voice_camera_tag_textview.setText(tag);
+			if (!(tag.equals("") || tag == null || tag.equals(getString(typeOfEntryUnfinished)) || tag.equals(getString(typeOfEntryFinished)))) {
+				showTextview.setText(tag);
 			} else {
-				show_text_voice_camera_tag_textview.setText(mContext.getString(typeOfEntryFinished));
+				showTextview.setText(getString(typeOfEntryFinished));
 			}
 			
 			Calendar mCalendar = Calendar.getInstance();
@@ -127,12 +123,12 @@ public class ShowHelper{
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			
 			if(mShowList.get(7) != null)
-				new ShowLocationHandler(mContext, mShowList.get(7));
+				new ShowLocationHandler(this, mShowList.get(7));
 			
 			if(mShowList.get(6) != null)
-				new ShowDateHandler(mContext, mShowList.get(6));
+				new ShowDateHandler(this, mShowList.get(6));
 			else {
-				new ShowDateHandler(mContext,typeOfEntry);
+				new ShowDateHandler(this,typeOfEntry);
 			}
 			
 		}

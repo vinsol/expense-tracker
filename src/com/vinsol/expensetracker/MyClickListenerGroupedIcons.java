@@ -20,22 +20,23 @@ public class MyClickListenerGroupedIcons implements OnClickListener{
 	private Bundle bundle;
 	private long timeInMillis;
 	
-	public MyClickListenerGroupedIcons(UnknownEntryDialog _unknownDialog,Context _mContext,Bundle _bundle,Long _timeInMillis) {
-		unknownDialog = _unknownDialog;
-		mContext = _mContext;
-		if(_bundle != null) {
-			if(!_bundle.isEmpty()){
-				bundle = _bundle;
+	public MyClickListenerGroupedIcons(UnknownEntryDialog unknownDialog,Context mContext,Bundle bundle,Long timeInMillis) {
+		this.unknownDialog = unknownDialog;
+		this.mContext = mContext;
+		if(bundle != null) {
+			if(!bundle.isEmpty()){
+				this.bundle = bundle;
 			} else {
-				bundle = new Bundle();
+				this.bundle = new Bundle();
 			}
 		} else {
 			bundle = new Bundle();
 		}
-		if(_timeInMillis != null || timeInMillis != 0)
-			timeInMillis = _timeInMillis;
+		if(timeInMillis != null)
+			if(timeInMillis != 0)
+				this.timeInMillis = timeInMillis;
 		else
-			timeInMillis = 0;
+			this.timeInMillis = 0;
 	}
 	
 	@Override
@@ -119,8 +120,8 @@ public class MyClickListenerGroupedIcons implements OnClickListener{
 	}
 	
 	private void createDatabaseEntry(int typeOfEntry, HashMap<String, String> toInsert) {	
-		Long _id = insertToDatabase(typeOfEntry,toInsert);
-		bundle.putLong("_id", _id);
+		Long userId = insertToDatabase(typeOfEntry,toInsert);
+		bundle.putLong("_id", userId);
 		
 		if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 			bundle.putBoolean("setLocation", false);
@@ -132,25 +133,25 @@ public class MyClickListenerGroupedIcons implements OnClickListener{
 	// /////// ******** function to mark entry into the database and returns the
 	// id of the new entry ***** //////
 	private long insertToDatabase(int type, HashMap<String, String> toInsert) {
-		HashMap<String, String> _list = new HashMap<String, String>();
+		HashMap<String, String> list = new HashMap<String, String>();
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if(timeInMillis != 0)
 			bundle.putLong("timeInMillis", Long.parseLong(toInsert.get(DatabaseAdapter.KEY_DATE_TIME)));
 		else 
 			bundle.putLong("timeInMillis", Long.parseLong(toInsert.get(DatabaseAdapter.KEY_DATE_TIME)));
-		_list.put(DatabaseAdapter.KEY_DATE_TIME,toInsert.get(DatabaseAdapter.KEY_DATE_TIME));
+		list.put(DatabaseAdapter.KEY_DATE_TIME,toInsert.get(DatabaseAdapter.KEY_DATE_TIME));
 		Activity activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		activity.finish();
 		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-			_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+			list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
-		_list.put(DatabaseAdapter.KEY_TYPE, mContext.getString(type));
+		list.put(DatabaseAdapter.KEY_TYPE, mContext.getString(type));
 		DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
 		mDatabaseAdapter.open();
-		long _id = mDatabaseAdapter.insert_to_database(_list);
+		long userId = mDatabaseAdapter.insertToDatabase(list);
 		mDatabaseAdapter.close();
-		return _id;
+		return userId;
 	}
 
 }

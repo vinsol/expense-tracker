@@ -28,8 +28,7 @@ public class RecordingHelper {
 			mRecorder.setOutputFile(mPath.toString());
 			mRecorder.setMaxDuration(60000 * 60);
 		} else {
-			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 	}
 

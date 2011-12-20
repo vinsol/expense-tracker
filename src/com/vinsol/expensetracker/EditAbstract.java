@@ -10,20 +10,17 @@ import com.vinsol.expensetracker.utils.DisplayDate;
 import com.vinsol.expensetracker.utils.StringProcessing;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public abstract class EditAbstract extends Activity implements OnClickListener{
+abstract class EditAbstract extends Activity implements OnClickListener{
 	private ArrayList<String> mEditList;
 	private Long userId = null;
 	private boolean setLocation = false;
 	private EditText editAmount;
 	private EditText editTag;
-	private Context mContext;
-	private Activity mActivity;
 	private Bundle intentExtras;
 	private boolean setUnknown = false;
 	private int typeOfEntryFinished;
@@ -31,15 +28,13 @@ public abstract class EditAbstract extends Activity implements OnClickListener{
 	private int typeOfEntry;
 	private boolean isChanged = false;
 	
-	public void editHelper(Context mContext,Bundle intentExtras,int typeOfEntry,int typeOfEntryFinished,int typeOfEntryUnfinished) {
-		this.mContext = mContext;
+	public void editHelper(Bundle intentExtras,int typeOfEntry,int typeOfEntryFinished,int typeOfEntryUnfinished) {
 		this.intentExtras = intentExtras;
 		this.typeOfEntry = typeOfEntry;
 		this.typeOfEntryFinished = typeOfEntryFinished;
 		this.typeOfEntryUnfinished = typeOfEntryUnfinished;
-		mActivity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		editAmount = (EditText) mActivity.findViewById(R.id.edit_amount);
-		editTag = (EditText) mActivity.findViewById(R.id.edit_tag);
+		editAmount = (EditText) findViewById(R.id.edit_amount);
+		editTag = (EditText) findViewById(R.id.edit_tag);
 		
 		if (intentExtras.containsKey("_id"))
 			userId = intentExtras.getLong("_id");
@@ -58,22 +53,22 @@ public abstract class EditAbstract extends Activity implements OnClickListener{
 				if (!amount.contains("?"))
 					editAmount.setText(amount);
 			}
-			if(tag.equals(mContext.getString(R.string.unknown_entry)) || mEditList.get(5).equals(mContext.getString(R.string.unknown))){
+			if(tag.equals(getString(R.string.unknown_entry)) || mEditList.get(5).equals(getString(R.string.unknown))){
 				setUnknown = true;
 			}
 			
-			if (!(tag.equals("") || tag == null || tag.equals(mContext.getString(typeOfEntryUnfinished)) || tag.equals(mContext.getString(typeOfEntryFinished))  || tag.equals(mContext.getString(R.string.unknown_entry)))) {
+			if (!(tag.equals("") || tag == null || tag.equals(getString(typeOfEntryUnfinished)) || tag.equals(getString(typeOfEntryFinished))  || tag.equals(getString(R.string.unknown_entry)))) {
 				editTag.setText(tag);
 			}
 		}
 		
 		// //////******** Handle Date Bar ********* ////////
 		if (intentExtras.containsKey("mDisplayList")) {
-			new DateHandler(mContext, Long.parseLong(mEditList.get(6)));
+			new DateHandler(this, Long.parseLong(mEditList.get(6)));
 		} else if (intentExtras.containsKey("timeInMillis")) {
-			new DateHandler(mContext, intentExtras.getLong("timeInMillis"));
+			new DateHandler(this, intentExtras.getLong("timeInMillis"));
 		} else {
-			new DateHandler(mContext);
+			new DateHandler(this);
 		}
 	}
 	
@@ -156,12 +151,12 @@ public abstract class EditAbstract extends Activity implements OnClickListener{
 			listOnResult.set(2, "?");
 		}
 		
-		if (listOnResult.get(1) == null || listOnResult.get(1).equals("") || listOnResult.get(1).equals(mContext.getString(typeOfEntryUnfinished)) || listOnResult.get(1).equals(mContext.getString(typeOfEntryFinished)) || listOnResult.get(1).equals(mContext.getString(R.string.unknown_entry))) {
-			listOnResult.set(1, mContext.getString(typeOfEntryFinished));
+		if (listOnResult.get(1) == null || listOnResult.get(1).equals("") || listOnResult.get(1).equals(getString(typeOfEntryUnfinished)) || listOnResult.get(1).equals(getString(typeOfEntryFinished)) || listOnResult.get(1).equals(getString(R.string.unknown_entry))) {
+			listOnResult.set(1, getString(typeOfEntryFinished));
 		}
 		
-		if (mEditList.get(1) == null || mEditList.get(1).equals("") || mEditList.get(1).equals(mContext.getString(typeOfEntryUnfinished)) || mEditList.get(1).equals(mContext.getString(typeOfEntryFinished)) || mEditList.get(1).equals(mContext.getString(R.string.unknown_entry))) {
-			mEditList.set(1, mContext.getString(typeOfEntryFinished));
+		if (mEditList.get(1) == null || mEditList.get(1).equals("") || mEditList.get(1).equals(getString(typeOfEntryUnfinished)) || mEditList.get(1).equals(getString(typeOfEntryFinished)) || mEditList.get(1).equals(getString(R.string.unknown_entry))) {
+			mEditList.set(1, getString(typeOfEntryFinished));
 		}
 		
 		if(list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
@@ -190,7 +185,7 @@ public abstract class EditAbstract extends Activity implements OnClickListener{
 			HashMap<String, String> listForFav = new HashMap<String, String>();
 			listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
 			listForFav.put(DatabaseAdapter.KEY_ID, mEditList.get(0));
-			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
+			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editDatabase(listForFav);
 			mDatabaseAdapter.close();

@@ -19,42 +19,41 @@ import com.vinsol.expensetracker.utils.DisplayTime;
 import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
-public class ShowVoiceActivity extends Activity implements OnClickListener {
+public class ShowVoiceActivity extends ShowAbstract implements OnClickListener {
 
 	private static final int EDIT_RESULT = 35;
 	private RelativeLayout dateBarRelativeLayout;
-	private TextView show_text_voice_camera_header_title;
-	private RelativeLayout show_text_voice_camera_voice_details;
-	private Button show_text_voice_camera_delete;
-	private Button show_text_voice_camera_play_button;
-	private Button show_text_voice_camera_stop_button;
-	private Chronometer show_text_voice_camera_time_details_chronometer;
+	private TextView showHeaderTitle;
+	private RelativeLayout showVoiceDetails;
+	private Button showDelete;
+	private Button showPlayButton;
+	private Button showStopButton;
+	private Chronometer showTimeDetailsChronometer;
 	private MyCountDownTimer countDownTimer;
-	private Button show_text_voice_camera_edit;
+	private Button showEdit;
 
 	private AudioPlay mAudioPlay;
-	private Long _id = null;
+	private Long userId = null;
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
 	private DatabaseAdapter mDatabaseAdapter;
 	protected static String favID = null;
 	private FavoriteHelper mFavoriteHelper;
-	private ShowHelper mShowHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.show_text_voice_camera);
+		setContentView(R.layout.show_page);
 		
-		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_text_voice_camera_date_bar); 
-		show_text_voice_camera_header_title = (TextView) findViewById(R.id.show_text_voice_camera_header_title);
-		show_text_voice_camera_voice_details = (RelativeLayout) findViewById(R.id.show_text_voice_camera_voice_details);
-		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
-		show_text_voice_camera_play_button = (Button) findViewById(R.id.show_text_voice_camera_play_button);
-		show_text_voice_camera_stop_button = (Button) findViewById(R.id.show_text_voice_camera_stop_button);
-		show_text_voice_camera_time_details_chronometer = (Chronometer) findViewById(R.id.show_text_voice_camera_time_details_chronometer);
-		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
+		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_date_bar); 
+		showHeaderTitle = (TextView) findViewById(R.id.show_header_title);
+		showVoiceDetails = (RelativeLayout) findViewById(R.id.show_voice_details);
+		showDelete = (Button) findViewById(R.id.show_delete);
+		showPlayButton = (Button) findViewById(R.id.show_play_button);
+		showStopButton = (Button) findViewById(R.id.show_stop_button);
+		showTimeDetailsChronometer = (Chronometer) findViewById(R.id.show_time_details_chronometer);
+		showEdit = (Button) findViewById(R.id.show_edit);
 
 		dateBarRelativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg_wo_shadow));
 		
@@ -62,31 +61,31 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 
 		intentExtras = getIntent().getBundleExtra("voiceShowBundle");
 
-		show_text_voice_camera_header_title.setText(getString(R.string.finished_voiceentry));
+		showHeaderTitle.setText(getString(R.string.finished_voiceentry));
 		
-		mShowHelper = new ShowHelper(this, intentExtras,R.string.voice,R.string.finished_voiceentry,R.string.unfinished_voiceentry);
+		showHelper(intentExtras,R.string.voice,R.string.finished_voiceentry,R.string.unfinished_voiceentry);
 		if (intentExtras.containsKey("mDisplayList")) {
 			getData();
 		}
-		show_text_voice_camera_delete.setOnClickListener(this);
-		show_text_voice_camera_play_button.setOnClickListener(this);
-		show_text_voice_camera_stop_button.setOnClickListener(this);
-		show_text_voice_camera_edit.setOnClickListener(this);
+		showDelete.setOnClickListener(this);
+		showPlayButton.setOnClickListener(this);
+		showStopButton.setOnClickListener(this);
+		showEdit.setOnClickListener(this);
 
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			updateUI();
 			if (intentExtras.containsKey("mDisplayList")) {
-				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + _id+ ".amr");
+				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + userId+ ".amr");
 
 				if (tempFile.canRead()) {
-					mAudioPlay = new AudioPlay(Long.toString(_id), this);
-					show_text_voice_camera_stop_button.setVisibility(View.GONE);
-					show_text_voice_camera_play_button.setVisibility(View.VISIBLE);
-					show_text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+					mAudioPlay = new AudioPlay(Long.toString(userId), this);
+					showStopButton.setVisibility(View.GONE);
+					showPlayButton.setVisibility(View.VISIBLE);
+					showTimeDetailsChronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
 				} else {
-					show_text_voice_camera_time_details_chronometer.setText("Audio File Missing");
-					show_text_voice_camera_stop_button.setVisibility(View.GONE);
-					show_text_voice_camera_play_button.setVisibility(View.GONE);
+					showTimeDetailsChronometer.setText("Audio File Missing");
+					showStopButton.setVisibility(View.GONE);
+					showPlayButton.setVisibility(View.GONE);
 				}
 				mFavoriteHelper = new FavoriteHelper(this, mShowList);
 			}
@@ -98,15 +97,15 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 
 	private void updateUI() {
 		// //// ****** Shows Voice Details ********////////
-		show_text_voice_camera_voice_details.setVisibility(View.VISIBLE);
+		showVoiceDetails.setVisibility(View.VISIBLE);
 	}
 
 	@Override
 	public void onClick(View v) {
 
-		if (v.getId() == R.id.show_text_voice_camera_delete) {
+		if (v.getId() == R.id.show_delete) {
 
-			if (_id != null) {
+			if (userId != null) {
 
 				// /// ******* If Audio PlayBack is there stop playing audio
 				// *******//////
@@ -117,12 +116,12 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 				} catch (NullPointerException e) {
 					e.printStackTrace();
 				}
-				show_text_voice_camera_time_details_chronometer.stop();
+				showTimeDetailsChronometer.stop();
 
-				new FileDelete(_id);
+				new FileDelete(userId);
 
 				mDatabaseAdapter.open();
-				mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(_id));
+				mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(userId));
 				mDatabaseAdapter.close();
 				Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
 				finish();
@@ -131,17 +130,17 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			}
 		}
 
-		if (v.getId() == R.id.show_text_voice_camera_play_button) {
+		if (v.getId() == R.id.show_play_button) {
 			// //// ******** to handle playback of recorded file *********
 			// ////////
-			mAudioPlay = new AudioPlay(_id + "", this);
+			mAudioPlay = new AudioPlay(userId + "", this);
 
 			// ///// ******* Chronometer Starts Countdown ****** ///////
-			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, show_text_voice_camera_time_details_chronometer, show_text_voice_camera_stop_button ,show_text_voice_camera_play_button, mAudioPlay);
+			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, showTimeDetailsChronometer, showStopButton ,showPlayButton, mAudioPlay);
 
 			// //// ****** Handles UI items on button click ****** ///////
-			show_text_voice_camera_play_button.setVisibility(View.GONE);
-			show_text_voice_camera_stop_button.setVisibility(View.VISIBLE);
+			showPlayButton.setVisibility(View.GONE);
+			showStopButton.setVisibility(View.VISIBLE);
 
 			// /// ******** Start Audio Playback and counter to play audio
 			// ****** ///////
@@ -154,29 +153,29 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 			countDownTimer.start();
 		}
 
-		if (v.getId() == R.id.show_text_voice_camera_stop_button) {
+		if (v.getId() == R.id.show_stop_button) {
 			try {
 				countDownTimer.cancel();
 			} catch (NullPointerException e) {
 			}
 			
 			// //// ****** Handles UI items on button click ****** ///////
-			show_text_voice_camera_stop_button.setVisibility(View.GONE);
-			show_text_voice_camera_play_button.setVisibility(View.VISIBLE);
+			showStopButton.setVisibility(View.GONE);
+			showPlayButton.setVisibility(View.VISIBLE);
 
 			// //// ******* Stop Recording Audio and stop chronometer ********
 			// ////////
-			show_text_voice_camera_time_details_chronometer.stop();
+			showTimeDetailsChronometer.stop();
 			try {
 				if (mAudioPlay.isAudioPlaying()) {
 					mAudioPlay.stopPlayBack();
 				}
 			} catch (Exception e) {
 			}
-			show_text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+			showTimeDetailsChronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
 		}
 		
-		if(v.getId() == R.id.show_text_voice_camera_edit){
+		if(v.getId() == R.id.show_edit){
 			Intent editIntent = new Intent(this, Voice.class);
 			intentExtras.putBoolean("isFromShowPage", true);
 			try {
@@ -214,29 +213,29 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 		if (EDIT_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getBundleExtra("voiceShowBundle");
-				mShowHelper.doTaskOnActivityResult(intentExtras);
+				doTaskOnActivityResult(intentExtras);
 				if (intentExtras.containsKey("mDisplayList")) {
 					getData();
 				}
-				show_text_voice_camera_delete.setOnClickListener(this);
-				show_text_voice_camera_play_button.setOnClickListener(this);
-				show_text_voice_camera_stop_button.setOnClickListener(this);
-				show_text_voice_camera_edit.setOnClickListener(this);
+				showDelete.setOnClickListener(this);
+				showPlayButton.setOnClickListener(this);
+				showStopButton.setOnClickListener(this);
+				showEdit.setOnClickListener(this);
 
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					updateUI();
 					if (intentExtras.containsKey("mDisplayList")) {
-						File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + _id+ ".amr");
+						File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + userId + ".amr");
 
 						if (tempFile.canRead()) {
-							mAudioPlay = new AudioPlay(Long.toString(_id), this);
-							show_text_voice_camera_stop_button.setVisibility(View.GONE);
-							show_text_voice_camera_play_button.setVisibility(View.VISIBLE);
-							show_text_voice_camera_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+							mAudioPlay = new AudioPlay(Long.toString(userId), this);
+							showStopButton.setVisibility(View.GONE);
+							showPlayButton.setVisibility(View.VISIBLE);
+							showTimeDetailsChronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
 						} else {
-							show_text_voice_camera_time_details_chronometer.setText("Audio File Missing");
-							show_text_voice_camera_stop_button.setVisibility(View.GONE);
-							show_text_voice_camera_play_button.setVisibility(View.GONE);
+							showTimeDetailsChronometer.setText("Audio File Missing");
+							showStopButton.setVisibility(View.GONE);
+							showPlayButton.setVisibility(View.GONE);
 						}
 						mFavoriteHelper.setShowList(mShowList);
 					}
@@ -252,9 +251,9 @@ public class ShowVoiceActivity extends Activity implements OnClickListener {
 	}
 	
 	private void getData(){
-		favID = mShowHelper.getFavID();
-		_id = mShowHelper.getId();
-		mShowList = mShowHelper.getShowList();
+		favID = getFavID();
+		userId = getId();
+		mShowList = getShowList();
 	}
 	
 }

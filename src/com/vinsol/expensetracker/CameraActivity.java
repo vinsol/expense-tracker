@@ -65,7 +65,7 @@ public class CameraActivity extends EditAbstract implements OnClickListener {
 		editLoadProgress = (RelativeLayout) findViewById(R.id.edit_load_progress);
 		editSaveEntry = (Button) findViewById(R.id.edit_save_entry);
 		editDelete = (Button) findViewById(R.id.edit_delete);
-		editHelper(this, intentExtras, R.string.camera, R.string.finished_cameraentry, R.string.unfinished_cameraentry);
+		editHelper(intentExtras, R.string.camera, R.string.finished_cameraentry, R.string.unfinished_cameraentry);
 		getData();
 		if (intentExtras.containsKey("mDisplayList")) {
 			if(setUnknown){

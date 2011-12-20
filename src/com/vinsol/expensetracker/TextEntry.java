@@ -14,30 +14,29 @@ import android.widget.TextView;
 
 import com.vinsol.expensetracker.utils.FileDelete;
 
-public class TextEntry extends Activity implements OnClickListener {
+public class TextEntry extends EditAbstract implements OnClickListener {
 
 	private DatabaseAdapter mDatabaseAdapter;
-	private Long _id;
+	private Long userId;
 	private Bundle intentExtras;
-	private TextView text_voice_camera_date_bar_dateview;
+	private TextView dateBarDateview;
 	private String dateViewString;
 	private ArrayList<String> mEditList;
-	private EditHelper mEditHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.text_voice_camera);
+		setContentView(R.layout.edit_page);
 
 		mDatabaseAdapter = new DatabaseAdapter(this);
-		findViewById(R.id.text_voice_camera_date_bar).setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg));
-		text_voice_camera_date_bar_dateview = (TextView) findViewById(R.id.text_voice_camera_date_bar_dateview);
+		findViewById(R.id.edit_date_bar).setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg));
+		dateBarDateview = (TextView) findViewById(R.id.edit_date_bar_dateview);
 
 		// //////********* Get id from intent extras ******** ////////////
 
 		intentExtras = getIntent().getBundleExtra("textEntryBundle");
-		mEditHelper = new EditHelper(this, intentExtras, R.string.text, R.string.finished_textentry, R.string.unfinished_textentry);
+		editHelper(intentExtras, R.string.text, R.string.finished_textentry, R.string.unfinished_textentry);
 		getData();
 		
 		// ////// ******** Handle Date Bar ********* ////////
@@ -52,25 +51,25 @@ public class TextEntry extends Activity implements OnClickListener {
 	}
 	
 	private void getData() {
-		_id = mEditHelper.getId();
-		mEditList = mEditHelper.getEditList();
-		intentExtras = mEditHelper.getIntentExtras();
+		userId = getId();
+		mEditList = getEditList();
+		intentExtras = getIntentExtras();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		dateViewString = text_voice_camera_date_bar_dateview.getText().toString();
+		dateViewString = dateBarDateview.getText().toString();
 	}
 
 	private void setClickListeners() {
 		// ////// ******* Adding Click Listeners to UI Items ******** //////////
 
-		Button text_voice_camera_save_entry = (Button) findViewById(R.id.text_voice_camera_save_entry);
-		text_voice_camera_save_entry.setOnClickListener(this);
+		Button editSaveEntry = (Button) findViewById(R.id.edit_save_entry);
+		editSaveEntry.setOnClickListener(this);
 
-		Button text_voice_camera_delete = (Button) findViewById(R.id.text_voice_camera_delete);
-		text_voice_camera_delete.setOnClickListener(this);
+		Button editDelete = (Button) findViewById(R.id.edit_delete);
+		editDelete.setOnClickListener(this);
 
 	}
 
@@ -78,18 +77,18 @@ public class TextEntry extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		// //////******** Adding Action to save entry ********* ///////////
 
-		if (v.getId() == R.id.text_voice_camera_save_entry) {
+		if (v.getId() == R.id.edit_save_entry) {
 			saveEntry();
 		}
 
 		// /////// ********* Adding action if delete button ********** /////////
 
-		if (v.getId() == R.id.text_voice_camera_delete) {
-			new FileDelete(_id);
+		if (v.getId() == R.id.edit_delete) {
+			new FileDelete(userId);
 
 			// //// ******* Delete entry from database ******** /////////
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(_id));
+			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(userId));
 			mDatabaseAdapter.close();
 			if(intentExtras.containsKey("isFromShowPage")){
 				Intent mIntent = new Intent(this, ShowTextActivity.class);
@@ -124,24 +123,24 @@ public class TextEntry extends Activity implements OnClickListener {
 
 	private void saveEntry() {
 		// ///// ******* Creating HashMap to update info ******* ////////
-		HashMap<String, String> _list = mEditHelper.getSaveEntryData(text_voice_camera_date_bar_dateview,dateViewString);
+		HashMap<String, String> list = getSaveEntryData(dateBarDateview,dateViewString);
 		// //// ******* Update database if user added additional info *******
 		// ///////
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editDatabase(_list);
+		mDatabaseAdapter.editDatabase(list);
 		mDatabaseAdapter.close();
 
 		if(!intentExtras.containsKey("isFromShowPage")){
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			Bundle mToHighLight = new Bundle();
-			mToHighLight.putString("toHighLight", _list.get(DatabaseAdapter.KEY_ID));
+			mToHighLight.putString("toHighLight", list.get(DatabaseAdapter.KEY_ID));
 			intentExpenseListing.putExtras(mToHighLight);
 			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intentExpenseListing);
 		} else {
 			Intent mIntent = new Intent(this, ShowTextActivity.class);
 			Bundle tempBundle = new Bundle();
-			ArrayList<String> listOnResult = mEditHelper.getListOnResult(_list);
+			ArrayList<String> listOnResult = getListOnResult(list);
 			getData();
 			tempBundle.putStringArrayList("mDisplayList", listOnResult);
 			mIntent.putExtra("textShowBundle", tempBundle);

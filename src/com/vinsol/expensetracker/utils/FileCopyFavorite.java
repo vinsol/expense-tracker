@@ -67,7 +67,6 @@ public class FileCopyFavorite {
 				out.write(buf, 0, len);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

@@ -33,32 +33,32 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	private Calendar lastDateCalendar;
 	private Activity activity;
 	private int j = 0;
-	private RelativeLayout main_graph ;
-	private ImageView main_graph_previous_arrow ;
-	private ImageView main_graph_next_arrow ;
+	private RelativeLayout mainGraph ;
+	private ImageView graphPreviousArrow ;
+	private ImageView graphNextArrow ;
 	private RelativeLayout.LayoutParams params ;
 	static private BarGraph barGraph;
-	static private TextView graph_no_item;
-	private TextView main_graph_header_textview;
+	static private TextView graphNoItem;
+	private TextView graphHeaderTextview;
 	
-	public HandleGraph(Context _context) {
-		mContext = _context;
+	public HandleGraph(Context context) {
+		mContext = context;
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		lastDateCalendar = Calendar.getInstance();
 		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		main_graph = (RelativeLayout) activity.findViewById(R.id.main_graph);
-		main_graph_header_textview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
-		main_graph_previous_arrow = (ImageView) activity.findViewById(R.id.main_graph_previous_arrow);
-		main_graph_next_arrow = (ImageView) activity.findViewById(R.id.main_graph_next_arrow);
-		params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,main_graph.getBackground().getIntrinsicHeight());
+		mainGraph = (RelativeLayout) activity.findViewById(R.id.main_graph);
+		graphHeaderTextview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
+		graphPreviousArrow = (ImageView) activity.findViewById(R.id.main_graph_previous_arrow);
+		graphNextArrow = (ImageView) activity.findViewById(R.id.main_graph_next_arrow);
+		params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
 	}
 	
 	@Override
 	protected void onPreExecute() {
-		main_graph_previous_arrow.setVisibility(View.INVISIBLE);
-		main_graph_next_arrow.setVisibility(View.INVISIBLE);
-		main_graph.removeView(barGraph);
-		main_graph.removeView(graph_no_item);
+		graphPreviousArrow.setVisibility(View.INVISIBLE);
+		graphNextArrow.setVisibility(View.INVISIBLE);
+		mainGraph.removeView(barGraph);
+		mainGraph.removeView(graphNoItem);
 		super.onPreExecute();
 	}
 	
@@ -81,47 +81,47 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		//view of graph
 		// ******start view******//
 
-		main_graph_previous_arrow.setVisibility(View.VISIBLE);
-		main_graph_next_arrow.setVisibility(View.VISIBLE);
+		graphPreviousArrow.setVisibility(View.VISIBLE);
+		graphNextArrow.setVisibility(View.VISIBLE);
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
 				barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
-				main_graph.addView(barGraph, params);
+				mainGraph.addView(barGraph, params);
 				if(j == mGraphList.size()-1){
-					main_graph_previous_arrow.setVisibility(View.INVISIBLE);
+					graphPreviousArrow.setVisibility(View.INVISIBLE);
 				}
 				if(j == 0){
 					if(!isNotNullAll(mGraphList.get(j).get(0))){
-						main_graph.removeView(barGraph);
+						mainGraph.removeView(barGraph);
 						graphNoItem();
-						main_graph.addView(graph_no_item);
+						mainGraph.addView(graphNoItem);
 					}
-					main_graph_next_arrow.setVisibility(View.INVISIBLE);
+					graphNextArrow.setVisibility(View.INVISIBLE);
 				}
-				main_graph_next_arrow.setOnClickListener(this);
-				main_graph_previous_arrow.setOnClickListener(this);
-				main_graph_header_textview.setText(mGraphList.get(j).get(3).get(0));
+				graphNextArrow.setOnClickListener(this);
+				graphPreviousArrow.setOnClickListener(this);
+				graphHeaderTextview.setText(mGraphList.get(j).get(3).get(0));
 			}
 			
 		} else {
 			graphNoItem();
-			main_graph.addView(graph_no_item);
-			main_graph_next_arrow.setVisibility(View.INVISIBLE);
-			main_graph_previous_arrow.setVisibility(View.INVISIBLE);
-			main_graph_header_textview.setText("");
+			mainGraph.addView(graphNoItem);
+			graphNextArrow.setVisibility(View.INVISIBLE);
+			graphPreviousArrow.setVisibility(View.INVISIBLE);
+			graphHeaderTextview.setText("");
 		}
 		super.onPostExecute(result);
 	}
 	
 	private void graphNoItem(){
-		graph_no_item = new TextView(mContext);
-		graph_no_item.setGravity(Gravity.CENTER);
-		graph_no_item.setText("No Items to Show");
-		LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, main_graph.getBackground().getIntrinsicHeight());
-		graph_no_item.setTextColor(Color.BLACK);
-		graph_no_item.setPadding(0, 0, 0, 15);
-		graph_no_item.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-		graph_no_item.setLayoutParams(textParams);
+		graphNoItem = new TextView(mContext);
+		graphNoItem.setGravity(Gravity.CENTER);
+		graphNoItem.setText("No Items to Show");
+		LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, mainGraph.getBackground().getIntrinsicHeight());
+		graphNoItem.setTextColor(Color.BLACK);
+		graphNoItem.setPadding(0, 0, 0, 15);
+		graphNoItem.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+		graphNoItem.setLayoutParams(textParams);
 	}
 	
 	private ArrayList<ArrayList<ArrayList<String>>> getGraphList(){
@@ -373,31 +373,31 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			break;
 		}
 		
-		main_graph.removeView(graph_no_item);
-		main_graph.removeView(barGraph);
+		mainGraph.removeView(graphNoItem);
+		mainGraph.removeView(barGraph);
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
 				barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
-				main_graph.addView(barGraph, params);
-				main_graph_previous_arrow.setVisibility(View.VISIBLE);
-				main_graph_next_arrow.setVisibility(View.VISIBLE);
+				mainGraph.addView(barGraph, params);
+				graphPreviousArrow.setVisibility(View.VISIBLE);
+				graphNextArrow.setVisibility(View.VISIBLE);
 				
 				if(j == mGraphList.size()-1){
-					main_graph_previous_arrow.setVisibility(View.INVISIBLE);
+					graphPreviousArrow.setVisibility(View.INVISIBLE);
 				}
 				if(j == 0){
 					if(!isNotNullAll(mGraphList.get(j).get(0))){
-						main_graph.removeView(barGraph);
+						mainGraph.removeView(barGraph);
 						graphNoItem();
-						main_graph.addView(graph_no_item);
+						mainGraph.addView(graphNoItem);
 					}
-					main_graph_next_arrow.setVisibility(View.INVISIBLE);
+					graphNextArrow.setVisibility(View.INVISIBLE);
 				}
 
-				main_graph_next_arrow.setOnClickListener(this);
-				main_graph_previous_arrow.setOnClickListener(this);
-				TextView main_graph_header_textview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
-				main_graph_header_textview.setText(mGraphList.get(j).get(3).get(0));
+				graphNextArrow.setOnClickListener(this);
+				graphPreviousArrow.setOnClickListener(this);
+				graphHeaderTextview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
+				graphHeaderTextview.setText(mGraphList.get(j).get(3).get(0));
 			}
 		} 
 	}

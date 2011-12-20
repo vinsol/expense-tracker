@@ -175,11 +175,11 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	}
 	
 	private void editDatabase(int type) {
-		HashMap<String, String> _list = new HashMap<String, String>();
-		_list.put(DatabaseAdapter.KEY_ID,mTempClickedList.get(0));
-		_list.put(DatabaseAdapter.KEY_TYPE, getContext().getString(type));
+		HashMap<String, String> list = new HashMap<String, String>();
+		list.put(DatabaseAdapter.KEY_ID,mTempClickedList.get(0));
+		list.put(DatabaseAdapter.KEY_TYPE, getContext().getString(type));
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editDatabase(_list);
+		mDatabaseAdapter.editDatabase(list);
 		mDatabaseAdapter.close();
 	}
 }

@@ -10,29 +10,29 @@ import android.widget.Chronometer;
 	public class MyCountDownTimer extends CountDownTimer {
 
 		private DisplayTime mDisplayTime;
-		private Chronometer show_text_voice_camera_time_details_chronometer;
-		private Button show_text_voice_camera_stop_button;
-		private Button show_text_voice_camera_play_button;
+		private Chronometer showDetailsChronometer;
+		private Button showStopButton;
+		private Button showPlayButton;
 		private AudioPlay mAudioPlay;
 		
 		public MyCountDownTimer(long millisInFuture, long countDownInterval,Chronometer chronometerTextView,Button stopButton,Button playButton,AudioPlay tempAudioPlay) {
 			super(millisInFuture, countDownInterval);
 			mDisplayTime = new DisplayTime();
-			show_text_voice_camera_time_details_chronometer = chronometerTextView;
-			show_text_voice_camera_stop_button = stopButton;
-			show_text_voice_camera_play_button = playButton;
+			showDetailsChronometer = chronometerTextView;
+			showStopButton = stopButton;
+			showPlayButton = playButton;
 			mAudioPlay = tempAudioPlay;
 		}
 
 		@Override
 		public void onFinish() {
-			show_text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(mAudioPlay.getPlayBackTime()));
-			show_text_voice_camera_stop_button.setVisibility(View.GONE);
-			show_text_voice_camera_play_button.setVisibility(View.VISIBLE);
+			showDetailsChronometer.setText(mDisplayTime.getDisplayTime(mAudioPlay.getPlayBackTime()));
+			showStopButton.setVisibility(View.GONE);
+			showPlayButton.setVisibility(View.VISIBLE);
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
-			show_text_voice_camera_time_details_chronometer.setText(mDisplayTime.getDisplayTime(millisUntilFinished));
+			showDetailsChronometer.setText(mDisplayTime.getDisplayTime(millisUntilFinished));
 		}
 	}

@@ -20,7 +20,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private DatabaseAdapter mDatabaseAdapter;
 	private long timeInMillis = 0;
 	private Bundle bundle;
-	private Long _id = null; 
+	private Long userId = null; 
 	private ArrayList<String> mTempClickedList;
 	private HandleGraph mHandleGraph;
 	
@@ -37,7 +37,7 @@ public class MainActivity extends Activity implements OnClickListener {
 					timeInMillis = tempBundle.getLong("timeInMillis");
 				if(tempBundle.containsKey("mDisplayList")){
 					mTempClickedList = tempBundle.getStringArrayList("mDisplayList");
-					_id = Long.parseLong(mTempClickedList.get(0));
+					userId = Long.parseLong(mTempClickedList.get(0));
 				}
 			}
 		}
@@ -88,7 +88,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onPause() {
 
-		_id = null;
+		userId = null;
 		super.onPause();
 	}
 	
@@ -133,7 +133,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			
 			if(new ConvertCursorToListString(this).getFavoriteList().size() >=1){
 				Intent intentFavorite = new Intent(this, FavoriteActivity.class);
-				if(_id == null) {
+				if(userId == null) {
 					if (timeInMillis != 0) {
 						bundle.putLong("timeInMillis", timeInMillis);
 					}
@@ -151,7 +151,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			
 		// //// ******* opens List Activity and adds unknown entry to database ******** ///////////
 		case R.id.main_save_reminder:
-			if(_id == null) 
+			if(userId == null) 
 				insertToDatabase(R.string.unknown);
 			Intent intentListView = new Intent(this, ExpenseListing.class);
 			startActivity(intentListView);
@@ -166,9 +166,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	}//end onClick
 	
 	private void createDatabaseEntry(int typeOfEntry) {	
-		if(_id == null ) {
-			_id = insertToDatabase(typeOfEntry);
-			bundle.putLong("_id", _id);
+		if(userId == null ) {
+			userId = insertToDatabase(typeOfEntry);
+			bundle.putLong("_id", userId);
 			
 			if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 				bundle.putBoolean("setLocation", false);
@@ -184,33 +184,33 @@ public class MainActivity extends Activity implements OnClickListener {
 	// /////// ******** function to mark entry into the database and returns the
 	// id of the new entry ***** //////
 	private long insertToDatabase(int type) {
-		HashMap<String, String> _list = new HashMap<String, String>();
+		HashMap<String, String> list = new HashMap<String, String>();
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if (timeInMillis == 0)
-			_list.put(DatabaseAdapter.KEY_DATE_TIME,Long.toString(mCalendar.getTimeInMillis()));
+			list.put(DatabaseAdapter.KEY_DATE_TIME,Long.toString(mCalendar.getTimeInMillis()));
 		else {
 			bundle.putLong("timeInMillis", timeInMillis);
-			_list.put(DatabaseAdapter.KEY_DATE_TIME,Long.toString(timeInMillis));
+			list.put(DatabaseAdapter.KEY_DATE_TIME,Long.toString(timeInMillis));
 			finish();
 		}
 
 		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-			_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+			list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
-		_list.put(DatabaseAdapter.KEY_TYPE, getString(type));
+		list.put(DatabaseAdapter.KEY_TYPE, getString(type));
 		mDatabaseAdapter.open();
-		long _id = mDatabaseAdapter.insert_to_database(_list);
+		long userId = mDatabaseAdapter.insertToDatabase(list);
 		mDatabaseAdapter.close();
-		return _id;
+		return userId;
 	}
 	
 	private void editDatabase(int type) {
-		HashMap<String, String> _list = new HashMap<String, String>();
-		_list.put(DatabaseAdapter.KEY_ID,mTempClickedList.get(0));
-		_list.put(DatabaseAdapter.KEY_TYPE, getString(type));
+		HashMap<String, String> list = new HashMap<String, String>();
+		list.put(DatabaseAdapter.KEY_ID,mTempClickedList.get(0));
+		list.put(DatabaseAdapter.KEY_TYPE, getString(type));
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editDatabase(_list);
+		mDatabaseAdapter.editDatabase(list);
 		mDatabaseAdapter.close();
 	}
 }

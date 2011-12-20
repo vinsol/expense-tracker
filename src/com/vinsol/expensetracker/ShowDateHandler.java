@@ -8,39 +8,39 @@ import android.content.Context;
 import android.widget.TextView;
 
 public class ShowDateHandler {
-	private TextView show_text_voice_camera_header_title;
+	private TextView showHeaderTitle;
 	private Activity activity;
 
 	public ShowDateHandler(Context mContext, String timeInMillis) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		show_text_voice_camera_header_title = (TextView) activity.findViewById(R.id.show_text_voice_camera_header_title);
+		showHeaderTitle = (TextView) activity.findViewById(R.id.show_header_title);
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
 		String date = getDate(mCalendar);
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-		show_text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+" at "+date);
+		showHeaderTitle.setText(mDisplayDate.getDisplayDate()+" at "+date);
 	}
 
 	public ShowDateHandler(Context mContext,int typeOfEntry) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		show_text_voice_camera_header_title = (TextView) activity.findViewById(R.id.show_text_voice_camera_header_title);
-		show_text_voice_camera_header_title.setText(activity.getString(typeOfEntry));
+		showHeaderTitle = (TextView) activity.findViewById(R.id.show_header_title);
+		showHeaderTitle.setText(activity.getString(typeOfEntry));
 	}
 	
 	public ShowDateHandler(Context mContext,TextView resource ,String timeInMillis) {
-		show_text_voice_camera_header_title = resource;
+		showHeaderTitle = resource;
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		String date = getDate(mCalendar);
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
 		//TODO
-		show_text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+" at "+date);
+		showHeaderTitle.setText(mDisplayDate.getDisplayDate()+" at "+date);
 	}
 
 	public ShowDateHandler(Context mContext,TextView resource,int typeOfEntry) {
-		show_text_voice_camera_header_title = resource;
-		show_text_voice_camera_header_title.setText(mContext.getString(typeOfEntry));
+		showHeaderTitle = resource;
+		showHeaderTitle.setText(mContext.getString(typeOfEntry));
 	}
 	
 	private String getDate(Calendar tempCalendar) {

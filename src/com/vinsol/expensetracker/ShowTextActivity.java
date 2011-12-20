@@ -10,15 +10,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class ShowTextActivity extends Activity implements OnClickListener{
+public class ShowTextActivity extends ShowAbstract implements OnClickListener{
 
 	private final int SHOW_RESULT = 35;
 	private Bundle intentExtras;
 	protected static String favID = null;
-	private ShowHelper mShowHelper;
-	private Long _id = null;
-	private Button show_text_voice_camera_delete;
-	private Button show_text_voice_camera_edit;
+	private Long userId = null;
+	private Button showDelete;
+	private Button showEdit;
 	private DatabaseAdapter mDatabaseAdapter;
 	private ArrayList<String> mShowList;
 	private FavoriteHelper mFavoriteHelper;
@@ -27,23 +26,23 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.show_text_voice_camera);
+		setContentView(R.layout.show_page);
 
-		show_text_voice_camera_delete = (Button) findViewById(R.id.show_text_voice_camera_delete);
-		show_text_voice_camera_edit = (Button) findViewById(R.id.show_text_voice_camera_edit);
+		showDelete = (Button) findViewById(R.id.show_delete);
+		showEdit = (Button) findViewById(R.id.show_edit);
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		// //////********* Get id from intent extras ******** ////////////
 
 		intentExtras = getIntent().getBundleExtra("textShowBundle");
-		mShowHelper = new ShowHelper(this, intentExtras,R.string.text,R.string.finished_textentry,R.string.unfinished_textentry);
+		showHelper(intentExtras,R.string.text,R.string.finished_textentry,R.string.unfinished_textentry);
 		if (intentExtras.containsKey("mDisplayList")) {
 			getData();
 		}
 		if (intentExtras.containsKey("mDisplayList")) {
 			mFavoriteHelper = new FavoriteHelper(this, mShowList);
 		}
-		show_text_voice_camera_delete.setOnClickListener(this);
-		show_text_voice_camera_edit.setOnClickListener(this);
+		showDelete.setOnClickListener(this);
+		showEdit.setOnClickListener(this);
 	}
 	
 	@Override
@@ -53,13 +52,13 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 		if (SHOW_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getBundleExtra("textShowBundle");
-				mShowHelper.doTaskOnActivityResult(intentExtras);
+				doTaskOnActivityResult(intentExtras);
 				if (intentExtras.containsKey("mDisplayList")) {
 					getData();
 					mFavoriteHelper.setShowList(mShowList);
 				}
-				show_text_voice_camera_delete.setOnClickListener(this);
-				show_text_voice_camera_edit.setOnClickListener(this);
+				showDelete.setOnClickListener(this);
+				showEdit.setOnClickListener(this);
 			}
 		}
 		if(resultCode == Activity.RESULT_CANCELED){
@@ -71,10 +70,10 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 
-		if (v.getId() == R.id.show_text_voice_camera_delete) {
-			if (_id != null) {
+		if (v.getId() == R.id.show_delete) {
+			if (userId != null) {
 				mDatabaseAdapter.open();
-				mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(_id));
+				mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(userId));
 				mDatabaseAdapter.close();
 				Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
 				finish();
@@ -83,7 +82,7 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 			}
 		}
 		
-		if(v.getId() == R.id.show_text_voice_camera_edit){
+		if(v.getId() == R.id.show_edit){
 			Intent editIntent = new Intent(this, TextEntry.class);
 			intentExtras.putBoolean("isFromShowPage", true);
 			mShowList.set(4, favID);
@@ -95,8 +94,8 @@ public class ShowTextActivity extends Activity implements OnClickListener{
 	}
 	
 	private void getData(){
-		favID = mShowHelper.getFavID();
-		_id = mShowHelper.getId();
-		mShowList = mShowHelper.getShowList();
+		favID = getFavID();
+		userId = getId();
+		mShowList = getShowList();
 	}
 }

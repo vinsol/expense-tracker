@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 public class ImagePreview extends Activity {
 
-	private Long _id = null;
+	private Long userId = null;
 	private android.widget.ImageView mImageView;
-	private LinearLayout image_view_full_screen_progress;
+	private LinearLayout progressBar;
 	private String path;
 	
 	private Drawable imageDrawable;
@@ -26,13 +26,13 @@ public class ImagePreview extends Activity {
 		setContentView(R.layout.image_view_full_screen);
 
 		//Extras
-		_id = getIntent().getLongExtra("id", 0);
+		userId = getIntent().getLongExtra("id", 0);
 		boolean isFavorite = getIntent().getBooleanExtra("isFavorite", false);
 		
-		path = "/mnt/sdcard/ExpenseTracker/" + (isFavorite ? "Favorite/" : "") + _id + ".jpg";
+		path = "/mnt/sdcard/ExpenseTracker/" + (isFavorite ? "Favorite/" : "") + userId + ".jpg";
 		
 		mImageView = (android.widget.ImageView) findViewById(R.id.image_view_full_screen_id);
-		image_view_full_screen_progress = (LinearLayout) findViewById(R.id.image_view_full_screen_progress);
+		progressBar = (LinearLayout) findViewById(R.id.image_view_full_screen_progress);
 
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			try {
@@ -48,7 +48,7 @@ public class ImagePreview extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			image_view_full_screen_progress.setVisibility(View.VISIBLE);
+			progressBar.setVisibility(View.VISIBLE);
 			mImageView.setVisibility(View.GONE);
 			super.onPreExecute();
 		}
@@ -61,11 +61,9 @@ public class ImagePreview extends Activity {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			image_view_full_screen_progress.setVisibility(View.GONE);
-
+			progressBar.setVisibility(View.GONE);
 			mImageView.setVisibility(View.VISIBLE);
 			mImageView.setImageDrawable(imageDrawable);
-
 			super.onPostExecute(result);
 		}
 	}
