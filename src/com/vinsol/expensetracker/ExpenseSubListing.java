@@ -33,7 +33,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 	private Long highlightID = null;
 	private String idList;
 	private UnknownEntryDialog unknownDialog;
-	private TextView expense_listing_header;
+	private TextView listingHeader;
 	private StringProcessing mStringProcessing;
 	
 	@Override
@@ -42,7 +42,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 		setContentView(R.layout.expense_listing);
 		idList = getIntent().getStringExtra("idList");
 		mConvertCursorToListString = new ConvertCursorToListString(this);
-		expense_listing_header = (TextView) findViewById(R.id.text_voice_camera_header_title);
+		listingHeader = (TextView) findViewById(R.id.edit_header_title);
 		mStringProcessing = new StringProcessing();
 	}
 	
@@ -66,7 +66,7 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 			mTempCalendar.set(mTempCalendar.get(Calendar.YEAR),mTempCalendar.get(Calendar.MONTH),mTempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 			mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			
-			expense_listing_header.setText(new DisplayDate(mTempCalendar).getDisplayDateSubListingHeader());
+			listingHeader.setText(new DisplayDate(mTempCalendar).getDisplayDateSubListingHeader());
 			
 			int j = 0;
 			@SuppressWarnings("rawtypes")
@@ -75,12 +75,12 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 				List<List<String>> mList = new ArrayList<List<String>>();
 				String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
 				while (j < mSubList.size()&& date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
-					List<String> _templist = new ArrayList<String>();
+					List<String> templist = new ArrayList<String>();
 					Calendar mCalendar = Calendar.getInstance();
 					mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
 					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-					_templist = getList(j);
-					mList.add(_templist);
+					templist = getList(j);
+					mList.add(templist);
 					j++;
 					if (j < mSubList.size()) {
 					} else {
@@ -99,8 +99,8 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 				mListView.setVisibility(View.GONE);
 				RelativeLayout mRelativeLayout = (RelativeLayout) findViewById(R.id.expense_listing_listview_no_item);
 				mRelativeLayout.setVisibility(View.VISIBLE);
-				Button expense_listing_listview_no_item_button = (Button) findViewById(R.id.expense_listing_listview_no_item_button);
-				expense_listing_listview_no_item_button.setOnClickListener(new OnClickListener() {
+				Button noItemButton = (Button) findViewById(R.id.expense_listing_listview_no_item_button);
+				noItemButton.setOnClickListener(new OnClickListener() {
 							@Override
 							public void onClick(View v) {
 								finish();
@@ -122,8 +122,8 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 	public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
 		@SuppressWarnings("unchecked")
 		final ArrayList<String> mTempClickedList = (ArrayList<String>) adapter.getItemAtPosition(position);
-		String _id = mTempClickedList.get(0);
-		if (!_id.contains(",")) {
+		String userId = mTempClickedList.get(0);
+		if (!userId.contains(",")) {
 			Bundle bundle = new Bundle();
 			bundle.putStringArrayList("mDisplayList", mTempClickedList);
 			if (mTempClickedList.get(5).equals(getString(R.string.camera))) {
@@ -192,40 +192,40 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 	
 	private List<String> getList(int j) {
 		
-		List<String> _templist = new ArrayList<String>();
-		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
+		List<String> templist = new ArrayList<String>();
+		templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
 		if (mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null&& !mSubList.get(j).get(DatabaseAdapter.KEY_TAG).equals("")) {
-			_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TAG));
+			templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TAG));
 		} else {
 			if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))) {
 				if(isEntryComplete(mSubList.get(j))){
-					_templist.add(getString(R.string.finished_cameraentry));
+					templist.add(getString(R.string.finished_cameraentry));
 				} else {
-					_templist.add(getString(R.string.unfinished_cameraentry));
+					templist.add(getString(R.string.unfinished_cameraentry));
 				}
 			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.voice))) {
 				if(isEntryComplete(mSubList.get(j))){
-					_templist.add(getString(R.string.finished_voiceentry));
+					templist.add(getString(R.string.finished_voiceentry));
 				} else {
-					_templist.add(getString(R.string.unfinished_voiceentry));
+					templist.add(getString(R.string.unfinished_voiceentry));
 				}
 			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.text))) {
 				if(isEntryComplete(mSubList.get(j))){		
-					_templist.add(getString(R.string.finished_textentry));
+					templist.add(getString(R.string.finished_textentry));
 				} else {
-					_templist.add(getString(R.string.unfinished_textentry));
+					templist.add(getString(R.string.unfinished_textentry));
 				}
 			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.favorite_entry))) {
-				_templist.add("Unfinished Favorite Entry");
+				templist.add("Unfinished Favorite Entry");
 			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.unknown))) {
-				_templist.add(getString(R.string.unknown_entry));
+				templist.add(getString(R.string.unknown_entry));
 			}
 		}
 
 		if (mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != null&& !mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT).equals("")) {
-			_templist.add(mStringProcessing.getStringDoubleDecimal(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT)));
+			templist.add(mStringProcessing.getStringDoubleDecimal(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT)));
 		} else {
-			_templist.add("?");
+			templist.add("?");
 		}
 
 		// ///// ******* Adding location date data to list ******* //////////
@@ -235,45 +235,45 @@ public class ExpenseSubListing extends Activity implements OnItemClickListener{
 				&& mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null
 				&& !mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals("")) {
 			
-			_templist.add(getLocationDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"), mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
+			templist.add(getLocationDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"), mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
 		}
 
 		else if (mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis") != null
 				&& !mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis").equals("")
 				&& (mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) == null || mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals(""))) {
-			_templist.add(getLocationDateDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
+			templist.add(getLocationDateDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
 		}
 
 		else if ((mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis") == null || mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis").equals(""))&& mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null&& !mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals("")) {
-			_templist.add("Unknown time at "+ mSubList.get(j).get(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
+			templist.add("Unknown time at "+ mSubList.get(j).get(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
 		}
 
 		else {
-			_templist.add("Unknown Location and Date");
+			templist.add("Unknown Location and Date");
 		}
 
 		if (mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE).equals("")) {
-			_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE));
+			templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE));
 		} else {
-			_templist.add("");
+			templist.add("");
 		}
 
 		if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE) != null
 				&& !mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals("")) {
-			_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE));
+			templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE));
 		} else {
-			_templist.add("");
+			templist.add("");
 		}
 
-		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"));
-		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
-		_templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
+		templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"));
+		templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
+		templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
 		if(highlightID != null){
 			if(mSubList.get(j).get(DatabaseAdapter.KEY_ID).equals(Long.toString(highlightID))){
-				_templist.add(Long.toString(highlightID));
+				templist.add(Long.toString(highlightID));
 			}
 		}
-		return _templist;
+		return templist;
 	}
 
 	private boolean isEntryComplete(HashMap<String, String> hashMap) {

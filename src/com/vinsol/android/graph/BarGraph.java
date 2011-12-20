@@ -24,11 +24,11 @@ public class BarGraph extends View {
 	private int horDiff;
 	private ArrayList<String> horLabels;
 	
-	public BarGraph(Context context,ArrayList<String> valueList,ArrayList<String> _horLabels) {
+	public BarGraph(Context context,ArrayList<String> valueList,ArrayList<String> horLabels) {
 		super(context);
 		values = valueList;
 		paint = new Paint();
-		horLabels = _horLabels;
+		this.horLabels = horLabels;
 	}
 
 	@Override

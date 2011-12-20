@@ -14,10 +14,10 @@ import android.widget.Chronometer;
 
 public class AudioPlayDialog extends Dialog implements android.view.View.OnClickListener,android.content.DialogInterface.OnDismissListener,android.content.DialogInterface.OnCancelListener {
 
-	private Button audio_play_dialog_stop_button;
-	private Button audio_play_dialog_play_button;
-	private Button audio_play_dialog_cancel_button;
-	private Chronometer audio_play_dialog_time_details_chronometer;
+	private Button stopButton;
+	private Button playButton;
+	private Button cancelButton;
+	private Chronometer timeDetailsChronometer;
 	private AudioPlay mAudioPlay;
 	private MyCountDownTimer countDownTimer;
 	private String mFile;
@@ -31,16 +31,16 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 		setContentView(R.layout.audio_play_dialog);
 		mAudioPlay = new AudioPlay(id, context);
 		
-		audio_play_dialog_stop_button = (Button) findViewById(R.id.audio_play_dialog_stop_button);
-		audio_play_dialog_play_button = (Button) findViewById(R.id.audio_play_dialog_play_button);
-		audio_play_dialog_cancel_button = (Button) findViewById(R.id.audio_play_dialog_cancel_button);
-		audio_play_dialog_time_details_chronometer = (Chronometer) findViewById(R.id.audio_play_dialog_time_details_chronometer);
-		audio_play_dialog_cancel_button.setOnClickListener(this);
-		audio_play_dialog_play_button.setOnClickListener(this);
-		audio_play_dialog_stop_button.setOnClickListener(this);
+		stopButton = (Button) findViewById(R.id.audio_play_dialog_stop_button);
+		playButton = (Button) findViewById(R.id.audio_play_dialog_play_button);
+		cancelButton = (Button) findViewById(R.id.audio_play_dialog_cancel_button);
+		timeDetailsChronometer = (Chronometer) findViewById(R.id.audio_play_dialog_time_details_chronometer);
+		cancelButton.setOnClickListener(this);
+		playButton.setOnClickListener(this);
+		stopButton.setOnClickListener(this);
 		setOnDismissListener(this);
 		setOnCancelListener(this);
-		countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000 , audio_play_dialog_time_details_chronometer,audio_play_dialog_stop_button,audio_play_dialog_play_button,mAudioPlay);
+		countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000 , timeDetailsChronometer,stopButton,playButton,mAudioPlay);
 		mAudioPlay.startPlayBack();
 		countDownTimer.start();
 		show();
@@ -54,16 +54,16 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 		setContentView(R.layout.audio_play_dialog);
 		mAudioPlay = new AudioPlay(id, context,fav);
 		
-		audio_play_dialog_stop_button = (Button) findViewById(R.id.audio_play_dialog_stop_button);
-		audio_play_dialog_play_button = (Button) findViewById(R.id.audio_play_dialog_play_button);
-		audio_play_dialog_cancel_button = (Button) findViewById(R.id.audio_play_dialog_cancel_button);
-		audio_play_dialog_time_details_chronometer = (Chronometer) findViewById(R.id.audio_play_dialog_time_details_chronometer);
-		audio_play_dialog_cancel_button.setOnClickListener(this);
-		audio_play_dialog_play_button.setOnClickListener(this);
-		audio_play_dialog_stop_button.setOnClickListener(this);
+		stopButton = (Button) findViewById(R.id.audio_play_dialog_stop_button);
+		playButton = (Button) findViewById(R.id.audio_play_dialog_play_button);
+		cancelButton = (Button) findViewById(R.id.audio_play_dialog_cancel_button);
+		timeDetailsChronometer = (Chronometer) findViewById(R.id.audio_play_dialog_time_details_chronometer);
+		cancelButton.setOnClickListener(this);
+		playButton.setOnClickListener(this);
+		stopButton.setOnClickListener(this);
 		setOnDismissListener(this);
 		setOnCancelListener(this);
-		countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, audio_play_dialog_time_details_chronometer, audio_play_dialog_stop_button,audio_play_dialog_play_button,mAudioPlay);
+		countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, timeDetailsChronometer, stopButton,playButton,mAudioPlay);
 		mAudioPlay.startPlayBack();
 		countDownTimer.start();
 		show();
@@ -79,25 +79,25 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 		}
 
 		if (v.getId() == R.id.audio_play_dialog_play_button) {
-			audio_play_dialog_play_button.setVisibility(View.GONE);
+			playButton.setVisibility(View.GONE);
 			if (mAudioPlay.isAudioPlaying()) {
 				countDownTimer.cancel();
 				mAudioPlay.stopPlayBack();
 			}
 			mAudioPlay = new AudioPlay(mFile, mContext);
-			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000,audio_play_dialog_time_details_chronometer,audio_play_dialog_stop_button,audio_play_dialog_play_button,mAudioPlay);
+			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000,timeDetailsChronometer,stopButton,playButton,mAudioPlay);
 			countDownTimer.start();
 			mAudioPlay.startPlayBack();
-			audio_play_dialog_stop_button.setVisibility(View.VISIBLE);
+			stopButton.setVisibility(View.VISIBLE);
 		}
 
 		if (v.getId() == R.id.audio_play_dialog_stop_button) {
 
-			audio_play_dialog_stop_button.setVisibility(View.GONE);
+			stopButton.setVisibility(View.GONE);
 			mAudioPlay.stopPlayBack();
 			countDownTimer.cancel();
-			audio_play_dialog_time_details_chronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
-			audio_play_dialog_play_button.setVisibility(View.VISIBLE);
+			timeDetailsChronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+			playButton.setVisibility(View.VISIBLE);
 		}
 
 	}

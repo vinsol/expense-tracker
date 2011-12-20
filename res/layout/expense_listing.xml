@@ -13,7 +13,7 @@
         android:gravity="center"
         >
         <TextView
-            android:id="@+id/text_voice_camera_header_title"
+            android:id="@+id/expense_listing_header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Expenses List"

@@ -14,9 +14,9 @@ import android.widget.TextView;
 
 public class DateHandler implements OnClickListener {
 
-	private ImageButton date_bar_previous_arrow;
-	private ImageButton date_bar_next_arrow;
-	private TextView date_bar_dateview;
+	private ImageButton previousArrow;
+	private ImageButton nextArrow;
+	private TextView dateview;
 	private DisplayDate mDisplayDate;
 	private Calendar mCalendar;
 	private Activity activity;
@@ -28,15 +28,15 @@ public class DateHandler implements OnClickListener {
 		mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mDisplayDate = new DisplayDate(mCalendar);
-		date_bar_dateview = (TextView) activity.findViewById(R.id.text_voice_camera_date_bar_dateview);
-		date_bar_previous_arrow = (ImageButton) activity.findViewById(R.id.text_voice_camera_date_bar_previous_arrow);
-		date_bar_next_arrow = (ImageButton) activity.findViewById(R.id.text_voice_camera_date_bar_next_arrow);
-		date_bar_next_arrow.setVisibility(View.INVISIBLE);
-		date_bar_dateview.setText(mDisplayDate.getDisplayDate());
-		dialog = new DatePickerDialog(mContext, date_bar_dateview);
-		date_bar_previous_arrow.setOnClickListener(this);
-		date_bar_next_arrow.setOnClickListener(this);
-		date_bar_dateview.setOnClickListener(this);
+		dateview = (TextView) activity.findViewById(R.id.edit_date_bar_dateview);
+		previousArrow = (ImageButton) activity.findViewById(R.id.edit_date_bar_previous_arrow);
+		nextArrow = (ImageButton) activity.findViewById(R.id.edit_date_bar_next_arrow);
+		nextArrow.setVisibility(View.INVISIBLE);
+		dateview.setText(mDisplayDate.getDisplayDate());
+		dialog = new DatePickerDialog(mContext, dateview);
+		previousArrow.setOnClickListener(this);
+		nextArrow.setOnClickListener(this);
+		dateview.setOnClickListener(this);
 	}
 
 	public DateHandler(Context mContext, long long1) {
@@ -45,50 +45,50 @@ public class DateHandler implements OnClickListener {
 		mCalendar.setTimeInMillis(long1);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mDisplayDate = new DisplayDate(mCalendar);
-		date_bar_dateview = (TextView) activity.findViewById(R.id.text_voice_camera_date_bar_dateview);
-		date_bar_previous_arrow = (ImageButton) activity.findViewById(R.id.text_voice_camera_date_bar_previous_arrow);
-		date_bar_next_arrow = (ImageButton) activity.findViewById(R.id.text_voice_camera_date_bar_next_arrow);
+		dateview = (TextView) activity.findViewById(R.id.edit_date_bar_dateview);
+		previousArrow = (ImageButton) activity.findViewById(R.id.edit_date_bar_previous_arrow);
+		nextArrow = (ImageButton) activity.findViewById(R.id.edit_date_bar_next_arrow);
 
 		if (!beforeCurrentDate(mCalendar))
-			date_bar_next_arrow.setVisibility(View.INVISIBLE);
+			nextArrow.setVisibility(View.INVISIBLE);
 
-		date_bar_dateview.setText(mDisplayDate.getDisplayDate());
-		dialog = new DatePickerDialog(mContext, date_bar_dateview);
-		date_bar_previous_arrow.setOnClickListener(this);
-		date_bar_next_arrow.setOnClickListener(this);
-		date_bar_dateview.setOnClickListener(this);
+		dateview.setText(mDisplayDate.getDisplayDate());
+		dialog = new DatePickerDialog(mContext, dateview);
+		previousArrow.setOnClickListener(this);
+		nextArrow.setOnClickListener(this);
+		dateview.setOnClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.text_voice_camera_date_bar_next_arrow) {
+		if (v.getId() == R.id.edit_date_bar_next_arrow) {
 			mCalendar.add(Calendar.DATE, 1);
 			mDisplayDate = new DisplayDate(mCalendar);
-			date_bar_dateview.setText(mDisplayDate.getDisplayDate());
+			dateview.setText(mDisplayDate.getDisplayDate());
 
 			if (isCurrentDate(mCalendar)) {
-				date_bar_next_arrow.setVisibility(View.INVISIBLE);
+				nextArrow.setVisibility(View.INVISIBLE);
 			}
 		}
 
-		if (v.getId() == R.id.text_voice_camera_date_bar_previous_arrow) {
+		if (v.getId() == R.id.edit_date_bar_previous_arrow) {
 			mCalendar.add(Calendar.DATE, -1);
 			mDisplayDate = new DisplayDate(mCalendar);
-			if (!date_bar_next_arrow.isShown()) {
-				date_bar_next_arrow.setVisibility(View.VISIBLE);
+			if (!nextArrow.isShown()) {
+				nextArrow.setVisibility(View.VISIBLE);
 			}
-			date_bar_dateview.setText(mDisplayDate.getDisplayDate());
+			dateview.setText(mDisplayDate.getDisplayDate());
 		}
 
-		if (v.getId() == R.id.text_voice_camera_date_bar_dateview) {
+		if (v.getId() == R.id.edit_date_bar_dateview) {
 			dialog.setOnDismissListener(new OnDismissListener() {
 				@Override
 				public void onDismiss(DialogInterface dialog) {
 					if (tempCalenderOnCancel != null) {
 						if (beforeCurrentDate(tempCalenderOnCancel)) {
-							date_bar_next_arrow.setVisibility(View.VISIBLE);
+							nextArrow.setVisibility(View.VISIBLE);
 						} else {
-							date_bar_next_arrow.setVisibility(View.INVISIBLE);
+							nextArrow.setVisibility(View.INVISIBLE);
 						}
 						mCalendar.setTime(tempCalenderOnCancel.getTime());
 						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);

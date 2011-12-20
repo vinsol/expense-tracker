@@ -12,8 +12,8 @@ import android.database.Cursor;
 public class ConvertCursorToListString {
 	Context context;
 
-	public ConvertCursorToListString(Context _context) {
-		context = _context;
+	public ConvertCursorToListString(Context context) {
+		this.context = context;
 	}
 
 	List<HashMap<String, String>> getFavoriteList() {

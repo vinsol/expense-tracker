@@ -7,7 +7,7 @@
     >
     <!-- Header -->
     <RelativeLayout
-        android:id="@+id/show_text_voice_camera_header"
+        android:id="@+id/show_header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/topbar_bg" 
@@ -15,7 +15,7 @@
         >
 
         <TextView
-            android:id="@+id/show_text_voice_camera_header_title"
+            android:id="@+id/show_header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text Entry"
@@ -29,16 +29,16 @@
         
     <!-- Date and location Bar -->
     <RelativeLayout  
-        android:id="@+id/show_text_voice_camera_date_bar"
+        android:id="@+id/show_date_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/show_text_voice_camera_header"
+        android:layout_below="@id/show_header"
         android:background="@drawable/date_bar_bg_wo_shadow"
         android:gravity="center"
         > 
         
 		<TextView
-            android:id="@+id/show_text_voice_camera_location"
+            android:id="@+id/show_location"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="unknown location"
@@ -57,11 +57,11 @@
     
     <!-- ScrollView for body -->
     <ScrollView
-        android:id="@+id/show_text_voice_camera_body"
+        android:id="@+id/show_body"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/show_text_voice_camera_date_bar"
-        android:layout_above="@+id/show_text_voice_camera_footer"
+        android:layout_below="@id/show_date_bar"
+        android:layout_above="@+id/show_footer"
         >
     	<LinearLayout
             android:layout_width="fill_parent"
@@ -71,7 +71,7 @@
             
     	    <!-- camera entry -->
             <LinearLayout
-                android:id="@+id/show_text_voice_camera_camera_details"
+                android:id="@+id/show_camera_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/audio_play_dialog_bg"
@@ -79,7 +79,7 @@
                 android:visibility="gone"
                 >
                 <ImageView 
-                    android:id="@+id/show_text_voice_camera_image_display"
+                    android:id="@+id/show_image_display"
                     android:layout_width="100dp"
                     android:layout_height="80dp"
                     android:background="@drawable/photo_frame"
@@ -95,14 +95,14 @@
             
             <!-- voice entry -->    
             <RelativeLayout
-                android:id="@+id/show_text_voice_camera_voice_details"
+                android:id="@+id/show_voice_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/audio_play_dialog_bg"
                 android:visibility="gone"
                 >   
                 <Chronometer 
-                    android:id="@+id/show_text_voice_camera_time_details_chronometer"
+                    android:id="@+id/show_time_details_chronometer"
                   	android:layout_width="fill_parent"
                   	android:layout_height="wrap_content"
                   	android:textSize="36sp"
@@ -114,16 +114,16 @@
             	</Chronometer>
                 
                 <LinearLayout
-                    android:id="@+id/show_text_voice_camera_voice_control_buttons"
+                    android:id="@+id/show_voice_control_buttons"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:layout_below="@id/show_text_voice_camera_time_details_chronometer"
+                    android:layout_below="@id/show_time_details_chronometer"
                     >
                     <!-- stop button -->
                     <Button
-                        android:id="@+id/show_text_voice_camera_stop_button"
+                        android:id="@+id/show_stop_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/voice_stop_states"
@@ -133,7 +133,7 @@
                     
                     <!-- play button -->
                     <Button
-                        android:id="@+id/show_text_voice_camera_play_button"
+                        android:id="@+id/show_play_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/voice_play_states"
@@ -158,7 +158,7 @@
            	</TextView>
             <!-- amount value -->
             <TextView
-                android:id="@+id/show_text_voice_camera_amount"
+                android:id="@+id/show_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -171,7 +171,7 @@
             
             <!-- divider -->    
             <View 
-                android:id="@+id/show_text_voice_camera_divider_amount_desc"
+                android:id="@+id/show_divider_amount_desc"
 	           	android:layout_width="fill_parent"
 	           	android:layout_height="wrap_content"
 	           	android:background="@drawable/list_divider"
@@ -181,7 +181,7 @@
                 
             <!-- description header -->
             <TextView 
-            	android:id="@+id/show_text_voice_camera_description_show"
+            	android:id="@+id/show_description_show"
             	android:layout_height="wrap_content"
             	android:layout_width="wrap_content"
             	android:text="Description:"
@@ -196,7 +196,7 @@
                 
             <!-- description text view -->    
        		<TextView 
-              	android:id="@+id/show_text_voice_camera_tag_textview"
+              	android:id="@+id/show_tag_textview"
               	android:layout_width="fill_parent"
               	android:layout_height="wrap_content"
               	android:gravity="top"
@@ -218,7 +218,7 @@
             </View>    
            	    
             <LinearLayout
-                android:id="@+id/show_text_voice_camera_add_favorite_layout" 
+                android:id="@+id/show_add_favorite_layout" 
                 android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_marginBottom="15dip"
@@ -229,7 +229,7 @@
 	            >    
                 
 	            <ToggleButton
-	                android:id="@+id/show_text_voice_camera_add_favorite"
+	                android:id="@+id/show_add_favorite"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:background="@drawable/add_to_favorite_states"
@@ -241,7 +241,7 @@
 	            </ToggleButton>
 	            
 	            <TextView 
-	                android:id="@+id/show_text_voice_camera_add_favorite_textView"
+	                android:id="@+id/show_add_favorite_textView"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:textSize="20dip"
@@ -255,7 +255,7 @@
    
     <!-- Footer -->
     <LinearLayout
-        android:id="@id/show_text_voice_camera_footer"
+        android:id="@id/show_footer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -266,7 +266,7 @@
         >
         <!-- edit button -->
         <Button
-            android:id="@+id/show_text_voice_camera_edit"
+            android:id="@+id/show_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_states"
@@ -275,7 +275,7 @@
        	</Button>
        	<!-- delete button -->
        	<Button
-            android:id="@+id/show_text_voice_camera_delete"
+            android:id="@+id/show_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/delete_states"

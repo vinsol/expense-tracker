@@ -19,37 +19,37 @@ class FavoriteHelper implements OnClickListener{
 
 	private Context mContext;
 	private ArrayList<String> mShowList;
-	private ToggleButton show_text_voice_camera_add_favorite;
+	private ToggleButton showAddFavorite;
 	private DBAdapterFavorite mDbAdapterFavorite;
 	private Activity activity;
 	private DatabaseAdapter mDatabaseAdapter;
-	private TextView show_text_voice_camera_add_favorite_textView;
+	private TextView showAddFavoriteTextView;
 	
-	FavoriteHelper(Context _context,ArrayList<String> _mShowList) {
-		mContext = _context;
-		mShowList = _mShowList;
+	FavoriteHelper(Context context,ArrayList<String> mShowList) {
+		this.mContext = context;
+		this.mShowList = mShowList;
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		show_text_voice_camera_add_favorite = (ToggleButton) activity.findViewById(R.id.show_text_voice_camera_add_favorite);
-		show_text_voice_camera_add_favorite_textView = (TextView) activity.findViewById(R.id.show_text_voice_camera_add_favorite_textView);
+		showAddFavorite = (ToggleButton) activity.findViewById(R.id.show_add_favorite);
+		showAddFavoriteTextView = (TextView) activity.findViewById(R.id.show_add_favorite_textView);
 		
-		show_text_voice_camera_add_favorite.setVisibility(View.VISIBLE);
-		show_text_voice_camera_add_favorite_textView.setVisibility(View.VISIBLE);
+		showAddFavorite.setVisibility(View.VISIBLE);
+		showAddFavoriteTextView.setVisibility(View.VISIBLE);
 		mDbAdapterFavorite = new DBAdapterFavorite(mContext);
 		mDatabaseAdapter = new DatabaseAdapter(mContext);
 		if(mShowList.get(4) != null){
 			if(!mShowList.get(4).equals("")){
-				show_text_voice_camera_add_favorite.setChecked(true);
-				show_text_voice_camera_add_favorite_textView.setText("Remove from Favorite");
+				showAddFavorite.setChecked(true);
+				showAddFavoriteTextView.setText("Remove from Favorite");
 			} else {
-				show_text_voice_camera_add_favorite_textView.setText("Add to Favorite");
-				show_text_voice_camera_add_favorite.setChecked(false);
+				showAddFavoriteTextView.setText("Add to Favorite");
+				showAddFavorite.setChecked(false);
 			}
 		} else {
-			show_text_voice_camera_add_favorite_textView.setText("Add to Favorite");
-			show_text_voice_camera_add_favorite.setChecked(false);
+			showAddFavoriteTextView.setText("Add to Favorite");
+			showAddFavorite.setChecked(false);
 		}
-		show_text_voice_camera_add_favorite.setOnClickListener(this);
-		show_text_voice_camera_add_favorite_textView.setOnClickListener(this);
+		showAddFavorite.setOnClickListener(this);
+		showAddFavoriteTextView.setOnClickListener(this);
 	}
 
 	public void setShowList(ArrayList<String> mShowList2) {
@@ -57,47 +57,47 @@ class FavoriteHelper implements OnClickListener{
 		mShowList = mShowList2;
 		if(mShowList.get(4) != null) {
 			if(mShowList.get(4).equals("")){
-				show_text_voice_camera_add_favorite_textView.setText("Add to Favorite");
-				show_text_voice_camera_add_favorite.setChecked(false);
+				showAddFavoriteTextView.setText("Add to Favorite");
+				showAddFavorite.setChecked(false);
 			} else {
-				show_text_voice_camera_add_favorite_textView.setText("Remove from Favorite");
-				show_text_voice_camera_add_favorite.setChecked(true);
+				showAddFavoriteTextView.setText("Remove from Favorite");
+				showAddFavorite.setChecked(true);
 			}
 		} else {
-			show_text_voice_camera_add_favorite_textView.setText("Add to Favorite");
-			show_text_voice_camera_add_favorite.setChecked(false);
+			showAddFavoriteTextView.setText("Add to Favorite");
+			showAddFavorite.setChecked(false);
 		}
 	}
 
 	@Override
 	public void onClick(View v) {
 		Boolean toCheck;
-		if(v.getId() == R.id.show_text_voice_camera_add_favorite){
-			toCheck = show_text_voice_camera_add_favorite.isChecked();
+		if(v.getId() == R.id.show_add_favorite){
+			toCheck = showAddFavorite.isChecked();
 		} else {
-			toCheck = !show_text_voice_camera_add_favorite.isChecked();
+			toCheck = !showAddFavorite.isChecked();
 		}
 		
 		if(toCheck){
 			
-			HashMap<String, String> _list = new HashMap<String, String>();
+			HashMap<String, String> list = new HashMap<String, String>();
 			Long favID = null;
-			_list.put(DBAdapterFavorite.KEY_AMOUNT, mShowList.get(2));
-			_list.put(DBAdapterFavorite.KEY_TYPE, mShowList.get(5));
+			list.put(DBAdapterFavorite.KEY_AMOUNT, mShowList.get(2));
+			list.put(DBAdapterFavorite.KEY_TYPE, mShowList.get(5));
 			if(mShowList.get(5).equals(mContext.getString(R.string.text))){
-				_list.put(DBAdapterFavorite.KEY_TAG, mShowList.get(1));
+				list.put(DBAdapterFavorite.KEY_TAG, mShowList.get(1));
 				mDbAdapterFavorite.open();
-				favID = mDbAdapterFavorite.insert_to_database(_list);
+				favID = mDbAdapterFavorite.insertToDatabase(list);
 				mDbAdapterFavorite.close();
 				ShowTextActivity.favID = Long.toString(favID);
 			} else if(mShowList.get(5).equals(mContext.getString(R.string.camera))){
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if(!mShowList.get(1).equals("") && !mShowList.get(1).equals(mContext.getString(R.string.unfinished_cameraentry)) && mShowList.get(1) != null){
-						_list.put(DBAdapterFavorite.KEY_TAG, mShowList.get(1));
+						list.put(DBAdapterFavorite.KEY_TAG, mShowList.get(1));
 					}
 					try{
 						mDbAdapterFavorite.open();
-						favID = mDbAdapterFavorite.insert_to_database(_list);
+						favID = mDbAdapterFavorite.insertToDatabase(list);
 						mDbAdapterFavorite.close();
 						new FileCopyFavorite(Long.parseLong(mShowList.get(0)), favID);
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+favID+".jpg");
@@ -118,11 +118,11 @@ class FavoriteHelper implements OnClickListener{
 			} else if(mShowList.get(5).equals(mContext.getString(R.string.voice))){
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if(!mShowList.get(1).equals("") && !mShowList.get(1).equals(mContext.getString(R.string.unfinished_voiceentry)) && mShowList.get(1) != null){
-						_list.put(DBAdapterFavorite.KEY_TAG, mShowList.get(1));
+						list.put(DBAdapterFavorite.KEY_TAG, mShowList.get(1));
 					}
 					try{
 						mDbAdapterFavorite.open();
-						favID = mDbAdapterFavorite.insert_to_database(_list);
+						favID = mDbAdapterFavorite.insertToDatabase(list);
 						mDbAdapterFavorite.close();
 						new FileCopyFavorite(Long.parseLong(mShowList.get(0)),favID);
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+favID+".amr");
@@ -141,14 +141,14 @@ class FavoriteHelper implements OnClickListener{
 				}
 			}
 			
-			_list = new HashMap<String, String>();
-			_list.put(DatabaseAdapter.KEY_ID, mShowList.get(0));
-			_list.put(DatabaseAdapter.KEY_FAVORITE, Long.toString(favID));
+			list = new HashMap<String, String>();
+			list.put(DatabaseAdapter.KEY_ID, mShowList.get(0));
+			list.put(DatabaseAdapter.KEY_FAVORITE, Long.toString(favID));
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.editDatabase(_list);
+			mDatabaseAdapter.editDatabase(list);
 			mDatabaseAdapter.close();
-			show_text_voice_camera_add_favorite.setChecked(true);
-			show_text_voice_camera_add_favorite_textView.setText("Remove from Favorite");
+			showAddFavorite.setChecked(true);
+			showAddFavoriteTextView.setText("Remove from Favorite");
 		} else if(mShowList.get(5).equals(mContext.getString(R.string.text))){
 			
 				ShowTextActivity.favID = null;
@@ -164,8 +164,8 @@ class FavoriteHelper implements OnClickListener{
 				mDatabaseAdapter.open();
 				mDatabaseAdapter.editDatabaseFavorite(favID);
 				mDatabaseAdapter.close();
-				show_text_voice_camera_add_favorite.setChecked(false);
-				show_text_voice_camera_add_favorite_textView.setText("Add to Favorite");
+				showAddFavorite.setChecked(false);
+				showAddFavoriteTextView.setText("Add to Favorite");
 				
 			} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				ShowVoiceActivity.favID = null;
@@ -182,8 +182,8 @@ class FavoriteHelper implements OnClickListener{
 				mDatabaseAdapter.open();
 				mDatabaseAdapter.editDatabaseFavorite(favID);
 				mDatabaseAdapter.close();
-				show_text_voice_camera_add_favorite.setChecked(false);
-				show_text_voice_camera_add_favorite_textView.setText("Add to Favorite");
+				showAddFavorite.setChecked(false);
+				showAddFavoriteTextView.setText("Add to Favorite");
 			} else {
 				Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_SHORT).show();
 			}

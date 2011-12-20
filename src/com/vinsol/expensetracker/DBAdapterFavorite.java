@@ -51,19 +51,19 @@ public class DBAdapterFavorite {
 			db.close();
 		}
 
-		protected void drop_table() {
+		protected void dropTable() {
 			db.execSQL("drop table " + TABLE_NAME);
 		}
 
-		protected long insert_to_database(HashMap<String, String> _list) {
+		protected long insertToDatabase(HashMap<String, String> list) {
 			ContentValues contentValues = new ContentValues();
-			contentValues.put(KEY_TAG, _list.get(KEY_TAG));
-			contentValues.put(KEY_AMOUNT, _list.get(KEY_AMOUNT));
-			contentValues.put(KEY_TYPE, _list.get(KEY_TYPE));
+			contentValues.put(KEY_TAG, list.get(KEY_TAG));
+			contentValues.put(KEY_AMOUNT, list.get(KEY_AMOUNT));
+			contentValues.put(KEY_TYPE, list.get(KEY_TYPE));
 			Log.d("TRYING");
-			long _id = db.insert(TABLE_NAME, null, contentValues);
+			long id = db.insert(TABLE_NAME, null, contentValues);
 			Log.d("ADDED");
-			return _id;
+			return id;
 		}
 
 		protected boolean deleteDatabaseEntryID(String id) {
@@ -78,15 +78,15 @@ public class DBAdapterFavorite {
 			return true;
 		}
 
-		protected boolean editDatabase(HashMap<String, String> _list) {
+		protected boolean editDatabase(HashMap<String, String> list) {
 			ContentValues contentValues = new ContentValues();
-			if (_list.get(KEY_TAG) != null)
-				contentValues.put(KEY_TAG, _list.get(KEY_TAG));
-			if (_list.get(KEY_AMOUNT) != null)
-				contentValues.put(KEY_AMOUNT, _list.get(KEY_AMOUNT));
-			if (_list.get(KEY_TYPE) != null)
-				contentValues.put(KEY_TYPE, _list.get(KEY_TYPE));
-			String where = KEY_ID + "=" + _list.get(KEY_ID);
+			if (list.get(KEY_TAG) != null)
+				contentValues.put(KEY_TAG, list.get(KEY_TAG));
+			if (list.get(KEY_AMOUNT) != null)
+				contentValues.put(KEY_AMOUNT, list.get(KEY_AMOUNT));
+			if (list.get(KEY_TYPE) != null)
+				contentValues.put(KEY_TYPE, list.get(KEY_TYPE));
+			String where = KEY_ID + "=" + list.get(KEY_ID);
 			try {
 				Log.d("EDITING");
 				db.update(TABLE_NAME, contentValues, where, null);

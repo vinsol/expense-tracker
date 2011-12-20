@@ -12,15 +12,16 @@ import com.vinsol.expensetracker.utils.StringProcessing;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class EditHelper {
+public abstract class EditAbstract extends Activity implements OnClickListener{
 	private ArrayList<String> mEditList;
-	private Long _id = null;
+	private Long userId = null;
 	private boolean setLocation = false;
-	private EditText text_voice_camera_amount;
-	private EditText text_voice_camera_tag;
+	private EditText editAmount;
+	private EditText editTag;
 	private Context mContext;
 	private Activity mActivity;
 	private Bundle intentExtras;
@@ -30,18 +31,18 @@ public class EditHelper {
 	private int typeOfEntry;
 	private boolean isChanged = false;
 	
-	public EditHelper(Context _mContext,Bundle _intentExtras,int _typeOfEntry,int _typeOfEntryFinished,int _typeOfEntryUnfinished) {
-		mContext = _mContext;
-		intentExtras = _intentExtras;
-		typeOfEntry = _typeOfEntry;
-		typeOfEntryFinished = _typeOfEntryFinished;
-		typeOfEntryUnfinished = _typeOfEntryUnfinished;
+	public void editHelper(Context mContext,Bundle intentExtras,int typeOfEntry,int typeOfEntryFinished,int typeOfEntryUnfinished) {
+		this.mContext = mContext;
+		this.intentExtras = intentExtras;
+		this.typeOfEntry = typeOfEntry;
+		this.typeOfEntryFinished = typeOfEntryFinished;
+		this.typeOfEntryUnfinished = typeOfEntryUnfinished;
 		mActivity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		text_voice_camera_amount = (EditText) mActivity.findViewById(R.id.text_voice_camera_amount);
-		text_voice_camera_tag = (EditText) mActivity.findViewById(R.id.text_voice_camera_tag);
+		editAmount = (EditText) mActivity.findViewById(R.id.edit_amount);
+		editTag = (EditText) mActivity.findViewById(R.id.edit_tag);
 		
 		if (intentExtras.containsKey("_id"))
-			_id = intentExtras.getLong("_id");
+			userId = intentExtras.getLong("_id");
 
 		if(intentExtras.containsKey("setLocation")){
 			setLocation = intentExtras.getBoolean("setLocation");
@@ -50,19 +51,19 @@ public class EditHelper {
 		if (intentExtras.containsKey("mDisplayList")) {
 			mEditList = new ArrayList<String>();
 			mEditList = intentExtras.getStringArrayList("mDisplayList");
-			_id = Long.parseLong(mEditList.get(0));
+			userId = Long.parseLong(mEditList.get(0));
 			String amount = mEditList.get(2);
 			String tag = mEditList.get(1);
 			if (!(amount.equals("") || amount == null)) {
 				if (!amount.contains("?"))
-					text_voice_camera_amount.setText(amount);
+					editAmount.setText(amount);
 			}
 			if(tag.equals(mContext.getString(R.string.unknown_entry)) || mEditList.get(5).equals(mContext.getString(R.string.unknown))){
 				setUnknown = true;
 			}
 			
 			if (!(tag.equals("") || tag == null || tag.equals(mContext.getString(typeOfEntryUnfinished)) || tag.equals(mContext.getString(typeOfEntryFinished))  || tag.equals(mContext.getString(R.string.unknown_entry)))) {
-				text_voice_camera_tag.setText(tag);
+				editTag.setText(tag);
 			}
 		}
 		
@@ -77,7 +78,7 @@ public class EditHelper {
 	}
 	
 	public Long getId() {
-		return _id;
+		return userId;
 	}
 	
 	public Bundle getIntentExtras() {
@@ -93,7 +94,7 @@ public class EditHelper {
 	}
 	
 	public void setId(Long id) {
-		_id = id;
+		userId = id;
 	}
 	
 	public boolean isChanged() {
@@ -104,35 +105,35 @@ public class EditHelper {
 		this.isChanged = isChanged;
 	}
 	
-	public HashMap<String, String> getSaveEntryData(TextView text_voice_camera_date_bar_dateview,String dateViewString){
+	public HashMap<String, String> getSaveEntryData(TextView editDateBarDateview,String dateViewString){
 		// ///// ******* Creating HashMap to update info ******* ////////
-				HashMap<String, String> _list = new HashMap<String, String>();
-				_list.put(DatabaseAdapter.KEY_ID, Long.toString(_id));
-		if (!text_voice_camera_amount.getText().toString().equals(".")&& !text_voice_camera_amount.getText().toString().equals("")) {
-			Double mAmount = Double.parseDouble(text_voice_camera_amount.getText().toString());
+		HashMap<String, String> list = new HashMap<String, String>();
+		list.put(DatabaseAdapter.KEY_ID, Long.toString(userId));
+		if (!editAmount.getText().toString().equals(".")&& !editAmount.getText().toString().equals("")) {
+			Double mAmount = Double.parseDouble(editAmount.getText().toString());
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-			_list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
+			list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
 		} else {
-			_list.put(DatabaseAdapter.KEY_AMOUNT, "");
+			list.put(DatabaseAdapter.KEY_AMOUNT, "");
 		}
-		if (text_voice_camera_tag.getText().toString() != "") {
-			_list.put(DatabaseAdapter.KEY_TAG, text_voice_camera_tag.getText().toString());
+		if (editTag.getText().toString() != "") {
+			list.put(DatabaseAdapter.KEY_TAG, editTag.getText().toString());
 		}
-		if (!text_voice_camera_date_bar_dateview.getText().toString().equals(dateViewString)) {
+		if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 			try {
 				if (!intentExtras.containsKey("mDisplayList")) {
-					DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
-					_list.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
+					DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
+					list.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
 				} else {
 					if(!intentExtras.containsKey("timeInMillis")){
-						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString());
-						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+						DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
+						list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					} else {
 						Calendar mCalendar = Calendar.getInstance();
 						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
 						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-						DateHelper mDateHelper = new DateHelper(text_voice_camera_date_bar_dateview.getText().toString(),mCalendar);
-						_list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+						DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString(),mCalendar);
+						list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					}
 				}
 			} catch (Exception e) {
@@ -141,16 +142,16 @@ public class EditHelper {
 		}
 		
 		if(setLocation == true && LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-				_list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+				list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
-		return _list;
+		return list;
 	}
 	
-	public ArrayList<String> getListOnResult(HashMap<String, String> _list){
+	public ArrayList<String> getListOnResult(HashMap<String, String> list){
 		ArrayList<String> listOnResult = new ArrayList<String>();
 		listOnResult.add(mEditList.get(0));
-		listOnResult.add(_list.get(DatabaseAdapter.KEY_TAG));
-		listOnResult.add(_list.get(DatabaseAdapter.KEY_AMOUNT));
+		listOnResult.add(list.get(DatabaseAdapter.KEY_TAG));
+		listOnResult.add(list.get(DatabaseAdapter.KEY_AMOUNT));
 		if(listOnResult.get(2) == null || listOnResult.get(2) == "") {
 			listOnResult.set(2, "?");
 		}
@@ -163,10 +164,10 @@ public class EditHelper {
 			mEditList.set(1, mContext.getString(typeOfEntryFinished));
 		}
 		
-		if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
-			listOnResult.add(new DisplayDate().getLocationDate(_list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.get(7)));
-		} else if (_list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) == null){
-			listOnResult.add(new DisplayDate().getLocationDateDate(_list.get(DatabaseAdapter.KEY_DATE_TIME)));
+		if(list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
+			listOnResult.add(new DisplayDate().getLocationDate(list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.get(7)));
+		} else if (list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) == null){
+			listOnResult.add(new DisplayDate().getLocationDateDate(list.get(DatabaseAdapter.KEY_DATE_TIME)));
 		} else {
 			listOnResult.add(mEditList.get(3));
 		}		
@@ -219,8 +220,8 @@ public class EditHelper {
 			}
 			
 		listOnResult.add(mEditList.get(5));
-		if(_list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
-			listOnResult.add(_list.get(DatabaseAdapter.KEY_DATE_TIME));
+		if(list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
+			listOnResult.add(list.get(DatabaseAdapter.KEY_DATE_TIME));
 		} else {
 			listOnResult.add(mEditList.get(6));
 		}
@@ -229,5 +230,4 @@ public class EditHelper {
 		mEditList.addAll(listOnResult);
 		return listOnResult;
 	}
-	
 }

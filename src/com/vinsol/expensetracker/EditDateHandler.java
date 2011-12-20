@@ -8,23 +8,23 @@ import android.content.Context;
 import android.widget.TextView;
 
 public class EditDateHandler {
-	private TextView text_voice_camera_header_title;
+	private TextView headerTitle;
 	private Activity activity;
 
 	public EditDateHandler(Context mContext, String timeInMillis) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		text_voice_camera_header_title = (TextView) activity.findViewById(R.id.text_voice_camera_header_title);
+		headerTitle = (TextView) activity.findViewById(R.id.edit_header_title);
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-		text_voice_camera_header_title.setText(mDisplayDate.getDisplayDate()+" at "+getDate(mCalendar));
+		headerTitle.setText(mDisplayDate.getDisplayDate()+" at "+getDate(mCalendar));
 	}
 
 	public EditDateHandler(Context mContext) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		text_voice_camera_header_title = (TextView) activity.findViewById(R.id.text_voice_camera_header_title);
-		text_voice_camera_header_title.setText("Camera Entry");
+		headerTitle = (TextView) activity.findViewById(R.id.edit_header_title);
+		headerTitle.setText("Camera Entry");
 	}
 	
 	private String getDate(Calendar tempCalendar) {

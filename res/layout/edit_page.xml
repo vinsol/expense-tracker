@@ -7,14 +7,14 @@
     >
     <!-- Header -->
     <RelativeLayout
-        android:id="@+id/text_voice_camera_header"
+        android:id="@+id/edit_header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/topbar_bg" 
         android:gravity="center"
         >
         <TextView
-            android:id="@+id/text_voice_camera_header_title"
+            android:id="@+id/edit_header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text Entry"
@@ -27,16 +27,16 @@
     
     <!-- Date Bar -->
     <LinearLayout  
-        android:id="@+id/text_voice_camera_date_bar"
+        android:id="@+id/edit_date_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_voice_camera_header"
+        android:layout_below="@id/edit_header"
         android:background="@drawable/date_bar_bg_wo_shadow"
         android:gravity="center"
         android:orientation="horizontal"
         >
         <ImageButton
-            android:id="@+id/text_voice_camera_date_bar_previous_arrow"
+            android:id="@+id/edit_date_bar_previous_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/previous_arrow_states"
@@ -44,7 +44,7 @@
        	</ImageButton>
         
         <TextView
-            android:id="@+id/text_voice_camera_date_bar_dateview"
+            android:id="@+id/edit_date_bar_dateview"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="Nov 6, 2011"
@@ -57,7 +57,7 @@
         </TextView>
         
         <ImageButton
-            android:id="@+id/text_voice_camera_date_bar_next_arrow"
+            android:id="@+id/edit_date_bar_next_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/next_arrow_states"
@@ -67,11 +67,11 @@
         
     <!-- ScrollView for body -->
     <ScrollView
-        android:id="@+id/text_voice_camera_body"
+        android:id="@+id/edit_body"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/text_voice_camera_footer"
-        android:layout_below="@id/text_voice_camera_date_bar"
+        android:layout_above="@+id/edit_footer"
+        android:layout_below="@id/edit_date_bar"
         >
         <!-- Layout because Scroll View can contain only single child -->
         <LinearLayout 
@@ -81,7 +81,7 @@
             >
             <!-- Camera Entry View -->
             <LinearLayout
-                android:id="@+id/text_voice_camera_camera_details"
+                android:id="@+id/edit_camera_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -90,7 +90,7 @@
                 android:visibility="gone"
                 >
                 <ImageView 
-                    android:id="@+id/text_voice_camera_image_display"
+                    android:id="@+id/edit_image_display"
                     android:layout_width="111dp"
                     android:layout_height="84dp"
                     android:background="@drawable/photo_frame"
@@ -104,7 +104,7 @@
                	</ImageView>
                 
                 <RelativeLayout 
-                    android:id="@+id/text_voice_camera_load_progress"
+                    android:id="@+id/edit_load_progress"
                     android:layout_width="111dp"
                     android:layout_height="84dp"
                     android:layout_marginRight="10dp"
@@ -119,7 +119,7 @@
                 </RelativeLayout>
                 
                 <Button
-                    android:id="@+id/text_voice_camera_retake_button"
+                    android:id="@+id/edit_retake_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/retake_states"
@@ -130,7 +130,7 @@
 			
             <!-- Voice Entry View -->   
             <RelativeLayout
-                android:id="@+id/text_voice_camera_voice_details"
+                android:id="@+id/edit_voice_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/audio_play_dialog_bg"
@@ -138,7 +138,7 @@
                 android:visibility="gone"
                 >
               	<Chronometer 
-              		android:id="@+id/text_voice_camera_time_details_chronometer"
+              		android:id="@+id/edit_time_details_chronometer"
                   	android:layout_width="fill_parent"
                   	android:layout_height="wrap_content"
                   	android:textSize="36sp"
@@ -150,17 +150,17 @@
               	</Chronometer>
                 
                 <LinearLayout
-                    android:id="@+id/text_voice_camera_voice_control_buttons"
+                    android:id="@+id/edit_voice_control_buttons"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:layout_marginTop="10dip"
-                    android:layout_below="@id/text_voice_camera_time_details_chronometer"
+                    android:layout_below="@id/edit_time_details_chronometer"
                     >
                     <!-- stop button -->
                     <Button
-                        android:id="@+id/text_voice_camera_stop_button"
+                        android:id="@+id/edit_stop_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/voice_stop_states"
@@ -171,7 +171,7 @@
                     
                     <!-- play button -->    
                     <Button
-                        android:id="@+id/text_voice_camera_play_button"
+                        android:id="@+id/edit_play_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/voice_play_states"
@@ -183,7 +183,7 @@
                     
                     <!-- rerecord button -->    
                     <Button
-                        android:id="@+id/text_voice_camera_rerecord_button"
+                        android:id="@+id/edit_rerecord_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/voice_rerecord_states"
@@ -198,7 +198,7 @@
 	        <!-- Common Text Entry fields -->
 	        <!-- amount -->
 	        <EditText 
-	            android:id="@+id/text_voice_camera_amount"
+	            android:id="@+id/edit_amount"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
 	            android:hint="amount"
@@ -210,10 +210,10 @@
 	       	</EditText>
 	        <!-- description -->
 	        <EditText 
-	            android:id="@+id/text_voice_camera_tag"
+	            android:id="@+id/edit_tag"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
-	            android:layout_below="@id/text_voice_camera_amount"
+	            android:layout_below="@id/edit_amount"
 	            android:minLines="4"
 	            android:gravity="top"
 	            android:layout_marginTop="7dp"
@@ -229,14 +229,14 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/text_voice_camera_footer"
-        android:layout_below="@+id/text_voice_camera_date_bar"
+        android:layout_above="@+id/edit_footer"
+        android:layout_below="@+id/edit_date_bar"
         android:background="@drawable/home_bg"
-        android:id="@+id/text_voice_camera_body_favorite"
+        android:id="@+id/edit_body_favorite"
         android:visibility="gone"
         >
         <TextView 
-            android:id="@+id/text_voice_camera_body_favorite_tag"
+            android:id="@+id/edit_body_favorite_tag"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:background="@drawable/notification_bg"
@@ -248,9 +248,9 @@
             >
         </TextView>
         <ListView 
-            android:id="@+id/text_voice_camera_body_favorite_listview"
+            android:id="@+id/edit_body_favorite_listview"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_voice_camera_body_favorite_tag"
+            android:layout_below="@id/edit_body_favorite_tag"
             android:layout_width="fill_parent"
             android:cacheColorHint="#00000000"
             android:divider="@drawable/list_divider"
@@ -260,7 +260,7 @@
         
     <!-- Footer -->
     <LinearLayout
-        android:id="@id/text_voice_camera_footer"
+        android:id="@id/edit_footer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -271,7 +271,7 @@
         >
 
         <Button
-            android:id="@+id/text_voice_camera_save_entry"
+            android:id="@+id/edit_save_entry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/save_entry_states"
@@ -279,7 +279,7 @@
             />
         
         <Button
-            android:id="@+id/text_voice_camera_delete"
+            android:id="@+id/edit_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/delete_states"
