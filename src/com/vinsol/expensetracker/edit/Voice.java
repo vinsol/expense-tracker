@@ -1,7 +1,6 @@
 package com.vinsol.expensetracker.edit;
 
 import java.io.File;
-import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.AudioPlay;
 import com.vinsol.expensetracker.utils.DisplayTime;
@@ -132,6 +130,7 @@ public class Voice extends EditAbstract {
 
 	@Override
 	public void onClick(View v) {
+		super.onClick(v);
 		// ///// ******** Adding On Click Actions to click listeners *********
 		// //////////
 
@@ -225,59 +224,22 @@ public class Voice extends EditAbstract {
 			editTimeDetailsChronometer.setBase(SystemClock.elapsedRealtime());
 			editTimeDetailsChronometer.start();
 		}
-
-		// //////******** Adding Action to save entry ********* ///////////
-
-		if (v.getId() == R.id.edit_save_entry) {
-			saveEntry();
-		}
-
-		// /////// ********* Adding action if delete button ********** /////////
-
-		if (v.getId() == R.id.edit_delete) {
-			// //// ***** Check whether audio is recording or not *******
-			// ///////
-			// //// ****** If audio recording started then stop recording audio
-			// ***** ///////
-			try {
-				if (mRecordingHelper.isRecording()) {
-					mRecordingHelper.stopRecording();
-				}
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-			}
-
-			// /// ******* If Audio PlayBack is there stop playing audio
-			// *******//////
-			try {
-				if (mAudioPlay.isAudioPlaying()) {
-					mAudioPlay.stopPlayBack();
-				}
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-			}
-			editTimeDetailsChronometer.stop();
-
-			new FileDelete(userId);
-
-			// //// ******* Delete entry from database ******** /////////
-			mDatabaseAdapter.open();
-			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(userId));
-			mDatabaseAdapter.close();
-			
-			if(intentExtras.containsKey("isFromShowPage")){
-				Intent mIntent = new Intent(this, ShowTextActivity.class);
-				ArrayList<String> listOnResult = new ArrayList<String>();
-				listOnResult.add("");
-				Bundle tempBundle = new Bundle();
-				tempBundle.putStringArrayList("mDisplayList", listOnResult);
-				mEditList = new ArrayList<String>();
-				mEditList.addAll(listOnResult);
-				mIntent.putExtra("textShowBundle", tempBundle);
-				setResult(Activity.RESULT_CANCELED, mIntent);
-			}
-			finish();
-		}
+	}
+	
+	@Override
+	protected void startIntentAfterDelete(Bundle tempBundle) {
+		super.startIntentAfterDelete(tempBundle);
+		Intent mIntent = new Intent(this, ShowVoiceActivity.class);
+		mIntent.putExtra("voiceShowBundle", tempBundle);
+		setResult(Activity.RESULT_CANCELED, mIntent);
+	}
+	
+	@Override
+	protected void deleteAction() {
+		super.deleteAction();
+		actionAfterSaveOnBackButton();
+		editTimeDetailsChronometer.stop();
+		new FileDelete(userId);
 	}
 	
 	@Override
@@ -291,6 +253,12 @@ public class Voice extends EditAbstract {
 	@Override
 	protected void actionAfterSaveOnBackButton() {
 		super.actionAfterSaveOnBackButton();
+		try {
+			if (mRecordingHelper.isRecording()) {
+				mRecordingHelper.stopRecording();
+			}
+		} catch (NullPointerException e) {
+		}
 		try {
 			if (mAudioPlay.isAudioPlaying())
 				mAudioPlay.stopPlayBack();

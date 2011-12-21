@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -272,4 +273,39 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 	protected void actionAfterSaveOnBackButton(){}
 		
 	protected void saveEntryStartIntent(Bundle tempBundle){}
+	
+	@Override
+	public void onClick(View v) {
+
+		// //////******** Adding Action to save entry ********* ///////////
+
+		if (v.getId() == R.id.edit_save_entry) {
+			saveEntry();
+		}
+		
+		// /////// ********* Adding action if delete button ********** /////////
+
+		if (v.getId() == R.id.edit_delete) {
+			deleteAction();
+
+			// //// ******* Delete entry from database ******** /////////
+			mDatabaseAdapter.open();
+			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(userId));
+			mDatabaseAdapter.close();
+			if(intentExtras.containsKey("isFromShowPage")){
+				ArrayList<String> listOnResult = new ArrayList<String>();
+				listOnResult.add("");
+				Bundle tempBundle = new Bundle();
+				tempBundle.putStringArrayList("mDisplayList", listOnResult);
+				mEditList = new ArrayList<String>();
+				mEditList.addAll(listOnResult);
+				startIntentAfterDelete(tempBundle);
+			}
+			finish();
+		}
+	}
+	
+	protected void startIntentAfterDelete(Bundle tempBundle) {}
+
+	protected void deleteAction(){}
 }

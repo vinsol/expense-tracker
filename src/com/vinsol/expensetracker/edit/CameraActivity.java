@@ -1,7 +1,6 @@
 package com.vinsol.expensetracker.edit;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -23,7 +22,6 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
-import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.FileDelete;
@@ -221,33 +219,8 @@ public class CameraActivity extends EditAbstract {
 
 	@Override
 	public void onClick(View v) {
-		// ////// ******** Adding Action to save entry ********* ///////////
-		if (v.getId() == R.id.edit_save_entry) {
-			saveEntry();
-		}
-
-		// /////// ********* Adding action if delete button ********** /////////
-		if (v.getId() == R.id.edit_delete) {
-			new FileDelete(userId);
-
-			// //// ******* Delete entry from database ******** /////////
-			mDatabaseAdapter.open();
-			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(userId));
-			mDatabaseAdapter.close();
-			if(intentExtras.containsKey("isFromShowPage")){
-				Intent mIntent = new Intent(this, ShowTextActivity.class);
-				ArrayList<String> listOnResult = new ArrayList<String>();
-				listOnResult.add("");
-				Bundle tempBundle = new Bundle();
-				tempBundle.putStringArrayList("mDisplayList", listOnResult);
-				mEditList = new ArrayList<String>();
-				mEditList.addAll(listOnResult);
-				mIntent.putExtra("textShowBundle", tempBundle);
-				setResult(Activity.RESULT_CANCELED, mIntent);
-			}
-			finish();
-		}
-
+		super.onClick(v);
+		
 		// //////// ********** Adding action if image is pressed ********		 ///////////
 		if (v.getId() == R.id.edit_image_display) {
 			File mFile = new File("/sdcard/ExpenseTracker/" + userId + ".jpg");
@@ -266,6 +239,20 @@ public class CameraActivity extends EditAbstract {
 		}
 	}
 
+	@Override
+	protected void deleteAction() {
+		super.deleteAction();
+		new FileDelete(userId);
+	}
+	
+	@Override
+	protected void startIntentAfterDelete(Bundle tempBundle) {
+		super.startIntentAfterDelete(tempBundle);
+		Intent mIntent = new Intent(this, ShowCameraActivity.class);
+		mIntent.putExtra("cameraShowBundle", tempBundle);
+		setResult(Activity.RESULT_CANCELED, mIntent);
+	}
+	
 	@Override
 	protected void saveEntryStartIntent(Bundle tempBundle) {
 		super.saveEntryStartIntent(tempBundle);
