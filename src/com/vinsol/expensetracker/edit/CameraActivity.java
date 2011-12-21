@@ -12,9 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,7 +22,6 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.utils.CameraFileSave;
@@ -33,31 +30,25 @@ import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.ImagePreview;
 import com.vinsol.expensetracker.utils.LocationHelper;
 
-public class CameraActivity extends EditAbstract implements OnClickListener {
+public class CameraActivity extends EditAbstract {
 
 	private static final int PICTURE_RESULT = 35;
 	private LinearLayout editCameraDetails;
 	private ImageView editImageDisplay;
 	private RelativeLayout editLoadProgress;
-	private Button editDelete;
-	private Button editSaveEntry;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-
+		
 		// //////********* Get id from intent extras ******** ////////////
 		intentExtras = getIntent().getBundleExtra("cameraBundle");
 		
 		// ////// ******** Initializing and assigning memory to UI Items
 		// ********** /////////
-
 		editCameraDetails = (LinearLayout) findViewById(R.id.edit_camera_details);
 		editImageDisplay = (ImageView) findViewById(R.id.edit_image_display);
 		editLoadProgress = (RelativeLayout) findViewById(R.id.edit_load_progress);
-		editSaveEntry = (Button) findViewById(R.id.edit_save_entry);
-		editDelete = (Button) findViewById(R.id.edit_delete);
 		typeOfEntry = R.string.voice;
 		typeOfEntryFinished = R.string.finished_voiceentry;
 		typeOfEntryUnfinished = R.string.unfinished_voiceentry;
@@ -222,8 +213,6 @@ public class CameraActivity extends EditAbstract implements OnClickListener {
 
 	private void setClickListeners() {
 		// ////// ******* Adding Click Listeners to UI Items ******** //////////
-		editSaveEntry.setOnClickListener(this);
-		editDelete.setOnClickListener(this);
 		ImageView editImageDisplay = (ImageView) findViewById(R.id.edit_image_display);
 		editImageDisplay.setOnClickListener(this);
 		Button editRetakeButton = (Button) findViewById(R.id.edit_retake_button);
@@ -277,44 +266,12 @@ public class CameraActivity extends EditAbstract implements OnClickListener {
 		}
 	}
 
-	private void saveEntry() {
-		
-		HashMap<String, String> toSave = getSaveEntryData(dateBarDateview,dateViewString);
-		
-		// //// ******* Update database if user added additional info *******		 ///////
-		mDatabaseAdapter.open();
-		mDatabaseAdapter.editDatabase(toSave);
-		mDatabaseAdapter.close();
-		if(!intentExtras.containsKey("isFromShowPage")){
-			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-			Bundle mToHighLight = new Bundle();
-			mToHighLight.putString("toHighLight", toSave.get(DatabaseAdapter.KEY_ID));
-			intentExpenseListing.putExtras(mToHighLight);
-			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intentExpenseListing);
-		} else {
-			Intent mIntent = new Intent(this, ShowCameraActivity.class);
-			Bundle tempBundle = new Bundle();
-			tempBundle.putStringArrayList("mDisplayList", getListOnResult(toSave));
-			mIntent.putExtra("cameraShowBundle", tempBundle);
-			setResult(Activity.RESULT_OK, mIntent);
-		}
-		finish();
+	@Override
+	protected void saveEntryStartIntent(Bundle tempBundle) {
+		super.saveEntryStartIntent(tempBundle);
+		Intent mIntent = new Intent(this, ShowCameraActivity.class);
+		mIntent.putExtra("cameraShowBundle", tempBundle);
+		setResult(Activity.RESULT_OK, mIntent);
 	}
 
-	// /// ****************** Handling back press of key ********** ///////////
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			onBackPressed();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	public void onBackPressed() {
-		// This will be called either automatically for you on 2.0
-		// or later, or by the code above on earlier versions of the platform.
-		saveEntry();
-		return;
-	}
 }

@@ -2,24 +2,18 @@ package com.vinsol.expensetracker.edit;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.AudioPlay;
@@ -28,7 +22,7 @@ import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
 import com.vinsol.expensetracker.utils.RecordingHelper;
 
-public class Voice extends EditAbstract implements OnClickListener {
+public class Voice extends EditAbstract {
 
 	private RelativeLayout editVoiceDetails;
 	private Chronometer editTimeDetailsChronometer;
@@ -111,12 +105,6 @@ public class Voice extends EditAbstract implements OnClickListener {
 		editStopButton.setOnClickListener(this);
 		editPlayButton.setOnClickListener(this);
 		editRerecordButton.setOnClickListener(this);
-
-		Button edit_save_entry = (Button) findViewById(R.id.edit_save_entry);
-		edit_save_entry.setOnClickListener(this);
-
-		Button edit_delete = (Button) findViewById(R.id.edit_delete);
-		edit_delete.setOnClickListener(this);
 	}
 
 	private void controlVoiceChronometer() {
@@ -291,53 +279,23 @@ public class Voice extends EditAbstract implements OnClickListener {
 			finish();
 		}
 	}
-
-	private void saveEntry() {
-		
-		// ///// ******* Creating HashMap to update info ******* ////////
-		HashMap<String, String> _list = getSaveEntryData(dateBarDateview,dateViewString);
-		// //// ******* Update database if user added additional info *******		 ///////
-		mDatabaseAdapter.open();
-		mDatabaseAdapter.editDatabase(_list);
-		mDatabaseAdapter.close();
-		
-		if(!intentExtras.containsKey("isFromShowPage")){
-			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-			Bundle mToHighLight = new Bundle();
-			mToHighLight.putString("toHighLight", _list.get(DatabaseAdapter.KEY_ID));
-			intentExpenseListing.putExtras(mToHighLight);
-			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intentExpenseListing);
-		} else {
-			
-			Intent mIntent = new Intent(this, ShowVoiceActivity.class);
-			Bundle tempBundle = new Bundle();
-			tempBundle.putStringArrayList("mDisplayList", getListOnResult(_list));
-			mIntent.putExtra("voiceShowBundle", tempBundle);
-			setResult(Activity.RESULT_OK, mIntent);
-		}
-		finish();
+	
+	@Override
+	protected void saveEntryStartIntent(Bundle tempBundle) {
+		super.saveEntryStartIntent(tempBundle);
+		Intent mIntent = new Intent(this, ShowVoiceActivity.class);
+		mIntent.putExtra("voiceShowBundle", tempBundle);
+		setResult(Activity.RESULT_OK, mIntent);
 	}
 
-	// /// ****************** Handling back press of key ********** ///////////
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			onBackPressed();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	public void onBackPressed() {
-		// This will be called either automatically for you on 2.0
-		// or later, or by the code above on earlier versions of the platform.
-		saveEntry();
+	@Override
+	protected void actionAfterSaveOnBackButton() {
+		super.actionAfterSaveOnBackButton();
 		try {
 			if (mAudioPlay.isAudioPlaying())
 				mAudioPlay.stopPlayBack();
 		} catch (Exception e) {
 		}
-		return;
 	}
 	
 }

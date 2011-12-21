@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
@@ -16,8 +17,11 @@ import com.vinsol.expensetracker.utils.LocationHelper;
 import com.vinsol.expensetracker.utils.StringProcessing;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -37,6 +41,8 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 	protected TextView editHeaderTitle;
 	protected TextView dateBarDateview;
 	protected String dateViewString;
+	protected Button editDelete;
+	protected Button editSaveEntry;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,11 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		editHeaderTitle = (TextView) findViewById(R.id.edit_header_title);
 		editTag = (EditText) findViewById(R.id.edit_tag);
 		dateBarDateview = (TextView) findViewById(R.id.edit_date_bar_dateview);
+		editSaveEntry = (Button) findViewById(R.id.edit_save_entry);
+		editDelete = (Button) findViewById(R.id.edit_delete);
 		mDatabaseAdapter = new DatabaseAdapter(this);
+		editSaveEntry.setOnClickListener(this);
+		editDelete.setOnClickListener(this);
 	}
 	
 	@Override
@@ -54,8 +64,8 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		super.onResume();
 		dateViewString = dateBarDateview.getText().toString();
 	}
-	
-	public void editHelper() {
+
+	protected void editHelper() {
 
 		if (intentExtras.containsKey("_id"))
 			userId = intentExtras.getLong("_id");
@@ -93,7 +103,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		}
 	}
 	
-	public HashMap<String, String> getSaveEntryData(TextView editDateBarDateview,String dateViewString){
+	protected HashMap<String, String> getSaveEntryData(TextView editDateBarDateview,String dateViewString){
 		// ///// ******* Creating HashMap to update info ******* ////////
 		HashMap<String, String> list = new HashMap<String, String>();
 		list.put(DatabaseAdapter.KEY_ID, Long.toString(userId));
@@ -135,7 +145,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		return list;
 	}
 	
-	public ArrayList<String> getListOnResult(HashMap<String, String> list){
+	protected ArrayList<String> getListOnResult(HashMap<String, String> list){
 		ArrayList<String> listOnResult = new ArrayList<String>();
 		listOnResult.add(mEditList.get(0));
 		listOnResult.add(list.get(DatabaseAdapter.KEY_TAG));
@@ -218,4 +228,48 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		mEditList.addAll(listOnResult);
 		return listOnResult;
 	}
+
+	protected void saveEntry() {
+		
+		HashMap<String, String> toSave = getSaveEntryData(dateBarDateview,dateViewString);
+		
+		// //// ******* Update database if user added additional info *******		 ///////
+		mDatabaseAdapter.open();
+		mDatabaseAdapter.editDatabase(toSave);
+		mDatabaseAdapter.close();
+		if(!intentExtras.containsKey("isFromShowPage")){
+			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			Bundle mToHighLight = new Bundle();
+			mToHighLight.putString("toHighLight", toSave.get(DatabaseAdapter.KEY_ID));
+			intentExpenseListing.putExtras(mToHighLight);
+			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intentExpenseListing);
+		} else {
+			Bundle tempBundle = new Bundle();
+			tempBundle.putStringArrayList("mDisplayList", getListOnResult(toSave));
+			saveEntryStartIntent(tempBundle);
+		}
+		finish();
+	}
+	
+	// /// ****************** Handling back press of key ********** ///////////
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+			onBackPressed();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	public void onBackPressed() {
+		// This will be called either automatically for you on 2.0
+		// or later, or by the code above on earlier versions of the platform.
+		saveEntry();
+		actionAfterSaveOnBackButton();
+		return;
+	}
+	
+	protected void actionAfterSaveOnBackButton(){}
+		
+	protected void saveEntryStartIntent(Bundle tempBundle){}
 }
