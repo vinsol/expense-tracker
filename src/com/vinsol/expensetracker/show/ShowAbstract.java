@@ -3,24 +3,35 @@ package com.vinsol.expensetracker.show;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.utils.FavoriteHelper;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 abstract class ShowAbstract extends Activity implements OnClickListener{
 
-	private TextView showAmount;
-	private TextView showTextview;
+	protected TextView showAmount;
+	protected TextView showTextview;
 	public static String favID;
-	private Long userId = null;
-	private ArrayList<String> mShowList;
-	private Bundle intentExtras;
-	private int typeOfEntryFinished;
-	private int typeOfEntryUnfinished;
-	private int typeOfEntry;
+	protected Long userId = null;
+	protected ArrayList<String> mShowList;
+	protected Bundle intentExtras;
+	protected int typeOfEntryFinished;
+	protected int typeOfEntryUnfinished;
+	protected int typeOfEntry;
+	protected TextView showHeaderTitle;
+	protected final int SHOW_RESULT = 35;
+	protected FavoriteHelper mFavoriteHelper;
+	protected DatabaseAdapter mDatabaseAdapter;	
+	protected Button showDelete;
+	protected Button showEdit;
 	
 	public void showHelper(Bundle intentExtras,int typeOfEntry,int typeOfEntryFinished,int typeOfEntryUnfinished) {
 		// ///// ****** Assigning memory ******* /////////
@@ -134,5 +145,35 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 			}
 			
 		}
+	}
+	
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.show_delete) {
+			if (userId != null) {
+				deleteAction();
+				mDatabaseAdapter.open();
+				mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(userId));
+				mDatabaseAdapter.close();
+				Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+				finish();
+			} else {
+				Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+			}
+		}
+		
+		if(v.getId() == R.id.show_edit){
+			intentExtras.putBoolean("isFromShowPage", true);
+			mShowList.set(4, favID);
+			intentExtras.remove("mDisplayList");
+			intentExtras.putStringArrayList("mDisplayList", mShowList);
+			editAction();
+		}
+	}
+	
+	protected void deleteAction(){
+	}
+	
+	protected void editAction() {
 	}
 }
