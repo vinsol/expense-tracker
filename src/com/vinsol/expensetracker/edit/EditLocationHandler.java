@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker.edit.utils;
+package com.vinsol.expensetracker.edit;
 
 
 import com.vinsol.expensetracker.R;

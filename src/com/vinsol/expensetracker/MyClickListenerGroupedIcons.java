@@ -6,10 +6,10 @@ import java.util.HashMap;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
-import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
-import com.vinsol.expensetracker.listing.utils.UnknownEntryDialog;
+import com.vinsol.expensetracker.listing.UnknownEntryDialog;
 import com.vinsol.expensetracker.utils.ConvertCursorToListString;
+import com.vinsol.expensetracker.utils.LocationHelper;
 
 import android.app.Activity;
 import android.content.Context;
@@ -36,7 +36,7 @@ public class MyClickListenerGroupedIcons implements OnClickListener{
 				this.bundle = new Bundle();
 			}
 		} else {
-			bundle = new Bundle();
+			this.bundle = new Bundle();
 		}
 		if(timeInMillis != null)
 			if(timeInMillis != 0)

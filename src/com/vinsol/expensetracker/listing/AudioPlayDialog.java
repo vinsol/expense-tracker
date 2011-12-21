@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker.listing.utils;
+package com.vinsol.expensetracker.listing;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.utils.AudioPlay;

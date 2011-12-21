@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
@@ -33,6 +32,7 @@ import com.vinsol.expensetracker.utils.CameraFileSave;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.ImagePreview;
+import com.vinsol.expensetracker.utils.LocationHelper;
 
 public class CameraActivity extends EditAbstract implements OnClickListener {
 

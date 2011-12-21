@@ -6,13 +6,13 @@ import java.util.HashMap;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.DateHandler;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.DisplayDate;
+import com.vinsol.expensetracker.utils.LocationHelper;
 import com.vinsol.expensetracker.utils.StringProcessing;
 
 import android.app.Activity;

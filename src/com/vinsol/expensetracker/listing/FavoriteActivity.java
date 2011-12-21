@@ -29,15 +29,13 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.favorite.DBAdapterFavorite;
-import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.listing.ExpenseListing;
-import com.vinsol.expensetracker.listing.utils.AudioPlayDialog;
-import com.vinsol.expensetracker.listing.utils.DescriptionDialog;
 import com.vinsol.expensetracker.utils.ConvertCursorToListString;
 import com.vinsol.expensetracker.utils.DateHandler;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.FileCopyFavorite;
 import com.vinsol.expensetracker.utils.ImagePreview;
+import com.vinsol.expensetracker.utils.LocationHelper;
 
 public class FavoriteActivity extends Activity implements OnItemClickListener{
 	
@@ -548,4 +546,5 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 			}
 		}
 	}
+
 }

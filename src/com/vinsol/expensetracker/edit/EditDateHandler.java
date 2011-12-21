@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker.show.utils;
+package com.vinsol.expensetracker.edit;
 
 import java.util.Calendar;
 
@@ -8,40 +8,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.TextView;
 
-public class ShowDateHandler {
-	private TextView showHeaderTitle;
+public class EditDateHandler {
+	private TextView headerTitle;
 	private Activity activity;
 
-	public ShowDateHandler(Context mContext, String timeInMillis) {
+	public EditDateHandler(Context mContext, String timeInMillis) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		showHeaderTitle = (TextView) activity.findViewById(R.id.show_header_title);
-		Calendar mCalendar = Calendar.getInstance();
-		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
-		String date = getDate(mCalendar);
-		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-		showHeaderTitle.setText(mDisplayDate.getDisplayDate()+" at "+date);
-	}
-
-	public ShowDateHandler(Context mContext,int typeOfEntry) {
-		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		showHeaderTitle = (TextView) activity.findViewById(R.id.show_header_title);
-		showHeaderTitle.setText(activity.getString(typeOfEntry));
-	}
-	
-	public ShowDateHandler(Context mContext,TextView resource ,String timeInMillis) {
-		showHeaderTitle = resource;
+		headerTitle = (TextView) activity.findViewById(R.id.edit_header_title);
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		String date = getDate(mCalendar);
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-		//TODO
-		showHeaderTitle.setText(mDisplayDate.getDisplayDate()+" at "+date);
+		headerTitle.setText(mDisplayDate.getDisplayDate()+" at "+getDate(mCalendar));
 	}
 
-	public ShowDateHandler(Context mContext,TextView resource,int typeOfEntry) {
-		showHeaderTitle = resource;
-		showHeaderTitle.setText(mContext.getString(typeOfEntry));
+	public EditDateHandler(Context mContext) {
+		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
+		headerTitle = (TextView) activity.findViewById(R.id.edit_header_title);
+		headerTitle.setText("Camera Entry");
 	}
 	
 	private String getDate(Calendar tempCalendar) {

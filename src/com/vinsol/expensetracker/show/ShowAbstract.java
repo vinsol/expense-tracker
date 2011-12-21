@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.show.utils.ShowDateHandler;
-import com.vinsol.expensetracker.show.utils.ShowLocationHandler;
 
 import android.app.Activity;
 import android.os.Bundle;
