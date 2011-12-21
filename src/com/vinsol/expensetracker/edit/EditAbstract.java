@@ -179,7 +179,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		}catch(Exception e){
 			isAmountNotEqual = true;
 		}
-		
+
 		if((!mEditList.get(1).equals(listOnResult.get(1))) || isAmountNotEqual || isChanged ) {
 			isChanged = false;
 			if(typeOfEntry == R.string.camera)

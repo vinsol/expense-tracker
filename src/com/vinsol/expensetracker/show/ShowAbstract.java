@@ -16,7 +16,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 
 	private TextView showAmount;
 	private TextView showTextview;
-	private String favID;
+	public static String favID;
 	private Long userId = null;
 	private ArrayList<String> mShowList;
 	private Bundle intentExtras;

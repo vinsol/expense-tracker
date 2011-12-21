@@ -6,6 +6,7 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -147,9 +148,9 @@ public class TextEntry extends EditAbstract implements OnClickListener {
 			Bundle tempBundle = new Bundle();
 			ArrayList<String> listOnResult = getListOnResult(list);
 			getData();
+			Log.v("mEditList TextEntry", mEditList.get(4)+ " "+listOnResult.get(4) +" edit");
 			tempBundle.putStringArrayList("mDisplayList", listOnResult);
 			mIntent.putExtra("textShowBundle", tempBundle);
-			mIntent.putExtra("toHighLight", listOnResult.get(0));
 			setResult(Activity.RESULT_OK, mIntent);
 		}
 		finish();

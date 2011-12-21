@@ -58,7 +58,6 @@ public class FavoriteHelper implements OnClickListener{
 	}
 
 	public void setShowList(ArrayList<String> mShowList2) {
-		
 		mShowList = mShowList2;
 		if(mShowList.get(4) != null) {
 			if(mShowList.get(4).equals("")){
@@ -84,18 +83,17 @@ public class FavoriteHelper implements OnClickListener{
 		}
 		
 		if(toCheck){
-			
 			HashMap<String, String> list = new HashMap<String, String>();
 			Long favID = null;
 			list.put(DBAdapterFavorite.KEY_AMOUNT, mShowList.get(2));
 			list.put(DBAdapterFavorite.KEY_TYPE, mShowList.get(5));
-			if(mShowList.get(5).equals(mContext.getString(R.string.text))){
+			if(mShowList.get(5).equals(mContext.getString(R.string.text))) {
 				list.put(DBAdapterFavorite.KEY_TAG, mShowList.get(1));
 				mDbAdapterFavorite.open();
 				favID = mDbAdapterFavorite.insertToDatabase(list);
 				mDbAdapterFavorite.close();
 				ShowTextActivity.favID = Long.toString(favID);
-			} else if(mShowList.get(5).equals(mContext.getString(R.string.camera))){
+			} else if(mShowList.get(5).equals(mContext.getString(R.string.camera))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if(!mShowList.get(1).equals("") && !mShowList.get(1).equals(mContext.getString(R.string.unfinished_cameraentry)) && mShowList.get(1) != null){
 						list.put(DBAdapterFavorite.KEY_TAG, mShowList.get(1));
@@ -131,9 +129,7 @@ public class FavoriteHelper implements OnClickListener{
 						mDbAdapterFavorite.close();
 						new FileCopyFavorite(Long.parseLong(mShowList.get(0)),favID);
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+favID+".amr");
-						if(mFile.canRead()){
-							
-						} else {
+						if(!mFile.canRead()){
 							mDbAdapterFavorite.open();
 							mDbAdapterFavorite.deleteDatabaseEntryID(Long.toString(favID));
 							mDbAdapterFavorite.close();
@@ -155,7 +151,6 @@ public class FavoriteHelper implements OnClickListener{
 			showAddFavorite.setChecked(true);
 			showAddFavoriteTextView.setText("Remove from Favorite");
 		} else if(mShowList.get(5).equals(mContext.getString(R.string.text))){
-			
 				ShowTextActivity.favID = null;
 				String favID = null;
 				mDatabaseAdapter.open();

@@ -41,7 +41,6 @@ public class ShowVoiceActivity extends ShowAbstract implements OnClickListener {
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
 	private DatabaseAdapter mDatabaseAdapter;
-	public static String favID = null;
 	private FavoriteHelper mFavoriteHelper;
 
 	@Override

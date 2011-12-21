@@ -37,7 +37,6 @@ public class ShowCameraActivity extends ShowAbstract implements OnClickListener 
 	private ArrayList<String> mShowList;
 	private Long userId = null;
 	private static final int EDIT_RESULT = 35;
-	public static String favID = null;
 	private FavoriteHelper mFavoriteHelper;
 
 	@Override

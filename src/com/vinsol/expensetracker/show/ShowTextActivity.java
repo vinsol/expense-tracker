@@ -10,6 +10,7 @@ import com.vinsol.expensetracker.favorite.FavoriteHelper;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,7 +20,6 @@ public class ShowTextActivity extends ShowAbstract implements OnClickListener{
 
 	private final int SHOW_RESULT = 35;
 	private Bundle intentExtras;
-	public static String favID = null;
 	private Long userId = null;
 	private Button showDelete;
 	private Button showEdit;
@@ -40,9 +40,7 @@ public class ShowTextActivity extends ShowAbstract implements OnClickListener{
 
 		intentExtras = getIntent().getBundleExtra("textShowBundle");
 		showHelper(intentExtras,R.string.text,R.string.finished_textentry,R.string.unfinished_textentry);
-		if (intentExtras.containsKey("mDisplayList")) {
-			getData();
-		}
+		getData();
 		if (intentExtras.containsKey("mDisplayList")) {
 			mFavoriteHelper = new FavoriteHelper(this, mShowList);
 		}
@@ -58,8 +56,8 @@ public class ShowTextActivity extends ShowAbstract implements OnClickListener{
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getBundleExtra("textShowBundle");
 				doTaskOnActivityResult(intentExtras);
+				getData();
 				if (intentExtras.containsKey("mDisplayList")) {
-					getData();
 					mFavoriteHelper.setShowList(mShowList);
 				}
 				showDelete.setOnClickListener(this);
@@ -93,6 +91,7 @@ public class ShowTextActivity extends ShowAbstract implements OnClickListener{
 			mShowList.set(4, favID);
 			intentExtras.remove("mDisplayList");
 			intentExtras.putStringArrayList("mDisplayList", mShowList);
+			Log.v("mEditList ShowTextActivity", mShowList.get(4)+" show");
 			editIntent.putExtra("textEntryBundle", intentExtras);
 			startActivityForResult(editIntent,SHOW_RESULT);
 		}
