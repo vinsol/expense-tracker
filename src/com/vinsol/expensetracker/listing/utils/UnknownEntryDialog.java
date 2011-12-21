@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker.listing;
+package com.vinsol.expensetracker.listing.utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,7 +9,7 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
-import com.vinsol.expensetracker.favorite.FavoriteActivity;
+import com.vinsol.expensetracker.listing.FavoriteActivity;
 import com.vinsol.expensetracker.utils.ConvertCursorToListString;
 import com.vinsol.expensetracker.utils.DisplayDate;
 

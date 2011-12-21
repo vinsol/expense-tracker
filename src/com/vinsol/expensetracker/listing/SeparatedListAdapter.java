@@ -26,6 +26,9 @@ import android.widget.TextView;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.MyClickListenerGroupedIcons;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.listing.utils.AudioPlayDialog;
+import com.vinsol.expensetracker.listing.utils.DescriptionDialog;
+import com.vinsol.expensetracker.listing.utils.UnknownEntryDialog;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.ImagePreview;
 

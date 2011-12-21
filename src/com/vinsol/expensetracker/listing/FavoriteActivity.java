@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker.favorite;
+package com.vinsol.expensetracker.listing;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,10 +28,11 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.favorite.DBAdapterFavorite;
 import com.vinsol.expensetracker.helpers.LocationHelper;
-import com.vinsol.expensetracker.listing.AudioPlayDialog;
-import com.vinsol.expensetracker.listing.DescriptionDialog;
 import com.vinsol.expensetracker.listing.ExpenseListing;
+import com.vinsol.expensetracker.listing.utils.AudioPlayDialog;
+import com.vinsol.expensetracker.listing.utils.DescriptionDialog;
 import com.vinsol.expensetracker.utils.ConvertCursorToListString;
 import com.vinsol.expensetracker.utils.DateHandler;
 import com.vinsol.expensetracker.utils.DateHelper;

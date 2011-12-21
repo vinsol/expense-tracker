@@ -11,6 +11,7 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
+import com.vinsol.expensetracker.listing.utils.UnknownEntryDialog;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;

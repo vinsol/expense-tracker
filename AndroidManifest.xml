@@ -58,7 +58,7 @@
             >
         </activity>
         <activity 
-            android:name=".favorite.FavoriteActivity"
+            android:name=".listing.FavoriteActivity"
     		android:screenOrientation="portrait"
             >
         </activity>
