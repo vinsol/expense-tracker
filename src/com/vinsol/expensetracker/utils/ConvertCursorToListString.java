@@ -5,8 +5,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import com.vinsol.expensetracker.DBAdapterFavorite;
 import com.vinsol.expensetracker.DatabaseAdapter;
-import com.vinsol.expensetracker.favorite.DBAdapterFavorite;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import android.content.Context;
 import android.database.Cursor;

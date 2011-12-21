@@ -20,7 +20,7 @@ import android.widget.LinearLayout.LayoutParams;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
-import com.vinsol.expensetracker.favorite.FavoriteHelper;
+import com.vinsol.expensetracker.utils.FavoriteHelper;
 import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.ImagePreview;
 

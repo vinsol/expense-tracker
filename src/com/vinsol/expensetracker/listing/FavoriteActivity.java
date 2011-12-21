@@ -26,9 +26,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.DBAdapterFavorite;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.favorite.DBAdapterFavorite;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.utils.ConvertCursorToListString;
 import com.vinsol.expensetracker.utils.DateHandler;

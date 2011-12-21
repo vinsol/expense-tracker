@@ -1,9 +1,10 @@
-package com.vinsol.expensetracker.favorite;
+package com.vinsol.expensetracker.utils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.vinsol.expensetracker.DBAdapterFavorite;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.show.ShowCameraActivity;

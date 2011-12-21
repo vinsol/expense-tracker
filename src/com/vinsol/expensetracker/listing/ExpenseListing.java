@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
-import com.vinsol.expensetracker.MyClickListenerGroupedIcons;
+import com.vinsol.expensetracker.GroupedIconDialog;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.utils.ConvertCursorToListString;
 import com.vinsol.expensetracker.utils.DisplayDate;
@@ -205,6 +205,6 @@ public class ExpenseListing extends ListingAbstract {
 	@Override
 	protected void noItemButtonAction(Button noItemButton) {
 		super.noItemButtonAction(noItemButton);
-		noItemButton.setOnClickListener(new MyClickListenerGroupedIcons(unknownDialog, ExpenseListing.this, bundle,null));
+		noItemButton.setOnClickListener(new GroupedIconDialog(unknownDialog, ExpenseListing.this, bundle,null));
 	}
 }

@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker.favorite;
+package com.vinsol.expensetracker;
 
 import java.util.HashMap;
 
@@ -55,7 +55,7 @@ public class DBAdapterFavorite {
 			db.execSQL("drop table " + TABLE_NAME);
 		}
 
-		protected long insertToDatabase(HashMap<String, String> list) {
+		public long insertToDatabase(HashMap<String, String> list) {
 			ContentValues contentValues = new ContentValues();
 			contentValues.put(KEY_TAG, list.get(KEY_TAG));
 			contentValues.put(KEY_AMOUNT, list.get(KEY_AMOUNT));
@@ -66,7 +66,7 @@ public class DBAdapterFavorite {
 			return id;
 		}
 
-		protected boolean deleteDatabaseEntryID(String id) {
+		public boolean deleteDatabaseEntryID(String id) {
 			String where = KEY_ID + "=" + id;
 			try {
 				Log.d("Deleting");

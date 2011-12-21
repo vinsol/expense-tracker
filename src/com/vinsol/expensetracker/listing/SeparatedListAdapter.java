@@ -24,7 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
-import com.vinsol.expensetracker.MyClickListenerGroupedIcons;
+import com.vinsol.expensetracker.GroupedIconDialog;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.ImagePreview;
@@ -161,7 +161,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderFooter.addExpensesButton.setText("Add expenses to "+ mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
 					holderFooter.addExpensesButton.setFocusable(false);
 					DateHelper mDateHelper = new DateHelper(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
-					holderFooter.addExpensesButton.setOnClickListener(new MyClickListenerGroupedIcons(unknownEntryDialog, mContext, null, mDateHelper.getTimeMillis()));
+					holderFooter.addExpensesButton.setOnClickListener(new GroupedIconDialog(unknownEntryDialog, mContext, null, mDateHelper.getTimeMillis()));
 				}
 
 				return viewFooter;

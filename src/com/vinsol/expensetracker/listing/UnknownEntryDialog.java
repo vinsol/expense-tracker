@@ -66,11 +66,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(Long.parseLong(toInsert.get(DatabaseAdapter.KEY_DATE_TIME)));
 			headerTextView.setText(new DisplayDate(mCalendar).getDisplayDate());
-//			new ShowDateHandler(getContext(),headerTextView, toInsert.get(DatabaseAdapter.KEY_DATE_TIME));
 		}
-//		else {
-//			new ShowDateHandler(getContext(),headerTextView, Integer.parseInt(mTempClickedList.get(5)));
-//		}
 		show();
 	}
 	
@@ -105,11 +101,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(Long.parseLong(mTempClickedList.get(6)));
 			headerTextView.setText(new DisplayDate(mCalendar).getDisplayDate());
-//			new ShowDateHandler(getContext(),headerTextView, mTempClickedList.get(6));
 		}
-//		else {
-//			new ShowDateHandler(getContext(),headerTextView, Integer.parseInt(mTempClickedList.get(5)));
-//		}
 		show();
 	}
 
