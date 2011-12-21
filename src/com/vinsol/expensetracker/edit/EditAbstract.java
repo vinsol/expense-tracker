@@ -22,26 +22,41 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 abstract class EditAbstract extends Activity implements OnClickListener{
-	private ArrayList<String> mEditList;
-	private Long userId = null;
-	private boolean setLocation = false;
-	private EditText editAmount;
-	private EditText editTag;
-	private Bundle intentExtras;
-	private boolean setUnknown = false;
-	private int typeOfEntryFinished;
-	private int typeOfEntryUnfinished;
-	private int typeOfEntry;
-	private boolean isChanged = false;
+	protected ArrayList<String> mEditList;
+	protected Long userId = null;
+	protected boolean setLocation = false;
+	protected EditText editAmount;
+	protected EditText editTag;
+	protected Bundle intentExtras;
+	protected boolean setUnknown = false;
+	protected int typeOfEntryFinished;
+	protected int typeOfEntryUnfinished;
+	protected int typeOfEntry;
+	protected boolean isChanged = false;
+	protected DatabaseAdapter mDatabaseAdapter;
+	protected TextView editHeaderTitle;
+	protected TextView dateBarDateview;
+	protected String dateViewString;
 	
-	public void editHelper(Bundle intentExtras,int typeOfEntry,int typeOfEntryFinished,int typeOfEntryUnfinished) {
-		this.intentExtras = intentExtras;
-		this.typeOfEntry = typeOfEntry;
-		this.typeOfEntryFinished = typeOfEntryFinished;
-		this.typeOfEntryUnfinished = typeOfEntryUnfinished;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.edit_page);
 		editAmount = (EditText) findViewById(R.id.edit_amount);
+		editHeaderTitle = (TextView) findViewById(R.id.edit_header_title);
 		editTag = (EditText) findViewById(R.id.edit_tag);
-		
+		dateBarDateview = (TextView) findViewById(R.id.edit_date_bar_dateview);
+		mDatabaseAdapter = new DatabaseAdapter(this);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		dateViewString = dateBarDateview.getText().toString();
+	}
+	
+	public void editHelper() {
+
 		if (intentExtras.containsKey("_id"))
 			userId = intentExtras.getLong("_id");
 
@@ -76,34 +91,6 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		} else {
 			new DateHandler(this);
 		}
-	}
-	
-	public Long getId() {
-		return userId;
-	}
-	
-	public Bundle getIntentExtras() {
-		return intentExtras;
-	}
-	
-	public ArrayList<String> getEditList() {
-		return mEditList;
-	}
-	
-	public boolean isSetUnknown() {
-		return setUnknown;
-	}
-	
-	public void setId(Long id) {
-		userId = id;
-	}
-	
-	public boolean isChanged() {
-		return isChanged;
-	}
-	
-	public void setChanged(boolean isChanged) {
-		this.isChanged = isChanged;
 	}
 	
 	public HashMap<String, String> getSaveEntryData(TextView editDateBarDateview,String dateViewString){

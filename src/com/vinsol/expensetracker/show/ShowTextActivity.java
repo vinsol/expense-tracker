@@ -1,6 +1,5 @@
 package com.vinsol.expensetracker.show;
 
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.utils.FavoriteHelper;
@@ -8,28 +7,20 @@ import com.vinsol.expensetracker.utils.FavoriteHelper;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 
 public class ShowTextActivity extends ShowAbstract{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.show_page);
-
-		showDelete = (Button) findViewById(R.id.show_delete);
-		showEdit = (Button) findViewById(R.id.show_edit);
-		mDatabaseAdapter = new DatabaseAdapter(this);
-		// //////********* Get id from intent extras ******** ////////////
-
 		intentExtras = getIntent().getBundleExtra("textShowBundle");
-		showHelper(intentExtras,R.string.text,R.string.finished_textentry,R.string.unfinished_textentry);
+		typeOfEntry = R.string.text;
+		typeOfEntryFinished = R.string.finished_textentry;
+		typeOfEntryUnfinished = R.string.unfinished_textentry;
+		showHelper();
 		if (intentExtras.containsKey("mDisplayList")) {
 			mFavoriteHelper = new FavoriteHelper(this, mShowList);
 		}
-		showDelete.setOnClickListener(this);
-		showEdit.setOnClickListener(this);
 	}
 	
 	@Override

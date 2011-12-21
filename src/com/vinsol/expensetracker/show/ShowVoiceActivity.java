@@ -8,10 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.utils.AudioPlay;
@@ -22,7 +20,6 @@ import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
 public class ShowVoiceActivity extends ShowAbstract {
  
-	private RelativeLayout dateBarRelativeLayout;
 	private RelativeLayout showVoiceDetails;
 	private Button showPlayButton;
 	private Button showStopButton;
@@ -33,31 +30,17 @@ public class ShowVoiceActivity extends ShowAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.show_page);
-		
-		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_date_bar); 
-		showHeaderTitle = (TextView) findViewById(R.id.show_header_title);
 		showVoiceDetails = (RelativeLayout) findViewById(R.id.show_voice_details);
-		showDelete = (Button) findViewById(R.id.show_delete);
 		showPlayButton = (Button) findViewById(R.id.show_play_button);
 		showStopButton = (Button) findViewById(R.id.show_stop_button);
 		showTimeDetailsChronometer = (Chronometer) findViewById(R.id.show_time_details_chronometer);
-		showEdit = (Button) findViewById(R.id.show_edit);
-
-		dateBarRelativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg_wo_shadow));
-		
-		mDatabaseAdapter = new DatabaseAdapter(this);
-
 		intentExtras = getIntent().getBundleExtra("voiceShowBundle");
-
-		showHeaderTitle.setText(getString(R.string.finished_voiceentry));
-		
-		showHelper(intentExtras,R.string.voice,R.string.finished_voiceentry,R.string.unfinished_voiceentry);
-		showDelete.setOnClickListener(this);
+		typeOfEntry = R.string.voice;
+		typeOfEntryFinished = R.string.finished_voiceentry;
+		typeOfEntryUnfinished = R.string.unfinished_voiceentry;
+		showHelper();
 		showPlayButton.setOnClickListener(this);
 		showStopButton.setOnClickListener(this);
-		showEdit.setOnClickListener(this);
 
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			updateUI();

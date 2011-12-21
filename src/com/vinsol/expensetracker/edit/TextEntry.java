@@ -6,13 +6,10 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
-
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.listing.ExpenseListing;
@@ -22,28 +19,17 @@ import com.vinsol.expensetracker.utils.FileDelete;
 
 public class TextEntry extends EditAbstract implements OnClickListener {
 
-	private DatabaseAdapter mDatabaseAdapter;
-	private Long userId;
-	private Bundle intentExtras;
-	private TextView dateBarDateview;
-	private String dateViewString;
-	private ArrayList<String> mEditList;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.edit_page);
-
-		mDatabaseAdapter = new DatabaseAdapter(this);
 		findViewById(R.id.edit_date_bar).setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg));
-		dateBarDateview = (TextView) findViewById(R.id.edit_date_bar_dateview);
-
 		// //////********* Get id from intent extras ******** ////////////
 
 		intentExtras = getIntent().getBundleExtra("textEntryBundle");
-		editHelper(intentExtras, R.string.text, R.string.finished_textentry, R.string.unfinished_textentry);
-		getData();
+		typeOfEntry = R.string.text;
+		typeOfEntryFinished = R.string.finished_textentry;
+		typeOfEntryUnfinished = R.string.unfinished_textentry;
+		editHelper();
 		
 		// ////// ******** Handle Date Bar ********* ////////
 		if (intentExtras.containsKey("mDisplayList")) {
@@ -54,18 +40,6 @@ public class TextEntry extends EditAbstract implements OnClickListener {
 			new DateHandler(this);
 		}
 		setClickListeners();
-	}
-	
-	private void getData() {
-		userId = getId();
-		mEditList = getEditList();
-		intentExtras = getIntentExtras();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		dateViewString = dateBarDateview.getText().toString();
 	}
 
 	private void setClickListeners() {
@@ -147,8 +121,6 @@ public class TextEntry extends EditAbstract implements OnClickListener {
 			Intent mIntent = new Intent(this, ShowTextActivity.class);
 			Bundle tempBundle = new Bundle();
 			ArrayList<String> listOnResult = getListOnResult(list);
-			getData();
-			Log.v("mEditList TextEntry", mEditList.get(4)+ " "+listOnResult.get(4) +" edit");
 			tempBundle.putStringArrayList("mDisplayList", listOnResult);
 			mIntent.putExtra("textShowBundle", tempBundle);
 			setResult(Activity.RESULT_OK, mIntent);

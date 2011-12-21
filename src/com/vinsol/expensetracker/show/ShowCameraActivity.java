@@ -6,15 +6,11 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.utils.FavoriteHelper;
@@ -23,34 +19,24 @@ import com.vinsol.expensetracker.utils.ImagePreview;
 
 public class ShowCameraActivity extends ShowAbstract {
 
-	private RelativeLayout dateBarRelativeLayout;
 	private ImageView showImageDisplay;
 	private LinearLayout showCameraDetails;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.show_page);
-
 		// ///// ****** Assigning memory ******* /////////
-		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_date_bar); 
-		showDelete = (Button) findViewById(R.id.show_delete);
 		showImageDisplay = (ImageView) findViewById(R.id.show_image_display);
-		showHeaderTitle = (TextView) findViewById(R.id.show_header_title);
 		showCameraDetails = (LinearLayout) findViewById(R.id.show_camera_details);
-		showEdit = (Button) findViewById(R.id.show_edit);
-		mDatabaseAdapter = new DatabaseAdapter(this);
-		
-		
-		dateBarRelativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg_wo_shadow));
 		
 		// //////********* Get id from intent extras ******** ////////////
 
 		setGraphicsCamera();
-
 		intentExtras = getIntent().getBundleExtra("cameraShowBundle");
-		showHelper(intentExtras,R.string.voice,R.string.finished_voiceentry,R.string.unfinished_voiceentry);
+		typeOfEntry = R.string.camera;
+		typeOfEntryFinished = R.string.finished_cameraentry;
+		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
+		showHelper();
 		if (intentExtras.containsKey("mDisplayList")) {
 			File mFile = new File("/sdcard/ExpenseTracker/" + userId+ "_small.jpg");
 			if (mFile.canRead()) {
@@ -70,9 +56,6 @@ public class ShowCameraActivity extends ShowAbstract {
 		}
 
 		showImageDisplay.setOnClickListener(this);
-		showDelete.setOnClickListener(this);
-		showEdit.setOnClickListener(this);
-
 	}
 
 	private void setGraphicsCamera() {
@@ -102,7 +85,6 @@ public class ShowCameraActivity extends ShowAbstract {
 		super.onClick(v);
 		if (v.getId() == R.id.show_image_display) {
 			if (userId != null) {
-				
 				Intent intent = new Intent(this, ImagePreview.class);
 				intent.putExtra("id", userId);
 				startActivity(intent);

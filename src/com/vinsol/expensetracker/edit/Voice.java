@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
@@ -31,7 +30,6 @@ import com.vinsol.expensetracker.utils.RecordingHelper;
 
 public class Voice extends EditAbstract implements OnClickListener {
 
-	private TextView editHeaderTitle;
 	private RelativeLayout editVoiceDetails;
 	private Chronometer editTimeDetailsChronometer;
 	private Button editStopButton;
@@ -40,36 +38,24 @@ public class Voice extends EditAbstract implements OnClickListener {
 	private MyCountDownTimer countDownTimer;
 	private RecordingHelper mRecordingHelper;
 	private AudioPlay mAudioPlay;
-	private long userId;
-	private Bundle intentExtras;
-	private DatabaseAdapter mDatabaseAdapter;
-	private TextView editDateBarDateview;
-	private String dateViewString;
-	private ArrayList<String> mEditList; 
-	private boolean setUnknown = false;
-	private boolean isChanged = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.edit_page);
-
 		// ////// ******** Initializing and assigning memory to UI Items ********** /////////
 
-		editHeaderTitle = (TextView) findViewById(R.id.edit_header_title);
 		editVoiceDetails = (RelativeLayout) findViewById(R.id.edit_voice_details);
 		editTimeDetailsChronometer = (Chronometer) findViewById(R.id.edit_time_details_chronometer);
 		editStopButton = (Button) findViewById(R.id.edit_stop_button);
 		editPlayButton = (Button) findViewById(R.id.edit_play_button);
 		editRerecordButton = (Button) findViewById(R.id.edit_rerecord_button);
-		editDateBarDateview = (TextView) findViewById(R.id.edit_date_bar_dateview);
-		mDatabaseAdapter = new DatabaseAdapter(this);
-
-		// //////********* Get id from intent extras ******** ////////////
+		////////********* Get id from intent extras ******** ////////////
 		intentExtras = getIntent().getBundleExtra("voiceBundle");
-		editHelper(intentExtras, R.string.voice, R.string.finished_voiceentry, R.string.unfinished_voiceentry);
-		getData();
+		typeOfEntry = R.string.voice;
+		typeOfEntryFinished = R.string.finished_voiceentry;
+		typeOfEntryUnfinished = R.string.unfinished_voiceentry;
+		editHelper();
 		// ////// ******** Starts Recording each time activity starts ****** ///////
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			setGraphicsVoice();
@@ -98,22 +84,6 @@ public class Voice extends EditAbstract implements OnClickListener {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 		setClickListeners();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		dateViewString = editDateBarDateview.getText().toString();
-	}
-
-
-	
-	private void getData() {
-		userId = getId();
-		mEditList = getEditList();
-		intentExtras = getIntentExtras();
-		setUnknown = isSetUnknown();
-		isChanged = isChanged();
 	}
 	
 	@Override
@@ -239,7 +209,6 @@ public class Voice extends EditAbstract implements OnClickListener {
 		// // ***** if rerecord button pressed ****** //////
 		else if (v.getId() == R.id.edit_rerecord_button) {
 			isChanged = true;
-			setChanged(isChanged);
 			try {
 				countDownTimer.cancel();
 			} catch (NullPointerException e) {
@@ -326,7 +295,7 @@ public class Voice extends EditAbstract implements OnClickListener {
 	private void saveEntry() {
 		
 		// ///// ******* Creating HashMap to update info ******* ////////
-		HashMap<String, String> _list = getSaveEntryData(editDateBarDateview,dateViewString);
+		HashMap<String, String> _list = getSaveEntryData(dateBarDateview,dateViewString);
 		// //// ******* Update database if user added additional info *******		 ///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(_list);

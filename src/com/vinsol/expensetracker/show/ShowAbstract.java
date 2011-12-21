@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,16 +33,28 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	protected DatabaseAdapter mDatabaseAdapter;	
 	protected Button showDelete;
 	protected Button showEdit;
+	private RelativeLayout dateBarRelativeLayout;
 	
-	public void showHelper(Bundle intentExtras,int typeOfEntry,int typeOfEntryFinished,int typeOfEntryUnfinished) {
-		// ///// ****** Assigning memory ******* /////////
-		this.typeOfEntry = typeOfEntry;
-		this.typeOfEntryFinished = typeOfEntryFinished;
-		this.typeOfEntryUnfinished = typeOfEntryUnfinished;
-		this.intentExtras = intentExtras;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.show_page);
+		showEdit = (Button) findViewById(R.id.show_edit);
+		showDelete = (Button) findViewById(R.id.show_delete);
+		showHeaderTitle = (TextView) findViewById(R.id.show_header_title);
+		mDatabaseAdapter = new DatabaseAdapter(this);
 		showAmount = (TextView) findViewById(R.id.show_amount);
 		showTextview = (TextView) findViewById(R.id.show_tag_textview);
+		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_date_bar); 
 		mShowList = new ArrayList<String>();
+		dateBarRelativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg_wo_shadow));
+		showEdit.setOnClickListener(this);
+		showDelete.setOnClickListener(this);
+	}
+	
+	public void showHelper() {
+		// ///// ****** Assigning memory ******* /////////
+		
 		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = new ArrayList<String>();
 			mShowList = intentExtras.getStringArrayList("mDisplayList");
