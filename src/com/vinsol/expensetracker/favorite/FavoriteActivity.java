@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.favorite;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,9 +26,17 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.LocationHelper;
+import com.vinsol.expensetracker.listing.AudioPlayDialog;
+import com.vinsol.expensetracker.listing.DescriptionDialog;
+import com.vinsol.expensetracker.listing.ExpenseListing;
+import com.vinsol.expensetracker.utils.ConvertCursorToListString;
+import com.vinsol.expensetracker.utils.DateHandler;
 import com.vinsol.expensetracker.utils.DateHelper;
 import com.vinsol.expensetracker.utils.FileCopyFavorite;
+import com.vinsol.expensetracker.utils.ImagePreview;
 
 public class FavoriteActivity extends Activity implements OnItemClickListener{
 	

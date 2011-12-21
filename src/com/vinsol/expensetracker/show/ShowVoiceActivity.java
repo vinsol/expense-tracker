@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.show;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,6 +14,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.edit.Voice;
+import com.vinsol.expensetracker.favorite.FavoriteHelper;
 import com.vinsol.expensetracker.utils.AudioPlay;
 import com.vinsol.expensetracker.utils.DisplayTime;
 import com.vinsol.expensetracker.utils.FileDelete;
@@ -37,7 +41,7 @@ public class ShowVoiceActivity extends ShowAbstract implements OnClickListener {
 	private Bundle intentExtras;
 	private ArrayList<String> mShowList;
 	private DatabaseAdapter mDatabaseAdapter;
-	protected static String favID = null;
+	public static String favID = null;
 	private FavoriteHelper mFavoriteHelper;
 
 	@Override

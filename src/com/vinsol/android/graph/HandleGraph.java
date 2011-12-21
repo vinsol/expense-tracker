@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker;
+package com.vinsol.android.graph;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +21,9 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.vinsol.android.graph.BarGraph;
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.utils.ConvertCursorToListString;
 import com.vinsol.expensetracker.utils.DisplayDate;
 
 public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickListener{

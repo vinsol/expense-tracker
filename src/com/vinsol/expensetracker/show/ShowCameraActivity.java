@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.show;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,7 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.edit.CameraActivity;
+import com.vinsol.expensetracker.favorite.FavoriteHelper;
 import com.vinsol.expensetracker.utils.FileDelete;
+import com.vinsol.expensetracker.utils.ImagePreview;
 
 public class ShowCameraActivity extends ShowAbstract implements OnClickListener {
 
@@ -32,7 +37,7 @@ public class ShowCameraActivity extends ShowAbstract implements OnClickListener 
 	private ArrayList<String> mShowList;
 	private Long userId = null;
 	private static final int EDIT_RESULT = 35;
-	protected static String favID = null;
+	public static String favID = null;
 	private FavoriteHelper mFavoriteHelper;
 
 	@Override

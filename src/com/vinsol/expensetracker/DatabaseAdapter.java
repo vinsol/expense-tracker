@@ -54,16 +54,16 @@ public class DatabaseAdapter {
 	private SQLiteDatabase db;
 	private MyCreateOpenHelper createOpenHelper;
 
-	protected DatabaseAdapter(Context context) {
+	public DatabaseAdapter(Context context) {
 		createOpenHelper = new MyCreateOpenHelper(context);
 	}
 
-	protected DatabaseAdapter open() throws SQLException {
+	public DatabaseAdapter open() throws SQLException {
 		db = createOpenHelper.getWritableDatabase();
 		return this;
 	}
 
-	protected void close() {
+	public void close() {
 		db.close();
 	}
 
@@ -71,7 +71,7 @@ public class DatabaseAdapter {
 		db.execSQL("drop table " + TABLE_NAME);
 	}
 
-	protected long insertToDatabase(HashMap<String, String> list) {
+	public long insertToDatabase(HashMap<String, String> list) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_TAG, list.get(KEY_TAG));
 		contentValues.put(KEY_AMOUNT, list.get(KEY_AMOUNT));
@@ -85,7 +85,7 @@ public class DatabaseAdapter {
 		return id;
 	}
 
-	protected boolean deleteDatabaseEntryID(String id) {
+	public boolean deleteDatabaseEntryID(String id) {
 		String where = KEY_ID + "=" + id;
 		
 		try {
@@ -98,7 +98,7 @@ public class DatabaseAdapter {
 		return true;
 	}
 
-	protected boolean editDatabase(HashMap<String, String> list) {
+	public boolean editDatabase(HashMap<String, String> list) {
 		ContentValues contentValues = new ContentValues();
 		if (list.get(KEY_TAG) != null)
 			contentValues.put(KEY_TAG, list.get(KEY_TAG));
@@ -132,7 +132,7 @@ public class DatabaseAdapter {
 
 	}
 
-	protected Cursor getDateDatabase() {
+	public Cursor getDateDatabase() {
 
 		return db.query(TABLE_NAME, new String[] { KEY_ID, 
 				KEY_TAG, 
@@ -144,7 +144,7 @@ public class DatabaseAdapter {
 		
 	}
 	
-	protected Cursor getDateDatabase(String id) {
+	public Cursor getDateDatabase(String id) {
 		if(id != null){
 			if(id.length() > 1)
 				id = id.substring(0, id.length()-1);

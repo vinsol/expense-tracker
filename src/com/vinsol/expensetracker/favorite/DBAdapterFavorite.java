@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.favorite;
 
 import java.util.HashMap;
 
@@ -37,17 +37,17 @@ public class DBAdapterFavorite {
 		private Context context;
 		private MyCreateOpenHelper createOpenHelper;
 
-		protected DBAdapterFavorite(Context _context) {
+		public DBAdapterFavorite(Context _context) {
 			context = _context;
 			createOpenHelper = new MyCreateOpenHelper(context);
 		}
 
-		protected DBAdapterFavorite open() throws SQLException {
+		public DBAdapterFavorite open() throws SQLException {
 			db = createOpenHelper.getWritableDatabase();
 			return this;
 		}
 
-		protected void close() {
+		public void close() {
 			db.close();
 		}
 
@@ -98,7 +98,7 @@ public class DBAdapterFavorite {
 			return false;
 		}
 
-		protected Cursor getCompleteDatabase() {
+		public Cursor getCompleteDatabase() {
 
 			return db.query(TABLE_NAME, new String[] { KEY_ID, KEY_TAG, KEY_AMOUNT, KEY_TYPE }, null,
 					null, null, null, null);

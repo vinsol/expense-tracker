@@ -30,56 +30,56 @@
         </activity>
         
         <activity 
-            android:name=".TextEntry"
+            android:name=".edit.TextEntry"
     		android:screenOrientation="portrait"
     		android:windowSoftInputMode="adjustPan"
     		>
         </activity>
         <activity 
-            android:name=".Voice"
+            android:name=".edit.Voice"
     		android:screenOrientation="portrait"
     		android:windowSoftInputMode="adjustPan"
             >
         </activity>
         <activity 
-            android:name=".CameraActivity"
+            android:name=".edit.CameraActivity"
     		android:screenOrientation="portrait"
     		android:windowSoftInputMode="adjustPan"
             >
         </activity>
         <activity 
-            android:name=".ExpenseListing"
+            android:name=".listing.ExpenseListing"
     		android:screenOrientation="portrait"
             >
         </activity>
         <activity 
-            android:name=".ExpenseSubListing"
+            android:name=".listing.ExpenseSubListing"
     		android:screenOrientation="portrait"
             >
         </activity>
         <activity 
-            android:name=".FavoriteActivity"
+            android:name=".favorite.FavoriteActivity"
     		android:screenOrientation="portrait"
             >
         </activity>
         <activity 
-            android:name=".ShowVoiceActivity"
+            android:name=".show.ShowVoiceActivity"
         	android:screenOrientation="portrait"
             >
         </activity>
         <activity 
-            android:name=".ShowCameraActivity"
+            android:name=".show.ShowCameraActivity"
         	android:screenOrientation="portrait"
             >
         </activity>
         <activity 
-            android:name=".ShowTextActivity"
+            android:name=".show.ShowTextActivity"
         	android:screenOrientation="portrait"
             >
         </activity>
         <activity 
             android:theme="@android:style/Theme.Dialog"
-            android:name=".ImagePreview"
+            android:name=".utils.ImagePreview"
     		android:screenOrientation="portrait"
     		>
         </activity>

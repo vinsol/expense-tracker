@@ -1,4 +1,6 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.utils;
+
+import com.vinsol.expensetracker.R;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;

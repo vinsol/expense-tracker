@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.edit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +12,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.listing.ExpenseListing;
+import com.vinsol.expensetracker.show.ShowTextActivity;
+import com.vinsol.expensetracker.utils.DateHandler;
 import com.vinsol.expensetracker.utils.FileDelete;
 
 public class TextEntry extends EditAbstract implements OnClickListener {

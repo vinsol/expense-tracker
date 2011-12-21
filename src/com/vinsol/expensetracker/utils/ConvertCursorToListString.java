@@ -1,10 +1,12 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.favorite.DBAdapterFavorite;
 import com.vinsol.expensetracker.utils.DisplayDate;
 import android.content.Context;
 import android.database.Cursor;
@@ -16,7 +18,7 @@ public class ConvertCursorToListString {
 		this.context = context;
 	}
 
-	List<HashMap<String, String>> getFavoriteList() {
+	public List<HashMap<String, String>> getFavoriteList() {
 		List<HashMap<String, String>> mainlist = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> list;
 		DBAdapterFavorite mDbAdapterFavorite = new DBAdapterFavorite(context);
@@ -39,7 +41,7 @@ public class ConvertCursorToListString {
 		return mainlist;
 	}
 	
-	List<HashMap<String, String>> getDateListStringGraph() {
+	public List<HashMap<String, String>> getDateListStringGraph() {
 		HashMap<String, String> list = new HashMap<String, String>();
 		DatabaseAdapter adapter = new DatabaseAdapter(context);
 		adapter.open();
@@ -175,7 +177,7 @@ public class ConvertCursorToListString {
 		return mainlist;
 	}
 	
-	List<HashMap<String, String>> getDateListString() {
+	public List<HashMap<String, String>> getDateListString() {
 		HashMap<String, String> list = new HashMap<String, String>();
 		DatabaseAdapter adapter = new DatabaseAdapter(context);
 		adapter.open();
@@ -313,7 +315,7 @@ public class ConvertCursorToListString {
 		return mainlist;
 	}
 	
-	List<HashMap<String, String>> getDateListString(String id) {
+	public List<HashMap<String, String>> getDateListString(String id) {
 		HashMap<String, String> list = new HashMap<String, String>();
 		DatabaseAdapter adapter = new DatabaseAdapter(context);
 		adapter.open();

@@ -1,9 +1,14 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.favorite;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.show.ShowCameraActivity;
+import com.vinsol.expensetracker.show.ShowTextActivity;
+import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.FileCopyFavorite;
 import com.vinsol.expensetracker.utils.FileDeleteFavorite;
 
@@ -15,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-class FavoriteHelper implements OnClickListener{
+public class FavoriteHelper implements OnClickListener{
 
 	private Context mContext;
 	private ArrayList<String> mShowList;
@@ -25,7 +30,7 @@ class FavoriteHelper implements OnClickListener{
 	private DatabaseAdapter mDatabaseAdapter;
 	private TextView showAddFavoriteTextView;
 	
-	FavoriteHelper(Context context,ArrayList<String> mShowList) {
+	public FavoriteHelper(Context context,ArrayList<String> mShowList) {
 		this.mContext = context;
 		this.mShowList = mShowList;
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;

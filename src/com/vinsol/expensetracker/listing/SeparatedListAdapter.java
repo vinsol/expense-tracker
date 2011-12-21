@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.listing;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,7 +22,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.MyClickListenerGroupedIcons;
+import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.utils.DateHelper;
+import com.vinsol.expensetracker.utils.ImagePreview;
 
 class SeparatedListAdapter extends BaseAdapter {
 

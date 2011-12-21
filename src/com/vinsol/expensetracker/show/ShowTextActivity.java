@@ -1,6 +1,11 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.show;
 
 import java.util.ArrayList;
+
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.edit.TextEntry;
+import com.vinsol.expensetracker.favorite.FavoriteHelper;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,7 +19,7 @@ public class ShowTextActivity extends ShowAbstract implements OnClickListener{
 
 	private final int SHOW_RESULT = 35;
 	private Bundle intentExtras;
-	protected static String favID = null;
+	public static String favID = null;
 	private Long userId = null;
 	private Button showDelete;
 	private Button showEdit;

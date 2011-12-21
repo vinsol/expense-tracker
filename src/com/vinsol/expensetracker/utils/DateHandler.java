@@ -1,6 +1,8 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.utils;
 
 import java.util.Calendar;
+
+import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.utils.DisplayDate;
 
 import android.app.Activity;
@@ -23,7 +25,7 @@ public class DateHandler implements OnClickListener {
 	private DatePickerDialog dialog;
 	static Calendar tempCalenderOnCancel;
 
-	protected DateHandler(Context mContext) {
+	public DateHandler(Context mContext) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
