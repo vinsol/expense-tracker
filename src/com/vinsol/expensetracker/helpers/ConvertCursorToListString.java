@@ -56,6 +56,7 @@ public class ConvertCursorToListString {
 		DatabaseAdapter adapter = new DatabaseAdapter(context);
 		adapter.open();
 		Cursor cursor;
+		StringProcessing mStringProcessing = new StringProcessing();
 		if(id == null || id.equals("")){
 			cursor = adapter.getDateDatabase();
 		} else {
@@ -93,91 +94,17 @@ public class ConvertCursorToListString {
 					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
 					if (!list.get(DatabaseAdapter.KEY_DATE_TIME).equals(getValue(mTempDisplayDate, isGraph, id))) { // TODO
-						if (isTempAmountNull) {
-							if (temptotalAmount != 0) {
-								totalAmountString = temptotalAmount + " ?";
-							} else {
-								totalAmountString = "?";
-							}
-						} else {
-							totalAmountString = temptotalAmount + "";
-						}
+						totalAmountString = getTotalAmount(isTempAmountNull, temptotalAmount, totalAmountString);
 						isTempAmountNull = false;
-						if (totalAmountString.contains("?")&& totalAmountString.length() > 1) {
-							String temp = totalAmountString.substring(0,totalAmountString.length() - 2);
-							Double mAmount = Double.parseDouble(temp);
-							mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-							if (mAmount.toString().contains(".")) {
-								if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
-									totalAmountString = mAmount.toString()+ " ?";
-								} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
-									totalAmountString = mAmount.toString()+ "0 ?";
-								}
-
-							} else {
-								totalAmountString = mAmount.toString()+ ".00 ?";
-							}
-						} else if (!totalAmountString.contains("?")) {
-							String temp = totalAmountString.substring(0,totalAmountString.length());
-							Double mAmount = Double.parseDouble(temp);
-							mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-
-							if (mAmount.toString().contains(".")) {
-								if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
-									totalAmountString = mAmount.toString() + "";
-								} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
-									totalAmountString = mAmount.toString()+ "0";
-								}
-
-							} else {
-								totalAmountString = mAmount.toString() + ".00";
-							}
-						}
+						totalAmountString = mStringProcessing.getStringDoubleDecimal(totalAmountString);
 						list.put(DatabaseAdapter.KEY_AMOUNT, totalAmountString);
 						temptotalAmount = 0;
 					}
 				} else {
 					cursor.moveToLast();
-					if (isTempAmountNull) {
-						if (temptotalAmount != 0) {
-							totalAmountString = temptotalAmount + " ?";
-						} else {
-							totalAmountString = "?";
-						}
-					} else {
-						totalAmountString = temptotalAmount + "";
-					}
+					totalAmountString = getTotalAmount(isTempAmountNull, temptotalAmount, totalAmountString);
 					isTempAmountNull = false;
-					if (totalAmountString.contains("?") && totalAmountString.length() > 1) {
-						String temp = totalAmountString.substring(0,totalAmountString.length() - 2);
-						Double mAmount = Double.parseDouble(temp);
-						mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-						if (mAmount.toString().contains(".")) {
-							if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
-								totalAmountString = mAmount.toString() + " ?";
-							} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
-								totalAmountString = mAmount.toString() + "0 ?";
-							}
-
-						} else {
-							totalAmountString = mAmount.toString() + ".00 ?";
-						}
-					} else if (!totalAmountString.contains("?")) {
-						String temp = totalAmountString.substring(0,totalAmountString.length());
-						Double mAmount = Double.parseDouble(temp);
-						mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-
-						if (mAmount.toString().contains(".")) {
-							if (mAmount.toString().charAt(mAmount.toString().length() - 3) == '.') {
-								totalAmountString = mAmount.toString() + "";
-							} else if (mAmount.toString().charAt(mAmount.toString().length() - 2) == '.') {
-								totalAmountString = mAmount.toString() + "0";
-							}
-
-						} else {
-							totalAmountString = mAmount.toString() + ".00";
-						}
-					}
+					totalAmountString = mStringProcessing.getStringDoubleDecimal(totalAmountString);
 					list.put(DatabaseAdapter.KEY_AMOUNT, totalAmountString);
 					cursor.moveToNext();
 				}
@@ -194,6 +121,19 @@ public class ConvertCursorToListString {
 		return mainlist;
 	}
 		
+	private String getTotalAmount(Boolean isTempAmountNull,double temptotalAmount,String totalAmountString){
+		if (isTempAmountNull) {
+			if (temptotalAmount != 0) {
+				totalAmountString = temptotalAmount + " ?";
+			} else {
+				totalAmountString = "?";
+			}
+		} else {
+			totalAmountString = temptotalAmount + "";
+		}
+		return totalAmountString;
+	}
+	
 	public List<HashMap<String, String>> getListStringParticularDate(String id) {
 		DatabaseAdapter adapter = new DatabaseAdapter(context);
 		adapter.open();

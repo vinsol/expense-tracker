@@ -16,7 +16,6 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
-import com.vinsol.expensetracker.helpers.StringProcessing;
 
 public class ExpenseListing extends ListingAbstract {
 
@@ -27,7 +26,6 @@ public class ExpenseListing extends ListingAbstract {
 		super.onCreate(savedInstanceState);
 		bundle = new Bundle();
 		setContentView(R.layout.expense_listing);
-		mStringProcessing = new StringProcessing();
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 	}
 
@@ -152,7 +150,6 @@ public class ExpenseListing extends ListingAbstract {
 							break;
 						}
 					}
-
 				}
 			}
 			listString.add(mList);
