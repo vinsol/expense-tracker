@@ -53,7 +53,6 @@ public class BarGraph extends View {
 			calculatedInterval /= 10;
 			multiplier *= 10; 
 		}
-
 		
 		if(calculatedInterval < .1) {
 			calculatedInterval = .1;

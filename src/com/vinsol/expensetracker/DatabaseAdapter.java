@@ -18,7 +18,6 @@ public class DatabaseAdapter {
 	private final String DATABASE_NAME = "ExpenseTrackerDB";
 	private final String TABLE_NAME = "ExpenseTrackerTable";
 	private final String TABLE_NAME_FAVORITE = "FavoriteTable";
-	
 
 	// column index
 	public static final String KEY_ID = "_id";

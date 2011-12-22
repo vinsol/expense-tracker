@@ -35,8 +35,8 @@ public class ExpenseListing extends ListingAbstract {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mDataDateList = mConvertCursorToListString.getDateListString();
-		mSubList = mConvertCursorToListString.getListStringParticularDate();
+		mDataDateList = mConvertCursorToListString.getDateListString(false,"");
+		mSubList = mConvertCursorToListString.getListStringParticularDate("");
 		Bundle intentExtras = getIntent().getExtras();
 		if(intentExtras != null){
 			if(intentExtras.containsKey("toHighLight")){

@@ -67,10 +67,9 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	
 	@Override
 	protected Void doInBackground(Void... arg0) {
-		
 		mConvertCursorToListString = new ConvertCursorToListString(mContext);
-		mDataDateListGraph = mConvertCursorToListString.getDateListStringGraph();
-		mSubList = mConvertCursorToListString.getListStringParticularDate();
+		mDataDateListGraph = mConvertCursorToListString.getDateListString(true,"");
+		mSubList = mConvertCursorToListString.getListStringParticularDate("");
 		if (mDataDateListGraph.size() >= 1) {
 			lastDateCalendar.setTimeInMillis(Long.parseLong(mSubList.get(mSubList.size()-1).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
 			lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);

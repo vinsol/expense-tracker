@@ -32,7 +32,7 @@ public class ExpenseSubListing extends ListingAbstract {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mDataDateList = mConvertCursorToListString.getDateListString(idList);
+		mDataDateList = mConvertCursorToListString.getDateListString(false,idList);
 		mSubList = mConvertCursorToListString.getListStringParticularDate(idList);
 		
 		if(mSubList.size() > 0){
