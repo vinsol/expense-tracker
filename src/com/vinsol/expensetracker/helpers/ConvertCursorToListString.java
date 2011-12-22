@@ -177,7 +177,6 @@ public class ConvertCursorToListString {
 				try {
 					list.put(tempList.get(i), cursor.getString(cursor.getColumnIndex(tempList.get(i))));
 				} catch (NullPointerException e) {
-					e.printStackTrace();
 				}
 			}
 			return list;

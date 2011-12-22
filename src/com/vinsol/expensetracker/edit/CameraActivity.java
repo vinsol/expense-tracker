@@ -55,7 +55,7 @@ public class CameraActivity extends EditAbstract {
 			if(setUnknown){
 				startCamera();
 			}
-			File mFile = new File("/sdcard/ExpenseTracker/" + userId + "_small.jpg");
+			File mFile = new File("/sdcard/ExpenseTracker/" + entry.userId + "_small.jpg");
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 				setImageResource(mDrawable);
@@ -73,7 +73,7 @@ public class CameraActivity extends EditAbstract {
 		
 		dateViewString = dateBarDateview.getText().toString();
 		
-		if(userId == null ) {
+		if(entry.userId == null ) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				
 				HashMap<String, String> toInsert = new HashMap<String, String>();
@@ -109,7 +109,7 @@ public class CameraActivity extends EditAbstract {
 				
 				toInsert.put(DatabaseAdapter.KEY_TYPE, getString(R.string.camera));
 				mDatabaseAdapter.open();
-				userId = mDatabaseAdapter.insertToDatabase(toInsert);
+				entry.userId = mDatabaseAdapter.insertToDatabase(toInsert);
 				mDatabaseAdapter.close();
 			}
 		}
@@ -135,7 +135,7 @@ public class CameraActivity extends EditAbstract {
 			Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			File path = new File("/mnt/sdcard/ExpenseTracker");
 			path.mkdirs();
-			String name = userId + ".jpg";
+			String name = entry.userId + ".jpg";
 			File file = new File(path, name);
 			camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
 			startActivityForResult(camera, PICTURE_RESULT);
@@ -154,14 +154,14 @@ public class CameraActivity extends EditAbstract {
 			} else {
 				isChanged = false;
 				if(!setUnknown) {
-					File mFile = new File("/sdcard/ExpenseTracker/" + userId+ "_small.jpg");
+					File mFile = new File("/sdcard/ExpenseTracker/" + entry.userId+ "_small.jpg");
 					if (mFile.canRead()) {
 						Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 						setImageResource(mDrawable);
 					} else {
 						DatabaseAdapter adapter = new DatabaseAdapter(this);
 						adapter.open();
-						adapter.deleteDatabaseEntryID(userId + "");
+						adapter.deleteDatabaseEntryID(entry.userId + "");
 						adapter.close();
 					}
 				}
@@ -184,7 +184,7 @@ public class CameraActivity extends EditAbstract {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			new CameraFileSave(CameraActivity.this).resizeImageAndSaveThumbnails(userId + "");
+			new CameraFileSave(CameraActivity.this).resizeImageAndSaveThumbnails(entry.userId + "");
 			return null;
 		}
 
@@ -192,7 +192,7 @@ public class CameraActivity extends EditAbstract {
 		protected void onPostExecute(Void result) {
 			editLoadProgress.setVisibility(View.GONE);
 			editImageDisplay.setVisibility(View.VISIBLE);
-			File mFile = new File("/sdcard/ExpenseTracker/" + userId+ "_small.jpg");
+			File mFile = new File("/sdcard/ExpenseTracker/" + entry.userId+ "_small.jpg");
 			Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 			setImageResource(mDrawable);
 			editDelete.setEnabled(true);
@@ -223,10 +223,10 @@ public class CameraActivity extends EditAbstract {
 		
 		// //////// ********** Adding action if image is pressed ********		 ///////////
 		if (v.getId() == R.id.edit_image_display) {
-			File mFile = new File("/sdcard/ExpenseTracker/" + userId + ".jpg");
+			File mFile = new File("/sdcard/ExpenseTracker/" + entry.userId + ".jpg");
 			if(mFile.canRead()) {
 				Intent intent = new Intent(this, ImagePreview.class);
-				intent.putExtra("id", userId);
+				intent.putExtra("id", entry.userId);
 				startActivity(intent);
 			} else {
 				Toast.makeText(this, "no image to preview", Toast.LENGTH_SHORT).show();
@@ -242,7 +242,7 @@ public class CameraActivity extends EditAbstract {
 	@Override
 	protected void deleteAction() {
 		super.deleteAction();
-		new FileDelete(userId);
+		new FileDelete(entry.userId);
 	}
 	
 	@Override

@@ -1,6 +1,5 @@
 package com.vinsol.expensetracker;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -22,13 +21,14 @@ import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
+import com.vinsol.expensetracker.models.Entry;
 
 public class MainActivity extends Activity implements OnClickListener {
 	private DatabaseAdapter mDatabaseAdapter;
 	private long timeInMillis = 0;
 	private Bundle bundle;
-	private Long userId = null; 
-	private ArrayList<String> mTempClickedList;
+//	private Long userId = null; 
+	private Entry entry;
 	private HandleGraph mHandleGraph;
 	
 	@Override
@@ -36,7 +36,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		bundle = new Bundle();
-
+		entry = new Entry();
 		// /////// ********* DatabaseAdaptor initialize ********* ////////
 		mDatabaseAdapter = new DatabaseAdapter(this);
 
@@ -79,12 +79,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		mHandleGraph.execute();
 		super.onResume();
 	}
-
-	@Override
-	protected void onPause() {
-		userId = null;
-		super.onPause();
-	}
 	
 	@Override
 	public void onClick(View clickedView) {
@@ -124,16 +118,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			
 		// //// ******* opens Favorite Activity ******** ///////////
 		case R.id.main_favorite:
-			
 			if(new ConvertCursorToListString(this).getFavoriteList().size() >=1){
 				Intent intentFavorite = new Intent(this, FavoriteActivity.class);
-				if(userId == null) {
-					if (timeInMillis != 0) {
-						bundle.putLong("timeInMillis", timeInMillis);
-					}
-				} else {
-					bundle.putStringArrayList("mDisplayList", mTempClickedList);
-				}
 				bundle = new Bundle();
 				intentFavorite.putExtra("favoriteBundle", bundle);
 				startActivity(intentFavorite);	
@@ -145,8 +131,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			
 		// //// ******* opens List Activity and adds unknown entry to database ******** ///////////
 		case R.id.main_save_reminder:
-			if(userId == null) 
-				insertToDatabase(R.string.unknown);
+			insertToDatabase(R.string.unknown);
 			Intent intentListView = new Intent(this, ExpenseListing.class);
 			startActivity(intentListView);
 			break;
@@ -159,20 +144,15 @@ public class MainActivity extends Activity implements OnClickListener {
 		}//end switch
 	}//end onClick
 	
-	private void createDatabaseEntry(int typeOfEntry) {	
-		if(userId == null ) {
-			userId = insertToDatabase(typeOfEntry);
-			bundle.putLong("_id", userId);
-			
-			if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-				bundle.putBoolean("setLocation", false);
-			} else {
-				bundle.putBoolean("setLocation", true);
-			}
+	private void createDatabaseEntry(int typeOfEntry) {
+		entry.userId = insertToDatabase(typeOfEntry);
+		bundle.putLong("_id", entry.userId);
+		
+		if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+			bundle.putBoolean("setLocation", false);
 		} else {
-			bundle.putStringArrayList("mDisplayList", mTempClickedList);
-			editDatabase(typeOfEntry);
-		}		
+			bundle.putBoolean("setLocation", true);
+		}
 	}
 
 	// /////// ******** function to mark entry into the database and returns the
@@ -197,14 +177,5 @@ public class MainActivity extends Activity implements OnClickListener {
 		long userId = mDatabaseAdapter.insertToDatabase(list);
 		mDatabaseAdapter.close();
 		return userId;
-	}
-	
-	private void editDatabase(int type) {
-		HashMap<String, String> list = new HashMap<String, String>();
-		list.put(DatabaseAdapter.KEY_ID,mTempClickedList.get(0));
-		list.put(DatabaseAdapter.KEY_TYPE, getString(type));
-		mDatabaseAdapter.open();
-		mDatabaseAdapter.editDatabase(list);
-		mDatabaseAdapter.close();
 	}
 }

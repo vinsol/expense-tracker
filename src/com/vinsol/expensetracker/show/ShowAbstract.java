@@ -6,6 +6,7 @@ import java.util.Calendar;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
+import com.vinsol.expensetracker.models.ShowData;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -19,9 +20,7 @@ import android.widget.Toast;
 abstract class ShowAbstract extends Activity implements OnClickListener{
 
 	protected TextView showAmount;
-	protected TextView showTextview;
-	public static String favID;
-	protected Long userId = null;
+	protected TextView showTag;
 	protected ArrayList<String> mShowList;
 	protected Bundle intentExtras;
 	protected int typeOfEntryFinished;
@@ -34,17 +33,19 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	protected Button showDelete;
 	protected Button showEdit;
 	private RelativeLayout dateBarRelativeLayout;
+	protected ShowData showData;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_page);
+		showData = new ShowData();
 		showEdit = (Button) findViewById(R.id.show_edit);
 		showDelete = (Button) findViewById(R.id.show_delete);
 		showHeaderTitle = (TextView) findViewById(R.id.show_header_title);
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		showAmount = (TextView) findViewById(R.id.show_amount);
-		showTextview = (TextView) findViewById(R.id.show_tag_textview);
+		showTag = (TextView) findViewById(R.id.show_tag_textview);
 		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_date_bar); 
 		mShowList = new ArrayList<String>();
 		dateBarRelativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg_wo_shadow));
@@ -58,24 +59,24 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = new ArrayList<String>();
 			mShowList = intentExtras.getStringArrayList("mDisplayList");
-			userId = Long.parseLong(mShowList.get(0));
-			String amount = mShowList.get(2);
-			String tag = mShowList.get(1);
+			showData.userId = Long.parseLong(mShowList.get(0));
+			showData.amount = mShowList.get(2);
+			showData.description = mShowList.get(1);
 			
-			if (!(amount.equals("") || amount == null)) {
-				if (!amount.contains("?"))
-					showAmount.setText(amount);
+			if (!(showData.amount.equals("") || showData.amount == null)) {
+				if (!showData.amount.contains("?"))
+					showAmount.setText(showData.amount);
 			}
 			
-			if (!(tag.equals("") || tag == null || tag.equals(getString(typeOfEntryUnfinished)))) {
-				showTextview.setText(tag);
+			if (!(showData.description.equals("") || showData.description == null || showData.description.equals(getString(typeOfEntryUnfinished)))) {
+				showTag.setText(showData.description);
 			} else {
-				showTextview.setText(getString(typeOfEntryFinished));
+				showTag.setText(getString(typeOfEntryFinished));
 			}
 			
 			if(mShowList.get(4) != null){
 				if(!mShowList.get(4).equals("")){
-					favID = mShowList.get(4);
+					ShowData.staticFavID = mShowList.get(4);
 				}
 			}
 			
@@ -106,19 +107,19 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 			
 			if(mShowList.get(0) != null){
 				if(mShowList.get(0) != ""){
-					userId = Long.parseLong(mShowList.get(0));
+					showData.userId = Long.parseLong(mShowList.get(0));
 				} else {
 					finish();
 				}
 			} else {
 				finish();
 			}
-			String amount = mShowList.get(2);
-			String tag = mShowList.get(1);
+			showData.amount = mShowList.get(2);
+			showData.description = mShowList.get(1);
 
-			if (amount != null) {
-				if(!amount.equals("") && !amount.equals("?")){
-					showAmount.setText(amount);
+			if (showData.amount != null) {
+				if(!showData.amount.equals("") && !showData.amount.equals("?")){
+					showAmount.setText(showData.amount);
 				} else {
 					finish();
 				}
@@ -126,10 +127,10 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 				finish();
 			}
 			
-			if (!(tag.equals("") || tag == null || tag.equals(getString(typeOfEntryUnfinished)) || tag.equals(getString(typeOfEntryFinished)))) {
-				showTextview.setText(tag);
+			if (!(showData.description.equals("") || showData.description == null || showData.description.equals(getString(typeOfEntryUnfinished)) || showData.description.equals(getString(typeOfEntryFinished)))) {
+				showTag.setText(showData.description);
 			} else {
-				showTextview.setText(getString(typeOfEntryFinished));
+				showTag.setText(getString(typeOfEntryFinished));
 			}
 			
 			Calendar mCalendar = Calendar.getInstance();
@@ -151,10 +152,10 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.show_delete) {
-			if (userId != null) {
+			if (showData.userId != null) {
 				deleteAction();
 				mDatabaseAdapter.open();
-				mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(userId));
+				mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(showData.userId));
 				mDatabaseAdapter.close();
 				Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
 				finish();
@@ -165,7 +166,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		
 		if(v.getId() == R.id.show_edit){
 			intentExtras.putBoolean("isFromShowPage", true);
-			mShowList.set(4, favID);
+			mShowList.set(4, ShowData.staticFavID);
 			intentExtras.remove("mDisplayList");
 			intentExtras.putStringArrayList("mDisplayList", mShowList);
 			editAction();

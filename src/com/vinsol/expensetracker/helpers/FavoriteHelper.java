@@ -7,11 +7,9 @@ import java.util.HashMap;
 import com.vinsol.expensetracker.DBAdapterFavorite;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.show.ShowCameraActivity;
-import com.vinsol.expensetracker.show.ShowTextActivity;
-import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.helpers.FileCopyFavorite;
 import com.vinsol.expensetracker.helpers.FileDeleteFavorite;
+import com.vinsol.expensetracker.models.ShowData;
 
 import android.app.Activity;
 import android.content.Context;
@@ -93,7 +91,7 @@ public class FavoriteHelper implements OnClickListener{
 				mDbAdapterFavorite.open();
 				favID = mDbAdapterFavorite.insertToDatabase(list);
 				mDbAdapterFavorite.close();
-				ShowTextActivity.favID = Long.toString(favID);
+				
 			} else if(mShowList.get(5).equals(mContext.getString(R.string.camera))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if(!mShowList.get(1).equals("") && !mShowList.get(1).equals(mContext.getString(R.string.unfinished_cameraentry)) && mShowList.get(1) != null){
@@ -113,7 +111,6 @@ public class FavoriteHelper implements OnClickListener{
 							mDbAdapterFavorite.deleteDatabaseEntryID(Long.toString(favID));
 							mDbAdapterFavorite.close();
 						}
-						ShowCameraActivity.favID = Long.toString(favID);
 					} catch (Exception e) {	
 					}
 				} else {
@@ -135,14 +132,13 @@ public class FavoriteHelper implements OnClickListener{
 							mDbAdapterFavorite.deleteDatabaseEntryID(Long.toString(favID));
 							mDbAdapterFavorite.close();
 						}
-						ShowVoiceActivity.favID = Long.toString(favID);
 					} catch (Exception e) {	
 					}
 				} else {
 					Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_SHORT).show();
 				}
 			}
-			
+			ShowData.staticFavID = Long.toString(favID);
 			list = new HashMap<String, String>();
 			list.put(DatabaseAdapter.KEY_ID, mShowList.get(0));
 			list.put(DatabaseAdapter.KEY_FAVORITE, Long.toString(favID));
@@ -152,7 +148,7 @@ public class FavoriteHelper implements OnClickListener{
 			showAddFavorite.setChecked(true);
 			showAddFavoriteTextView.setText("Remove from Favorite");
 		} else if(mShowList.get(5).equals(mContext.getString(R.string.text))){
-				ShowTextActivity.favID = null;
+				ShowData.staticFavID = null;
 				String favID = null;
 				mDatabaseAdapter.open();
 				favID = mDatabaseAdapter.getFavoriteId(mShowList.get(0));
@@ -169,8 +165,7 @@ public class FavoriteHelper implements OnClickListener{
 				showAddFavoriteTextView.setText("Add to Favorite");
 				
 			} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-				ShowVoiceActivity.favID = null;
-				ShowCameraActivity.favID = null;
+				ShowData.staticFavID = null;
 				String favID = null;
 				mDatabaseAdapter.open();
 				favID = mDatabaseAdapter.getFavoriteId(mShowList.get(0));

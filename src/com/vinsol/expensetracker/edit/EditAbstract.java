@@ -7,9 +7,8 @@ import java.util.HashMap;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.listing.ExpenseListing;
-import com.vinsol.expensetracker.show.ShowCameraActivity;
-import com.vinsol.expensetracker.show.ShowTextActivity;
-import com.vinsol.expensetracker.show.ShowVoiceActivity;
+import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.models.ShowData;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.DisplayDate;
@@ -19,6 +18,7 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,7 +28,6 @@ import android.widget.TextView;
 
 abstract class EditAbstract extends Activity implements OnClickListener{
 	protected ArrayList<String> mEditList;
-	protected Long userId = null;
 	protected boolean setLocation = false;
 	protected EditText editAmount;
 	protected EditText editTag;
@@ -44,11 +43,13 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 	protected String dateViewString;
 	protected Button editDelete;
 	protected Button editSaveEntry;
+	protected Entry entry;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_page);
+		entry = new Entry();
 		editAmount = (EditText) findViewById(R.id.edit_amount);
 		editHeaderTitle = (TextView) findViewById(R.id.edit_header_title);
 		editTag = (EditText) findViewById(R.id.edit_tag);
@@ -69,7 +70,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 	protected void editHelper() {
 
 		if (intentExtras.containsKey("_id"))
-			userId = intentExtras.getLong("_id");
+			entry.userId = intentExtras.getLong("_id");
 
 		if(intentExtras.containsKey("setLocation")){
 			setLocation = intentExtras.getBoolean("setLocation");
@@ -78,20 +79,20 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		if (intentExtras.containsKey("mDisplayList")) {
 			mEditList = new ArrayList<String>();
 			mEditList = intentExtras.getStringArrayList("mDisplayList");
-			userId = Long.parseLong(mEditList.get(0));
-			String amount = mEditList.get(2);
-			String tag = mEditList.get(1);
-			if (!(amount.equals("") || amount == null)) {
-				if (!amount.contains("?"))
-					editAmount.setText(amount);
+			entry.userId = Long.parseLong(mEditList.get(0));
+			entry.amount = mEditList.get(2);
+			entry.description = mEditList.get(1);
+			if (!(entry.amount.equals("") || entry.amount == null)) {
+				if (!entry.amount.contains("?"))
+					editAmount.setText(entry.amount);
 			}
-			if(tag.equals(getString(R.string.unknown_entry)) || mEditList.get(5).equals(getString(R.string.unknown))){
+			if(entry.description.equals(getString(R.string.unknown_entry)) || mEditList.get(5).equals(getString(R.string.unknown))){
 				setUnknown = true;
 			}
 			
-			if (!(tag.equals("") || tag == null || 
-					tag.equals(getString(typeOfEntryUnfinished)) || tag.equals(getString(typeOfEntryFinished))  || tag.equals(getString(R.string.unknown_entry)))) {
-				editTag.setText(tag);
+			if (!(entry.description.equals("") || entry.description == null || 
+					entry.description.equals(getString(typeOfEntryUnfinished)) || entry.description.equals(getString(typeOfEntryFinished))  || entry.description.equals(getString(R.string.unknown_entry)))) {
+				editTag.setText(entry.description);
 			}
 		}
 		
@@ -108,16 +109,19 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 	protected HashMap<String, String> getSaveEntryData(TextView editDateBarDateview,String dateViewString){
 		// ///// ******* Creating HashMap to update info ******* ////////
 		HashMap<String, String> list = new HashMap<String, String>();
-		list.put(DatabaseAdapter.KEY_ID, Long.toString(userId));
-		if (!editAmount.getText().toString().equals(".") && !editAmount.getText().toString().equals("")) {
-			Double mAmount = Double.parseDouble(editAmount.getText().toString());
+		list.put(DatabaseAdapter.KEY_ID, Long.toString(entry.userId));
+		entry.amount = editAmount.getText().toString();
+		entry.description = editTag.getText().toString();
+		if (!entry.amount.equals(".") && !entry.amount.equals("")) {
+			Log.v("entry", entry.amount);
+			Double mAmount = Double.parseDouble(entry.amount);
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 			list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
 		} else {
 			list.put(DatabaseAdapter.KEY_AMOUNT, "");
 		}
-		if (editTag.getText().toString() != "") {
-			list.put(DatabaseAdapter.KEY_TAG, editTag.getText().toString());
+		if (!entry.description.equals("")) {
+			list.put(DatabaseAdapter.KEY_TAG, entry.description);
 		}
 		if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 			try {
@@ -178,15 +182,12 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		}catch(Exception e){
 			isAmountNotEqual = true;
 		}
+		
+		Log.v("(!mEditList.get(1).equals(listOnResult.get(1))) || isAmountNotEqual || isChanged", mEditList.get(1)+" "+listOnResult.get(1));
 
 		if((!mEditList.get(1).equals(listOnResult.get(1))) || isAmountNotEqual || isChanged ) {
 			isChanged = false;
-			if(typeOfEntry == R.string.camera)
-				ShowCameraActivity.favID = null;
-			else if(typeOfEntry == R.string.voice)
-				ShowVoiceActivity.favID = null;
-			else if(typeOfEntry == R.string.text)
-				ShowTextActivity.favID = null;
+			ShowData.staticFavID = null;
 			HashMap<String, String> listForFav = new HashMap<String, String>();
 			listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
 			listForFav.put(DatabaseAdapter.KEY_ID, mEditList.get(0));
@@ -196,28 +197,13 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			mDatabaseAdapter.close();
 			listOnResult.add("");
 		} else 
-			if(typeOfEntry == R.string.camera){
-				if(ShowCameraActivity.favID == null) {
-					listOnResult.add(mEditList.get(4));
-				}
-				else { 
-					listOnResult.add(ShowCameraActivity.favID);
-				}
-			} else if (typeOfEntry == R.string.voice) {
-				if(ShowVoiceActivity.favID == null) {
-					listOnResult.add(mEditList.get(4));
-				}
-				else { 
-					listOnResult.add(ShowVoiceActivity.favID);
-				}
-			} else if (typeOfEntry == R.string.text) {
-				if(ShowTextActivity.favID == null) {
-					listOnResult.add(mEditList.get(4));
-				}
-				else { 
-					listOnResult.add(ShowTextActivity.favID);
-				}
+			if(ShowData.staticFavID == null) {
+				listOnResult.add(mEditList.get(4));
 			}
+			else { 
+				listOnResult.add(ShowData.staticFavID);
+			}
+			
 			
 		listOnResult.add(mEditList.get(5));
 		if(list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
@@ -234,7 +220,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 	protected void saveEntry() {
 		
 		HashMap<String, String> toSave = getSaveEntryData(dateBarDateview,dateViewString);
-		
+
 		// //// ******* Update database if user added additional info *******		 ///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(toSave);
@@ -250,6 +236,8 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			Bundle tempBundle = new Bundle();
 			tempBundle.putStringArrayList("mDisplayList", getListOnResult(toSave));
 			saveEntryStartIntent(tempBundle);
+
+			Log.v("Constants After", ShowData.staticFavID+ " Checking");
 		}
 		finish();
 	}
@@ -291,7 +279,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 
 			// //// ******* Delete entry from database ******** /////////
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(userId));
+			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(entry.userId));
 			mDatabaseAdapter.close();
 			if(intentExtras.containsKey("isFromShowPage")){
 				ArrayList<String> listOnResult = new ArrayList<String>();
