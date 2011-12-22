@@ -47,7 +47,6 @@ public class ShowCameraActivity extends ShowAbstract {
 					int height = (int) (111 * scale + 0.5f);
 					showImageDisplay.setLayoutParams(new LayoutParams(width, height));
 				}
-				
 				showImageDisplay.setImageDrawable(mDrawable);
 			} else {
 				showImageDisplay.setImageResource(R.drawable.no_image_small);
