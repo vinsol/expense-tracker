@@ -12,10 +12,10 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.Voice;
-import com.vinsol.expensetracker.utils.AudioPlay;
 import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
+import com.vinsol.expensetracker.helpers.AudioPlay;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
-import com.vinsol.expensetracker.utils.FileDelete;
+import com.vinsol.expensetracker.helpers.FileDelete;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
 public class ShowVoiceActivity extends ShowAbstract {

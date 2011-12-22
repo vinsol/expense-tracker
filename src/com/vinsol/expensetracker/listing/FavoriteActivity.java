@@ -34,8 +34,8 @@ import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.FileCopyFavorite;
+import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.utils.ImagePreview;
-import com.vinsol.expensetracker.utils.LocationHelper;
 
 public class FavoriteActivity extends Activity implements OnItemClickListener{
 	

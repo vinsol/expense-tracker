@@ -11,7 +11,7 @@ public class TextEntry extends EditAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		findViewById(R.id.edit_date_bar).setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg));
+//		findViewById(R.id.edit_date_bar).setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg));
 		// //////********* Get id from intent extras ******** ////////////
 
 		intentExtras = getIntent().getBundleExtra("textEntryBundle");

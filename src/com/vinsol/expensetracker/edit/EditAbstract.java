@@ -13,7 +13,7 @@ import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.DisplayDate;
-import com.vinsol.expensetracker.utils.LocationHelper;
+import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 
 import android.app.Activity;
@@ -89,7 +89,8 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 				setUnknown = true;
 			}
 			
-			if (!(tag.equals("") || tag == null || tag.equals(getString(typeOfEntryUnfinished)) || tag.equals(getString(typeOfEntryFinished))  || tag.equals(getString(R.string.unknown_entry)))) {
+			if (!(tag.equals("") || tag == null || 
+					tag.equals(getString(typeOfEntryUnfinished)) || tag.equals(getString(typeOfEntryFinished))  || tag.equals(getString(R.string.unknown_entry)))) {
 				editTag.setText(tag);
 			}
 		}
@@ -108,7 +109,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		// ///// ******* Creating HashMap to update info ******* ////////
 		HashMap<String, String> list = new HashMap<String, String>();
 		list.put(DatabaseAdapter.KEY_ID, Long.toString(userId));
-		if (!editAmount.getText().toString().equals(".")&& !editAmount.getText().toString().equals("")) {
+		if (!editAmount.getText().toString().equals(".") && !editAmount.getText().toString().equals("")) {
 			Double mAmount = Double.parseDouble(editAmount.getText().toString());
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 			list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());

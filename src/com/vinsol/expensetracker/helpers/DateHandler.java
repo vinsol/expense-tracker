@@ -3,7 +3,6 @@ package com.vinsol.expensetracker.helpers;
 import java.util.Calendar;
 
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.utils.DatePickerDialog;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,25 +25,22 @@ public class DateHandler implements OnClickListener {
 	public static Calendar tempCalenderOnCancel;
 
 	public DateHandler(Context mContext) {
-		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		mCalendar = Calendar.getInstance();
-		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		mDisplayDate = new DisplayDate(mCalendar);
-		dateview = (TextView) activity.findViewById(R.id.edit_date_bar_dateview);
-		previousArrow = (ImageButton) activity.findViewById(R.id.edit_date_bar_previous_arrow);
-		nextArrow = (ImageButton) activity.findViewById(R.id.edit_date_bar_next_arrow);
-		nextArrow.setVisibility(View.INVISIBLE);
-		dateview.setText(mDisplayDate.getDisplayDate());
-		dialog = new DatePickerDialog(mContext, dateview);
-		previousArrow.setOnClickListener(this);
-		nextArrow.setOnClickListener(this);
-		dateview.setOnClickListener(this);
+		doCommonTaskBefore(mContext);
+		doCommonTaskAfter(mContext);
 	}
 
 	public DateHandler(Context mContext, long long1) {
+		doCommonTaskBefore(mContext);
+		mCalendar.setTimeInMillis(long1);
+		doCommonTaskAfter(mContext);
+	}
+	
+	private void doCommonTaskBefore(Context mContext){
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		mCalendar = Calendar.getInstance();
-		mCalendar.setTimeInMillis(long1);
+	}
+	
+	private void doCommonTaskAfter(Context mContext) {
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mDisplayDate = new DisplayDate(mCalendar);
 		dateview = (TextView) activity.findViewById(R.id.edit_date_bar_dateview);

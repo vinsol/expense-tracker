@@ -19,9 +19,9 @@ import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
+import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
-import com.vinsol.expensetracker.utils.LocationHelper;
 
 public class MainActivity extends Activity implements OnClickListener {
 	private DatabaseAdapter mDatabaseAdapter;

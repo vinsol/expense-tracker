@@ -97,18 +97,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		}
 	}
 	
-	public String getFavID() {
-		return favID;
-	}
-	
-	public long getId() {
-		return userId;
-	}
-	
-	public ArrayList<String> getShowList() {
-		return mShowList;
-	}
-	
 	public void doTaskOnActivityResult(Bundle _intentExtras){
 		intentExtras = _intentExtras;
 		mShowList = new ArrayList<String>();

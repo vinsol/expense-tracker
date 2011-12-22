@@ -1,10 +1,11 @@
-package com.vinsol.expensetracker.utils;
+package com.vinsol.expensetracker.helpers;
 
 import java.util.Calendar;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.utils.GetMonth;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,12 +15,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 public class DatePickerDialog extends Dialog implements android.view.View.OnClickListener, OnDateChangedListener {
 
 	private DatePicker datePicker;
-	private TimePicker timePicker;
 	private TextView dateView;
 	private TextView textView;
 
@@ -30,13 +29,11 @@ public class DatePickerDialog extends Dialog implements android.view.View.OnClic
 		setContentView(R.layout.date_input_dialog);
 		textView = (TextView) findViewById(R.id.new_date_label);
 		datePicker = (DatePicker) findViewById(R.id.new_date_picker);
-		timePicker = (TimePicker) findViewById(R.id.new_time_picker);
 	}
 
 	@Override
 	public void show() {
 		String dateViewString = dateView.getText().toString();
-		timePicker.setVisibility(View.GONE);
 		int year, month, day;
 		if (dateViewString.contains("Today")) {
 			Calendar mCalendar = Calendar.getInstance();
@@ -47,7 +44,7 @@ public class DatePickerDialog extends Dialog implements android.view.View.OnClic
 			year = Integer.parseInt((String) dateViewString.subSequence(dateViewString.length() - 4, dateViewString.length()));
 			dateViewString = (String) dateViewString.subSequence(0,dateViewString.length() - 6);
 		}
-		month = getMonth((String) dateViewString.subSequence(0, 3));
+		month = new GetMonth().getMonth((String) dateViewString.subSequence(0, 3));
 		dateViewString = (String) dateViewString.subSequence(4,dateViewString.length());
 		day = Integer.parseInt(dateViewString);
 		datePicker.init(year, month, day, this);
@@ -74,34 +71,6 @@ public class DatePickerDialog extends Dialog implements android.view.View.OnClic
 		if (v.getId() == R.id.new_date_dialog_cancel_button) {
 			dismiss();
 		}
-	}
-
-	private int getMonth(String i) {
-		if (i.equals("Jan"))
-			return 0;
-		if (i.equals("Feb"))
-			return 1;
-		if (i.equals("Mar"))
-			return 2;
-		if (i.equals("Apr"))
-			return 3;
-		if (i.equals("May"))
-			return 4;
-		if (i.equals("Jun"))
-			return 5;
-		if (i.equals("Jul"))
-			return 6;
-		if (i.equals("Aug"))
-			return 7;
-		if (i.equals("Sep"))
-			return 8;
-		if (i.equals("Oct"))
-			return 9;
-		if (i.equals("Nov"))
-			return 10;
-		if (i.equals("Dec"))
-			return 11;
-		return 0;
 	}
 
 	private void textViewInvisible() {

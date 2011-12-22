@@ -35,13 +35,6 @@
     	android:layout_margin="5dp"
     	android:layout_gravity="center"/>
     	
-    <TimePicker 
-    	android:id = "@+id/new_time_picker"
-    	android:layout_height = "wrap_content"
-    	android:layout_width = "fill_parent"
-    	android:layout_margin = "5dp"
-    	android:layout_gravity = "center_horizontal"/>
-    	
     <LinearLayout 
     	android:orientation="horizontal"
     	android:layout_height = "wrap_content"

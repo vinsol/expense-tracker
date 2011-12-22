@@ -14,7 +14,7 @@ import android.widget.LinearLayout.LayoutParams;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
-import com.vinsol.expensetracker.utils.FileDelete;
+import com.vinsol.expensetracker.helpers.FileDelete;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
 public class ShowCameraActivity extends ShowAbstract {
