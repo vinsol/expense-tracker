@@ -27,7 +27,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	private DatabaseAdapter mDatabaseAdapter;
 	private long timeInMillis = 0;
 	private Bundle bundle;
-//	private Long userId = null; 
 	private Entry entry;
 	private HandleGraph mHandleGraph;
 	

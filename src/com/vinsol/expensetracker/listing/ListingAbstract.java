@@ -2,7 +2,6 @@ package com.vinsol.expensetracker.listing;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +14,7 @@ import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
+import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 
 import android.app.Activity;
@@ -123,40 +123,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 		return false;
 	}
 	
-	protected String getLocationDate(String dateInMillis, String locationData) {
-		Calendar tempCalendar = Calendar.getInstance();
-		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
-		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		int hour = tempCalendar.get(Calendar.HOUR);
-		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));
-		if (minute.length() == 1) {
-			minute = "0" + minute;
-		}
-		if (hour == 0) {
-			hour = 12;
-		}
-		if(locationData == null || locationData.equals("")){
-				locationData = "Unknown location";
-		}
-		if (tempCalendar.get(Calendar.MINUTE) != 0){
-			if (tempCalendar.get(Calendar.AM_PM) == 1){
-				return hour + ":" + minute + " " + "PM" + " at " + locationData;
-			}
-			if (tempCalendar.get(Calendar.AM_PM) == 0){
-				return hour + ":" + minute + " " + "AM" + " at " + locationData;
-			}
-		}
-		else{
-			if (tempCalendar.get(Calendar.AM_PM) == 1){
-				return hour + "" + " " + "PM" + " at " + locationData;
-			}
-			if (tempCalendar.get(Calendar.AM_PM) == 0){
-				return hour + ":" + " " + "AM" + " at " + locationData;
-			}
-		}
-		return null;
-	}
-	
 	protected List<String> getListCurrentWeek(int j) {
 		List<String> templist = new ArrayList<String>();
 		templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
@@ -197,7 +163,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 		// ///// ******* Adding location date data to list ******* //////////
 
 		if (mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis") != null  && !mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis").equals("")) {
-			templist.add(getLocationDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"), mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
+			templist.add(new DisplayDate().getLocationDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"), mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
 		} else if ((mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis") == null || mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis").equals(""))&& mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null&& !mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals("")) {
 			templist.add("Unknown time at "+ mSubList.get(j).get(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
 		} else {

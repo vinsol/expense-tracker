@@ -1,12 +1,12 @@
 package com.vinsol.expensetracker.edit;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.listing.ExpenseListing;
+import com.vinsol.expensetracker.models.DisplayList;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.StaticVariables;
 import com.vinsol.expensetracker.helpers.DateHandler;
@@ -26,7 +26,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 abstract class EditAbstract extends Activity implements OnClickListener{
-	protected ArrayList<String> mEditList;
+	protected DisplayList mEditList;
 	protected boolean setLocation = false;
 	protected EditText editAmount;
 	protected EditText editTag;
@@ -76,16 +76,16 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		}
 		
 		if (intentExtras.containsKey("mDisplayList")) {
-			mEditList = new ArrayList<String>();
-			mEditList = intentExtras.getStringArrayList("mDisplayList");
-			entry.userId = Long.parseLong(mEditList.get(0));
-			entry.amount = mEditList.get(2);
-			entry.description = mEditList.get(1);
+			mEditList = new DisplayList();
+			mEditList = intentExtras.getParcelable("mDisplayList");
+			entry.userId = mEditList.userId;
+			entry.amount = mEditList.amount;
+			entry.description = mEditList.description;
 			if (!(entry.amount.equals("") || entry.amount == null)) {
 				if (!entry.amount.contains("?"))
 					editAmount.setText(entry.amount);
 			}
-			if(entry.description.equals(getString(R.string.unknown_entry)) || mEditList.get(5).equals(getString(R.string.unknown))){
+			if(entry.description.equals(getString(R.string.unknown_entry)) || mEditList.description.equals(getString(R.string.unknown))){
 				setUnknown = true;
 			}
 			
@@ -97,7 +97,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		
 		// //////******** Handle Date Bar ********* ////////
 		if (intentExtras.containsKey("mDisplayList")) {
-			new DateHandler(this, Long.parseLong(mEditList.get(6)));
+			new DateHandler(this, mEditList.timeInMillis);
 		} else if (intentExtras.containsKey("timeInMillis")) {
 			new DateHandler(this, intentExtras.getLong("timeInMillis"));
 		} else {
@@ -149,68 +149,65 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		return list;
 	}
 	
-	protected ArrayList<String> getListOnResult(HashMap<String, String> list){
-		ArrayList<String> listOnResult = new ArrayList<String>();
-		listOnResult.add(mEditList.get(0));
-		listOnResult.add(list.get(DatabaseAdapter.KEY_TAG));
-		listOnResult.add(list.get(DatabaseAdapter.KEY_AMOUNT));
-		if(listOnResult.get(2) == null || listOnResult.get(2) == "") {
-			listOnResult.set(2, "?");
+	protected DisplayList getListOnResult(HashMap<String, String> list){
+		DisplayList displayList = new DisplayList();
+		displayList.userId = mEditList.userId;
+		displayList.description = list.get(DatabaseAdapter.KEY_TAG);
+		displayList.amount = list.get(DatabaseAdapter.KEY_AMOUNT);
+		if(displayList.amount == null || displayList.amount.equals("")) {
+			displayList.amount = "?";
 		}
 		
-		if (listOnResult.get(1) == null || listOnResult.get(1).equals("") || listOnResult.get(1).equals(getString(typeOfEntryUnfinished)) || listOnResult.get(1).equals(getString(typeOfEntryFinished)) || listOnResult.get(1).equals(getString(R.string.unknown_entry))) {
-			listOnResult.set(1, getString(typeOfEntryFinished));
+		if (displayList.description == null || displayList.description.equals("") || displayList.description.equals(getString(typeOfEntryUnfinished)) || displayList.description.equals(getString(typeOfEntryFinished)) || displayList.description.equals(getString(R.string.unknown_entry))) {
+			displayList.description = getString(typeOfEntryFinished);
 		}
 		
-		if (mEditList.get(1) == null || mEditList.get(1).equals("") || mEditList.get(1).equals(getString(typeOfEntryUnfinished)) || mEditList.get(1).equals(getString(typeOfEntryFinished)) || mEditList.get(1).equals(getString(R.string.unknown_entry))) {
-			mEditList.set(1, getString(typeOfEntryFinished));
+		if (mEditList.description == null || mEditList.description.equals("") || mEditList.description.equals(getString(typeOfEntryUnfinished)) || mEditList.description.equals(getString(typeOfEntryFinished)) || mEditList.description.equals(getString(R.string.unknown_entry))) {
+			mEditList.description = getString(typeOfEntryFinished);
 		}
 		
-		if(list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) != null ){
-			listOnResult.add(new DisplayDate().getLocationDate(list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.get(7)));
-		} else if (list.containsKey(DatabaseAdapter.KEY_DATE_TIME) && mEditList.get(7) == null){
-			listOnResult.add(new DisplayDate().getLocationDateDate(list.get(DatabaseAdapter.KEY_DATE_TIME)));
+		if(list.containsKey(DatabaseAdapter.KEY_DATE_TIME)){
+			displayList.timeLocation = new DisplayDate().getLocationDate(list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.location);
 		} else {
-			listOnResult.add(mEditList.get(3));
+			displayList.timeLocation = "Unknown Time and Location";
 		}		
 		
 		Boolean isAmountNotEqual = false;
 		try{
-			isAmountNotEqual = Double.parseDouble(new StringProcessing().getStringDoubleDecimal(listOnResult.get(2))) != Double.parseDouble(mEditList.get(2));
+			isAmountNotEqual = Double.parseDouble(new StringProcessing().getStringDoubleDecimal(displayList.amount)) != Double.parseDouble(mEditList.amount);
 		}catch(Exception e){
 			isAmountNotEqual = true;
 		}
 		
-		if((!mEditList.get(1).equals(listOnResult.get(1))) || isAmountNotEqual || isChanged ) {
+		if((!mEditList.description.equals(displayList.description)) || isAmountNotEqual || isChanged ) {
 			isChanged = false;
 			StaticVariables.favID = null;
 			HashMap<String, String> listForFav = new HashMap<String, String>();
 			listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
-			listForFav.put(DatabaseAdapter.KEY_ID, mEditList.get(0));
+			listForFav.put(DatabaseAdapter.KEY_ID, mEditList.userId.toString());
 			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editDatabase(listForFav);
 			mDatabaseAdapter.close();
-			listOnResult.add("");
+			displayList.favorite = "";
 		} else 
 			if(StaticVariables.favID == null) {
-				listOnResult.add(mEditList.get(4));
+				displayList.favorite = mEditList.favorite;
 			}
 			else { 
-				listOnResult.add(StaticVariables.favID.toString());
+				displayList.favorite = StaticVariables.favID.toString();
 			}
 			
-			
-		listOnResult.add(mEditList.get(5));
+		displayList.type = mEditList.type;	
+
 		if(list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
-			listOnResult.add(list.get(DatabaseAdapter.KEY_DATE_TIME));
+			displayList.timeInMillis = Long.parseLong(list.get(DatabaseAdapter.KEY_DATE_TIME));
 		} else {
-			listOnResult.add(mEditList.get(6));
+			displayList.timeInMillis = mEditList.timeInMillis;
 		}
-		listOnResult.add(mEditList.get(7));
-		mEditList = new ArrayList<String>();
-		mEditList.addAll(listOnResult);
-		return listOnResult;
+		displayList.location = mEditList.location;
+		mEditList = displayList;
+		return displayList;
 	}
 
 	protected void saveEntry() {
@@ -230,7 +227,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			startActivity(intentExpenseListing);
 		} else {
 			Bundle tempBundle = new Bundle();
-			tempBundle.putStringArrayList("mDisplayList", getListOnResult(toSave));
+			tempBundle.putParcelable("mDisplayList", getListOnResult(toSave));
 			saveEntryStartIntent(tempBundle);
 		}
 		finish();
@@ -276,12 +273,10 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(entry.userId));
 			mDatabaseAdapter.close();
 			if(intentExtras.containsKey("isFromShowPage")){
-				ArrayList<String> listOnResult = new ArrayList<String>();
-				listOnResult.add("");
 				Bundle tempBundle = new Bundle();
-				tempBundle.putStringArrayList("mDisplayList", listOnResult);
-				mEditList = new ArrayList<String>();
-				mEditList.addAll(listOnResult);
+				DisplayList displayList = new DisplayList();
+				tempBundle.putParcelable("mDisplayList", displayList);
+				mEditList = displayList;
 				startIntentAfterDelete(tempBundle);
 			}
 			finish();
