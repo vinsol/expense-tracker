@@ -132,21 +132,21 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 		} else {
 			if (mSubList.get(j).type.equals(getString(R.string.camera))) {
 				if(isEntryComplete(mSubList.get(j))){
-					templist.type = getString(R.string.finished_cameraentry);
+					templist.description = getString(R.string.finished_cameraentry);
 				} else {
-					templist.type = getString(R.string.unfinished_cameraentry);
+					templist.description = getString(R.string.unfinished_cameraentry);
 				}
 			} else if (mSubList.get(j).type.equals(getString(R.string.voice))) {
 				if(isEntryComplete(mSubList.get(j))){
-					templist.type = getString(R.string.finished_voiceentry);
+					templist.description = getString(R.string.finished_voiceentry);
 				} else {
-					templist.type = getString(R.string.unfinished_voiceentry);
+					templist.description = getString(R.string.unfinished_voiceentry);
 				}
 			} else if (mSubList.get(j).type.equals(getString(R.string.text))) {
 				if(isEntryComplete(mSubList.get(j))){
-					templist.type = getString(R.string.finished_textentry);
+					templist.description = getString(R.string.finished_textentry);
 				} else {
-					templist.type = getString(R.string.unfinished_textentry);
+					templist.description = getString(R.string.unfinished_textentry);
 				}
 			} else if (mSubList.get(j).type.equals(getString(R.string.favorite_entry))) {
 				templist.type = "Unfinished Favorite Entry";

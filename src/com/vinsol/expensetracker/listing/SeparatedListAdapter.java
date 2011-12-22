@@ -210,12 +210,13 @@ class SeparatedListAdapter extends BaseAdapter {
 					if(!isEntryComplete(mlist)){
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					}
+					
 					if (!mlist.description.equals(mContext.getString(R.string.unfinished_textentry)) && !mlist.description.equals(mContext.getString(R.string.finished_textentry))) {
 						holderBody.rowImageview.setImageResource(R.drawable.listing_text_entry_icon);
 					} else {
 						holderBody.rowImageview.setImageResource(R.drawable.text_list_icon_no_tag);
 					}
-
+					
 				} else if (mlist.type.equals(mContext.getString(R.string.unknown))) {
 					holderBody.rowImageview.setImageResource(R.drawable.listing_reminder_icon);
 					holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unknown_states);
@@ -246,7 +247,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				holderBody.rowImageview.setFocusable(false);
 				holderBody.rowImageview.setOnClickListener(new MyClickListener(mlist));
 				holderBody.rowLocationTime.setText(mlist.timeLocation);
-				holderBody.rowTag.setText(mlist.amount);
+				holderBody.rowTag.setText(mlist.description);
 				holderBody.rowAmount.setText(mlist.amount);
 				if ((mlist.type.equals(mContext.getString(R.string.sublist_daywise))) || mlist.type.equals(mContext.getString(R.string.sublist_monthwise)) || mlist.type.equals(mContext.getString(R.string.sublist_yearwise))|| mlist.type.equals(mContext.getString(R.string.sublist_weekwise))) {
 					holderBody.rowImageview.setVisibility(View.GONE);
@@ -254,10 +255,8 @@ class SeparatedListAdapter extends BaseAdapter {
 				}
 				return convertView;
 			}
-
 			position -= size;
 			sectionnum++;
-
 		}
 		return null;
 	}

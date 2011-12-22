@@ -25,7 +25,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.DBAdapterFavorite;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.listing.ExpenseListing;
@@ -307,17 +306,16 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
-		saveEntry((HashMap<String, String>) adapter.getItemAtPosition(position));
+		saveEntry((Favorite) adapter.getItemAtPosition(position));
 	}
 
-	private void saveEntry(HashMap<String, String> adapterList) {
-		String favID = adapterList.get(DBAdapterFavorite.KEY_ID);
-		String type = adapterList.get(DBAdapterFavorite.KEY_TYPE);
-		String tag = adapterList.get(DBAdapterFavorite.KEY_TAG);
-		String amount = adapterList.get(DBAdapterFavorite.KEY_AMOUNT);
+	private void saveEntry(Favorite adapterList) {
+		String favID = adapterList.userId;
+		String type = adapterList.type;
+		String tag = adapterList.description;
+		String amount = adapterList.amount;
 		Long idCreated;
 		HashMap<String, String> toInsert = new HashMap<String, String>();
 		Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
