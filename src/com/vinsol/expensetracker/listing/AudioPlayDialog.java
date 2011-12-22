@@ -26,35 +26,27 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 
 	public AudioPlayDialog(Context context, String id) {
 		super(context);
-		mContext = context;
-		mFile = id;
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.audio_play_dialog);
-		mAudioPlay = new AudioPlay(id, context);
-		
-		stopButton = (Button) findViewById(R.id.stop_button);
-		playButton = (Button) findViewById(R.id.play_button);
-		cancelButton = (Button) findViewById(R.id.cancel_button);
-		timeDetailsChronometer = (Chronometer) findViewById(R.id.time_details_chronometer);
-		cancelButton.setOnClickListener(this);
-		playButton.setOnClickListener(this);
-		stopButton.setOnClickListener(this);
-		setOnDismissListener(this);
-		setOnCancelListener(this);
-		countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000 , timeDetailsChronometer,stopButton,playButton,mAudioPlay);
-		mAudioPlay.startPlayBack();
-		countDownTimer.start();
-		show();
+		doCommonTaskBefore(context, id);
+		mAudioPlay = new AudioPlay(id, context,false);
+		doCommonTask();
 	}
 
 	public AudioPlayDialog(Context context, String id,String fav) {
 		super(context);
+		doCommonTaskBefore(context,id);
+		mAudioPlay = new AudioPlay(id, context,true);
+		doCommonTask();
+	}
+	
+	private void doCommonTaskBefore(Context context, String id){
+		
 		mContext = context;
 		mFile = id;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.audio_play_dialog);
-		mAudioPlay = new AudioPlay(id, context,fav);
-		
+	}
+	
+	private void doCommonTask(){
 		stopButton = (Button) findViewById(R.id.stop_button);
 		playButton = (Button) findViewById(R.id.play_button);
 		cancelButton = (Button) findViewById(R.id.cancel_button);
@@ -85,7 +77,7 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 				countDownTimer.cancel();
 				mAudioPlay.stopPlayBack();
 			}
-			mAudioPlay = new AudioPlay(mFile, mContext);
+			mAudioPlay = new AudioPlay(mFile, mContext,false);
 			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000,timeDetailsChronometer,stopButton,playButton,mAudioPlay);
 			countDownTimer.start();
 			mAudioPlay.startPlayBack();

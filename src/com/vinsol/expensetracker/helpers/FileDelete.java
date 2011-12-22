@@ -8,12 +8,12 @@ public class FileDelete {
 		delete(file);
 	}
 
-	public FileDelete(long _id) {
+	public FileDelete(String _id) {
 		deleteAll(_id);
 	}
 	
 
-	private void deleteAll(long _id) {
+	private void deleteAll(String _id) {
 		if (android.os.Environment.getExternalStorageState().equals(
 				android.os.Environment.MEDIA_MOUNTED)) {
 			File file = new File("/sdcard/ExpenseTracker/" + _id + ".jpg");

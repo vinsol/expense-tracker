@@ -10,6 +10,7 @@ import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
 import com.vinsol.expensetracker.listing.UnknownEntryDialog;
+import com.vinsol.expensetracker.models.DisplayList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -47,19 +48,19 @@ public class GroupedIconDialogClickListener implements OnClickListener{
 	
 	@Override
 	public void onClick(View v) {
-		final HashMap<String, String> toInsert = new HashMap<String, String>();
+		final DisplayList toInsert = new DisplayList();
 		
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if(timeInMillis == 0)
-			toInsert.put(DatabaseAdapter.KEY_DATE_TIME,mCalendar.getTimeInMillis()+"");
+			toInsert.timeInMillis = mCalendar.getTimeInMillis();
 		else {
-			toInsert.put(DatabaseAdapter.KEY_DATE_TIME,timeInMillis+"");
+			toInsert.timeInMillis = timeInMillis;
 		}
 		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-			toInsert.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+			toInsert.location = LocationHelper.currentAddress;
 		}
-		unknownDialog = new UnknownEntryDialog(mContext,toInsert,new android.view.View.OnClickListener() {
+		unknownDialog = new UnknownEntryDialog(toInsert,mContext,new android.view.View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -125,7 +126,7 @@ public class GroupedIconDialogClickListener implements OnClickListener{
 		});
 	}
 	
-	private void createDatabaseEntry(int typeOfEntry, HashMap<String, String> toInsert) {	
+	private void createDatabaseEntry(int typeOfEntry, DisplayList toInsert) {	
 		Long userId = insertToDatabase(typeOfEntry,toInsert);
 		bundle.putLong("_id", userId);
 		
@@ -138,15 +139,15 @@ public class GroupedIconDialogClickListener implements OnClickListener{
 
 	// /////// ******** function to mark entry into the database and returns the
 	// id of the new entry ***** //////
-	private long insertToDatabase(int type, HashMap<String, String> toInsert) {
+	private long insertToDatabase(int type, DisplayList toInsert) {
 		HashMap<String, String> list = new HashMap<String, String>();
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if(timeInMillis != 0)
-			bundle.putLong("timeInMillis", Long.parseLong(toInsert.get(DatabaseAdapter.KEY_DATE_TIME)));
+			bundle.putLong("timeInMillis", toInsert.timeInMillis);
 		else 
-			bundle.putLong("timeInMillis", Long.parseLong(toInsert.get(DatabaseAdapter.KEY_DATE_TIME)));
-		list.put(DatabaseAdapter.KEY_DATE_TIME,toInsert.get(DatabaseAdapter.KEY_DATE_TIME));
+			bundle.putLong("timeInMillis", toInsert.timeInMillis);
+		list.put(DatabaseAdapter.KEY_DATE_TIME,toInsert.timeInMillis.toString());
 		Activity activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		activity.finish();
 		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {

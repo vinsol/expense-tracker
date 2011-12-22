@@ -1,6 +1,5 @@
 package com.vinsol.expensetracker.listing;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -10,6 +9,7 @@ import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
+import com.vinsol.expensetracker.models.DisplayList;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 
@@ -33,7 +33,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	private Button cancelButton;
 	private Bundle bundle;
 	private DatabaseAdapter mDatabaseAdapter;
-	private ArrayList<String> mTempClickedList;
+	private DisplayList mTempClickedList;
 	private TextView headerTextView;
 	private TextView locationTextView;
 	
@@ -51,7 +51,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		bundle = new Bundle();
 	}
 	
-	public UnknownEntryDialog(Context mContext,HashMap<String, String> toInsert, android.view.View.OnClickListener myClickListener) {
+	public UnknownEntryDialog(DisplayList toInsert,Context mContext, android.view.View.OnClickListener myClickListener) {
 		super(mContext);
 		onCreateDialog();
 		textEntryButton.setOnClickListener(myClickListener);
@@ -61,20 +61,20 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		favoriteEntryButton.setOnClickListener(myClickListener);
 		cancelButton.setOnClickListener(myClickListener);
 		
-		if(toInsert.containsKey(DatabaseAdapter.KEY_LOCATION))
-			if(toInsert.get(DatabaseAdapter.KEY_LOCATION) != ""){
-				locationTextView.setText(toInsert.get(DatabaseAdapter.KEY_LOCATION));
+		if(toInsert.location != null)
+			if(!toInsert.location.equals("")){
+				locationTextView.setText(toInsert.location);
 			}
 		
-		if(toInsert.containsKey(DatabaseAdapter.KEY_DATE_TIME)){
+		if(toInsert.timeInMillis != null){
 			Calendar mCalendar = Calendar.getInstance();
-			mCalendar.setTimeInMillis(Long.parseLong(toInsert.get(DatabaseAdapter.KEY_DATE_TIME)));
+			mCalendar.setTimeInMillis(toInsert.timeInMillis);
 			headerTextView.setText(new DisplayDate(mCalendar).getDisplayDate());
 		}
 		show();
 	}
 	
-	public UnknownEntryDialog(Context mContext,ArrayList<String> _list,android.view.View.OnClickListener deleteClickListener) {
+	public UnknownEntryDialog(Context mContext,DisplayList _list,android.view.View.OnClickListener deleteClickListener) {
 		super(mContext);
 		onCreateDialog();
 		textEntryButton.setOnClickListener(this);
@@ -86,14 +86,14 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		mDatabaseAdapter = new DatabaseAdapter(getContext());
 		mTempClickedList = _list;
 		
-		if(mTempClickedList.get(7) != null)
-			if(mTempClickedList.get(7) != ""){
-				locationTextView.setText(mTempClickedList.get(7));
+		if(mTempClickedList.location != null)
+			if(mTempClickedList.location != ""){
+				locationTextView.setText(mTempClickedList.location);
 			}
 		
-		if(mTempClickedList.get(6) != null){
+		if(mTempClickedList.timeInMillis != null){
 			Calendar mCalendar = Calendar.getInstance();
-			mCalendar.setTimeInMillis(Long.parseLong(mTempClickedList.get(6)));
+			mCalendar.setTimeInMillis(mTempClickedList.timeInMillis);
 			headerTextView.setText(new DisplayDate(mCalendar).getDisplayDate());
 		}
 		show();
@@ -106,7 +106,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 			case R.id.main_text:
 				Intent intentTextEntry = new Intent(getContext(), TextEntry.class);
 				editDatabase(R.string.text);
-				bundle.putStringArrayList("mDisplayList", mTempClickedList);
+				bundle.putParcelable("mDisplayList", mTempClickedList);
 				intentTextEntry.putExtra("textEntryBundle", bundle);
 				getContext().startActivity(intentTextEntry);
 				dismiss();
@@ -114,7 +114,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				
 			case R.id.unknown_entry_dialog_delete:
 				mDatabaseAdapter.open();
-				mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.get(0));
+				mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.userId);
 				mDatabaseAdapter.close();
 				dismiss();
 				break;
@@ -123,7 +123,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					Intent intentVoice = new Intent(getContext(), Voice.class);
 					editDatabase(R.string.voice);
-					bundle.putStringArrayList("mDisplayList", mTempClickedList);
+					bundle.putParcelable("mDisplayList", mTempClickedList);
 					intentVoice.putExtra("voiceBundle", bundle);
 					getContext().startActivity(intentVoice);
 					dismiss();
@@ -136,7 +136,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					Intent intentCamera = new Intent(getContext(), CameraActivity.class);
 					editDatabase(R.string.camera);
-					bundle.putStringArrayList("mDisplayList", mTempClickedList);
+					bundle.putParcelable("mDisplayList", mTempClickedList);
 					intentCamera.putExtra("cameraBundle", bundle);
 					getContext().startActivity(intentCamera);
 					dismiss();
@@ -148,7 +148,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 			case R.id.main_favorite:
 				if(new ConvertCursorToListString(getContext()).getFavoriteList().size() >=1){
 					Intent intentFavorite = new Intent(getContext(), FavoriteActivity.class);
-					bundle.putStringArrayList("mDisplayList", mTempClickedList);
+					bundle.putParcelable("mDisplayList", mTempClickedList);
 					intentFavorite.putExtra("favoriteBundle", bundle);
 					getContext().startActivity(intentFavorite);
 					dismiss();
@@ -168,7 +168,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	
 	private void editDatabase(int type) {
 		HashMap<String, String> list = new HashMap<String, String>();
-		list.put(DatabaseAdapter.KEY_ID,mTempClickedList.get(0));
+		list.put(DatabaseAdapter.KEY_ID,mTempClickedList.userId);
 		list.put(DatabaseAdapter.KEY_TYPE, getContext().getString(type));
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(list);

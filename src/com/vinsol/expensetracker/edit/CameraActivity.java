@@ -109,7 +109,7 @@ public class CameraActivity extends EditAbstract {
 				
 				toInsert.put(DatabaseAdapter.KEY_TYPE, getString(R.string.camera));
 				mDatabaseAdapter.open();
-				entry.userId = mDatabaseAdapter.insertToDatabase(toInsert);
+				entry.userId = mDatabaseAdapter.insertToDatabase(toInsert).toString();
 				mDatabaseAdapter.close();
 			}
 		}

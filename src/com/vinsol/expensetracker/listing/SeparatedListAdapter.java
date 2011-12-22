@@ -1,8 +1,6 @@
 package com.vinsol.expensetracker.listing;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +21,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.GroupedIconDialogClickListener;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DateHelper;
+import com.vinsol.expensetracker.models.DisplayList;
+import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
 class SeparatedListAdapter extends BaseAdapter {
@@ -37,7 +36,7 @@ class SeparatedListAdapter extends BaseAdapter {
 	public final static int TYPE_SECTION_HEADER = 0;
 	public final static int TYPE_SECTION_FOOTER = 0;
 	private Context mContext;
-	private List<HashMap<String, String>> mDatadateList;
+	private List<ListDatetimeAmount> mDatadateList;
 	private LayoutInflater mInflater;
 	private UnknownEntryDialog unknownEntryDialog;
 	private View viewHeader = null;
@@ -50,9 +49,9 @@ class SeparatedListAdapter extends BaseAdapter {
 		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
-	public void addSection(String section, Adapter adapter,List<HashMap<String, String>> mDataDateList) {
+	public void addSection(String section, Adapter adapter,List<ListDatetimeAmount> mDataDateList2) {
 		
-		this.mDatadateList = mDataDateList;
+		this.mDatadateList = mDataDateList2;
 		notifyDataSetChanged();
 		this.headers.add(section);
 		this.footers.add(section);
@@ -141,8 +140,8 @@ class SeparatedListAdapter extends BaseAdapter {
 				viewHeader = mInflater.inflate(R.layout.mainlist_header_view,null);
 				holderHeader.listDateView = (TextView) viewHeader.findViewById(R.id.expenses_listing_list_date_view);
 				holderHeader.listAmountView = (TextView) viewHeader.findViewById(R.id.expenses_listing_list_amount_view);
-				holderHeader.listDateView.setText(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
-				holderHeader.listAmountView.setText(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_AMOUNT));
+				holderHeader.listDateView.setText(mDatadateList.get(sectionnum).dateTime);
+				holderHeader.listAmountView.setText(mDatadateList.get(sectionnum).amount);
 				return viewHeader;
 			}
 			
@@ -153,14 +152,14 @@ class SeparatedListAdapter extends BaseAdapter {
 				holderFooter.addExpensesButton = (Button) viewFooter.findViewById(R.id.expenses_listing_add_expenses_button);
 				holderFooter.addExpenses = (LinearLayout) viewFooter.findViewById(R.id.expense_listing_list_add_expenses);
 
-				if (!isCurrentWeek(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME))) {
+				if (!isCurrentWeek(mDatadateList.get(sectionnum).dateTime)) {
 					holderFooter.addExpenses.setBackgroundResource(0);
 					holderFooter.addExpenses.setVisibility(View.GONE);
 					holderFooter.addExpensesButton.setVisibility(View.GONE);
 				} else {
-					holderFooter.addExpensesButton.setText("Add expenses to "+ mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
+					holderFooter.addExpensesButton.setText("Add expenses to "+ mDatadateList.get(sectionnum).dateTime);
 					holderFooter.addExpensesButton.setFocusable(false);
-					DateHelper mDateHelper = new DateHelper(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME));
+					DateHelper mDateHelper = new DateHelper(mDatadateList.get(sectionnum).dateTime);
 					holderFooter.addExpensesButton.setOnClickListener(new GroupedIconDialogClickListener(unknownEntryDialog, mContext, null, mDateHelper.getTimeMillis()));
 				}
 
@@ -183,17 +182,16 @@ class SeparatedListAdapter extends BaseAdapter {
 				}
 				
 				
-				@SuppressWarnings("unchecked")
-				List<String> mlist = (List<String>) adapter.getItem(position - 1);
-				if (mlist.get(5).equals(mContext.getString(R.string.camera))) {
+				DisplayList mlist = (DisplayList) adapter.getItem(position - 1);
+				if (mlist.type.equals(mContext.getString(R.string.camera))) {
 					
-					if(!isEntryComplete((ArrayList<String>) mlist)){
+					if(!isEntryComplete(mlist)){
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					}
 					
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						try {
-							File mFile = new File("/sdcard/ExpenseTracker/"+ mlist.get(0) + "_thumbnail.jpg");
+							File mFile = new File("/sdcard/ExpenseTracker/"+ mlist.userId + "_thumbnail.jpg");
 							if (mFile.canRead()) {
 								Drawable drawable = Drawable.createFromPath(mFile.getPath());
 								holderBody.rowImageview.setImageDrawable(drawable);
@@ -207,37 +205,36 @@ class SeparatedListAdapter extends BaseAdapter {
 					} else {
 						holderBody.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
 					}
-				} else if (mlist.get(5).equals(mContext.getString(R.string.text))) {
+				} else if (mlist.type.equals(mContext.getString(R.string.text))) {
 
-					if(!isEntryComplete((ArrayList<String>) mlist)){
+					if(!isEntryComplete(mlist)){
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					}
-					if (!mlist.get(1).equals(mContext.getString(R.string.unfinished_textentry)) && !mlist.get(1).equals(mContext.getString(R.string.finished_textentry))) {
+					if (!mlist.description.equals(mContext.getString(R.string.unfinished_textentry)) && !mlist.description.equals(mContext.getString(R.string.finished_textentry))) {
 						holderBody.rowImageview.setImageResource(R.drawable.listing_text_entry_icon);
 					} else {
 						holderBody.rowImageview.setImageResource(R.drawable.text_list_icon_no_tag);
 					}
 
-				} else if (mlist.get(5).equals(mContext.getString(R.string.unknown))) {
+				} else if (mlist.type.equals(mContext.getString(R.string.unknown))) {
 					holderBody.rowImageview.setImageResource(R.drawable.listing_reminder_icon);
 					holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unknown_states);
-				} else if (mlist.get(5).equals(mContext.getString(R.string.voice))) {
+				} else if (mlist.type.equals(mContext.getString(R.string.voice))) {
 
-					if(!isEntryComplete((ArrayList<String>) mlist)){
+					if(!isEntryComplete(mlist)){
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					}
-					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+ mlist.get(0) + ".amr");
+					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+ mlist.userId + ".amr");
 					if (mFile.canRead()) {
 						holderBody.rowImageview.setImageResource(R.drawable.listing_voice_entry_icon);
 					} else {
 						holderBody.rowImageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 					}
 				} 
-				if (mlist.get(4) != null) {
-					
-					if(!mlist.get(4).equals("")){
+				if (mlist.favorite != null) {
+					if(!mlist.favorite.equals("")){
 						try{
-							if(isCurrentWeek(mDatadateList.get(sectionnum).get(DatabaseAdapter.KEY_DATE_TIME))){
+							if(isCurrentWeek(mDatadateList.get(sectionnum).dateTime)){
 								holderBody.rowFavoriteIcon.setVisibility(View.VISIBLE);
 							}
 						}catch(Exception e){
@@ -248,10 +245,10 @@ class SeparatedListAdapter extends BaseAdapter {
 				
 				holderBody.rowImageview.setFocusable(false);
 				holderBody.rowImageview.setOnClickListener(new MyClickListener(mlist));
-				holderBody.rowLocationTime.setText(mlist.get(3));
-				holderBody.rowTag.setText(mlist.get(1));
-				holderBody.rowAmount.setText(mlist.get(2));
-				if ((mlist.get(5).equals(mContext.getString(R.string.sublist_daywise))) || mlist.get(5).equals(mContext.getString(R.string.sublist_monthwise)) || mlist.get(5).equals(mContext.getString(R.string.sublist_yearwise))|| mlist.get(5).equals(mContext.getString(R.string.sublist_weekwise))) {
+				holderBody.rowLocationTime.setText(mlist.timeLocation);
+				holderBody.rowTag.setText(mlist.amount);
+				holderBody.rowAmount.setText(mlist.amount);
+				if ((mlist.type.equals(mContext.getString(R.string.sublist_daywise))) || mlist.type.equals(mContext.getString(R.string.sublist_monthwise)) || mlist.type.equals(mContext.getString(R.string.sublist_yearwise))|| mlist.type.equals(mContext.getString(R.string.sublist_weekwise))) {
 					holderBody.rowImageview.setVisibility(View.GONE);
 					holderBody.rowLocationTime.setVisibility(View.GONE);
 				}
@@ -302,9 +299,9 @@ class SeparatedListAdapter extends BaseAdapter {
 
 	private class MyClickListener implements OnClickListener {
 
-		List<String> mListenerList;
+		DisplayList mListenerList;
 
-		public MyClickListener(List<String> mlist) {
+		public MyClickListener(DisplayList mlist) {
 			mListenerList = mlist;
 		}
 		
@@ -313,66 +310,66 @@ class SeparatedListAdapter extends BaseAdapter {
 			if (v.getId() == R.id.expense_listing_inflated_row_imageview) {
 				if (mListenerList != null)
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-						if (mListenerList.get(5).equals(mContext.getString(R.string.voice))) {
-							File mFile = new File("/sdcard/ExpenseTracker/Audio/" + mListenerList.get(0) + ".amr");
+						if (mListenerList.type.equals(mContext.getString(R.string.voice))) {
+							File mFile = new File("/sdcard/ExpenseTracker/Audio/" + mListenerList.userId + ".amr");
 							if (mFile.canRead()) {
-								new AudioPlayDialog(mContext, mListenerList.get(0));
+								new AudioPlayDialog(mContext, mListenerList.userId);
 							}
-						} else if (mListenerList.get(5).equals(mContext.getString(R.string.camera))) {
-							File mFile = new File("/sdcard/ExpenseTracker/" + mListenerList.get(0) + ".jpg");
+						} else if (mListenerList.type.equals(mContext.getString(R.string.camera))) {
+							File mFile = new File("/sdcard/ExpenseTracker/" + mListenerList.userId + ".jpg");
 							if (mFile.canRead()) {
 								
 								Intent intent = new Intent(mContext, ImagePreview.class);
-								intent.putExtra("id", Long.parseLong(mListenerList.get(0)));
+								intent.putExtra("id", mListenerList.userId);
 								mContext.startActivity(intent);
 
 							}
 						}
 					}
-				if (mListenerList.get(5).equals(mContext.getString(R.string.text))) {
-					if (!mListenerList.get(1).equals(mContext.getString(R.string.unfinished_textentry))) {
-						new DescriptionDialog(mContext, mListenerList.get(1));
+				if (mListenerList.type.equals(mContext.getString(R.string.text))) {
+					if (!mListenerList.description.equals(mContext.getString(R.string.unfinished_textentry))) {
+						new DescriptionDialog(mContext, mListenerList.description);
 					}
 				}
 			}
 		}
 	}
 	
-	private boolean isEntryComplete(ArrayList<String> toCheckList) {
-		if (toCheckList.get(5).equals(mContext.getString(R.string.camera))) {
-			if(toCheckList.get(2) != null){
-				if (toCheckList.get(2).contains("?")) {
+	private boolean isEntryComplete(DisplayList mlist) {
+		if (mlist.type.equals(mContext.getString(R.string.camera))) {
+			if(mlist.amount != null){
+				if (mlist.amount.contains("?")) {
 					return false;
 				}
 			}
-			File mFileSmall = new File("/sdcard/ExpenseTracker/" + toCheckList.get(0) + "_small.jpg");
-			File mFile = new File("/sdcard/ExpenseTracker/" + toCheckList.get(0) + ".jpg");
-			File mFileThumbnail = new File("/sdcard/ExpenseTracker/" + toCheckList.get(0) + "_thumbnail.jpg");
+			File mFileSmall = new File("/sdcard/ExpenseTracker/" + mlist.userId + "_small.jpg");
+			File mFile = new File("/sdcard/ExpenseTracker/" + mlist.userId + ".jpg");
+			File mFileThumbnail = new File("/sdcard/ExpenseTracker/" + mlist.userId + "_thumbnail.jpg");
 			if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 				return true;
 			} else {
 				return false;
 			}
-		} else if (toCheckList.get(5).equals(mContext.getString(R.string.voice))) {
-			if(toCheckList.get(2) != null){
-				if (toCheckList.get(2).contains("?")) {
+		} else if (mlist.type.equals(mContext.getString(R.string.voice))) {
+			if(mlist.userId != null){
+				if (mlist.userId.contains("?")) {
 					return false;
 				}
 			}
-			File mFile = new File("/sdcard/ExpenseTracker/Audio/" + toCheckList.get(0) + ".amr");
+			File mFile = new File("/sdcard/ExpenseTracker/Audio/" + mlist.userId + ".amr");
 			if (mFile.canRead()) {
 				return true;
 			} else {
 				return false;
 			}
-		} else if (toCheckList.get(5).equals(mContext.getString(R.string.text))) {
-			if(toCheckList.get(2) != null){
-				if (toCheckList.get(2).contains("?")) {
+		} else if (mlist.type.equals(mContext.getString(R.string.text))) {
+			if(mlist.amount != null){
+				if (mlist.amount.contains("?")) {
 					return false;
 				}
 			}
-			if(toCheckList.get(1) != null){
-				if (toCheckList.get(1).equals(mContext.getString(R.string.unfinished_textentry)) || toCheckList.get(1).equals(mContext.getString(R.string.finished_textentry))) {
+			if(mlist.description != null){
+				if (mlist.description.equals(mContext.getString(R.string.unfinished_textentry)) || mlist.description.equals(mContext.getString(R.string.finished_textentry))) {
 					return false;
 				} else {
 					return true;

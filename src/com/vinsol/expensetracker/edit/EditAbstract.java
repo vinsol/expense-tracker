@@ -69,7 +69,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 	protected void editHelper() {
 
 		if (intentExtras.containsKey("_id"))
-			entry.userId = intentExtras.getLong("_id");
+			entry.userId = intentExtras.getString("_id");
 
 		if(intentExtras.containsKey("setLocation")){
 			setLocation = intentExtras.getBoolean("setLocation");
@@ -108,7 +108,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 	protected HashMap<String, String> getSaveEntryData(TextView editDateBarDateview,String dateViewString){
 		// ///// ******* Creating HashMap to update info ******* ////////
 		HashMap<String, String> list = new HashMap<String, String>();
-		list.put(DatabaseAdapter.KEY_ID, Long.toString(entry.userId));
+		list.put(DatabaseAdapter.KEY_ID, entry.userId);
 		entry.amount = editAmount.getText().toString();
 		entry.description = editTag.getText().toString();
 		if (!entry.amount.equals(".") && !entry.amount.equals("")) {
@@ -167,9 +167,9 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		}
 		
 		if(list.containsKey(DatabaseAdapter.KEY_DATE_TIME)){
-			displayList.timeLocation = new DisplayDate().getLocationDate(list.get(DatabaseAdapter.KEY_DATE_TIME), mEditList.location);
+			displayList.timeLocation = new DisplayDate().getLocationDate(Long.parseLong(list.get(DatabaseAdapter.KEY_DATE_TIME)), mEditList.location);
 		} else {
-			displayList.timeLocation = "Unknown Time and Location";
+			displayList.timeLocation = mEditList.timeLocation;
 		}		
 		
 		Boolean isAmountNotEqual = false;
@@ -270,7 +270,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 
 			// //// ******* Delete entry from database ******** /////////
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.deleteDatabaseEntryID(Long.toString(entry.userId));
+			mDatabaseAdapter.deleteDatabaseEntryID(entry.userId);
 			mDatabaseAdapter.close();
 			if(intentExtras.containsKey("isFromShowPage")){
 				Bundle tempBundle = new Bundle();

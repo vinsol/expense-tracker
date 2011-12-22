@@ -220,9 +220,9 @@ public class DisplayDate {
 		return null;
 	}
 	
-	public String getLocationDate(String dateInMillis, String locationData) {
+	public String getLocationDate(Long timeInMillis, String locationData) {
 		Calendar tempCalendar = Calendar.getInstance();
-		tempCalendar.setTimeInMillis(Long.parseLong(dateInMillis));
+		tempCalendar.setTimeInMillis(timeInMillis);
 		tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		int hour = tempCalendar.get(Calendar.HOUR);
 		String minute = Integer.toString(tempCalendar.get(Calendar.MINUTE));

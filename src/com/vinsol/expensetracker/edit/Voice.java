@@ -56,7 +56,7 @@ public class Voice extends EditAbstract {
 				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + entry.userId + ".amr");
 
 				if (tempFile.canRead()) {
-					mAudioPlay = new AudioPlay(Long.toString(entry.userId), this);
+					mAudioPlay = new AudioPlay(entry.userId, this, false);
 					editStopButton.setVisibility(View.GONE);
 					editPlayButton.setVisibility(View.VISIBLE);
 					editRerecordButton.setVisibility(View.VISIBLE);
@@ -161,7 +161,7 @@ public class Voice extends EditAbstract {
 			} catch (Exception e) {
 			}
 			try {
-				mAudioPlay = new AudioPlay(entry.userId + "", this);
+				mAudioPlay = new AudioPlay(entry.userId , this, false);
 				editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 			} catch (NullPointerException e) {
 
@@ -172,7 +172,7 @@ public class Voice extends EditAbstract {
 		else if (v.getId() == R.id.edit_play_button) {
 			// //// ******** to handle playback of recorded file *********
 			// ////////
-			mAudioPlay = new AudioPlay(entry.userId + "", this);
+			mAudioPlay = new AudioPlay(entry.userId, this, false);
 
 			// ///// ******* Chronometer Starts Countdown ****** ///////
 			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, editTimeDetailsChronometer,editStopButton,editPlayButton,mAudioPlay);

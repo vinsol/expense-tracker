@@ -10,11 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.GroupedIconDialogClickListener;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.models.DisplayList;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
 
 public class ExpenseListing extends ListingAbstract {
@@ -28,7 +28,7 @@ public class ExpenseListing extends ListingAbstract {
 		setContentView(R.layout.expense_listing);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onResume() {
@@ -43,15 +43,15 @@ public class ExpenseListing extends ListingAbstract {
 		}
 		int j = 0;
 		@SuppressWarnings("rawtypes")
-		List listString = new ArrayList<List<List<String>>>();
+		List listString = new ArrayList<List<DisplayList>>();
 		for (int i = 0; i < mDataDateList.size(); i++) {
-			List<List<String>> mList = new ArrayList<List<String>>();
-			String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
+			List<DisplayList> mList = new ArrayList<DisplayList>();
+			String date = mDataDateList.get(i).dateTime;
 
-			while (j < mSubList.size()&& date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
-				List<String> templist = new ArrayList<String>();
+			while (j < mSubList.size()&& date.equals(mSubList.get(j).displayTime)) {
+				DisplayList templist = new DisplayList();
 				Calendar mCalendar = Calendar.getInstance();
-				mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
+				mCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
 				mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mCalendar);
@@ -65,14 +65,14 @@ public class ExpenseListing extends ListingAbstract {
 					}
 				} else if (mDisplayDate.isCurrentMonth() || mDisplayDate.isPrevMonths() || mDisplayDate.isPrevYears()) {
 
-					while (mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME).equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
+					while (mDataDateList.get(i).dateTime.equals(mSubList.get(j).displayTime)) {
 						// //// Adding i+" "+j as id
-						List<String> mTempSubList = new ArrayList<String>();
-						mTempSubList.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID) +",");
+						DisplayList mTempSubList = new DisplayList();
+						mTempSubList.userId = mSubList.get(j).userId +",";
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
-						tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+						tempCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
 						tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						mDisplayDate = new DisplayDate(tempCalendar);
@@ -82,14 +82,14 @@ public class ExpenseListing extends ListingAbstract {
 						int isCurrentYear = tempCalendar.get(Calendar.YEAR);
 						int isMonth = tempCalendar.get(Calendar.MONTH);
 						int isYear = tempCalendar.get(Calendar.YEAR);
-						mTempSubList.add(tempDisplayDate.getSubListTag()); 
+						mTempSubList.displayTime = tempDisplayDate.getSubListTag();
 
 						// /// Adding Amount
 						double temptotalAmount = 0;
 						String totalAmountString = null;
 						boolean isTempAmountNull = false;
 						do {
-							String tempAmount = mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT);
+							String tempAmount = mSubList.get(j).amount;
 							if (tempAmount != null && !tempAmount.equals("")) {
 								try {
 									temptotalAmount += Double.parseDouble(tempAmount);
@@ -100,7 +100,7 @@ public class ExpenseListing extends ListingAbstract {
 							}
 							j++;
 							if (j < mSubList.size()) {
-								tempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME+ "Millis")));
+								tempCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
 								tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 								tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								tempDisplayDate = new DisplayDate(tempCalendar);
@@ -111,7 +111,7 @@ public class ExpenseListing extends ListingAbstract {
 												&& tempCalendar.get(Calendar.YEAR) == isCurrentYear)) 
 												||  ((tempCalendar.get(Calendar.MONTH) == isMonth) 
 														&& (tempCalendar.get(Calendar.YEAR) == isYear)))
-								mTempSubList.set(0, mTempSubList.get(0)+mSubList.get(j).get(DatabaseAdapter.KEY_ID)+",");
+									mTempSubList.userId = mTempSubList.userId+mSubList.get(j).userId+",";
 							} else {
 								break;
 							}
@@ -132,16 +132,12 @@ public class ExpenseListing extends ListingAbstract {
 						} else {
 							totalAmountString = temptotalAmount + "";
 						}
-						mTempSubList.add(mStringProcessing.getStringDoubleDecimal(totalAmountString));
-						mTempSubList.add("");
-						mTempSubList.add("");
-						mTempSubList.add(getString(R.string.sublist_weekwise));
-						mTempSubList.add("");
-						mTempSubList.add("");
-						if(highlightID != null){
+						mTempSubList.amount = mStringProcessing.getStringDoubleDecimal(totalAmountString);
+						mTempSubList.type = getString(R.string.sublist_weekwise);
+						if(highlightID != null){//TODO not proper method to check highlight id
 							if (j <= mSubList.size()) {
-								if(mTempSubList.get(0).contains(highlightID)){
-									startSubListing(mTempSubList.get(0));
+								if(mTempSubList.userId.contains(highlightID)){
+									startSubListing(mTempSubList.userId);
 								} 
 							}
 						}

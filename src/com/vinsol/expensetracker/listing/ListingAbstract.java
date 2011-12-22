@@ -2,7 +2,6 @@ package com.vinsol.expensetracker.listing;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
@@ -16,6 +15,8 @@ import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.helpers.StringProcessing;
+import com.vinsol.expensetracker.models.DisplayList;
+import com.vinsol.expensetracker.models.ListDatetimeAmount;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -31,9 +32,9 @@ import android.widget.Toast;
 
 abstract class ListingAbstract extends Activity implements OnItemClickListener{
 
-	protected List<HashMap<String, String>> mDataDateList;
+	protected List<ListDatetimeAmount> mDataDateList;
 	protected SeparatedListAdapter mSeparatedListAdapter;
-	protected List<HashMap<String, String>> mSubList;
+	protected List<DisplayList> mSubList;
 	protected ConvertCursorToListString mConvertCursorToListString;
 	protected StringProcessing mStringProcessing;
 	protected ListView mListView;
@@ -55,14 +56,14 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 		mSeparatedListAdapter = new SeparatedListAdapter(this);
 	}
 
-	protected boolean isEntryComplete(HashMap<String, String> hashMap) {
-		if(isAmountValid(hashMap.get(DatabaseAdapter.KEY_AMOUNT))) {
-			if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))) {
-				return isCameraFileReadable(hashMap.get(DatabaseAdapter.KEY_ID));
-			} else if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.voice))) {
-				return isAudioFileReadable(hashMap.get(DatabaseAdapter.KEY_ID));
-			} else if (hashMap.get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.text))) {
-				return isTagValid(hashMap.get(DatabaseAdapter.KEY_TAG));
+	protected boolean isEntryComplete(DisplayList displayList) {
+		if(isAmountValid(displayList.amount)) {
+			if (displayList.type.equals(getString(R.string.camera))) {
+				return isCameraFileReadable(displayList.userId);
+			} else if (displayList.type.equals(getString(R.string.voice))) {
+				return isAudioFileReadable(displayList.userId);
+			} else if (displayList.type.equals(getString(R.string.text))) {
+				return isTagValid(displayList.description);
 			}
 		}
 		return false;
@@ -123,79 +124,78 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 		return false;
 	}
 	
-	protected List<String> getListCurrentWeek(int j) {
-		List<String> templist = new ArrayList<String>();
-		templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_ID));
-		if (mSubList.get(j).get(DatabaseAdapter.KEY_TAG) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_TAG).equals("")) {
-			templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TAG));
+	protected DisplayList getListCurrentWeek(int j) {
+		DisplayList templist = new DisplayList();
+		templist.userId = mSubList.get(j).userId;
+		if (mSubList.get(j).description != null && !mSubList.get(j).description.equals("")) {
+			templist.description = mSubList.get(j).description;
 		} else {
-			if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.camera))) {
+			if (mSubList.get(j).type.equals(getString(R.string.camera))) {
 				if(isEntryComplete(mSubList.get(j))){
-					templist.add(getString(R.string.finished_cameraentry));
+					templist.type = getString(R.string.finished_cameraentry);
 				} else {
-					templist.add(getString(R.string.unfinished_cameraentry));
+					templist.type = getString(R.string.unfinished_cameraentry);
 				}
-			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.voice))) {
+			} else if (mSubList.get(j).type.equals(getString(R.string.voice))) {
 				if(isEntryComplete(mSubList.get(j))){
-					templist.add(getString(R.string.finished_voiceentry));
+					templist.type = getString(R.string.finished_voiceentry);
 				} else {
-					templist.add(getString(R.string.unfinished_voiceentry));
+					templist.type = getString(R.string.unfinished_voiceentry);
 				}
-			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.text))) {
-				if(isEntryComplete(mSubList.get(j))){		
-					templist.add(getString(R.string.finished_textentry));
+			} else if (mSubList.get(j).type.equals(getString(R.string.text))) {
+				if(isEntryComplete(mSubList.get(j))){
+					templist.type = getString(R.string.finished_textentry);
 				} else {
-					templist.add(getString(R.string.unfinished_textentry));
+					templist.type = getString(R.string.unfinished_textentry);
 				}
-			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.favorite_entry))) {
-				templist.add("Unfinished Favorite Entry");
-			} else if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals(getString(R.string.unknown))) {
-				templist.add(getString(R.string.unknown_entry));
+			} else if (mSubList.get(j).type.equals(getString(R.string.favorite_entry))) {
+				templist.type = "Unfinished Favorite Entry";
+			} else if (mSubList.get(j).type.equals(getString(R.string.unknown))) {
+				templist.type = getString(R.string.unknown_entry);
 			}
 		}
 
-		if (mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT) != null&& !mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT).equals("")) {
-			templist.add(mStringProcessing.getStringDoubleDecimal(mSubList.get(j).get(DatabaseAdapter.KEY_AMOUNT)));
+		if (mSubList.get(j).amount != null&& !mSubList.get(j).amount.equals("")) {
+			templist.amount = mStringProcessing.getStringDoubleDecimal(mSubList.get(j).amount);
 		} else {
-			templist.add("?");
+			templist.amount = "?";
 		}
 
 		// ///// ******* Adding location date data to list ******* //////////
 
-		if (mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis") != null  && !mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis").equals("")) {
-			templist.add(new DisplayDate().getLocationDate(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"), mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
-		} else if ((mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis") == null || mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis").equals(""))&& mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION) != null&& !mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION).equals("")) {
-			templist.add("Unknown time at "+ mSubList.get(j).get(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION)));
+		if (mSubList.get(j).timeInMillis != null  && !mSubList.get(j).timeInMillis.equals("")) {
+			templist.timeLocation = new DisplayDate().getLocationDate(mSubList.get(j).timeInMillis, mSubList.get(j).location);
+		} else if ((mSubList.get(j).timeInMillis == null || mSubList.get(j).timeInMillis.equals(""))&& mSubList.get(j).location != null&& !mSubList.get(j).location.equals("")) {
+			templist.timeLocation = "Unknown time at "+ mSubList.get(j).location;
 		} else {
-			templist.add("Unknown Location and Date");
+			templist.timeLocation = "Unknown time at Unknown Location";
 		}
 
-		if (mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE).equals("")) {
-			templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_FAVORITE));
+		if (mSubList.get(j).favorite != null && !mSubList.get(j).favorite.equals("")) {
+			templist.favorite = mSubList.get(j).favorite;
 		} else {
-			templist.add("");
+			templist.favorite = "";
 		}
 
-		if (mSubList.get(j).get(DatabaseAdapter.KEY_TYPE) != null && !mSubList.get(j).get(DatabaseAdapter.KEY_TYPE).equals("")) {
-			templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_TYPE));
+		if (mSubList.get(j).type != null && !mSubList.get(j).type.equals("")) {
+			templist.type = mSubList.get(j).type;
 		} else {
-			templist.add("");
+			templist.type = "";
 		}
 
-		templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis"));
-		templist.add(mSubList.get(j).get(DatabaseAdapter.KEY_LOCATION));
+		templist.timeInMillis = mSubList.get(j).timeInMillis;
+		templist.location = mSubList.get(j).location;
 		return templist;
 	}
 	
 	@Override
 	public void onItemClick(final AdapterView<?> adapter, View v,final int position, long arg3) {
-		@SuppressWarnings("unchecked")
-		final ArrayList<String> mTempClickedList = (ArrayList<String>) adapter.getItemAtPosition(position);
-		String userId = mTempClickedList.get(0);
+		final DisplayList mTempClickedList = (DisplayList) adapter.getItemAtPosition(position);
+		String userId = mTempClickedList.userId;
 		if (!userId.contains(",")) {
 			Bundle bundle = new Bundle();
-			bundle.putStringArrayList("mDisplayList", mTempClickedList);
-			if (mTempClickedList.get(5).equals(getString(R.string.camera))) {
+			bundle.putParcelable("mDisplayList", mTempClickedList);
+			if (mTempClickedList.type.equals(getString(R.string.camera))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if (!isEntryComplete(mTempClickedList)) {
 						Intent intentCamera = new Intent(this,CameraActivity.class);
@@ -209,7 +209,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 				} else {
 					Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
 				}
-			} else if (mTempClickedList.get(5).equals(getString(R.string.text))) {
+			} else if (mTempClickedList.type.equals(getString(R.string.text))) {
 				if (!isEntryComplete(mTempClickedList)) {
 					Intent intentTextEntry = new Intent(this, TextEntry.class);
 					intentTextEntry.putExtra("textEntryBundle", bundle);
@@ -220,7 +220,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 					startActivity(intentTextShow);
 				}
 
-			} else if (mTempClickedList.get(5).equals(getString(R.string.voice))) {
+			} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if (!isEntryComplete(mTempClickedList)) {
 						Intent intentVoice = new Intent(this, Voice.class);
@@ -234,23 +234,23 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 				} else {
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
 				}
-			} else if (mTempClickedList.get(5).equals(getString(R.string.unknown))) {
+			} else if (mTempClickedList.type.equals(getString(R.string.unknown))) {
 				unknownDialog = new UnknownEntryDialog(this,mTempClickedList,new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
 						DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(ListingAbstract.this);
 						mDatabaseAdapter.open();
-						mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.get(0));
+						mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.userId);
 						mDatabaseAdapter.close();
 						unknownDialog.dismiss();
-						unknownDialogAction(mTempClickedList.get(0));
+						unknownDialogAction(mTempClickedList.userId);
 						Toast.makeText(ListingAbstract.this, "Deleted", Toast.LENGTH_SHORT).show();
 					}
 				});
 			}
 		} else {
-			onClickElse(mTempClickedList.get(0));
+			onClickElse(mTempClickedList.userId);
 		}
 	}
 	

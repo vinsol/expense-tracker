@@ -48,7 +48,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + showData.userId+ ".amr");
 
 				if (tempFile.canRead()) {
-					mAudioPlay = new AudioPlay(Long.toString(showData.userId), this);
+					mAudioPlay = new AudioPlay(showData.userId, this, false);
 					showStopButton.setVisibility(View.GONE);
 					showPlayButton.setVisibility(View.VISIBLE);
 					showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
@@ -107,7 +107,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 		if (v.getId() == R.id.show_play_button) {
 			// //// ******** to handle playback of recorded file *********
 			// ////////
-			mAudioPlay = new AudioPlay(showData.userId + "", this);
+			mAudioPlay = new AudioPlay(showData.userId, this, false);
 
 			// ///// ******* Chronometer Starts Countdown ****** ///////
 			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, showTimeDetailsChronometer, showStopButton ,showPlayButton, mAudioPlay);
@@ -183,7 +183,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 						File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + showData.userId + ".amr");
 
 						if (tempFile.canRead()) {
-							mAudioPlay = new AudioPlay(Long.toString(showData.userId), this);
+							mAudioPlay = new AudioPlay(showData.userId, this, false);
 							showStopButton.setVisibility(View.GONE);
 							showPlayButton.setVisibility(View.VISIBLE);
 							showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));

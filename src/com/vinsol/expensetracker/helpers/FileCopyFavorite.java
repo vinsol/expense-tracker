@@ -11,19 +11,19 @@ public class FileCopyFavorite {
 		copy(source,destinition);
 	}
 
-	public FileCopyFavorite(long _id,long targetId) {
+	public FileCopyFavorite(String _id,String targetId) {
 		File createDirectories = new File("/sdcard/ExpenseTracker/Favorite/Audio");
 		createDirectories.mkdirs();
 		copyAll(_id,targetId);
 	}
 	
-	public FileCopyFavorite(long _id,long targetId,String from) {
+	public FileCopyFavorite(String _id,String targetId,String from) {
 		File createDirectories = new File("/sdcard/ExpenseTracker/Favorite/Audio");
 		createDirectories.mkdirs();
 		copyAllFrom(_id,targetId);
 	}
 
-	private void copyAllFrom(long _id,long targetId) {
+	private void copyAllFrom(String _id,String targetId) {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			File file = new File("/sdcard/ExpenseTracker/Favorite/" + _id + ".jpg");
 			File mfile = new File("/sdcard/ExpenseTracker/" + targetId + ".jpg");
@@ -40,7 +40,7 @@ public class FileCopyFavorite {
 		}
 	}
 	
-	private void copyAll(long _id,long targetId) {
+	private void copyAll(String _id,String targetId) {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			File file = new File("/sdcard/ExpenseTracker/" + _id + ".jpg");
 			File mfile = new File("/sdcard/ExpenseTracker/Favorite/" + targetId + ".jpg");

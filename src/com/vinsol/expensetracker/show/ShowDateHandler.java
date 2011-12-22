@@ -12,11 +12,11 @@ public class ShowDateHandler {
 	private TextView showHeaderTitle;
 	private Activity activity;
 
-	public ShowDateHandler(Context mContext, String timeInMillis) {
+	public ShowDateHandler(Context mContext, Long timeInMillis) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		showHeaderTitle = (TextView) activity.findViewById(R.id.header_title);
 		Calendar mCalendar = Calendar.getInstance();
-		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
+		mCalendar.setTimeInMillis(timeInMillis);
 		String date = getDate(mCalendar);
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
 		showHeaderTitle.setText(mDisplayDate.getDisplayDate()+" at "+date);
@@ -28,10 +28,10 @@ public class ShowDateHandler {
 		showHeaderTitle.setText(activity.getString(typeOfEntry));
 	}
 	
-	public ShowDateHandler(Context mContext,TextView resource ,String timeInMillis) {
+	public ShowDateHandler(Context mContext,TextView resource ,Long timeInMillis) {
 		showHeaderTitle = resource;
 		Calendar mCalendar = Calendar.getInstance();
-		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
+		mCalendar.setTimeInMillis(timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		String date = getDate(mCalendar);
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);

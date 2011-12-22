@@ -3,7 +3,6 @@ package com.vinsol.android.graph;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -21,17 +20,19 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.vinsol.android.graph.BarGraph;
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.models.DisplayList;
+import com.vinsol.expensetracker.models.GraphDataList;
+import com.vinsol.expensetracker.models.ListDatetimeAmount;
 
 public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickListener{
 
-	private List<HashMap<String, String>> mDataDateListGraph;
+	private List<ListDatetimeAmount> mDataDateListGraph;
 	private ConvertCursorToListString mConvertCursorToListString;
 	static private Context mContext;
-	private List<HashMap<String, String>> mSubList;
+	private List<DisplayList> mSubList;
 	private ArrayList<ArrayList<ArrayList<String>>> mGraphList;
 	private Calendar lastDateCalendar;
 	private Activity activity;
@@ -71,7 +72,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		mDataDateListGraph = mConvertCursorToListString.getDateListString(true,"");
 		mSubList = mConvertCursorToListString.getListStringParticularDate("");
 		if (mDataDateListGraph.size() >= 1) {
-			lastDateCalendar.setTimeInMillis(Long.parseLong(mSubList.get(mSubList.size()-1).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+			lastDateCalendar.setTimeInMillis(mSubList.get(mSubList.size()-1).timeInMillis);
 			lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			mGraphList = getGraphList();
 		}
@@ -139,15 +140,15 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		ArrayList<String> mArrayIDList = new ArrayList<String>();
 		ArrayList<String> mArrayValues = new ArrayList<String>();
 		ArrayList<String> mArrayHorLabels = new ArrayList<String>();
-		List<List<String>> mList = getDateIDList();
+		List<GraphDataList> mList = getDateIDList();
 		while(lastDateCalendar.before(mTempCalender) || lastDateDisplayDate.getDisplayDateGraph().equals(new DisplayDate(mTempCalender).getDisplayDateGraph())){
 			DisplayDate mDisplayDate = new DisplayDate(mTempCalender);
 			while(mDisplayDate.isCurrentWeek()){
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				if(j < mList.size()) {
-					if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
-						mArrayIDList.add(mList.get(j).get(0));
-						mArrayValues.add(mList.get(j).get(1));
+					if(mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())){
+						mArrayIDList.add(mList.get(j).idList);
+						mArrayValues.add(mList.get(j).amount);
 						mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
 						j++;
 					} else {
@@ -187,9 +188,9 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				while(mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
 					if(j < mList.size()) {
-						if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
-							mArrayIDList.add(mList.get(j).get(0));
-							mArrayValues.add(mList.get(j).get(1));
+						if(mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())){
+							mArrayIDList.add(mList.get(j).idList);
+							mArrayValues.add(mList.get(j).amount);
 							mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
 							j++;
 						} else {
@@ -235,9 +236,9 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				while(mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
 					if(j < mList.size()) {
-						if(mList.get(j).get(2).equals(mDisplayDate.getDisplayDateGraph())){
-							mArrayIDList.add(mList.get(j).get(0));
-							mArrayValues.add(mList.get(j).get(1));
+						if(mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())){
+							mArrayIDList.add(mList.get(j).idList);
+							mArrayValues.add(mList.get(j).amount);
 							mArrayHorLabels.add("W "+mTempCalender.get(Calendar.WEEK_OF_MONTH));
 							j++;
 						} else {
@@ -289,13 +290,13 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		return false;
 	}
 
-	private List<List<String>> getDateIDList() {
-		List<List<String>> listString = new ArrayList<List<String>>();
+	private List<GraphDataList> getDateIDList() {
+		List<GraphDataList> listString = new ArrayList<GraphDataList>();
 		for(int i = 0 ;i < mSubList.size(); ) {
-			ArrayList<String> mList = new ArrayList<String>();
-			String tempDisplayDate = mSubList.get(i).get(DatabaseAdapter.KEY_DATE_TIME+"Millis");
+			GraphDataList mList = new GraphDataList();
+			Long tempDisplayDate = mSubList.get(i).timeInMillis;
 			Calendar mTCalendar = Calendar.getInstance();
-			mTCalendar.setTimeInMillis(Long.parseLong(tempDisplayDate));
+			mTCalendar.setTimeInMillis(tempDisplayDate);
 			mTCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			String tempDisplayDateGraph = new DisplayDate(mTCalendar).getDisplayDateGraph();
 			String idList = "";
@@ -303,7 +304,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			String totalAmountString = null;
 			boolean isTempAmountNull = false;
 			while(new DisplayDate(mTCalendar).getDisplayDateGraph().equals(tempDisplayDateGraph)) {
-				String tempAmount = mSubList.get(i).get(DatabaseAdapter.KEY_AMOUNT);
+				String tempAmount = mSubList.get(i).amount;
 				if (tempAmount != null && !tempAmount.equals("")) {
 					try {
 						temptotalAmount += Double.parseDouble(tempAmount);
@@ -312,11 +313,11 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				} else {
 					isTempAmountNull = true;
 				}
-				idList = idList+mSubList.get(i).get(DatabaseAdapter.KEY_ID)+",";
+				idList = idList+mSubList.get(i).userId+",";
 				i++;
 				
 				if (i < mSubList.size()) {
-					mTCalendar.setTimeInMillis(Long.parseLong(mSubList.get(i).get(DatabaseAdapter.KEY_DATE_TIME+"Millis")));
+					mTCalendar.setTimeInMillis(mSubList.get(i).timeInMillis);
 					mTCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				} else {
 					break;
@@ -331,11 +332,10 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			} else {
 				totalAmountString = temptotalAmount + "";
 			}
-			mList.add(idList);
-			mList.add(totalAmountString);
-			mList.add(tempDisplayDateGraph);
+			mList.idList = idList;
+			mList.amount = totalAmountString;
+			mList.dateTime = tempDisplayDateGraph;
 			listString.add(mList);
-			
 		}
 		return listString;
 	}

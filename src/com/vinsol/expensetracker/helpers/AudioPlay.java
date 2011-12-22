@@ -16,51 +16,32 @@ public class AudioPlay {
 	Context mContext;
 
 	// ////// ********* Constructor ********* //////////
-	public AudioPlay(String mFileName, Context _context) {
+	public AudioPlay(String userId, Context _context,Boolean isFav) {
 		mContext = _context;
 		mPlayer = new MediaPlayer();
-		if (android.os.Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED)) {
-			File mDirectory = new File("/mnt/sdcard/ExpenseTracker/Audio");
+		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+			
+			File mDirectory = new File(getFile(isFav));
 			mDirectory.mkdirs();
-			mPath = new File(mDirectory, mFileName + ".amr");
+			mPath = new File(mDirectory, userId + ".amr");
 			mPlayer.setScreenOnWhilePlaying(true);
 			mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			try {
 				mPlayer.setDataSource(mPath.toString());
 				mPlayer.prepare();
 			} catch (IllegalStateException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		} else {
-			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 	}
-	
-	public AudioPlay(String mFileName, Context _context,String fav) {
-		mContext = _context;
-		mPlayer = new MediaPlayer();
-		if (android.os.Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED)) {
-			File mDirectory = new File("/mnt/sdcard/ExpenseTracker/Favorite/Audio");
-			mDirectory.mkdirs();
-			mPath = new File(mDirectory, mFileName + ".amr");
-			mPlayer.setScreenOnWhilePlaying(true);
-			mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			try {
-				mPlayer.setDataSource(mPath.toString());
-				mPlayer.prepare();
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
+	private String getFile(Boolean isFav) {
+		if(isFav) {
+			return "/mnt/sdcard/ExpenseTracker/Favorite/Audio";
 		} else {
-			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG)
-					.show();
+			return "/mnt/sdcard/ExpenseTracker/Audio";
 		}
 	}
 

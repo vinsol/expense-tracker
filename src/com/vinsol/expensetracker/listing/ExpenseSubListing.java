@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.models.DisplayList;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,7 +45,7 @@ public class ExpenseSubListing extends ListingAbstract {
 			}
 			
 			Calendar mTempCalendar = Calendar.getInstance();
-			mTempCalendar.setTimeInMillis(Long.parseLong(mSubList.get(0).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
+			mTempCalendar.setTimeInMillis(mSubList.get(0).timeInMillis);
 			mTempCalendar.set(mTempCalendar.get(Calendar.YEAR),mTempCalendar.get(Calendar.MONTH),mTempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 			mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			
@@ -53,14 +53,14 @@ public class ExpenseSubListing extends ListingAbstract {
 			
 			int j = 0;
 			@SuppressWarnings("rawtypes")
-			List listString = new ArrayList<List<List<String>>>();
+			List listString = new ArrayList<List<DisplayList>>();
 			for (int i = 0; i < mDataDateList.size(); i++) {
-				List<List<String>> mList = new ArrayList<List<String>>();
-				String date = mDataDateList.get(i).get(DatabaseAdapter.KEY_DATE_TIME);
-				while (j < mSubList.size()&& date.equals(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME))) {
-					List<String> templist = new ArrayList<String>();
+				List<DisplayList> mList = new ArrayList<DisplayList>();
+				String date = mDataDateList.get(i).dateTime;
+				while (j < mSubList.size()&& date.equals(mSubList.get(j).displayTime)) {
+					DisplayList templist = new DisplayList();
 					Calendar mCalendar = Calendar.getInstance();
-					mCalendar.setTimeInMillis(Long.parseLong(mSubList.get(j).get(DatabaseAdapter.KEY_DATE_TIME + "Millis")));
+					mCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
 					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					templist = getListCurrentWeek(j);
 					mList.add(templist);

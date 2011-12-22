@@ -144,8 +144,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	}//end onClick
 	
 	private void createDatabaseEntry(int typeOfEntry) {
-		entry.userId = insertToDatabase(typeOfEntry);
-		bundle.putLong("_id", entry.userId);
+		entry.userId = insertToDatabase(typeOfEntry).toString();
+		bundle.putLong("_id", Long.parseLong(entry.userId));
 		
 		if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 			bundle.putBoolean("setLocation", false);
@@ -156,7 +156,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	// /////// ******** function to mark entry into the database and returns the
 	// id of the new entry ***** //////
-	private long insertToDatabase(int type) {
+	private Long insertToDatabase(int type) {
 		HashMap<String, String> list = new HashMap<String, String>();
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);

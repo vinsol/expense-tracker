@@ -70,7 +70,7 @@ public class DatabaseAdapter {
 		db.execSQL("drop table " + TABLE_NAME);
 	}
 
-	public long insertToDatabase(HashMap<String, String> list) {
+	public Long insertToDatabase(HashMap<String, String> list) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_TAG, list.get(KEY_TAG));
 		contentValues.put(KEY_AMOUNT, list.get(KEY_AMOUNT));
