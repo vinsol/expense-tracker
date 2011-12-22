@@ -43,7 +43,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		showData = new ShowData();
 		showEdit = (Button) findViewById(R.id.show_edit);
 		showDelete = (Button) findViewById(R.id.show_delete);
-		showHeaderTitle = (TextView) findViewById(R.id.show_header_title);
+		showHeaderTitle = (TextView) findViewById(R.id.header_title);
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		showAmount = (TextView) findViewById(R.id.show_amount);
 		showTag = (TextView) findViewById(R.id.show_tag_textview);

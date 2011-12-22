@@ -14,7 +14,7 @@ public class ShowDateHandler {
 
 	public ShowDateHandler(Context mContext, String timeInMillis) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		showHeaderTitle = (TextView) activity.findViewById(R.id.show_header_title);
+		showHeaderTitle = (TextView) activity.findViewById(R.id.header_title);
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(Long.parseLong(timeInMillis));
 		String date = getDate(mCalendar);
@@ -24,7 +24,7 @@ public class ShowDateHandler {
 
 	public ShowDateHandler(Context mContext,int typeOfEntry) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		showHeaderTitle = (TextView) activity.findViewById(R.id.show_header_title);
+		showHeaderTitle = (TextView) activity.findViewById(R.id.header_title);
 		showHeaderTitle.setText(activity.getString(typeOfEntry));
 	}
 	

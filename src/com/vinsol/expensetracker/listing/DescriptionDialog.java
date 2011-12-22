@@ -19,8 +19,8 @@ public class DescriptionDialog extends Dialog implements
 		super(mContext);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.description_dialog);
-		textview = (TextView) findViewById(R.id.description_dialog_textview);
-		cancelButton = (Button) findViewById(R.id.description_dialog_cancel_button);
+		textview = (TextView) findViewById(R.id.textview);
+		cancelButton = (Button) findViewById(R.id.cancel_button);
 		textview.setText(string);
 		cancelButton.setOnClickListener(this);
 		show();
@@ -28,7 +28,7 @@ public class DescriptionDialog extends Dialog implements
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.description_dialog_cancel_button) {
+		if (v.getId() == R.id.cancel_button) {
 			dismiss();
 		}
 	}

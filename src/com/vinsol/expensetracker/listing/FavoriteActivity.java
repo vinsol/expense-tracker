@@ -61,7 +61,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		// ******* ///////
 		handleUI();
 		
-		headerTitle = (TextView) findViewById(R.id.edit_header_title);
+		headerTitle = (TextView) findViewById(R.id.header_title);
 		editFavoriteListview = (ListView) findViewById(R.id.edit_body_favorite_listview);
 		editDateBarDateview = (TextView) findViewById(R.id.edit_date_bar_dateview);
 		mConvertCursorToListString = new ConvertCursorToListString(this);

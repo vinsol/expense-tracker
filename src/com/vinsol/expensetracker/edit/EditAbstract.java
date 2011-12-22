@@ -50,7 +50,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		setContentView(R.layout.edit_page);
 		entry = new Entry();
 		editAmount = (EditText) findViewById(R.id.edit_amount);
-		editHeaderTitle = (TextView) findViewById(R.id.edit_header_title);
+		editHeaderTitle = (TextView) findViewById(R.id.header_title);
 		editTag = (EditText) findViewById(R.id.edit_tag);
 		dateBarDateview = (TextView) findViewById(R.id.edit_date_bar_dateview);
 		editSaveEntry = (Button) findViewById(R.id.edit_save_entry);

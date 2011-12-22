@@ -6,33 +6,17 @@
     android:background="@drawable/home_bg"
     >
     <!-- Header -->
-    <RelativeLayout
-        android:id="@+id/show_header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/topbar_bg" 
-        android:gravity="center"
-        >
-
-        <TextView
-            android:id="@+id/show_header_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Text Entry"
-            android:textSize="20dip"
-            android:textStyle="bold"
-            android:textColor="@color/white" 
-            >
-        </TextView>
-        
-    </RelativeLayout>   
+    <include
+        layout="@layout/simple_header"
+        android:id="@+id/include_header"
+        /> 
         
     <!-- Date and location Bar -->
     <RelativeLayout  
         android:id="@+id/show_date_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/show_header"
+        android:layout_below="@id/include_header"
         android:background="@drawable/date_bar_bg_wo_shadow"
         android:gravity="center"
         > 
