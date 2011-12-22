@@ -8,7 +8,7 @@ import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
-import com.vinsol.expensetracker.models.ShowData;
+import com.vinsol.expensetracker.models.StaticVariables;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.DisplayDate;
@@ -18,7 +18,6 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -113,7 +112,6 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		entry.amount = editAmount.getText().toString();
 		entry.description = editTag.getText().toString();
 		if (!entry.amount.equals(".") && !entry.amount.equals("")) {
-			Log.v("entry", entry.amount);
 			Double mAmount = Double.parseDouble(entry.amount);
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 			list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
@@ -183,11 +181,9 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			isAmountNotEqual = true;
 		}
 		
-		Log.v("(!mEditList.get(1).equals(listOnResult.get(1))) || isAmountNotEqual || isChanged", mEditList.get(1)+" "+listOnResult.get(1));
-
 		if((!mEditList.get(1).equals(listOnResult.get(1))) || isAmountNotEqual || isChanged ) {
 			isChanged = false;
-			ShowData.staticFavID = null;
+			StaticVariables.favID = null;
 			HashMap<String, String> listForFav = new HashMap<String, String>();
 			listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
 			listForFav.put(DatabaseAdapter.KEY_ID, mEditList.get(0));
@@ -197,11 +193,11 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			mDatabaseAdapter.close();
 			listOnResult.add("");
 		} else 
-			if(ShowData.staticFavID == null) {
+			if(StaticVariables.favID == null) {
 				listOnResult.add(mEditList.get(4));
 			}
 			else { 
-				listOnResult.add(ShowData.staticFavID);
+				listOnResult.add(StaticVariables.favID.toString());
 			}
 			
 			
@@ -236,8 +232,6 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			Bundle tempBundle = new Bundle();
 			tempBundle.putStringArrayList("mDisplayList", getListOnResult(toSave));
 			saveEntryStartIntent(tempBundle);
-
-			Log.v("Constants After", ShowData.staticFavID+ " Checking");
 		}
 		finish();
 	}

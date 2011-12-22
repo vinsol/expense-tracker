@@ -66,8 +66,8 @@ public class DBAdapterFavorite {
 			return id;
 		}
 
-		public boolean deleteDatabaseEntryID(String id) {
-			String where = KEY_ID + "=" + id;
+		public boolean deleteDatabaseEntryID(Long favID) {
+			String where = KEY_ID + "=" + favID;
 			try {
 				Log.d("Deleting");
 				db.delete(TABLE_NAME, where, null);

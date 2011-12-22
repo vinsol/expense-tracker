@@ -7,6 +7,7 @@ import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.models.ShowData;
+import com.vinsol.expensetracker.models.StaticVariables;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -76,7 +77,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 			
 			if(mShowList.get(4) != null){
 				if(!mShowList.get(4).equals("")){
-					ShowData.staticFavID = mShowList.get(4);
+					StaticVariables.favID = Long.parseLong(mShowList.get(4));
 				}
 			}
 			
@@ -166,7 +167,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		
 		if(v.getId() == R.id.show_edit){
 			intentExtras.putBoolean("isFromShowPage", true);
-			mShowList.set(4, ShowData.staticFavID);
+			mShowList.set(4, StaticVariables.favID.toString());
 			intentExtras.remove("mDisplayList");
 			intentExtras.putStringArrayList("mDisplayList", mShowList);
 			editAction();

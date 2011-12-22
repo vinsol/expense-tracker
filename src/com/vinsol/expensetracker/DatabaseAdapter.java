@@ -159,24 +159,20 @@ public class DatabaseAdapter {
 		
 	}
 	
-	public String getFavoriteId(String id) {
+	public Long getFavoriteId(String id) {
 		String where = KEY_ID+" = "+id;
 		
 		Cursor cr = db.query(TABLE_NAME,  new String[] {
 				KEY_FAVORITE}, where, null, null, null, null);
 		cr.moveToFirst();
-		String favId = cr.getString(cr.getColumnIndex(KEY_FAVORITE));
+		Long favId = cr.getLong(cr.getColumnIndex(KEY_FAVORITE));
 		cr.close();
 		return favId;
 	}
 
-	public void editDatabaseFavorite(String favID) {
+	public void editDatabaseFavorite(Long favID) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_FAVORITE, "");
-		
-		if(favID.equals("") || favID == null){
-			favID = "";
-		}
 		String where = KEY_FAVORITE+" = "+favID;
 		db.update(TABLE_NAME, contentValues, where, null);
 	}

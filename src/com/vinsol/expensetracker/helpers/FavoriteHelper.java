@@ -9,7 +9,7 @@ import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.FileCopyFavorite;
 import com.vinsol.expensetracker.helpers.FileDeleteFavorite;
-import com.vinsol.expensetracker.models.ShowData;
+import com.vinsol.expensetracker.models.StaticVariables;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,6 +28,7 @@ public class FavoriteHelper implements OnClickListener{
 	private Activity activity;
 	private DatabaseAdapter mDatabaseAdapter;
 	private TextView showAddFavoriteTextView;
+	private Long favID;
 	
 	public FavoriteHelper(Context context,ArrayList<String> mShowList) {
 		this.mContext = context;
@@ -83,7 +84,6 @@ public class FavoriteHelper implements OnClickListener{
 		
 		if(toCheck){
 			HashMap<String, String> list = new HashMap<String, String>();
-			Long favID = null;
 			list.put(DBAdapterFavorite.KEY_AMOUNT, mShowList.get(2));
 			list.put(DBAdapterFavorite.KEY_TYPE, mShowList.get(5));
 			if(mShowList.get(5).equals(mContext.getString(R.string.text))) {
@@ -108,7 +108,7 @@ public class FavoriteHelper implements OnClickListener{
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
 						} else {
 							mDbAdapterFavorite.open();
-							mDbAdapterFavorite.deleteDatabaseEntryID(Long.toString(favID));
+							mDbAdapterFavorite.deleteDatabaseEntryID(favID);
 							mDbAdapterFavorite.close();
 						}
 					} catch (Exception e) {	
@@ -129,7 +129,7 @@ public class FavoriteHelper implements OnClickListener{
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+favID+".amr");
 						if(!mFile.canRead()){
 							mDbAdapterFavorite.open();
-							mDbAdapterFavorite.deleteDatabaseEntryID(Long.toString(favID));
+							mDbAdapterFavorite.deleteDatabaseEntryID(favID);
 							mDbAdapterFavorite.close();
 						}
 					} catch (Exception e) {	
@@ -138,7 +138,7 @@ public class FavoriteHelper implements OnClickListener{
 					Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_SHORT).show();
 				}
 			}
-			ShowData.staticFavID = Long.toString(favID);
+			StaticVariables.favID = favID;
 			list = new HashMap<String, String>();
 			list.put(DatabaseAdapter.KEY_ID, mShowList.get(0));
 			list.put(DatabaseAdapter.KEY_FAVORITE, Long.toString(favID));
@@ -148,8 +148,7 @@ public class FavoriteHelper implements OnClickListener{
 			showAddFavorite.setChecked(true);
 			showAddFavoriteTextView.setText("Remove from Favorite");
 		} else if(mShowList.get(5).equals(mContext.getString(R.string.text))){
-				ShowData.staticFavID = null;
-				String favID = null;
+				StaticVariables.favID = null;
 				mDatabaseAdapter.open();
 				favID = mDatabaseAdapter.getFavoriteId(mShowList.get(0));
 				mDatabaseAdapter.close();
@@ -165,12 +164,11 @@ public class FavoriteHelper implements OnClickListener{
 				showAddFavoriteTextView.setText("Add to Favorite");
 				
 			} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-				ShowData.staticFavID = null;
-				String favID = null;
+				StaticVariables.favID = null;
 				mDatabaseAdapter.open();
 				favID = mDatabaseAdapter.getFavoriteId(mShowList.get(0));
 				mDatabaseAdapter.close();
-				new FileDeleteFavorite(Long.parseLong(favID));
+				new FileDeleteFavorite(favID);
 				mDbAdapterFavorite.open();
 				mDbAdapterFavorite.deleteDatabaseEntryID(favID);
 				mDbAdapterFavorite.close();
