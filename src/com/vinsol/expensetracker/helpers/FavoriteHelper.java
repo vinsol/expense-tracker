@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker.utils;
+package com.vinsol.expensetracker.helpers;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
-import com.vinsol.expensetracker.utils.FileCopyFavorite;
-import com.vinsol.expensetracker.utils.FileDeleteFavorite;
+import com.vinsol.expensetracker.helpers.FileCopyFavorite;
+import com.vinsol.expensetracker.helpers.FileDeleteFavorite;
 
 import android.app.Activity;
 import android.content.Context;

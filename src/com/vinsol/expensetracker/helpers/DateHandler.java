@@ -1,9 +1,9 @@
-package com.vinsol.expensetracker.utils;
+package com.vinsol.expensetracker.helpers;
 
 import java.util.Calendar;
 
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.utils.DisplayDate;
+import com.vinsol.expensetracker.utils.DatePickerDialog;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,7 +23,7 @@ public class DateHandler implements OnClickListener {
 	private Calendar mCalendar;
 	private Activity activity;
 	private DatePickerDialog dialog;
-	static Calendar tempCalenderOnCancel;
+	public static Calendar tempCalenderOnCancel;
 
 	public DateHandler(Context mContext) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;

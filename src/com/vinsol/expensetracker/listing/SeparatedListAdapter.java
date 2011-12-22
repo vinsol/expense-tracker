@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.GroupedIconDialogClickListener;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.utils.DateHelper;
+import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
 class SeparatedListAdapter extends BaseAdapter {

@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.AudioPlay;
-import com.vinsol.expensetracker.utils.DisplayTime;
+import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
 import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
 import com.vinsol.expensetracker.utils.RecordingHelper;
@@ -60,7 +60,7 @@ public class Voice extends EditAbstract {
 					editStopButton.setVisibility(View.GONE);
 					editPlayButton.setVisibility(View.VISIBLE);
 					editRerecordButton.setVisibility(View.VISIBLE);
-					editTimeDetailsChronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+					editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 				} else {
 					editTimeDetailsChronometer.setText("Audio File Missing");
 					editRerecordButton.setVisibility(View.VISIBLE);
@@ -162,7 +162,7 @@ public class Voice extends EditAbstract {
 			}
 			try {
 				mAudioPlay = new AudioPlay(userId + "", this);
-				editTimeDetailsChronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+				editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 			} catch (NullPointerException e) {
 
 			}

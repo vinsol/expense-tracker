@@ -1,6 +1,6 @@
 package com.vinsol.expensetracker.utils;
 
-public class DisplayTime {
+public class DisplayTimeForChronometer {
 
 	// ////// ******** Function which take time in millis and return time in
 	// 00:00 format ******* ////////

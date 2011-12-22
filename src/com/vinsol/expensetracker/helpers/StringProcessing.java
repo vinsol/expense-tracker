@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker.utils;
+package com.vinsol.expensetracker.helpers;
 
 public class StringProcessing {
 	public String getStringDoubleDecimal(String totalAmountString){

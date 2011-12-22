@@ -2,7 +2,7 @@ package com.vinsol.expensetracker.listing;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.utils.AudioPlay;
-import com.vinsol.expensetracker.utils.DisplayTime;
+import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
 import android.app.Dialog;
@@ -97,7 +97,7 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 			stopButton.setVisibility(View.GONE);
 			mAudioPlay.stopPlayBack();
 			countDownTimer.cancel();
-			timeDetailsChronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+			timeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 			playButton.setVisibility(View.VISIBLE);
 		}
 

@@ -1,4 +1,4 @@
-package com.vinsol.expensetracker.utils;
+package com.vinsol.expensetracker.helpers;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.vinsol.expensetracker.DBAdapterFavorite;
 import com.vinsol.expensetracker.DatabaseAdapter;
-import com.vinsol.expensetracker.utils.DisplayDate;
 import android.content.Context;
 import android.database.Cursor;
 

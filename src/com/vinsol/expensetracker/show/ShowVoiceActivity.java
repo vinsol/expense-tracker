@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.utils.AudioPlay;
-import com.vinsol.expensetracker.utils.DisplayTime;
-import com.vinsol.expensetracker.utils.FavoriteHelper;
+import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
+import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.utils.FileDelete;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
@@ -51,7 +51,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 					mAudioPlay = new AudioPlay(Long.toString(userId), this);
 					showStopButton.setVisibility(View.GONE);
 					showPlayButton.setVisibility(View.VISIBLE);
-					showTimeDetailsChronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+					showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 				} else {
 					showTimeDetailsChronometer.setText("Audio File Missing");
 					showStopButton.setVisibility(View.GONE);
@@ -146,7 +146,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 				}
 			} catch (Exception e) {
 			}
-			showTimeDetailsChronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+			showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 		}
 	}
 
@@ -186,7 +186,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 							mAudioPlay = new AudioPlay(Long.toString(userId), this);
 							showStopButton.setVisibility(View.GONE);
 							showPlayButton.setVisibility(View.VISIBLE);
-							showTimeDetailsChronometer.setText(new DisplayTime().getDisplayTime(mAudioPlay.getPlayBackTime()));
+							showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 						} else {
 							showTimeDetailsChronometer.setText("Audio File Missing");
 							showStopButton.setVisibility(View.GONE);

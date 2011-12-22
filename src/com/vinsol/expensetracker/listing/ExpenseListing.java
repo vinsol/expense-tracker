@@ -13,10 +13,10 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.GroupedIconDialogClickListener;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.utils.ConvertCursorToListString;
-import com.vinsol.expensetracker.utils.DisplayDate;
+import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
+import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
-import com.vinsol.expensetracker.utils.StringProcessing;
+import com.vinsol.expensetracker.helpers.StringProcessing;
 
 public class ExpenseListing extends ListingAbstract {
 

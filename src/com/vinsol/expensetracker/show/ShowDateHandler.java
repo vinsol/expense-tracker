@@ -3,7 +3,7 @@ package com.vinsol.expensetracker.show;
 import java.util.Calendar;
 
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.utils.DisplayDate;
+import com.vinsol.expensetracker.helpers.DisplayDate;
 import android.app.Activity;
 import android.content.Context;
 import android.widget.TextView;

@@ -14,8 +14,8 @@ import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
-import com.vinsol.expensetracker.utils.ConvertCursorToListString;
-import com.vinsol.expensetracker.utils.StringProcessing;
+import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
+import com.vinsol.expensetracker.helpers.StringProcessing;
 
 import android.app.Activity;
 import android.content.Intent;

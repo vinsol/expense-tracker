@@ -10,8 +10,8 @@ import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
-import com.vinsol.expensetracker.utils.ConvertCursorToListString;
-import com.vinsol.expensetracker.utils.DisplayDate;
+import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
+import com.vinsol.expensetracker.helpers.DisplayDate;
 
 import android.app.Dialog;
 import android.content.Context;

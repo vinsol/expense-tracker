@@ -9,7 +9,7 @@ import android.widget.Chronometer;
 	// countdowntimer is an abstract class, so extend it and fill in methods
 	public class MyCountDownTimer extends CountDownTimer {
 
-		private DisplayTime mDisplayTime;
+		private DisplayTimeForChronometer mDisplayTime;
 		private Chronometer showDetailsChronometer;
 		private Button showStopButton;
 		private Button showPlayButton;
@@ -17,7 +17,7 @@ import android.widget.Chronometer;
 		
 		public MyCountDownTimer(long millisInFuture, long countDownInterval,Chronometer chronometerTextView,Button stopButton,Button playButton,AudioPlay tempAudioPlay) {
 			super(millisInFuture, countDownInterval);
-			mDisplayTime = new DisplayTime();
+			mDisplayTime = new DisplayTimeForChronometer();
 			showDetailsChronometer = chronometerTextView;
 			showStopButton = stopButton;
 			showPlayButton = playButton;

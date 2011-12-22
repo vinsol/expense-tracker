@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.utils.DisplayDate;
+import com.vinsol.expensetracker.helpers.DisplayDate;
 
 import android.content.Intent;
 import android.os.Bundle;

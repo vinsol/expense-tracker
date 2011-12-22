@@ -5,7 +5,7 @@ import java.util.Calendar;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.utils.FavoriteHelper;
+import com.vinsol.expensetracker.helpers.FavoriteHelper;
 
 import android.app.Activity;
 import android.os.Bundle;
