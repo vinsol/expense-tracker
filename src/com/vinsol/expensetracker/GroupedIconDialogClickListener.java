@@ -19,14 +19,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
-public class GroupedIconDialog implements OnClickListener{
+public class GroupedIconDialogClickListener implements OnClickListener{
 	
 	private UnknownEntryDialog unknownDialog;
 	private Context mContext;
 	private Bundle bundle;
 	private long timeInMillis;
 	
-	public GroupedIconDialog(UnknownEntryDialog unknownDialog,Context mContext,Bundle bundle,Long timeInMillis) {
+	public GroupedIconDialogClickListener(UnknownEntryDialog unknownDialog,Context mContext,Bundle bundle,Long timeInMillis) {
 		this.unknownDialog = unknownDialog;
 		this.mContext = mContext;
 		if(bundle != null) {

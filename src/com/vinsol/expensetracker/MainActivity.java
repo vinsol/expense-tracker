@@ -34,20 +34,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.main);
 		bundle = new Bundle();
-		if (getIntent().hasExtra("mainBundle")) {
-			Bundle tempBundle = getIntent().getBundleExtra("mainBundle");
-			if (!tempBundle.isEmpty()) {
-				if (tempBundle.containsKey("timeInMillis"))
-					timeInMillis = tempBundle.getLong("timeInMillis");
-				if(tempBundle.containsKey("mDisplayList")){
-					mTempClickedList = tempBundle.getStringArrayList("mDisplayList");
-					userId = Long.parseLong(mTempClickedList.get(0));
-				}
-			}
-		}
 
 		// /////// ********* DatabaseAdaptor initialize ********* ////////
 		mDatabaseAdapter = new DatabaseAdapter(this);
@@ -94,7 +82,6 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onPause() {
-
 		userId = null;
 		super.onPause();
 	}

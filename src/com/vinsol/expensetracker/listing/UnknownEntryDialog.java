@@ -37,8 +37,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	private TextView headerTextView;
 	private TextView locationTextView;
 	
-	public UnknownEntryDialog(Context mContext,HashMap<String, String> toInsert, android.view.View.OnClickListener myClickListener) {
-		super(mContext);
+	protected void onCreateDialog() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.unknown_entry_dialog);
 		textEntryButton = (Button) findViewById(R.id.main_text);
@@ -49,13 +48,18 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		cancelButton = (Button) findViewById(R.id.unknown_entry_dialog_cancel);
 		headerTextView = (TextView) findViewById(R.id.unknown_entry_dialog_header_title);
 		locationTextView = (TextView) findViewById(R.id.unknown_entry_dialog_location);
+		bundle = new Bundle();
+	}
+	
+	public UnknownEntryDialog(Context mContext,HashMap<String, String> toInsert, android.view.View.OnClickListener myClickListener) {
+		super(mContext);
+		onCreateDialog();
 		textEntryButton.setOnClickListener(myClickListener);
 		deleteButton.setVisibility(View.GONE);
 		voiceEntryButton.setOnClickListener(myClickListener);
 		cameraEntryButton.setOnClickListener(myClickListener);
 		favoriteEntryButton.setOnClickListener(myClickListener);
 		cancelButton.setOnClickListener(myClickListener);
-		bundle = new Bundle();
 		
 		if(toInsert.containsKey(DatabaseAdapter.KEY_LOCATION))
 			if(toInsert.get(DatabaseAdapter.KEY_LOCATION) != ""){
@@ -72,23 +76,13 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	
 	public UnknownEntryDialog(Context mContext,ArrayList<String> _list,android.view.View.OnClickListener deleteClickListener) {
 		super(mContext);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.unknown_entry_dialog);
-		textEntryButton = (Button) findViewById(R.id.main_text);
-		deleteButton = (Button) findViewById(R.id.unknown_entry_dialog_delete);
-		voiceEntryButton = (Button) findViewById(R.id.main_voice);
-		cameraEntryButton = (Button) findViewById(R.id.main_camera);
-		favoriteEntryButton = (Button) findViewById(R.id.main_favorite);
-		cancelButton = (Button) findViewById(R.id.unknown_entry_dialog_cancel);
-		headerTextView = (TextView) findViewById(R.id.unknown_entry_dialog_header_title);
-		locationTextView = (TextView) findViewById(R.id.unknown_entry_dialog_location);
+		onCreateDialog();
 		textEntryButton.setOnClickListener(this);
 		deleteButton.setOnClickListener(deleteClickListener);
 		voiceEntryButton.setOnClickListener(this);
 		cameraEntryButton.setOnClickListener(this);
 		favoriteEntryButton.setOnClickListener(this);
 		cancelButton.setOnClickListener(this);
-		bundle = new Bundle();
 		mDatabaseAdapter = new DatabaseAdapter(getContext());
 		mTempClickedList = _list;
 		
@@ -122,7 +116,6 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				mDatabaseAdapter.open();
 				mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.get(0));
 				mDatabaseAdapter.close();
-				
 				dismiss();
 				break;
 				
