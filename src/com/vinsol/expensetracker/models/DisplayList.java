@@ -24,28 +24,28 @@ public class DisplayList extends Favorite implements Parcelable{
 	public DisplayList(){}
     
     public DisplayList(Parcel in){
+    	userId = in.readString();
+    	amount = in.readString();
+    	description = in.readString();
+    	type = in.readString();
     	timeLocation = in.readString();
     	location = in.readString();
     	favorite = in.readString();
     	timeInMillis = new Long(in.readString());
     	displayTime = in.readString();
-    	userId = in.readString();
-    	type = in.readString();
-    	amount = in.readString();
-    	description = in.readString();
     };
     
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(userId);
+		dest.writeString(amount);
+		dest.writeString(description);
+		dest.writeString(type);
 		dest.writeString(timeLocation);
 		dest.writeString(location);
 		dest.writeString(favorite);
 		dest.writeString(timeInMillis.toString());
 		dest.writeString(displayTime);
-		dest.writeString(userId);
-		dest.writeString(type);
-		dest.writeString(amount);
-		dest.writeString(description);
 	}
 
 	@Override

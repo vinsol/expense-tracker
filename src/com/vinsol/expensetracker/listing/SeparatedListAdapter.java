@@ -187,6 +187,8 @@ class SeparatedListAdapter extends BaseAdapter {
 					
 					if(!isEntryComplete(mlist)){
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
+					} else {
+						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
 					}
 					
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
@@ -209,6 +211,8 @@ class SeparatedListAdapter extends BaseAdapter {
 
 					if(!isEntryComplete(mlist)){
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
+					} else {
+						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
 					}
 					
 					if (!mlist.description.equals(mContext.getString(R.string.unfinished_textentry)) && !mlist.description.equals(mContext.getString(R.string.finished_textentry))) {
@@ -224,6 +228,8 @@ class SeparatedListAdapter extends BaseAdapter {
 
 					if(!isEntryComplete(mlist)){
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
+					} else {
+						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
 					}
 					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+ mlist.userId + ".amr");
 					if (mFile.canRead()) {
@@ -237,6 +243,8 @@ class SeparatedListAdapter extends BaseAdapter {
 						try{
 							if(isCurrentWeek(mDatadateList.get(sectionnum).dateTime)){
 								holderBody.rowFavoriteIcon.setVisibility(View.VISIBLE);
+							} else {
+								holderBody.rowFavoriteIcon.setVisibility(View.INVISIBLE);
 							}
 						}catch(Exception e){
 							

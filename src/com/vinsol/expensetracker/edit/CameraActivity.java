@@ -47,9 +47,9 @@ public class CameraActivity extends EditAbstract {
 		editCameraDetails = (LinearLayout) findViewById(R.id.edit_camera_details);
 		editImageDisplay = (ImageView) findViewById(R.id.edit_image_display);
 		editLoadProgress = (RelativeLayout) findViewById(R.id.edit_load_progress);
-		typeOfEntry = R.string.voice;
-		typeOfEntryFinished = R.string.finished_voiceentry;
-		typeOfEntryUnfinished = R.string.unfinished_voiceentry;
+		typeOfEntry = R.string.camera;
+		typeOfEntryFinished = R.string.finished_cameraentry;
+		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
 		editHelper();
 		if (intentExtras.containsKey("mDisplayList")) {
 			if(setUnknown){

@@ -150,9 +150,9 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 					templist.description = getString(R.string.unfinished_textentry);
 				}
 			} else if (mSubList.get(j).type.equals(getString(R.string.favorite_entry))) {
-				templist.type = "Unfinished Favorite Entry";
+				templist.description = "Unfinished Favorite Entry";
 			} else if (mSubList.get(j).type.equals(getString(R.string.unknown))) {
-				templist.type = getString(R.string.unknown_entry);
+				templist.description = getString(R.string.unknown_entry);
 			}
 		}
 

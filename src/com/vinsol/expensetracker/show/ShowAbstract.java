@@ -98,10 +98,8 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	
 	public void doTaskOnActivityResult(Bundle _intentExtras){
 		intentExtras = _intentExtras;
-		mShowList = new DisplayList();
 		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = intentExtras.getParcelable("mDisplayList");
-			
 			if(mShowList.userId != null){
 				if(mShowList.userId != ""){
 					showData.userId = mShowList.userId;
@@ -111,8 +109,8 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 			} else {
 				finish();
 			}
-			showData.amount = mShowList.userId;
-			showData.description = mShowList.userId;
+			showData.amount = mShowList.amount;
+			showData.description = mShowList.description;
 
 			if (showData.amount != null) {
 				if(!showData.amount.equals("") && !showData.amount.equals("?")){

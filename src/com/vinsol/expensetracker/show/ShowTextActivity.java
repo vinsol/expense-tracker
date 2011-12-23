@@ -13,7 +13,7 @@ public class ShowTextActivity extends ShowAbstract{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		intentExtras = getIntent().getBundleExtra("textShowBundle");
+		intentExtras = getIntent().getExtras().getBundle("textShowBundle");
 		typeOfEntry = R.string.text;
 		typeOfEntryFinished = R.string.finished_textentry;
 		typeOfEntryUnfinished = R.string.unfinished_textentry;
