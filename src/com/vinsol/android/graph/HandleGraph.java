@@ -131,8 +131,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		DisplayDate lastDateDisplayDate = new DisplayDate(lastDateCalendar);
 		ArrayList<ArrayList<ArrayList<String>>> graphList = new ArrayList<ArrayList<ArrayList<String>>>();
 		Calendar mTempCalender = Calendar.getInstance();
-		mTempCalender.set(mTempCalender.get(Calendar.YEAR), mTempCalender.get(Calendar.MONTH), mTempCalender.get(Calendar.DAY_OF_MONTH
-				),0,0,0);
+		mTempCalender.set(mTempCalender.get(Calendar.YEAR), mTempCalender.get(Calendar.MONTH), mTempCalender.get(Calendar.DAY_OF_MONTH),0,0,0);
 		mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 		
 		int j = 0;
