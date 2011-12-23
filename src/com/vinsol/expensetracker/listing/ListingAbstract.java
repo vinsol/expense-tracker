@@ -1,7 +1,5 @@
 package com.vinsol.expensetracker.listing;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
@@ -12,6 +10,7 @@ import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
+import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.helpers.StringProcessing;
@@ -56,74 +55,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 		super.onResume();
 		mSeparatedListAdapter = new SeparatedListAdapter(this);
 	}
-
-	protected boolean isEntryComplete(DisplayList displayList) {
-		if(isAmountValid(displayList.amount)) {
-			if (displayList.type.equals(getString(R.string.camera))) {
-				return isCameraFileReadable(displayList.userId);
-			} else if (displayList.type.equals(getString(R.string.voice))) {
-				return isAudioFileReadable(displayList.userId);
-			} else if (displayList.type.equals(getString(R.string.text))) {
-				return isTagValid(displayList.description);
-			}
-		}
-		return false;
-	}
-	
-	private boolean isAmountValid(String amount){
-		if( amount!= null){
-			if (amount.contains("?")) {
-				return false;
-			} else {
-				return true;
-			} 
-				
-		} else {
-			return false;
-		}
-	}
-	private boolean isTagValid(String tag) {
-		if(tag != null){
-			if (tag.equals("")) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean isAudioFileReadable(String userId) {
-		File mFile = new File("/sdcard/ExpenseTracker/Audio/" + userId + ".amr");
-		if (mFile.canRead()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private boolean isCameraFileReadable(String userId) {
-		File mFileSmall = new File("/sdcard/ExpenseTracker/" + userId + "_small.jpg");
-		File mFile = new File("/sdcard/ExpenseTracker/" + userId + ".jpg");
-		File mFileThumbnail = new File("/sdcard/ExpenseTracker/" + userId + "_thumbnail.jpg");
-		if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
-			return true;
-		}
-		return false;
-	}
-
-	protected boolean isEntryComplete(ArrayList<String> toCheckList) {
-		if(isAmountValid(toCheckList.get(2))) {
-			if (toCheckList.get(5).equals(getString(R.string.camera))) {
-				return isCameraFileReadable(toCheckList.get(0));
-			} else if (toCheckList.get(5).equals(getString(R.string.voice))) {
-				return isAudioFileReadable(toCheckList.get(0));
-			} else if (toCheckList.get(5).equals(getString(R.string.text))) {
-				return isTagValid(toCheckList.get(1));
-			}
-		}
-		return false;
-	}
 	
 	protected DisplayList getListCurrentWeek(int j) {
 		DisplayList templist = new DisplayList();
@@ -131,20 +62,21 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 		if (mSubList.get(j).description != null && !mSubList.get(j).description.equals("")) {
 			templist.description = mSubList.get(j).description;
 		} else {
+			CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 			if (mSubList.get(j).type.equals(getString(R.string.camera))) {
-				if(isEntryComplete(mSubList.get(j))){
+				if(mCheckEntryComplete.isEntryComplete(mSubList.get(j),this)){
 					templist.description = getString(R.string.finished_cameraentry);
 				} else {
 					templist.description = getString(R.string.unfinished_cameraentry);
 				}
 			} else if (mSubList.get(j).type.equals(getString(R.string.voice))) {
-				if(isEntryComplete(mSubList.get(j))){
+				if(mCheckEntryComplete.isEntryComplete(mSubList.get(j),this)){
 					templist.description = getString(R.string.finished_voiceentry);
 				} else {
 					templist.description = getString(R.string.unfinished_voiceentry);
 				}
 			} else if (mSubList.get(j).type.equals(getString(R.string.text))) {
-				if(isEntryComplete(mSubList.get(j))){
+				if(mCheckEntryComplete.isEntryComplete(mSubList.get(j),this)){
 					templist.description = getString(R.string.finished_textentry);
 				} else {
 					templist.description = getString(R.string.unfinished_textentry);
@@ -196,9 +128,10 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 		if (!userId.contains(",")) {
 			Bundle bundle = new Bundle();
 			bundle.putParcelable("mDisplayList", mTempClickedList);
+			CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 			if (mTempClickedList.type.equals(getString(R.string.camera))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					if (!isEntryComplete(mTempClickedList)) {
+					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)){
 						Intent intentCamera = new Intent(this,CameraActivity.class);
 						intentCamera.putExtra("cameraBundle", bundle);
 						startActivity(intentCamera);
@@ -211,7 +144,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 					Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
 				}
 			} else if (mTempClickedList.type.equals(getString(R.string.text))) {
-				if (!isEntryComplete(mTempClickedList)) {
+				if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)){
 					Intent intentTextEntry = new Intent(this, TextEntry.class);
 					intentTextEntry.putExtra("textEntryBundle", bundle);
 					startActivity(intentTextEntry);
@@ -223,7 +156,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 				}
 			} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					if (!isEntryComplete(mTempClickedList)) {
+					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)){
 						Intent intentVoice = new Intent(this, Voice.class);
 						intentVoice.putExtra("voiceBundle", bundle);
 						startActivity(intentVoice);

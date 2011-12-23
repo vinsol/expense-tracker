@@ -119,10 +119,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			list.put(DatabaseAdapter.KEY_AMOUNT, "");
 		}
 		
-		if (entry.description.equals("")) {
-			list.put(DatabaseAdapter.KEY_TAG, entry.description);
-		}
-		
+		list.put(DatabaseAdapter.KEY_TAG, entry.description);
 		if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 			try {
 				if (!intentExtras.containsKey("mDisplayList")) {

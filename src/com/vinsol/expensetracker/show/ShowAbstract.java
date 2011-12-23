@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.models.DisplayList;
 import com.vinsol.expensetracker.models.ShowData;
@@ -11,7 +12,6 @@ import com.vinsol.expensetracker.models.StaticVariables;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -62,7 +62,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 			showData.userId = mShowList.userId;
 			showData.amount = mShowList.amount;
 			showData.description = mShowList.description;
-			Log.v("mShowList", mShowList.favorite+" "+mShowList.userId+" "+mShowList.timeInMillis+" "+mShowList.location);
+			
 			if (!(showData.amount.equals("") || showData.amount == null)) {
 				if (!showData.amount.contains("?"))
 					showAmount.setText(showData.amount);
@@ -100,27 +100,13 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		intentExtras = _intentExtras;
 		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = intentExtras.getParcelable("mDisplayList");
-			if(mShowList.userId != null){
-				if(mShowList.userId != ""){
-					showData.userId = mShowList.userId;
-				} else {
-					finish();
-				}
-			} else {
+			
+			if(!new CheckEntryComplete().isEntryComplete(mShowList, this)){
 				finish();
 			}
+			
 			showData.amount = mShowList.amount;
 			showData.description = mShowList.description;
-
-			if (showData.amount != null) {
-				if(!showData.amount.equals("") && !showData.amount.equals("?")){
-					showAmount.setText(showData.amount);
-				} else {
-					finish();
-				}
-			} else {
-				finish();
-			}
 			
 			if (!(showData.description.equals("") || showData.description == null || showData.description.equals(getString(typeOfEntryUnfinished)) || showData.description.equals(getString(typeOfEntryFinished)))) {
 				showTag.setText(showData.description);

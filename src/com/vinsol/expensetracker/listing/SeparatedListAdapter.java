@@ -8,6 +8,7 @@ import java.util.Map;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import com.vinsol.expensetracker.GroupedIconDialogClickListener;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.models.DisplayList;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
@@ -183,9 +185,10 @@ class SeparatedListAdapter extends BaseAdapter {
 				
 				
 				DisplayList mlist = (DisplayList) adapter.getItem(position - 1);
+				CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 				if (mlist.type.equals(mContext.getString(R.string.camera))) {
 					
-					if(!isEntryComplete(mlist)){
+					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)){
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					} else {
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
@@ -208,8 +211,8 @@ class SeparatedListAdapter extends BaseAdapter {
 						holderBody.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
 					}
 				} else if (mlist.type.equals(mContext.getString(R.string.text))) {
-
-					if(!isEntryComplete(mlist)){
+					Log.v("text", mCheckEntryComplete.isEntryComplete(mlist,mContext)+"");
+					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)){
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					} else {
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
@@ -226,7 +229,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unknown_states);
 				} else if (mlist.type.equals(mContext.getString(R.string.voice))) {
 
-					if(!isEntryComplete(mlist)){
+					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)){
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					} else {
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
@@ -340,56 +343,6 @@ class SeparatedListAdapter extends BaseAdapter {
 				}
 			}
 		}
-	}
-	
-	private boolean isEntryComplete(DisplayList mlist) {
-		if (mlist.type.equals(mContext.getString(R.string.camera))) {
-			if(mlist.amount != null){
-				if (mlist.amount.contains("?")) {
-					return false;
-				}
-			} else {
-				return false;
-			}
-			File mFileSmall = new File("/sdcard/ExpenseTracker/" + mlist.userId + "_small.jpg");
-			File mFile = new File("/sdcard/ExpenseTracker/" + mlist.userId + ".jpg");
-			File mFileThumbnail = new File("/sdcard/ExpenseTracker/" + mlist.userId + "_thumbnail.jpg");
-			if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
-				return true;
-			} else {
-				return false;
-			}
-		} else if (mlist.type.equals(mContext.getString(R.string.voice))) {
-			if(mlist.amount != null){
-				if (mlist.amount.contains("?")) {
-					return false;
-				}
-			} else {
-				return false;
-			}
-			File mFile = new File("/sdcard/ExpenseTracker/Audio/" + mlist.userId + ".amr");
-			if (mFile.canRead()) {
-				return true;
-			} else {
-				return false;
-			}
-		} else if (mlist.type.equals(mContext.getString(R.string.text))) {
-			if(mlist.amount != null){
-				if (mlist.amount.contains("?")) {
-					return false;
-				}
-			} else {
-				return false;
-			}
-			if(mlist.description != null){
-				if (mlist.description.equals(mContext.getString(R.string.unfinished_textentry)) || mlist.description.equals(mContext.getString(R.string.finished_textentry))) {
-					return false;
-				} else {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 }
