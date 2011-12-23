@@ -18,7 +18,6 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -77,7 +76,6 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		}
 		
 		if (intentExtras.containsKey("mDisplayList")) {
-			mEditList = new DisplayList();
 			mEditList = intentExtras.getParcelable("mDisplayList");
 			entry.userId = mEditList.userId;
 			entry.amount = mEditList.amount;
@@ -215,7 +213,6 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		
 		HashMap<String, String> toSave = getSaveEntryData(dateBarDateview,dateViewString);
 
-		Log.v("Before Save", toSave.toString());
 		// //// ******* Update database if user added additional info *******		 ///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(toSave);

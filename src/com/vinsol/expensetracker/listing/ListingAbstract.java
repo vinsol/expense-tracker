@@ -21,6 +21,7 @@ import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView.OnItemClickListener;
@@ -217,9 +218,9 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 				} else {
 					Intent intentTextShow = new Intent(this,ShowTextActivity.class);
 					intentTextShow.putExtra("textShowBundle", bundle);
+					Log.v("mShowList pass", mTempClickedList.favorite+" "+mTempClickedList.userId+" "+mTempClickedList.timeInMillis+" "+mTempClickedList.location);
 					startActivity(intentTextShow);
 				}
-
 			} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if (!isEntryComplete(mTempClickedList)) {

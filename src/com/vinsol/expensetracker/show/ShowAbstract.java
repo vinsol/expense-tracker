@@ -11,6 +11,7 @@ import com.vinsol.expensetracker.models.StaticVariables;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -48,7 +49,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		showAmount = (TextView) findViewById(R.id.show_amount);
 		showTag = (TextView) findViewById(R.id.show_tag_textview);
 		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_date_bar); 
-		mShowList = new DisplayList();
 		dateBarRelativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg_wo_shadow));
 		showEdit.setOnClickListener(this);
 		showDelete.setOnClickListener(this);
@@ -58,12 +58,11 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		// ///// ****** Assigning memory ******* /////////
 		
 		if (intentExtras.containsKey("mDisplayList")) {
-			mShowList = new DisplayList();
 			mShowList = intentExtras.getParcelable("mDisplayList");
 			showData.userId = mShowList.userId;
 			showData.amount = mShowList.amount;
 			showData.description = mShowList.description;
-			
+			Log.v("mShowList", mShowList.favorite+" "+mShowList.userId+" "+mShowList.timeInMillis+" "+mShowList.location);
 			if (!(showData.amount.equals("") || showData.amount == null)) {
 				if (!showData.amount.contains("?"))
 					showAmount.setText(showData.amount);
@@ -87,15 +86,13 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 			
 			if(mShowList.location != null)
 				new ShowLocationHandler(this, mShowList.location);
-			
-			
+
 			if(mShowList.timeInMillis != null) {
 				new ShowDateHandler(this, mShowList.timeInMillis);
 			}
 			else {
 				new ShowDateHandler(this,typeOfEntry);
 			}
-			
 		}
 	}
 	
@@ -166,7 +163,8 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		
 		if(v.getId() == R.id.show_edit){
 			intentExtras.putBoolean("isFromShowPage", true);
-			mShowList.favorite = StaticVariables.favID.toString();
+			if(StaticVariables.favID != null)
+				mShowList.favorite = StaticVariables.favID.toString();
 			intentExtras.remove("mDisplayList");
 			intentExtras.putParcelable("mDisplayList", mShowList);
 			editAction();

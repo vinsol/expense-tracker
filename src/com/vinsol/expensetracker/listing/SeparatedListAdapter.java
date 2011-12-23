@@ -340,6 +340,8 @@ class SeparatedListAdapter extends BaseAdapter {
 				if (mlist.amount.contains("?")) {
 					return false;
 				}
+			} else {
+				return false;
 			}
 			File mFileSmall = new File("/sdcard/ExpenseTracker/" + mlist.userId + "_small.jpg");
 			File mFile = new File("/sdcard/ExpenseTracker/" + mlist.userId + ".jpg");
@@ -350,10 +352,12 @@ class SeparatedListAdapter extends BaseAdapter {
 				return false;
 			}
 		} else if (mlist.type.equals(mContext.getString(R.string.voice))) {
-			if(mlist.userId != null){
-				if (mlist.userId.contains("?")) {
+			if(mlist.amount != null){
+				if (mlist.amount.contains("?")) {
 					return false;
 				}
+			} else {
+				return false;
 			}
 			File mFile = new File("/sdcard/ExpenseTracker/Audio/" + mlist.userId + ".amr");
 			if (mFile.canRead()) {
@@ -366,6 +370,8 @@ class SeparatedListAdapter extends BaseAdapter {
 				if (mlist.amount.contains("?")) {
 					return false;
 				}
+			} else {
+				return false;
 			}
 			if(mlist.description != null){
 				if (mlist.description.equals(mContext.getString(R.string.unfinished_textentry)) || mlist.description.equals(mContext.getString(R.string.finished_textentry))) {

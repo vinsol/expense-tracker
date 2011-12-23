@@ -36,7 +36,6 @@ public class ExpenseSubListing extends ListingAbstract {
 		mSubList = mConvertCursorToListString.getListStringParticularDate(idList);
 		
 		if(mSubList.size() > 0){
-		
 			Bundle intentExtras = getIntent().getExtras();
 			if(intentExtras != null){
 				if(intentExtras.containsKey("toHighLight")){
@@ -57,7 +56,7 @@ public class ExpenseSubListing extends ListingAbstract {
 			for (int i = 0; i < mDataDateList.size(); i++) {
 				List<DisplayList> mList = new ArrayList<DisplayList>();
 				String date = mDataDateList.get(i).dateTime;
-				while (j < mSubList.size()&& date.equals(mSubList.get(j).displayTime)) {
+				while (j < mSubList.size() && date.equals(mSubList.get(j).displayTime)) {
 					DisplayList templist = new DisplayList();
 					Calendar mCalendar = Calendar.getInstance();
 					mCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);

@@ -47,9 +47,9 @@ public class ConvertCursorToListString {
 			return mDisplayDate.getDisplayDateHeaderGraph();
 		} else {
 			if(id == null || id.equals(""))
-				return mDisplayDate.getDisplayDate();
-			else 
 				return mDisplayDate.getHeaderFooterListDisplayDate();
+			else 
+				return mDisplayDate.getDisplayDate();
 		}
 	}
 	
@@ -156,7 +156,11 @@ public class ConvertCursorToListString {
 				calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				calendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(calendar);
-				mDisplayList.displayTime = mDisplayDate.getDisplayDate();
+				if(id == null || id.equals("")){
+					mDisplayList.displayTime = mDisplayDate.getHeaderFooterListDisplayDate();
+				} else {
+					mDisplayList.displayTime = mDisplayDate.getDisplayDate();
+				}
 				mDisplayList.timeInMillis = cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME));
 				mainlist.add(mDisplayList);
 				cursor.moveToNext();

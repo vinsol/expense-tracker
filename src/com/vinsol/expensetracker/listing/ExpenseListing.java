@@ -82,7 +82,7 @@ public class ExpenseListing extends ListingAbstract {
 						int isCurrentYear = tempCalendar.get(Calendar.YEAR);
 						int isMonth = tempCalendar.get(Calendar.MONTH);
 						int isYear = tempCalendar.get(Calendar.YEAR);
-						mTempSubList.displayTime = tempDisplayDate.getSubListTag();
+						mTempSubList.description = tempDisplayDate.getSubListTag();
 
 						// /// Adding Amount
 						double temptotalAmount = 0;
