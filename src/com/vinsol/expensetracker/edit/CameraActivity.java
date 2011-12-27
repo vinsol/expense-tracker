@@ -95,7 +95,6 @@ public class CameraActivity extends EditAbstract {
 							}
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
 					}
 				} else {
 					Calendar mCalendar = Calendar.getInstance();

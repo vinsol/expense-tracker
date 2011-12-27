@@ -138,7 +138,6 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 		

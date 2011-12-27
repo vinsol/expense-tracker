@@ -205,7 +205,6 @@ class SeparatedListAdapter extends BaseAdapter {
 							}
 						} catch (Exception e) {
 							holderBody.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
-							e.printStackTrace();
 						}
 					} else {
 						holderBody.rowImageview.setImageResource(R.drawable.no_image_thumbnail);

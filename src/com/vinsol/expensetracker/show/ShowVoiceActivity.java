@@ -80,7 +80,6 @@ public class ShowVoiceActivity extends ShowAbstract {
 				mAudioPlay.stopPlayBack();
 			}
 		} catch (NullPointerException e) {
-			e.printStackTrace();
 		}
 		showTimeDetailsChronometer.stop();
 

@@ -48,7 +48,6 @@ public class CameraFileSave {
 			try {
 				fileInputStream = new FileInputStream(fullSizeImage);
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
 			}
 			
 			Bitmap fullSizeImageBitmap = BitmapFactory.decodeStream(fileInputStream);
@@ -56,7 +55,6 @@ public class CameraFileSave {
 			try {
 				fileInputStream.close();
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 
 			FULL_SIZE_IMAGE_WIDTH = fullSizeImageBitmap.getWidth();
@@ -95,14 +93,12 @@ public class CameraFileSave {
 			try {
 				out = new FileOutputStream(file);
 			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
 			}
 			bitmapToSave.compress(Bitmap.CompressFormat.JPEG, 90, out);
 			try {
 				out.flush();
 				out.close();
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 
 			// ///////// ********* Clear Bitmap to save VM space ********* /////////
@@ -122,7 +118,6 @@ public class CameraFileSave {
 				return BitmapFactory.decodeStream(new FileInputStream(originalImage), null, o2);
 			} catch (FileNotFoundException e) {
 				Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
-				e.printStackTrace();
 			}
 		} else {
 			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();

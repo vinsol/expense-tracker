@@ -52,11 +52,9 @@ public class AudioPlay {
 			try {
 				mPlayer.start();
 			} catch (IllegalStateException e) {
-				e.printStackTrace();
 			}
 		} else {
-			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -67,8 +65,7 @@ public class AudioPlay {
 			if (mPlayer.isPlaying())
 				mPlayer.stop();
 		} else {
-			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 	}
 

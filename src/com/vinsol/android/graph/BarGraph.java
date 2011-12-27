@@ -200,7 +200,6 @@ public class BarGraph extends View {
 					return Double.parseDouble(tempString);
 					}
 				} catch (Exception e){
-					e.printStackTrace();
 					return 0.00;
 				}
 			} else {

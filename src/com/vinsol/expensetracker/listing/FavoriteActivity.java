@@ -203,7 +203,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					} catch (Exception e) {
 						// TODO if image not available on sdcard
 						viewHolder.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
-						e.printStackTrace();
 					}
 				} else {
 					viewHolder.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
@@ -367,7 +366,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 								}
 							}
 						} catch (Exception e) {
-							e.printStackTrace();
 						}
 					}
 					if(userId == null){
@@ -445,7 +443,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 								}
 							}
 						} catch (Exception e) {
-							e.printStackTrace();
 						}
 					}
 					if(userId == null){
@@ -517,7 +514,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 							}
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
 					}
 				}
 				if(userId == null){

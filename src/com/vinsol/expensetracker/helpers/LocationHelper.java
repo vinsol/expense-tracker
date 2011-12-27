@@ -164,10 +164,7 @@ public class LocationHelper {
 				try {
 					list = new Geocoder(ExpenseTrackerApplication.getContext()).getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (Exception e) {
-					e.printStackTrace();
 				}
 				return null;
 			}
