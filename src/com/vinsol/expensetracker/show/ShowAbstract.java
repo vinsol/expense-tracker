@@ -8,7 +8,6 @@ import com.vinsol.expensetracker.DBAdapterFavorite;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
-import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.helpers.FileCopyFavorite;
 import com.vinsol.expensetracker.helpers.FileDeleteFavorite;
 import com.vinsol.expensetracker.models.Entry;
@@ -33,7 +32,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	protected int typeOfEntry;
 	protected TextView showHeaderTitle;
 	protected final int SHOW_RESULT = 35;
-	protected FavoriteHelper mFavoriteHelper;
 	protected DatabaseAdapter mDatabaseAdapter;	
 	protected Button showDelete;
 	protected Button showEdit;
@@ -65,9 +63,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		
 		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = intentExtras.getParcelable("mDisplayList");
-//			showData.id = mShowList.id;
-//			showData.amount = mShowList.amount;
-//			showData.description = mShowList.description;
 			
 			if (!(mShowList.amount.equals("") || mShowList.amount == null)) {
 				if (!mShowList.amount.contains("?"))
@@ -104,9 +99,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 			if(!new CheckEntryComplete().isEntryComplete(mShowList, this)){
 				finish();
 			}
-			
-//			showData.amount = mShowList.amount;
-//			showData.description = mShowList.description;
 			
 			if (!(mShowList.description.equals("") || mShowList.description == null || mShowList.description.equals(getString(typeOfEntryUnfinished)) || mShowList.description.equals(getString(typeOfEntryFinished)))) {
 				showTag.setText(mShowList.description);
@@ -172,7 +164,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		}
 	}
 	
-	protected void deleteAction(){
+	protected void deleteAction() {
 	}
 	
 	protected void editAction() {

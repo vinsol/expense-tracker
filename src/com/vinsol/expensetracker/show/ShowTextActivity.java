@@ -2,8 +2,6 @@ package com.vinsol.expensetracker.show;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.TextEntry;
-import com.vinsol.expensetracker.helpers.FavoriteHelper;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +17,7 @@ public class ShowTextActivity extends ShowAbstract{
 		typeOfEntryUnfinished = R.string.unfinished_textentry;
 		showHelper();
 		if (intentExtras.containsKey("mDisplayList")) {
-			mFavoriteHelper = new FavoriteHelper(this, mShowList);
+			FavoriteHelper();
 		}
 	}
 	
@@ -31,9 +29,8 @@ public class ShowTextActivity extends ShowAbstract{
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getBundleExtra("textShowBundle");
 				doTaskOnActivityResult(intentExtras);
-				if (intentExtras.containsKey("mDisplayList")) {
-					mFavoriteHelper.setShowList(mShowList);
-				}
+				mShowList = intentExtras.getParcelable("mDisplayList");
+				FavoriteHelper();
 				showDelete.setOnClickListener(this);
 				showEdit.setOnClickListener(this);
 			}

@@ -79,6 +79,7 @@ public class ExpenseSubListing extends ListingAbstract {
 			}
 			doOperationsOnListview();
 		} else {
+			//TODO donot start activity just set result and finish the activity
 			Intent mIntent = new Intent(this, ExpenseListing.class);
 			mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(mIntent);
@@ -89,6 +90,7 @@ public class ExpenseSubListing extends ListingAbstract {
 	@Override
 	protected void unknownDialogAction(String id) {
 		super.unknownDialogAction(id);
+		//TODO donot start activity add id to idlist and then setnotify dataset changed
 		Intent intentExpenseListing = new Intent(ExpenseSubListing.this, ExpenseSubListing.class);
 		intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intentExpenseListing.putExtra("idList", idList);

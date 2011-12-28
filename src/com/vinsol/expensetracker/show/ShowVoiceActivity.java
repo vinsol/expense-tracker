@@ -14,7 +14,6 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
 import com.vinsol.expensetracker.helpers.AudioPlay;
-import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.helpers.FileDelete;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
@@ -57,7 +56,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 					showStopButton.setVisibility(View.GONE);
 					showPlayButton.setVisibility(View.GONE);
 				}
-				mFavoriteHelper = new FavoriteHelper(this, mShowList);
+				FavoriteHelper();
 			}
 		} else {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
@@ -73,8 +72,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 	@Override
 	protected void deleteAction() {
 		super.deleteAction();
-		// /// ******* If Audio PlayBack is there stop playing audio
-		// *******//////
+		// /// ******* If Audio PlayBack is there stop playing audio*******//////
 		try {
 			if (mAudioPlay.isAudioPlaying()) {
 				mAudioPlay.stopPlayBack();
@@ -82,7 +80,6 @@ public class ShowVoiceActivity extends ShowAbstract {
 		} catch (NullPointerException e) {
 		}
 		showTimeDetailsChronometer.stop();
-
 		new FileDelete(mShowList.id);
 	}
 	
@@ -191,7 +188,8 @@ public class ShowVoiceActivity extends ShowAbstract {
 							showStopButton.setVisibility(View.GONE);
 							showPlayButton.setVisibility(View.GONE);
 						}
-						mFavoriteHelper.setShowList(mShowList);
+						mShowList = intentExtras.getParcelable("mDisplayList");
+						FavoriteHelper();
 					}
 				} else {
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();

@@ -170,8 +170,8 @@ public class ExpenseListing extends ListingAbstract {
 				Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
 				expenseSubListing.putExtra("idList", string);
 				expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(expenseSubListing);
-				finish();
+				startActivity(expenseSubListing); //TODO start activity for result and get edited list back
+ 				finish();
 			}
 		}	
 	}
@@ -187,7 +187,7 @@ public class ExpenseListing extends ListingAbstract {
 		Intent mSubListIntent = new Intent(this, ExpenseSubListing.class);
 		mSubListIntent.putExtra("idList", id);
 		mSubListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(mSubListIntent);
+		startActivity(mSubListIntent); //TODO start activity for result and get edited list back
 	}
 	
 	@Override
@@ -198,7 +198,7 @@ public class ExpenseListing extends ListingAbstract {
 		Bundle mToHighLight = new Bundle();
 		mToHighLight.putString("toHighLight", id);
 		intentExpenseListing.putExtras(mToHighLight);
-		startActivity(intentExpenseListing);
+		startActivity(intentExpenseListing); //TODO start activity for result and get edited list back
 		Toast.makeText(ExpenseListing.this, "Deleted", Toast.LENGTH_SHORT).show();
 	}
 

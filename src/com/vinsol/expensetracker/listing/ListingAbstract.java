@@ -19,7 +19,6 @@ import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView.OnItemClickListener;
@@ -40,6 +39,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 	protected String highlightID = null;
 	protected static int firstVisiblePosition;
 	protected UnknownEntryDialog unknownDialog;
+	protected final int LIST_RESULT = 35;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -123,11 +123,11 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)){
 						Intent intentCamera = new Intent(this,CameraActivity.class);
 						intentCamera.putExtra("cameraBundle", bundle);
-						startActivity(intentCamera);
+						startActivityForResult(intentCamera,LIST_RESULT); // TODO getEdited list back and replace clicked list with listfetched
 					} else {
 						Intent intentCamera = new Intent(this,ShowCameraActivity.class);
 						intentCamera.putExtra("cameraShowBundle", bundle);
-						startActivity(intentCamera);
+						startActivityForResult(intentCamera,LIST_RESULT); // TODO getEdited list back and replace clicked list with listfetched
 					}
 				} else {
 					Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
@@ -136,23 +136,22 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 				if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)){
 					Intent intentTextEntry = new Intent(this, TextEntry.class);
 					intentTextEntry.putExtra("textEntryBundle", bundle);
-					startActivity(intentTextEntry);
+					startActivityForResult(intentTextEntry,LIST_RESULT); // TODO getEdited list back and replace clicked list with listfetched
 				} else {
 					Intent intentTextShow = new Intent(this,ShowTextActivity.class);
 					intentTextShow.putExtra("textShowBundle", bundle);
-					Log.v("mShowList pass", mTempClickedList.favId+" "+mTempClickedList.id+" "+mTempClickedList.timeInMillis+" "+mTempClickedList.location);
-					startActivity(intentTextShow);
+					startActivityForResult(intentTextShow,LIST_RESULT); // TODO getEdited list back and replace clicked list with listfetched
 				}
 			} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)){
 						Intent intentVoice = new Intent(this, Voice.class);
 						intentVoice.putExtra("voiceBundle", bundle);
-						startActivity(intentVoice);
+						startActivityForResult(intentVoice,LIST_RESULT); // TODO getEdited list back and replace clicked list with listfetched
 					} else {
 						Intent intentVoiceShow = new Intent(this,ShowVoiceActivity.class);
 						intentVoiceShow.putExtra("voiceShowBundle", bundle);
-						startActivity(intentVoiceShow);
+						startActivityForResult(intentVoiceShow,LIST_RESULT); // TODO getEdited list back and replace clicked list with listfetched
 					}
 				} else {
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
@@ -197,5 +196,11 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 			noItemButtonAction(noItemButton);
 		}
 		mListView.setSelection(firstVisiblePosition);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }
