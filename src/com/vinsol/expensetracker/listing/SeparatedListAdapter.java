@@ -196,7 +196,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						try {
-							File mFile = new File("/sdcard/ExpenseTracker/"+ mlist.userId + "_thumbnail.jpg");
+							File mFile = new File("/sdcard/ExpenseTracker/"+ mlist.id + "_thumbnail.jpg");
 							if (mFile.canRead()) {
 								Drawable drawable = Drawable.createFromPath(mFile.getPath());
 								holderBody.rowImageview.setImageDrawable(drawable);
@@ -233,7 +233,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					} else {
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
 					}
-					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+ mlist.userId + ".amr");
+					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+ mlist.id + ".amr");
 					if (mFile.canRead()) {
 						holderBody.rowImageview.setImageResource(R.drawable.listing_voice_entry_icon);
 					} else {
@@ -320,16 +320,16 @@ class SeparatedListAdapter extends BaseAdapter {
 				if (mListenerList != null)
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						if (mListenerList.type.equals(mContext.getString(R.string.voice))) {
-							File mFile = new File("/sdcard/ExpenseTracker/Audio/" + mListenerList.userId + ".amr");
+							File mFile = new File("/sdcard/ExpenseTracker/Audio/" + mListenerList.id + ".amr");
 							if (mFile.canRead()) {
-								new AudioPlayDialog(mContext, mListenerList.userId);
+								new AudioPlayDialog(mContext, mListenerList.id);
 							}
 						} else if (mListenerList.type.equals(mContext.getString(R.string.camera))) {
-							File mFile = new File("/sdcard/ExpenseTracker/" + mListenerList.userId + ".jpg");
+							File mFile = new File("/sdcard/ExpenseTracker/" + mListenerList.id + ".jpg");
 							if (mFile.canRead()) {
 								
 								Intent intent = new Intent(mContext, ImagePreview.class);
-								intent.putExtra("id", mListenerList.userId);
+								intent.putExtra("id", mListenerList.id);
 								mContext.startActivity(intent);
 
 							}

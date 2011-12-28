@@ -59,7 +59,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		
 		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = intentExtras.getParcelable("mDisplayList");
-			showData.userId = mShowList.userId;
+			showData.id = mShowList.id;
 			showData.amount = mShowList.amount;
 			showData.description = mShowList.description;
 			
@@ -133,10 +133,10 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.show_delete) {
-			if (showData.userId != null) {
+			if (showData.id != null) {
 				deleteAction();
 				mDatabaseAdapter.open();
-				mDatabaseAdapter.deleteDatabaseEntryID(showData.userId);
+				mDatabaseAdapter.deleteDatabaseEntryID(showData.id);
 				mDatabaseAdapter.close();
 				Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
 				finish();

@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class ImagePreview extends Activity {
 
-	private Long userId = null;
+	private Long id = null;
 	private android.widget.ImageView mImageView;
 	private LinearLayout progressBar;
 	private String path;
@@ -28,10 +28,10 @@ public class ImagePreview extends Activity {
 		setContentView(R.layout.image_view_full_screen);
 
 		//Extras
-		userId = getIntent().getLongExtra("id", 0);
+		id = getIntent().getLongExtra("id", 0);
 		boolean isFavorite = getIntent().getBooleanExtra("isFavorite", false);
 		
-		path = "/mnt/sdcard/ExpenseTracker/" + (isFavorite ? "Favorite/" : "") + userId + ".jpg";
+		path = "/mnt/sdcard/ExpenseTracker/" + (isFavorite ? "Favorite/" : "") + id + ".jpg";
 		
 		mImageView = (android.widget.ImageView) findViewById(R.id.image_view_full_screen_id);
 		progressBar = (LinearLayout) findViewById(R.id.image_view_full_screen_progress);

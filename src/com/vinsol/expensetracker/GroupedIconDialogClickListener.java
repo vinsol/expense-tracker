@@ -127,8 +127,8 @@ public class GroupedIconDialogClickListener implements OnClickListener{
 	}
 	
 	private void createDatabaseEntry(int typeOfEntry, DisplayList toInsert) {	
-		Long userId = insertToDatabase(typeOfEntry,toInsert);
-		bundle.putLong("_id", userId);
+		Long id = insertToDatabase(typeOfEntry,toInsert);
+		bundle.putLong("_id", id);
 		
 		if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 			bundle.putBoolean("setLocation", false);
@@ -156,9 +156,9 @@ public class GroupedIconDialogClickListener implements OnClickListener{
 		list.put(DatabaseAdapter.KEY_TYPE, mContext.getString(type));
 		DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
 		mDatabaseAdapter.open();
-		long userId = mDatabaseAdapter.insertToDatabase(list);
+		long id = mDatabaseAdapter.insertToDatabase(list);
 		mDatabaseAdapter.close();
-		return userId;
+		return id;
 	}
 
 }

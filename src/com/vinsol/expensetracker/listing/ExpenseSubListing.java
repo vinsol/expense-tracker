@@ -84,8 +84,8 @@ public class ExpenseSubListing extends ListingAbstract {
 	}
 	
 	@Override
-	protected void unknownDialogAction(String userId) {
-		super.unknownDialogAction(userId);
+	protected void unknownDialogAction(String id) {
+		super.unknownDialogAction(id);
 		Intent intentExpenseListing = new Intent(ExpenseSubListing.this, ExpenseSubListing.class);
 		intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intentExpenseListing.putExtra("idList", idList);

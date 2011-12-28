@@ -45,10 +45,10 @@ public class ShowVoiceActivity extends ShowAbstract {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			updateUI();
 			if (intentExtras.containsKey("mDisplayList")) {
-				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + showData.userId+ ".amr");
+				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + showData.id+ ".amr");
 
 				if (tempFile.canRead()) {
-					mAudioPlay = new AudioPlay(showData.userId, this, false);
+					mAudioPlay = new AudioPlay(showData.id, this, false);
 					showStopButton.setVisibility(View.GONE);
 					showPlayButton.setVisibility(View.VISIBLE);
 					showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
@@ -83,7 +83,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 		}
 		showTimeDetailsChronometer.stop();
 
-		new FileDelete(showData.userId);
+		new FileDelete(showData.id);
 	}
 	
 	@Override
@@ -106,7 +106,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 		if (v.getId() == R.id.show_play_button) {
 			// //// ******** to handle playback of recorded file *********
 			// ////////
-			mAudioPlay = new AudioPlay(showData.userId, this, false);
+			mAudioPlay = new AudioPlay(showData.id, this, false);
 
 			// ///// ******* Chronometer Starts Countdown ****** ///////
 			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, showTimeDetailsChronometer, showStopButton ,showPlayButton, mAudioPlay);
@@ -179,10 +179,10 @@ public class ShowVoiceActivity extends ShowAbstract {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					updateUI();
 					if (intentExtras.containsKey("mDisplayList")) {
-						File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + showData.userId + ".amr");
+						File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + showData.id + ".amr");
 
 						if (tempFile.canRead()) {
-							mAudioPlay = new AudioPlay(showData.userId, this, false);
+							mAudioPlay = new AudioPlay(showData.id, this, false);
 							showStopButton.setVisibility(View.GONE);
 							showPlayButton.setVisibility(View.VISIBLE);
 							showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));

@@ -68,7 +68,7 @@ public class ExpenseListing extends ListingAbstract {
 					while (mDataDateList.get(i).dateTime.equals(mSubList.get(j).displayTime)) {
 						// //// Adding i+" "+j as id
 						DisplayList mTempSubList = new DisplayList();
-						mTempSubList.userId = mSubList.get(j).userId +",";
+						mTempSubList.id = mSubList.get(j).id +",";
 
 						// /// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
@@ -111,7 +111,7 @@ public class ExpenseListing extends ListingAbstract {
 												&& tempCalendar.get(Calendar.YEAR) == isCurrentYear)) 
 												||  ((tempCalendar.get(Calendar.MONTH) == isMonth) 
 														&& (tempCalendar.get(Calendar.YEAR) == isYear)))
-									mTempSubList.userId = mTempSubList.userId+mSubList.get(j).userId+",";
+									mTempSubList.id = mTempSubList.id+mSubList.get(j).id+",";
 							} else {
 								break;
 							}
@@ -136,8 +136,8 @@ public class ExpenseListing extends ListingAbstract {
 						mTempSubList.type = getString(R.string.sublist_weekwise);
 						if(highlightID != null){//TODO not proper method to check highlight id
 							if (j <= mSubList.size()) {
-								if(mTempSubList.userId.contains(highlightID)){
-									startSubListing(mTempSubList.userId);
+								if(mTempSubList.id.contains(highlightID)){
+									startSubListing(mTempSubList.id);
 								} 
 							}
 						}
@@ -176,20 +176,20 @@ public class ExpenseListing extends ListingAbstract {
 	}
 	
 	@Override
-	protected void onClickElse(String userId) {
+	protected void onClickElse(String id) {
 		Intent mSubListIntent = new Intent(this, ExpenseSubListing.class);
-		mSubListIntent.putExtra("idList", userId);
+		mSubListIntent.putExtra("idList", id);
 		mSubListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(mSubListIntent);
 	}
 	
 	@Override
-	protected void unknownDialogAction(String userId) {
-		super.unknownDialogAction(userId);
+	protected void unknownDialogAction(String id) {
+		super.unknownDialogAction(id);
 		Intent intentExpenseListing = new Intent(ExpenseListing.this, ExpenseListing.class);
 		intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		Bundle mToHighLight = new Bundle();
-		mToHighLight.putString("toHighLight", userId);
+		mToHighLight.putString("toHighLight", id);
 		intentExpenseListing.putExtras(mToHighLight);
 		startActivity(intentExpenseListing);
 		Toast.makeText(ExpenseListing.this, "Deleted", Toast.LENGTH_SHORT).show();

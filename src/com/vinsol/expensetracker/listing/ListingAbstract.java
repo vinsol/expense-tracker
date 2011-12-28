@@ -58,7 +58,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 	
 	protected DisplayList getListCurrentWeek(int j) {
 		DisplayList templist = new DisplayList();
-		templist.userId = mSubList.get(j).userId;
+		templist.id = mSubList.get(j).id;
 		if (mSubList.get(j).description != null && !mSubList.get(j).description.equals("")) {
 			templist.description = mSubList.get(j).description;
 		} else {
@@ -124,8 +124,8 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 	@Override
 	public void onItemClick(final AdapterView<?> adapter, View v,final int position, long arg3) {
 		final DisplayList mTempClickedList = (DisplayList) adapter.getItemAtPosition(position);
-		String userId = mTempClickedList.userId;
-		if (!userId.contains(",")) {
+		String id = mTempClickedList.id;
+		if (!id.contains(",")) {
 			Bundle bundle = new Bundle();
 			bundle.putParcelable("mDisplayList", mTempClickedList);
 			CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
@@ -151,7 +151,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 				} else {
 					Intent intentTextShow = new Intent(this,ShowTextActivity.class);
 					intentTextShow.putExtra("textShowBundle", bundle);
-					Log.v("mShowList pass", mTempClickedList.favorite+" "+mTempClickedList.userId+" "+mTempClickedList.timeInMillis+" "+mTempClickedList.location);
+					Log.v("mShowList pass", mTempClickedList.favorite+" "+mTempClickedList.id+" "+mTempClickedList.timeInMillis+" "+mTempClickedList.location);
 					startActivity(intentTextShow);
 				}
 			} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
@@ -175,22 +175,22 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 					public void onClick(View v) {
 						DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(ListingAbstract.this);
 						mDatabaseAdapter.open();
-						mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.userId);
+						mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.id);
 						mDatabaseAdapter.close();
 						unknownDialog.dismiss();
-						unknownDialogAction(mTempClickedList.userId);
+						unknownDialogAction(mTempClickedList.id);
 						Toast.makeText(ListingAbstract.this, "Deleted", Toast.LENGTH_SHORT).show();
 					}
 				});
 			}
 		} else {
-			onClickElse(mTempClickedList.userId);
+			onClickElse(mTempClickedList.id);
 		}
 	}
 	
-	protected void unknownDialogAction(String userId){}
+	protected void unknownDialogAction(String id){}
 	
-	protected void onClickElse(String userId) {}
+	protected void onClickElse(String id) {}
 	
 	protected void noItemButtonAction(Button noItemButton){}
 	

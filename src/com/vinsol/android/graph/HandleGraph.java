@@ -312,7 +312,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				} else {
 					isTempAmountNull = true;
 				}
-				idList = idList+mSubList.get(i).userId+",";
+				idList = idList+mSubList.get(i).id+",";
 				i++;
 				
 				if (i < mSubList.size()) {

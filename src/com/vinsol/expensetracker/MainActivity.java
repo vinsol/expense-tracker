@@ -144,8 +144,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	}//end onClick
 	
 	private void createDatabaseEntry(int typeOfEntry) {
-		entry.userId = insertToDatabase(typeOfEntry).toString();
-		bundle.putLong("_id", Long.parseLong(entry.userId));
+		entry.id = insertToDatabase(typeOfEntry).toString();
+		bundle.putLong("_id", Long.parseLong(entry.id));
 		
 		if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 			bundle.putBoolean("setLocation", false);
@@ -173,8 +173,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 		list.put(DatabaseAdapter.KEY_TYPE, getString(type));
 		mDatabaseAdapter.open();
-		long userId = mDatabaseAdapter.insertToDatabase(list);
+		long id = mDatabaseAdapter.insertToDatabase(list);
 		mDatabaseAdapter.close();
-		return userId;
+		return id;
 	}
 }

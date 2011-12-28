@@ -38,7 +38,7 @@ public class ShowCameraActivity extends ShowAbstract {
 		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
 		showHelper();
 		if (intentExtras.containsKey("mDisplayList")) {
-			File mFile = new File("/sdcard/ExpenseTracker/" + showData.userId+ "_small.jpg");
+			File mFile = new File("/sdcard/ExpenseTracker/" + showData.id+ "_small.jpg");
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 				if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
@@ -68,7 +68,7 @@ public class ShowCameraActivity extends ShowAbstract {
 	@Override
 	protected void deleteAction() {
 		super.deleteAction();
-		new FileDelete(showData.userId);
+		new FileDelete(showData.id);
 	}
 	
 	@Override
@@ -83,9 +83,9 @@ public class ShowCameraActivity extends ShowAbstract {
 	public void onClick(View v) {
 		super.onClick(v);
 		if (v.getId() == R.id.show_image_display) {
-			if (showData.userId != null) {
+			if (showData.id != null) {
 				Intent intent = new Intent(this, ImagePreview.class);
-				intent.putExtra("id", showData.userId);
+				intent.putExtra("id", showData.id);
 				startActivity(intent);
 
 			} else {
@@ -103,7 +103,7 @@ public class ShowCameraActivity extends ShowAbstract {
 				intentExtras = data.getBundleExtra("cameraShowBundle");
 				doTaskOnActivityResult(intentExtras);
 				if (intentExtras.containsKey("mDisplayList")) {
-					File mFile = new File("/sdcard/ExpenseTracker/" + showData.userId + "_small.jpg");
+					File mFile = new File("/sdcard/ExpenseTracker/" + showData.id + "_small.jpg");
 					if (mFile.canRead()) {Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 						if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
 							final float scale = this.getResources().getDisplayMetrics().density;

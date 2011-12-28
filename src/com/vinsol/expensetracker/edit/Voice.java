@@ -53,10 +53,10 @@ public class Voice extends EditAbstract {
 			setGraphicsVoice();
 
 			if (intentExtras.containsKey("mDisplayList") && !setUnknown) {
-				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + entry.userId + ".amr");
+				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + entry.id + ".amr");
 
 				if (tempFile.canRead()) {
-					mAudioPlay = new AudioPlay(entry.userId, this, false);
+					mAudioPlay = new AudioPlay(entry.id, this, false);
 					editStopButton.setVisibility(View.GONE);
 					editPlayButton.setVisibility(View.VISIBLE);
 					editRerecordButton.setVisibility(View.VISIBLE);
@@ -68,7 +68,7 @@ public class Voice extends EditAbstract {
 					editPlayButton.setVisibility(View.GONE);
 				}
 			} else {
-				mRecordingHelper = new RecordingHelper(entry.userId + "", this);
+				mRecordingHelper = new RecordingHelper(entry.id + "", this);
 				mRecordingHelper.startRecording();
 				controlVoiceChronometer();
 			}
@@ -161,7 +161,7 @@ public class Voice extends EditAbstract {
 			} catch (Exception e) {
 			}
 			try {
-				mAudioPlay = new AudioPlay(entry.userId , this, false);
+				mAudioPlay = new AudioPlay(entry.id , this, false);
 				editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 			} catch (NullPointerException e) {
 
@@ -172,7 +172,7 @@ public class Voice extends EditAbstract {
 		else if (v.getId() == R.id.edit_play_button) {
 			// //// ******** to handle playback of recorded file *********
 			// ////////
-			mAudioPlay = new AudioPlay(entry.userId, this, false);
+			mAudioPlay = new AudioPlay(entry.id, this, false);
 
 			// ///// ******* Chronometer Starts Countdown ****** ///////
 			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, editTimeDetailsChronometer,editStopButton,editPlayButton,mAudioPlay);
@@ -219,7 +219,7 @@ public class Voice extends EditAbstract {
 			if(mRecordingHelper != null)
 				if (mRecordingHelper.isRecording())
 					mRecordingHelper.stopRecording();
-			mRecordingHelper = new RecordingHelper(entry.userId + "", this);
+			mRecordingHelper = new RecordingHelper(entry.id + "", this);
 			mRecordingHelper.startRecording();
 			editTimeDetailsChronometer.setBase(SystemClock.elapsedRealtime());
 			editTimeDetailsChronometer.start();
@@ -239,7 +239,7 @@ public class Voice extends EditAbstract {
 		super.deleteAction();
 		actionAfterSaveOnBackButton();
 		editTimeDetailsChronometer.stop();
-		new FileDelete(entry.userId);
+		new FileDelete(entry.id);
 	}
 	
 	@Override

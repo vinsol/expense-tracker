@@ -101,7 +101,7 @@ public class FavoriteHelper implements OnClickListener{
 						mDbAdapterFavorite.open();
 						favID = mDbAdapterFavorite.insertToDatabase(list);
 						mDbAdapterFavorite.close();
-						new FileCopyFavorite(mShowList.userId, favID.toString());
+						new FileCopyFavorite(mShowList.id, favID.toString());
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+favID+".jpg");
 						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+favID+"_small.jpg");
 						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+favID+"_thumbnail.jpg");
@@ -125,7 +125,7 @@ public class FavoriteHelper implements OnClickListener{
 						mDbAdapterFavorite.open();
 						favID = mDbAdapterFavorite.insertToDatabase(list);
 						mDbAdapterFavorite.close();
-						new FileCopyFavorite(mShowList.userId,favID.toString());
+						new FileCopyFavorite(mShowList.id,favID.toString());
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+favID+".amr");
 						if(!mFile.canRead()){
 							mDbAdapterFavorite.open();
@@ -140,17 +140,17 @@ public class FavoriteHelper implements OnClickListener{
 			}
 			StaticVariables.favID = favID;
 			list = new HashMap<String, String>();
-			list.put(DatabaseAdapter.KEY_ID, mShowList.userId);
+			list.put(DatabaseAdapter.KEY_ID, mShowList.id);
 			list.put(DatabaseAdapter.KEY_FAVORITE, Long.toString(favID));
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editDatabase(list);
 			mDatabaseAdapter.close();
 			showAddFavorite.setChecked(true);
 			showAddFavoriteTextView.setText("Remove from Favorite");
-		} else if(mShowList.userId.equals(mContext.getString(R.string.text))){
+		} else if(mShowList.id.equals(mContext.getString(R.string.text))){
 				StaticVariables.favID = null;
 				mDatabaseAdapter.open();
-				favID = mDatabaseAdapter.getFavoriteId(mShowList.userId);
+				favID = mDatabaseAdapter.getFavoriteId(mShowList.id);
 				mDatabaseAdapter.close();
 				
 				mDbAdapterFavorite.open();
@@ -166,7 +166,7 @@ public class FavoriteHelper implements OnClickListener{
 			} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				StaticVariables.favID = null;
 				mDatabaseAdapter.open();
-				favID = mDatabaseAdapter.getFavoriteId(mShowList.userId);
+				favID = mDatabaseAdapter.getFavoriteId(mShowList.id);
 				mDatabaseAdapter.close();
 				new FileDeleteFavorite(favID);
 				mDbAdapterFavorite.open();

@@ -31,7 +31,7 @@ public class ConvertCursorToListString {
 			do {
 				listFavorite = new Favorite();
 				listFavorite.amount = cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_AMOUNT));
-				listFavorite.userId = cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_ID));
+				listFavorite.id = cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_ID));
 				listFavorite.description = cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_TAG));
 				listFavorite.type = cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_TYPE));
 				mainlist.add(listFavorite);
@@ -146,7 +146,7 @@ public class ConvertCursorToListString {
 			cursor.moveToFirst();
 			do {
 				DisplayList mDisplayList = new DisplayList();
-				mDisplayList.userId = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
+				mDisplayList.id = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
 				mDisplayList.amount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
 				mDisplayList.favorite = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_FAVORITE));
 				mDisplayList.location = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_LOCATION));

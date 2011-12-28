@@ -16,14 +16,14 @@ public class AudioPlay {
 	Context mContext;
 
 	// ////// ********* Constructor ********* //////////
-	public AudioPlay(String userId, Context _context,Boolean isFav) {
+	public AudioPlay(String id, Context _context,Boolean isFav) {
 		mContext = _context;
 		mPlayer = new MediaPlayer();
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			
 			File mDirectory = new File(getFile(isFav));
 			mDirectory.mkdirs();
-			mPath = new File(mDirectory, userId + ".amr");
+			mPath = new File(mDirectory, id + ".amr");
 			mPlayer.setScreenOnWhilePlaying(true);
 			mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			try {

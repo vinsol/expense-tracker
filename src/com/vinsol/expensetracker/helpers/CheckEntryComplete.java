@@ -11,9 +11,9 @@ public class CheckEntryComplete {
 	public boolean isEntryComplete(DisplayList displayList,Context mContext) {
 		if(isAmountValid(displayList.amount)) {
 			if (displayList.type.equals(mContext.getString(R.string.camera))) {
-				return isCameraFileReadable(displayList.userId);
+				return isCameraFileReadable(displayList.id);
 			} else if (displayList.type.equals(mContext.getString(R.string.voice))) {
-				return isAudioFileReadable(displayList.userId);
+				return isAudioFileReadable(displayList.id);
 			} else if (displayList.type.equals(mContext.getString(R.string.text))) {
 				return isTagValid(displayList.description,mContext);
 			}
@@ -44,8 +44,8 @@ public class CheckEntryComplete {
 		return false;
 	}
 
-	private boolean isAudioFileReadable(String userId) {
-		File mFile = new File("/sdcard/ExpenseTracker/Audio/" + userId + ".amr");
+	private boolean isAudioFileReadable(String id) {
+		File mFile = new File("/sdcard/ExpenseTracker/Audio/" + id + ".amr");
 		if (mFile.canRead()) {
 			return true;
 		} else {
@@ -53,10 +53,10 @@ public class CheckEntryComplete {
 		}
 	}
 
-	private boolean isCameraFileReadable(String userId) {
-		File mFileSmall = new File("/sdcard/ExpenseTracker/" + userId + "_small.jpg");
-		File mFile = new File("/sdcard/ExpenseTracker/" + userId + ".jpg");
-		File mFileThumbnail = new File("/sdcard/ExpenseTracker/" + userId + "_thumbnail.jpg");
+	private boolean isCameraFileReadable(String id) {
+		File mFileSmall = new File("/sdcard/ExpenseTracker/" + id + "_small.jpg");
+		File mFile = new File("/sdcard/ExpenseTracker/" + id + ".jpg");
+		File mFileThumbnail = new File("/sdcard/ExpenseTracker/" + id + "_thumbnail.jpg");
 		if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 			return true;
 		}

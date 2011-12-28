@@ -49,7 +49,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 	private MyAdapter mAdapter;
 	private DisplayList mEditList;
 	private String dateViewString;
-	private Long userId = null;
+	private Long id = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		if (intentExtras.containsKey("mDisplayList")) {
 			mEditList = new DisplayList();
 			mEditList = intentExtras.getParcelable("mDisplayList");
-			userId = Long.parseLong(mEditList.userId);
+			id = Long.parseLong(mEditList.id);
 		}
 		
 		// ////// ******** Handle Date Bar ********* ////////
@@ -88,11 +88,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 
 	@Override
 	protected void onResume() {
-//		try{
-//			mEditList.userId;
-//		} catch(Exception e){
-//			userId = null;
-//		}
 		mList = mConvertCursorToListString.getFavoriteList();
 		mAdapter = new MyAdapter(this, R.layout.expense_listing_inflated_row , mList);
 		editFavoriteListview.setAdapter(mAdapter);
@@ -158,7 +153,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					try {
 						
 						//TODO image set for voice entry
-						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+ tempFavorite.userId + ".amr");
+						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+ tempFavorite.id + ".amr");
 						if (mFile.canRead()) {
 							viewHolder.rowImageview.setImageResource(R.drawable.listing_voice_entry_icon);
 						} else {
@@ -191,9 +186,9 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				//TODO image set for camera entry
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					try {
-						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.userId + "_thumbnail.jpg");
-						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.userId + "_small.jpg");
-						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.userId + ".jpg");
+						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.id + "_thumbnail.jpg");
+						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.id + "_small.jpg");
+						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.id + ".jpg");
 						if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Drawable drawable = Drawable.createFromPath(mFileThumbnail.getPath());
 							viewHolder.rowImageview.setImageDrawable(drawable);
@@ -274,7 +269,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 			if (v.getId() == R.id.expense_listing_inflated_row_imageview) {
 //				if (mListenerList != null)
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-						String id = tempFavorite.userId;
+						String id = tempFavorite.id;
 						if (tempFavorite.type.equals(getString(R.string.voice))) {
 							File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+ id + ".amr");
 							if (mFile.canRead()) {
@@ -311,7 +306,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 	}
 
 	private void saveEntry(Favorite adapterList) {
-		String favID = adapterList.userId;
+		String favID = adapterList.id;
 		String type = adapterList.type;
 		String tag = adapterList.description;
 		String amount = adapterList.amount;
@@ -321,8 +316,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		Bundle bundle = new Bundle();
 		
-		if(userId != null){
-			toInsert.put(DatabaseAdapter.KEY_ID, Long.toString(userId));
+		if(id != null){
+			toInsert.put(DatabaseAdapter.KEY_ID, Long.toString(id));
 		}
 
 		if(amount != null){
@@ -343,7 +338,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_cameraentry)) && !tag.equals(getString(R.string.finished_cameraentry)))
 							toInsert.put(DatabaseAdapter.KEY_TAG, tag);
 					}
-					if(userId == null) {
+					if(id == null) {
 						if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 							toInsert.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 						}
@@ -368,7 +363,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						} catch (Exception e) {
 						}
 					}
-					if(userId == null){
+					if(id == null){
 						mDatabaseAdapter.open();
 						idCreated = mDatabaseAdapter.insertToDatabase(toInsert);
 						mDatabaseAdapter.close();
@@ -388,10 +383,10 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 							mDatabaseAdapter.close();
 						}
 					} else {
-						new FileCopyFavorite(favID.toString(), userId.toString(),"from");
-						File mFile = new File("/sdcard/ExpenseTracker/"+userId+".jpg");
-						File mFileSmall = new File("/sdcard/ExpenseTracker/"+userId+"_small.jpg");
-						File mFileThumbnail = new File("/sdcard/ExpenseTracker/"+userId+"_thumbnail.jpg");
+						new FileCopyFavorite(favID.toString(), id.toString(),"from");
+						File mFile = new File("/sdcard/ExpenseTracker/"+id+".jpg");
+						File mFileSmall = new File("/sdcard/ExpenseTracker/"+id+"_small.jpg");
+						File mFileThumbnail = new File("/sdcard/ExpenseTracker/"+id+"_thumbnail.jpg");
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 							bundle.putString("toHighLight", toInsert.get(DatabaseAdapter.KEY_ID));
@@ -420,7 +415,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_voiceentry)) && !tag.equals(getString(R.string.finished_voiceentry)))
 							toInsert.put(DatabaseAdapter.KEY_TAG, tag);
 					}
-					if(userId == null){
+					if(id == null){
 						if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 							toInsert.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 						}
@@ -445,7 +440,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						} catch (Exception e) {
 						}
 					}
-					if(userId == null){
+					if(id == null){
 						mDatabaseAdapter.open();
 						idCreated = mDatabaseAdapter.insertToDatabase(toInsert);
 						mDatabaseAdapter.close();
@@ -463,8 +458,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 							mDatabaseAdapter.close();
 						}
 					} else {
-						new FileCopyFavorite(favID.toString(), userId.toString(),"from");
-						File mFile = new File("/sdcard/ExpenseTracker/Audio/"+userId+".amr");
+						new FileCopyFavorite(favID.toString(), id.toString(),"from");
+						File mFile = new File("/sdcard/ExpenseTracker/Audio/"+id+".amr");
 						if(mFile.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 							bundle.putString("toHighLight", toInsert.get(DatabaseAdapter.KEY_ID));
@@ -491,7 +486,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_textentry)) && !tag.equals(getString(R.string.finished_textentry)))
 						toInsert.put(DatabaseAdapter.KEY_TAG, tag);
 				}
-				if(userId == null){
+				if(id == null){
 					if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 						toInsert.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 					}
@@ -516,7 +511,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					} catch (Exception e) {
 					}
 				}
-				if(userId == null){
+				if(id == null){
 					mDatabaseAdapter.open();
 					idCreated = mDatabaseAdapter.insertToDatabase(toInsert);
 					mDatabaseAdapter.close();
