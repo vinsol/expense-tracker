@@ -23,7 +23,7 @@ import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
 import com.vinsol.expensetracker.models.Entry;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class Home extends Activity implements OnClickListener {
 	private DatabaseAdapter mDatabaseAdapter;
 	private long timeInMillis = 0;
 	private Bundle bundle;
@@ -33,7 +33,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.home);
 		bundle = new Bundle();
 		entry = new Entry();
 		// /////// ********* DatabaseAdaptor initialize ********* ////////

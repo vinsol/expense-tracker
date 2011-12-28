@@ -4,18 +4,18 @@ import java.io.File;
 
 import android.content.Context;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.models.DisplayList;
+import com.vinsol.expensetracker.models.Entry;
 
 public class CheckEntryComplete {
 	
-	public boolean isEntryComplete(DisplayList displayList,Context mContext) {
-		if(isAmountValid(displayList.amount)) {
-			if (displayList.type.equals(mContext.getString(R.string.camera))) {
-				return isCameraFileReadable(displayList.id);
-			} else if (displayList.type.equals(mContext.getString(R.string.voice))) {
-				return isAudioFileReadable(displayList.id);
-			} else if (displayList.type.equals(mContext.getString(R.string.text))) {
-				return isTagValid(displayList.description,mContext);
+	public boolean isEntryComplete(Entry entryList,Context mContext) {
+		if(isAmountValid(entryList.amount)) {
+			if (entryList.type.equals(mContext.getString(R.string.camera))) {
+				return isCameraFileReadable(entryList.id);
+			} else if (entryList.type.equals(mContext.getString(R.string.voice))) {
+				return isAudioFileReadable(entryList.id);
+			} else if (entryList.type.equals(mContext.getString(R.string.text))) {
+				return isTagValid(entryList.description,mContext);
 			}
 		}
 		return false;

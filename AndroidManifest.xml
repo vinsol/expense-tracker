@@ -20,7 +20,7 @@
         >
         <activity
             android:label="@string/app_name"
-            android:name=".MainActivity" 
+            android:name=".Home" 
     		android:screenOrientation="portrait"
     		>
             <intent-filter >

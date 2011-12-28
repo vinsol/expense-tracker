@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
-import com.vinsol.expensetracker.models.DisplayList;
+import com.vinsol.expensetracker.models.Entry;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -52,12 +52,15 @@ public class ExpenseSubListing extends ListingAbstract {
 			
 			int j = 0;
 			@SuppressWarnings("rawtypes")
-			List listString = new ArrayList<List<DisplayList>>();
+			List listString = new ArrayList<List<Entry>>();
 			for (int i = 0; i < mDataDateList.size(); i++) {
-				List<DisplayList> mList = new ArrayList<DisplayList>();
+				List<Entry> mList = new ArrayList<Entry>();
 				String date = mDataDateList.get(i).dateTime;
-				while (j < mSubList.size() && date.equals(mSubList.get(j).displayTime)) {
-					DisplayList templist = new DisplayList();
+				Calendar toCHeckCal = Calendar.getInstance();
+				toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+				toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
+				while (j < mSubList.size() && date.equals(new DisplayDate(toCHeckCal).getDisplayDate())) {
+					Entry templist = new Entry();
 					Calendar mCalendar = Calendar.getInstance();
 					mCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
 					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);

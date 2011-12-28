@@ -6,19 +6,15 @@ import java.util.HashMap;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.listing.ExpenseListing;
-import com.vinsol.expensetracker.models.DisplayList;
 import com.vinsol.expensetracker.models.Entry;
-import com.vinsol.expensetracker.models.StaticVariables;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
-import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 abstract class EditAbstract extends Activity implements OnClickListener{
-	protected DisplayList mEditList;
+	protected Entry mEditList;
 	protected boolean setLocation = false;
 	protected EditText editAmount;
 	protected EditText editTag;
@@ -147,8 +143,8 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		return list;
 	}
 	
-	protected DisplayList getListOnResult(HashMap<String, String> list){
-		DisplayList displayList = new DisplayList();
+	protected Entry getListOnResult(HashMap<String, String> list){
+		Entry displayList = new Entry();
 		displayList.id = mEditList.id;
 		displayList.description = list.get(DatabaseAdapter.KEY_TAG);
 		displayList.amount = list.get(DatabaseAdapter.KEY_AMOUNT);
@@ -162,13 +158,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		
 		if (mEditList.description == null || mEditList.description.equals("") || mEditList.description.equals(getString(typeOfEntryUnfinished)) || mEditList.description.equals(getString(typeOfEntryFinished)) || mEditList.description.equals(getString(R.string.unknown_entry))) {
 			mEditList.description = getString(typeOfEntryFinished);
-		}
-		
-		if(list.containsKey(DatabaseAdapter.KEY_DATE_TIME)){
-			displayList.timeLocation = new DisplayDate().getLocationDate(Long.parseLong(list.get(DatabaseAdapter.KEY_DATE_TIME)), mEditList.location);
-		} else {
-			displayList.timeLocation = mEditList.timeLocation;
-		}		
+		}	
 		
 		Boolean isAmountNotEqual = false;
 		try{
@@ -179,7 +169,6 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		
 		if((!mEditList.description.equals(displayList.description)) || isAmountNotEqual || isChanged ) {
 			isChanged = false;
-			StaticVariables.favID = null;
 			HashMap<String, String> listForFav = new HashMap<String, String>();
 			listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
 			listForFav.put(DatabaseAdapter.KEY_ID, mEditList.id.toString());
@@ -187,14 +176,10 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editDatabase(listForFav);
 			mDatabaseAdapter.close();
-			displayList.favorite = "";
-		} else 
-			if(StaticVariables.favID == null) {
-				displayList.favorite = mEditList.favorite;
-			}
-			else { 
-				displayList.favorite = StaticVariables.favID.toString();
-			}
+			displayList.favId = "";
+		} else {
+			displayList.favId = mEditList.favId;
+		}
 			
 		displayList.type = mEditList.type;	
 
@@ -213,7 +198,6 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		HashMap<String, String> toSave = getSaveEntryData(dateBarDateview,dateViewString);
 
 		// //// ******* Update database if user added additional info *******		 ///////
-		Log.v("toSave", toSave.toString()+" kl");
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(toSave);
 		mDatabaseAdapter.close();
@@ -273,7 +257,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			mDatabaseAdapter.close();
 			if(intentExtras.containsKey("isFromShowPage")){
 				Bundle tempBundle = new Bundle();
-				DisplayList displayList = new DisplayList();
+				Entry displayList = new Entry();
 				tempBundle.putParcelable("mDisplayList", displayList);
 				mEditList = displayList;
 				startIntentAfterDelete(tempBundle);

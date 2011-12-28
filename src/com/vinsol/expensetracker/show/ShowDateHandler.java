@@ -35,7 +35,6 @@ public class ShowDateHandler {
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		String date = getDate(mCalendar);
 		DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-		//TODO
 		showHeaderTitle.setText(mDisplayDate.getDisplayDate()+" at "+date);
 	}
 

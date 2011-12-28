@@ -26,7 +26,8 @@ import com.vinsol.expensetracker.GroupedIconDialogClickListener;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.DateHelper;
-import com.vinsol.expensetracker.models.DisplayList;
+import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
@@ -184,7 +185,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				}
 				
 				
-				DisplayList mlist = (DisplayList) adapter.getItem(position - 1);
+				Entry mlist = (Entry) adapter.getItem(position - 1);
 				CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 				if (mlist.type.equals(mContext.getString(R.string.camera))) {
 					
@@ -240,8 +241,8 @@ class SeparatedListAdapter extends BaseAdapter {
 						holderBody.rowImageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 					}
 				} 
-				if (mlist.favorite != null) {
-					if(!mlist.favorite.equals("")){
+				if (mlist.favId != null) {
+					if(!mlist.favId.equals("")){
 						try{
 							if(isCurrentWeek(mDatadateList.get(sectionnum).dateTime)){
 								holderBody.rowFavoriteIcon.setVisibility(View.VISIBLE);
@@ -256,7 +257,13 @@ class SeparatedListAdapter extends BaseAdapter {
 				
 				holderBody.rowImageview.setFocusable(false);
 				holderBody.rowImageview.setOnClickListener(new MyClickListener(mlist));
-				holderBody.rowLocationTime.setText(mlist.timeLocation);
+				if (mlist.timeInMillis != null  && !mlist.timeInMillis.equals("")) {
+					holderBody.rowLocationTime.setText(new DisplayDate().getLocationDate(mlist.timeInMillis, mlist.location));
+				} else if ((mlist.timeInMillis == null || mlist.timeInMillis.equals(""))&& mlist.location != null&& !mlist.location.equals("")) {
+					holderBody.rowLocationTime.setText("Unknown time at "+ mlist.location);
+				} else {
+					holderBody.rowLocationTime.setText("Unknown time at Unknown Location");
+				}
 				holderBody.rowTag.setText(mlist.description);
 				holderBody.rowAmount.setText(mlist.amount);
 				if ((mlist.type.equals(mContext.getString(R.string.sublist_daywise))) || mlist.type.equals(mContext.getString(R.string.sublist_monthwise)) || mlist.type.equals(mContext.getString(R.string.sublist_yearwise))|| mlist.type.equals(mContext.getString(R.string.sublist_weekwise))) {
@@ -308,9 +315,9 @@ class SeparatedListAdapter extends BaseAdapter {
 
 	private class MyClickListener implements OnClickListener {
 
-		DisplayList mListenerList;
+		Entry mListenerList;
 
-		public MyClickListener(DisplayList mlist) {
+		public MyClickListener(Entry mlist) {
 			mListenerList = mlist;
 		}
 		

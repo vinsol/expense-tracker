@@ -23,7 +23,7 @@ import com.vinsol.android.graph.BarGraph;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
-import com.vinsol.expensetracker.models.DisplayList;
+import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.GraphDataList;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 
@@ -32,7 +32,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	private List<ListDatetimeAmount> mDataDateListGraph;
 	private ConvertCursorToListString mConvertCursorToListString;
 	static private Context mContext;
-	private List<DisplayList> mSubList;
+	private List<Entry> mSubList;
 	private ArrayList<ArrayList<ArrayList<String>>> mGraphList;
 	private Calendar lastDateCalendar;
 	private Activity activity;

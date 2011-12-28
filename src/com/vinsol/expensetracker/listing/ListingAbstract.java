@@ -12,9 +12,8 @@ import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
-import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.helpers.StringProcessing;
-import com.vinsol.expensetracker.models.DisplayList;
+import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 
 import android.app.Activity;
@@ -34,7 +33,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 
 	protected List<ListDatetimeAmount> mDataDateList;
 	protected SeparatedListAdapter mSeparatedListAdapter;
-	protected List<DisplayList> mSubList;
+	protected List<Entry> mSubList;
 	protected ConvertCursorToListString mConvertCursorToListString;
 	protected StringProcessing mStringProcessing;
 	protected ListView mListView;
@@ -56,8 +55,8 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 		mSeparatedListAdapter = new SeparatedListAdapter(this);
 	}
 	
-	protected DisplayList getListCurrentWeek(int j) {
-		DisplayList templist = new DisplayList();
+	protected Entry getListCurrentWeek(int j) {
+		Entry templist = new Entry();
 		templist.id = mSubList.get(j).id;
 		if (mSubList.get(j).description != null && !mSubList.get(j).description.equals("")) {
 			templist.description = mSubList.get(j).description;
@@ -94,20 +93,10 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 			templist.amount = "?";
 		}
 
-		// ///// ******* Adding location date data to list ******* //////////
-
-		if (mSubList.get(j).timeInMillis != null  && !mSubList.get(j).timeInMillis.equals("")) {
-			templist.timeLocation = new DisplayDate().getLocationDate(mSubList.get(j).timeInMillis, mSubList.get(j).location);
-		} else if ((mSubList.get(j).timeInMillis == null || mSubList.get(j).timeInMillis.equals(""))&& mSubList.get(j).location != null&& !mSubList.get(j).location.equals("")) {
-			templist.timeLocation = "Unknown time at "+ mSubList.get(j).location;
+		if (mSubList.get(j).favId != null && !mSubList.get(j).favId.equals("")) {
+			templist.favId = mSubList.get(j).favId;
 		} else {
-			templist.timeLocation = "Unknown time at Unknown Location";
-		}
-
-		if (mSubList.get(j).favorite != null && !mSubList.get(j).favorite.equals("")) {
-			templist.favorite = mSubList.get(j).favorite;
-		} else {
-			templist.favorite = "";
+			templist.favId = "";
 		}
 
 		if (mSubList.get(j).type != null && !mSubList.get(j).type.equals("")) {
@@ -123,7 +112,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 	
 	@Override
 	public void onItemClick(final AdapterView<?> adapter, View v,final int position, long arg3) {
-		final DisplayList mTempClickedList = (DisplayList) adapter.getItemAtPosition(position);
+		final Entry mTempClickedList = (Entry) adapter.getItemAtPosition(position);
 		String id = mTempClickedList.id;
 		if (!id.contains(",")) {
 			Bundle bundle = new Bundle();
@@ -151,7 +140,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 				} else {
 					Intent intentTextShow = new Intent(this,ShowTextActivity.class);
 					intentTextShow.putExtra("textShowBundle", bundle);
-					Log.v("mShowList pass", mTempClickedList.favorite+" "+mTempClickedList.id+" "+mTempClickedList.timeInMillis+" "+mTempClickedList.location);
+					Log.v("mShowList pass", mTempClickedList.favId+" "+mTempClickedList.id+" "+mTempClickedList.timeInMillis+" "+mTempClickedList.location);
 					startActivity(intentTextShow);
 				}
 			} else if (mTempClickedList.type.equals(getString(R.string.voice))) {

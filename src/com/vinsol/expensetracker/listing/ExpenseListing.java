@@ -14,7 +14,7 @@ import com.vinsol.expensetracker.GroupedIconDialogClickListener;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
-import com.vinsol.expensetracker.models.DisplayList;
+import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
 
 public class ExpenseListing extends ListingAbstract {
@@ -43,13 +43,15 @@ public class ExpenseListing extends ListingAbstract {
 		}
 		int j = 0;
 		@SuppressWarnings("rawtypes")
-		List listString = new ArrayList<List<DisplayList>>();
+		List listString = new ArrayList<List<Entry>>();
 		for (int i = 0; i < mDataDateList.size(); i++) {
-			List<DisplayList> mList = new ArrayList<DisplayList>();
+			List<Entry> mList = new ArrayList<Entry>();
 			String date = mDataDateList.get(i).dateTime;
-
-			while (j < mSubList.size()&& date.equals(mSubList.get(j).displayTime)) {
-				DisplayList templist = new DisplayList();
+			Calendar toCHeckCal = Calendar.getInstance();
+			toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+			toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
+			while (j < mSubList.size() && date.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate())) {
+				Entry templist = new Entry();
 				Calendar mCalendar = Calendar.getInstance();
 				mCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
 				mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
@@ -60,14 +62,17 @@ public class ExpenseListing extends ListingAbstract {
 					mList.add(templist);
 					j++;
 					if (j < mSubList.size()) {
+						toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+						toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
 					} else {
 						break;
 					}
 				} else if (mDisplayDate.isCurrentMonth() || mDisplayDate.isPrevMonths() || mDisplayDate.isPrevYears()) {
-
-					while (mDataDateList.get(i).dateTime.equals(mSubList.get(j).displayTime)) {
+					toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+					toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
+					while (mDataDateList.get(i).dateTime.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate())) {
 						// //// Adding i+" "+j as id
-						DisplayList mTempSubList = new DisplayList();
+						Entry mTempSubList = new Entry();
 						mTempSubList.id = mSubList.get(j).id +",";
 
 						// /// Adding tag
@@ -100,6 +105,8 @@ public class ExpenseListing extends ListingAbstract {
 							}
 							j++;
 							if (j < mSubList.size()) {
+								toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+								toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
 								tempCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
 								tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 								tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
@@ -134,7 +141,7 @@ public class ExpenseListing extends ListingAbstract {
 						}
 						mTempSubList.amount = mStringProcessing.getStringDoubleDecimal(totalAmountString);
 						mTempSubList.type = getString(R.string.sublist_weekwise);
-						if(highlightID != null){//TODO not proper method to check highlight id
+						if(highlightID != null){
 							if (j <= mSubList.size()) {
 								if(mTempSubList.id.contains(highlightID)){
 									startSubListing(mTempSubList.id);

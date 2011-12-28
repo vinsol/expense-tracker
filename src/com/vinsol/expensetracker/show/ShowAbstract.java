@@ -1,15 +1,17 @@
 package com.vinsol.expensetracker.show;
 
+import java.io.File;
 import java.util.Calendar;
+import java.util.HashMap;
 
+import com.vinsol.expensetracker.DBAdapterFavorite;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
-import com.vinsol.expensetracker.models.DisplayList;
-import com.vinsol.expensetracker.models.ShowData;
-import com.vinsol.expensetracker.models.StaticVariables;
-
+import com.vinsol.expensetracker.helpers.FileCopyFavorite;
+import com.vinsol.expensetracker.helpers.FileDeleteFavorite;
+import com.vinsol.expensetracker.models.Entry;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,12 +20,13 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 abstract class ShowAbstract extends Activity implements OnClickListener{
 
 	protected TextView showAmount;
 	protected TextView showTag;
-	protected DisplayList mShowList;
+	protected Entry mShowList;
 	protected Bundle intentExtras;
 	protected int typeOfEntryFinished;
 	protected int typeOfEntryUnfinished;
@@ -35,14 +38,17 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	protected Button showDelete;
 	protected Button showEdit;
 	private RelativeLayout dateBarRelativeLayout;
-	protected ShowData showData;
+	private ToggleButton showAddFavorite;
+	private TextView showAddFavoriteTextView;
+	private DBAdapterFavorite mDbAdapterFavorite;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_page);
-		showData = new ShowData();
 		showEdit = (Button) findViewById(R.id.show_edit);
+		showAddFavorite = (ToggleButton) findViewById(R.id.show_add_favorite);
+		showAddFavoriteTextView = (TextView) findViewById(R.id.show_add_favorite_textView);
 		showDelete = (Button) findViewById(R.id.show_delete);
 		showHeaderTitle = (TextView) findViewById(R.id.header_title);
 		mDatabaseAdapter = new DatabaseAdapter(this);
@@ -59,25 +65,19 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		
 		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = intentExtras.getParcelable("mDisplayList");
-			showData.id = mShowList.id;
-			showData.amount = mShowList.amount;
-			showData.description = mShowList.description;
+//			showData.id = mShowList.id;
+//			showData.amount = mShowList.amount;
+//			showData.description = mShowList.description;
 			
-			if (!(showData.amount.equals("") || showData.amount == null)) {
-				if (!showData.amount.contains("?"))
-					showAmount.setText(showData.amount);
+			if (!(mShowList.amount.equals("") || mShowList.amount == null)) {
+				if (!mShowList.amount.contains("?"))
+					showAmount.setText(mShowList.amount);
 			}
 			
-			if (!(showData.description.equals("") || showData.description == null || showData.description.equals(getString(typeOfEntryUnfinished)))) {
-				showTag.setText(showData.description);
+			if (!(mShowList.description.equals("") || mShowList.description == null || mShowList.description.equals(getString(typeOfEntryUnfinished)))) {
+				showTag.setText(mShowList.description);
 			} else {
 				showTag.setText(getString(typeOfEntryFinished));
-			}
-			
-			if(mShowList.favorite != null){
-				if(!mShowList.favorite.equals("")){
-					StaticVariables.favID = Long.parseLong(mShowList.favorite);
-				}
 			}
 			
 			Calendar mCalendar = Calendar.getInstance();
@@ -105,11 +105,11 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 				finish();
 			}
 			
-			showData.amount = mShowList.amount;
-			showData.description = mShowList.description;
+//			showData.amount = mShowList.amount;
+//			showData.description = mShowList.description;
 			
-			if (!(showData.description.equals("") || showData.description == null || showData.description.equals(getString(typeOfEntryUnfinished)) || showData.description.equals(getString(typeOfEntryFinished)))) {
-				showTag.setText(showData.description);
+			if (!(mShowList.description.equals("") || mShowList.description == null || mShowList.description.equals(getString(typeOfEntryUnfinished)) || mShowList.description.equals(getString(typeOfEntryFinished)))) {
+				showTag.setText(mShowList.description);
 			} else {
 				showTag.setText(getString(typeOfEntryFinished));
 			}
@@ -132,26 +132,43 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.show_delete) {
-			if (showData.id != null) {
+		switch (v.getId()) {
+		case R.id.show_delete:
+			if (mShowList.id != null) {
 				deleteAction();
 				mDatabaseAdapter.open();
-				mDatabaseAdapter.deleteDatabaseEntryID(showData.id);
+				mDatabaseAdapter.deleteDatabaseEntryID(mShowList.id);
 				mDatabaseAdapter.close();
 				Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
 				finish();
 			} else {
 				Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
 			}
-		}
-		
-		if(v.getId() == R.id.show_edit){
+			break;
+
+		case R.id.show_edit:
 			intentExtras.putBoolean("isFromShowPage", true);
-			if(StaticVariables.favID != null)
-				mShowList.favorite = StaticVariables.favID.toString();
 			intentExtras.remove("mDisplayList");
 			intentExtras.putParcelable("mDisplayList", mShowList);
 			editAction();
+			break;
+			
+		case R.id.show_add_favorite:
+		case R.id.show_add_favorite_textView:
+			Boolean toCheck;
+			if(v.getId() == R.id.show_add_favorite){
+				toCheck = showAddFavorite.isChecked();
+			} else {
+				toCheck = !showAddFavorite.isChecked();
+			}
+			onClickFavorite(toCheck);
+			
+			break;
+		default:
+			break;
+		}
+		if (v.getId() == R.id.show_delete) {
+			
 		}
 	}
 	
@@ -160,4 +177,127 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	
 	protected void editAction() {
 	}
+	
+	
+	public void FavoriteHelper() {
+
+		showAddFavorite.setVisibility(View.VISIBLE);
+		showAddFavoriteTextView.setVisibility(View.VISIBLE);
+		mDbAdapterFavorite = new DBAdapterFavorite(this);
+		if(mShowList.favId != null){
+			if(!mShowList.favId.equals("")){
+				showAddFavorite.setChecked(true);
+				showAddFavoriteTextView.setText("Remove from Favorite");
+			} else {
+				showAddFavoriteTextView.setText("Add to Favorite");
+				showAddFavorite.setChecked(false);
+			}
+		} else {
+			showAddFavoriteTextView.setText("Add to Favorite");
+			showAddFavorite.setChecked(false);
+		}
+		showAddFavorite.setOnClickListener(this);
+		showAddFavoriteTextView.setOnClickListener(this);
+	}
+
+	public void onClickFavorite(Boolean toCheck) {
+		Long favID = null;
+		if(toCheck){
+			HashMap<String, String> list = new HashMap<String, String>();
+			list.put(DBAdapterFavorite.KEY_AMOUNT, mShowList.amount);
+			list.put(DBAdapterFavorite.KEY_TYPE, mShowList.type);
+			if(mShowList.type.equals(getString(R.string.text))) {
+				list.put(DBAdapterFavorite.KEY_TAG, mShowList.description);
+				mDbAdapterFavorite.open();
+				favID = mDbAdapterFavorite.insertToDatabase(list);
+				mDbAdapterFavorite.close();
+				
+			} else if(mShowList.type.equals(getString(R.string.camera))) {
+				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+					if(!mShowList.description.equals("") && !mShowList.description.equals(getString(R.string.unfinished_cameraentry)) && mShowList.description != null){
+						list.put(DBAdapterFavorite.KEY_TAG, mShowList.description);
+					}
+					try{
+						mDbAdapterFavorite.open();
+						favID = mDbAdapterFavorite.insertToDatabase(list);
+						mDbAdapterFavorite.close();
+						new FileCopyFavorite(mShowList.id, favID.toString());
+						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+favID+".jpg");
+						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+favID+"_small.jpg");
+						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+favID+"_thumbnail.jpg");
+						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
+						} else {
+							mDbAdapterFavorite.open();
+							mDbAdapterFavorite.deleteDatabaseEntryID(favID);
+							mDbAdapterFavorite.close();
+						}
+					} catch (Exception e) {	
+					}
+				} else {
+					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
+				}
+			} else if(mShowList.type.equals(getString(R.string.voice))){
+				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+					if(!mShowList.description.equals("") && !mShowList.description.equals(getString(R.string.unfinished_voiceentry)) && mShowList.description != null){
+						list.put(DBAdapterFavorite.KEY_TAG, mShowList.description);
+					}
+					try{
+						mDbAdapterFavorite.open();
+						favID = mDbAdapterFavorite.insertToDatabase(list);
+						mDbAdapterFavorite.close();
+						new FileCopyFavorite(mShowList.id,favID.toString());
+						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+favID+".amr");
+						if(!mFile.canRead()){
+							mDbAdapterFavorite.open();
+							mDbAdapterFavorite.deleteDatabaseEntryID(favID);
+							mDbAdapterFavorite.close();
+						}
+					} catch (Exception e) {	
+					}
+				} else {
+					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
+				}
+			}
+			list = new HashMap<String, String>();
+			list.put(DatabaseAdapter.KEY_ID, mShowList.id);
+			list.put(DatabaseAdapter.KEY_FAVORITE, Long.toString(favID));
+			mDatabaseAdapter.open();
+			mDatabaseAdapter.editDatabase(list);
+			mDatabaseAdapter.close();
+			showAddFavorite.setChecked(true);
+			showAddFavoriteTextView.setText("Remove from Favorite");
+		} else if(mShowList.id.equals(getString(R.string.text))) {
+				mDatabaseAdapter.open();
+				favID = mDatabaseAdapter.getFavoriteId(mShowList.id);
+				mDatabaseAdapter.close();
+				
+				mDbAdapterFavorite.open();
+				mDbAdapterFavorite.deleteDatabaseEntryID(favID);
+				mDbAdapterFavorite.close();
+				
+				mDatabaseAdapter.open();
+				mDatabaseAdapter.editDatabaseFavorite(favID);
+				mDatabaseAdapter.close();
+				showAddFavorite.setChecked(false);
+				showAddFavoriteTextView.setText("Add to Favorite");
+				
+			} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+				mDatabaseAdapter.open();
+				favID = mDatabaseAdapter.getFavoriteId(mShowList.id);
+				mDatabaseAdapter.close();
+				new FileDeleteFavorite(favID);
+				mDbAdapterFavorite.open();
+				mDbAdapterFavorite.deleteDatabaseEntryID(favID);
+				mDbAdapterFavorite.close();
+				
+				mDatabaseAdapter.open();
+				mDatabaseAdapter.editDatabaseFavorite(favID);
+				mDatabaseAdapter.close();
+				showAddFavorite.setChecked(false);
+				showAddFavoriteTextView.setText("Add to Favorite");
+			} else {
+				Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
+			}
+		
+		}	
 }

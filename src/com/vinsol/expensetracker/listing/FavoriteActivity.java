@@ -27,14 +27,13 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.listing.ExpenseListing;
-import com.vinsol.expensetracker.models.DisplayList;
-import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.FileCopyFavorite;
 import com.vinsol.expensetracker.helpers.LocationHelper;
+import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
 public class FavoriteActivity extends Activity implements OnItemClickListener{
@@ -47,7 +46,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 	private TextView editDateBarDateview;
 	private Bundle intentExtras;
 	private MyAdapter mAdapter;
-	private DisplayList mEditList;
+	private Entry mEditList;
 	private String dateViewString;
 	private Long id = null;
 	
@@ -71,7 +70,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		headerTitle.setText("Favorite Entry");
 		
 		if (intentExtras.containsKey("mDisplayList")) {
-			mEditList = new DisplayList();
+			mEditList = new Entry();
 			mEditList = intentExtras.getParcelable("mDisplayList");
 			id = Long.parseLong(mEditList.id);
 		}
@@ -151,9 +150,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				}
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					try {
-						
-						//TODO image set for voice entry
-						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+ tempFavorite.id + ".amr");
+						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+ tempFavorite.favId + ".amr");
 						if (mFile.canRead()) {
 							viewHolder.rowImageview.setImageResource(R.drawable.listing_voice_entry_icon);
 						} else {
@@ -183,12 +180,11 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				} else {
 					viewHolder.rowAmount.setText("?");
 				}
-				//TODO image set for camera entry
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					try {
-						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.id + "_thumbnail.jpg");
-						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.id + "_small.jpg");
-						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.id + ".jpg");
+						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.favId + "_thumbnail.jpg");
+						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.favId + "_small.jpg");
+						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+ tempFavorite.favId + ".jpg");
 						if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Drawable drawable = Drawable.createFromPath(mFileThumbnail.getPath());
 							viewHolder.rowImageview.setImageDrawable(drawable);
@@ -196,13 +192,11 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 							viewHolder.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
 						}
 					} catch (Exception e) {
-						// TODO if image not available on sdcard
 						viewHolder.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
 					}
 				} else {
 					viewHolder.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
 					return convertView;
-					// TODO if sdcard not available
 				}
 			}
 			else if(tempFavorite.type.equals(getString(R.string.text))){
@@ -220,7 +214,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 				} else {
 					viewHolder.rowAmount.setText("?");
 				}
-				//TODO image set for camera entry
 				
 				if(tempFavorite.description != null){
 					if (!tempFavorite.description.equals("") && !tempFavorite.description.equals(getString(R.string.unfinished_textentry)) ) {
@@ -267,30 +260,26 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		@Override
 		public void onClick(View v) {
 			if (v.getId() == R.id.expense_listing_inflated_row_imageview) {
-//				if (mListenerList != null)
-					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-						String id = tempFavorite.id;
-						if (tempFavorite.type.equals(getString(R.string.voice))) {
-							File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+ id + ".amr");
-							if (mFile.canRead()) {
-								new AudioPlayDialog(FavoriteActivity.this,id,"fav");
-							} else {
-								// TODO audio image change
-							}
-						} else if (tempFavorite.type.equals(getString(R.string.camera))) {
-							File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+ id + ".jpg");
-							File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+ id + "_small.jpg");
-							File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+ id + "_thumbnail.jpg");
-							if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
-								Intent intent = new Intent(FavoriteActivity.this, ImagePreview.class);
-								intent.putExtra("id", id);
-								intent.putExtra("isFavorite", true);
-								startActivity(intent);
-							} else {
-								// TODO if image not found
-							}
+				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+					String id = tempFavorite.favId;
+					if (tempFavorite.type.equals(getString(R.string.voice))) {
+						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+ id + ".amr");
+						if (mFile.canRead()) {
+							new AudioPlayDialog(FavoriteActivity.this,id,"fav");
+						} else {
+						}
+					} else if (tempFavorite.type.equals(getString(R.string.camera))) {
+						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+ id + ".jpg");
+						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+ id + "_small.jpg");
+						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+ id + "_thumbnail.jpg");
+						if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
+							Intent intent = new Intent(FavoriteActivity.this, ImagePreview.class);
+							intent.putExtra("id", id);
+							intent.putExtra("isFavorite", true);
+							startActivity(intent);
 						}
 					}
+				}
 				if (tempFavorite.type.equals(getString(R.string.text))) {
 					if (!tempFavorite.description.equals(getString(R.string.unfinished_textentry))) {
 						new DescriptionDialog(FavoriteActivity.this, tempFavorite.description);
@@ -306,7 +295,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 	}
 
 	private void saveEntry(Favorite adapterList) {
-		String favID = adapterList.id;
+		String favID = adapterList.favId;
 		String type = adapterList.type;
 		String tag = adapterList.description;
 		String amount = adapterList.amount;

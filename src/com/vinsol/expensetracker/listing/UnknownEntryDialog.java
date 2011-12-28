@@ -9,7 +9,7 @@ import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
-import com.vinsol.expensetracker.models.DisplayList;
+import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 
@@ -33,7 +33,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	private Button cancelButton;
 	private Bundle bundle;
 	private DatabaseAdapter mDatabaseAdapter;
-	private DisplayList mTempClickedList;
+	private Entry mTempClickedList;
 	private TextView headerTextView;
 	private TextView locationTextView;
 	
@@ -51,7 +51,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		bundle = new Bundle();
 	}
 	
-	public UnknownEntryDialog(DisplayList toInsert,Context mContext, android.view.View.OnClickListener myClickListener) {
+	public UnknownEntryDialog(Entry toInsert,Context mContext, android.view.View.OnClickListener myClickListener) {
 		super(mContext);
 		onCreateDialog();
 		textEntryButton.setOnClickListener(myClickListener);
@@ -74,7 +74,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		show();
 	}
 	
-	public UnknownEntryDialog(Context mContext,DisplayList _list,android.view.View.OnClickListener deleteClickListener) {
+	public UnknownEntryDialog(Context mContext,Entry _list,android.view.View.OnClickListener deleteClickListener) {
 		super(mContext);
 		onCreateDialog();
 		textEntryButton.setOnClickListener(this);

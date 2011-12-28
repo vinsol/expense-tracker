@@ -10,7 +10,7 @@ import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
 import com.vinsol.expensetracker.listing.UnknownEntryDialog;
-import com.vinsol.expensetracker.models.DisplayList;
+import com.vinsol.expensetracker.models.Entry;
 
 import android.app.Activity;
 import android.content.Context;
@@ -48,7 +48,7 @@ public class GroupedIconDialogClickListener implements OnClickListener{
 	
 	@Override
 	public void onClick(View v) {
-		final DisplayList toInsert = new DisplayList();
+		final Entry toInsert = new Entry();
 		
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
@@ -126,7 +126,7 @@ public class GroupedIconDialogClickListener implements OnClickListener{
 		});
 	}
 	
-	private void createDatabaseEntry(int typeOfEntry, DisplayList toInsert) {	
+	private void createDatabaseEntry(int typeOfEntry, Entry toInsert) {	
 		Long id = insertToDatabase(typeOfEntry,toInsert);
 		bundle.putLong("_id", id);
 		
@@ -139,7 +139,7 @@ public class GroupedIconDialogClickListener implements OnClickListener{
 
 	// /////// ******** function to mark entry into the database and returns the
 	// id of the new entry ***** //////
-	private long insertToDatabase(int type, DisplayList toInsert) {
+	private long insertToDatabase(int type, Entry toInsert) {
 		HashMap<String, String> list = new HashMap<String, String>();
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
