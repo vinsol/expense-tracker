@@ -201,5 +201,4 @@ public class ExpenseListing extends ListingAbstract {
 		super.updateListView();
 		initListView();
 	}
-	
 }

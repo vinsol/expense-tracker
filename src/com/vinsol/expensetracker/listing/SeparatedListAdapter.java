@@ -247,7 +247,11 @@ class SeparatedListAdapter extends BaseAdapter {
 						}catch(Exception e){
 							
 						}
+					}else {
+						holderBody.rowFavoriteIcon.setVisibility(View.INVISIBLE);
 					}
+				}else {
+					holderBody.rowFavoriteIcon.setVisibility(View.INVISIBLE);
 				}
 				
 				holderBody.rowImageview.setFocusable(false);
