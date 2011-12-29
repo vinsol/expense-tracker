@@ -26,13 +26,12 @@ public class ExpenseListing extends ListingAbstract {
 		super.onCreate(savedInstanceState);
 		bundle = new Bundle();
 		setContentView(R.layout.expense_listing);
-		mConvertCursorToListString = new ConvertCursorToListString(this);
+		initListView();
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Override
-	protected void onResume() {
-		super.onResume();
+	private void initListView() {
+		mConvertCursorToListString = new ConvertCursorToListString(this);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,"");
 		mSubList = mConvertCursorToListString.getListStringParticularDate("");
 		Bundle intentExtras = getIntent().getExtras();
@@ -162,7 +161,7 @@ public class ExpenseListing extends ListingAbstract {
 		}
 		doOperationsOnListview();
 	}
-	
+
 	private void startSubListing(String string) {
 		ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(string);
 		for(int checkI=0;checkI<mArrayList.size();checkI++){
@@ -170,16 +169,10 @@ public class ExpenseListing extends ListingAbstract {
 				Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
 				expenseSubListing.putExtra("idList", string);
 				expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(expenseSubListing); //TODO start activity for result and get edited list back
+				startActivityForResult(expenseSubListing,RESULT);
  				finish();
 			}
 		}	
-	}
-	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		firstVisiblePosition = mListView.getFirstVisiblePosition();
 	}
 	
 	@Override
@@ -187,18 +180,13 @@ public class ExpenseListing extends ListingAbstract {
 		Intent mSubListIntent = new Intent(this, ExpenseSubListing.class);
 		mSubListIntent.putExtra("idList", id);
 		mSubListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(mSubListIntent); //TODO start activity for result and get edited list back
+		startActivityForResult(mSubListIntent,RESULT);
 	}
 	
 	@Override
 	protected void unknownDialogAction(String id) {
 		super.unknownDialogAction(id);
-		Intent intentExpenseListing = new Intent(ExpenseListing.this, ExpenseListing.class);
-		intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		Bundle mToHighLight = new Bundle();
-		mToHighLight.putString("toHighLight", id);
-		intentExpenseListing.putExtras(mToHighLight);
-		startActivity(intentExpenseListing); //TODO start activity for result and get edited list back
+		initListView();
 		Toast.makeText(ExpenseListing.this, "Deleted", Toast.LENGTH_SHORT).show();
 	}
 
@@ -207,4 +195,11 @@ public class ExpenseListing extends ListingAbstract {
 		super.noItemButtonAction(noItemButton);
 		noItemButton.setOnClickListener(new GroupedIconDialogClickListener(unknownDialog, ExpenseListing.this, bundle,null));
 	}
+
+	@Override
+	protected void updateListView() {
+		super.updateListView();
+		initListView();
+	}
+	
 }

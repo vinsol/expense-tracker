@@ -8,8 +8,10 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -24,14 +26,13 @@ public class ExpenseSubListing extends ListingAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		idList = getIntent().getStringExtra("idList");
-		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
+		initListView();
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Override
-	protected void onResume() {
-		super.onResume();
+	private void initListView() {
+		idList = getIntent().getStringExtra("idList");
+		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,idList);
 		mSubList = mConvertCursorToListString.getListStringParticularDate(idList);
 		
@@ -68,6 +69,8 @@ public class ExpenseSubListing extends ListingAbstract {
 					mList.add(templist);
 					j++;
 					if (j < mSubList.size()) {
+						toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+						toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
 					} else {
 						break;
 					}
@@ -79,22 +82,17 @@ public class ExpenseSubListing extends ListingAbstract {
 			}
 			doOperationsOnListview();
 		} else {
-			//TODO donot start activity just set result and finish the activity
 			Intent mIntent = new Intent(this, ExpenseListing.class);
 			mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(mIntent);
 			finish();
 		}
 	}
-	
+
 	@Override
 	protected void unknownDialogAction(String id) {
 		super.unknownDialogAction(id);
-		//TODO donot start activity add id to idlist and then setnotify dataset changed
-		Intent intentExpenseListing = new Intent(ExpenseSubListing.this, ExpenseSubListing.class);
-		intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intentExpenseListing.putExtra("idList", idList);
-		startActivity(intentExpenseListing);
+		initListView();
 	}
 	
 	@Override
@@ -107,4 +105,30 @@ public class ExpenseSubListing extends ListingAbstract {
 			}
 		});
 	}
+	
+	@Override
+	protected void updateListView() {
+		super.updateListView();
+		initListView();
+	}
+	
+	// /// ****************** Handling back press of key ********** ///////////
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+			onBackPressed();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	public void onBackPressed() {
+		// This will be called either automatically for you on 2.0
+		// or later, or by the code above on earlier versions of the platform.
+		Intent intent = new Intent(this, ExpenseListing.class);
+		intent.putExtras(intentExtras);
+		setResult(Activity.RESULT_OK, intent);
+		finish();
+		return;
+	}
+	
 }

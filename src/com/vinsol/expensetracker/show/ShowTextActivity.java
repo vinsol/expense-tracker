@@ -28,7 +28,7 @@ public class ShowTextActivity extends ShowAbstract{
 		if (SHOW_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getBundleExtra("textShowBundle");
-				doTaskOnActivityResult(intentExtras);
+				doTaskOnActivityResult();
 				mShowList = intentExtras.getParcelable("mDisplayList");
 				FavoriteHelper();
 				showDelete.setOnClickListener(this);

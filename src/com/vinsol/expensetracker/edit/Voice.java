@@ -265,5 +265,13 @@ public class Voice extends EditAbstract {
 		} catch (Exception e) {
 		}
 	}
+
+	@Override
+	protected Boolean checkDataModified() {
+		if(super.checkDataModified() || isChanged)
+			return true;
+		else 
+			return false;
+	}
 	
 }

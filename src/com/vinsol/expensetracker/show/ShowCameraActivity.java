@@ -100,7 +100,7 @@ public class ShowCameraActivity extends ShowAbstract {
 		if (SHOW_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getBundleExtra("cameraShowBundle");
-				doTaskOnActivityResult(intentExtras);
+				doTaskOnActivityResult();
 				if (intentExtras.containsKey("mDisplayList")) {
 					File mFile = new File("/sdcard/ExpenseTracker/" + mShowList.id + "_small.jpg");
 					if (mFile.canRead()) {Drawable mDrawable = Drawable.createFromPath(mFile.getPath());

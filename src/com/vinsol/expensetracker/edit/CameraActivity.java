@@ -67,12 +67,9 @@ public class CameraActivity extends EditAbstract {
 		setGraphicsCamera();
 		setClickListeners();
 
-		// ////// *********** Initializing Database Adaptor **********
-		// //////////
+		// ////// *********** Initializing Database Adaptor **********//////////
 		mDatabaseAdapter = new DatabaseAdapter(this);
-		
 		dateViewString = dateBarDateview.getText().toString();
-		
 		if(entry.id == null ) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				
@@ -260,4 +257,11 @@ public class CameraActivity extends EditAbstract {
 		setResult(Activity.RESULT_OK, mIntent);
 	}
 
+	@Override
+	protected Boolean checkDataModified() {
+		if(super.checkDataModified() || isChanged)
+			return true;
+		else 
+			return false;
+	}
 }

@@ -8,7 +8,6 @@ import java.util.Map;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,9 +52,7 @@ class SeparatedListAdapter extends BaseAdapter {
 	}
 
 	public void addSection(String section, Adapter adapter,List<ListDatetimeAmount> mDataDateList2) {
-		
 		this.mDatadateList = mDataDateList2;
-		notifyDataSetChanged();
 		this.headers.add(section);
 		this.footers.add(section);
 		this.sections.put(section, adapter);
@@ -184,7 +181,6 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderBody = (ViewHolderBody) convertView.getTag();
 				}
 				
-				
 				Entry mlist = (Entry) adapter.getItem(position - 1);
 				CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 				if (mlist.type.equals(mContext.getString(R.string.camera))) {
@@ -211,7 +207,6 @@ class SeparatedListAdapter extends BaseAdapter {
 						holderBody.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
 					}
 				} else if (mlist.type.equals(mContext.getString(R.string.text))) {
-					Log.v("text", mCheckEntryComplete.isEntryComplete(mlist,mContext)+"");
 					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)){
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					} else {

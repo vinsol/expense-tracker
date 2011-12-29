@@ -9,6 +9,7 @@ import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
+import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 
@@ -201,21 +202,53 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(toSave);
 		mDatabaseAdapter.close();
-		if(!intentExtras.containsKey("isFromShowPage")){
+		if(!intentExtras.containsKey("isFromShowPage")) {
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			Bundle mToHighLight = new Bundle();
 			mToHighLight.putString("toHighLight", toSave.get(DatabaseAdapter.KEY_ID));
 			intentExpenseListing.putExtras(mToHighLight);
 			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intentExpenseListing);
+			if(!intentExtras.containsKey("position")) {	
+				startActivity(intentExpenseListing);
+			} else {
+				setActivityResult(mToHighLight);
+				finish();
+			}
 		} else {
 			Bundle tempBundle = new Bundle();
 			tempBundle.putParcelable("mDisplayList", getListOnResult(toSave));
+			if(intentExtras.containsKey("position")) {
+				if(checkDataModified()) {
+					tempBundle.putInt("position", intentExtras.getInt("position"));
+					tempBundle.putBoolean("isChanged", true);
+				}
+			}
 			saveEntryStartIntent(tempBundle);
 		}
 		finish();
 	}
 	
+	private void setActivityResult(Bundle bundle) {
+		Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+		isChanged = checkDataModified();
+		if(isChanged) {
+			bundle.putBoolean("isChanged", isChanged);
+			intentExtras.putAll(bundle);
+		}
+		intentExpenseListing.putExtras(intentExtras);
+		setResult(Activity.RESULT_OK, intentExpenseListing);
+	}
+
+	protected Boolean checkDataModified() {
+		Calendar mCalendar = Calendar.getInstance();
+		mCalendar.setTimeInMillis(mEditList.timeInMillis);
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		if (!editTag.getText().equals(mEditList.description) || !editAmount.getText().equals(mEditList.amount) || !dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate())) {
+			return true;
+		}
+		return false;
+	}
+
 	// /// ****************** Handling back press of key ********** ///////////
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
@@ -235,7 +268,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 	
 	protected void actionAfterSaveOnBackButton(){}
 		
-	protected void saveEntryStartIntent(Bundle tempBundle){}
+	protected void saveEntryStartIntent(Bundle tempBundle) {}
 	
 	@Override
 	public void onClick(View v) {
@@ -249,18 +282,28 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		// /////// ********* Adding action if delete button ********** /////////
 
 		if (v.getId() == R.id.edit_delete) {
+			isChanged = true;
 			deleteAction();
 
 			// //// ******* Delete entry from database ******** /////////
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.deleteDatabaseEntryID(entry.id);
 			mDatabaseAdapter.close();
-			if(intentExtras.containsKey("isFromShowPage")){
-				Bundle tempBundle = new Bundle();
+			Bundle tempBundle = new Bundle();
+			if(intentExtras.containsKey("isFromShowPage")) {
 				Entry displayList = new Entry();
 				tempBundle.putParcelable("mDisplayList", displayList);
 				mEditList = displayList;
 				startIntentAfterDelete(tempBundle);
+			}
+			if(intentExtras.containsKey("position")) {
+				tempBundle = new Bundle();
+				Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+				if(isChanged) {
+					tempBundle.putBoolean("isChanged", isChanged);
+				}
+				intentExpenseListing.putExtras(tempBundle);
+				setResult(Activity.RESULT_CANCELED, intentExpenseListing);
 			}
 			finish();
 		}
@@ -269,4 +312,5 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 	protected void startIntentAfterDelete(Bundle tempBundle) {}
 
 	protected void deleteAction(){}
+
 }

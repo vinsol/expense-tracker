@@ -10,8 +10,11 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.FileCopyFavorite;
 import com.vinsol.expensetracker.helpers.FileDeleteFavorite;
+import com.vinsol.expensetracker.listing.ExpenseListing;
+import com.vinsol.expensetracker.listing.ExpenseSubListing;
 import com.vinsol.expensetracker.models.Entry;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +42,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	private ToggleButton showAddFavorite;
 	private TextView showAddFavoriteTextView;
 	private DBAdapterFavorite mDbAdapterFavorite;
+	private String tempfavID;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		
 		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = intentExtras.getParcelable("mDisplayList");
-			
+
 			if (!(mShowList.amount.equals("") || mShowList.amount == null)) {
 				if (!mShowList.amount.contains("?"))
 					showAmount.setText(mShowList.amount);
@@ -88,16 +92,26 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 			else {
 				new ShowDateHandler(this,typeOfEntry);
 			}
+			
+			tempfavID = mShowList.favId;
 		}
 	}
 	
-	public void doTaskOnActivityResult(Bundle _intentExtras){
-		intentExtras = _intentExtras;
+	public void doTaskOnActivityResult() {
 		if (intentExtras.containsKey("mDisplayList")) {
 			mShowList = intentExtras.getParcelable("mDisplayList");
 			
 			if(!new CheckEntryComplete().isEntryComplete(mShowList, this)){
 				finish();
+			}
+			
+			if (!(mShowList.amount.equals("") || mShowList.amount == null)) {
+				if (!mShowList.amount.contains("?"))
+					showAmount.setText(mShowList.amount);
+				else
+					showAmount.setText("?");
+			} else {
+				showAmount.setText("?");
 			}
 			
 			if (!(mShowList.description.equals("") || mShowList.description == null || mShowList.description.equals(getString(typeOfEntryUnfinished)) || mShowList.description.equals(getString(typeOfEntryFinished)))) {
@@ -118,13 +132,15 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 			else {
 				new ShowDateHandler(this,typeOfEntry);
 			}
-			
 		}
+		setResultModifiedToListing();
 	}
 	
 	@Override
 	public void onClick(View v) {
+		
 		switch (v.getId()) {
+		
 		case R.id.show_delete:
 			if (mShowList.id != null) {
 				deleteAction();
@@ -132,6 +148,10 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 				mDatabaseAdapter.deleteDatabaseEntryID(mShowList.id);
 				mDatabaseAdapter.close();
 				Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+				if(intentExtras.containsKey("position")) {
+					intentExtras.putBoolean("isChanged", true);
+					setResultModifiedToListing();
+				}
 				finish();
 			} else {
 				Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
@@ -154,25 +174,43 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 				toCheck = !showAddFavorite.isChecked();
 			}
 			onClickFavorite(toCheck);
-			
 			break;
+			
 		default:
 			break;
 		}
-		if (v.getId() == R.id.show_delete) {
-			
+	}
+
+	private void setResultModifiedToListing() {
+		if(!istempfavIdequalsfavId()) {
+			intentExtras.putBoolean("isChanged", true);
 		}
+		Intent intent = new Intent(this, ExpenseListing.class);
+		intent.putExtras(intentExtras);
+		setResult(Activity.RESULT_OK, intent);
+		intent = new Intent(this, ExpenseSubListing.class);
+		intent.putExtras(intentExtras);
+		setResult(Activity.RESULT_OK, intent);
 	}
-	
-	protected void deleteAction() {
+
+	private boolean istempfavIdequalsfavId() {
+		if(tempfavID == null && mShowList.favId == null) {
+			return true;
+		}
+		if(tempfavID == null || mShowList.favId == null) {
+			return false;
+		}
+		if(tempfavID.equals(mShowList.favId)) {
+			return true;
+		}
+		return false;
 	}
+
+	protected void deleteAction() {}
 	
-	protected void editAction() {
-	}
-	
+	protected void editAction() {}
 	
 	public void FavoriteHelper() {
-
 		showAddFavorite.setVisibility(View.VISIBLE);
 		showAddFavoriteTextView.setVisibility(View.VISIBLE);
 		mDbAdapterFavorite = new DBAdapterFavorite(this);
@@ -203,7 +241,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 				mDbAdapterFavorite.open();
 				favID = mDbAdapterFavorite.insertToDatabase(list);
 				mDbAdapterFavorite.close();
-				
 			} else if(mShowList.type.equals(getString(R.string.camera))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					if(!mShowList.description.equals("") && !mShowList.description.equals(getString(R.string.unfinished_cameraentry)) && mShowList.description != null){
@@ -257,39 +294,34 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 			mDatabaseAdapter.editDatabase(list);
 			mDatabaseAdapter.close();
 			showAddFavorite.setChecked(true);
+			mShowList.favId = Long.toString(favID);
 			showAddFavoriteTextView.setText("Remove from Favorite");
 		} else if(mShowList.id.equals(getString(R.string.text))) {
 				mDatabaseAdapter.open();
 				favID = mDatabaseAdapter.getFavoriteId(mShowList.id);
 				mDatabaseAdapter.close();
-				
-				mDbAdapterFavorite.open();
-				mDbAdapterFavorite.deleteDatabaseEntryID(favID);
-				mDbAdapterFavorite.close();
-				
-				mDatabaseAdapter.open();
-				mDatabaseAdapter.editDatabaseFavorite(favID);
-				mDatabaseAdapter.close();
-				showAddFavorite.setChecked(false);
-				showAddFavoriteTextView.setText("Add to Favorite");
-				
+				doTaskAfter(favID);
 			} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				mDatabaseAdapter.open();
 				favID = mDatabaseAdapter.getFavoriteId(mShowList.id);
 				mDatabaseAdapter.close();
 				new FileDeleteFavorite(favID);
-				mDbAdapterFavorite.open();
-				mDbAdapterFavorite.deleteDatabaseEntryID(favID);
-				mDbAdapterFavorite.close();
-				
-				mDatabaseAdapter.open();
-				mDatabaseAdapter.editDatabaseFavorite(favID);
-				mDatabaseAdapter.close();
-				showAddFavorite.setChecked(false);
-				showAddFavoriteTextView.setText("Add to Favorite");
+				doTaskAfter(favID);
 			} else {
 				Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
 			}
-		
-		}	
+	}
+
+	private void doTaskAfter(Long favID) {
+		mDbAdapterFavorite.open();
+		mDbAdapterFavorite.deleteDatabaseEntryID(favID);
+		mDbAdapterFavorite.close();
+		mDatabaseAdapter.open();
+		mDatabaseAdapter.editDatabaseFavorite(favID);
+		mDatabaseAdapter.close();
+		showAddFavorite.setChecked(false);
+		mShowList.favId = null;
+		showAddFavoriteTextView.setText("Add to Favorite");
+	}	
+
 }

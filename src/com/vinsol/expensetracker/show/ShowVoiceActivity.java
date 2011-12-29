@@ -167,7 +167,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 		if (SHOW_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getBundleExtra("voiceShowBundle");
-				doTaskOnActivityResult(intentExtras);
+				doTaskOnActivityResult();
 				showDelete.setOnClickListener(this);
 				showPlayButton.setOnClickListener(this);
 				showStopButton.setOnClickListener(this);

@@ -27,5 +27,5 @@ public class TextEntry extends EditAbstract {
 		mIntent.putExtra("textShowBundle", tempBundle);
 		setResult(Activity.RESULT_OK, mIntent);
 	}
-
+	
 }
