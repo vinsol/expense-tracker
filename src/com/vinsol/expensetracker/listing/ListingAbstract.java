@@ -124,7 +124,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 					} else {
 						Intent intentCamera = new Intent(this,ShowCameraActivity.class);
 						intentCamera.putExtra("cameraShowBundle", bundle);
-						startActivityForResult(intentCamera,RESULT); // TODO getEdited list back and replace clicked list with listfetched
+						startActivityForResult(intentCamera,RESULT); 
 					}
 				} else {
 					Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
@@ -137,7 +137,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 				} else {
 					Intent intentTextShow = new Intent(this,ShowTextActivity.class);
 					intentTextShow.putExtra("textShowBundle", bundle);
-					startActivityForResult(intentTextShow,RESULT); // TODO getEdited list back and replace clicked list with listfetched
+					startActivityForResult(intentTextShow,RESULT); 
 				}
 			} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
@@ -148,7 +148,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 					} else {
 						Intent intentVoiceShow = new Intent(this,ShowVoiceActivity.class);
 						intentVoiceShow.putExtra("voiceShowBundle", bundle);
-						startActivityForResult(intentVoiceShow,RESULT); // TODO getEdited list back and replace clicked list with listfetched
+						startActivityForResult(intentVoiceShow,RESULT);
 					}
 				} else {
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
