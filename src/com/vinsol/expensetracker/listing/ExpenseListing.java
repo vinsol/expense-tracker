@@ -31,6 +31,7 @@ public class ExpenseListing extends ListingAbstract {
 	
 	@SuppressWarnings("unchecked")
 	private void initListView() {
+		mSeparatedListAdapter = new SeparatedListAdapter(this);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,"");
 		mSubList = mConvertCursorToListString.getListStringParticularDate("");

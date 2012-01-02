@@ -31,6 +31,7 @@ public class ExpenseSubListing extends ListingAbstract {
 	
 	@SuppressWarnings("unchecked")
 	private void initListView() {
+		mSeparatedListAdapter = new SeparatedListAdapter(this);
 		idList = getIntent().getStringExtra("idList");
 		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,idList);
