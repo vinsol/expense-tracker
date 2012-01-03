@@ -86,7 +86,6 @@ public class DatePickerDialog extends Dialog implements android.view.View.OnClic
 		boolean color = true;
 		if (isDateAfter(view)) {
 			textViewVisible();
-			// textViewVisible();
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			if (color) {

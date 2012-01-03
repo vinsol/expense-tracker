@@ -2,8 +2,6 @@ package com.vinsol.expensetracker.show;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.HashMap;
-
 import com.vinsol.expensetracker.DBAdapterFavorite;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
@@ -234,22 +232,15 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	public void onClickFavorite(Boolean toCheck) {
 		Long favID = null;
 		if(toCheck){
-			HashMap<String, String> list = new HashMap<String, String>();
-			list.put(DBAdapterFavorite.KEY_AMOUNT, mShowList.amount);
-			list.put(DBAdapterFavorite.KEY_TYPE, mShowList.type);
 			if(mShowList.type.equals(getString(R.string.text))) {
-				list.put(DBAdapterFavorite.KEY_TAG, mShowList.description);
 				mDbAdapterFavorite.open();
-				favID = mDbAdapterFavorite.insertToDatabase(list);
+				favID = mDbAdapterFavorite.insertToDatabase(mShowList);
 				mDbAdapterFavorite.close();
 			} else if(mShowList.type.equals(getString(R.string.camera))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					if(!mShowList.description.equals("") && !mShowList.description.equals(getString(R.string.unfinished_cameraentry)) && mShowList.description != null){
-						list.put(DBAdapterFavorite.KEY_TAG, mShowList.description);
-					}
 					try{
 						mDbAdapterFavorite.open();
-						favID = mDbAdapterFavorite.insertToDatabase(list);
+						favID = mDbAdapterFavorite.insertToDatabase(mShowList);
 						mDbAdapterFavorite.close();
 						new FileCopyFavorite(mShowList.id, favID.toString());
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+favID+".jpg");
@@ -268,12 +259,9 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 				}
 			} else if(mShowList.type.equals(getString(R.string.voice))){
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					if(!mShowList.description.equals("") && !mShowList.description.equals(getString(R.string.unfinished_voiceentry)) && mShowList.description != null){
-						list.put(DBAdapterFavorite.KEY_TAG, mShowList.description);
-					}
 					try{
 						mDbAdapterFavorite.open();
-						favID = mDbAdapterFavorite.insertToDatabase(list);
+						favID = mDbAdapterFavorite.insertToDatabase(mShowList);
 						mDbAdapterFavorite.close();
 						new FileCopyFavorite(mShowList.id,favID.toString());
 						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+favID+".amr");
@@ -288,14 +276,11 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
 				}
 			}
-			list = new HashMap<String, String>();
-			list.put(DatabaseAdapter.KEY_ID, mShowList.id);
-			list.put(DatabaseAdapter.KEY_FAVORITE, Long.toString(favID));
+			mShowList.favId = favID+"";
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.editDatabase(list);
+			mDatabaseAdapter.editDatabase(mShowList);
 			mDatabaseAdapter.close();
 			showAddFavorite.setChecked(true);
-			mShowList.favId = Long.toString(favID);
 			showAddFavoriteTextView.setText("Remove from Favorite");
 		} else if(mShowList.id.equals(getString(R.string.text))) {
 				mDatabaseAdapter.open();

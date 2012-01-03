@@ -1,8 +1,6 @@
 package com.vinsol.expensetracker.edit;
 
 import java.util.Calendar;
-import java.util.HashMap;
-
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.listing.ExpenseListing;
@@ -102,36 +100,43 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		}
 	}
 	
-	protected HashMap<String, String> getSaveEntryData(TextView editDateBarDateview,String dateViewString){
+	protected Entry getSaveEntryData(TextView editDateBarDateview,String dateViewString){
 		// ///// ******* Creating HashMap to update info ******* ////////
-		HashMap<String, String> list = new HashMap<String, String>();
-		list.put(DatabaseAdapter.KEY_ID, entry.id);
+		Entry list = new Entry();
+		list.id = entry.id;
+//		list.put(DatabaseAdapter.KEY_ID, entry.id);
 		entry.amount = editAmount.getText().toString();
 		entry.description = editTag.getText().toString();
 		if (!entry.amount.equals(".") && !entry.amount.equals("")) {
 			Double mAmount = Double.parseDouble(entry.amount);
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
-			list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
+			list.amount = mAmount+"";
+//			list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
 		} else {
-			list.put(DatabaseAdapter.KEY_AMOUNT, "");
+			list.amount = "";
+//			list.put(DatabaseAdapter.KEY_AMOUNT, "");
 		}
 		
-		list.put(DatabaseAdapter.KEY_TAG, entry.description);
+		list.description = entry.description;
+//		list.put(DatabaseAdapter.KEY_TAG, entry.description);
 		if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 			try {
 				if (!intentExtras.containsKey("mDisplayList")) {
 					DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
-					list.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
+					list.timeInMillis = mDateHelper.getTimeMillis();
+//					list.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
 				} else {
 					if(!intentExtras.containsKey("timeInMillis")){
 						DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
-						list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+						list.timeInMillis = mDateHelper.getTimeMillis();
+//						list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					} else {
 						Calendar mCalendar = Calendar.getInstance();
 						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
 						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString(),mCalendar);
-						list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+						list.timeInMillis = mDateHelper.getTimeMillis();
+//						list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					}
 				}
 			} catch (Exception e) {
@@ -139,16 +144,17 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		}
 		
 		if(setLocation == true && LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-				list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+			list.location = LocationHelper.currentAddress;
+//				list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
 		return list;
 	}
 	
-	protected Entry getListOnResult(HashMap<String, String> list){
+	protected Entry getListOnResult(Entry list){
 		Entry displayList = new Entry();
 		displayList.id = mEditList.id;
-		displayList.description = list.get(DatabaseAdapter.KEY_TAG);
-		displayList.amount = list.get(DatabaseAdapter.KEY_AMOUNT);
+		displayList.description = list.description;
+		displayList.amount = list.amount;
 		if(displayList.amount == null || displayList.amount.equals("")) {
 			displayList.amount = "?";
 		}
@@ -170,9 +176,11 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		
 		if((!mEditList.description.equals(displayList.description)) || isAmountNotEqual || isChanged ) {
 			isChanged = false;
-			HashMap<String, String> listForFav = new HashMap<String, String>();
-			listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
-			listForFav.put(DatabaseAdapter.KEY_ID, mEditList.id.toString());
+			Entry listForFav = new Entry();
+			listForFav.favId = "";
+//			listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
+			listForFav.id = mEditList.id;
+//			listForFav.put(DatabaseAdapter.KEY_ID, mEditList.id.toString());
 			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editDatabase(listForFav);
@@ -184,8 +192,8 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			
 		displayList.type = mEditList.type;	
 
-		if(list.containsKey(DatabaseAdapter.KEY_DATE_TIME)) {
-			displayList.timeInMillis = Long.parseLong(list.get(DatabaseAdapter.KEY_DATE_TIME));
+		if(list.timeInMillis != null) {
+			displayList.timeInMillis = list.timeInMillis;
 		} else {
 			displayList.timeInMillis = mEditList.timeInMillis;
 		}
@@ -196,7 +204,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 
 	protected void saveEntry() {
 		
-		HashMap<String, String> toSave = getSaveEntryData(dateBarDateview,dateViewString);
+		Entry toSave = getSaveEntryData(dateBarDateview,dateViewString);
 
 		// //// ******* Update database if user added additional info *******		 ///////
 		mDatabaseAdapter.open();
@@ -205,7 +213,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		if(!intentExtras.containsKey("isFromShowPage")) {
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			Bundle mToHighLight = new Bundle();
-			mToHighLight.putString("toHighLight", toSave.get(DatabaseAdapter.KEY_ID));
+			mToHighLight.putString("toHighLight", toSave.id);
 			intentExpenseListing.putExtras(mToHighLight);
 			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			if(!intentExtras.containsKey("position")) {	

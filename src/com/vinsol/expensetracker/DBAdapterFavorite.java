@@ -1,7 +1,6 @@
 package com.vinsol.expensetracker;
 
-import java.util.HashMap;
-
+import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.Log;
 
 import android.content.ContentValues;
@@ -55,11 +54,11 @@ public class DBAdapterFavorite {
 			db.execSQL("drop table " + TABLE_NAME);
 		}
 
-		public long insertToDatabase(HashMap<String, String> list) {
+		public long insertToDatabase(Favorite list) {
 			ContentValues contentValues = new ContentValues();
-			contentValues.put(KEY_TAG, list.get(KEY_TAG));
-			contentValues.put(KEY_AMOUNT, list.get(KEY_AMOUNT));
-			contentValues.put(KEY_TYPE, list.get(KEY_TYPE));
+			contentValues.put(KEY_TAG, list.description);
+			contentValues.put(KEY_AMOUNT, list.amount);
+			contentValues.put(KEY_TYPE, list.type);
 			Log.d("TRYING");
 			long id = db.insert(TABLE_NAME, null, contentValues);
 			Log.d("ADDED");
@@ -78,15 +77,15 @@ public class DBAdapterFavorite {
 			return true;
 		}
 
-		protected boolean editDatabase(HashMap<String, String> list) {
+		protected boolean editDatabase(Favorite list) {
 			ContentValues contentValues = new ContentValues();
-			if (list.get(KEY_TAG) != null)
-				contentValues.put(KEY_TAG, list.get(KEY_TAG));
-			if (list.get(KEY_AMOUNT) != null)
-				contentValues.put(KEY_AMOUNT, list.get(KEY_AMOUNT));
-			if (list.get(KEY_TYPE) != null)
-				contentValues.put(KEY_TYPE, list.get(KEY_TYPE));
-			String where = KEY_ID + "=" + list.get(KEY_ID);
+			if (list.description != null)
+				contentValues.put(KEY_TAG, list.description);
+			if (list.amount != null)
+				contentValues.put(KEY_AMOUNT, list.amount);
+			if (list.type != null)
+				contentValues.put(KEY_TYPE, list.type);
+			String where = KEY_ID + "=" + list.favId;
 			try {
 				Log.d("EDITING");
 				db.update(TABLE_NAME, contentValues, where, null);

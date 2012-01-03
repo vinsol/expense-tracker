@@ -2,7 +2,6 @@ package com.vinsol.expensetracker.listing;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -300,53 +299,53 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		String tag = adapterList.description;
 		String amount = adapterList.amount;
 		Long idCreated;
-		HashMap<String, String> toInsert = new HashMap<String, String>();
+		Entry toInsert = new Entry();
 		Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
 		expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		Bundle bundle = new Bundle();
 		
 		if(id != null){
-			toInsert.put(DatabaseAdapter.KEY_ID, Long.toString(id));
+			toInsert.id = id+"";
 		}
 
 		if(amount != null){
 			if(!amount.contains("?") && !amount.equals(""))
-				toInsert.put(DatabaseAdapter.KEY_AMOUNT, amount);
+				toInsert.amount = amount;
 		}
 		
 		if(favID != null) {
 			if(!favID.equals(""))
-				toInsert.put(DatabaseAdapter.KEY_FAVORITE, favID);
+				toInsert.favId = favID;
 		}
 		
 		if(type.equals(getString(R.string.camera))) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				try{
-					toInsert.put(DatabaseAdapter.KEY_TYPE, type);
+					toInsert.type = type;
 					if(tag != null) {
 						if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_cameraentry)) && !tag.equals(getString(R.string.finished_cameraentry)))
-							toInsert.put(DatabaseAdapter.KEY_TAG, tag);
+							toInsert.description = tag;
 					}
 					if(id == null) {
 						if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-							toInsert.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+							toInsert.location = LocationHelper.currentAddress;
 						}
 					}
 					if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 						try {
 							if (!intentExtras.containsKey("mDisplayList")) {
 								DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
-								toInsert.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
+								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
 								if(!intentExtras.containsKey("timeInMillis")){
 									DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
-									toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+									toInsert.timeInMillis = mDateHelper.getTimeMillis();
 								} else {
 									Calendar mCalendar = Calendar.getInstance();
 									mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
 									mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 									DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString(),mCalendar);
-									toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+									toInsert.timeInMillis = mDateHelper.getTimeMillis();
 								}
 							}
 						} catch (Exception e) {
@@ -378,7 +377,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						File mFileThumbnail = new File("/sdcard/ExpenseTracker/"+id+"_thumbnail.jpg");
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							bundle.putString("toHighLight", toInsert.get(DatabaseAdapter.KEY_ID));
+							bundle.putString("toHighLight", toInsert.id);
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
@@ -399,31 +398,31 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		} else if(type.equals(getString(R.string.voice))){
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				try{
-					toInsert.put(DatabaseAdapter.KEY_TYPE, type);
+					toInsert.type = type;
 					if(tag != null){
 						if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_voiceentry)) && !tag.equals(getString(R.string.finished_voiceentry)))
-							toInsert.put(DatabaseAdapter.KEY_TAG, tag);
+							toInsert.description = tag;
 					}
 					if(id == null){
 						if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-							toInsert.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+							toInsert.location = LocationHelper.currentAddress;
 						}
 					}
 					if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 						try {
 							if (!intentExtras.containsKey("mDisplayList")) {
 								DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
-								toInsert.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
+								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
 								if(!intentExtras.containsKey("timeInMillis")){
 									DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
-									toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+									toInsert.timeInMillis = mDateHelper.getTimeMillis();
 								} else {
 									Calendar mCalendar = Calendar.getInstance();
 									mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
 									mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 									DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString(),mCalendar);
-									toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+									toInsert.timeInMillis = mDateHelper.getTimeMillis();
 								}
 							}
 						} catch (Exception e) {
@@ -451,7 +450,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						File mFile = new File("/sdcard/ExpenseTracker/Audio/"+id+".amr");
 						if(mFile.canRead()){
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							bundle.putString("toHighLight", toInsert.get(DatabaseAdapter.KEY_ID));
+							bundle.putString("toHighLight", toInsert.id);
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
@@ -470,31 +469,31 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 			}
 		} else if(type.equals(getString(R.string.text))) {
 			try{
-				toInsert.put(DatabaseAdapter.KEY_TYPE, type);
+				toInsert.type = type;
 				if(tag != null){
 					if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_textentry)) && !tag.equals(getString(R.string.finished_textentry)))
-						toInsert.put(DatabaseAdapter.KEY_TAG, tag);
+						toInsert.description = tag;
 				}
 				if(id == null){
 					if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-						toInsert.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+						toInsert.location = LocationHelper.currentAddress;
 					}
 				}
 				if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 					try {
 						if (!intentExtras.containsKey("mDisplayList")) {
 							DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
-							toInsert.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
+							toInsert.timeInMillis = mDateHelper.getTimeMillis();
 						} else {
 							if(!intentExtras.containsKey("timeInMillis")){
 								DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
-								toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
 								Calendar mCalendar = Calendar.getInstance();
 								mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
 								mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString(),mCalendar);
-								toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							}
 						}
 					} catch (Exception e) {
@@ -512,7 +511,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					mDatabaseAdapter.open();
 					mDatabaseAdapter.editDatabase(toInsert);
 					mDatabaseAdapter.close();
-					bundle.putString("toHighLight", toInsert.get(DatabaseAdapter.KEY_ID));
+					bundle.putString("toHighLight", toInsert.id);
 					expenseListingIntent.putExtras(bundle);
 					startActivity(expenseListingIntent);
 					finish();

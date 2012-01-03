@@ -1,8 +1,6 @@
 package com.vinsol.expensetracker.listing;
 
 import java.util.Calendar;
-import java.util.HashMap;
-
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
@@ -167,9 +165,9 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	}
 	
 	private void editDatabase(int type) {
-		HashMap<String, String> list = new HashMap<String, String>();
-		list.put(DatabaseAdapter.KEY_ID,mTempClickedList.id);
-		list.put(DatabaseAdapter.KEY_TYPE, getContext().getString(type));
+		Entry list = new Entry();
+		list.id = mTempClickedList.id;
+		list.type = getContext().getString(type);
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editDatabase(list);
 		mDatabaseAdapter.close();

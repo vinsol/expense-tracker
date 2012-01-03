@@ -1,8 +1,6 @@
 package com.vinsol.expensetracker;
 
 import java.util.Calendar;
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
@@ -157,21 +155,21 @@ public class Home extends Activity implements OnClickListener {
 	// /////// ******** function to mark entry into the database and returns the
 	// id of the new entry ***** //////
 	private Long insertToDatabase(int type) {
-		HashMap<String, String> list = new HashMap<String, String>();
+		Entry list = new Entry();
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if (timeInMillis == 0)
-			list.put(DatabaseAdapter.KEY_DATE_TIME,Long.toString(mCalendar.getTimeInMillis()));
+			list.timeInMillis = mCalendar.getTimeInMillis();
 		else {
 			bundle.putLong("timeInMillis", timeInMillis);
-			list.put(DatabaseAdapter.KEY_DATE_TIME,Long.toString(timeInMillis));
+			list.timeInMillis = timeInMillis;
 			finish();
 		}
 
 		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-			list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+			list.location = LocationHelper.currentAddress;
 		}
-		list.put(DatabaseAdapter.KEY_TYPE, getString(type));
+		list.type = getString(type);
 		mDatabaseAdapter.open();
 		long id = mDatabaseAdapter.insertToDatabase(list);
 		mDatabaseAdapter.close();

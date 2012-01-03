@@ -1,8 +1,6 @@
 package com.vinsol.expensetracker;
 
 import java.util.Calendar;
-import java.util.HashMap;
-
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
@@ -140,23 +138,19 @@ public class GroupedIconDialogClickListener implements OnClickListener{
 	// /////// ******** function to mark entry into the database and returns the
 	// id of the new entry ***** //////
 	private long insertToDatabase(int type, Entry toInsert) {
-		HashMap<String, String> list = new HashMap<String, String>();
-		Calendar mCalendar = Calendar.getInstance();
-		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		if(timeInMillis != 0)
 			bundle.putLong("timeInMillis", toInsert.timeInMillis);
 		else 
 			bundle.putLong("timeInMillis", toInsert.timeInMillis);
-		list.put(DatabaseAdapter.KEY_DATE_TIME,toInsert.timeInMillis.toString());
 		Activity activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		activity.finish();
 		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-			list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+			toInsert.location = LocationHelper.currentAddress;
 		}
-		list.put(DatabaseAdapter.KEY_TYPE, mContext.getString(type));
+		toInsert.type = mContext.getString(type);
 		DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
 		mDatabaseAdapter.open();
-		long id = mDatabaseAdapter.insertToDatabase(list);
+		long id = mDatabaseAdapter.insertToDatabase(toInsert);
 		mDatabaseAdapter.close();
 		return id;
 	}

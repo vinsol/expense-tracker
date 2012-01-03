@@ -2,8 +2,7 @@ package com.vinsol.expensetracker.utils;
 
 public class DisplayTimeForChronometer {
 
-	// ////// ******** Function which take time in millis and return time in
-	// 00:00 format ******* ////////
+	// ////// ******** Function which take time in millis and return time in 00:00 format ******* ////////
 	public String getDisplayTime(long timeinmillis) {
 		String minutes = "00";
 		if (timeinmillis >= 60000) {

@@ -2,8 +2,6 @@ package com.vinsol.expensetracker.edit;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -26,6 +24,7 @@ import com.vinsol.expensetracker.helpers.CameraFileSave;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.FileDelete;
 import com.vinsol.expensetracker.helpers.LocationHelper;
+import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
 public class CameraActivity extends EditAbstract {
@@ -73,22 +72,22 @@ public class CameraActivity extends EditAbstract {
 		if(entry.id == null ) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				
-				HashMap<String, String> toInsert = new HashMap<String, String>();
+				Entry toInsert = new Entry();
 				if (!dateBarDateview.getText().toString().equals(dateViewString)) {
 					try {
 						if (!intentExtras.containsKey("mDisplayList")) {
 							DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString());
-							toInsert.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
+							toInsert.timeInMillis = mDateHelper.getTimeMillis();
 						} else {
 							if(!intentExtras.containsKey("timeInMillis")){
 								DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString());
-								toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
 								Calendar mCalendar = Calendar.getInstance();
 								mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
 								mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString(),mCalendar);
-								toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
+								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							}
 						}
 					} catch (Exception e) {
@@ -96,14 +95,14 @@ public class CameraActivity extends EditAbstract {
 				} else {
 					Calendar mCalendar = Calendar.getInstance();
 					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-					toInsert.put(DatabaseAdapter.KEY_DATE_TIME, mCalendar.getTimeInMillis()+"");
+					toInsert.timeInMillis = mCalendar.getTimeInMillis();
 				}
 				
 				if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-					toInsert.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
+					toInsert.location = LocationHelper.currentAddress;
 				}
 				
-				toInsert.put(DatabaseAdapter.KEY_TYPE, getString(R.string.camera));
+				toInsert.type = getString(R.string.camera);
 				mDatabaseAdapter.open();
 				entry.id = mDatabaseAdapter.insertToDatabase(toInsert).toString();
 				mDatabaseAdapter.close();
