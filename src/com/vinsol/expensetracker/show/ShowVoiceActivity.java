@@ -201,7 +201,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 			}
 		}
 
-		if(resultCode == Activity.RESULT_CANCELED){
+		if(resultCode == Activity.RESULT_CANCELED) {
 			finish();
 		}
 	}

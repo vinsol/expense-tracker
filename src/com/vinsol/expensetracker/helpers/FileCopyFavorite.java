@@ -63,7 +63,7 @@ public class FileCopyFavorite {
 			OutputStream out = new FileOutputStream(target);
 			byte[] buf = new byte[1024];
 			int len;
-			while ((len = in.read(buf)) > 0){
+			while ((len = in.read(buf)) > 0) {
 				out.write(buf, 0, len);
 			}
 		} catch (Exception e) {

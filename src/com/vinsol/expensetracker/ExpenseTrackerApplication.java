@@ -13,7 +13,7 @@ public class ExpenseTrackerApplication extends Application {
         applicationContext = this;
     }
     
-    public static Context getContext(){
+    public static Context getContext() {
     	return applicationContext;
     }
 }

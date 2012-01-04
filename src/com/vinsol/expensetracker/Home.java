@@ -115,7 +115,7 @@ public class Home extends Activity implements OnClickListener {
 			
 		// //// ******* opens Favorite Activity ******** ///////////
 		case R.id.main_favorite:
-			if(new ConvertCursorToListString(this).getFavoriteList().size() >=1){
+			if(new ConvertCursorToListString(this).getFavoriteList().size() >=1) {
 				Intent intentFavorite = new Intent(this, FavoriteActivity.class);
 				bundle = new Bundle();
 				intentFavorite.putExtra("favoriteBundle", bundle);

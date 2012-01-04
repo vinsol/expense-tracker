@@ -21,8 +21,8 @@ public class CheckEntryComplete {
 		return false;
 	}
 	
-	private boolean isAmountValid(String amount){
-		if( amount!= null){
+	private boolean isAmountValid(String amount) {
+		if( amount!= null) {
 			if (amount.contains("?")) {
 				return false;
 			} else {
@@ -34,7 +34,7 @@ public class CheckEntryComplete {
 		}
 	}
 	private boolean isTagValid(String tag,Context context) {
-		if(tag != null){
+		if(tag != null) {
 			if (tag.equals("") || tag.equals(context.getString(R.string.unfinished_textentry)) || tag.equals(context.getString(R.string.finished_textentry))) {
 				return false;
 			} else {

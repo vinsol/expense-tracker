@@ -185,7 +185,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 				if (mlist.type.equals(mContext.getString(R.string.camera))) {
 					
-					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)){
+					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					} else {
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
@@ -207,7 +207,7 @@ class SeparatedListAdapter extends BaseAdapter {
 						holderBody.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
 					}
 				} else if (mlist.type.equals(mContext.getString(R.string.text))) {
-					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)){
+					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					} else {
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
@@ -224,7 +224,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unknown_states);
 				} else if (mlist.type.equals(mContext.getString(R.string.voice))) {
 
-					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)){
+					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 					} else {
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
@@ -237,14 +237,14 @@ class SeparatedListAdapter extends BaseAdapter {
 					}
 				} 
 				if (mlist.favId != null) {
-					if(!mlist.favId.equals("")){
+					if(!mlist.favId.equals("")) {
 						try{
-							if(isCurrentWeek(mDatadateList.get(sectionnum).dateTime)){
+							if(isCurrentWeek(mDatadateList.get(sectionnum).dateTime)) {
 								holderBody.rowFavoriteIcon.setVisibility(View.VISIBLE);
 							} else {
 								holderBody.rowFavoriteIcon.setVisibility(View.INVISIBLE);
 							}
-						}catch(Exception e){
+						}catch(Exception e) { 
 							
 						}
 					}else {
@@ -333,7 +333,6 @@ class SeparatedListAdapter extends BaseAdapter {
 						} else if (mListenerList.type.equals(mContext.getString(R.string.camera))) {
 							File mFile = new File("/sdcard/ExpenseTracker/" + mListenerList.id + ".jpg");
 							if (mFile.canRead()) {
-								
 								Intent intent = new Intent(mContext, ImagePreview.class);
 								intent.putExtra("id", mListenerList.id);
 								mContext.startActivity(intent);

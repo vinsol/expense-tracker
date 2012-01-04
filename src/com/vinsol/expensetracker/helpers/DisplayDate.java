@@ -17,7 +17,7 @@ public class DisplayDate {
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 	}
 	
-	public Calendar getCalendar(){
+	public Calendar getCalendar() {
 		return mCalendar;
 	}
 
@@ -78,7 +78,7 @@ public class DisplayDate {
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		month = getMonth(mCalendar.get(Calendar.MONTH));
 		year = mCalendar.get(Calendar.YEAR) + "";
-		if(isCurrentMonth()){
+		if(isCurrentMonth()) {
 			return getDisplayDate();
 		}
 		
@@ -95,7 +95,7 @@ public class DisplayDate {
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		month = getMonth(mCalendar.get(Calendar.MONTH));
 		year = mCalendar.get(Calendar.YEAR) + "";
-		if(isCurrentMonth()){
+		if(isCurrentMonth()) {
 			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
 		}
 		
@@ -113,7 +113,7 @@ public class DisplayDate {
 		month = getMonth(mCalendar.get(Calendar.MONTH));
 		year = mCalendar.get(Calendar.YEAR) + "";
 		
-		if(isCurrentMonth() || isPrevMonths() || isPrevYears()){
+		if(isCurrentMonth() || isPrevMonths() || isPrevYears()) {
 			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
 		}
 		
@@ -170,8 +170,7 @@ public class DisplayDate {
 		return false;
 	}
 
-	// ////// ******* Function which returns month as string ********
-	// ///////////
+	// ////// ******* Function which returns month as string ********///////////
 	private String getMonth(int i) {
 		switch (i) {
 		case 0:
@@ -214,8 +213,7 @@ public class DisplayDate {
 		}
 
 		if (isPrevYears()) {
-			return getMonth(mCalendar.get(Calendar.MONTH)) + " "
-					+ mCalendar.get(Calendar.YEAR) + "";
+			return getMonth(mCalendar.get(Calendar.MONTH)) + " " + mCalendar.get(Calendar.YEAR) + "";
 		}
 		return null;
 	}
@@ -232,22 +230,22 @@ public class DisplayDate {
 		if (hour == 0) {
 			hour = 12;
 		}
-		if(locationData == null || locationData.equals("")){
+		if(locationData == null || locationData.equals("")) {
 				locationData = "Unknown location";
 		}
-		if (tempCalendar.get(Calendar.MINUTE) != 0){
-			if (tempCalendar.get(Calendar.AM_PM) == 1){
+		if (tempCalendar.get(Calendar.MINUTE) != 0) {
+			if (tempCalendar.get(Calendar.AM_PM) == 1) {
 				return hour + ":" + minute + " " + "PM" + " at " + locationData;
 			}
-			if (tempCalendar.get(Calendar.AM_PM) == 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 0) {
 				return hour + ":" + minute + " " + "AM" + " at " + locationData;
 			}
 		}
-		else{
-			if (tempCalendar.get(Calendar.AM_PM) == 1){
+		else {
+			if (tempCalendar.get(Calendar.AM_PM) == 1) {
 				return hour + "" + " " + "PM" + " at " + locationData;
 			}
-			if (tempCalendar.get(Calendar.AM_PM) == 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 0) {
 				return hour + ":" + " " + "AM" + " at " + locationData;
 			}
 		}

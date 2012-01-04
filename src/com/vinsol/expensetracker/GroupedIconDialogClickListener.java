@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
-public class GroupedIconDialogClickListener implements OnClickListener{
+public class GroupedIconDialogClickListener implements OnClickListener {
 	
 	private UnknownEntryDialog unknownDialog;
 	private Context mContext;
@@ -29,7 +29,7 @@ public class GroupedIconDialogClickListener implements OnClickListener{
 		this.unknownDialog = unknownDialog;
 		this.mContext = mContext;
 		if(bundle != null) {
-			if(!bundle.isEmpty()){
+			if(!bundle.isEmpty()) {
 				this.bundle = bundle;
 			} else {
 				this.bundle = new Bundle();
@@ -101,7 +101,7 @@ public class GroupedIconDialogClickListener implements OnClickListener{
 				// //// ******* opens Favorite Activity ******** ///////////
 				case R.id.main_favorite:
 					
-					if(new ConvertCursorToListString(mContext).getFavoriteList().size() >=1){
+					if(new ConvertCursorToListString(mContext).getFavoriteList().size() >=1) {
 						Intent intentFavorite = new Intent(mContext, FavoriteActivity.class);
 						if (timeInMillis != 0) {
 							bundle.putLong("timeInMillis", timeInMillis);

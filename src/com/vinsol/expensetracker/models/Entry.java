@@ -3,7 +3,7 @@ package com.vinsol.expensetracker.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Entry extends Favorite implements Parcelable{
+public class Entry extends Favorite implements Parcelable {
 	
 	public String id;
 	public Long timeInMillis;

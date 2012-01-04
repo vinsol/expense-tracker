@@ -86,7 +86,6 @@ public class ShowCameraActivity extends ShowAbstract {
 				Intent intent = new Intent(this, ImagePreview.class);
 				intent.putExtra("id", mShowList.id);
 				startActivity(intent);
-
 			} else {
 				Toast.makeText(this, "Error Opening Image", Toast.LENGTH_SHORT).show();
 			}
@@ -95,7 +94,6 @@ public class ShowCameraActivity extends ShowAbstract {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
 		super.onActivityResult(requestCode, resultCode, data);
 		if (SHOW_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
@@ -117,15 +115,13 @@ public class ShowCameraActivity extends ShowAbstract {
 					mShowList = intentExtras.getParcelable("mDisplayList");
 					FavoriteHelper();
 				}
-
 				showImageDisplay.setOnClickListener(this);
 				showDelete.setOnClickListener(this);
 				showEdit.setOnClickListener(this);
 			}
 		}
-		
 
-		if(resultCode == Activity.RESULT_CANCELED){
+		if(resultCode == Activity.RESULT_CANCELED) {
 			finish();
 		}
 	}

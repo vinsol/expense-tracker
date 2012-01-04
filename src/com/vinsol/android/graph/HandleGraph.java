@@ -27,7 +27,7 @@ import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.GraphDataList;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 
-public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickListener{
+public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickListener {
 
 	private List<ListDatetimeAmount> mDataDateListGraph;
 	private ConvertCursorToListString mConvertCursorToListString;
@@ -90,11 +90,11 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 			if(mGraphList.size() >= 1 ) {
 				barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
 				mainGraph.addView(barGraph, params);
-				if(j == mGraphList.size()-1){
+				if(j == mGraphList.size()-1) {
 					graphPreviousArrow.setVisibility(View.INVISIBLE);
 				}
-				if(j == 0){
-					if(!isNotNullAll(mGraphList.get(j).get(0))){
+				if(j == 0) {
+					if(!isNotNullAll(mGraphList.get(j).get(0))) {
 						mainGraph.removeView(barGraph);
 						graphNoItem();
 						mainGraph.addView(graphNoItem);
@@ -116,7 +116,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		super.onPostExecute(result);
 	}
 	
-	private void graphNoItem(){
+	private void graphNoItem() {
 		graphNoItem = new TextView(mContext);
 		graphNoItem.setGravity(Gravity.CENTER);
 		graphNoItem.setText("No Items to Show");
@@ -127,7 +127,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		graphNoItem.setLayoutParams(textParams);
 	}
 	
-	private ArrayList<ArrayList<ArrayList<String>>> getGraphList(){
+	private ArrayList<ArrayList<ArrayList<String>>> getGraphList() {
 		DisplayDate lastDateDisplayDate = new DisplayDate(lastDateCalendar);
 		ArrayList<ArrayList<ArrayList<String>>> graphList = new ArrayList<ArrayList<ArrayList<String>>>();
 		Calendar mTempCalender = Calendar.getInstance();
@@ -140,12 +140,12 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		ArrayList<String> mArrayValues = new ArrayList<String>();
 		ArrayList<String> mArrayHorLabels = new ArrayList<String>();
 		List<GraphDataList> mList = getDateIDList();
-		while(lastDateCalendar.before(mTempCalender) || lastDateDisplayDate.getDisplayDateGraph().equals(new DisplayDate(mTempCalender).getDisplayDateGraph())){
+		while(lastDateCalendar.before(mTempCalender) || lastDateDisplayDate.getDisplayDateGraph().equals(new DisplayDate(mTempCalender).getDisplayDateGraph())) {
 			DisplayDate mDisplayDate = new DisplayDate(mTempCalender);
-			while(mDisplayDate.isCurrentWeek()){
+			while(mDisplayDate.isCurrentWeek()) {
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				if(j < mList.size()) {
-					if(mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())){
+					if(mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())) {
 						mArrayIDList.add(mList.get(j).idList);
 						mArrayValues.add(mList.get(j).amount);
 						mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
@@ -162,8 +162,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				}
 				mTempCalender.add(Calendar.DATE, -1);
 				mDisplayDate = new DisplayDate(mTempCalender);
-				if(!mDisplayDate.isCurrentWeek()){
-					if(mArrayIDList.size() >= 1){
+				if(!mDisplayDate.isCurrentWeek()) {
+					if(mArrayIDList.size() >= 1) {
 						Collections.reverse(mArrayIDList);
 						Collections.reverse(mArrayValues);
 						Collections.reverse(mArrayHorLabels);
@@ -182,12 +182,12 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				}
 			} 
 
-			if(!mDisplayDate.isCurrentWeek() && mDisplayDate.isCurrentMonth()){
+			if(!mDisplayDate.isCurrentWeek() && mDisplayDate.isCurrentMonth()) {
 				
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
-				while(mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
+				while(mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)) {
 					if(j < mList.size()) {
-						if(mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())){
+						if(mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())) {
 							mArrayIDList.add(mList.get(j).idList);
 							mArrayValues.add(mList.get(j).amount);
 							mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
@@ -204,8 +204,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 					}
 					mTempCalender.add(Calendar.DATE, -1);
 					mDisplayDate = new DisplayDate(mTempCalender);
-					if(!mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
-						if(mArrayIDList.size() >= 1){
+					if(!mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)) {
+						if(mArrayIDList.size() >= 1) {
 							Collections.reverse(mArrayIDList);
 							Collections.reverse(mArrayValues);
 							Collections.reverse(mArrayHorLabels);
@@ -226,16 +226,14 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				}
 			}
 			
-			
-			if(mDisplayDate.isPrevMonths() || mDisplayDate.isPrevYears()){
-				
+			if(mDisplayDate.isPrevMonths() || mDisplayDate.isPrevYears()) {
 				mTempCalender.set(Calendar.DAY_OF_MONTH, mTempCalender.getActualMaximum(Calendar.DAY_OF_MONTH));
 				mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 				mDisplayDate = new DisplayDate(mTempCalender);
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
-				while(mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
+				while(mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)) {
 					if(j < mList.size()) {
-						if(mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())){
+						if(mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())) {
 							mArrayIDList.add(mList.get(j).idList);
 							mArrayValues.add(mList.get(j).amount);
 							mArrayHorLabels.add("W "+mTempCalender.get(Calendar.WEEK_OF_MONTH));
@@ -254,8 +252,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 					mTempCalender.set(Calendar.DAY_OF_WEEK, mTempCalender.getActualMinimum(Calendar.DAY_OF_WEEK));
 					mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 					mDisplayDate = new DisplayDate(mTempCalender);
-					if(!mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)){
-						if(mArrayIDList.size() >= 1){
+					if(!mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)) {
+						if(mArrayIDList.size() >= 1) {
 							Collections.reverse(mArrayIDList);
 							Collections.reverse(mArrayValues);
 							Collections.reverse(mArrayHorLabels);
@@ -281,8 +279,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	}
 
 	private boolean isNotNullAll(ArrayList<String> mArrayIDList) {
-		for(int i = 0;i<mArrayIDList.size();i++){
-			if(mArrayIDList.get(i) != null){
+		for(int i = 0;i<mArrayIDList.size();i++) {
+			if(mArrayIDList.get(i) != null) {
 				return true;
 			}
 		}
@@ -383,11 +381,11 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 				graphPreviousArrow.setVisibility(View.VISIBLE);
 				graphNextArrow.setVisibility(View.VISIBLE);
 				
-				if(j == mGraphList.size()-1){
+				if(j == mGraphList.size()-1) {
 					graphPreviousArrow.setVisibility(View.INVISIBLE);
 				}
-				if(j == 0){
-					if(!isNotNullAll(mGraphList.get(j).get(0))){
+				if(j == 0) {
+					if(!isNotNullAll(mGraphList.get(j).get(0))) {
 						mainGraph.removeView(barGraph);
 						graphNoItem();
 						mainGraph.addView(graphNoItem);

@@ -36,10 +36,10 @@ public class ExpenseSubListing extends ListingAbstract {
 		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,idList);
 		mSubList = mConvertCursorToListString.getListStringParticularDate(idList);
-		if(mSubList.size() > 0){
+		if(mSubList.size() > 0) {
 			Bundle intentExtras = getIntent().getExtras();
 			if(intentExtras != null){
-				if(intentExtras.containsKey("toHighLight")){
+				if(intentExtras.containsKey("toHighLight")) {
 					highlightID = intentExtras.getString("toHighLight");
 				}
 			}

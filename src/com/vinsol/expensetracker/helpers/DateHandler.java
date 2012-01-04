@@ -35,7 +35,7 @@ public class DateHandler implements OnClickListener {
 		doCommonTaskAfter(mContext);
 	}
 	
-	private void doCommonTaskBefore(Context mContext){
+	private void doCommonTaskBefore(Context mContext) {
 		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
 		mCalendar = Calendar.getInstance();
 	}

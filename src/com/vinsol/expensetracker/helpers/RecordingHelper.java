@@ -17,8 +17,7 @@ public class RecordingHelper {
 	// ////// ********* Constructor ********* //////////
 	public RecordingHelper(String mFileName, Context _context) {
 		mRecorder = new MediaRecorder();
-		if (android.os.Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED)) {
+		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			File mDirectory = new File("/mnt/sdcard/ExpenseTracker/Audio");
 			mDirectory.mkdirs();
 			File mPath = new File(mDirectory, mFileName + ".amr");
@@ -34,39 +33,31 @@ public class RecordingHelper {
 
 	// ///// ********* Function to start recording ********* /////////
 	public void startRecording() {
-		if (android.os.Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED)) {
+		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			try {
 				mRecorder.prepare();
 				mRecorder.start();
 				isRecording = true;
 			} catch (IllegalStateException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		} else {
-			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 	}
 
 	// ////// *********** Function to stop recording ********** //////////
 	public void stopRecording() {
-		if (android.os.Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED)) {
+		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			if (isRecording) {
 				mRecorder.stop();
 				mRecorder.release();
 				isRecording = false;
 			}
-		} else {
-
 		}
 	}
 
-	// ////// ********** Function to check whether recorder is running or not
-	// ******** /////////
+	// ////// ********** Function to check whether recorder is running or not ******** /////////
 	public boolean isRecording() {
 		return isRecording;
 	}

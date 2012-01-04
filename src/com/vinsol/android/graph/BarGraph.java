@@ -86,7 +86,7 @@ public class BarGraph extends View {
 			interval = 1;
 		} 
 		
-		if (interval == 2.5){
+		if (interval == 2.5) {
 			interval = 3;
 		}
 		
@@ -100,16 +100,16 @@ public class BarGraph extends View {
 		TextView mTextViewTemp = new TextView(getContext());
 		mTextViewTemp.setTextSize(TypedValue.COMPLEX_UNIT_DIP,5);
 		paint.setTypeface(Typeface.DEFAULT_BOLD);
-		for(int i=0;i<6;i++){
-			if(value % 1000000000 == 0 && i != 0){
+		for(int i=0;i<6;i++) {
+			if(value % 1000000000 == 0 && i != 0) {
 				value = value/1000000000;
 				canvas.drawText(value+"B", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
 				value = value * 1000000000;
-			} else if(value % 1000000 == 0 && i != 0){
+			} else if(value % 1000000 == 0 && i != 0) {
 				value = value/1000000;
 				canvas.drawText(value+"M", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
 				value = value*1000000;
-			} else if(value % 1000 == 0 && i != 0){
+			} else if(value % 1000 == 0 && i != 0) {
 				value = value/1000;
 				canvas.drawText(value+"K", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
 				value = value*1000;
@@ -147,7 +147,7 @@ public class BarGraph extends View {
 			canvas.drawRect(mRectF,paint);
 			canvas.drawText(horLabels.get(i), originX+value, topY+mTextViewTemp.getTextSize(), textPaint);
 			if(values.get(i) != null) {
-				if(values.get(i).contains("?")){
+				if(values.get(i).contains("?")) {
 					textPaint.setTextAlign(Align.LEFT);
 					canvas.drawText("?", originX+value-(barWidth/2), topY-(int)((tempDouble/max)*verDiff)-5, textPaint);
 					textPaint.setTextAlign(Align.RIGHT);
@@ -165,7 +165,7 @@ public class BarGraph extends View {
 		canvas.drawLine(originX, originY, rightX, rightY, paint);
 	}
 
-	private void drawVerticalLine(Canvas canvas){
+	private void drawVerticalLine(Canvas canvas) {
 		int originX = (int) ((15.83/100)*width);
 		int originY = (int) ((9.0/100)*height);
 		int topX = originX;
@@ -176,7 +176,7 @@ public class BarGraph extends View {
 	
 	private Double getMax() {
 		Double largest = 0.0;
-		for (int i = 0; i < values.size(); i++){
+		for (int i = 0; i < values.size(); i++) {
 			Double tempDouble = getDouble(i);
 			if (tempDouble > largest)
 				largest = tempDouble;
@@ -194,12 +194,12 @@ public class BarGraph extends View {
 				return 0.0;
 			}
 			if(values.get(i).contains("?")) {
-				try{
-					if(values.get(i).length() > 1){
+				try {
+					if(values.get(i).length() > 1) {
 						String tempString = (String) values.get(i).subSequence(0, values.get(i).length()-1);
 					return Double.parseDouble(tempString);
 					}
-				} catch (Exception e){
+				} catch (Exception e) {
 					return 0.00;
 				}
 			} else {

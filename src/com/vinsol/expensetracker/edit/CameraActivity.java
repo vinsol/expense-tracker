@@ -51,7 +51,7 @@ public class CameraActivity extends EditAbstract {
 		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
 		editHelper();
 		if (intentExtras.containsKey("mDisplayList")) {
-			if(setUnknown){
+			if(setUnknown) {
 				startCamera();
 			}
 			File mFile = new File("/sdcard/ExpenseTracker/" + entry.id + "_small.jpg");
@@ -79,7 +79,7 @@ public class CameraActivity extends EditAbstract {
 							DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString());
 							toInsert.timeInMillis = mDateHelper.getTimeMillis();
 						} else {
-							if(!intentExtras.containsKey("timeInMillis")){
+							if(!intentExtras.containsKey("timeInMillis")) {
 								DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString());
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {

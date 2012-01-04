@@ -60,11 +60,11 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		cancelButton.setOnClickListener(myClickListener);
 		
 		if(toInsert.location != null)
-			if(!toInsert.location.equals("")){
+			if(!toInsert.location.equals("")) {
 				locationTextView.setText(toInsert.location);
 			}
 		
-		if(toInsert.timeInMillis != null){
+		if(toInsert.timeInMillis != null) {
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(toInsert.timeInMillis);
 			headerTextView.setText(new DisplayDate(mCalendar).getDisplayDate());
@@ -85,11 +85,11 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		mTempClickedList = _list;
 		
 		if(mTempClickedList.location != null)
-			if(mTempClickedList.location != ""){
+			if(mTempClickedList.location != "") {
 				locationTextView.setText(mTempClickedList.location);
 			}
 		
-		if(mTempClickedList.timeInMillis != null){
+		if(mTempClickedList.timeInMillis != null) {
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.setTimeInMillis(mTempClickedList.timeInMillis);
 			headerTextView.setText(new DisplayDate(mCalendar).getDisplayDate());
@@ -144,7 +144,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				break;
 				
 			case R.id.main_favorite:
-				if(new ConvertCursorToListString(getContext()).getFavoriteList().size() >=1){
+				if(new ConvertCursorToListString(getContext()).getFavoriteList().size() >=1) {
 					Intent intentFavorite = new Intent(getContext(), FavoriteActivity.class);
 					bundle.putParcelable("mDisplayList", mTempClickedList);
 					intentFavorite.putExtra("favoriteBundle", bundle);

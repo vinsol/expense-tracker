@@ -21,7 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-abstract class EditAbstract extends Activity implements OnClickListener{
+abstract class EditAbstract extends Activity implements OnClickListener {
 	protected Entry mEditList;
 	protected boolean setLocation = false;
 	protected EditText editAmount;
@@ -67,7 +67,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		if (intentExtras.containsKey("_id"))
 			entry.id = intentExtras.getLong("_id")+"";
 
-		if(intentExtras.containsKey("setLocation")){
+		if(intentExtras.containsKey("setLocation")) {
 			setLocation = intentExtras.getBoolean("setLocation");
 		}
 		
@@ -80,7 +80,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 				if (!entry.amount.contains("?"))
 					editAmount.setText(entry.amount);
 			}
-			if(entry.description.equals(getString(R.string.unknown_entry)) || mEditList.description.equals(getString(R.string.unknown))){
+			if(entry.description.equals(getString(R.string.unknown_entry)) || mEditList.description.equals(getString(R.string.unknown))) {
 				setUnknown = true;
 			}
 			
@@ -100,7 +100,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		}
 	}
 	
-	protected Entry getSaveEntryData(TextView editDateBarDateview,String dateViewString){
+	protected Entry getSaveEntryData(TextView editDateBarDateview,String dateViewString) {
 		// ///// ******* Creating HashMap to update info ******* ////////
 		Entry list = new Entry();
 		list.id = entry.id;
@@ -121,7 +121,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 					DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 					list.timeInMillis = mDateHelper.getTimeMillis();
 				} else {
-					if(!intentExtras.containsKey("timeInMillis")){
+					if(!intentExtras.containsKey("timeInMillis")) {
 						DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 						list.timeInMillis = mDateHelper.getTimeMillis();
 					} else {
@@ -142,7 +142,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		return list;
 	}
 	
-	protected Entry getListOnResult(Entry list){
+	protected Entry getListOnResult(Entry list) {
 		Entry displayList = new Entry();
 		displayList.id = mEditList.id;
 		displayList.description = list.description;
@@ -160,9 +160,9 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		}	
 		
 		Boolean isAmountNotEqual = false;
-		try{
+		try {
 			isAmountNotEqual = Double.parseDouble(new StringProcessing().getStringDoubleDecimal(displayList.amount)) != Double.parseDouble(mEditList.amount);
-		}catch(Exception e){
+		}catch(Exception e) {
 			isAmountNotEqual = true;
 		}
 		

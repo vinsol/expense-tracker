@@ -26,7 +26,7 @@ public class ConvertCursorToListString {
 		DBAdapterFavorite mDbAdapterFavorite = new DBAdapterFavorite(context);
 		mDbAdapterFavorite.open();
 		Cursor cursor = mDbAdapterFavorite.getCompleteDatabase();
-		if(cursor.getCount() >= 1){
+		if(cursor.getCount() >= 1) {
 			cursor.moveToFirst();
 			do {
 				listFavorite = new Favorite();
@@ -42,8 +42,8 @@ public class ConvertCursorToListString {
 		return mainlist;
 	}
 	
-	private String getValue(DisplayDate mDisplayDate,boolean isGraph,String id){
-		if(isGraph == true){
+	private String getValue(DisplayDate mDisplayDate,boolean isGraph,String id) {
+		if(isGraph == true) {
 			return mDisplayDate.getDisplayDateHeaderGraph();
 		} else {
 			if(id == null || id.equals(""))
@@ -59,7 +59,7 @@ public class ConvertCursorToListString {
 		adapter.open();
 		Cursor cursor;
 		StringProcessing mStringProcessing = new StringProcessing();
-		if(id == null || id.equals("")){
+		if(id == null || id.equals("")) {
 			cursor = adapter.getDateDatabase();
 		} else {
 			cursor = adapter.getDateDatabase(id);
@@ -119,7 +119,7 @@ public class ConvertCursorToListString {
 		return mainlist;
 	}
 		
-	private String getTotalAmount(Boolean isTempAmountNull,double temptotalAmount,String totalAmountString){
+	private String getTotalAmount(Boolean isTempAmountNull,double temptotalAmount,String totalAmountString) {
 		if (isTempAmountNull) {
 			if (temptotalAmount != 0) {
 				totalAmountString = temptotalAmount + " ?";
@@ -136,7 +136,7 @@ public class ConvertCursorToListString {
 		DatabaseAdapter adapter = new DatabaseAdapter(context);
 		adapter.open();
 		Cursor cursor;
-		if(id == null || id.equals("")){
+		if(id == null || id.equals("")) {
 			cursor = adapter.getDateDatabase();
 		} else {
 			cursor = adapter.getDateDatabase(id);

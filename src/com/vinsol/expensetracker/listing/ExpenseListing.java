@@ -36,8 +36,8 @@ public class ExpenseListing extends ListingAbstract {
 		mDataDateList = mConvertCursorToListString.getDateListString(false,"");
 		mSubList = mConvertCursorToListString.getListStringParticularDate("");
 		Bundle intentExtras = getIntent().getExtras();
-		if(intentExtras != null){
-			if(intentExtras.containsKey("toHighLight")){
+		if(intentExtras != null) {
+			if(intentExtras.containsKey("toHighLight")) {
 				highlightID = intentExtras.getString("toHighLight");
 			}
 		}
@@ -141,9 +141,9 @@ public class ExpenseListing extends ListingAbstract {
 						}
 						mTempSubList.amount = mStringProcessing.getStringDoubleDecimal(totalAmountString);
 						mTempSubList.type = getString(R.string.sublist_weekwise);
-						if(highlightID != null){
+						if(highlightID != null) {
 							if (j <= mSubList.size()) {
-								if(mTempSubList.id.contains(highlightID)){
+								if(mTempSubList.id.contains(highlightID)) {
 									startSubListing(mTempSubList.id);
 								} 
 							}
@@ -165,8 +165,8 @@ public class ExpenseListing extends ListingAbstract {
 
 	private void startSubListing(String string) {
 		ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(string);
-		for(int checkI=0;checkI<mArrayList.size();checkI++){
-			if(mArrayList.get(checkI).equals(highlightID)){
+		for(int checkI=0;checkI<mArrayList.size();checkI++) {
+			if(mArrayList.get(checkI).equals(highlightID)) {
 				Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
 				expenseSubListing.putExtra("idList", string);
 				expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

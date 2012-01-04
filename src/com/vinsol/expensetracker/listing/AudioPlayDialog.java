@@ -38,7 +38,7 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 		doCommonTask();
 	}
 	
-	private void doCommonTaskBefore(Context context, String id){
+	private void doCommonTaskBefore(Context context, String id) {
 		
 		mContext = context;
 		mFile = id;
@@ -46,7 +46,7 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 		setContentView(R.layout.audio_play_dialog);
 	}
 	
-	private void doCommonTask(){
+	private void doCommonTask() {
 		stopButton = (Button) findViewById(R.id.stop_button);
 		playButton = (Button) findViewById(R.id.play_button);
 		cancelButton = (Button) findViewById(R.id.cancel_button);

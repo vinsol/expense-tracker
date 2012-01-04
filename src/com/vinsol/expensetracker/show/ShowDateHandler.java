@@ -52,19 +52,19 @@ public class ShowDateHandler {
 		if (hour == 0) {
 			hour = 12;
 		}
-		if (tempCalendar.get(Calendar.MINUTE) != 0){
-			if (tempCalendar.get(Calendar.AM_PM) == 1){
+		if (tempCalendar.get(Calendar.MINUTE) != 0) {
+			if (tempCalendar.get(Calendar.AM_PM) == 1) {
 				return hour + ":" + minute + " " + "PM";
 			}
-			if (tempCalendar.get(Calendar.AM_PM) == 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 0) {
 				return hour + ":" + minute + " " + "AM";
 			}
 		}
-		else{ 
-			if (tempCalendar.get(Calendar.AM_PM) == 1){
+		else { 
+			if (tempCalendar.get(Calendar.AM_PM) == 1) {
 				return hour + "" + " " + "PM";
 			}
-			if (tempCalendar.get(Calendar.AM_PM) == 0){
+			if (tempCalendar.get(Calendar.AM_PM) == 0) {
 				return hour + "" + " " + "AM";
 			}
 		}

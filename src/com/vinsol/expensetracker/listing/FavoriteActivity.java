@@ -35,7 +35,7 @@ import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
-public class FavoriteActivity extends Activity implements OnItemClickListener{
+public class FavoriteActivity extends Activity implements OnItemClickListener {
 	
 	private TextView headerTitle;
 	private ListView editFavoriteListview;
@@ -55,8 +55,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 
 		setContentView(R.layout.edit_page);
 
-		// ///// ******* Hide Main Body of layout and make favorite body visible
-		// ******* ///////
+		// ///// ******* Hide Main Body of layout and make favorite body visible ******* ///////
 		handleUI();
 		
 		headerTitle = (TextView) findViewById(R.id.header_title);
@@ -90,7 +89,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		mAdapter = new MyAdapter(this, R.layout.expense_listing_inflated_row , mList);
 		editFavoriteListview.setAdapter(mAdapter);
 		mAdapter.notifyDataSetChanged();
-		if (intentExtras.containsKey("mDisplayList")){
+		if (intentExtras.containsKey("mDisplayList")) {
 			dateViewString = editDateBarDateview.getText().toString();
 		} else {
 			dateViewString = "";
@@ -99,12 +98,10 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		super.onResume();
 	}
 	
-	private class MyAdapter extends ArrayAdapter<String>{
-		
+	private class MyAdapter extends ArrayAdapter<String> {
 		
 		private LayoutInflater mInflater;
 		List<Favorite> mList;
-		
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		private MyAdapter(Context context, int resource,List list1) {
 			super(context, resource,list1);
@@ -132,16 +129,16 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 			viewHolder.rowImageview.setOnClickListener(new MyClickListener(tempFavorite));
 			viewHolder.rowFavoriteIcon.setVisibility(View.INVISIBLE);
 			viewHolder.rowLocationTime.setVisibility(View.GONE);
-			if(tempFavorite.type.equals(getString(R.string.voice))){
-				if(tempFavorite.description != null){
-					if(!tempFavorite.description.equals("") &&!tempFavorite.description.equals(R.string.unfinished_voiceentry)){
+			if(tempFavorite.type.equals(getString(R.string.voice))) {
+				if(tempFavorite.description != null) {
+					if(!tempFavorite.description.equals("") &&!tempFavorite.description.equals(R.string.unfinished_voiceentry)) {
 						viewHolder.rowTag.setText(tempFavorite.description);
 					}
 				} else {
 					viewHolder.rowTag.setText(getString(R.string.finished_voiceentry));
 				}
-				if(tempFavorite.amount != null ){
-					if(!tempFavorite.amount.equals("")){
+				if(tempFavorite.amount != null ) {
+					if(!tempFavorite.amount.equals("")) {
 						viewHolder.rowAmount.setText(tempFavorite.amount);
 					}
 				} else {
@@ -155,7 +152,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						} else {
 							viewHolder.rowImageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 						}
-					}catch(Exception e){
+					}catch(Exception e) {
 						viewHolder.rowImageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 					}
 				} else {
@@ -163,17 +160,17 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					return convertView;
 				}
 			}
-			else if(tempFavorite.type.equals(getString(R.string.camera))){
+			else if(tempFavorite.type.equals(getString(R.string.camera))) {
 				
-				if(tempFavorite.description != null){
-					if(!tempFavorite.description.equals("") && !tempFavorite.description.equals(R.string.unfinished_cameraentry)){
+				if(tempFavorite.description != null) {
+					if(!tempFavorite.description.equals("") && !tempFavorite.description.equals(R.string.unfinished_cameraentry)) {
 						viewHolder.rowTag.setText(tempFavorite.description);
 					}
 				} else {
 					viewHolder.rowTag.setText(getString(R.string.finished_cameraentry));
 				}
-				if(tempFavorite.amount != null ){
-					if(!tempFavorite.amount.equals("")){
+				if(tempFavorite.amount != null ) {
+					if(!tempFavorite.amount.equals("")) {
 						viewHolder.rowAmount.setText(tempFavorite.amount);
 					}
 				} else {
@@ -198,24 +195,24 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					return convertView;
 				}
 			}
-			else if(tempFavorite.type.equals(getString(R.string.text))){
-				if(tempFavorite.description != null){
-					if(!tempFavorite.description.equals("") && !tempFavorite.description.equals(R.string.unfinished_textentry)){
+			else if(tempFavorite.type.equals(getString(R.string.text))) {
+				if(tempFavorite.description != null) {
+					if(!tempFavorite.description.equals("") && !tempFavorite.description.equals(R.string.unfinished_textentry)) {
 						viewHolder.rowTag.setText(tempFavorite.description);
 					}
 				} else {
 					viewHolder.rowTag.setText(getString(R.string.finished_textentry));
 				}
-				if(tempFavorite.amount != null ){
-					if(!tempFavorite.amount.equals("")){
+				if(tempFavorite.amount != null ) {
+					if(!tempFavorite.amount.equals("")) {
 						viewHolder.rowAmount.setText(tempFavorite.amount);
 					}
 				} else {
 					viewHolder.rowAmount.setText("?");
 				}
 				
-				if(tempFavorite.description != null){
-					if (!tempFavorite.description.equals("") && !tempFavorite.description.equals(getString(R.string.unfinished_textentry)) ) {
+				if(tempFavorite.description != null) {
+					if (!tempFavorite.description.equals("") && !tempFavorite.description.equals(getString(R.string.unfinished_textentry))) {
 						viewHolder.rowImageview.setImageResource(R.drawable.listing_text_entry_icon);
 					} else {
 						viewHolder.rowImageview.setImageResource(R.drawable.text_list_icon_no_tag);
@@ -226,7 +223,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 			}
 			return convertView;
 		}
-		
 	}
 	
 	private class ViewHolder {
@@ -238,8 +234,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 	}
 	
 	private void handleUI() {
-		// ///// ******* Hide Main Body of layout and make favorite body visible
-		// ******* ///////
+		// ///// ******* Hide Main Body of layout and make favorite body visible ******* ///////
 		ScrollView mScrollView = (ScrollView) findViewById(R.id.edit_body);
 		mScrollView.setVisibility(View.GONE);
 		RelativeLayout mRelativeLayout = (RelativeLayout) findViewById(R.id.edit_body_favorite);
@@ -251,7 +246,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 	private class MyClickListener implements OnClickListener {
 
 		Favorite tempFavorite;
-
+		
 		public MyClickListener(Favorite tempFavorite) {
 			this.tempFavorite = tempFavorite;
 		}
@@ -304,11 +299,11 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		Bundle bundle = new Bundle();
 		
-		if(id != null){
+		if(id != null) {
 			toInsert.id = id+"";
 		}
 
-		if(amount != null){
+		if(amount != null) {
 			if(!amount.contains("?") && !amount.equals(""))
 				toInsert.amount = amount;
 		}
@@ -320,7 +315,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 		
 		if(type.equals(getString(R.string.camera))) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-				try{
+				try {
 					toInsert.type = type;
 					if(tag != null) {
 						if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_cameraentry)) && !tag.equals(getString(R.string.finished_cameraentry)))
@@ -337,7 +332,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 								DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
-								if(!intentExtras.containsKey("timeInMillis")){
+								if(!intentExtras.containsKey("timeInMillis")) {
 									DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 									toInsert.timeInMillis = mDateHelper.getTimeMillis();
 								} else {
@@ -351,7 +346,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						} catch (Exception e) {
 						}
 					}
-					if(id == null){
+					if(id == null) {
 						mDatabaseAdapter.open();
 						idCreated = mDatabaseAdapter.insertToDatabase(toInsert);
 						mDatabaseAdapter.close();
@@ -359,7 +354,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						File mFile = new File("/sdcard/ExpenseTracker/"+idCreated+".jpg");
 						File mFileSmall = new File("/sdcard/ExpenseTracker/"+idCreated+"_small.jpg");
 						File mFileThumbnail = new File("/sdcard/ExpenseTracker/"+idCreated+"_thumbnail.jpg");
-						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
+						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 							bundle.putString("toHighLight", idCreated+"");
 							expenseListingIntent.putExtras(bundle);
@@ -375,7 +370,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						File mFile = new File("/sdcard/ExpenseTracker/"+id+".jpg");
 						File mFileSmall = new File("/sdcard/ExpenseTracker/"+id+"_small.jpg");
 						File mFileThumbnail = new File("/sdcard/ExpenseTracker/"+id+"_thumbnail.jpg");
-						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()){
+						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 							bundle.putString("toHighLight", toInsert.id);
 							expenseListingIntent.putExtras(bundle);
@@ -389,21 +384,21 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						}
 					}
 				}
-				catch (Exception e){
+				catch (Exception e) {
 					Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
 				}
 			} else {
 				Toast.makeText(this, "you cannot use camera entry without sdcard", Toast.LENGTH_LONG).show();
 			}
-		} else if(type.equals(getString(R.string.voice))){
+		} else if(type.equals(getString(R.string.voice))) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-				try{
+				try {
 					toInsert.type = type;
-					if(tag != null){
+					if(tag != null) {
 						if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_voiceentry)) && !tag.equals(getString(R.string.finished_voiceentry)))
 							toInsert.description = tag;
 					}
-					if(id == null){
+					if(id == null) {
 						if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 							toInsert.location = LocationHelper.currentAddress;
 						}
@@ -414,7 +409,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 								DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
-								if(!intentExtras.containsKey("timeInMillis")){
+								if(!intentExtras.containsKey("timeInMillis")) {
 									DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 									toInsert.timeInMillis = mDateHelper.getTimeMillis();
 								} else {
@@ -428,13 +423,13 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 						} catch (Exception e) {
 						}
 					}
-					if(id == null){
+					if(id == null) {
 						mDatabaseAdapter.open();
 						idCreated = mDatabaseAdapter.insertToDatabase(toInsert);
 						mDatabaseAdapter.close();
 						new FileCopyFavorite(favID.toString(), idCreated.toString(),"from");
 						File mFile = new File("/sdcard/ExpenseTracker/Audio/"+idCreated+".amr");
-						if(mFile.canRead()){
+						if(mFile.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 							bundle.putString("toHighLight", idCreated+"");
 							expenseListingIntent.putExtras(bundle);
@@ -448,7 +443,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					} else {
 						new FileCopyFavorite(favID.toString(), id.toString(),"from");
 						File mFile = new File("/sdcard/ExpenseTracker/Audio/"+id+".amr");
-						if(mFile.canRead()){
+						if(mFile.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
 							bundle.putString("toHighLight", toInsert.id);
 							expenseListingIntent.putExtras(bundle);
@@ -461,20 +456,20 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 							Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
 						}
 					}
-				} catch(Exception e){
+				} catch(Exception e) {
 					Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
 				}
 			} else {
 				Toast.makeText(this, "you cannot use voice entry without sdcard", Toast.LENGTH_LONG).show();
 			}
 		} else if(type.equals(getString(R.string.text))) {
-			try{
+			try {
 				toInsert.type = type;
-				if(tag != null){
+				if(tag != null) {
 					if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_textentry)) && !tag.equals(getString(R.string.finished_textentry)))
 						toInsert.description = tag;
 				}
-				if(id == null){
+				if(id == null) {
 					if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 						toInsert.location = LocationHelper.currentAddress;
 					}
@@ -485,7 +480,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 							DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 							toInsert.timeInMillis = mDateHelper.getTimeMillis();
 						} else {
-							if(!intentExtras.containsKey("timeInMillis")){
+							if(!intentExtras.containsKey("timeInMillis")) {
 								DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
@@ -499,7 +494,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					} catch (Exception e) {
 					}
 				}
-				if(id == null){
+				if(id == null) {
 					mDatabaseAdapter.open();
 					idCreated = mDatabaseAdapter.insertToDatabase(toInsert);
 					mDatabaseAdapter.close();
@@ -516,7 +511,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener{
 					startActivity(expenseListingIntent);
 					finish();
 				}
-			} catch(Exception e){
+			} catch(Exception e) {
 				Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
 			}
 		}

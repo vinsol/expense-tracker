@@ -94,7 +94,7 @@ public class LocationHelper {
 		}
 		
 		long timeAccuracy = System.currentTimeMillis() - currentLocation.getTime();
-		if (timeAccuracy > STALE_GPS_REQUEST_TIME_DELTA){
+		if (timeAccuracy > STALE_GPS_REQUEST_TIME_DELTA) {
 			Log.d("*** STALE FIX, DISCARDING..., timeAccuracy was: " + timeAccuracy);
 			currentAddress = null;
 			return null;

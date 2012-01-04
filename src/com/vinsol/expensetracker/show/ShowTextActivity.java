@@ -6,7 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class ShowTextActivity extends ShowAbstract{
+public class ShowTextActivity extends ShowAbstract {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class ShowTextActivity extends ShowAbstract{
 				showEdit.setOnClickListener(this);
 			}
 		}
-		if(resultCode == Activity.RESULT_CANCELED){
+		if(resultCode == Activity.RESULT_CANCELED) {
 			finish();
 		}
 	}

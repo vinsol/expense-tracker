@@ -28,7 +28,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-abstract class ListingAbstract extends Activity implements OnItemClickListener{
+abstract class ListingAbstract extends Activity implements OnItemClickListener {
 
 	protected List<ListDatetimeAmount> mDataDateList;
 	protected SeparatedListAdapter mSeparatedListAdapter;
@@ -57,20 +57,20 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 			templist.description = mSubList.get(j).description;
 		} else {
 			CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
-			if (mSubList.get(j).type.equals(getString(R.string.camera))) {
-				if(mCheckEntryComplete.isEntryComplete(mSubList.get(j),this)){
+			if (mSubList.get(j).type.equals(getString(R.string.camera))) { 
+				if(mCheckEntryComplete.isEntryComplete(mSubList.get(j),this)) {
 					templist.description = getString(R.string.finished_cameraentry);
 				} else {
 					templist.description = getString(R.string.unfinished_cameraentry);
 				}
 			} else if (mSubList.get(j).type.equals(getString(R.string.voice))) {
-				if(mCheckEntryComplete.isEntryComplete(mSubList.get(j),this)){
+				if(mCheckEntryComplete.isEntryComplete(mSubList.get(j),this)) {
 					templist.description = getString(R.string.finished_voiceentry);
 				} else {
 					templist.description = getString(R.string.unfinished_voiceentry);
 				}
 			} else if (mSubList.get(j).type.equals(getString(R.string.text))) {
-				if(mCheckEntryComplete.isEntryComplete(mSubList.get(j),this)){
+				if(mCheckEntryComplete.isEntryComplete(mSubList.get(j),this)) {
 					templist.description = getString(R.string.finished_textentry);
 				} else {
 					templist.description = getString(R.string.unfinished_textentry);
@@ -116,7 +116,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 			CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 			if (mTempClickedList.type.equals(getString(R.string.camera))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)){
+					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
 						Intent intentCamera = new Intent(this,CameraActivity.class);
 						intentCamera.putExtra("cameraBundle", bundle);
 						startActivityForResult(intentCamera,RESULT);
@@ -129,7 +129,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 					Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
 				}
 			} else if (mTempClickedList.type.equals(getString(R.string.text))) {
-				if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)){
+				if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
 					Intent intentTextEntry = new Intent(this, TextEntry.class);
 					intentTextEntry.putExtra("textEntryBundle", bundle);
 					startActivityForResult(intentTextEntry,RESULT); 
@@ -140,7 +140,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 				}
 			} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)){
+					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
 						Intent intentVoice = new Intent(this, Voice.class);
 						intentVoice.putExtra("voiceBundle", bundle);
 						startActivityForResult(intentVoice,RESULT);
@@ -172,15 +172,15 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener{
 		}
 	}
 	
-	protected void unknownDialogAction(String id){}
+	protected void unknownDialogAction(String id) {}
 	
 	protected void onClickElse(String id) {}
 	
-	protected void noItemButtonAction(Button noItemButton){}
+	protected void noItemButtonAction(Button noItemButton) {}
 	
-	protected void getListToAdd(){}
+	protected void getListToAdd() {}
 	
-	protected void doOperationsOnListview(){
+	protected void doOperationsOnListview() {
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setOnItemClickListener(this);
 		mListView.setAdapter(mSeparatedListAdapter);
