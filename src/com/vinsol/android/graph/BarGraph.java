@@ -137,7 +137,7 @@ public class BarGraph extends View {
 		textPaint.setTextSize(mTextView.getTextSize());
 		textPaint.setTypeface(Typeface.DEFAULT_BOLD);
 		
-		for(int i = 0 ;i<values.size();i++){
+		for(int i = 0 ;i<values.size();i++) {
 			finalValue = value+originX+barWidth;
 			value = value + interval;
 			Double tempDouble = getDouble(i);
@@ -187,13 +187,13 @@ public class BarGraph extends View {
 			return 100.0;
 	}
 	
-	private Double getDouble(int i){
+	private Double getDouble(int i) { 
 		Double tempDouble = null;
 		if(values.get(i) != null) {
-			if(values.get(i).equals("?")){
+			if(values.get(i).equals("?")) {
 				return 0.0;
 			}
-			if(values.get(i).contains("?")){
+			if(values.get(i).contains("?")) {
 				try{
 					if(values.get(i).length() > 1){
 						String tempString = (String) values.get(i).subSequence(0, values.get(i).length()-1);
@@ -205,7 +205,6 @@ public class BarGraph extends View {
 			} else {
 				return Double.parseDouble(values.get(i));
 			}
-			
 			return tempDouble;
 		} else {
 			return 0.0;

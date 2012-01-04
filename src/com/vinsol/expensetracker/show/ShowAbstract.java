@@ -319,4 +319,5 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+
 }
