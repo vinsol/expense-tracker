@@ -311,19 +311,12 @@ abstract class ShowAbstract extends Activity implements OnClickListener{
 	}	
 
 	// /// ****************** Handling back press of key ********** ///////////
-		public boolean onKeyDown(int keyCode, KeyEvent event) {
-			if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-				onBackPressed();
-				return true;
-			}
-			return super.onKeyDown(keyCode, event);
-		}
-
-		public void onBackPressed() {
-			// This will be called either automatically for you on 2.0
-			// or later, or by the code above on earlier versions of the platform.
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 			setResultModifiedToListing();
 			finish();
-			return;
+			return true;
 		}
+		return super.onKeyDown(keyCode, event);
+	}
 }

@@ -250,17 +250,10 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 	// /// ****************** Handling back press of key ********** ///////////
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			onBackPressed();
+			saveEntry();
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
-	}
-
-	public void onBackPressed() {
-		// This will be called either automatically for you on 2.0
-		// or later, or by the code above on earlier versions of the platform.
-		saveEntry();
-		return;
 	}
 		
 	abstract protected void saveEntryStartIntent(Bundle tempBundle);

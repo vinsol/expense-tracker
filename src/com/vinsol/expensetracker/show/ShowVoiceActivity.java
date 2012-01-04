@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
+import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.helpers.AudioPlay;
 import com.vinsol.expensetracker.helpers.FileDelete;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
@@ -61,7 +62,6 @@ public class ShowVoiceActivity extends ShowAbstract {
 		} else {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
-		
 	}
 
 	private void updateUI() {
@@ -152,10 +152,14 @@ public class ShowVoiceActivity extends ShowAbstract {
 		// //// ***** Check whether audio is recording or not ******* ///////
 		// //// ****** If audio recording started then stop recording audio ***** ///////
 		try {
+			countDownTimer.cancel();
+		} catch (NullPointerException e) {
+		}
+		try {
 			if (mAudioPlay.isAudioPlaying())
 				mAudioPlay.stopPlayBack();
 		} catch (Exception e) {
-
+			Log.d("Audio Play Stop");
 		}
 		super.onPause();
 	}

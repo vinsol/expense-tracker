@@ -173,8 +173,7 @@ public class Voice extends EditAbstract {
 
 		// // ***** if play button pressed ****** //////
 		else if (v.getId() == R.id.edit_play_button) {
-			// //// ******** to handle playback of recorded file *********
-			// ////////
+			// //// ******** to handle playback of recorded file ********* ////////
 			mAudioPlay = new AudioPlay(entry.id, this, false);
 
 			// ///// ******* Chronometer Starts Countdown ****** ///////

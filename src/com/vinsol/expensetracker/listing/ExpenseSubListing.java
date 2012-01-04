@@ -36,7 +36,6 @@ public class ExpenseSubListing extends ListingAbstract {
 		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,idList);
 		mSubList = mConvertCursorToListString.getListStringParticularDate(idList);
-		
 		if(mSubList.size() > 0){
 			Bundle intentExtras = getIntent().getExtras();
 			if(intentExtras != null){
@@ -44,14 +43,11 @@ public class ExpenseSubListing extends ListingAbstract {
 					highlightID = intentExtras.getString("toHighLight");
 				}
 			}
-			
 			Calendar mTempCalendar = Calendar.getInstance();
 			mTempCalendar.setTimeInMillis(mSubList.get(0).timeInMillis);
 			mTempCalendar.set(mTempCalendar.get(Calendar.YEAR),mTempCalendar.get(Calendar.MONTH),mTempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 			mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-			
 			listingHeader.setText(new DisplayDate(mTempCalendar).getDisplayDateSubListingHeader());
-			
 			int j = 0;
 			@SuppressWarnings("rawtypes")
 			List listString = new ArrayList<List<Entry>>();
@@ -116,20 +112,13 @@ public class ExpenseSubListing extends ListingAbstract {
 	// /// ****************** Handling back press of key ********** ///////////
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			onBackPressed();
+			Intent intent = new Intent(this, ExpenseListing.class);
+			intent.putExtras(intentExtras);
+			setResult(Activity.RESULT_OK, intent);
+			finish();
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
-	}
-
-	public void onBackPressed() {
-		// This will be called either automatically for you on 2.0
-		// or later, or by the code above on earlier versions of the platform.
-		Intent intent = new Intent(this, ExpenseListing.class);
-		intent.putExtras(intentExtras);
-		setResult(Activity.RESULT_OK, intent);
-		finish();
-		return;
 	}
 	
 }
