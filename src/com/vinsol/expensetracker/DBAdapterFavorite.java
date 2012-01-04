@@ -97,10 +97,8 @@ public class DBAdapterFavorite {
 		}
 
 		public Cursor getCompleteDatabase() {
-
 			return db.query(TABLE_NAME, new String[] { KEY_ID, KEY_TAG, KEY_AMOUNT, KEY_TYPE }, null,
 					null, null, null, null);
-
 		}
 
 		private class MyCreateOpenHelper extends SQLiteOpenHelper {

@@ -250,7 +250,6 @@ public class CameraActivity extends EditAbstract {
 	
 	@Override
 	protected void saveEntryStartIntent(Bundle tempBundle) {
-		super.saveEntryStartIntent(tempBundle);
 		Intent mIntent = new Intent(this, ShowCameraActivity.class);
 		mIntent.putExtra("cameraShowBundle", tempBundle);
 		setResult(Activity.RESULT_OK, mIntent);

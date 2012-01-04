@@ -22,7 +22,6 @@ public class TextEntry extends EditAbstract {
 	
 	@Override
 	protected void saveEntryStartIntent(Bundle tempBundle) {
-		super.saveEntryStartIntent(tempBundle);
 		Intent mIntent = new Intent(this, ShowTextActivity.class);
 		mIntent.putExtra("textShowBundle", tempBundle);
 		setResult(Activity.RESULT_OK, mIntent);

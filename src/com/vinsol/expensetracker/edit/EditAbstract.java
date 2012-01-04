@@ -104,39 +104,32 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		// ///// ******* Creating HashMap to update info ******* ////////
 		Entry list = new Entry();
 		list.id = entry.id;
-//		list.put(DatabaseAdapter.KEY_ID, entry.id);
 		entry.amount = editAmount.getText().toString();
 		entry.description = editTag.getText().toString();
 		if (!entry.amount.equals(".") && !entry.amount.equals("")) {
 			Double mAmount = Double.parseDouble(entry.amount);
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 			list.amount = mAmount+"";
-//			list.put(DatabaseAdapter.KEY_AMOUNT, mAmount.toString());
 		} else {
 			list.amount = "";
-//			list.put(DatabaseAdapter.KEY_AMOUNT, "");
 		}
 		
 		list.description = entry.description;
-//		list.put(DatabaseAdapter.KEY_TAG, entry.description);
 		if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 			try {
 				if (!intentExtras.containsKey("mDisplayList")) {
 					DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 					list.timeInMillis = mDateHelper.getTimeMillis();
-//					list.put(DatabaseAdapter.KEY_DATE_TIME,mDateHelper.getTimeMillis() + "");
 				} else {
 					if(!intentExtras.containsKey("timeInMillis")){
 						DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 						list.timeInMillis = mDateHelper.getTimeMillis();
-//						list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					} else {
 						Calendar mCalendar = Calendar.getInstance();
 						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
 						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString(),mCalendar);
 						list.timeInMillis = mDateHelper.getTimeMillis();
-//						list.put(DatabaseAdapter.KEY_DATE_TIME, mDateHelper.getTimeMillis()+"");
 					}
 				}
 			} catch (Exception e) {
@@ -145,7 +138,6 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		
 		if(setLocation == true && LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 			list.location = LocationHelper.currentAddress;
-//				list.put(DatabaseAdapter.KEY_LOCATION, LocationHelper.currentAddress);
 		}
 		return list;
 	}
@@ -178,9 +170,7 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 			isChanged = false;
 			Entry listForFav = new Entry();
 			listForFav.favId = "";
-//			listForFav.put(DatabaseAdapter.KEY_FAVORITE, "");
 			listForFav.id = mEditList.id;
-//			listForFav.put(DatabaseAdapter.KEY_ID, mEditList.id.toString());
 			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editDatabase(listForFav);
@@ -270,13 +260,10 @@ abstract class EditAbstract extends Activity implements OnClickListener{
 		// This will be called either automatically for you on 2.0
 		// or later, or by the code above on earlier versions of the platform.
 		saveEntry();
-		actionAfterSaveOnBackButton();
 		return;
 	}
-	
-	protected void actionAfterSaveOnBackButton(){}
 		
-	protected void saveEntryStartIntent(Bundle tempBundle) {}
+	abstract protected void saveEntryStartIntent(Bundle tempBundle);
 	
 	@Override
 	public void onClick(View v) {

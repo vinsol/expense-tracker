@@ -244,15 +244,18 @@ public class Voice extends EditAbstract {
 	
 	@Override
 	protected void saveEntryStartIntent(Bundle tempBundle) {
-		super.saveEntryStartIntent(tempBundle);
 		Intent mIntent = new Intent(this, ShowVoiceActivity.class);
 		mIntent.putExtra("voiceShowBundle", tempBundle);
 		setResult(Activity.RESULT_OK, mIntent);
 	}
 
 	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		actionAfterSaveOnBackButton();
+	}
+	
 	protected void actionAfterSaveOnBackButton() {
-		super.actionAfterSaveOnBackButton();
 		try {
 			if (mRecordingHelper.isRecording()) {
 				mRecordingHelper.stopRecording();
