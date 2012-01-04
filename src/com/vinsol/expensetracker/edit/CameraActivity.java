@@ -41,8 +41,7 @@ public class CameraActivity extends EditAbstract {
 		// //////********* Get id from intent extras ******** ////////////
 		intentExtras = getIntent().getBundleExtra("cameraBundle");
 		
-		// ////// ******** Initializing and assigning memory to UI Items
-		// ********** /////////
+		// ////// ******** Initializing and assigning memory to UI Items ********** /////////
 		editCameraDetails = (LinearLayout) findViewById(R.id.edit_camera_details);
 		editImageDisplay = (ImageView) findViewById(R.id.edit_image_display);
 		editLoadProgress = (RelativeLayout) findViewById(R.id.edit_load_progress);

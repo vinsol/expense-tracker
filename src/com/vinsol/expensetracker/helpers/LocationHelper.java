@@ -1,6 +1,5 @@
 package com.vinsol.expensetracker.helpers;
 
-import java.io.IOException;
 import java.util.List;
 
 import android.content.Context;
@@ -163,8 +162,7 @@ public class LocationHelper {
 			protected Void doInBackground(Void... params) {
 				try {
 					list = new Geocoder(ExpenseTrackerApplication.getContext()).getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
-				} catch (IOException e) {
-				} catch (Exception e) {
+				}catch (Exception e) {
 				}
 				return null;
 			}
@@ -173,15 +171,17 @@ public class LocationHelper {
 			protected void onPostExecute(Void result) {
 				currentAddress = "";
 				if (list != null) {
-					Address address = (Address)list.get(0);
-					if (address.getFeatureName() != null) {
-						currentAddress += address.getFeatureName() + ", ";
-					} 
-					if(address.getLocality() != null) {
-						currentAddress += address.getLocality() + ", ";
-					}
-					if(address.getAdminArea() != null) {
-						currentAddress += address.getAdminArea();
+					if(list.size() > 0) {
+						Address address = (Address)list.get(0);
+						if (address.getFeatureName() != null) {
+							currentAddress += address.getFeatureName() + ", ";
+						} 
+						if(address.getLocality() != null) {
+							currentAddress += address.getLocality() + ", ";
+						}
+						if(address.getAdminArea() != null) {
+							currentAddress += address.getAdminArea();
+						}
 					}
 				}
 			}
