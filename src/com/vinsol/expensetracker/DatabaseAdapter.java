@@ -121,14 +121,6 @@ public class DatabaseAdapter {
 		return false;
 	}
 
-	protected Cursor getCompleteDatabase() {
-
-		return db.query(TABLE_NAME, new String[] { KEY_ID, KEY_TAG, KEY_AMOUNT,
-				KEY_DATE_TIME, KEY_LOCATION, KEY_FAVORITE, KEY_TYPE }, null,
-				null, null, null, null);
-
-	}
-
 	public Cursor getDateDatabase() {
 
 		return db.query(TABLE_NAME, new String[] { KEY_ID, 
