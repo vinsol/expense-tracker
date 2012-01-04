@@ -18,6 +18,7 @@ import com.vinsol.expensetracker.helpers.FileDelete;
 import com.vinsol.expensetracker.helpers.RecordingHelper;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
+import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
 public class Voice extends EditAbstract {
@@ -84,15 +85,17 @@ public class Voice extends EditAbstract {
 		// //// ***** Check whether audio is recording or not ******* ///////
 		// //// ****** If audio recording started then stop recording audio  ***** ///////
 		try {
-			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-				if (mRecordingHelper.isRecording()) {
-					mRecordingHelper.stopRecording();
-				}
+			if (mRecordingHelper.isRecording()) {
+				mRecordingHelper.stopRecording();
 			}
+		} catch (Exception e) {
+			Log.d("Recording Stops");
+		}
+		try {
 			if (mAudioPlay.isAudioPlaying())
 				mAudioPlay.stopPlayBack();
 		} catch (Exception e) {
-
+			Log.d("Audio Play Stops");
 		}
 		super.onPause();
 	}
@@ -237,7 +240,6 @@ public class Voice extends EditAbstract {
 	@Override
 	protected void deleteAction() {
 		super.deleteAction();
-		actionAfterSaveOnBackButton();
 		editTimeDetailsChronometer.stop();
 		new FileDelete(entry.id);
 	}
@@ -247,26 +249,6 @@ public class Voice extends EditAbstract {
 		Intent mIntent = new Intent(this, ShowVoiceActivity.class);
 		mIntent.putExtra("voiceShowBundle", tempBundle);
 		setResult(Activity.RESULT_OK, mIntent);
-	}
-
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		actionAfterSaveOnBackButton();
-	}
-	
-	protected void actionAfterSaveOnBackButton() {
-		try {
-			if (mRecordingHelper.isRecording()) {
-				mRecordingHelper.stopRecording();
-			}
-		} catch (NullPointerException e) {
-		}
-		try {
-			if (mAudioPlay.isAudioPlaying())
-				mAudioPlay.stopPlayBack();
-		} catch (Exception e) {
-		}
 	}
 
 	@Override
