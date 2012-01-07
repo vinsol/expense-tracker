@@ -8,6 +8,7 @@ import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 
@@ -39,6 +40,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	protected Button editDelete;
 	protected Button editSaveEntry;
 	protected Entry entry;
+	protected FileHelper fileHelper;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +175,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			listForFav.id = mEditList.id;
 			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.editDatabase(listForFav);
+			mDatabaseAdapter.editEntryTable(listForFav);
 			mDatabaseAdapter.close();
 			displayList.favId = "";
 		} else {
@@ -198,7 +200,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 
 		// //// ******* Update database if user added additional info *******		 ///////
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editDatabase(toSave);
+		mDatabaseAdapter.editEntryTable(toSave);
 		mDatabaseAdapter.close();
 		if(!intentExtras.containsKey("isFromShowPage")) {
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
@@ -275,7 +277,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 
 			// //// ******* Delete entry from database ******** /////////
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.deleteDatabaseEntryID(entry.id);
+			mDatabaseAdapter.deleteEntryTableEntryID(entry.id);
 			mDatabaseAdapter.close();
 			Bundle tempBundle = new Bundle();
 			if(intentExtras.containsKey("isFromShowPage")) {

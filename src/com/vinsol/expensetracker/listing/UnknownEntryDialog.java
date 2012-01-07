@@ -112,7 +112,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				
 			case R.id.unknown_entry_dialog_delete:
 				mDatabaseAdapter.open();
-				mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.id);
+				mDatabaseAdapter.deleteEntryTableEntryID(mTempClickedList.id);
 				mDatabaseAdapter.close();
 				dismiss();
 				break;
@@ -169,7 +169,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		list.id = mTempClickedList.id;
 		list.type = getContext().getString(type);
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editDatabase(list);
+		mDatabaseAdapter.editEntryTable(list);
 		mDatabaseAdapter.close();
 	}
 }

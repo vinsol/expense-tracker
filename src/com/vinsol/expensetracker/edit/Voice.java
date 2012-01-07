@@ -1,6 +1,7 @@
 package com.vinsol.expensetracker.edit;
 
 import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.AudioPlay;
-import com.vinsol.expensetracker.helpers.FileDelete;
+import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.RecordingHelper;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
@@ -37,7 +38,7 @@ public class Voice extends EditAbstract {
 		super.onCreate(savedInstanceState);
 
 		// ////// ******** Initializing and assigning memory to UI Items ********** /////////
-
+		fileHelper = new FileHelper();
 		editVoiceDetails = (RelativeLayout) findViewById(R.id.edit_voice_details);
 		editTimeDetailsChronometer = (Chronometer) findViewById(R.id.edit_time_details_chronometer);
 		editStopButton = (Button) findViewById(R.id.edit_stop_button);
@@ -54,7 +55,7 @@ public class Voice extends EditAbstract {
 			setGraphicsVoice();
 
 			if (intentExtras.containsKey("mDisplayList") && !setUnknown) {
-				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + entry.id + ".amr");
+				File tempFile = fileHelper.getAudioFileEntry(entry.id);
 
 				if (tempFile.canRead()) {
 					mAudioPlay = new AudioPlay(entry.id, this, false);
@@ -240,7 +241,7 @@ public class Voice extends EditAbstract {
 	protected void deleteAction() {
 		super.deleteAction();
 		editTimeDetailsChronometer.stop();
-		new FileDelete(entry.id);
+		fileHelper.deleteAllEntryFiles(entry.id);
 	}
 	
 	@Override

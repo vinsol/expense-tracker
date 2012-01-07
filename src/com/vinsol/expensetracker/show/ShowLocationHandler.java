@@ -3,16 +3,13 @@ package com.vinsol.expensetracker.show;
 import com.vinsol.expensetracker.R;
 
 import android.app.Activity;
-import android.content.Context;
 import android.widget.TextView;
 
 public class ShowLocationHandler {
 
 	private TextView showLocation;
-	private Activity activity;
 
-	public ShowLocationHandler(Context mContext, String location) {
-		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
+	public ShowLocationHandler(Activity activity, String location) {
 		showLocation = (TextView) activity.findViewById(R.id.show_location);
 		showLocation.setText(location);
 	}

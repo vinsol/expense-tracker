@@ -11,22 +11,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.vinsol.android.graph.HandleGraph;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
+import com.vinsol.expensetracker.helpers.GraphHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
 import com.vinsol.expensetracker.models.Entry;
 
 public class Home extends Activity implements OnClickListener {
-	private DatabaseAdapter mDatabaseAdapter;
+	
 	private long timeInMillis = 0;
 	private Bundle bundle;
 	private Entry entry;
-	private HandleGraph mHandleGraph;
+	private GraphHelper mHandleGraph;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,6 @@ public class Home extends Activity implements OnClickListener {
 		setContentView(R.layout.home);
 		bundle = new Bundle();
 		entry = new Entry();
-		// /////// ********* DatabaseAdaptor initialize ********* ////////
-		mDatabaseAdapter = new DatabaseAdapter(this);
 
 		// //// ********* Adding Click Listeners to MainActivity ********** /////////
 
@@ -72,7 +70,7 @@ public class Home extends Activity implements OnClickListener {
 		if(location == null) {
 			LocationHelper.requestLocationUpdate();
 		}
-		mHandleGraph = new HandleGraph(this);
+		mHandleGraph = new GraphHelper(this);
 		mHandleGraph.execute();
 		super.onResume();
 	}
@@ -80,6 +78,8 @@ public class Home extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View clickedView) {
 		int idOfClickedView = clickedView.getId();
+		if(mHandleGraph != null)
+			mHandleGraph.cancel(true);
 		switch (idOfClickedView) {
 		// //// ******* opens TextEntry Activity ******** ///////////
 		case R.id.main_text:
@@ -170,8 +170,9 @@ public class Home extends Activity implements OnClickListener {
 			list.location = LocationHelper.currentAddress;
 		}
 		list.type = getString(type);
+		DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
 		mDatabaseAdapter.open();
-		long id = mDatabaseAdapter.insertToDatabase(list);
+		long id = mDatabaseAdapter.insertToEntryTable(list);
 		mDatabaseAdapter.close();
 		return id;
 	}

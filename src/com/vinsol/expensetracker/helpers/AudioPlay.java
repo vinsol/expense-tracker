@@ -14,16 +14,16 @@ public class AudioPlay {
 	File mPath;
 	MediaPlayer mPlayer;
 	Context mContext;
+	FileHelper fileHelper;
 
 	// ////// ********* Constructor ********* //////////
 	public AudioPlay(String id, Context _context,Boolean isFav) {
 		mContext = _context;
 		mPlayer = new MediaPlayer();
+		fileHelper = new FileHelper();
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			
-			File mDirectory = new File(getFile(isFav));
-			mDirectory.mkdirs();
-			mPath = new File(mDirectory, id + ".amr");
+			mPath = getFile(isFav,id);
 			mPlayer.setScreenOnWhilePlaying(true);
 			mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			try {
@@ -37,11 +37,11 @@ public class AudioPlay {
 		}
 	}
 
-	private String getFile(Boolean isFav) {
+	private File getFile(Boolean isFav,String id) {
 		if(isFav) {
-			return "/mnt/sdcard/ExpenseTracker/Favorite/Audio";
+			return fileHelper.getAudioFileFavorite(id);
 		} else {
-			return "/mnt/sdcard/ExpenseTracker/Audio";
+			return fileHelper.getAudioFileEntry(id);
 		}
 	}
 

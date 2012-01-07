@@ -1,6 +1,8 @@
 package com.vinsol.expensetracker.show;
 
+
 import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -8,12 +10,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Toast;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
-import com.vinsol.expensetracker.helpers.FileDelete;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
 public class ShowCameraActivity extends ShowAbstract {
@@ -37,7 +38,7 @@ public class ShowCameraActivity extends ShowAbstract {
 		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
 		showHelper();
 		if (intentExtras.containsKey("mDisplayList")) {
-			File mFile = new File("/sdcard/ExpenseTracker/" + mShowList.id+ "_small.jpg");
+			File mFile = fileHelper.getCameraFileSmallEntry(mShowList.id);
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 				if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
@@ -67,7 +68,7 @@ public class ShowCameraActivity extends ShowAbstract {
 	@Override
 	protected void deleteAction() {
 		super.deleteAction();
-		new FileDelete(mShowList.id);
+		fileHelper.deleteAllEntryFiles(mShowList.id);
 	}
 	
 	@Override
@@ -100,7 +101,7 @@ public class ShowCameraActivity extends ShowAbstract {
 				intentExtras = data.getBundleExtra("cameraShowBundle");
 				doTaskOnActivityResult();
 				if (intentExtras.containsKey("mDisplayList")) {
-					File mFile = new File("/sdcard/ExpenseTracker/" + mShowList.id + "_small.jpg");
+					File mFile = fileHelper.getCameraFileSmallEntry(mShowList.id);
 					if (mFile.canRead()) {Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 						if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
 							final float scale = this.getResources().getDisplayMetrics().density;

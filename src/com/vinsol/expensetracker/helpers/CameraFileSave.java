@@ -26,24 +26,20 @@ public class CameraFileSave {
 	private int THUMBNAIL_MAX_HEIGHT = 60;
 	private int THUMBNAIL_MAX_WIDTH = 60;
 
-
-	// ///// ********* ExpenseTracker Directory Location ******** /////////
-	private File mExpenseTrackerDirectory;
-
 	private Context mContext;
+	private FileHelper fileHelper;
 
 	// /////// ********* Constructors ******** /////////////
 	public CameraFileSave(Context _context) {
 		mContext = _context;
+		fileHelper = new FileHelper();
 	}
 	
 	// /////// ********* Resize original Image and save thumbnails ******** /////////////
 	public void resizeImageAndSaveThumbnails(String _filename) {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			filename = _filename;
-			mExpenseTrackerDirectory = new File("/sdcard/ExpenseTracker");
-			mExpenseTrackerDirectory.mkdirs();
-			File fullSizeImage = new File(mExpenseTrackerDirectory, filename + ".jpg");
+			File fullSizeImage = fileHelper.getCameraFileLargeEntry(filename);
 			FileInputStream fileInputStream = null;
 			try {
 				fileInputStream = new FileInputStream(fullSizeImage);
@@ -69,11 +65,11 @@ public class CameraFileSave {
 			}
 			
 			//Save small image
-			File smallImage = new File(mExpenseTrackerDirectory, filename + "_small" + ".jpg");
+			File smallImage = fileHelper.getCameraFileSmallEntry(filename);
 			saveImage(smallImage, getBitmap(fullSizeImage, SMALL_MAX_WIDTH, SMALL_MAX_HEIGHT));
 			
 			//save Small thumbnail
-			File thumbnail = new File(mExpenseTrackerDirectory, filename + "_thumbnail" + ".jpg");
+			File thumbnail = fileHelper.getCameraFileThumbnailEntry(filename);
 			saveImage(thumbnail, getBitmap(fullSizeImage, THUMBNAIL_MAX_WIDTH, THUMBNAIL_MAX_HEIGHT));
 			
 			//resize Image

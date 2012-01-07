@@ -1,5 +1,6 @@
 package com.vinsol.expensetracker.utils;
 
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 
 import android.app.Activity;
@@ -31,7 +32,7 @@ public class ImagePreview extends Activity {
 		id = getIntent().getStringExtra("id");
 		boolean isFavorite = getIntent().getBooleanExtra("isFavorite", false);
 		
-		path = "/mnt/sdcard/ExpenseTracker/" + (isFavorite ? "Favorite/" : "") + id + ".jpg";
+		path = "/mnt/sdcard/ExpenseTracker/" + (isFavorite ? "Favorite/" : "") + id + Constants.IMAGE_LARGE_SUFFIX;
 		mImageView = (android.widget.ImageView) findViewById(R.id.image_view_full_screen_id);
 		progressBar = (LinearLayout) findViewById(R.id.image_view_full_screen_progress);
 

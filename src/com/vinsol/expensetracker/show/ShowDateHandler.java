@@ -5,15 +5,12 @@ import java.util.Calendar;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import android.app.Activity;
-import android.content.Context;
 import android.widget.TextView;
 
 public class ShowDateHandler {
 	private TextView showHeaderTitle;
-	private Activity activity;
 
-	public ShowDateHandler(Context mContext, Long timeInMillis) {
-		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
+	public ShowDateHandler(Activity activity, Long timeInMillis) {
 		showHeaderTitle = (TextView) activity.findViewById(R.id.header_title);
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(timeInMillis);
@@ -22,13 +19,12 @@ public class ShowDateHandler {
 		showHeaderTitle.setText(mDisplayDate.getDisplayDate()+" at "+date);
 	}
 
-	public ShowDateHandler(Context mContext,int typeOfEntry) {
-		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
+	public ShowDateHandler(Activity activity,int typeOfEntry) {
 		showHeaderTitle = (TextView) activity.findViewById(R.id.header_title);
 		showHeaderTitle.setText(activity.getString(typeOfEntry));
 	}
 	
-	public ShowDateHandler(Context mContext,TextView resource ,Long timeInMillis) {
+	public ShowDateHandler(Activity activity,TextView resource ,Long timeInMillis) {
 		showHeaderTitle = resource;
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(timeInMillis);
@@ -38,9 +34,9 @@ public class ShowDateHandler {
 		showHeaderTitle.setText(mDisplayDate.getDisplayDate()+" at "+date);
 	}
 
-	public ShowDateHandler(Context mContext,TextView resource,int typeOfEntry) {
+	public ShowDateHandler(Activity activity,TextView resource,int typeOfEntry) {
 		showHeaderTitle = resource;
-		showHeaderTitle.setText(mContext.getString(typeOfEntry));
+		showHeaderTitle.setText(activity.getString(typeOfEntry));
 	}
 	
 	private String getDate(Calendar tempCalendar) {

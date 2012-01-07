@@ -1,4 +1,4 @@
-package com.vinsol.android.graph;
+package com.vinsol.expensetracker.helpers;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.TypedValue;
@@ -27,11 +26,10 @@ import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.GraphDataList;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 
-public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickListener {
+public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickListener {
 
 	private List<ListDatetimeAmount> mDataDateListGraph;
 	private ConvertCursorToListString mConvertCursorToListString;
-	static private Context mContext;
 	private List<Entry> mSubList;
 	private ArrayList<ArrayList<ArrayList<String>>> mGraphList;
 	private Calendar lastDateCalendar;
@@ -45,9 +43,8 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	static private TextView graphNoItem;
 	private TextView graphHeaderTextview;
 	
-	public HandleGraph(Context context) {
-		mContext = context;
-		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
+	public GraphHelper(Activity activity) {
+		this.activity = activity;
 		lastDateCalendar = Calendar.getInstance();
 		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mainGraph = (RelativeLayout) activity.findViewById(R.id.main_graph);
@@ -68,7 +65,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	
 	@Override
 	protected Void doInBackground(Void... arg0) {
-		mConvertCursorToListString = new ConvertCursorToListString(mContext);
+		mConvertCursorToListString = new ConvertCursorToListString(activity);
 		mDataDateListGraph = mConvertCursorToListString.getDateListString(true,"");
 		mSubList = mConvertCursorToListString.getListStringParticularDate("");
 		if (mDataDateListGraph.size() >= 1) {
@@ -81,14 +78,12 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	
 	@Override
 	protected void onPostExecute(Void result) {
-		//view of graph
-		// ******start view******//
-
+		//view of graph******start view******//
 		graphPreviousArrow.setVisibility(View.VISIBLE);
 		graphNextArrow.setVisibility(View.VISIBLE);
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
-				barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
+				barGraph = new BarGraph(activity,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
 				mainGraph.addView(barGraph, params);
 				if(j == mGraphList.size()-1) {
 					graphPreviousArrow.setVisibility(View.INVISIBLE);
@@ -117,7 +112,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 	}
 	
 	private void graphNoItem() {
-		graphNoItem = new TextView(mContext);
+		graphNoItem = new TextView(activity);
 		graphNoItem.setGravity(Gravity.CENTER);
 		graphNoItem.setText("No Items to Show");
 		LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, mainGraph.getBackground().getIntrinsicHeight());
@@ -376,7 +371,7 @@ public class HandleGraph extends AsyncTask<Void, Void, Void> implements OnClickL
 		mainGraph.removeView(barGraph);
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
-				barGraph = new BarGraph(mContext,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
+				barGraph = new BarGraph(activity,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
 				mainGraph.addView(barGraph, params);
 				graphPreviousArrow.setVisibility(View.VISIBLE);
 				graphNextArrow.setVisibility(View.VISIBLE);

@@ -159,7 +159,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 					public void onClick(View v) {
 						DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(ListingAbstract.this);
 						mDatabaseAdapter.open();
-						mDatabaseAdapter.deleteDatabaseEntryID(mTempClickedList.id);
+						mDatabaseAdapter.deleteEntryTableEntryID(mTempClickedList.id);
 						mDatabaseAdapter.close();
 						unknownDialog.dismiss();
 						unknownDialogAction(mTempClickedList.id);

@@ -1,6 +1,8 @@
 package com.vinsol.expensetracker.show;
 
+
 import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,10 +14,9 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.Voice;
+import com.vinsol.expensetracker.helpers.AudioPlay;
 import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
 import com.vinsol.expensetracker.utils.Log;
-import com.vinsol.expensetracker.helpers.AudioPlay;
-import com.vinsol.expensetracker.helpers.FileDelete;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
 public class ShowVoiceActivity extends ShowAbstract {
@@ -45,7 +46,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			updateUI();
 			if (intentExtras.containsKey("mDisplayList")) {
-				File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + mShowList.id+ ".amr");
+				File tempFile = fileHelper.getAudioFileEntry(mShowList.id);
 
 				if (tempFile.canRead()) {
 					mAudioPlay = new AudioPlay(mShowList.id, this, false);
@@ -80,7 +81,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 		} catch (NullPointerException e) {
 		}
 		showTimeDetailsChronometer.stop();
-		new FileDelete(mShowList.id);
+		fileHelper.deleteAllEntryFiles(mShowList.id);
 	}
 	
 	@Override
@@ -180,7 +181,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					updateUI();
 					if (intentExtras.containsKey("mDisplayList")) {
-						File tempFile = new File("/sdcard/ExpenseTracker/Audio/" + mShowList.id + ".amr");
+						File tempFile = fileHelper.getAudioFileEntry(mShowList.id);
 
 						if (tempFile.canRead()) {
 							mAudioPlay = new AudioPlay(mShowList.id, this, false);

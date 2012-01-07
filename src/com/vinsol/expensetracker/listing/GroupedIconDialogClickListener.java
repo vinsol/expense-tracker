@@ -1,6 +1,9 @@
-package com.vinsol.expensetracker;
+package com.vinsol.expensetracker.listing;
 
 import java.util.Calendar;
+
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
@@ -11,7 +14,6 @@ import com.vinsol.expensetracker.listing.UnknownEntryDialog;
 import com.vinsol.expensetracker.models.Entry;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,13 +23,13 @@ import android.widget.Toast;
 public class GroupedIconDialogClickListener implements OnClickListener {
 	
 	private UnknownEntryDialog unknownDialog;
-	private Context mContext;
+	private Activity activity;
 	private Bundle bundle;
 	private long timeInMillis;
 	
-	public GroupedIconDialogClickListener(UnknownEntryDialog unknownDialog,Context mContext,Bundle bundle,Long timeInMillis) {
+	public GroupedIconDialogClickListener(UnknownEntryDialog unknownDialog,Activity activity,Bundle bundle,Long timeInMillis) {
 		this.unknownDialog = unknownDialog;
-		this.mContext = mContext;
+		this.activity = activity;
 		if(bundle != null) {
 			if(!bundle.isEmpty()) {
 				this.bundle = bundle;
@@ -58,7 +60,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 			toInsert.location = LocationHelper.currentAddress;
 		}
-		unknownDialog = new UnknownEntryDialog(toInsert,mContext,new android.view.View.OnClickListener() {
+		unknownDialog = new UnknownEntryDialog(toInsert,activity,new android.view.View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -66,51 +68,51 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 				switch (v.getId()) {
 				// //// ******* opens TextEntry Activity ******** ///////////
 				case R.id.main_text:
-					Intent intentTextEntry = new Intent(mContext, TextEntry.class);
+					Intent intentTextEntry = new Intent(activity, TextEntry.class);
 					createDatabaseEntry(R.string.text,toInsert);
 					intentTextEntry.putExtra("textEntryBundle", bundle);
-					mContext.startActivity(intentTextEntry);
+					activity.startActivity(intentTextEntry);
 					break;
 					
 				// //// ******* opens Voice Activity ******** ///////////
 				case R.id.main_voice:
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-						Intent intentVoice = new Intent(mContext, Voice.class);
+						Intent intentVoice = new Intent(activity, Voice.class);
 						createDatabaseEntry(R.string.voice,toInsert);
 						intentVoice.putExtra("voiceBundle", bundle);
-						mContext.startActivity(intentVoice);
+						activity.startActivity(intentVoice);
 					} else {
-						Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_SHORT).show();
+						Toast.makeText(activity, "sdcard not available", Toast.LENGTH_SHORT).show();
 					}
 					break;
 
 				// //// ******* opens Camera Activity ******** ///////////
 				case R.id.main_camera:
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-						Intent intentCamera = new Intent(mContext, CameraActivity.class);
+						Intent intentCamera = new Intent(activity, CameraActivity.class);
 						if (timeInMillis != 0) {
 							bundle.putLong("timeInMillis", timeInMillis);
 						}
 						intentCamera.putExtra("cameraBundle", bundle);
-						mContext.startActivity(intentCamera);
+						activity.startActivity(intentCamera);
 					} else {
-						Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_SHORT).show();
+						Toast.makeText(activity, "sdcard not available", Toast.LENGTH_SHORT).show();
 					}
 					break;
 					
 				// //// ******* opens Favorite Activity ******** ///////////
 				case R.id.main_favorite:
 					
-					if(new ConvertCursorToListString(mContext).getFavoriteList().size() >=1) {
-						Intent intentFavorite = new Intent(mContext, FavoriteActivity.class);
+					if(new ConvertCursorToListString(activity).getFavoriteList().size() >=1) {
+						Intent intentFavorite = new Intent(activity, FavoriteActivity.class);
 						if (timeInMillis != 0) {
 							bundle.putLong("timeInMillis", timeInMillis);
 						}
 						intentFavorite.putExtra("favoriteBundle", bundle);
-						mContext.startActivity(intentFavorite);	
+						activity.startActivity(intentFavorite);	
 					}
 					else {
-						Toast.makeText(mContext, "no favorite added", Toast.LENGTH_SHORT).show();
+						Toast.makeText(activity, "no favorite added", Toast.LENGTH_SHORT).show();
 					}
 					break;
 				case R.id.unknown_entry_dialog_cancel:
@@ -135,22 +137,21 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 		}	
 	}
 
-	// /////// ******** function to mark entry into the database and returns the
-	// id of the new entry ***** //////
+	///////// ******** function to mark entry into the database and returns the id of the new entry ***** //////
 	private long insertToDatabase(int type, Entry toInsert) {
 		if(timeInMillis != 0)
 			bundle.putLong("timeInMillis", toInsert.timeInMillis);
 		else 
 			bundle.putLong("timeInMillis", toInsert.timeInMillis);
-		Activity activity = (mContext instanceof Activity) ? (Activity) mContext : null;
-		activity.finish();
+		if(activity != null)
+			activity.finish();
 		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
 			toInsert.location = LocationHelper.currentAddress;
 		}
-		toInsert.type = mContext.getString(type);
-		DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(mContext);
+		toInsert.type = activity.getString(type);
+		DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(activity);
 		mDatabaseAdapter.open();
-		long id = mDatabaseAdapter.insertToDatabase(toInsert);
+		long id = mDatabaseAdapter.insertToEntryTable(toInsert);
 		mDatabaseAdapter.close();
 		return id;
 	}

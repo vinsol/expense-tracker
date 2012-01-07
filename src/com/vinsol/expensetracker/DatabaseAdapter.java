@@ -1,6 +1,7 @@
 package com.vinsol.expensetracker;
 
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.Log;
 
 import android.content.ContentValues;
@@ -14,9 +15,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseAdapter {
 
 	// database and table name
-	private final String DATABASE_NAME = "ExpenseTrackerDB";
-	private final String TABLE_NAME = "ExpenseTrackerTable";
-	private final String TABLE_NAME_FAVORITE = "FavoriteTable";
+	private static int 	  DB_VERSION = 1;
+	private final String DATABASE_NAME = "ETDB";
+	private final String ENTRY_TABLE = "EntryTable";
+	private final String FAVORITE_TABLE = "FavoriteTable";
 
 	// column index
 	public static final String KEY_ID = "_id";
@@ -29,8 +31,8 @@ public class DatabaseAdapter {
 	
 
 	// sql open or create database
-	private final String DATABASE_CREATE = "create table if not exists "
-			+ TABLE_NAME + "(" 
+	private final String ENTRY_TABLE_CREATE = "create table if not exists "
+			+ ENTRY_TABLE + "(" 
 			+ KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," 
 			+ KEY_TAG + " TEXT,"
 			+ KEY_AMOUNT + " TEXT, " 
@@ -40,8 +42,8 @@ public class DatabaseAdapter {
 			+ KEY_TYPE + " VARCHAR(1) NOT NULL " 
 			+ ")";
 
-	private final String DATABASE_CREATE_FAVORITE = "create table if not exists "
-			+ TABLE_NAME_FAVORITE + "(" 
+	private final String FAVORITE_TABLE_CREATE = "create table if not exists "
+			+ FAVORITE_TABLE + "(" 
 			+ KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," 
 			+ KEY_TAG + " TEXT,"
 			+ KEY_AMOUNT + " TEXT, " 
@@ -65,11 +67,57 @@ public class DatabaseAdapter {
 		db.close();
 	}
 
-	protected void dropTable() {
-		db.execSQL("drop table " + TABLE_NAME);
+	protected void dropEntryTable() {
+		db.execSQL("drop table " + ENTRY_TABLE);
+	}
+	
+	protected void dropFavoriteTable() {
+		db.execSQL("drop table " + FAVORITE_TABLE);
 	}
 
-	public Long insertToDatabase(Entry list) {
+	public long insertToFavoriteTable(Favorite list) {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_TAG, list.description);
+		contentValues.put(KEY_AMOUNT, list.amount);
+		contentValues.put(KEY_TYPE, list.type);
+		Log.d("TRYING");
+		long id = db.insert(FAVORITE_TABLE, null, contentValues);
+		Log.d("ADDED");
+		return id;
+	}
+	
+	public boolean deleteFavoriteTableEntryID(Long favID) {
+		String where = KEY_ID + "=" + favID;
+		try {
+			Log.d("Deleting");
+			db.delete(FAVORITE_TABLE, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	protected boolean editFavoriteTable(Favorite list) {
+		ContentValues contentValues = new ContentValues();
+		if (list.description != null)
+			contentValues.put(KEY_TAG, list.description);
+		if (list.amount != null)
+			contentValues.put(KEY_AMOUNT, list.amount);
+		if (list.type != null)
+			contentValues.put(KEY_TYPE, list.type);
+		String where = KEY_ID + "=" + list.favId;
+		try {
+			Log.d("EDITING");
+			db.update(FAVORITE_TABLE, contentValues, where, null);
+			Log.d("EDITED");
+			return true;
+		} catch (Exception e) {
+		}
+		return false;
+	}
+	
+	public Long insertToEntryTable(Entry list) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_TAG, list.description);
 		contentValues.put(KEY_AMOUNT, list.amount);
@@ -78,17 +126,16 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_FAVORITE, list.favId);
 		contentValues.put(KEY_TYPE, list.type);
 		Log.d("TRYING");
-		long id = db.insert(TABLE_NAME, null, contentValues);
+		long id = db.insert(ENTRY_TABLE, null, contentValues);
 		Log.d("ADDED");
 		return id;
 	}
 
-	public boolean deleteDatabaseEntryID(String id) {
+	public boolean deleteEntryTableEntryID(String id) {
 		String where = KEY_ID + "=" + id;
-		
 		try {
 			Log.d("Deleting");
-			db.delete(TABLE_NAME, where, null);
+			db.delete(ENTRY_TABLE, where, null);
 			Log.d("Deleted");
 		} catch (SQLiteException e) {
 			return false;
@@ -96,7 +143,7 @@ public class DatabaseAdapter {
 		return true;
 	}
 
-	public boolean editDatabase(Entry list) {
+	public boolean editEntryTable(Entry list) {
 		ContentValues contentValues = new ContentValues();
 		if (list.description != null)
 			contentValues.put(KEY_TAG, list.description);
@@ -113,46 +160,35 @@ public class DatabaseAdapter {
 		String where = KEY_ID + "=" + list.id;
 		try {
 			Log.d("EDITING");
-			db.update(TABLE_NAME, contentValues, where, null);
+			db.update(ENTRY_TABLE, contentValues, where, null);
 			Log.d("EDITED");
 			return true;
-		} catch (Exception e) {
+		} catch (SQLiteException e) {
+			e.printStackTrace();
 		}
 		return false;
 	}
 
-	public Cursor getDateDatabase() {
+	public Cursor getEntryTableDateDatabase() {
 
-		return db.query(TABLE_NAME, new String[] { KEY_ID, 
-				KEY_TAG, 
-				KEY_AMOUNT,
-				KEY_DATE_TIME, 
-				KEY_LOCATION, 
-				KEY_FAVORITE, 
-				KEY_TYPE }, null, null, null, null, KEY_DATE_TIME+" desc");
+		return db.query(ENTRY_TABLE, null, null, null, null, null, KEY_DATE_TIME+" desc");
 		
 	}
 	
-	public Cursor getDateDatabase(String id) {
+	public Cursor getEntryTableDateDatabase(String id) {
 		if(id != null){
 			if(id.length() > 1)
 				id = id.substring(0, id.length()-1);
 		}
 		String where = KEY_ID+" in ("+id +")";
-		return db.query(TABLE_NAME, new String[] { KEY_ID, 
-				KEY_TAG, 
-				KEY_AMOUNT,
-				KEY_DATE_TIME, 
-				KEY_LOCATION, 
-				KEY_FAVORITE, 
-				KEY_TYPE }, where, null, null, null, KEY_DATE_TIME+" desc");
+		return db.query(ENTRY_TABLE, null, where, null, null, null, KEY_DATE_TIME+" desc");
 		
 	}
 	
-	public Long getFavoriteId(String id) {
+	public Long getFavoriteIdEntryTable(String id) {
 		String where = KEY_ID+" = "+id;
 		
-		Cursor cr = db.query(TABLE_NAME,  new String[] {
+		Cursor cr = db.query(ENTRY_TABLE,  new String[] {
 				KEY_FAVORITE}, where, null, null, null, null);
 		cr.moveToFirst();
 		Long favId = cr.getLong(cr.getColumnIndex(KEY_FAVORITE));
@@ -160,23 +196,27 @@ public class DatabaseAdapter {
 		return favId;
 	}
 
-	public void editDatabaseFavorite(Long favID) {
+	public void editFavoriteIdEntryTable(Long favID) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_FAVORITE, "");
 		String where = KEY_FAVORITE+" = "+favID;
-		db.update(TABLE_NAME, contentValues, where, null);
+		db.update(ENTRY_TABLE, contentValues, where, null);
 	}
 
+	public Cursor getFavoriteTableComplete() {
+		return db.query(FAVORITE_TABLE, new String[] { KEY_ID, KEY_TAG, KEY_AMOUNT, KEY_TYPE }, null,null, null, null, null);
+	}
+	
 	private class MyCreateOpenHelper extends SQLiteOpenHelper {
 
 		public MyCreateOpenHelper(Context context) {
-			super(context, DATABASE_NAME, null, 1);
+			super(context, DATABASE_NAME, null, DB_VERSION);
 		}
 
 		@Override
 		public void onCreate(SQLiteDatabase database) {
-			database.execSQL(DATABASE_CREATE);
-			database.execSQL(DATABASE_CREATE_FAVORITE);
+			database.execSQL(ENTRY_TABLE_CREATE);
+			database.execSQL(FAVORITE_TABLE_CREATE);
 		}
 
 		@Override

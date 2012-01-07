@@ -18,9 +18,7 @@ public class RecordingHelper {
 	public RecordingHelper(String mFileName, Context _context) {
 		mRecorder = new MediaRecorder();
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-			File mDirectory = new File("/mnt/sdcard/ExpenseTracker/Audio");
-			mDirectory.mkdirs();
-			File mPath = new File(mDirectory, mFileName + ".amr");
+			File mPath = new FileHelper().getAudioFileEntry(mFileName);
 			mRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
 			mRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
 			mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);

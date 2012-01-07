@@ -2,6 +2,7 @@ package com.vinsol.expensetracker.edit;
 
 import java.io.File;
 import java.util.Calendar;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -19,12 +20,12 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.helpers.CameraFileSave;
 import com.vinsol.expensetracker.helpers.DateHelper;
-import com.vinsol.expensetracker.helpers.FileDelete;
+import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
 public class CameraActivity extends EditAbstract {
@@ -40,7 +41,7 @@ public class CameraActivity extends EditAbstract {
 		
 		// //////********* Get id from intent extras ******** ////////////
 		intentExtras = getIntent().getBundleExtra("cameraBundle");
-		
+		fileHelper = new FileHelper();
 		// ////// ******** Initializing and assigning memory to UI Items ********** /////////
 		editCameraDetails = (LinearLayout) findViewById(R.id.edit_camera_details);
 		editImageDisplay = (ImageView) findViewById(R.id.edit_image_display);
@@ -53,7 +54,7 @@ public class CameraActivity extends EditAbstract {
 			if(setUnknown) {
 				startCamera();
 			}
-			File mFile = new File("/sdcard/ExpenseTracker/" + entry.id + "_small.jpg");
+			File mFile = fileHelper.getCameraFileSmallEntry(entry.id);
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 				setImageResource(mDrawable);
@@ -103,7 +104,7 @@ public class CameraActivity extends EditAbstract {
 				
 				toInsert.type = getString(R.string.camera);
 				mDatabaseAdapter.open();
-				entry.id = mDatabaseAdapter.insertToDatabase(toInsert).toString();
+				entry.id = mDatabaseAdapter.insertToEntryTable(toInsert).toString();
 				mDatabaseAdapter.close();
 			}
 		}
@@ -127,10 +128,7 @@ public class CameraActivity extends EditAbstract {
 		// ///// ******* Starting Camera to capture Image ******** //////////
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			File path = new File("/mnt/sdcard/ExpenseTracker");
-			path.mkdirs();
-			String name = entry.id + ".jpg";
-			File file = new File(path, name);
+			File file = fileHelper.getCameraFileLargeEntry(entry.id);
 			camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
 			startActivityForResult(camera, PICTURE_RESULT);
 		} else {
@@ -148,14 +146,14 @@ public class CameraActivity extends EditAbstract {
 			} else {
 				isChanged = false;
 				if(!setUnknown) {
-					File mFile = new File("/sdcard/ExpenseTracker/" + entry.id+ "_small.jpg");
+					File mFile = fileHelper.getCameraFileSmallEntry(entry.id);
 					if (mFile.canRead()) {
 						Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 						setImageResource(mDrawable);
 					} else {
 						DatabaseAdapter adapter = new DatabaseAdapter(this);
 						adapter.open();
-						adapter.deleteDatabaseEntryID(entry.id + "");
+						adapter.deleteEntryTableEntryID(entry.id + "");
 						adapter.close();
 					}
 				}
@@ -186,7 +184,7 @@ public class CameraActivity extends EditAbstract {
 		protected void onPostExecute(Void result) {
 			editLoadProgress.setVisibility(View.GONE);
 			editImageDisplay.setVisibility(View.VISIBLE);
-			File mFile = new File("/sdcard/ExpenseTracker/" + entry.id+ "_small.jpg");
+			File mFile = fileHelper.getCameraFileSmallEntry(entry.id);
 			Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 			setImageResource(mDrawable);
 			editDelete.setEnabled(true);
@@ -217,7 +215,7 @@ public class CameraActivity extends EditAbstract {
 		
 		// //////// ********** Adding action if image is pressed ********		 ///////////
 		if (v.getId() == R.id.edit_image_display) {
-			File mFile = new File("/sdcard/ExpenseTracker/" + entry.id + ".jpg");
+			File mFile = fileHelper.getCameraFileLargeEntry(entry.id);
 			if(mFile.canRead()) {
 				Intent intent = new Intent(this, ImagePreview.class);
 				intent.putExtra("id", entry.id);
@@ -236,7 +234,7 @@ public class CameraActivity extends EditAbstract {
 	@Override
 	protected void deleteAction() {
 		super.deleteAction();
-		new FileDelete(entry.id);
+		fileHelper.deleteAllEntryFiles(entry.id);
 	}
 	
 	@Override

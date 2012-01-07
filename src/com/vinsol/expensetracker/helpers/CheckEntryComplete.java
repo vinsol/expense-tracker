@@ -3,12 +3,16 @@ package com.vinsol.expensetracker.helpers;
 import java.io.File;
 
 import android.content.Context;
+
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 
 public class CheckEntryComplete {
 	
+	private FileHelper fileHelper;
+	
 	public boolean isEntryComplete(Entry entryList,Context mContext) {
+		fileHelper = new FileHelper();
 		if(isAmountValid(entryList.amount)) {
 			if (entryList.type.equals(mContext.getString(R.string.camera))) {
 				return isCameraFileReadable(entryList.id);
@@ -45,7 +49,7 @@ public class CheckEntryComplete {
 	}
 
 	private boolean isAudioFileReadable(String id) {
-		File mFile = new File("/sdcard/ExpenseTracker/Audio/" + id + ".amr");
+		File mFile = fileHelper.getAudioFileEntry(id);
 		if (mFile.canRead()) {
 			return true;
 		} else {
@@ -54,9 +58,9 @@ public class CheckEntryComplete {
 	}
 
 	private boolean isCameraFileReadable(String id) {
-		File mFileSmall = new File("/sdcard/ExpenseTracker/" + id + "_small.jpg");
-		File mFile = new File("/sdcard/ExpenseTracker/" + id + ".jpg");
-		File mFileThumbnail = new File("/sdcard/ExpenseTracker/" + id + "_thumbnail.jpg");
+		File mFileSmall = fileHelper.getCameraFileSmallEntry(id);
+		File mFile = fileHelper.getCameraFileLargeEntry(id);
+		File mFileThumbnail = fileHelper.getCameraFileThumbnailEntry(id);
 		if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 			return true;
 		}

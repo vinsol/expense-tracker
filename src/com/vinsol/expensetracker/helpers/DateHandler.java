@@ -5,7 +5,6 @@ import java.util.Calendar;
 import com.vinsol.expensetracker.R;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.view.View;
@@ -20,27 +19,21 @@ public class DateHandler implements OnClickListener {
 	private TextView dateview;
 	private DisplayDate mDisplayDate;
 	private Calendar mCalendar;
-	private Activity activity;
 	private DatePickerDialog dialog;
 	public static Calendar tempCalenderOnCancel;
 
-	public DateHandler(Context mContext) {
-		doCommonTaskBefore(mContext);
-		doCommonTaskAfter(mContext);
+	public DateHandler(Activity activity) {
+		mCalendar = Calendar.getInstance();
+		doCommonTaskAfter(activity);
 	}
 
-	public DateHandler(Context mContext, long long1) {
-		doCommonTaskBefore(mContext);
-		mCalendar.setTimeInMillis(long1);
-		doCommonTaskAfter(mContext);
-	}
-	
-	private void doCommonTaskBefore(Context mContext) {
-		activity = (mContext instanceof Activity) ? (Activity) mContext : null;
+	public DateHandler(Activity activity, long long1) {
 		mCalendar = Calendar.getInstance();
+		mCalendar.setTimeInMillis(long1);
+		doCommonTaskAfter(activity);
 	}
 	
-	private void doCommonTaskAfter(Context mContext) {
+	private void doCommonTaskAfter(Activity activity) {
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mDisplayDate = new DisplayDate(mCalendar);
 		dateview = (TextView) activity.findViewById(R.id.edit_date_bar_dateview);
@@ -51,7 +44,7 @@ public class DateHandler implements OnClickListener {
 			nextArrow.setVisibility(View.INVISIBLE);
 
 		dateview.setText(mDisplayDate.getDisplayDate());
-		dialog = new DatePickerDialog(mContext, dateview);
+		dialog = new DatePickerDialog(activity, dateview);
 		previousArrow.setOnClickListener(this);
 		nextArrow.setOnClickListener(this);
 		dateview.setOnClickListener(this);

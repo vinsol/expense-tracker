@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -21,11 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.vinsol.expensetracker.GroupedIconDialogClickListener;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.utils.ImagePreview;
@@ -43,12 +44,14 @@ class SeparatedListAdapter extends BaseAdapter {
 	private UnknownEntryDialog unknownEntryDialog;
 	private View viewHeader = null;
 	private View viewFooter = null;
+	private FileHelper fileHelper;
 	
 	public SeparatedListAdapter(Context context) {
 		mContext = context;
 		headers = new ArrayAdapter<String>(context,R.layout.mainlist_header_view);
 		footers = new ArrayAdapter<String>(context,R.layout.main_list_footerview);
 		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		fileHelper = new FileHelper();
 	}
 
 	public void addSection(String section, Adapter adapter,List<ListDatetimeAmount> mDataDateList2) {
@@ -160,7 +163,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderFooter.addExpensesButton.setText("Add expenses to "+ mDatadateList.get(sectionnum).dateTime);
 					holderFooter.addExpensesButton.setFocusable(false);
 					DateHelper mDateHelper = new DateHelper(mDatadateList.get(sectionnum).dateTime);
-					holderFooter.addExpensesButton.setOnClickListener(new GroupedIconDialogClickListener(unknownEntryDialog, mContext, null, mDateHelper.getTimeMillis()));
+					holderFooter.addExpensesButton.setOnClickListener(new GroupedIconDialogClickListener(unknownEntryDialog, (Activity)mContext, null, mDateHelper.getTimeMillis()));
 				}
 
 				return viewFooter;
@@ -193,7 +196,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						try {
-							File mFile = new File("/sdcard/ExpenseTracker/"+ mlist.id + "_thumbnail.jpg");
+							File mFile = fileHelper.getCameraFileThumbnailEntry(mlist.id);
 							if (mFile.canRead()) {
 								Drawable drawable = Drawable.createFromPath(mFile.getPath());
 								holderBody.rowImageview.setImageDrawable(drawable);
@@ -229,7 +232,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					} else {
 						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
 					}
-					File mFile = new File("/sdcard/ExpenseTracker/Audio/"+ mlist.id + ".amr");
+					File mFile = fileHelper.getAudioFileEntry(mlist.id);
 					if (mFile.canRead()) {
 						holderBody.rowImageview.setImageResource(R.drawable.listing_voice_entry_icon);
 					} else {
@@ -326,12 +329,12 @@ class SeparatedListAdapter extends BaseAdapter {
 				if (mListenerList != null)
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						if (mListenerList.type.equals(mContext.getString(R.string.voice))) {
-							File mFile = new File("/sdcard/ExpenseTracker/Audio/" + mListenerList.id + ".amr");
+							File mFile = fileHelper.getAudioFileEntry(mListenerList.id);
 							if (mFile.canRead()) {
 								new AudioPlayDialog(mContext, mListenerList.id);
 							}
 						} else if (mListenerList.type.equals(mContext.getString(R.string.camera))) {
-							File mFile = new File("/sdcard/ExpenseTracker/" + mListenerList.id + ".jpg");
+							File mFile = fileHelper.getCameraFileLargeEntry(mListenerList.id);
 							if (mFile.canRead()) {
 								Intent intent = new Intent(mContext, ImagePreview.class);
 								intent.putExtra("id", mListenerList.id);

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.vinsol.expensetracker.DBAdapterFavorite;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
@@ -16,29 +15,30 @@ import android.database.Cursor;
 public class ConvertCursorToListString {
 	Context context;
 
+	DatabaseAdapter adapter ;
 	public ConvertCursorToListString(Context context) {
 		this.context = context;
+		adapter = new DatabaseAdapter(context);
 	}
 
 	public List<Favorite> getFavoriteList() {
 		List<Favorite> mainlist = new ArrayList<Favorite>();
 		Favorite listFavorite;
-		DBAdapterFavorite mDbAdapterFavorite = new DBAdapterFavorite(context);
-		mDbAdapterFavorite.open();
-		Cursor cursor = mDbAdapterFavorite.getCompleteDatabase();
+		adapter.open();
+		Cursor cursor = adapter.getFavoriteTableComplete();
 		if(cursor.getCount() >= 1) {
 			cursor.moveToFirst();
 			do {
 				listFavorite = new Favorite();
-				listFavorite.amount = cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_AMOUNT));
-				listFavorite.favId = cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_ID));
-				listFavorite.description = cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_TAG));
-				listFavorite.type = cursor.getString(cursor.getColumnIndex(DBAdapterFavorite.KEY_TYPE));
+				listFavorite.amount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
+				listFavorite.favId = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
+				listFavorite.description = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TAG));
+				listFavorite.type = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TYPE));
 				mainlist.add(listFavorite);
 				cursor.moveToNext();
 			} while (!cursor.isAfterLast());
 		}
-		mDbAdapterFavorite.close();
+		adapter.close();
 		return mainlist;
 	}
 	
@@ -55,14 +55,13 @@ public class ConvertCursorToListString {
 	
 	public List<ListDatetimeAmount> getDateListString(boolean isGraph,String id) {
 		ListDatetimeAmount listDatetimeAmount = new ListDatetimeAmount();
-		DatabaseAdapter adapter = new DatabaseAdapter(context);
 		adapter.open();
 		Cursor cursor;
 		StringProcessing mStringProcessing = new StringProcessing();
 		if(id == null || id.equals("")) {
-			cursor = adapter.getDateDatabase();
+			cursor = adapter.getEntryTableDateDatabase();
 		} else {
-			cursor = adapter.getDateDatabase(id);
+			cursor = adapter.getEntryTableDateDatabase(id);
 		}
 		List<ListDatetimeAmount> mainlist = new ArrayList<ListDatetimeAmount>();
 		double temptotalAmount = 0;
@@ -133,13 +132,12 @@ public class ConvertCursorToListString {
 	}
 	
 	public List<Entry> getListStringParticularDate(String id) {
-		DatabaseAdapter adapter = new DatabaseAdapter(context);
 		adapter.open();
 		Cursor cursor;
 		if(id == null || id.equals("")) {
-			cursor = adapter.getDateDatabase();
+			cursor = adapter.getEntryTableDateDatabase();
 		} else {
-			cursor = adapter.getDateDatabase(id);
+			cursor = adapter.getEntryTableDateDatabase(id);
 		}
 		List<Entry> mainlist = new ArrayList<Entry>();
 		if (cursor.getCount() >= 1) {

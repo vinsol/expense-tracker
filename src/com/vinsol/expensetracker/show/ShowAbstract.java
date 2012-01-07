@@ -2,15 +2,7 @@ package com.vinsol.expensetracker.show;
 
 import java.io.File;
 import java.util.Calendar;
-import com.vinsol.expensetracker.DBAdapterFavorite;
-import com.vinsol.expensetracker.DatabaseAdapter;
-import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.helpers.CheckEntryComplete;
-import com.vinsol.expensetracker.helpers.FileCopyFavorite;
-import com.vinsol.expensetracker.helpers.FileDeleteFavorite;
-import com.vinsol.expensetracker.listing.ExpenseListing;
-import com.vinsol.expensetracker.listing.ExpenseSubListing;
-import com.vinsol.expensetracker.models.Entry;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +14,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.CheckEntryComplete;
+import com.vinsol.expensetracker.helpers.FileHelper;
+import com.vinsol.expensetracker.listing.ExpenseListing;
+import com.vinsol.expensetracker.listing.ExpenseSubListing;
+import com.vinsol.expensetracker.models.Entry;
 
 abstract class ShowAbstract extends Activity implements OnClickListener {
 
@@ -40,13 +40,14 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	private RelativeLayout dateBarRelativeLayout;
 	private ToggleButton showAddFavorite;
 	private TextView showAddFavoriteTextView;
-	private DBAdapterFavorite mDbAdapterFavorite;
 	private String tempfavID;
+	protected FileHelper fileHelper;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_page);
+		fileHelper = new FileHelper();
 		showEdit = (Button) findViewById(R.id.show_edit);
 		showAddFavorite = (ToggleButton) findViewById(R.id.show_add_favorite);
 		showAddFavoriteTextView = (TextView) findViewById(R.id.show_add_favorite_textView);
@@ -144,7 +145,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 			if (mShowList.id != null) {
 				deleteAction();
 				mDatabaseAdapter.open();
-				mDatabaseAdapter.deleteDatabaseEntryID(mShowList.id);
+				mDatabaseAdapter.deleteEntryTableEntryID(mShowList.id);
 				mDatabaseAdapter.close();
 				Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
 				if(intentExtras.containsKey("position")) {
@@ -212,7 +213,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	public void FavoriteHelper() {
 		showAddFavorite.setVisibility(View.VISIBLE);
 		showAddFavoriteTextView.setVisibility(View.VISIBLE);
-		mDbAdapterFavorite = new DBAdapterFavorite(this);
 		if(mShowList.favId != null) {
 			if(!mShowList.favId.equals("")) {
 				showAddFavorite.setChecked(true);
@@ -233,24 +233,25 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		Long favID = null;
 		if(toCheck) {
 			if(mShowList.type.equals(getString(R.string.text))) {
-				mDbAdapterFavorite.open();
-				favID = mDbAdapterFavorite.insertToDatabase(mShowList);
-				mDbAdapterFavorite.close();
+				mDatabaseAdapter.open();
+				favID = mDatabaseAdapter.insertToFavoriteTable(mShowList);
+				mDatabaseAdapter.close();
 			} else if(mShowList.type.equals(getString(R.string.camera))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					try {
-						mDbAdapterFavorite.open();
-						favID = mDbAdapterFavorite.insertToDatabase(mShowList);
-						mDbAdapterFavorite.close();
-						new FileCopyFavorite(mShowList.id, favID.toString());
-						File mFile = new File("/sdcard/ExpenseTracker/Favorite/"+favID+".jpg");
-						File mFileSmall = new File("/sdcard/ExpenseTracker/Favorite/"+favID+"_small.jpg");
-						File mFileThumbnail = new File("/sdcard/ExpenseTracker/Favorite/"+favID+"_thumbnail.jpg");
+						mDatabaseAdapter.open();
+						favID = mDatabaseAdapter.insertToFavoriteTable(mShowList);
+						mDatabaseAdapter.close();
+						
+						fileHelper.copyAllToFavorite(mShowList.id, favID.toString());
+						File mFile = fileHelper.getCameraFileLargeFavorite(favID.toString());
+						File mFileSmall = fileHelper.getCameraFileSmallFavorite(favID.toString());
+						File mFileThumbnail = fileHelper.getCameraFileThumbnailFavorite(favID.toString());
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 						} else {
-							mDbAdapterFavorite.open();
-							mDbAdapterFavorite.deleteDatabaseEntryID(favID);
-							mDbAdapterFavorite.close();
+							mDatabaseAdapter.open();
+							mDatabaseAdapter.deleteFavoriteTableEntryID(favID);
+							mDatabaseAdapter.close();
 						}
 					} catch (Exception e) {	
 					}
@@ -260,15 +261,15 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 			} else if(mShowList.type.equals(getString(R.string.voice))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					try {
-						mDbAdapterFavorite.open();
-						favID = mDbAdapterFavorite.insertToDatabase(mShowList);
-						mDbAdapterFavorite.close();
-						new FileCopyFavorite(mShowList.id,favID.toString());
-						File mFile = new File("/sdcard/ExpenseTracker/Favorite/Audio/"+favID+".amr");
+						mDatabaseAdapter.open();
+						favID = mDatabaseAdapter.insertToFavoriteTable(mShowList);
+						mDatabaseAdapter.close();
+						fileHelper.copyAllToFavorite(mShowList.id, favID.toString());
+						File mFile = fileHelper.getAudioFileFavorite(favID.toString());
 						if(!mFile.canRead()) {
-							mDbAdapterFavorite.open();
-							mDbAdapterFavorite.deleteDatabaseEntryID(favID);
-							mDbAdapterFavorite.close();
+							mDatabaseAdapter.open();
+							mDatabaseAdapter.deleteFavoriteTableEntryID(favID);
+							mDatabaseAdapter.close();
 						}
 					} catch (Exception e) {	
 					}
@@ -278,20 +279,20 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 			}
 			mShowList.favId = favID+"";
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.editDatabase(mShowList);
+			mDatabaseAdapter.editEntryTable(mShowList);
 			mDatabaseAdapter.close();
 			showAddFavorite.setChecked(true);
 			showAddFavoriteTextView.setText("Remove from Favorite");
 		} else if(mShowList.id.equals(getString(R.string.text))) {
 				mDatabaseAdapter.open();
-				favID = mDatabaseAdapter.getFavoriteId(mShowList.id);
+				favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
 				mDatabaseAdapter.close();
 				doTaskAfter(favID);
 			} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				mDatabaseAdapter.open();
-				favID = mDatabaseAdapter.getFavoriteId(mShowList.id);
+				favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
 				mDatabaseAdapter.close();
-				new FileDeleteFavorite(favID);
+				fileHelper.deleteAllFavoriteFiles(favID.toString());
 				doTaskAfter(favID);
 			} else {
 				Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
@@ -299,11 +300,11 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	}
 
 	private void doTaskAfter(Long favID) {
-		mDbAdapterFavorite.open();
-		mDbAdapterFavorite.deleteDatabaseEntryID(favID);
-		mDbAdapterFavorite.close();
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editDatabaseFavorite(favID);
+		mDatabaseAdapter.deleteFavoriteTableEntryID(favID);
+		mDatabaseAdapter.close();
+		mDatabaseAdapter.open();
+		mDatabaseAdapter.editFavoriteIdEntryTable(favID);
 		mDatabaseAdapter.close();
 		showAddFavorite.setChecked(false);
 		mShowList.favId = null;
