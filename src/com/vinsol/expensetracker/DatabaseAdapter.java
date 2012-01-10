@@ -1,9 +1,5 @@
 package com.vinsol.expensetracker;
 
-import com.vinsol.expensetracker.models.Entry;
-import com.vinsol.expensetracker.models.Favorite;
-import com.vinsol.expensetracker.utils.Log;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,14 +8,23 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.models.Favorite;
+import com.vinsol.expensetracker.utils.Log;
+
 public class DatabaseAdapter {
 
 	// database and table name
-	private static int 	  DB_VERSION = 1;
-	private final String DATABASE_NAME = "ETDB";
+	private static int DB_VERSION = 2;
+	private final String DATABASE_NAME = "ExpenseTrackerDB";
 	private final String ENTRY_TABLE = "EntryTable";
 	private final String FAVORITE_TABLE = "FavoriteTable";
-
+	
+//	private final String ENTRY_TABLE = "ExpenseTrackerTable";
+//	private final String FAVORITE_TABLE = "FavoriteTable";
+	
+	private final String PREVIOUS_VERSION_ENTRY_TABLE = "ExpenseTrackerTable";
+	
 	// column index
 	public static final String KEY_ID = "_id";
 	public static final String KEY_TAG = "TAG";
@@ -202,7 +207,7 @@ public class DatabaseAdapter {
 		String where = KEY_FAVORITE+" = "+favID;
 		db.update(ENTRY_TABLE, contentValues, where, null);
 	}
-
+ 
 	public Cursor getFavoriteTableComplete() {
 		return db.query(FAVORITE_TABLE, new String[] { KEY_ID, KEY_TAG, KEY_AMOUNT, KEY_TYPE }, null,null, null, null, null);
 	}
@@ -225,7 +230,13 @@ public class DatabaseAdapter {
 		}
 
 		@Override
-		public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
+		public void onUpgrade(SQLiteDatabase db, int prevVersion, int newVersion) {
+			Log.d("********** prevVersion "+prevVersion+" ********newVersion "+newVersion+" ********");
+			if(prevVersion == 1) {
+				db.execSQL("ALTER TABLE " + PREVIOUS_VERSION_ENTRY_TABLE +" RENAME TO "+ENTRY_TABLE);
+			}
+			Log.d("********** prevVersion "+prevVersion+" ********newVersion "+newVersion+" ********");
 		}
+		
 	}
 }

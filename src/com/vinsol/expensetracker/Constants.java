@@ -1,6 +1,7 @@
 package com.vinsol.expensetracker;
 
 public class Constants {
+	
 	public static String IMAGE_SMALL_SUFFIX = "_small.jpg";
 	public static String IMAGE_THUMBNAIL_SUFFIX = "_thumbnail.jpg";
 	public static String IMAGE_LARGE_SUFFIX = ".jpg";
