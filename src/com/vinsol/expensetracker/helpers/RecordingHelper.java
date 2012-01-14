@@ -15,12 +15,12 @@ import android.widget.Toast;
 
 public class RecordingHelper {
 
-	// ///// ******** Declaring variables and classes ******** ///////
+	/////// ******** Declaring variables and classes ******** ///////
 	MediaRecorder mRecorder;
 	private boolean isRecording = false;
 	private Context mContext;
 
-	// ////// ********* Constructor ********* //////////
+	//////// ********* Constructor ********* //////////
 	public RecordingHelper(String mFileName, Context _context) {
 		mRecorder = new MediaRecorder();
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
@@ -35,7 +35,7 @@ public class RecordingHelper {
 		}
 	}
 
-	// ///// ********* Function to start recording ********* /////////
+	/////// ********* Function to start recording ********* /////////
 	public void startRecording() {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			try {
@@ -50,7 +50,7 @@ public class RecordingHelper {
 		}
 	}
 
-	// ////// *********** Function to stop recording ********** //////////
+	//////// *********** Function to stop recording ********** //////////
 	public void stopRecording() {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			if (isRecording) {
@@ -61,7 +61,7 @@ public class RecordingHelper {
 		}
 	}
 
-	// ////// ********** Function to check whether recorder is running or not ******** /////////
+	//////// ********** Function to check whether recorder is running or not ******** /////////
 	public boolean isRecording() {
 		return isRecording;
 	}

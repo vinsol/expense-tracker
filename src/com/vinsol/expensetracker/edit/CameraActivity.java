@@ -200,10 +200,10 @@ public class CameraActivity extends EditAbstract {
 	}
 
 	private void setGraphicsCamera() {
-		// ///// ***** Sets Title Camera Entry *********///////
+		/////// ***** Sets Title Camera Entry *********///////
 		editHeaderTitle.setText("Camera Entry");
 
-		// //// ****** Shows Camera Details ********////////
+		////// ****** Shows Camera Details ********////////
 		editCameraDetails.setVisibility(View.VISIBLE);
 	}
 
@@ -219,7 +219,7 @@ public class CameraActivity extends EditAbstract {
 	public void onClick(View v) {
 		super.onClick(v);
 		
-		// //////// ********** Adding action if image is pressed ********		 ///////////
+		////////// ********** Adding action if image is pressed ********		 ///////////
 		if (v.getId() == R.id.edit_image_display) {
 			File mFile = fileHelper.getCameraFileLargeEntry(entry.id);
 			if(mFile.canRead()) {
@@ -231,7 +231,7 @@ public class CameraActivity extends EditAbstract {
 			}
 		}
 
-		// /////// ********** Adding action if retake button is pressed ******//////////
+		///////// ********** Adding action if retake button is pressed ******//////////
 		if (v.getId() == R.id.edit_retake_button) {
 			startCamera();
 		}
