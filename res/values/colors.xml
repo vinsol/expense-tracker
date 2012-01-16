@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
     <color name="grey">#ff404040</color>
+	<drawable name="transparent_background">#00000000</drawable>
+	<drawable name="screen_background_black">#ff000000</drawable>
+	
 </resources>

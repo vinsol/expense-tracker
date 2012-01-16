@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE activity>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout 
+		android:id="@+id/camera_preview_container"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		/>
+    
+    <RelativeLayout
+        android:id="@+id/camera_button_container"
+        android:background="@drawable/camera_button_bg"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+        
+        <!-- Take Pic Button -->
+		<Button 
+		    android:id="@+id/take_pic_button" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:background="@drawable/shutter_button_states"
+			android:layout_alignParentLeft="true"
+			android:layout_marginLeft="10dp"
+			android:layout_centerVertical="true"
+			/>
+		<!-- Flash Button -->
+		<com.vinsol.expensetracker.cameraservice.CameraFlashButton
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_marginRight="10dp"
+		    android:paddingRight="5dp"
+		    android:paddingLeft="5dp"
+		    android:layout_centerVertical="true"
+			/>
+	</RelativeLayout>
+	
+</RelativeLayout>

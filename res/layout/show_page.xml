@@ -34,8 +34,7 @@
             android:ellipsize="end"
             android:layout_marginRight="7dip"
             android:singleLine="true"
-            >
-        </TextView>            
+            />          
         
     </RelativeLayout>
     
@@ -73,8 +72,7 @@
                    	android:paddingRight="5dp"
                    	android:paddingBottom="8dp"
                    	android:scaleType="fitXY"
-                   	>
-            	</ImageView>
+                   	/>
             </LinearLayout>
             
             <!-- voice entry -->    
@@ -94,8 +92,7 @@
                   	android:gravity="center_horizontal"
                   	android:textColor="@color/black"
                   	android:layout_marginTop="5dip"
-                    >
-            	</Chronometer>
+                    />
                 
                 <LinearLayout
                     android:id="@+id/show_voice_control_buttons"
@@ -112,8 +109,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/voice_stop_states"
                         android:visibility="gone"
-                       	>
-                    </Button>
+                       	/>
                     
                     <!-- play button -->
                     <Button
@@ -121,8 +117,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/voice_play_states"
-                       	>
-                    </Button>
+                       	/>
               	</LinearLayout>    
             </RelativeLayout>
             
@@ -138,8 +133,7 @@
                 android:layout_marginLeft="7dp"
             	android:layout_marginRight="7dp"
             	android:layout_marginTop="10dip"
-                >
-           	</TextView>
+                />
             <!-- amount value -->
             <TextView
                 android:id="@+id/show_amount"
@@ -150,8 +144,7 @@
                 android:layout_marginLeft="7dp"
             	android:layout_marginRight="7dp"
                 android:layout_marginBottom="10dp"
-                >
-           	</TextView>
+                />
             
             <!-- divider -->    
             <View 
@@ -160,8 +153,7 @@
 	           	android:layout_height="wrap_content"
 	           	android:background="@drawable/list_divider"
 	           	android:layout_marginBottom="10dp"
-	           	>
-            </View>
+	           	/>
                 
             <!-- description header -->
             <TextView 
@@ -175,8 +167,7 @@
             	android:layout_marginLeft="7dp"
             	android:layout_marginRight="7dp"
                 android:layout_marginBottom="5dp"
-            	>
-            </TextView>
+            	/>
                 
             <!-- description text view -->    
        		<TextView 
@@ -188,8 +179,7 @@
               	android:textColor="@color/black"
               	android:layout_marginLeft="7dp"
             	android:layout_marginRight="7dp"
-                >
-            </TextView>
+                />
             
            	<!-- divider -->    
             <View 
@@ -198,8 +188,7 @@
 	           	android:background="@drawable/list_divider"
 	           	android:layout_marginTop="10dp"
 	           	android:layout_marginBottom="15dp"
-	           	>
-            </View>    
+	           	/>  
            	    
             <LinearLayout
                 android:id="@+id/show_add_favorite_layout" 
@@ -221,8 +210,7 @@
 	                android:textOff=""
 	                android:layout_marginRight="7dp" 
 	                android:visibility="gone"
-	                >
-	            </ToggleButton>
+	                />
 	            
 	            <TextView 
 	                android:id="@+id/show_add_favorite_textView"

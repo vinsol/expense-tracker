@@ -10,12 +10,11 @@ import java.io.File;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.Environment;
 
 public class ExpenseTrackerApplication extends Application {
 	
 	private static Context applicationContext; 
-	public static String SDCARD_PATH = Environment.getExternalStorageDirectory().toString(); 
+	public static String SDCARD_PATH ; 
 	
     @Override
     public void onCreate() {
@@ -25,6 +24,7 @@ public class ExpenseTrackerApplication extends Application {
     }
     
     private void Initialize() {
+    	SDCARD_PATH = getExternalCacheDir().toString();
 		File mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_AUDIO);
 		mFile.mkdirs();
 		mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + Constants.DIRECTORY_AUDIO);
