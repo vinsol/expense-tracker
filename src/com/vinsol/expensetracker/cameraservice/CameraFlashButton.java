@@ -1,6 +1,7 @@
 package com.vinsol.expensetracker.cameraservice;
 
 import android.content.Context;
+import android.hardware.Camera;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,6 +34,7 @@ public class CameraFlashButton extends FrameLayout implements OnClickListener {
 		flashButton.setFocusable(false);
 		flashButton.setFocusableInTouchMode(false);
 		flashButton.setOnClickListener(this);
+//		setFlashMode();
 	}
 	
 	private void setButtonBackground() {
@@ -45,6 +47,23 @@ public class CameraFlashButton extends FrameLayout implements OnClickListener {
 		selectedResId%=3;
 		setButtonBackground();
 		this.refreshDrawableState();
+//		setFlashMode();
 	}
+
+//	private void setFlashMode() {
+//		switch (selectedResId) {
+//		case 0:
+//			Camera.open().getParameters().setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+//			break;
+//		case 1:
+//			Camera.open().getParameters().setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+//			break;
+//		case 2:
+//			Camera.open().getParameters().setFlashMode(Camera.Parameters.FLASH_MODE_ON);	
+//			break;
+//		default:
+//			break;
+//		}
+//	}
 
 }
