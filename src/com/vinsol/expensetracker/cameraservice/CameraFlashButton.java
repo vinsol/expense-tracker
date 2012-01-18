@@ -14,6 +14,7 @@ public class CameraFlashButton extends FrameLayout implements OnClickListener {
 	private Button flashButton;
 	private int[] resId = {R.drawable.flash_auto, R.drawable.flash_disable, R.drawable.flash_enable};
 	private int selectedResId = 0;
+	private CameraFlashButtonCBInterface mCallbackInterface = null;
 	
 	public CameraFlashButton(Context context) {
 		super(context);
@@ -27,6 +28,12 @@ public class CameraFlashButton extends FrameLayout implements OnClickListener {
 		Initialize();
 	}
 
+	public void setButtonCallback(CameraFlashButtonCBInterface callback) {
+		mCallbackInterface = callback;
+		if(mCallbackInterface != null)
+			mCallbackInterface.onClickListener(selectedResId);
+	}
+	
 	private void Initialize() {
 		this.addView(flashButton);
 		setButtonBackground();
@@ -45,6 +52,7 @@ public class CameraFlashButton extends FrameLayout implements OnClickListener {
 		selectedResId%=3;
 		setButtonBackground();
 		this.refreshDrawableState();
+		mCallbackInterface.onClickListener(selectedResId);
 	}
 
 }

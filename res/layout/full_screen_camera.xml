@@ -30,6 +30,7 @@
 			/>
 		<!-- Flash Button -->
 		<com.vinsol.expensetracker.cameraservice.CameraFlashButton
+		    android:id="@+id/camera_flash_button"
 		    android:layout_height="wrap_content"
 		    android:layout_width="wrap_content"
 		    android:layout_alignParentRight="true"

@@ -136,7 +136,7 @@ public class CameraActivity extends EditAbstract {
 //			Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			Intent camera = new Intent(this,CameraPreview.class);
 			File file = fileHelper.getCameraFileLargeEntry(entry.id);
-			camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+			camera.putExtra("FullSizeImagePath", file.toString());
 			
 			startActivityForResult(camera, PICTURE_RESULT);
 		} else {
