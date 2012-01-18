@@ -15,7 +15,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.ExpenseTrackerApplication;
@@ -26,7 +25,7 @@ public class CameraPreview extends Activity {
 
 	private Camera camera;
 	private long minSpaceRequired = 10000000;
-	private LinearLayout cameraPreview;
+//	private LinearLayout cameraPreview;
     private Size mPreviewSize;
     private List<Size> mSupportedPreviewSizes;
     private Preview mPreview;
@@ -35,8 +34,8 @@ public class CameraPreview extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.full_screen_camera);
-		cameraPreview = (LinearLayout) findViewById(R.id.camera_preview_container);
+//		setContentView(R.layout.full_screen_camera);
+//		cameraPreview = (LinearLayout) findViewById(R.id.camera_preview_container);
 		camera = Camera.open();
 		if(camera == null) {
 			Toast.makeText(this, getString(R.string.error_camera), Toast.LENGTH_SHORT).show();
@@ -47,7 +46,8 @@ public class CameraPreview extends Activity {
 				checkSDCardSpace();
 				mPreview = new Preview(this);
 				mPreview.setCamera(camera);
-				cameraPreview.addView(mPreview);
+				setContentView(mPreview);
+//				cameraPreview.addView(mPreview);
 			} else {
 				Toast.makeText(this, getString(R.string.no_sdcard), Toast.LENGTH_LONG).show();
 			}
@@ -79,11 +79,13 @@ public class CameraPreview extends Activity {
 
         // Try to find an size match aspect ratio and size
         for (Size size : sizes) {
-            double ratio = (double) size.width / size.height;
+        	Log.d("size "+" w "+size.width+" \t h "+size.height+" w "+w+" \t h "+h);
+            double ratio = getRatioSize(size);
+            int height = getHeightSize(size);
             if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
-            if (Math.abs(size.height - targetHeight) < minDiff) {
+            if (Math.abs(height - targetHeight) < minDiff) {
                 optimalSize = size;
-                minDiff = Math.abs(size.height - targetHeight);
+                minDiff = Math.abs(height - targetHeight);
             }
         }
 
@@ -91,15 +93,40 @@ public class CameraPreview extends Activity {
         if (optimalSize == null) {
             minDiff = Double.MAX_VALUE;
             for (Size size : sizes) {
-                if (Math.abs(size.height - targetHeight) < minDiff) {
+            	int height = getHeightSize(size);
+                if (Math.abs(height - targetHeight) < minDiff) {
                     optimalSize = size;
-                    minDiff = Math.abs(size.height - targetHeight);
+                    minDiff = Math.abs(height - targetHeight);
                 }
             }
         }
         Log.d("optimalSize "+optimalSize.height+" \t "+optimalSize.width+" \t "+w+" \t "+h);
         return optimalSize;
     }
+	
+	private int getHeightSize(Size size) {
+		if(size.width < size.height) {
+			return size.height;
+		} else {
+			return size.width;
+		}
+	}
+	
+	private int getWidthSize(Size size) {
+		if(size.width < size.height) {
+			return size.width;
+		} else {
+			return size.height;
+		}
+	}
+	
+	private double getRatioSize(Size size) {
+		if(size.width < size.height) {
+			return ((double)size.width / size.height);
+		} else {
+			return ((double)size.height / size.width);
+		}
+	}
 	
 	@Override
 	public void onBackPressed() {
@@ -128,7 +155,7 @@ public class CameraPreview extends Activity {
 		public Preview(Context context) {
 			super(context);
 			mSurfaceView = new SurfaceView(CameraPreview.this);
-			cameraPreview.addView(mSurfaceView);
+			addView(mSurfaceView);
 			mSurfaceHolder = mSurfaceView.getHolder();
 			mSurfaceHolder.addCallback(this);
 			mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -161,10 +188,19 @@ public class CameraPreview extends Activity {
 			// Now that the size is known, set up the camera parameters and begin the preview.
 	        Camera.Parameters parameters = mCamera.getParameters();
 	        mSupportedPreviewSizes = parameters.getSupportedPreviewSizes();
-	        parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
-	        mCamera.setDisplayOrientation(90);
-	        cameraPreview.requestLayout();
-	        mCamera.setParameters(parameters);
+	        try {
+	        	parameters.setPreviewSize(getWidthSize(mPreviewSize), getHeightSize(mPreviewSize));
+	        	mCamera.setDisplayOrientation(90);
+		        requestLayout();
+	        	mCamera.setParameters(parameters);
+	        } catch (RuntimeException e) {
+	        	Log.d("RunTime Exception Occurs");
+	        	Log.d("mPreviewSize height"+mPreviewSize.height+" \t mPreviewSize width"+mPreviewSize.width);
+	        	parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
+	        	mCamera.setDisplayOrientation(90);
+		        requestLayout();
+	        	mCamera.setParameters(parameters);
+			}
 	        mCamera.startPreview();
 		}
 
@@ -200,8 +236,8 @@ public class CameraPreview extends Activity {
 	            int previewWidth = width;
 	            int previewHeight = height;
 	            if (mPreviewSize != null) {
-	                previewWidth = mPreviewSize.width;
-	                previewHeight = mPreviewSize.height;
+	                previewWidth = getWidthSize(mPreviewSize);
+	                previewHeight = getHeightSize(mPreviewSize);
 	            }
 
 	            // Center the child SurfaceView within the parent.
@@ -211,8 +247,7 @@ public class CameraPreview extends Activity {
 	                        (width + scaledChildWidth) / 2, height);
 	            } else {
 	                final int scaledChildHeight = previewHeight * width / previewWidth;
-	                child.layout(0, (height - scaledChildHeight) / 2,
-	                        width, (height + scaledChildHeight) / 2);
+	                child.layout(0, (height - scaledChildHeight) / 2, width, (height + scaledChildHeight) / 2);
 	            }
 	        }
 		}
