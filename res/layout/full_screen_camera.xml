@@ -9,11 +9,10 @@
 		android:id="@+id/camera_preview_container"
 		android:layout_width="wrap_content" 
 		android:layout_height="wrap_content"
-		android:layout_above="@+id/camera_button_container"
 		/>
     
     <RelativeLayout
-        android:id="@id/camera_button_container"
+        android:id="@+id/camera_button_container"
         android:background="@drawable/camera_button_bg"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
