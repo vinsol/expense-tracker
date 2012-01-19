@@ -15,22 +15,25 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.TypedValue;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
+import android.view.ViewConfiguration;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vinsol.android.graph.BarGraph;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
-import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.GraphDataList;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
+import com.vinsol.expensetracker.utils.Log;
 
 public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickListener {
 
@@ -42,12 +45,11 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	private Activity activity;
 	private int j = 0;
 	private RelativeLayout mainGraph ;
-	private ImageView graphPreviousArrow ;
-	private ImageView graphNextArrow ;
 	private RelativeLayout.LayoutParams params ;
 	static private BarGraph barGraph;
 	static private TextView graphNoItem;
 	private TextView graphHeaderTextview;
+	private View.OnTouchListener gestureListener;
 	
 	public GraphHelper(Activity activity) {
 		this.activity = activity;
@@ -55,15 +57,20 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mainGraph = (RelativeLayout) activity.findViewById(R.id.main_graph);
 		graphHeaderTextview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
-		graphPreviousArrow = (ImageView) activity.findViewById(R.id.main_graph_previous_arrow);
-		graphNextArrow = (ImageView) activity.findViewById(R.id.main_graph_next_arrow);
 		params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
+		final GestureDetector gestureDetector = new GestureDetector(new MyGestureDetector());
+		gestureListener = new View.OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+			}
+        };
+        mainGraph.setOnTouchListener(gestureListener);
 	}
 	
 	@Override
 	protected void onPreExecute() {
-		graphPreviousArrow.setVisibility(View.INVISIBLE);
-		graphNextArrow.setVisibility(View.INVISIBLE);
 		mainGraph.removeView(barGraph);
 		mainGraph.removeView(graphNoItem);
 		super.onPreExecute();
@@ -85,14 +92,13 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	@Override
 	protected void onPostExecute(Void result) {
 		//view of graph******start view******//
-		graphPreviousArrow.setVisibility(View.VISIBLE);
-		graphNextArrow.setVisibility(View.VISIBLE);
+        
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
 				barGraph = new BarGraph(activity,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
 				mainGraph.addView(barGraph, params);
 				if(j == mGraphList.size()-1) {
-					graphPreviousArrow.setVisibility(View.INVISIBLE);
+//					graphPreviousArrow.setVisibility(View.INVISIBLE);
 				}
 				if(j == 0) {
 					if(!isNotNullAll(mGraphList.get(j).get(0))) {
@@ -100,18 +106,22 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 						graphNoItem();
 						mainGraph.addView(graphNoItem);
 					}
-					graphNextArrow.setVisibility(View.INVISIBLE);
+//					graphNextArrow.setVisibility(View.INVISIBLE);
 				}
-				graphNextArrow.setOnClickListener(this);
-				graphPreviousArrow.setOnClickListener(this);
+				Log.d("*********************************");
+				Log.d("Setting gesture listener on graph");
+				Log.d("*********************************");
+				mainGraph.setOnTouchListener(gestureListener);
+//				graphNextArrow.setOnClickListener(this);
+//				graphPreviousArrow.setOnClickListener(this);
 				graphHeaderTextview.setText(mGraphList.get(j).get(3).get(0));
 			}
 			
 		} else {
 			graphNoItem();
 			mainGraph.addView(graphNoItem);
-			graphNextArrow.setVisibility(View.INVISIBLE);
-			graphPreviousArrow.setVisibility(View.INVISIBLE);
+//			graphNextArrow.setVisibility(View.INVISIBLE);
+//			graphPreviousArrow.setVisibility(View.INVISIBLE);
 			graphHeaderTextview.setText("");
 		}
 		super.onPostExecute(result);
@@ -379,11 +389,11 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 			if(mGraphList.size() >= 1 ) {
 				barGraph = new BarGraph(activity,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
 				mainGraph.addView(barGraph, params);
-				graphPreviousArrow.setVisibility(View.VISIBLE);
-				graphNextArrow.setVisibility(View.VISIBLE);
+//				graphPreviousArrow.setVisibility(View.VISIBLE);
+//				graphNextArrow.setVisibility(View.VISIBLE);
 				
 				if(j == mGraphList.size()-1) {
-					graphPreviousArrow.setVisibility(View.INVISIBLE);
+//					graphPreviousArrow.setVisibility(View.INVISIBLE);
 				}
 				if(j == 0) {
 					if(!isNotNullAll(mGraphList.get(j).get(0))) {
@@ -391,15 +401,42 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 						graphNoItem();
 						mainGraph.addView(graphNoItem);
 					}
-					graphNextArrow.setVisibility(View.INVISIBLE);
+//					graphNextArrow.setVisibility(View.INVISIBLE);
 				}
 
-				graphNextArrow.setOnClickListener(this);
-				graphPreviousArrow.setOnClickListener(this);
+//				graphNextArrow.setOnClickListener(this);
+//				graphPreviousArrow.setOnClickListener(this);
 				graphHeaderTextview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
 				graphHeaderTextview.setText(mGraphList.get(j).get(3).get(0));
 			}
 		} 
 	}
 
+	class MyGestureDetector extends SimpleOnGestureListener {
+		
+		private int SWIPE_MIN_DISTANCE ;
+	    private static final int SWIPE_MAX_OFF_PATH = 400;
+	    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+	    
+	    public MyGestureDetector() {
+			ViewConfiguration vc = ViewConfiguration.get(activity);
+			SWIPE_MIN_DISTANCE = vc.getScaledTouchSlop();
+		}
+	    
+	    @Override
+	    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+	    	Toast.makeText(activity, "On Fling", Toast.LENGTH_SHORT).show();
+	    	if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+                return false;
+	    	
+	    	 if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                 Toast.makeText(activity, "Left Swipe", Toast.LENGTH_SHORT).show();
+             }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                 Toast.makeText(activity, "Right Swipe", Toast.LENGTH_SHORT).show();
+             }
+
+	        return false;
+	    }
+	}
+	
 }
