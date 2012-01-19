@@ -7,6 +7,7 @@
 package com.vinsol.expensetracker;
 
 import java.util.Calendar;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
@@ -66,6 +67,7 @@ public class Home extends Activity implements OnClickListener {
 		// opens ListView
 		ImageView showListingButton = (ImageView) findViewById(R.id.main_listview);
 		showListingButton.setOnClickListener(this);
+		
 	}
 
 	@Override

@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Expense Tracker"
+            android:text="@string/app_name"
             android:textSize="20dip"
             android:textStyle="bold"
             android:textColor="@color/white" 
@@ -39,7 +39,7 @@
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:layout_below="@id/main_header"
-        android:layout_above="@+id/main_footer"
+        android:layout_above="@+id/versionName"
         android:background="@drawable/home_bg"
         android:id="@+id/main_body"
         >
@@ -82,9 +82,7 @@
        		        android:paddingRight="5dp"
        		        android:paddingLeft="5dp"
        		        android:paddingTop="5dp"
-       		        android:visibility="invisible"
-       		        >
-     		    </ImageView>
+       		        android:visibility="invisible" />
        		    
        		    <ImageView 
        		        android:id="@+id/main_graph_next_arrow"
@@ -97,22 +95,26 @@
        		        android:paddingRight="5dp"
        		        android:paddingLeft="5dp"
        		        android:paddingTop="5dp"
-       		        android:visibility="invisible"
-       		        >
-      		    </ImageView>   
+       		        android:visibility="invisible" />
        		</RelativeLayout>
     		
     		<include 
-     			layout="@layout/new_entry_icons_grid"
-    		    android:layout_below="@id/main_graph"
-     		    >
-    		</include>
+     			layout="@layout/new_entry_icons_grid" />
+    		<TextView 
+			    android:id="@id/versionName"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:gravity="right"
+			    android:layout_marginTop="10dp"
+			    android:textSize="12sp"
+			    android:textColor="@color/grey" 
+			    android:text="@string/version" />
 		</LinearLayout>  
     </ScrollView>
-    
+	
     <!-- Footer -->
     <RelativeLayout
-        android:id="@id/main_footer"
+        android:id="@+id/main_footer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -125,8 +127,6 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/save_reminder_states" 
-            >
-   	    </Button>
+            android:background="@drawable/save_reminder_states"  />
     </RelativeLayout>
 </RelativeLayout>

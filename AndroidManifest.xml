@@ -34,21 +34,21 @@
             android:name=".edit.TextEntry"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
-    		android:windowSoftInputMode="adjustPan"
+    		android:windowSoftInputMode="adjustPan|stateAlwaysVisible"
     		>
         </activity>
         <activity 
             android:name=".edit.Voice"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
-    		android:windowSoftInputMode="adjustPan"
+    		android:windowSoftInputMode="adjustPan|stateAlwaysVisible"
             >
         </activity>
         <activity 
             android:name=".edit.CameraActivity"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
-    		android:windowSoftInputMode="adjustPan"
+    		android:windowSoftInputMode="adjustPan|stateAlwaysVisible"
             >
         </activity>
         <activity 

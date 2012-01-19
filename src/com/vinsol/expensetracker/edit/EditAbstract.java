@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -63,7 +64,21 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		editSaveEntry.setOnClickListener(this);
 		editDelete.setOnClickListener(this);
+		editAmount.setSelection(editAmount.getText().length());
+		editAmount.setOnKeyListener(focusTagOnEnter);
 	}
+	
+	private OnKeyListener focusTagOnEnter = new OnKeyListener() {
+		
+		@Override
+		public boolean onKey(View v, int keyCode, KeyEvent event) {
+			if(keyCode == KeyEvent.KEYCODE_ENTER) {
+				editTag.requestFocus();
+				return true;
+			}
+			return false;
+		}
+	};
 	
 	@Override
 	protected void onResume() {
