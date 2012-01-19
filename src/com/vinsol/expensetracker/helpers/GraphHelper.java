@@ -26,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.vinsol.android.graph.BarGraph;
 import com.vinsol.expensetracker.R;
@@ -46,8 +45,8 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	private int j = 0;
 	private RelativeLayout mainGraph ;
 	private RelativeLayout.LayoutParams params ;
-	static private BarGraph barGraph;
-	static private TextView graphNoItem;
+	private BarGraph barGraph;
+	private TextView graphNoItem;
 	private TextView graphHeaderTextview;
 	private View.OnTouchListener gestureListener;
 	
@@ -66,13 +65,11 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
                 return gestureDetector.onTouchEvent(event);
 			}
         };
-        mainGraph.setOnTouchListener(gestureListener);
 	}
 	
 	@Override
 	protected void onPreExecute() {
-		mainGraph.removeView(barGraph);
-		mainGraph.removeView(graphNoItem);
+		removeGraphView();
 		super.onPreExecute();
 	}
 	
@@ -95,36 +92,38 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
         
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
-				barGraph = new BarGraph(activity,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
-				mainGraph.addView(barGraph, params);
-				if(j == mGraphList.size()-1) {
-//					graphPreviousArrow.setVisibility(View.INVISIBLE);
-				}
-				if(j == 0) {
-					if(!isNotNullAll(mGraphList.get(j).get(0))) {
-						mainGraph.removeView(barGraph);
-						graphNoItem();
-						mainGraph.addView(graphNoItem);
-					}
-//					graphNextArrow.setVisibility(View.INVISIBLE);
-				}
-				Log.d("*********************************");
-				Log.d("Setting gesture listener on graph");
-				Log.d("*********************************");
-				mainGraph.setOnTouchListener(gestureListener);
-//				graphNextArrow.setOnClickListener(this);
-//				graphPreviousArrow.setOnClickListener(this);
-				graphHeaderTextview.setText(mGraphList.get(j).get(3).get(0));
+				createBarGraph();
 			}
 			
 		} else {
 			graphNoItem();
 			mainGraph.addView(graphNoItem);
-//			graphNextArrow.setVisibility(View.INVISIBLE);
-//			graphPreviousArrow.setVisibility(View.INVISIBLE);
 			graphHeaderTextview.setText("");
 		}
 		super.onPostExecute(result);
+	}
+	
+	private void removeGraphView() {
+		mainGraph.removeView(barGraph);
+		mainGraph.removeView(graphNoItem);
+	}
+	
+	private void createBarGraph() {
+		barGraph = new BarGraph(activity,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
+		mainGraph.addView(barGraph, params);
+		if(j == 0) {
+			if(!isNotNullAll(mGraphList.get(j).get(0))) {
+				mainGraph.removeView(barGraph);
+				graphNoItem();
+				mainGraph.addView(graphNoItem);
+			}
+		}
+		Log.d("*********************************");
+		Log.d("Setting gesture listener on graph");
+		Log.d("*********************************");
+		mainGraph.setOnTouchListener(gestureListener);
+		mainGraph.setOnClickListener(this);
+		graphHeaderTextview.setText(mGraphList.get(j).get(3).get(0));
 	}
 	
 	private void graphNoItem() {
@@ -371,6 +370,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		
 		case R.id.main_graph_next_arrow:
 			j--;
 			break;
@@ -382,61 +382,55 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 		default:
 			break;
 		}
-		
-		mainGraph.removeView(graphNoItem);
-		mainGraph.removeView(barGraph);
-		if(mGraphList != null) {
-			if(mGraphList.size() >= 1 ) {
-				barGraph = new BarGraph(activity,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
-				mainGraph.addView(barGraph, params);
-//				graphPreviousArrow.setVisibility(View.VISIBLE);
-//				graphNextArrow.setVisibility(View.VISIBLE);
-				
-				if(j == mGraphList.size()-1) {
-//					graphPreviousArrow.setVisibility(View.INVISIBLE);
-				}
-				if(j == 0) {
-					if(!isNotNullAll(mGraphList.get(j).get(0))) {
-						mainGraph.removeView(barGraph);
-						graphNoItem();
-						mainGraph.addView(graphNoItem);
-					}
-//					graphNextArrow.setVisibility(View.INVISIBLE);
-				}
-
-//				graphNextArrow.setOnClickListener(this);
-//				graphPreviousArrow.setOnClickListener(this);
-				graphHeaderTextview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
-				graphHeaderTextview.setText(mGraphList.get(j).get(3).get(0));
-			}
-		} 
 	}
 
 	class MyGestureDetector extends SimpleOnGestureListener {
 		
 		private int SWIPE_MIN_DISTANCE ;
-	    private static final int SWIPE_MAX_OFF_PATH = 400;
-	    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 	    
-	    public MyGestureDetector() {
-			ViewConfiguration vc = ViewConfiguration.get(activity);
-			SWIPE_MIN_DISTANCE = vc.getScaledTouchSlop();
+		public MyGestureDetector() {
+			SWIPE_MIN_DISTANCE = ViewConfiguration.getTouchSlop();
 		}
-	    
+		
 	    @Override
 	    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-	    	Toast.makeText(activity, "On Fling", Toast.LENGTH_SHORT).show();
-	    	if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
-                return false;
 	    	
-	    	 if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                 Toast.makeText(activity, "Left Swipe", Toast.LENGTH_SHORT).show();
-             }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                 Toast.makeText(activity, "Right Swipe", Toast.LENGTH_SHORT).show();
+	    	 if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
+                 leftSwipeAction();
+             }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
+                 rightSwipeAction();
              }
 
-	        return false;
+	        return true;
 	    }
+	}
+	
+	private boolean leftSwipeAction() {
+		Log.d("Left Swipe");
+		if(j == 0) {
+			overScrollingEffect();
+			return true;
+		}
+		j--;
+		removeGraphView();
+		createBarGraph();
+		return true;
+	}
+	
+	private boolean rightSwipeAction() {
+		Log.d("Right Swipe");
+		if(j == mGraphList.size()-1) {
+			overScrollingEffect();
+			return true;
+		}
+		j++;
+		removeGraphView();
+		createBarGraph();
+		return true;
+	}
+
+	private void overScrollingEffect() {
+		// TODO Auto-generated method stub
 	}
 	
 }
