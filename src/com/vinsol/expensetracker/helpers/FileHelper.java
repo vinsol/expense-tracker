@@ -98,7 +98,7 @@ public class FileHelper {
 		}
 	}
 
-	private void delete(File file) {
+	public void delete(File file) {
 		try {
 			file.delete();
 		} catch (Exception e) {

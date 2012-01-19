@@ -1,6 +1,7 @@
 package com.vinsol.expensetracker.cameraservice;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,6 +11,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -27,14 +29,16 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.utils.Log;
 
-public class CameraPreview extends Activity implements CameraServiceCallback,SurfaceHolder.Callback,OnClickListener {
+public class CameraPreview extends Activity implements SurfaceHolder.Callback, OnClickListener {
 
 	private Camera mCamera;
 	private long minSpaceRequired = 10000000;
@@ -48,8 +52,13 @@ public class CameraPreview extends Activity implements CameraServiceCallback,Sur
 	private CameraFlashButton flashButton;
 	private Button takePicButton;
 	private boolean isTakingPic = false;
-	private CameraServiceCallback mCameraServiceCallback = null;
 	private File mTempFile;
+	private LinearLayout takePicPreviewContainer;
+	private ProgressBar mProgressBar;
+	private LinearLayout mProgressBarLayout;
+	private Button useButton;
+	private Button cancelButton;
+	private Button retakeButton;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +68,17 @@ public class CameraPreview extends Activity implements CameraServiceCallback,Sur
 		mCameraPreview = (LinearLayout) findViewById(R.id.camera_preview_container);
 		flashButton = (CameraFlashButton) findViewById(R.id.camera_flash_button);
 		takePicButton = (Button) findViewById(R.id.take_pic_button);
+		takePicPreviewContainer = (LinearLayout) findViewById(R.id.take_pic_preview_container);
+		mProgressBar = (ProgressBar) findViewById(R.id.camera_progress_bar);
+		mProgressBarLayout = (LinearLayout) findViewById(R.id.camera_progress_bar_layout);
+		useButton = (Button) findViewById(R.id.camera_use_button);
+		cancelButton = (Button) findViewById(R.id.camera_cancel_button);
+		retakeButton = (Button) findViewById(R.id.camera_retake_button);
 		takePicButton.setOnClickListener(this);
+		useButton.setOnClickListener(this);
+		retakeButton.setOnClickListener(this);
+		cancelButton.setOnClickListener(this);
 		mTempFile = new File(getIntent().getStringExtra("FullSizeImagePath"));
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
 		mCamera = Camera.open();
 		if(mCamera == null) {
 			Toast.makeText(this, getString(R.string.error_camera), Toast.LENGTH_SHORT).show();
@@ -85,7 +98,6 @@ public class CameraPreview extends Activity implements CameraServiceCallback,Sur
 					temp = mPreviewSize.height;
 					mPreviewSize.height = mPreviewSize.width;
 					mPreviewSize.width = temp;
-					Log.d("mPreviewSize "+mPreviewSize.height+" "+mPreviewSize.width);
 				}
 				mSurfaceHolder = mSurfaceView.getHolder();
 				mSurfaceHolder.addCallback(this);
@@ -95,6 +107,13 @@ public class CameraPreview extends Activity implements CameraServiceCallback,Sur
 				Toast.makeText(this, getString(R.string.no_sdcard), Toast.LENGTH_LONG).show();
 			}
 		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(mCamera == null)
+			mCamera = Camera.open();
 	}
 
 	private void checkSDCardSpace() {
@@ -114,17 +133,14 @@ public class CameraPreview extends Activity implements CameraServiceCallback,Sur
         final double ASPECT_TOLERANCE = 0.1;
         double targetRatio = (double) w / h;
         if (sizes == null) return null;
-
         Size optimalSize = null;
         double minDiff = Double.MAX_VALUE;
-
         int targetHeight = h;
 
         // Try to find an size match aspect ratio and size
         for (Size size : sizes) {
         	setTempCameraSize(size);
             double ratio = ((double)tempCameraSizeWidth/tempCameraSizeHeight);
-            Log.d("ratio "+ratio+" "+targetRatio+" tempCameraSize "+tempCameraSizeWidth+" "+tempCameraSizeHeight+" size "+size.width+" "+size.height);
             if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
             if (Math.abs(tempCameraSizeHeight - targetHeight) < minDiff) {
                 optimalSize = size;
@@ -184,13 +200,6 @@ public class CameraPreview extends Activity implements CameraServiceCallback,Sur
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		// Now that the size is known, set up the camera parameters and begin the preview.
-    	RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(mPreviewSize.width, mPreviewSize.height);
-       	mCameraPreview.setLayoutParams(params);
-       	Camera.Parameters parameters = mCamera.getParameters();
-       	parameters.setPreviewSize(mPreviewSize.height, mPreviewSize.width);
-       	Log.d(" getWidthSize(mPreviewSize) "+mPreviewSize.width+" \t getHeightSize(mPreviewSize) "+mPreviewSize.height);
-	    mCameraPreview.requestLayout();
-        mCamera.setParameters(parameters);
         mCamera.startPreview();
 	}
 
@@ -204,32 +213,40 @@ public class CameraPreview extends Activity implements CameraServiceCallback,Sur
 		} catch (IOException e) {
 			Log.d("IOException caused by setPreviewDisplay()"+ e);
 		}
-
        	mCamera.setDisplayOrientation(90);
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(mPreviewSize.width, mPreviewSize.height);
+//       	mCameraPreview.setLayoutParams(params);
+       	mProgressBarLayout.setLayoutParams(params);
+       	Camera.Parameters parameters = mCamera.getParameters();
+       	parameters.setPreviewSize(mPreviewSize.height, mPreviewSize.width);
+	    mCameraPreview.requestLayout();
+        mCamera.setParameters(parameters);
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// Surface will be destroyed when we return, so stop the preview.
         if (mCamera != null) {
-            mCamera.stopPreview();
-    		mCamera.release();
+        	mCamera.stopPreview();
         }
 	}
 	
 	private CameraFlashButtonCBInterface flashCB = new CameraFlashButtonCBInterface() {
 		@Override
 		public void onClickListener(int item) {
-			Log.d("Flash: " + item);
+			Parameters parameters = mCamera.getParameters();
 			switch(item) {
 			case 0:
-				mCamera.getParameters().setFlashMode(Parameters.FLASH_MODE_AUTO);
+				parameters.setFlashMode(Parameters.FLASH_MODE_AUTO);
+				mCamera.setParameters(parameters);
 				break;
 			case 1:
-				mCamera.getParameters().setFlashMode(Parameters.FLASH_MODE_OFF);
+				parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
+				mCamera.setParameters(parameters);
 				break;
 			case 2:
-				mCamera.getParameters().setFlashMode(Parameters.FLASH_MODE_ON);
+				parameters.setFlashMode(Parameters.FLASH_MODE_ON);
+				mCamera.setParameters(parameters);
 				break;
 			}
 		}		
@@ -245,6 +262,20 @@ public class CameraPreview extends Activity implements CameraServiceCallback,Sur
 			focusAndTakePicture();
 			break;
 
+		case R.id.camera_cancel_button:
+			setResult(Activity.RESULT_CANCELED);
+			deleteFile();
+			finish();
+			break;
+			
+		case R.id.camera_use_button:
+			setResult(Activity.RESULT_OK);
+			finish();
+			break;
+			
+		case R.id.camera_retake_button:
+			retakePicture();
+			break;
 		default:
 			break;
 		}
@@ -261,66 +292,62 @@ public class CameraPreview extends Activity implements CameraServiceCallback,Sur
     }
 	
 	private AutoFocusCallback afcb = new AutoFocusCallback() {
-
 		@Override
 		public void onAutoFocus(boolean success, Camera camera) {
 			if(isTakingPic)
 				takePicture();
 		}
-
     };
-    
 
     private void takePicture() {
     	if(isTakingPic) {
     		mCamera.takePicture(mShutterCallback, null, mPictureCallback);
     		mCamera.stopPreview();
-    		mCamera.release();
     	}
     }
     
     private Camera.ShutterCallback mShutterCallback = new Camera.ShutterCallback() {
-		
 		@Override
 		public void onShutter() {
-			mCameraServiceCallback.onShutter();
+			showConfirmationScreen();
 		}
 	};
 	
 	private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
 		public void onPictureTaken(byte[] imageData, Camera c) {
 			if (imageData != null) {
-				Log.d("Picture taken, length:" + imageData.length);
-				
-				// rotate the image such that 
-				byte[] newImage=imageData;
-				if(mCameraServiceCallback!=null){
-					mCameraServiceCallback.pictureTaken(newImage);
+				imageData=rotateImage(imageData, 90);
+				File mTempFile = saveImage(imageData);
+				if (mTempFile != null) {
+					updatePicConfirmationScreen();
 				}
-				
+				else {
+					Toast toast = Toast.makeText(CameraPreview.this, "There was a problem with taking a Picture! Please retake!", Toast.LENGTH_LONG); 
+					toast.show();
+					retakePicture();
+				}
 				// unlock camera
 				isTakingPic=false;
 			}
 		}
 	};
-
-	@Override
-	public void onShutter() {
-		showConfirmationScreen();
-	}
-
-	@Override
-	public void pictureTaken(byte[] imageData) {
-		File mTempFile = saveImage(imageData);
 		
-		if (mTempFile != null) {
-			updatePicConfirmationScreen();
-		}
-		else {
-			Toast toast = Toast.makeText(this, "There was a problem with taking a Picture! Please retake!", Toast.LENGTH_LONG); 
-			toast.show();
-			retakePicture();
-		}
+	private byte[] rotateImage(byte[] imageData, int degrees) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		int width = 0;
+		int height = 0;
+		Bitmap image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+		if (image == null)
+			return imageData;
+		width = image.getWidth();
+		height = image.getHeight();
+		Log.d("Rotating image");
+		Matrix matrix = new Matrix();
+		matrix.postRotate(degrees);
+		Bitmap rotatedBitmap = Bitmap.createBitmap(image, 0, 0, width, height, matrix, true);
+		rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+		image.recycle();
+		return baos.toByteArray();
 	}
 	
 	private void retakePicture() {
@@ -328,18 +355,34 @@ public class CameraPreview extends Activity implements CameraServiceCallback,Sur
 		flashButton.setVisibility(View.VISIBLE);
 		takePicButton.setOnClickListener(this);
 		flashButton.setButtonCallback(flashCB);
-		// start preview because of energy consumption modifications
+		takePicPreviewContainer.setVisibility(View.GONE);
+		useButton.setVisibility(View.GONE);
+		retakeButton.setVisibility(View.GONE);
+		cancelButton.setVisibility(View.GONE);
+		mCameraPreview.setVisibility(View.VISIBLE);
+		deleteFile();
 		mCamera.startPreview();
 	}
 	
+	private void deleteFile() {
+		new FileHelper().delete(mTempFile);
+	}
+	
 	private void showConfirmationScreen() {
-		flashButton.setVisibility(View.INVISIBLE);
-		takePicButton.setVisibility(View.INVISIBLE);
+		flashButton.setVisibility(View.GONE);
+		takePicButton.setVisibility(View.GONE);
+		mCameraPreview.setVisibility(View.GONE);
+		mProgressBar.setVisibility(View.VISIBLE);
 	}
 	
 	private void updatePicConfirmationScreen() {
 		if(mTempFile != null) {
-			mCameraPreview.setBackgroundDrawable(new BitmapDrawable(mTempFile.toString()));
+			mProgressBar.setVisibility(View.GONE);
+			useButton.setVisibility(View.VISIBLE);
+			retakeButton.setVisibility(View.VISIBLE);
+			cancelButton.setVisibility(View.VISIBLE);
+			takePicPreviewContainer.setVisibility(View.VISIBLE);
+			takePicPreviewContainer.setBackgroundDrawable(new BitmapDrawable(mTempFile.toString()));
  		}
 	}
 	
@@ -355,37 +398,27 @@ public class CameraPreview extends Activity implements CameraServiceCallback,Sur
 	}	
 	
 	private boolean storeByteImage(Context mContext, byte[] imageData, int quality) {
-		Log.d("File"+mTempFile.toString()+" "+imageData.length);
 	    FileOutputStream fileOutputStream = null;
 		try {
-	
 			BitmapFactory.Options options=new BitmapFactory.Options();
 			options.inSampleSize = 1;
-			
 			Bitmap myImage = BitmapFactory.decodeByteArray(imageData, 0,imageData.length,options);
 			fileOutputStream = new FileOutputStream(mTempFile.toString());
 			BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
-	
 			if(quality!=49) {
 				myImage.compress(CompressFormat.JPEG, quality, bos);
 			}
 			else {
 				bos.write(imageData);
 			}
-	
 			bos.flush();
 			bos.close();
-	
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
 		return true;
 	}
-	
 	
 }

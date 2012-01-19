@@ -3,13 +3,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    >
     
     <LinearLayout 
 		android:id="@+id/camera_preview_container"
 		android:layout_width="wrap_content" 
 		android:layout_height="wrap_content"
+		android:gravity="center"
 		/>
+    
+    <LinearLayout 
+		android:id="@+id/take_pic_preview_container"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		android:gravity="center"
+		/>
+    
+    <LinearLayout 
+        android:id="@+id/camera_progress_bar_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+	    android:gravity="center"
+        >
+	    <ProgressBar 
+	        android:id="@+id/camera_progress_bar"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:visibility="gone"
+	        />
+    </LinearLayout>
     
     <RelativeLayout
         android:id="@+id/camera_button_container"
@@ -37,6 +60,50 @@
 		    android:layout_marginRight="10dp"
 		    android:layout_centerVertical="true"
 			/>
+		
+		<LinearLayout 
+		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"
+		    android:gravity="center"
+		    android:orientation="horizontal"
+		    android:layout_marginTop="10dp">
+		
+			<!-- Use Button -->
+			<Button 
+			    android:id="@+id/camera_use_button" 
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1" 
+				android:text="Use"
+				android:layout_marginLeft="10dp"
+				android:visibility="gone"
+				/>
+			
+			<!-- Retake Button -->
+			<Button 
+			    android:id="@+id/camera_retake_button" 
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Retake"
+				android:layout_weight="1"
+				android:layout_marginRight="10dp"
+				android:layout_marginLeft="10dp"
+				android:visibility="gone"
+				/>
+			
+			<!-- Cancel Button -->
+			<Button 
+			    android:id="@+id/camera_cancel_button" 
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Cancel"
+				android:layout_weight="1"
+				android:layout_marginRight="10dp"
+				android:visibility="gone"
+				/>
+			
+			
+		</LinearLayout>
 	</RelativeLayout>
 	
 </RelativeLayout>
