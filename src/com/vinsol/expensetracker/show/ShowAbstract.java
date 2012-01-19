@@ -113,7 +113,13 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 			
 			if (!(mShowList.amount.equals("") || mShowList.amount == null)) {
 				if (!mShowList.amount.contains("?"))
-					showAmount.setText(mShowList.amount);
+					if(mShowList.amount.endsWith(".0")) {
+						mShowList.amount = mShowList.amount+"0";
+						showAmount.setText(mShowList.amount);
+					}
+					else { 
+						showAmount.setText(mShowList.amount);
+					}
 				else
 					showAmount.setText("?");
 			} else {
@@ -167,6 +173,9 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		case R.id.show_edit:
 			intentExtras.putBoolean("isFromShowPage", true);
 			intentExtras.remove("mDisplayList");
+			if(mShowList.amount.endsWith(".00")) {
+				mShowList.amount = mShowList.amount.substring(0, mShowList.amount.length()-3);
+			}
 			intentExtras.putParcelable("mDisplayList", mShowList);
 			editAction();
 			break;

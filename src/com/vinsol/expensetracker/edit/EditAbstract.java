@@ -7,16 +7,6 @@
 package com.vinsol.expensetracker.edit;
 
 import java.util.Calendar;
-import com.vinsol.expensetracker.DatabaseAdapter;
-import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.listing.ExpenseListing;
-import com.vinsol.expensetracker.models.Entry;
-import com.vinsol.expensetracker.helpers.DateHandler;
-import com.vinsol.expensetracker.helpers.DateHelper;
-import com.vinsol.expensetracker.helpers.DisplayDate;
-import com.vinsol.expensetracker.helpers.FileHelper;
-import com.vinsol.expensetracker.helpers.LocationHelper;
-import com.vinsol.expensetracker.helpers.StringProcessing;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,6 +17,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.DateHandler;
+import com.vinsol.expensetracker.helpers.DateHelper;
+import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.helpers.FileHelper;
+import com.vinsol.expensetracker.helpers.LocationHelper;
+import com.vinsol.expensetracker.helpers.StringProcessing;
+import com.vinsol.expensetracker.listing.ExpenseListing;
+import com.vinsol.expensetracker.models.Entry;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
 	protected Entry mEditList;
@@ -249,7 +250,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(mEditList.timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if (!editTag.getText().equals(mEditList.description) || !editAmount.getText().equals(mEditList.amount) || !dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate())) {
+		if (!editTag.getText().equals(mEditList.description) || Double.parseDouble(editAmount.getText().toString()) != Double.parseDouble(mEditList.amount) || !dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate())) {
 			return true;
 		}
 		return false;

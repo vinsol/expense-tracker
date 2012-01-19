@@ -215,7 +215,7 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 		}
        	mCamera.setDisplayOrientation(90);
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(mPreviewSize.width, mPreviewSize.height);
-//       	mCameraPreview.setLayoutParams(params);
+       	mCameraPreview.setLayoutParams(params);
        	mProgressBarLayout.setLayoutParams(params);
        	Camera.Parameters parameters = mCamera.getParameters();
        	parameters.setPreviewSize(mPreviewSize.height, mPreviewSize.width);
