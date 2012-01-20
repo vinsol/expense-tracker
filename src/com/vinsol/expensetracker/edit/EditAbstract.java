@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.View.OnKeyListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -65,6 +67,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		editDelete.setOnClickListener(this);
 		editAmount.setSelection(editAmount.getText().length());
 		editAmount.setOnKeyListener(focusTagOnEnter);
+		editAmount.setOnFocusChangeListener(focusChangeListener);
 	}
 	
 	private OnKeyListener focusTagOnEnter = new OnKeyListener() {
@@ -76,6 +79,15 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 				return true;
 			}
 			return false;
+		}
+	};
+	
+	private OnFocusChangeListener focusChangeListener = new OnFocusChangeListener() {
+		
+		@Override
+		public void onFocusChange(View v, boolean hasFocus) {
+			if(!hasFocus)
+				getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 		}
 	};
 	
@@ -122,6 +134,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		} else {
 			new DateHandler(this);
 		}
+		
 	}
 	
 	protected Entry getSaveEntryData(TextView editDateBarDateview,String dateViewString) {

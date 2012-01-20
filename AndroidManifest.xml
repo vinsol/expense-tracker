@@ -16,8 +16,7 @@
         android:label="@string/app_name"
         android:name=".ExpenseTrackerApplication" 
         android:debuggable="true"
-        android:theme="@android:style/Theme.NoTitleBar"
-        >
+        android:theme="@android:style/Theme.NoTitleBar" >
         <activity
             android:label="@string/app_name"
             android:name=".Home" 
@@ -34,71 +33,48 @@
             android:name=".edit.TextEntry"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
-    		android:windowSoftInputMode="adjustPan|stateAlwaysVisible"
-    		>
-        </activity>
+    		android:windowSoftInputMode="adjustPan|stateAlwaysVisible" />
         <activity 
             android:name=".edit.Voice"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
-    		android:windowSoftInputMode="adjustPan|stateAlwaysVisible"
-            >
-        </activity>
+    		android:windowSoftInputMode="adjustPan|stateAlwaysVisible" />
         <activity 
             android:name=".edit.CameraActivity"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
-    		android:windowSoftInputMode="adjustPan|stateAlwaysVisible"
-            >
-        </activity>
+    		android:windowSoftInputMode="adjustPan|stateAlwaysVisible" />
         <activity 
             android:name=".listing.ExpenseListing"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation"
-            >
-        </activity>
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".listing.ExpenseSubListing"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation"
-            >
-        </activity>
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".listing.FavoriteActivity"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation"
-            >
-        </activity>
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".show.ShowVoiceActivity"
         	android:screenOrientation="portrait"
-        	android:configChanges="keyboardHidden|orientation"
-            >
-        </activity>
+        	android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".show.ShowCameraActivity"
         	android:screenOrientation="portrait"
-        	android:configChanges="keyboardHidden|orientation"
-            >
-        </activity>
+        	android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".show.ShowTextActivity"
         	android:screenOrientation="portrait"
-        	android:configChanges="keyboardHidden|orientation"
-            >
-        </activity>
+        	android:configChanges="keyboardHidden|orientation" />
         <activity 
-            android:theme="@android:style/Theme.Dialog"
             android:name=".utils.ImagePreview"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation"
-    		>
-        </activity>
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".cameraservice.CameraPreview"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation"
-    		>
-        </activity>
+    		android:configChanges="keyboardHidden|orientation" />
     </application>
 </manifest>
