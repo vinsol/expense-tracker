@@ -45,8 +45,8 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	private int j = 0;
 	private RelativeLayout mainGraph ;
 	private RelativeLayout.LayoutParams params ;
-	private BarGraph barGraph;
-	private TextView graphNoItem;
+	private static BarGraph barGraph;
+	private static TextView graphNoItem;
 	private TextView graphHeaderTextview;
 	private View.OnTouchListener gestureListener;
 	
