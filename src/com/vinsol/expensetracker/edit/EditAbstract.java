@@ -3,7 +3,6 @@
  * See the file license.txt for copying permission.
 */     
 
-
 package com.vinsol.expensetracker.edit;
 
 import java.util.Calendar;
@@ -112,9 +111,10 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 					entry.description.equals(getString(typeOfEntryUnfinished)) || entry.description.equals(getString(typeOfEntryFinished))  || entry.description.equals(getString(R.string.unknown_entry)))) {
 				editTag.setText(entry.description);
 			}
+			editHeaderTitle.setText(new DisplayDate().getLocationDate(mEditList.timeInMillis, mEditList.location));
 		}
 		
-		// //////******** Handle Date Bar ********* ////////
+		////////******** Handle Date Bar ********* ////////
 		if (intentExtras.containsKey("mDisplayList")) {
 			new DateHandler(this, mEditList.timeInMillis);
 		} else if (intentExtras.containsKey("timeInMillis")) {
@@ -125,7 +125,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	}
 	
 	protected Entry getSaveEntryData(TextView editDateBarDateview,String dateViewString) {
-		// ///// ******* Creating HashMap to update info ******* ////////
+		/////// ******* Creating HashMap to update info ******* ////////
 		Entry list = new Entry();
 		list.id = entry.id;
 		entry.amount = editAmount.getText().toString();
@@ -217,10 +217,8 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	}
 
 	protected void saveEntry() {
-		
 		Entry toSave = getSaveEntryData(dateBarDateview,dateViewString);
-
-		// //// ******* Update database if user added additional info *******		 ///////
+		////// ******* Update database if user added additional info *******		 ///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editEntryTable(toSave);
 		mDatabaseAdapter.close();
@@ -285,19 +283,18 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 
-		// //////******** Adding Action to save entry ********* ///////////
+		////////******** Adding Action to save entry ********* ///////////
 
 		if (v.getId() == R.id.edit_save_entry) {
 			saveEntry();
 		}
 		
-		// /////// ********* Adding action if delete button ********** /////////
+		///////// ********* Adding action if delete button ********** /////////
 
 		if (v.getId() == R.id.edit_delete) {
 			isChanged = true;
 			deleteAction();
-
-			// //// ******* Delete entry from database ******** /////////
+			////// ******* Delete entry from database ******** /////////
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.deleteEntryTableEntryID(entry.id);
 			mDatabaseAdapter.close();

@@ -11,10 +11,11 @@
             android:id="@+id/header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Text Entry"
+            android:text="@string/finished_textentry"
             android:textSize="20dip"
             android:textStyle="bold"
-            android:textColor="@color/white" 
-            >
-        </TextView>
+            android:textColor="@color/white"
+            android:maxLines="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
     </RelativeLayout>

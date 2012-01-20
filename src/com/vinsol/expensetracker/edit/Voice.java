@@ -131,10 +131,7 @@ public class Voice extends EditAbstract {
 	}
 
 	private void setGraphicsVoice() {
-		// ///// ***** Sets Title Voice Entry *********///////
-		editHeaderTitle.setText("Voice Entry");
-
-		// //// ****** Shows Voice Details ********////////
+		////// ****** Shows Voice Details ********////////
 		editVoiceDetails.setVisibility(View.VISIBLE);
 	}
 

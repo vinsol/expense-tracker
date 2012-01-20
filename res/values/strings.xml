@@ -6,5 +6,21 @@
     <string name="no_sdcard">sdcard not available</string>
     <string name="insufficient_storage">insufficient space on sdcard</string>
     <string name="version">Version 1.1</string>
+    <string name="unknown">0</string>
+    <string name="text">1</string>
+    <string name="camera">2</string>
+    <string name="voice">3</string>
+    <string name="favorite_entry">4</string>
+    <string name="sublist_daywise">5</string>
+    <string name="sublist_weekwise">6</string>
+    <string name="sublist_monthwise">7</string>
+    <string name="sublist_yearwise">8</string>
+    <string name="unfinished_textentry">Unfinished Text Entry</string>
+    <string name="unknown_entry">Unknown Entry</string>
+    <string name="unfinished_cameraentry">Unfinished Camera Entry</string>
+    <string name="unfinished_voiceentry">Unfinished Voice Entry</string>
+    <string name="finished_textentry">Text Entry</string>
+    <string name="finished_cameraentry">Camera Entry</string>
+    <string name="finished_voiceentry">Voice Entry</string>
 
 </resources>

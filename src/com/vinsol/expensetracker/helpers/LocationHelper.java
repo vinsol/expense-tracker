@@ -61,7 +61,6 @@ public class LocationHelper {
 			if(isBetterLocation(location)) {
 				Log.d("Location updated to " + location.toString() );
 		        currentLocation = location;
-		        
 		        getCurrentAddress();
 			} else {
 				Log.d("Current Location is better then new Location");

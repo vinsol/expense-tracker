@@ -130,13 +130,11 @@ public class CameraActivity extends EditAbstract {
 	}
 	
 	private void startCamera() {
-		// ///// ******* Starting Camera to capture Image ******** //////////
+		/////// ******* Starting Camera to capture Image ******** //////////
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-//			Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			Intent camera = new Intent(this,CameraPreview.class);
 			File file = fileHelper.getCameraFileLargeEntry(entry.id);
 			camera.putExtra("FullSizeImagePath", file.toString());
-			
 			startActivityForResult(camera, PICTURE_RESULT);
 		} else {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
@@ -201,9 +199,6 @@ public class CameraActivity extends EditAbstract {
 	}
 
 	private void setGraphicsCamera() {
-		/////// ***** Sets Title Camera Entry *********///////
-		editHeaderTitle.setText("Camera Entry");
-
 		////// ****** Shows Camera Details ********////////
 		editCameraDetails.setVisibility(View.VISIBLE);
 	}
