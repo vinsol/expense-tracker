@@ -43,8 +43,8 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	private Calendar lastDateCalendar;
 	private Activity activity;
 	private int j = 0;
-	private RelativeLayout mainGraph ;
-	private RelativeLayout.LayoutParams params ;
+	private LinearLayout mainGraph ;
+	private LinearLayout.LayoutParams params ;
 	private static BarGraph barGraph;
 	private static TextView graphNoItem;
 	private TextView graphHeaderTextview;
@@ -54,9 +54,9 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 		this.activity = activity;
 		lastDateCalendar = Calendar.getInstance();
 		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		mainGraph = (RelativeLayout) activity.findViewById(R.id.main_graph);
+		mainGraph = (LinearLayout) activity.findViewById(R.id.main_graph);
 		graphHeaderTextview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
-		params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
+		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
 		final GestureDetector gestureDetector = new GestureDetector(new MyGestureDetector());
 		gestureListener = new View.OnTouchListener() {
 
@@ -369,19 +369,6 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
-		
-		case R.id.main_graph_next_arrow:
-			j--;
-			break;
-
-		case R.id.main_graph_previous_arrow:
-			j++;
-			break;	
-			
-		default:
-			break;
-		}
 	}
 
 	class MyGestureDetector extends SimpleOnGestureListener {

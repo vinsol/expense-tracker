@@ -17,8 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:src="@drawable/list_icon_states" 
-            >
-        </ImageView>
+            />
 
         <TextView
             android:id="@+id/main_header_title"
@@ -30,104 +29,81 @@
             android:textStyle="bold"
             android:textColor="@color/white" 
             android:layout_marginLeft="10dip"
-            >
-        </TextView>
+            />
     </RelativeLayout>    
     
-    <!-- ScrollView for body-->
-    <ScrollView
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:layout_below="@id/main_header"
-        android:layout_above="@+id/versionName"
-        android:background="@drawable/home_bg"
-        android:id="@+id/main_body"
-        >
-    
-		<!-- Body -->
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            >
-        
-            <TextView 
-                android:id="@+id/main_graph_header_textview"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/graph_header"
-                android:textColor="@color/black"
-            	android:textSize="16sp"
-            	android:textStyle="bold"
-            	android:gravity="center"/>
-            
-       		<RelativeLayout
-        		android:id="@+id/main_graph"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:orientation="horizontal" 
-        		android:background="@drawable/graph"
-        		android:layout_marginBottom="10dp"
-        		>
-        		
-       		    <ImageView 
-       		        android:id="@+id/main_graph_previous_arrow"
-       		        android:layout_width="wrap_content"
-       		        android:layout_height="wrap_content"
-       		        android:src="@drawable/graph_previous_arrow"
-       		        android:layout_alignParentLeft="true"
-       		        android:layout_centerVertical="true"
-       		        android:paddingBottom="15dp"
-       		        android:paddingRight="5dp"
-       		        android:paddingLeft="5dp"
-       		        android:paddingTop="5dp"
-       		        android:visibility="invisible" />
-       		    
-       		    <ImageView 
-       		        android:id="@+id/main_graph_next_arrow"
-       		        android:layout_width="wrap_content"
-       		        android:layout_height="wrap_content"
-       		        android:src="@drawable/graph_next_arrow"
-       		        android:layout_alignParentRight="true"
-       		        android:layout_centerVertical="true"
-       		        android:paddingBottom="15dp"
-       		        android:paddingRight="5dp"
-       		        android:paddingLeft="5dp"
-       		        android:paddingTop="5dp"
-       		        android:visibility="invisible" />
-       		</RelativeLayout>
-    		
-    		<include 
-     			layout="@layout/new_entry_icons_grid" />
-    		<TextView 
-			    android:id="@id/versionName"
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content"
-			    android:gravity="right"
-			    android:layout_marginTop="10dp"
-			    android:textSize="12sp"
-			    android:textColor="@color/grey" 
-			    android:text="@string/version"
-			    android:layout_marginRight="5dp" />
-		</LinearLayout>  
-    </ScrollView>
-	
-    <!-- Footer -->
+   	<!-- Body -->
     <RelativeLayout
-        android:id="@+id/main_footer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/bottom_bar_bg"
-        >
-
-        <Button
-            android:id="@+id/main_save_reminder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/save_reminder_states"  />
+        android:layout_height="fill_parent"
+	    android:layout_width="fill_parent"
+	    android:layout_below="@id/main_header"
+	    android:layout_above="@+id/versionName"
+	    android:background="@drawable/home_bg"
+	    android:id="@+id/main_body" >
+        
+	    <!-- ScrollView for body-->
+	    <ScrollView
+	        android:layout_height="fill_parent"
+	        android:layout_width="fill_parent" >
+	    
+	        <LinearLayout
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="vertical"
+	            android:gravity="center_horizontal"
+	            >
+	        
+	            <TextView 
+	                android:id="@+id/main_graph_header_textview"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/graph_header"
+	                android:textColor="@color/black"
+	            	android:textSize="16sp"
+	            	android:textStyle="bold"
+	            	android:gravity="center"/>
+	            
+	       		<LinearLayout
+	        		android:id="@+id/main_graph"
+	        		android:layout_width="wrap_content"
+	        		android:layout_height="wrap_content"
+	        		android:orientation="horizontal" 
+	        		android:background="@drawable/graph"
+	        		android:layout_marginBottom="10dp"
+	        		/>
+	    		
+	    		<include 
+	     			layout="@layout/new_entry_icons_grid" />
+	    		
+			</LinearLayout>  
+	    </ScrollView>
+	
+	  	<TextView 
+		    android:id="@id/versionName"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:gravity="right"
+		    android:layout_alignParentRight="true"
+		    android:textSize="12sp"
+		    android:textColor="@color/grey" 
+		    android:text="@string/version"
+		    android:layout_marginRight="5dp" 
+		    android:layout_above="@+id/main_footer"/>
+	  	
+	    <!-- Footer -->
+	    <LinearLayout
+	        android:id="@id/main_footer"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:layout_alignParentBottom="true"
+	        android:background="@drawable/bottom_bar_bg"
+	        >
+	        <Button
+	            android:id="@+id/main_save_reminder"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/save_reminder_states"  />
+	    </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

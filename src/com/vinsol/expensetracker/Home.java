@@ -42,7 +42,7 @@ public class Home extends Activity implements OnClickListener {
 		bundle = new Bundle();
 		entry = new Entry();
 
-		// //// ********* Adding Click Listeners to MainActivity ********** /////////
+		////// ********* Adding Click Listeners to MainActivity ********** /////////
 
 		// opens text entry Activity
 		Button textButton = (Button) findViewById(R.id.main_text);
