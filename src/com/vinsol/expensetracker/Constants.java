@@ -17,7 +17,7 @@ public class Constants {
 	public static String DIRECTORY_FAVORITE = "Favorite/";
 	
 	//Flurry Analytics Key for Expense Tracker
-	public static String FLURRY_KEY = "TWN1Q86PGWA7WWEPDWXA";
+	public static String FLURRY_KEY = "Enter Flurry Key";
 	
 	//Flurry Events
 	public static String SAVE_REMINDER = "Save Reminder";
