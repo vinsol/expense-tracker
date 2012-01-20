@@ -107,11 +107,11 @@ public class BarGraph extends View {
 		mTextViewTemp.setTextSize(TypedValue.COMPLEX_UNIT_DIP,5);
 		paint.setTypeface(Typeface.DEFAULT_BOLD);
 		for(int i=0;i<6;i++) {
-			if(((double)value / 1000000000) >= 0.1 && i != 0) {
+			if(((double)value / 1000000000) >= 1 && i != 0) {
 				canvas.drawText(getVal(value,1000000000)+"B", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
-			} else if(((double)value / 1000000) >= 0.1 && i != 0) {
+			} else if(((double)value / 1000000) >= 1 && i != 0) {
 				canvas.drawText(getVal(value,1000000)+"M", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
-			} else if(((double)value / 1000) >= 0.1 && i != 0) {
+			} else if(((double)value / 1000) >= 1 && i != 0) {
 				canvas.drawText(getVal(value,1000)+"K", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);
 			} else {
 				canvas.drawText(value+"", originX-mTextViewTemp.getTextSize(), topY+mTextViewTemp.getTextSize(), paint);

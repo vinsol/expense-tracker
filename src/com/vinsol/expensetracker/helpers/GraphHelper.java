@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	private static TextView graphNoItem;
 	private TextView graphHeaderTextview;
 	private View.OnTouchListener gestureListener;
+	private ProgressBar graphProgressBar;
 	
 	public GraphHelper(Activity activity) {
 		this.activity = activity;
@@ -56,6 +58,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mainGraph = (LinearLayout) activity.findViewById(R.id.main_graph);
 		graphHeaderTextview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
+		graphProgressBar = (ProgressBar) activity.findViewById(R.id.main_graph_progress_bar);
 		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
 		final GestureDetector gestureDetector = new GestureDetector(new MyGestureDetector());
 		gestureListener = new View.OnTouchListener() {
@@ -89,7 +92,6 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	@Override
 	protected void onPostExecute(Void result) {
 		//view of graph******start view******//
-        
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
 				createBarGraph();
@@ -106,10 +108,12 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	private void removeGraphView() {
 		mainGraph.removeView(barGraph);
 		mainGraph.removeView(graphNoItem);
+		graphProgressBar.setVisibility(View.VISIBLE);
 	}
 	
 	private void createBarGraph() {
 		barGraph = new BarGraph(activity,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
+		graphProgressBar.setVisibility(View.GONE);
 		mainGraph.addView(barGraph, params);
 		if(j == 0) {
 			if(!isNotNullAll(mGraphList.get(j).get(0))) {
