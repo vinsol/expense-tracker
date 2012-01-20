@@ -16,13 +16,13 @@ import android.widget.Toast;
 
 public class AudioPlay {
 
-	// ///// ******** Declaring variables and classes ******** ///////
+	/////// ******** Declaring variables and classes ******** ///////
 	File mPath;
 	MediaPlayer mPlayer;
 	Context mContext;
 	FileHelper fileHelper;
 
-	// ////// ********* Constructor ********* //////////
+	//////// ********* Constructor ********* //////////
 	public AudioPlay(String id, Context _context,Boolean isFav) {
 		mContext = _context;
 		mPlayer = new MediaPlayer();

@@ -8,6 +8,8 @@ package com.vinsol.expensetracker.listing;
 
 import java.util.Calendar;
 
+import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
@@ -34,6 +36,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 	private long timeInMillis;
 	
 	public GroupedIconDialogClickListener(UnknownEntryDialog unknownDialog,Activity activity,Bundle bundle,Long timeInMillis) {
+		FlurryAgent.onEvent(Constants.GROUPED_ICON_CLICK);
 		this.unknownDialog = unknownDialog;
 		this.activity = activity;
 		if(bundle != null) {

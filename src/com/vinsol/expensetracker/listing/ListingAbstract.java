@@ -8,6 +8,8 @@ package com.vinsol.expensetracker.listing;
 
 import java.util.List;
 
+import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
@@ -46,6 +48,18 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	protected UnknownEntryDialog unknownDialog;
 	protected final int RESULT = 35;
 	protected Bundle intentExtras;
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, Constants.FLURRY_KEY);
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

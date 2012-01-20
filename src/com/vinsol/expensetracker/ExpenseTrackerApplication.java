@@ -3,10 +3,11 @@
  * See the file license.txt for copying permission.
 */     
 
-
 package com.vinsol.expensetracker;
 
 import java.io.File;
+
+import com.flurry.android.FlurryAgent;
 
 import android.app.Application;
 import android.content.Context;
@@ -29,6 +30,7 @@ public class ExpenseTrackerApplication extends Application {
 		mFile.mkdirs();
 		mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + Constants.DIRECTORY_AUDIO);
 		mFile.mkdirs();
+		FlurryAgent.setReportLocation(false);
 	}
 
 	public static Context getContext() {

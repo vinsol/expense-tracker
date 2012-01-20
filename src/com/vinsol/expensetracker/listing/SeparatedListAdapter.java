@@ -28,6 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.DateHelper;
@@ -331,15 +333,18 @@ class SeparatedListAdapter extends BaseAdapter {
 		
 		@Override
 		public void onClick(View v) {
-			if (v.getId() == R.id.expense_listing_inflated_row_imageview) {
+			switch (v.getId()) {
+			case R.id.expense_listing_inflated_row_imageview:
 				if (mListenerList != null)
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						if (mListenerList.type.equals(mContext.getString(R.string.voice))) {
+							FlurryAgent.onEvent(Constants.LIST_AUDIO_DIALOG);
 							File mFile = fileHelper.getAudioFileEntry(mListenerList.id);
 							if (mFile.canRead()) {
 								new AudioPlayDialog(mContext, mListenerList.id);
 							}
 						} else if (mListenerList.type.equals(mContext.getString(R.string.camera))) {
+							FlurryAgent.onEvent(Constants.LIST_IMAGE_DIALOG);
 							File mFile = fileHelper.getCameraFileLargeEntry(mListenerList.id);
 							if (mFile.canRead()) {
 								Intent intent = new Intent(mContext, ImagePreview.class);
@@ -350,10 +355,15 @@ class SeparatedListAdapter extends BaseAdapter {
 						}
 					}
 				if (mListenerList.type.equals(mContext.getString(R.string.text))) {
+					FlurryAgent.onEvent(Constants.LIST_TEXT_DIALOG);
 					if (!mListenerList.description.equals(mContext.getString(R.string.unfinished_textentry))) {
 						new DescriptionDialog(mContext, mListenerList.description);
 					}
 				}
+				break;
+
+			default:
+				break;
 			}
 		}
 	}

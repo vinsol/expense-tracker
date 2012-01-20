@@ -33,6 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.FileHelper;
@@ -59,6 +60,18 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 	private Button useButton;
 	private Button cancelButton;
 	private Button retakeButton;
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, Constants.FLURRY_KEY);
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +190,7 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 	public void onBackPressed() {
 		if(!isTakingPic) {
 			super.onBackPressed();
+			FlurryAgent.onEvent(Constants.BACK_PRESSED);
 			setResult(Activity.RESULT_CANCELED);
 		}
 	}
@@ -237,14 +251,17 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 			Parameters parameters = mCamera.getParameters();
 			switch(item) {
 			case 0:
+				FlurryAgent.onEvent(Constants.FLASH_AUTO);
 				parameters.setFlashMode(Parameters.FLASH_MODE_AUTO);
 				mCamera.setParameters(parameters);
 				break;
 			case 1:
+				FlurryAgent.onEvent(Constants.FLASH_OFF);
 				parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
 				mCamera.setParameters(parameters);
 				break;
 			case 2:
+				FlurryAgent.onEvent(Constants.FLASH_ON);
 				parameters.setFlashMode(Parameters.FLASH_MODE_ON);
 				mCamera.setParameters(parameters);
 				break;
@@ -256,6 +273,7 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.take_pic_button:
+			FlurryAgent.onEvent(Constants.CAMERA_TAKE_PIC);
 			isTakingPic = true;
 			takePicButton.setOnClickListener(null);
 			flashButton.setButtonCallback(null);
@@ -263,17 +281,20 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 			break;
 
 		case R.id.camera_cancel_button:
+			FlurryAgent.onEvent(Constants.CAMERA_CANCEL);
 			setResult(Activity.RESULT_CANCELED);
 			deleteFile();
 			finish();
 			break;
 			
 		case R.id.camera_use_button:
+			FlurryAgent.onEvent(Constants.CAMERA_USE);
 			setResult(Activity.RESULT_OK);
 			finish();
 			break;
 			
 		case R.id.camera_retake_button:
+			FlurryAgent.onEvent(Constants.CAMERA_RETAKE);
 			retakePicture();
 			break;
 		default:

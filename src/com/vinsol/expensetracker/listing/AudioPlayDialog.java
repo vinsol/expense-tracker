@@ -6,11 +6,6 @@
 
 package com.vinsol.expensetracker.listing;
 
-import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.helpers.AudioPlay;
-import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
-import com.vinsol.expensetracker.utils.MyCountDownTimer;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +13,11 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Chronometer;
+
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.AudioPlay;
+import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
+import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
 public class AudioPlayDialog extends Dialog implements android.view.View.OnClickListener,android.content.DialogInterface.OnDismissListener,android.content.DialogInterface.OnCancelListener {
 
@@ -29,7 +29,7 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 	private MyCountDownTimer countDownTimer;
 	private String mFile;
 	private Context mContext;
-
+	
 	public AudioPlayDialog(Context context, String id) {
 		super(context);
 		doCommonTaskBefore(context, id);

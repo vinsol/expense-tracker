@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DateHandler;
@@ -50,6 +52,12 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	protected Button editSaveEntry;
 	protected Entry entry;
 	protected FileHelper fileHelper;
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, Constants.FLURRY_KEY);
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -282,13 +290,11 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		return false;
 	}
 
-	// /// ****************** Handling back press of key ********** ///////////
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			saveEntry();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
+	@Override
+	public void onBackPressed() {
+		FlurryAgent.onEvent(Constants.BACK_PRESSED);
+		saveEntry();
+		super.onBackPressed();
 	}
 		
 	abstract protected void saveEntryStartIntent(Bundle tempBundle);
@@ -299,12 +305,14 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		////////******** Adding Action to save entry ********* ///////////
 
 		if (v.getId() == R.id.edit_save_entry) {
+			FlurryAgent.onEvent(Constants.SAVE_BUTTON);
 			saveEntry();
 		}
 		
 		///////// ********* Adding action if delete button ********** /////////
 
 		if (v.getId() == R.id.edit_delete) {
+			FlurryAgent.onEvent(Constants.DELETE_BUTTON);
 			isChanged = true;
 			deleteAction();
 			////// ******* Delete entry from database ******** /////////
@@ -335,4 +343,10 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 
 	protected void deleteAction(){}
 
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
+	
 }

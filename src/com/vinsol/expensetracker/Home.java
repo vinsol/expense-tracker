@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
@@ -34,6 +35,12 @@ public class Home extends Activity implements OnClickListener {
 	private Bundle bundle;
 	private Entry entry;
 	private GraphHelper mHandleGraph;
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, Constants.FLURRY_KEY);
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -89,63 +96,69 @@ public class Home extends Activity implements OnClickListener {
 		if(mHandleGraph != null)
 			mHandleGraph.cancel(true);
 		switch (idOfClickedView) {
-		// //// ******* opens TextEntry Activity ******** ///////////
-		case R.id.main_text:
-			Intent intentTextEntry = new Intent(this, TextEntry.class);
-			createDatabaseEntry(R.string.text);
-			intentTextEntry.putExtra("textEntryBundle", bundle);
-			startActivity(intentTextEntry);
-			break;
+			// //// ******* opens TextEntry Activity ******** ///////////
+			case R.id.main_text:
+				FlurryAgent.onEvent(Constants.TEXT);
+				Intent intentTextEntry = new Intent(this, TextEntry.class);
+				createDatabaseEntry(R.string.text);
+				intentTextEntry.putExtra("textEntryBundle", bundle);
+				startActivity(intentTextEntry);
+				break;
+				
+			// //// ******* opens Voice Activity ******** ///////////
+			case R.id.main_voice:
+				FlurryAgent.onEvent(Constants.VOICE);
+				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+					Intent intentVoice = new Intent(this, Voice.class);
+					createDatabaseEntry(R.string.voice);
+					intentVoice.putExtra("voiceBundle", bundle);
+					startActivity(intentVoice);
+				} else {
+					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
+				}
+				break;
+	
+			// //// ******* opens Camera Activity ******** ///////////
+			case R.id.main_camera:
+				FlurryAgent.onEvent(Constants.CAMERA);
+				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+					Intent intentCamera = new Intent(this, CameraActivity.class);
+					bundle = new Bundle();
+					intentCamera.putExtra("cameraBundle", bundle);
+					startActivity(intentCamera);
+				} else {
+					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
+				}
+				break;
+				
+			// //// ******* opens Favorite Activity ******** ///////////
+			case R.id.main_favorite:
+				FlurryAgent.onEvent(Constants.FAVORITE);
+				if(new ConvertCursorToListString(this).getFavoriteList().size() >=1) {
+					Intent intentFavorite = new Intent(this, FavoriteActivity.class);
+					bundle = new Bundle();
+					intentFavorite.putExtra("favoriteBundle", bundle);
+					startActivity(intentFavorite);	
+				}
+				else {
+					Toast.makeText(this, "no favorite added", Toast.LENGTH_SHORT).show();
+				}
+				break;
+				
+			// //// ******* opens List Activity and adds unknown entry to database ******** ///////////
+			case R.id.main_save_reminder:
+				FlurryAgent.onEvent(Constants.SAVE_REMINDER);
+				insertToDatabase(R.string.unknown);
+				Intent intentListView = new Intent(this, ExpenseListing.class);
+				startActivity(intentListView);
+				break;
 			
-		// //// ******* opens Voice Activity ******** ///////////
-		case R.id.main_voice:
-			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-				Intent intentVoice = new Intent(this, Voice.class);
-				createDatabaseEntry(R.string.voice);
-				intentVoice.putExtra("voiceBundle", bundle);
-				startActivity(intentVoice);
-			} else {
-				Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
-			}
-			break;
-
-		// //// ******* opens Camera Activity ******** ///////////
-		case R.id.main_camera:
-			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-				Intent intentCamera = new Intent(this, CameraActivity.class);
-				bundle = new Bundle();
-				intentCamera.putExtra("cameraBundle", bundle);
-				startActivity(intentCamera);
-			} else {
-				Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
-			}
-			break;
-			
-		// //// ******* opens Favorite Activity ******** ///////////
-		case R.id.main_favorite:
-			if(new ConvertCursorToListString(this).getFavoriteList().size() >=1) {
-				Intent intentFavorite = new Intent(this, FavoriteActivity.class);
-				bundle = new Bundle();
-				intentFavorite.putExtra("favoriteBundle", bundle);
-				startActivity(intentFavorite);	
-			}
-			else {
-				Toast.makeText(this, "no favorite added", Toast.LENGTH_SHORT).show();
-			}
-			break;
-			
-		// //// ******* opens List Activity and adds unknown entry to database ******** ///////////
-		case R.id.main_save_reminder:
-			insertToDatabase(R.string.unknown);
-			Intent intentListView = new Intent(this, ExpenseListing.class);
-			startActivity(intentListView);
-			break;
-		
-		// //// ******* opens ListView Activity ******** ///////////
-		case R.id.main_listview:
-			Intent intentListView2 = new Intent(this, ExpenseListing.class);
-			startActivity(intentListView2);
-			break;
+			////// ******* opens ListView Activity ******** ///////////
+			case R.id.main_listview:
+				FlurryAgent.onEvent(Constants.LIST_VIEW);
+				Intent intentListView2 = new Intent(this, ExpenseListing.class);
+				startActivity(intentListView2);
+				break;
 		}//end switch
 	}//end onClick
 	
@@ -183,5 +196,11 @@ public class Home extends Activity implements OnClickListener {
 		long id = mDatabaseAdapter.insertToEntryTable(list);
 		mDatabaseAdapter.close();
 		return id;
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
 	}
 }

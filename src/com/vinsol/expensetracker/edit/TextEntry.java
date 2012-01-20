@@ -17,7 +17,7 @@ public class TextEntry extends EditAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// //////********* Get id from intent extras ******** ////////////
+		////////********* Get id from intent extras ******** ////////////
 
 		intentExtras = getIntent().getBundleExtra("textEntryBundle");
 		typeOfEntry = R.string.text;

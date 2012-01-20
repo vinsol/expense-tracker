@@ -12,7 +12,6 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
@@ -48,6 +49,18 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	private TextView showAddFavoriteTextView;
 	private String tempfavID;
 	protected FileHelper fileHelper;
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, Constants.FLURRY_KEY);
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -153,46 +166,49 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		
 		switch (v.getId()) {
 		
-		case R.id.show_delete:
-			if (mShowList.id != null) {
-				deleteAction();
-				mDatabaseAdapter.open();
-				mDatabaseAdapter.deleteEntryTableEntryID(mShowList.id);
-				mDatabaseAdapter.close();
-				Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
-				if(intentExtras.containsKey("position")) {
-					intentExtras.putBoolean("isChanged", true);
-					setResultModifiedToListing();
+			case R.id.show_delete:
+				FlurryAgent.onEvent(Constants.DELETE_BUTTON);
+				if (mShowList.id != null) {
+					deleteAction();
+					mDatabaseAdapter.open();
+					mDatabaseAdapter.deleteEntryTableEntryID(mShowList.id);
+					mDatabaseAdapter.close();
+					Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+					if(intentExtras.containsKey("position")) {
+						intentExtras.putBoolean("isChanged", true);
+						setResultModifiedToListing();
+					}
+					finish();
+				} else {
+					Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
 				}
-				finish();
-			} else {
-				Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-			}
-			break;
-
-		case R.id.show_edit:
-			intentExtras.putBoolean("isFromShowPage", true);
-			intentExtras.remove("mDisplayList");
-			if(mShowList.amount.endsWith(".00")) {
-				mShowList.amount = mShowList.amount.substring(0, mShowList.amount.length()-3);
-			}
-			intentExtras.putParcelable("mDisplayList", mShowList);
-			editAction();
-			break;
-			
-		case R.id.show_add_favorite:
-		case R.id.show_add_favorite_textView:
-			Boolean toCheck;
-			if(v.getId() == R.id.show_add_favorite) {
-				toCheck = showAddFavorite.isChecked();
-			} else {
-				toCheck = !showAddFavorite.isChecked();
-			}
-			onClickFavorite(toCheck);
-			break;
-			
-		default:
-			break;
+				break;
+	
+			case R.id.show_edit:
+				FlurryAgent.onEvent(Constants.EDIT_BUTTON);
+				intentExtras.putBoolean("isFromShowPage", true);
+				intentExtras.remove("mDisplayList");
+				if(mShowList.amount.endsWith(".00")) {
+					mShowList.amount = mShowList.amount.substring(0, mShowList.amount.length()-3);
+				}
+				intentExtras.putParcelable("mDisplayList", mShowList);
+				editAction();
+				break;
+				
+			case R.id.show_add_favorite:
+			case R.id.show_add_favorite_textView:
+				FlurryAgent.onEvent(Constants.ADDED_TO_FAVORITE);
+				Boolean toCheck;
+				if(v.getId() == R.id.show_add_favorite) {
+					toCheck = showAddFavorite.isChecked();
+				} else {
+					toCheck = !showAddFavorite.isChecked();
+				}
+				onClickFavorite(toCheck);
+				break;
+				
+			default:
+				break;
 		}
 	}
 
@@ -326,14 +342,12 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		showAddFavoriteTextView.setText("Add to Favorite");
 	}	
 
-	// /// ****************** Handling back press of key ********** ///////////
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			setResultModifiedToListing();
-			finish();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
+	@Override
+	public void onBackPressed() {
+		FlurryAgent.onEvent(Constants.BACK_PRESSED);
+		setResultModifiedToListing();
+		finish();
+		super.onBackPressed();
 	}
 
 }
