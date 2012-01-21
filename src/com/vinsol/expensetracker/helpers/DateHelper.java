@@ -12,6 +12,7 @@ import com.vinsol.expensetracker.utils.GetMonth;
 
 public class DateHelper {
 	Calendar mCalendar;
+	private boolean isCurrentWeek;
 
 	public DateHelper(String dateViewString) {
 		doCommonTask(dateViewString, null);
@@ -32,15 +33,26 @@ public class DateHelper {
 			year = Integer.parseInt((String) dateViewString.subSequence(dateViewString.length() - 4, dateViewString.length()));
 			dateViewString = (String) dateViewString.subSequence(0,dateViewString.length() - 6);
 		}
-		month = new GetMonth().getMonth((String) dateViewString.subSequence(0, 3));
-		dateViewString = (String) dateViewString.subSequence(4,dateViewString.length());
-		day = Integer.parseInt(dateViewString);
-		if(mCalendar2 == null) {
-			mCalendar.set(year, month, day);
+		if(dateViewString.length() >= 4) {
+			month = new GetMonth().getMonth((String) dateViewString.subSequence(0, 3));
+			if(month != -1) {
+				dateViewString = (String) dateViewString.subSequence(4,dateViewString.length());
+				day = Integer.parseInt(dateViewString);
+				if(mCalendar2 == null) {
+					mCalendar.set(year, month, day);
+				} else {
+					mCalendar.set(year, month, day, mCalendar2.get(Calendar.HOUR_OF_DAY),mCalendar2.get(Calendar.MINUTE),mCalendar2.get(Calendar.SECOND));
+				}
+				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+				isCurrentWeek = true;
+			}
 		} else {
-			mCalendar.set(year, month, day, mCalendar2.get(Calendar.HOUR_OF_DAY),mCalendar2.get(Calendar.MINUTE),mCalendar2.get(Calendar.SECOND));
+			isCurrentWeek = false;
 		}
-		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+	}
+	
+	public boolean isCurrentWeek() {
+		return isCurrentWeek;
 	}
 
 	public long getTimeMillis() {

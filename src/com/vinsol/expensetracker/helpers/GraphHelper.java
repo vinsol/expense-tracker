@@ -93,6 +93,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	@Override
 	protected void onPostExecute(Void result) {
 		//view of graph******start view******//
+		graphProgressBar.setVisibility(View.GONE);
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
 				createBarGraph();
@@ -114,7 +115,6 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	
 	private void createBarGraph() {
 		barGraph = new BarGraph(activity,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
-		graphProgressBar.setVisibility(View.GONE);
 		mainGraph.addView(barGraph, params);
 		if(j == 0) {
 			if(!isNotNullAll(mGraphList.get(j).get(0))) {

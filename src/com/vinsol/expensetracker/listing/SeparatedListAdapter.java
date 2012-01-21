@@ -406,10 +406,9 @@ class SeparatedListAdapter extends BaseAdapter {
 
 	private boolean isCurrentWeek(String dateViewString) {
 		if(dateViewString != null) {
+			Log.d(dateViewString.length());
 			if(!dateViewString.equals("")) {
-				DateHelper mDateHelper = new DateHelper(dateViewString);
-				mDateHelper.getTimeMillis();
-				return true;
+				return new DateHelper(dateViewString).isCurrentWeek();
 			}
 		}
 		return false;

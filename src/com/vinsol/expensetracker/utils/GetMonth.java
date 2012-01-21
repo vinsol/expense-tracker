@@ -33,6 +33,6 @@ public class GetMonth {
 			return 10;
 		if (i.equals("Dec"))
 			return 11;
-		return 0;
+		return -1;
 	}
 }
