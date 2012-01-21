@@ -38,6 +38,7 @@ import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.utils.ImagePreview;
+import com.vinsol.expensetracker.utils.Log;
 
 class SeparatedListAdapter extends BaseAdapter {
 
@@ -53,9 +54,17 @@ class SeparatedListAdapter extends BaseAdapter {
 	private View viewHeader = null;
 	private View viewFooter = null;
 	private FileHelper fileHelper;
+	private String highlightID;
 	
-	public SeparatedListAdapter(Context context) {
+	public SeparatedListAdapter(Context context,String highlightID) {
 		mContext = context;
+		this.highlightID = highlightID;
+		if(this.highlightID == null) {
+			highlightID = "";
+		}
+		Log.d("***************************");
+		Log.d("highlightID "+highlightID);
+		Log.d("*****************************");
 		headers = new ArrayAdapter<String>(context,R.layout.mainlist_header_view);
 		footers = new ArrayAdapter<String>(context,R.layout.main_list_footerview);
 		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -195,13 +204,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				Entry mlist = (Entry) adapter.getItem(position - 1);
 				CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 				if (mlist.type.equals(mContext.getString(R.string.camera))) {
-					
-					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
-						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
-					} else {
-						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
-					}
-					
+					setBackGround(holderBody,mCheckEntryComplete,mlist);
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						try {
 							File mFile = fileHelper.getCameraFileThumbnailEntry(mlist.id);
@@ -218,11 +221,7 @@ class SeparatedListAdapter extends BaseAdapter {
 						holderBody.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
 					}
 				} else if (mlist.type.equals(mContext.getString(R.string.text))) {
-					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
-						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
-					} else {
-						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
-					}
+					setBackGround(holderBody, mCheckEntryComplete, mlist);
 					
 					if (!mlist.description.equals(mContext.getString(R.string.unfinished_textentry)) && !mlist.description.equals(mContext.getString(R.string.finished_textentry))) {
 						holderBody.rowImageview.setImageResource(R.drawable.listing_text_entry_icon);
@@ -235,11 +234,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unknown_states);
 				} else if (mlist.type.equals(mContext.getString(R.string.voice))) {
 
-					if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
-						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
-					} else {
-						holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
-					}
+					setBackGround(holderBody, mCheckEntryComplete, mlist);
 					File mFile = fileHelper.getAudioFileEntry(mlist.id);
 					if (mFile.canRead()) {
 						holderBody.rowImageview.setImageResource(R.drawable.listing_voice_entry_icon);
@@ -288,14 +283,25 @@ class SeparatedListAdapter extends BaseAdapter {
 		return null;
 	}
 
-	private boolean isCurrentWeek(String dateViewString) {
-		try {
-			DateHelper mDateHelper = new DateHelper(dateViewString);
-			mDateHelper.getTimeMillis();
-			return true;
-		} catch (Exception e) {
+	private void setBackGround(ViewHolderBody holderBody,CheckEntryComplete mCheckEntryComplete,Entry mlist) {
+		if (mlist.id.equals(highlightID)) {
+			Log.d(true+" \t "+mlist.type);
+			//TODO for last entry
+		} else if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
+			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
+		} else {
+			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
 		}
+	}
 
+	private boolean isCurrentWeek(String dateViewString) {
+		if(dateViewString != null) {
+			if(dateViewString.equals("")) {
+				DateHelper mDateHelper = new DateHelper(dateViewString);
+				mDateHelper.getTimeMillis();
+				return true;
+			}
+		}
 		return false;
 	}
 

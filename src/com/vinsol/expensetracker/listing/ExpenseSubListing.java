@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
@@ -37,7 +38,7 @@ public class ExpenseSubListing extends ListingAbstract {
 	
 	@SuppressWarnings("unchecked")
 	private void initListView() {
-		mSeparatedListAdapter = new SeparatedListAdapter(this);
+		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		idList = getIntent().getStringExtra("idList");
 		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,idList);
@@ -45,8 +46,8 @@ public class ExpenseSubListing extends ListingAbstract {
 		if(mSubList.size() > 0) {
 			Bundle intentExtras = getIntent().getExtras();
 			if(intentExtras != null){
-				if(intentExtras.containsKey("toHighLight")) {
-					highlightID = intentExtras.getString("toHighLight");
+				if(intentExtras.containsKey(Constants.HIGHLIGHT)) {
+					highlightID = intentExtras.getString(Constants.HIGHLIGHT);
 				}
 			}
 			Calendar mTempCalendar = Calendar.getInstance();
@@ -111,7 +112,6 @@ public class ExpenseSubListing extends ListingAbstract {
 	
 	@Override
 	protected void updateListView() {
-		super.updateListView();
 		initListView();
 	}
 	

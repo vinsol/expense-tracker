@@ -36,16 +36,10 @@ public class ExpenseListing extends ListingAbstract {
 	
 	@SuppressWarnings("unchecked")
 	private void initListView() {
-		mSeparatedListAdapter = new SeparatedListAdapter(this);
+		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,"");
 		mSubList = mConvertCursorToListString.getListStringParticularDate("");
-		Bundle intentExtras = getIntent().getExtras();
-		if(intentExtras != null) {
-			if(intentExtras.containsKey("toHighLight")) {
-				highlightID = intentExtras.getString("toHighLight");
-			}
-		}
 		int j = 0;
 		@SuppressWarnings("rawtypes")
 		List listString = new ArrayList<List<Entry>>();
@@ -204,7 +198,6 @@ public class ExpenseListing extends ListingAbstract {
 
 	@Override
 	protected void updateListView() {
-		super.updateListView();
 		initListView();
 	}
 }

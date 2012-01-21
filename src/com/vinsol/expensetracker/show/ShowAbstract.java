@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -44,7 +43,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	protected DatabaseAdapter mDatabaseAdapter;	
 	protected Button showDelete;
 	protected Button showEdit;
-	private RelativeLayout dateBarRelativeLayout;
 	private ToggleButton showAddFavorite;
 	private TextView showAddFavoriteTextView;
 	private String tempfavID;
@@ -75,8 +73,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		showAmount = (TextView) findViewById(R.id.show_amount);
 		showTag = (TextView) findViewById(R.id.show_tag_textview);
-		dateBarRelativeLayout = (RelativeLayout) findViewById(R.id.show_date_bar); 
-		dateBarRelativeLayout.setBackgroundDrawable(getResources().getDrawable(R.drawable.date_bar_bg_wo_shadow));
 		showEdit.setOnClickListener(this);
 		showDelete.setOnClickListener(this);
 	}

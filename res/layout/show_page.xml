@@ -8,49 +8,20 @@
     <!-- Header -->
     <include
         layout="@layout/simple_header"
-        android:id="@+id/include_header"
-        /> 
-        
-    <!-- Date and location Bar -->
-    <RelativeLayout  
-        android:id="@+id/show_date_bar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/include_header"
-        android:background="@drawable/date_bar_bg_wo_shadow"
-        android:gravity="center"
-        > 
-        
-		<TextView
-            android:id="@+id/show_location"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="unknown location"
-            android:textColor="@color/black"
-            android:textSize="14dip"
-            android:gravity="center"
-            android:layout_marginBottom="1dip"
-            android:layout_marginLeft="15dip"
-            android:ellipsize="end"
-            android:layout_marginRight="7dip"
-            android:singleLine="true"
-            />          
-        
-    </RelativeLayout>
+        android:id="@+id/include_header" /> 
     
     <!-- ScrollView for body -->
     <ScrollView
         android:id="@+id/show_body"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/show_date_bar"
+        android:layout_below="@id/include_header"
         android:layout_above="@+id/show_footer"
         >
     	<LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-           	android:orientation="vertical"
-            >          
+            android:layout_height="wrap_content"
+           	android:orientation="vertical" >          
             
     	    <!-- camera entry -->
             <LinearLayout
@@ -59,8 +30,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/audio_play_dialog_bg"
                 android:gravity="center"
-                android:visibility="gone"
-                >
+                android:visibility="gone" >
+                
                 <ImageView 
                     android:id="@+id/show_image_display"
                     android:layout_width="100dp"
@@ -71,8 +42,8 @@
                    	android:paddingLeft="5dp"
                    	android:paddingRight="5dp"
                    	android:paddingBottom="8dp"
-                   	android:scaleType="fitXY"
-                   	/>
+                   	android:scaleType="fitXY" />
+                
             </LinearLayout>
             
             <!-- voice entry -->    
@@ -81,8 +52,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/audio_play_dialog_bg"
-                android:visibility="gone"
-                >   
+                android:visibility="gone" >   
+                
                 <Chronometer 
                     android:id="@+id/show_time_details_chronometer"
                   	android:layout_width="fill_parent"
@@ -91,8 +62,7 @@
                   	android:textStyle="bold"
                   	android:gravity="center_horizontal"
                   	android:textColor="@color/black"
-                  	android:layout_marginTop="5dip"
-                    />
+                  	android:layout_marginTop="5dip" />
                 
                 <LinearLayout
                     android:id="@+id/show_voice_control_buttons"
@@ -102,23 +72,24 @@
                     android:orientation="horizontal"
                     android:layout_below="@id/show_time_details_chronometer"
                     >
+                    
                     <!-- stop button -->
                     <Button
                         android:id="@+id/show_stop_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/voice_stop_states"
-                        android:visibility="gone"
-                       	/>
+                        android:visibility="gone" />
                     
                     <!-- play button -->
                     <Button
                         android:id="@+id/show_play_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/voice_play_states"
-                       	/>
+                        android:background="@drawable/voice_play_states" />
+                    
               	</LinearLayout>    
+              	
             </RelativeLayout>
             
             <!--common amount and description field -->     
@@ -132,8 +103,8 @@
                 android:textStyle="bold"
                 android:layout_marginLeft="7dp"
             	android:layout_marginRight="7dp"
-            	android:layout_marginTop="10dip"
-                />
+            	android:layout_marginTop="10dip" />
+            
             <!-- amount value -->
             <TextView
                 android:id="@+id/show_amount"
@@ -143,8 +114,7 @@
                 android:textSize="20dip"
                 android:layout_marginLeft="7dp"
             	android:layout_marginRight="7dp"
-                android:layout_marginBottom="10dp"
-                />
+                android:layout_marginBottom="10dp" />
             
             <!-- divider -->    
             <View 
@@ -152,8 +122,7 @@
 	           	android:layout_width="fill_parent"
 	           	android:layout_height="wrap_content"
 	           	android:background="@drawable/list_divider"
-	           	android:layout_marginBottom="10dp"
-	           	/>
+	           	android:layout_marginBottom="10dp" />
                 
             <!-- description header -->
             <TextView 
@@ -166,8 +135,7 @@
             	android:textStyle="bold"
             	android:layout_marginLeft="7dp"
             	android:layout_marginRight="7dp"
-                android:layout_marginBottom="5dp"
-            	/>
+                android:layout_marginBottom="5dp" />
                 
             <!-- description text view -->    
        		<TextView 
@@ -178,8 +146,7 @@
               	android:textSize="20dip"
               	android:textColor="@color/black"
               	android:layout_marginLeft="7dp"
-            	android:layout_marginRight="7dp"
-                />
+            	android:layout_marginRight="7dp" />
             
            	<!-- divider -->    
             <View 
@@ -187,9 +154,41 @@
 	           	android:layout_height="wrap_content"
 	           	android:background="@drawable/list_divider"
 	           	android:layout_marginTop="10dp"
-	           	android:layout_marginBottom="15dp"
-	           	/>  
-           	    
+	           	android:layout_marginBottom="15dp" /> 
+	           	
+            <!-- Location header -->
+            <TextView 
+            	android:id="@+id/show_location_header"
+            	android:layout_height="wrap_content"
+            	android:layout_width="wrap_content"
+            	android:text="Location:"
+            	android:textColor="@color/black"
+            	android:textSize="18dip"
+            	android:textStyle="bold"
+            	android:layout_marginLeft="7dp"
+            	android:layout_marginRight="7dp"
+                android:layout_marginBottom="5dp" />
+                
+            <!-- description text view -->    
+       		<TextView 
+              	android:id="@+id/show_location"
+              	android:layout_width="fill_parent"
+              	android:layout_height="wrap_content"
+              	android:gravity="top"
+              	android:textSize="20dip"
+              	android:textColor="@color/black"
+              	android:layout_marginLeft="7dp"
+            	android:layout_marginRight="7dp" />
+            
+           	<!-- divider -->    
+            <View 
+	           	android:layout_width="fill_parent"
+	           	android:layout_height="wrap_content"
+	           	android:background="@drawable/list_divider"
+	           	android:layout_marginTop="10dp"
+	           	android:layout_marginBottom="15dp" />  
+           	
+            <!-- Favorite -->
             <LinearLayout
                 android:id="@+id/show_add_favorite_layout" 
                 android:layout_width="wrap_content"
@@ -198,8 +197,7 @@
 	            android:layout_marginLeft="7dp"
 	            android:layout_marginRight="7dp"
 	            android:orientation="horizontal"
-	            android:gravity="center_vertical"
-	            >    
+	            android:gravity="center_vertical" >    
                 
 	            <ToggleButton
 	                android:id="@+id/show_add_favorite"
@@ -209,8 +207,7 @@
 	                android:textOn=""
 	                android:textOff=""
 	                android:layout_marginRight="7dp" 
-	                android:visibility="gone"
-	                />
+	                android:visibility="gone" />
 	            
 	            <TextView 
 	                android:id="@+id/show_add_favorite_textView"
@@ -218,9 +215,10 @@
 	                android:layout_height="wrap_content"
 	                android:textSize="20dip"
 	                android:textColor="@color/black"
-	                android:visibility="gone"
-	                />
+	                android:visibility="gone" />
+	            
             </LinearLayout>
+            
         </LinearLayout>
         
     </ScrollView>
@@ -242,17 +240,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_states"
-            android:layout_marginRight="7dp"
-            >
-       	</Button>
+            android:layout_marginRight="7dp" />
        	<!-- delete button -->
        	<Button
             android:id="@+id/show_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/delete_states"
-            android:layout_marginLeft="7dp"
-            >
-       	</Button>  
+            android:layout_marginLeft="7dp" />
     </LinearLayout>  
 </RelativeLayout>

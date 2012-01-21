@@ -15,9 +15,7 @@
   		android:layout_height="44dip"
 		android:scaleType="fitXY"
  		android:layout_marginTop="7dip"
- 		android:layout_marginLeft="7dip"
- 		>
- 	</ImageView>
+ 		android:layout_marginLeft="7dip" />
    	
 	<!-- description and time-location relative layout -->
    	<RelativeLayout
@@ -40,9 +38,7 @@
            	android:textSize="16sp"
    	        android:singleLine="true"
    	        android:ellipsize="end"
-   	        android:layout_marginTop="3dip"
-   	        >
-   	    </TextView>
+   	        android:layout_marginTop="3dip" />
    	    
    	    <!-- time and location -->    
    	    <TextView 
@@ -55,9 +51,7 @@
    	        android:singleLine="true"
    	        android:ellipsize="end"
    	        android:layout_below="@id/expense_listing_inflated_row_tag"
-   	        android:layout_marginTop="5dip"
-   	        >
-        </TextView>
+   	        android:layout_marginTop="5dip" />
    	</RelativeLayout>
    	    
    	<!-- favorite -->
@@ -68,9 +62,7 @@
        	android:visibility="invisible"
        	android:layout_alignParentTop="true"
        	android:layout_alignParentRight="true"
-       	android:src="@drawable/listing_favorite_icon"
-       	>
-   	</ImageView>
+       	android:src="@drawable/listing_favorite_icon" />
 	
 	<!-- amount -->
     <TextView
@@ -84,7 +76,5 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:layout_marginRight="7dip"
-        android:layout_centerVertical="true"
-        >
-	</TextView>
+        android:layout_centerVertical="true" />
 </RelativeLayout>

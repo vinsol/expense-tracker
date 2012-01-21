@@ -68,6 +68,12 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		intentExtras = new Bundle();
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		mStringProcessing = new StringProcessing();
+		Bundle intentExtras = getIntent().getExtras();
+		if(intentExtras != null) {
+			if(intentExtras.containsKey(Constants.HIGHLIGHT)) {
+				highlightID = intentExtras.getString(Constants.HIGHLIGHT);
+			}
+		}
 	}
 	
 	protected Entry getListCurrentWeek(int j) {
@@ -232,6 +238,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		}
 	}
 
-	protected void updateListView() {}
+	protected abstract void updateListView();
 	
 }

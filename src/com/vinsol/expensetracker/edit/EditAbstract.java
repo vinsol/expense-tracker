@@ -246,7 +246,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		if(!intentExtras.containsKey("isFromShowPage")) {
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			Bundle mToHighLight = new Bundle();
-			mToHighLight.putString("toHighLight", toSave.id);
+			mToHighLight.putString(Constants.HIGHLIGHT, toSave.id);
 			intentExpenseListing.putExtras(mToHighLight);
 			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			if(!intentExtras.containsKey("position")) {	

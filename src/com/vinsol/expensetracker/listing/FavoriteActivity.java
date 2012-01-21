@@ -30,6 +30,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
@@ -363,7 +364,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 						File mFileThumbnail = fileHelper.getCameraFileThumbnailEntry(idCreated);
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							bundle.putString("toHighLight", idCreated+"");
+							bundle.putString(Constants.HIGHLIGHT, idCreated+"");
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							finish();
@@ -379,7 +380,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 						File mFileThumbnail = fileHelper.getCameraFileThumbnailEntry(id);
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							bundle.putString("toHighLight", toInsert.id);
+							bundle.putString(Constants.HIGHLIGHT, toInsert.id);
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
@@ -438,7 +439,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 						File mFile = fileHelper.getAudioFileEntry(idCreated);
 						if(mFile.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							bundle.putString("toHighLight", idCreated+"");
+							bundle.putString(Constants.HIGHLIGHT, idCreated+"");
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							finish();
@@ -452,7 +453,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 						File mFile = fileHelper.getAudioFileEntry(id);
 						if(mFile.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							bundle.putString("toHighLight", toInsert.id);
+							bundle.putString(Constants.HIGHLIGHT, toInsert.id);
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
@@ -505,7 +506,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 					mDatabaseAdapter.open();
 					idCreated = mDatabaseAdapter.insertToEntryTable(toInsert)+"";
 					mDatabaseAdapter.close();
-					bundle.putString("toHighLight", idCreated+"");
+					bundle.putString(Constants.HIGHLIGHT, idCreated+"");
 					expenseListingIntent.putExtras(bundle);
 					startActivity(expenseListingIntent);
 					finish();
@@ -513,7 +514,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 					mDatabaseAdapter.open();
 					mDatabaseAdapter.editEntryTable(toInsert);
 					mDatabaseAdapter.close();
-					bundle.putString("toHighLight", toInsert.id);
+					bundle.putString(Constants.HIGHLIGHT, toInsert.id);
 					expenseListingIntent.putExtras(bundle);
 					startActivity(expenseListingIntent);
 					finish();

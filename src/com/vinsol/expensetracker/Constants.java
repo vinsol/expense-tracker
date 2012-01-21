@@ -16,6 +16,10 @@ public class Constants {
 	public static String DIRECTORY_AUDIO = "Audio/";
 	public static String DIRECTORY_FAVORITE = "Favorite/";
 	
+	//Intent Extras
+	public static String HIGHLIGHT = "toHighLight";
+	
+	
 	//Flurry Analytics Key for Expense Tracker
 	public static String FLURRY_KEY = "Enter Flurry Key";
 	
