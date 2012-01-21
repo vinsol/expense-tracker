@@ -185,14 +185,12 @@ public class ExpenseListing extends ListingAbstract {
 	
 	@Override
 	protected void unknownDialogAction(String id) {
-		super.unknownDialogAction(id);
 		initListView();
 		Toast.makeText(ExpenseListing.this, "Deleted", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	protected void noItemButtonAction(Button noItemButton) {
-		super.noItemButtonAction(noItemButton);
 		noItemButton.setOnClickListener(new GroupedIconDialogClickListener(unknownDialog, ExpenseListing.this, bundle,null));
 	}
 

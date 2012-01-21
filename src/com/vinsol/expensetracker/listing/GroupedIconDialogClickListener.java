@@ -8,8 +8,14 @@ package com.vinsol.expensetracker.listing;
 
 import java.util.Calendar;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Toast;
+
 import com.flurry.android.FlurryAgent;
-import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
@@ -17,16 +23,7 @@ import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.LocationHelper;
-import com.vinsol.expensetracker.listing.FavoriteActivity;
-import com.vinsol.expensetracker.listing.UnknownEntryDialog;
 import com.vinsol.expensetracker.models.Entry;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Toast;
 
 public class GroupedIconDialogClickListener implements OnClickListener {
 	
@@ -36,7 +33,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 	private long timeInMillis;
 	
 	public GroupedIconDialogClickListener(UnknownEntryDialog unknownDialog,Activity activity,Bundle bundle,Long timeInMillis) {
-		FlurryAgent.onEvent(Constants.GROUPED_ICON_CLICK);
+		FlurryAgent.onEvent(activity.getString(R.string.grouped_icon_click));
 		this.unknownDialog = unknownDialog;
 		this.activity = activity;
 		if(bundle != null) {

@@ -64,7 +64,7 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 	@Override
 	protected void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, Constants.FLURRY_KEY);
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
 	}
 	
 	@Override
@@ -190,7 +190,7 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 	public void onBackPressed() {
 		if(!isTakingPic) {
 			super.onBackPressed();
-			FlurryAgent.onEvent(Constants.BACK_PRESSED);
+			FlurryAgent.onEvent(getString(R.string.back_pressed));
 			setResult(Activity.RESULT_CANCELED);
 		}
 	}
@@ -251,17 +251,17 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 			Parameters parameters = mCamera.getParameters();
 			switch(item) {
 			case 0:
-				FlurryAgent.onEvent(Constants.FLASH_AUTO);
+				FlurryAgent.onEvent(getString(R.string.flash_auto));
 				parameters.setFlashMode(Parameters.FLASH_MODE_AUTO);
 				mCamera.setParameters(parameters);
 				break;
 			case 1:
-				FlurryAgent.onEvent(Constants.FLASH_OFF);
+				FlurryAgent.onEvent(getString(R.string.flash_off));
 				parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
 				mCamera.setParameters(parameters);
 				break;
 			case 2:
-				FlurryAgent.onEvent(Constants.FLASH_ON);
+				FlurryAgent.onEvent(getString(R.string.flash_on));
 				parameters.setFlashMode(Parameters.FLASH_MODE_ON);
 				mCamera.setParameters(parameters);
 				break;
@@ -273,7 +273,7 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.take_pic_button:
-			FlurryAgent.onEvent(Constants.CAMERA_TAKE_PIC);
+			FlurryAgent.onEvent(getString(R.string.camera_take_pic));
 			isTakingPic = true;
 			takePicButton.setOnClickListener(null);
 			flashButton.setButtonCallback(null);
@@ -281,20 +281,20 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 			break;
 
 		case R.id.camera_cancel_button:
-			FlurryAgent.onEvent(Constants.CAMERA_CANCEL);
+			FlurryAgent.onEvent(getString(R.string.camera_cancel_button));
 			setResult(Activity.RESULT_CANCELED);
 			deleteFile();
 			finish();
 			break;
 			
 		case R.id.camera_use_button:
-			FlurryAgent.onEvent(Constants.CAMERA_USE);
+			FlurryAgent.onEvent(getString(R.string.camera_use_button));
 			setResult(Activity.RESULT_OK);
 			finish();
 			break;
 			
 		case R.id.camera_retake_button:
-			FlurryAgent.onEvent(Constants.CAMERA_RETAKE);
+			FlurryAgent.onEvent(getString(R.string.camera_retake_button));
 			retakePicture();
 			break;
 		default:

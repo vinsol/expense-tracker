@@ -95,13 +95,11 @@ public class ExpenseSubListing extends ListingAbstract {
 
 	@Override
 	protected void unknownDialogAction(String id) {
-		super.unknownDialogAction(id);
 		initListView();
 	}
 	
 	@Override
 	protected void noItemButtonAction(Button noItemButton) {
-		super.noItemButtonAction(noItemButton);
 		noItemButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

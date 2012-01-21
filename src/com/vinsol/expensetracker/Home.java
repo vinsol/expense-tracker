@@ -39,7 +39,7 @@ public class Home extends Activity implements OnClickListener {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, Constants.FLURRY_KEY);
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
 	}
 	
 	@Override
@@ -98,7 +98,7 @@ public class Home extends Activity implements OnClickListener {
 		switch (idOfClickedView) {
 			// //// ******* opens TextEntry Activity ******** ///////////
 			case R.id.main_text:
-				FlurryAgent.onEvent(Constants.TEXT);
+				FlurryAgent.onEvent(getString(R.string.finished_textentry));
 				Intent intentTextEntry = new Intent(this, TextEntry.class);
 				createDatabaseEntry(R.string.text);
 				intentTextEntry.putExtra("textEntryBundle", bundle);
@@ -107,7 +107,7 @@ public class Home extends Activity implements OnClickListener {
 				
 			// //// ******* opens Voice Activity ******** ///////////
 			case R.id.main_voice:
-				FlurryAgent.onEvent(Constants.VOICE);
+				FlurryAgent.onEvent(getString(R.string.finished_voiceentry));
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					Intent intentVoice = new Intent(this, Voice.class);
 					createDatabaseEntry(R.string.voice);
@@ -120,7 +120,7 @@ public class Home extends Activity implements OnClickListener {
 	
 			// //// ******* opens Camera Activity ******** ///////////
 			case R.id.main_camera:
-				FlurryAgent.onEvent(Constants.CAMERA);
+				FlurryAgent.onEvent(getString(R.string.finished_cameraentry));
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					Intent intentCamera = new Intent(this, CameraActivity.class);
 					bundle = new Bundle();
@@ -133,7 +133,7 @@ public class Home extends Activity implements OnClickListener {
 				
 			// //// ******* opens Favorite Activity ******** ///////////
 			case R.id.main_favorite:
-				FlurryAgent.onEvent(Constants.FAVORITE);
+				FlurryAgent.onEvent(getString(R.string.favorite));
 				if(new ConvertCursorToListString(this).getFavoriteList().size() >=1) {
 					Intent intentFavorite = new Intent(this, FavoriteActivity.class);
 					bundle = new Bundle();
@@ -147,7 +147,7 @@ public class Home extends Activity implements OnClickListener {
 				
 			// //// ******* opens List Activity and adds unknown entry to database ******** ///////////
 			case R.id.main_save_reminder:
-				FlurryAgent.onEvent(Constants.SAVE_REMINDER);
+				FlurryAgent.onEvent(getString(R.string.save_reminder));
 				insertToDatabase(R.string.unknown);
 				Intent intentListView = new Intent(this, ExpenseListing.class);
 				startActivity(intentListView);
@@ -155,7 +155,7 @@ public class Home extends Activity implements OnClickListener {
 			
 			////// ******* opens ListView Activity ******** ///////////
 			case R.id.main_listview:
-				FlurryAgent.onEvent(Constants.LIST_VIEW);
+				FlurryAgent.onEvent(getString(R.string.list_view));
 				Intent intentListView2 = new Intent(this, ExpenseListing.class);
 				startActivity(intentListView2);
 				break;

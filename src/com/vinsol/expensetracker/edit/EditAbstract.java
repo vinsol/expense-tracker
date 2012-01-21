@@ -56,7 +56,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, Constants.FLURRY_KEY);
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
 	}
 	
 	@Override
@@ -292,7 +292,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 
 	@Override
 	public void onBackPressed() {
-		FlurryAgent.onEvent(Constants.BACK_PRESSED);
+		FlurryAgent.onEvent(getString(R.string.back_pressed));
 		saveEntry();
 		super.onBackPressed();
 	}
@@ -305,14 +305,14 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		////////******** Adding Action to save entry ********* ///////////
 
 		if (v.getId() == R.id.edit_save_entry) {
-			FlurryAgent.onEvent(Constants.SAVE_BUTTON);
+			FlurryAgent.onEvent(getString(R.string.save_button));
 			saveEntry();
 		}
 		
 		///////// ********* Adding action if delete button ********** /////////
 
 		if (v.getId() == R.id.edit_delete) {
-			FlurryAgent.onEvent(Constants.DELETE_BUTTON);
+			FlurryAgent.onEvent(getString(R.string.delete_button));
 			isChanged = true;
 			deleteAction();
 			////// ******* Delete entry from database ******** /////////

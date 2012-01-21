@@ -29,7 +29,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.DateHelper;
@@ -164,14 +163,12 @@ class SeparatedListAdapter extends BaseAdapter {
 				holderHeader.listAmountView.setText(mDatadateList.get(sectionnum).amount);
 				return viewHeader;
 			}
-			
 
 			if (position == size-1) {
 				holderFooter = new ViewHolderFooter();
 				viewFooter = mInflater.inflate(R.layout.main_list_footerview, null);
 				holderFooter.addExpensesButton = (Button) viewFooter.findViewById(R.id.expenses_listing_add_expenses_button);
 				holderFooter.addExpenses = (LinearLayout) viewFooter.findViewById(R.id.expense_listing_list_add_expenses);
-
 				if (!isCurrentWeek(mDatadateList.get(sectionnum).dateTime)) {
 					holderFooter.addExpenses.setBackgroundResource(0);
 					holderFooter.addExpenses.setVisibility(View.GONE);
@@ -182,7 +179,6 @@ class SeparatedListAdapter extends BaseAdapter {
 					DateHelper mDateHelper = new DateHelper(mDatadateList.get(sectionnum).dateTime);
 					holderFooter.addExpensesButton.setOnClickListener(new GroupedIconDialogClickListener(unknownEntryDialog, (Activity)mContext, null, mDateHelper.getTimeMillis()));
 				}
-
 				return viewFooter;
 			}
 			
@@ -296,7 +292,7 @@ class SeparatedListAdapter extends BaseAdapter {
 
 	private boolean isCurrentWeek(String dateViewString) {
 		if(dateViewString != null) {
-			if(dateViewString.equals("")) {
+			if(!dateViewString.equals("")) {
 				DateHelper mDateHelper = new DateHelper(dateViewString);
 				mDateHelper.getTimeMillis();
 				return true;
@@ -344,13 +340,13 @@ class SeparatedListAdapter extends BaseAdapter {
 				if (mListenerList != null)
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						if (mListenerList.type.equals(mContext.getString(R.string.voice))) {
-							FlurryAgent.onEvent(Constants.LIST_AUDIO_DIALOG);
+							FlurryAgent.onEvent(mContext.getString(R.string.list_audio_dialog));
 							File mFile = fileHelper.getAudioFileEntry(mListenerList.id);
 							if (mFile.canRead()) {
 								new AudioPlayDialog(mContext, mListenerList.id);
 							}
 						} else if (mListenerList.type.equals(mContext.getString(R.string.camera))) {
-							FlurryAgent.onEvent(Constants.LIST_IMAGE_DIALOG);
+							FlurryAgent.onEvent(mContext.getString(R.string.list_image_dialog));
 							File mFile = fileHelper.getCameraFileLargeEntry(mListenerList.id);
 							if (mFile.canRead()) {
 								Intent intent = new Intent(mContext, ImagePreview.class);
@@ -361,7 +357,7 @@ class SeparatedListAdapter extends BaseAdapter {
 						}
 					}
 				if (mListenerList.type.equals(mContext.getString(R.string.text))) {
-					FlurryAgent.onEvent(Constants.LIST_TEXT_DIALOG);
+					FlurryAgent.onEvent(mContext.getString(R.string.list_text_dialog));
 					if (!mListenerList.description.equals(mContext.getString(R.string.unfinished_textentry))) {
 						new DescriptionDialog(mContext, mListenerList.description);
 					}

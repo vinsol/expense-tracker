@@ -19,8 +19,40 @@
     <string name="unknown_entry">Unknown Entry</string>
     <string name="unfinished_cameraentry">Unfinished Camera Entry</string>
     <string name="unfinished_voiceentry">Unfinished Voice Entry</string>
+    
+    <!-- Context Menu Item Id -->
+    <string name="contextitem_edit">0</string>
+    <string name="contextitem_delete">1</string>
+    
+    
+    <!-- Flurry And Other Strings -->
     <string name="finished_textentry">Text Entry</string>
     <string name="finished_cameraentry">Camera Entry</string>
     <string name="finished_voiceentry">Voice Entry</string>
-
+    
+    <!-- Flurry Events -->
+    <string name="flurry_key">Enter Flurry Key</string>
+    <string name="save_reminder">Save Reminder</string>
+    <string name="list_view">List View</string>
+    <string name="favorite">Favorite Entry</string>
+    <string name="save_button">Save Button</string>
+    <string name="delete_button">Delete Button</string>
+    <string name="edit_button">Edit Button</string>
+    <string name="back_pressed">Back Pressed</string>
+    <string name="added_to_favorite">Added to Favorite</string>
+    <string name="flash_auto">Flash mode auto</string>
+    <string name="flash_on">Flash mode on</string>
+    <string name="flash_off">Flash mode off</string>
+    <string name="camera_take_pic">Camera Take Picture</string>
+    <string name="camera_cancel_button">Camera Cancel Button</string>
+    <string name="camera_use_button">Camera use Button</string>
+    <string name="camera_retake_button">Camera Retake Button</string>
+    <string name="graph_swipe">Graph Swipe</string>
+    <string name="list_image_dialog">Listing ImageView Dialog</string>
+    <string name="list_text_dialog">Listing TextView Dialog</string>
+    <string name="list_audio_dialog">Listing AudioDialog</string>
+    <string name="grouped_icon_click">Grouped Icon Dialog Show</string>
+    <string name="context_item_edit">Context Item Edit</string>
+    <string name="context_item_delete">Context Item Delete</string>
+    
 </resources>

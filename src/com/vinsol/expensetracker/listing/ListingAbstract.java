@@ -8,6 +8,23 @@ package com.vinsol.expensetracker.listing;
 
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
@@ -15,26 +32,15 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
-import com.vinsol.expensetracker.show.ShowCameraActivity;
-import com.vinsol.expensetracker.show.ShowTextActivity;
-import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import com.vinsol.expensetracker.show.ShowCameraActivity;
+import com.vinsol.expensetracker.show.ShowTextActivity;
+import com.vinsol.expensetracker.show.ShowVoiceActivity;
+import com.vinsol.expensetracker.utils.Log;
 
 abstract class ListingAbstract extends Activity implements OnItemClickListener {
 
@@ -52,7 +58,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, Constants.FLURRY_KEY);
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
 	}
 	
 	@Override
@@ -198,14 +204,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		}
 	}
 	
-	protected void unknownDialogAction(String id) {}
-	
-	protected void onClickElse(String id) {}
-	
-	protected void noItemButtonAction(Button noItemButton) {}
-	
-	protected void getListToAdd() {}
-	
 	protected void doOperationsOnListview() {
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setOnItemClickListener(this);
@@ -220,6 +218,50 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		if(intentExtras.containsKey("position")) {
 			mListView.setSelection(intentExtras.getInt("position"));
 		}
+		registerForContextMenu(mListView);
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		switch (v.getId()) {
+		
+			case R.id.expense_listing_listview:
+	    	    String[] menuItems = getResources().getStringArray(R.array.listcontextmenu);
+	    	    for (int i = 0; i<menuItems.length; i++) {
+	    	    	menu.add(Menu.NONE, i, i, menuItems[i]);
+	    	    }
+				break;
+				
+			default:
+				break;
+		}
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		Log.d("************************");
+		Log.d("item "+item.getItemId());
+		Log.d("************************");
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+  	    
+  	    switch (item.getItemId()) {
+		//Edit itemId = 0	
+  	    case 0:
+  	    	FlurryAgent.onEvent(getString(R.string.context_item_edit));
+  	    	//TODO open edit page
+			break;
+			
+		//Delete itemId = 1
+  	    case 1:
+  	    	FlurryAgent.onEvent(getString(R.string.context_item_delete));
+  	    	//TODO delete item
+  	    	break;
+  	    	
+		default:
+			break;
+		}
+		return super.onContextItemSelected(item);
 	}
 
 	@Override
@@ -239,5 +281,11 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	}
 
 	protected abstract void updateListView();
+	
+	protected abstract void unknownDialogAction(String id);
+	
+	protected void onClickElse(String id) {}
+	
+	protected abstract void noItemButtonAction(Button noItemButton);
 	
 }

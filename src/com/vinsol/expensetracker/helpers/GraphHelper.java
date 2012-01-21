@@ -30,7 +30,6 @@ import android.widget.TextView;
 
 import com.flurry.android.FlurryAgent;
 import com.vinsol.android.graph.BarGraph;
-import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.GraphDataList;
@@ -387,7 +386,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 		
 	    @Override
 	    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-	    	FlurryAgent.onEvent(Constants.GRAPH_SWIPE);
+	    	FlurryAgent.onEvent(activity.getString(R.string.graph_swipe));
 	    	
 	    	if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
                 leftSwipeAction();

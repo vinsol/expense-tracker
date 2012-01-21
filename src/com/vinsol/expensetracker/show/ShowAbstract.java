@@ -20,7 +20,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
@@ -51,7 +50,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, Constants.FLURRY_KEY);
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
 	}
 	
 	@Override
@@ -163,7 +162,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		
 			case R.id.show_delete:
-				FlurryAgent.onEvent(Constants.DELETE_BUTTON);
+				FlurryAgent.onEvent(getString(R.string.delete_button));
 				if (mShowList.id != null) {
 					deleteAction();
 					mDatabaseAdapter.open();
@@ -181,7 +180,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 				break;
 	
 			case R.id.show_edit:
-				FlurryAgent.onEvent(Constants.EDIT_BUTTON);
+				FlurryAgent.onEvent(getString(R.string.edit_button));
 				intentExtras.putBoolean("isFromShowPage", true);
 				intentExtras.remove("mDisplayList");
 				if(mShowList.amount.endsWith(".00")) {
@@ -193,7 +192,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 				
 			case R.id.show_add_favorite:
 			case R.id.show_add_favorite_textView:
-				FlurryAgent.onEvent(Constants.ADDED_TO_FAVORITE);
+				FlurryAgent.onEvent(getString(R.string.added_to_favorite));
 				Boolean toCheck;
 				if(v.getId() == R.id.show_add_favorite) {
 					toCheck = showAddFavorite.isChecked();
@@ -340,7 +339,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 
 	@Override
 	public void onBackPressed() {
-		FlurryAgent.onEvent(Constants.BACK_PRESSED);
+		FlurryAgent.onEvent(getString(R.string.back_pressed));
 		setResultModifiedToListing();
 		finish();
 		super.onBackPressed();
