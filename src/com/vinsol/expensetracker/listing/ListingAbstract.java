@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -54,6 +53,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	protected UnknownEntryDialog unknownDialog;
 	protected final int RESULT = 35;
 	protected Bundle intentExtras;
+	private DatabaseAdapter mDatabaseAdapter;
 
 	@Override
 	protected void onStart() {
@@ -74,6 +74,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		intentExtras = new Bundle();
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		mStringProcessing = new StringProcessing();
+		mDatabaseAdapter = new DatabaseAdapter(this);
 		Bundle intentExtras = getIntent().getExtras();
 		if(intentExtras != null) {
 			if(intentExtras.containsKey(Constants.HIGHLIGHT)) {
@@ -240,11 +241,14 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		Log.d("************************");
-		Log.d("item "+item.getItemId());
-		Log.d("************************");
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-  	    
+		Log.d("************************");
+		Log.d("item position "+info.position+" \t "+mSubList.get(info.position).id+" \t "+mSubList.get(info.position).description+" \t "+mSubList.get(info.position).amount);
+		Log.d("************************");
+		Log.d("************************");
+		Log.d("entry position "+info.position+" \t "+mSeparatedListAdapter.getItem(info.position).id+" \t "+mSeparatedListAdapter.getItem(info.position).description+" \t "+mSeparatedListAdapter.getItem(info.position).amount);
+		Log.d("************************");
+		
   	    switch (item.getItemId()) {
 		//Edit itemId = 0	
   	    case 0:
@@ -255,7 +259,10 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		//Delete itemId = 1
   	    case 1:
   	    	FlurryAgent.onEvent(getString(R.string.context_item_delete));
-  	    	//TODO delete item
+  	    	mDatabaseAdapter.open();
+  	    	mDatabaseAdapter.deleteEntryTableEntryID(mSeparatedListAdapter.getItem(info.position).id);
+  	    	mDatabaseAdapter.close();
+  	    	mSeparatedListAdapter.remove(info.position);
   	    	break;
   	    	
 		default:
@@ -263,7 +270,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		}
 		return super.onContextItemSelected(item);
 	}
-
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);

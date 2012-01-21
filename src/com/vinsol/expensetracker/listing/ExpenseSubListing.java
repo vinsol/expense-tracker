@@ -82,7 +82,7 @@ public class ExpenseSubListing extends ListingAbstract {
 				listString.add(mList);
 				@SuppressWarnings("rawtypes")
 				List tt = (List) listString.get(i);
-				mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<String>(this, R.layout.expense_listing, tt), mDataDateList);
+				mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing, tt), mDataDateList);
 			}
 			doOperationsOnListview();
 		} else {

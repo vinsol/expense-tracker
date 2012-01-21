@@ -41,7 +41,7 @@ import com.vinsol.expensetracker.utils.Log;
 
 class SeparatedListAdapter extends BaseAdapter {
 
-	public final Map<String, Adapter> sections = new LinkedHashMap<String, Adapter>();
+	public final Map<String, ArrayAdapter<Entry>> sections = new LinkedHashMap<String, ArrayAdapter<Entry>>();
 	public final ArrayAdapter<String> headers;
 	public final ArrayAdapter<String> footers;
 	public final static int TYPE_SECTION_HEADER = 0;
@@ -61,35 +61,33 @@ class SeparatedListAdapter extends BaseAdapter {
 		if(this.highlightID == null) {
 			highlightID = "";
 		}
-		Log.d("***************************");
-		Log.d("highlightID "+highlightID);
-		Log.d("*****************************");
 		headers = new ArrayAdapter<String>(context,R.layout.mainlist_header_view);
 		footers = new ArrayAdapter<String>(context,R.layout.main_list_footerview);
 		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		fileHelper = new FileHelper();
 	}
 
-	public void addSection(String section, Adapter adapter,List<ListDatetimeAmount> mDataDateList2) {
-		this.mDatadateList = mDataDateList2;
+	public void addSection(String section, ArrayAdapter<Entry> adapter,List<ListDatetimeAmount> mDataDateList) {
+		this.mDatadateList = mDataDateList;
 		this.headers.add(section);
 		this.footers.add(section);
 		this.sections.put(section, adapter);
 	}
 
-	public Object getItem(int position) {
-		for (Object section : this.sections.keySet()) {
+	@Override
+	public Entry getItem(int position) {
+		for (Object section : sections.keySet()) {
 			Adapter adapter = sections.get(section);
 			int size = adapter.getCount() + 2;
 
 			// check if position inside this section
 			if (position == 0) {
-				return section;
+				return (Entry) section;
 			}
 			if (position < size - 1)
-				return adapter.getItem(position - 1);
+				return (Entry) adapter.getItem(position - 1);
 			if (position < size)
-				return section;
+				return (Entry) section;
 
 			// otherwise jump into next section
 			position -= size;
@@ -97,6 +95,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		return null;
 	}
 
+	@Override
 	public int getCount() {
 		// total together all sections, plus one for each section header
 		int total = 0;
@@ -105,6 +104,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		return total;
 	}
 
+	@Override
 	public int getViewTypeCount() {
 		// assume that headers count as one, then total all sections
 		int total = 2;
@@ -113,6 +113,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		return total;
 	}
 
+	@Override
 	public int getItemViewType(int position) {
 		int type = 1;
 		for (Object section : this.sections.keySet()) {
@@ -134,10 +135,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		return -1;
 	}
 
-	public boolean areAllItemsSelectable() {
-		return false;
-	}
-
+	@Override
 	public boolean isEnabled(int position) {
 		return (getItemViewType(position) != TYPE_SECTION_HEADER);
 	}
@@ -150,9 +148,8 @@ class SeparatedListAdapter extends BaseAdapter {
 		ViewHolderFooter holderFooter;
 		
 		for (Object section : this.sections.keySet()) {
-			Adapter adapter = sections.get(section);
+			ArrayAdapter<Entry> adapter = sections.get(section);
 			int size = adapter.getCount() + 2;
-
 			// check if position inside this section
 			if (position == 0) {
 				holderHeader = new ViewHolderHeader();
@@ -279,51 +276,36 @@ class SeparatedListAdapter extends BaseAdapter {
 		return null;
 	}
 
-	private void setBackGround(ViewHolderBody holderBody,CheckEntryComplete mCheckEntryComplete,Entry mlist) {
-		if (mlist.id.equals(highlightID)) {
-			Log.d(true+" \t "+mlist.type);
-			//TODO for last entry
-		} else if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
-			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
-		} else {
-			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
-		}
-	}
-
-	private boolean isCurrentWeek(String dateViewString) {
-		if(dateViewString != null) {
-			if(!dateViewString.equals("")) {
-				DateHelper mDateHelper = new DateHelper(dateViewString);
-				mDateHelper.getTimeMillis();
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private static class ViewHolderBody {
-		TextView rowLocationTime;
-		TextView rowTag;
-		TextView rowAmount;
-		ImageView rowImageview;
-		ImageView rowFavoriteIcon;
-		RelativeLayout rowListview;
-	}
-
-	private class ViewHolderHeader {
-		TextView listDateView;
-		TextView listAmountView;
-	}
-
-	private class ViewHolderFooter {
-		Button addExpensesButton;
-		LinearLayout addExpenses;
-	}
-
 	@Override
 	public long getItemId(int position) {
 		return position;
 	}
+	
+	public int getListPosition(int position) {
+		int listPosition = 0;
+		for (Object section : sections.keySet()) {
+			Adapter adapter = sections.get(section);
+			int size = adapter.getCount() + 2;
+			if(position <= size) {
+				return listPosition;
+			}
+			listPosition+=adapter.getCount();
+			position-=size;
+		}
+		return -1;
+	}
+
+	public void remove(int toRemove) {
+		String sectionNumber = getSectionNumber(toRemove);
+		sections.get(sectionNumber).remove(getItem(toRemove));
+		if(sections.get(sectionNumber).getCount() == 0) {
+			removeSection(sectionNumber);
+		}
+		notifyDataSetChanged();
+	}
+	
+	
+	/////////////////**********************Private Classes **********************////////////////////////
 
 	private class MyClickListener implements OnClickListener {
 
@@ -370,4 +352,66 @@ class SeparatedListAdapter extends BaseAdapter {
 		}
 	}
 
+	private void removeSection(String sectionNumber) {
+		sections.remove(sectionNumber);
+		mDatadateList.remove(Integer.parseInt(sectionNumber));
+		notifyDataSetChanged();
+	}
+	
+	private String  getSectionNumber(int position) {
+		int sectionNumber = 0;
+		for (Object section : sections.keySet()) {
+			Adapter adapter = sections.get(section);
+			int size = adapter.getCount() + 2;
+			if(position <= size) {
+				return sectionNumber+"";
+			}
+			sectionNumber++;
+			position-=size;
+		}
+		return "";
+	}
+	
+
+
+	private class ViewHolderBody {
+		TextView rowLocationTime;
+		TextView rowTag;
+		TextView rowAmount;
+		ImageView rowImageview;
+		ImageView rowFavoriteIcon;
+		RelativeLayout rowListview;
+	}
+
+	private class ViewHolderHeader {
+		TextView listDateView;
+		TextView listAmountView;
+	}
+
+	private class ViewHolderFooter {
+		Button addExpensesButton;
+		LinearLayout addExpenses;
+	}
+	
+	private void setBackGround(ViewHolderBody holderBody,CheckEntryComplete mCheckEntryComplete,Entry mlist) {
+		if (mlist.id.equals(highlightID)) {
+			Log.d(true+" \t "+mlist.type);
+			//TODO for last entry
+		} else if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
+			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
+		} else {
+			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
+		}
+	}
+
+	private boolean isCurrentWeek(String dateViewString) {
+		if(dateViewString != null) {
+			if(!dateViewString.equals("")) {
+				DateHelper mDateHelper = new DateHelper(dateViewString);
+				mDateHelper.getTimeMillis();
+				return true;
+			}
+		}
+		return false;
+	}
 }
