@@ -234,8 +234,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 
 	protected void deleteAction() {}
 	
-	protected void editAction() {}
-	
 	public void FavoriteHelper() {
 		showAddFavorite.setVisibility(View.VISIBLE);
 		showAddFavoriteTextView.setVisibility(View.VISIBLE);
@@ -344,5 +342,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		finish();
 		super.onBackPressed();
 	}
+	
+	protected abstract void editAction();
 
 }

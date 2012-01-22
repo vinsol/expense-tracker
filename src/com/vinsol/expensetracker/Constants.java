@@ -18,5 +18,7 @@ public class Constants {
 	
 	//Intent Extras
 	public static String HIGHLIGHT = "toHighLight";
+	public static String ENTRY_LIST_EXTRA = "mDisplayList";
+	public static String POSITION = "position";
 	
 }

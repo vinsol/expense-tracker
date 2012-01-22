@@ -249,18 +249,21 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			mToHighLight.putString(Constants.HIGHLIGHT, toSave.id);
 			intentExpenseListing.putExtras(mToHighLight);
 			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			if(!intentExtras.containsKey("position")) {	
+			if(!intentExtras.containsKey(Constants.POSITION)) {
+				mToHighLight.putInt(Constants.POSITION, intentExtras.getInt(Constants.POSITION));
+				mToHighLight.putParcelable(Constants.ENTRY_LIST_EXTRA, getListOnResult(toSave));
 				startActivity(intentExpenseListing);
 			} else {
+				mToHighLight.putParcelable(Constants.ENTRY_LIST_EXTRA, getListOnResult(toSave));
 				setActivityResult(mToHighLight);
 				finish();
 			}
 		} else {
 			Bundle tempBundle = new Bundle();
-			tempBundle.putParcelable("mDisplayList", getListOnResult(toSave));
-			if(intentExtras.containsKey("position")) {
+			tempBundle.putParcelable(Constants.ENTRY_LIST_EXTRA, getListOnResult(toSave));
+			if(intentExtras.containsKey(Constants.POSITION)) {
 				if(checkDataModified()) {
-					tempBundle.putInt("position", intentExtras.getInt("position"));
+					tempBundle.putInt(Constants.POSITION , intentExtras.getInt(Constants.POSITION));
 					tempBundle.putBoolean("isChanged", true);
 				}
 			}
@@ -338,15 +341,14 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			finish();
 		}
 	}
-	
-	protected void startIntentAfterDelete(Bundle tempBundle) {}
-
-	protected void deleteAction(){}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
 		FlurryAgent.onEndSession(this);
 	}
-	
+
+	protected void startIntentAfterDelete(Bundle tempBundle) {}
+
+	protected void deleteAction(){}
 }

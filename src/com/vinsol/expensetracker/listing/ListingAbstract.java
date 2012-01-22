@@ -144,8 +144,8 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		String id = mTempClickedList.id;
 		if (!id.contains(",")) {
 			Bundle bundle = new Bundle();
-			bundle.putParcelable("mDisplayList", mTempClickedList);
-			bundle.putInt("position", position);
+			bundle.putParcelable(Constants.ENTRY_LIST_EXTRA, mTempClickedList);
+			bundle.putInt(Constants.POSITION, position);
 			
 			CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 			if (mTempClickedList.type.equals(getString(R.string.unknown))) {
@@ -206,9 +206,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		mListView.setOnItemClickListener(this);
 		mListView.setAdapter(mSeparatedListAdapter);
 		noItemLayout();
-		if(intentExtras.containsKey("position")) {
-			mListView.setSelection(intentExtras.getInt("position"));
-		}
 		registerForContextMenu(mListView);
 	}
 	
@@ -240,20 +237,13 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		//Edit Action	
   	    case 0:
   	    	FlurryAgent.onEvent(getString(R.string.context_item_edit));
-  	    	//TODO open edit page
   	    	startEditPage(info.position);
 			break;
 			
 		//Delete Action
   	    case 1:
   	    	FlurryAgent.onEvent(getString(R.string.context_item_delete));
-  	    	mDatabaseAdapter.open();
-  	    	mDatabaseAdapter.deleteEntryTableEntryID(mSeparatedListAdapter.getItem(info.position).id);
-  	    	mDatabaseAdapter.close();
-  	    	mDataDateList.remove(mSeparatedListAdapter.getSectionNumber(info.position));
-  	    	mSeparatedListAdapter.remove(info.position);
-  	    	mSeparatedListAdapter.notifyDataSetChanged();
-  	    	noItemLayout();
+  	    	removeItem(info.position);
   	    	break;
   	    	
 		default:
@@ -262,18 +252,27 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		return super.onContextItemSelected(item);
 	}
 	
+	private void removeItem(int position) {
+		mDatabaseAdapter.open();
+    	mDatabaseAdapter.deleteEntryTableEntryID(mSeparatedListAdapter.getItem(position).id);
+    	mDatabaseAdapter.close();
+    	mDataDateList.remove(mSeparatedListAdapter.getSectionNumber(position));
+    	mSeparatedListAdapter.remove(position);
+    	noItemLayout();
+	}
+	
 	private void startEditPage(int position) {
 		Entry mTempClickedList = mSeparatedListAdapter.getItem(position);
 		Intent intent = null;
 		Bundle bundle = new Bundle();
-		bundle.putParcelable("mDisplayList", mTempClickedList);
-		bundle.putInt("position", position);
+		bundle.putParcelable(Constants.ENTRY_LIST_EXTRA, mTempClickedList);
+		bundle.putInt(Constants.POSITION, position);
 		if (mTempClickedList.type.equals(getString(R.string.text))) {
 			intent = new Intent(this, TextEntry.class);
 		} else {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				if (mTempClickedList.type.equals(getString(R.string.camera))) {
-					intent = new Intent(this,CameraActivity.class);
+					intent = new Intent(this, CameraActivity.class);
 				} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
 					intent = new Intent(this, Voice.class);
 				}
@@ -294,16 +293,19 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getExtras();
 				if(intentExtras.containsKey("isChanged")) {
-					updateListView();
+					updateListView(intentExtras,intentExtras.getInt(Constants.POSITION));
 				}
-			}
-			if(Activity.RESULT_CANCELED == resultCode) {
-				updateListView();
+			} else if(Activity.RESULT_CANCELED == resultCode) {
+				removeItem(intentExtras.getInt(Constants.POSITION));
 			}
 		}
 	}
 
-	protected abstract void updateListView();
+	protected void updateListView(Bundle bundle,int toUpdate) {
+		Entry updatedEntry = bundle.getParcelable(Constants.ENTRY_LIST_EXTRA);
+		mSeparatedListAdapter.update(updatedEntry, toUpdate);
+		noItemLayout();
+	}
 	protected abstract void unknownDialogAction(String id);
 	protected void onClickElse(String id) {}
 	protected abstract void noItemButtonAction(Button noItemButton);

@@ -34,6 +34,7 @@ import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.helpers.FileHelper;
+import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.utils.ImagePreview;
@@ -307,6 +308,25 @@ class SeparatedListAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 	
+	public void update(Entry updatedEntry,int toUpdate) {
+		String sectionNumber = getSectionNumber(toUpdate);
+		Entry prevEntry = getItem(toUpdate);
+		sections.get(sectionNumber).insert(updatedEntry, toUpdate);
+		sections.get(sectionNumber).remove(prevEntry);
+		StringProcessing mStringProcessing = new StringProcessing();
+		Double amountDouble = mStringProcessing.getAmount(mDatadateList.get(Integer.parseInt(sectionNumber)).amount);
+		amountDouble -= mStringProcessing.getAmount(prevEntry.amount);
+		if(!updatedEntry.amount.contains("?")) { 
+			updatedEntry.amount = mStringProcessing.getStringDoubleDecimal(updatedEntry.amount);
+			amountDouble += mStringProcessing.getAmount(updatedEntry.amount);
+			if(mDatadateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
+				mDatadateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"?");
+			} else {
+				mDatadateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"");
+			}
+		}
+		notifyDataSetChanged();
+	}
 	
 	public String  getSectionNumber(int position) {
 		int sectionNumber = 0;

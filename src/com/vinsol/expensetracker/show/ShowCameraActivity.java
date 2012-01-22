@@ -78,7 +78,6 @@ public class ShowCameraActivity extends ShowAbstract {
 	
 	@Override
 	protected void editAction() {
-		super.editAction();
 		Intent editIntent = new Intent(this, CameraActivity.class);
 		editIntent.putExtras(intentExtras);
 		startActivityForResult(editIntent,SHOW_RESULT);
@@ -103,7 +102,7 @@ public class ShowCameraActivity extends ShowAbstract {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (SHOW_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
-				intentExtras = data.getBundleExtra("cameraShowBundle");
+				intentExtras = data.getExtras();
 				doTaskOnActivityResult();
 				if (intentExtras.containsKey("mDisplayList")) {
 					File mFile = fileHelper.getCameraFileSmallEntry(mShowList.id);

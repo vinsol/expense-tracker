@@ -108,11 +108,6 @@ public class ExpenseSubListing extends ListingAbstract {
 		});
 	}
 	
-	@Override
-	protected void updateListView() {
-		initListView();
-	}
-	
 	// /// ****************** Handling back press of key ********** ///////////
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {

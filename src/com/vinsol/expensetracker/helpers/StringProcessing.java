@@ -41,4 +41,11 @@ public class StringProcessing {
 		
 		return totalAmountString;
 	}
+	
+	public Double getAmount(String amount) {
+		if(amount.contains("?")) {
+			amount = (String) amount.subSequence(0, amount.length()-1);		
+		}
+		return Double.parseDouble(amount);
+	}
 }

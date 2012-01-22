@@ -91,7 +91,6 @@ public class ShowVoiceActivity extends ShowAbstract {
 	
 	@Override
 	protected void editAction() {
-		super.editAction();
 		Intent editIntent = new Intent(this, Voice.class);
 		try {
 			if (mAudioPlay.isAudioPlaying())
@@ -176,7 +175,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (SHOW_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
-				intentExtras = data.getBundleExtra("voiceShowBundle");
+				intentExtras = data.getExtras();
 				doTaskOnActivityResult();
 				showDelete.setOnClickListener(this);
 				showPlayButton.setOnClickListener(this);

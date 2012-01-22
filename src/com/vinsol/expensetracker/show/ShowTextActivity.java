@@ -33,7 +33,7 @@ public class ShowTextActivity extends ShowAbstract {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (SHOW_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
-				intentExtras = data.getBundleExtra("textShowBundle");
+				intentExtras = data.getExtras();
 				doTaskOnActivityResult();
 				mShowList = intentExtras.getParcelable("mDisplayList");
 				FavoriteHelper();
@@ -48,7 +48,6 @@ public class ShowTextActivity extends ShowAbstract {
 
 	@Override
 	protected void editAction() {
-		super.editAction();
 		Intent editIntent = new Intent(this, TextEntry.class);
 		editIntent.putExtras(intentExtras);
 		startActivityForResult(editIntent,SHOW_RESULT);

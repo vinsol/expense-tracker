@@ -195,11 +195,6 @@ public class ExpenseListing extends ListingAbstract {
 	protected void noItemButtonAction(Button noItemButton) {
 		noItemButton.setOnClickListener(new GroupedIconDialogClickListener(unknownDialog, ExpenseListing.this, bundle,null));
 	}
-
-	@Override
-	protected void updateListView() {
-		initListView();
-	}
 	
 	@Override
 	public void noItemLayout() {
