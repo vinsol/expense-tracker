@@ -12,8 +12,10 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.R;
@@ -197,5 +199,16 @@ public class ExpenseListing extends ListingAbstract {
 	@Override
 	protected void updateListView() {
 		initListView();
+	}
+	
+	@Override
+	public void noItemLayout() {
+		if (mDataDateList.size() == 0) {
+			mListView.setVisibility(View.GONE);
+			RelativeLayout mRelativeLayout = (RelativeLayout) findViewById(R.id.expense_listing_listview_no_item);
+			mRelativeLayout.setVisibility(View.VISIBLE);
+			Button noItemButton = (Button) findViewById(R.id.expense_listing_listview_no_item_button);
+			noItemButtonAction(noItemButton);
+		}
 	}
 }

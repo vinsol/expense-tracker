@@ -32,8 +32,7 @@
         android:cacheColorHint="#00000000"
         android:layout_below="@id/expense_listing_header"
         android:divider="@drawable/list_divider"
-        >
-    </ListView>
+        />
 	
     <!-- Body if no list item -->
     <RelativeLayout

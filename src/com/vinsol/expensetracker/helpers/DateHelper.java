@@ -31,7 +31,13 @@ public class DateHelper {
 			dateViewString = (String) dateViewString.subSequence(7,dateViewString.length());
 		} else {
 			year = Integer.parseInt((String) dateViewString.subSequence(dateViewString.length() - 4, dateViewString.length()));
-			dateViewString = (String) dateViewString.subSequence(0,dateViewString.length() - 6);
+			if(dateViewString.length() >= 6) {
+				dateViewString = (String) dateViewString.subSequence(0,dateViewString.length() - 6);
+			} else {
+				dateViewString = "";
+				isCurrentWeek = false;
+			}
+			
 		}
 		if(dateViewString.length() >= 4) {
 			month = new GetMonth().getMonth((String) dateViewString.subSequence(0, 3));

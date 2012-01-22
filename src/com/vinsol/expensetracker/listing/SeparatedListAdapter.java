@@ -268,6 +268,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderBody.rowImageview.setVisibility(View.GONE);
 					holderBody.rowLocationTime.setVisibility(View.GONE);
 				}
+				
 				return convertView;
 			}
 			position -= size;
@@ -276,6 +277,8 @@ class SeparatedListAdapter extends BaseAdapter {
 		return null;
 	}
 
+	
+	
 	@Override
 	public long getItemId(int position) {
 		return position;
@@ -302,6 +305,21 @@ class SeparatedListAdapter extends BaseAdapter {
 			removeSection(sectionNumber);
 		}
 		notifyDataSetChanged();
+	}
+	
+	
+	public String  getSectionNumber(int position) {
+		int sectionNumber = 0;
+		for (Object section : sections.keySet()) {
+			Adapter adapter = sections.get(section);
+			int size = adapter.getCount() + 2;
+			if(position <= size) {
+				return sectionNumber+"";
+			}
+			sectionNumber++;
+			position-=size;
+		}
+		return "";
 	}
 	
 	
@@ -352,27 +370,10 @@ class SeparatedListAdapter extends BaseAdapter {
 		}
 	}
 
-	private void removeSection(String sectionNumber) {
-		sections.remove(sectionNumber);
-		mDatadateList.remove(Integer.parseInt(sectionNumber));
-		notifyDataSetChanged();
+	private void removeSection(String sectionKey) {
+		sections.remove(sectionKey);
+		mDatadateList.remove(Integer.parseInt(sectionKey));
 	}
-	
-	private String  getSectionNumber(int position) {
-		int sectionNumber = 0;
-		for (Object section : sections.keySet()) {
-			Adapter adapter = sections.get(section);
-			int size = adapter.getCount() + 2;
-			if(position <= size) {
-				return sectionNumber+"";
-			}
-			sectionNumber++;
-			position-=size;
-		}
-		return "";
-	}
-	
-
 
 	private class ViewHolderBody {
 		TextView rowLocationTime;
@@ -396,6 +397,7 @@ class SeparatedListAdapter extends BaseAdapter {
 	private void setBackGround(ViewHolderBody holderBody,CheckEntryComplete mCheckEntryComplete,Entry mlist) {
 		if (mlist.id.equals(highlightID)) {
 			Log.d(true+" \t "+mlist.type);
+			highlightID = "";
 			//TODO for last entry
 		} else if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
 			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);

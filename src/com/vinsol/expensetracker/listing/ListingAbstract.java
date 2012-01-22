@@ -18,10 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
@@ -33,13 +33,13 @@ import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
+import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
-import com.vinsol.expensetracker.utils.Log;
 
 abstract class ListingAbstract extends Activity implements OnItemClickListener {
 
@@ -209,21 +209,19 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setOnItemClickListener(this);
 		mListView.setAdapter(mSeparatedListAdapter);
-		if (mDataDateList.size() < 1) {
-			mListView.setVisibility(View.GONE);
-			RelativeLayout mRelativeLayout = (RelativeLayout) findViewById(R.id.expense_listing_listview_no_item);
-			mRelativeLayout.setVisibility(View.VISIBLE);
-			Button noItemButton = (Button) findViewById(R.id.expense_listing_listview_no_item_button);
-			noItemButtonAction(noItemButton);
-		}
+		noItemLayout();
 		if(intentExtras.containsKey("position")) {
 			mListView.setSelection(intentExtras.getInt("position"));
 		}
 		registerForContextMenu(mListView);
 	}
 	
+	public abstract void noItemLayout();
+	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+		if(new DateHelper(mDataDateList.get(Integer.parseInt(mSeparatedListAdapter.getSectionNumber(info.position))).dateTime).isCurrentWeek()) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		switch (v.getId()) {
 		
@@ -237,17 +235,12 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 			default:
 				break;
 		}
+		}
 	}
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-		Log.d("************************");
-		Log.d("item position "+info.position+" \t "+mSubList.get(info.position).id+" \t "+mSubList.get(info.position).description+" \t "+mSubList.get(info.position).amount);
-		Log.d("************************");
-		Log.d("************************");
-		Log.d("entry position "+info.position+" \t "+mSeparatedListAdapter.getItem(info.position).id+" \t "+mSeparatedListAdapter.getItem(info.position).description+" \t "+mSeparatedListAdapter.getItem(info.position).amount);
-		Log.d("************************");
 		
   	    switch (item.getItemId()) {
 		//Edit itemId = 0	
@@ -262,7 +255,10 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
   	    	mDatabaseAdapter.open();
   	    	mDatabaseAdapter.deleteEntryTableEntryID(mSeparatedListAdapter.getItem(info.position).id);
   	    	mDatabaseAdapter.close();
+  	    	mDataDateList.remove(mSeparatedListAdapter.getSectionNumber(info.position));
   	    	mSeparatedListAdapter.remove(info.position);
+  	    	mSeparatedListAdapter.notifyDataSetChanged();
+  	    	noItemLayout();
   	    	break;
   	    	
 		default:

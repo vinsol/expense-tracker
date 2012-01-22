@@ -10,11 +10,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.vinsol.expensetracker.Constants;
-import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.helpers.DisplayDate;
-import com.vinsol.expensetracker.models.Entry;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +19,11 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.vinsol.expensetracker.Constants;
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.models.Entry;
 
 public class ExpenseSubListing extends ListingAbstract {
 
@@ -123,6 +123,13 @@ public class ExpenseSubListing extends ListingAbstract {
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public void noItemLayout() {
+		if(mDataDateList.size() == 0) {
+			finish();
+		}
 	}
 	
 }

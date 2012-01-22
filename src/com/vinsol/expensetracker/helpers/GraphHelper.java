@@ -74,6 +74,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	@Override
 	protected void onPreExecute() {
 		removeGraphView();
+		graphProgressBar.setVisibility(View.VISIBLE);
 		super.onPreExecute();
 	}
 	
@@ -110,7 +111,6 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	private void removeGraphView() {
 		mainGraph.removeView(barGraph);
 		mainGraph.removeView(graphNoItem);
-		graphProgressBar.setVisibility(View.VISIBLE);
 	}
 	
 	private void createBarGraph() {
@@ -123,9 +123,6 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 				mainGraph.addView(graphNoItem);
 			}
 		}
-		Log.d("*********************************");
-		Log.d("Setting gesture listener on graph");
-		Log.d("*********************************");
 		mainGraph.setOnTouchListener(gestureListener);
 		mainGraph.setOnClickListener(this);
 		graphHeaderTextview.setText(mGraphList.get(j).get(3).get(0));
