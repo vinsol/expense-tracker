@@ -45,7 +45,7 @@ public class CameraActivity extends EditAbstract {
 		super.onCreate(savedInstanceState);
 		
 		// //////********* Get id from intent extras ******** ////////////
-		intentExtras = getIntent().getBundleExtra("cameraBundle");
+		intentExtras = getIntent().getExtras();
 		fileHelper = new FileHelper();
 		// ////// ******** Initializing and assigning memory to UI Items ********** /////////
 		editCameraDetails = (LinearLayout) findViewById(R.id.edit_camera_details);
@@ -243,14 +243,14 @@ public class CameraActivity extends EditAbstract {
 	protected void startIntentAfterDelete(Bundle tempBundle) {
 		super.startIntentAfterDelete(tempBundle);
 		Intent mIntent = new Intent(this, ShowCameraActivity.class);
-		mIntent.putExtra("cameraShowBundle", tempBundle);
+		mIntent.putExtras(tempBundle);
 		setResult(Activity.RESULT_CANCELED, mIntent);
 	}
 	
 	@Override
 	protected void saveEntryStartIntent(Bundle tempBundle) {
 		Intent mIntent = new Intent(this, ShowCameraActivity.class);
-		mIntent.putExtra("cameraShowBundle", tempBundle);
+		mIntent.putExtras(tempBundle);
 		setResult(Activity.RESULT_OK, mIntent);
 	}
 

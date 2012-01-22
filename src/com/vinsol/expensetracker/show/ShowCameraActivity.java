@@ -37,7 +37,7 @@ public class ShowCameraActivity extends ShowAbstract {
 		// //////********* Get id from intent extras ******** ////////////
 
 		setGraphicsCamera();
-		intentExtras = getIntent().getBundleExtra("cameraShowBundle");
+		intentExtras = getIntent().getExtras();
 		typeOfEntry = R.string.camera;
 		typeOfEntryFinished = R.string.finished_cameraentry;
 		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
@@ -80,7 +80,7 @@ public class ShowCameraActivity extends ShowAbstract {
 	protected void editAction() {
 		super.editAction();
 		Intent editIntent = new Intent(this, CameraActivity.class);
-		editIntent.putExtra("cameraBundle", intentExtras);
+		editIntent.putExtras(intentExtras);
 		startActivityForResult(editIntent,SHOW_RESULT);
 	}
 	

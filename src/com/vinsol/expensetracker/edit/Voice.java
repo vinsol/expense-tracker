@@ -51,7 +51,7 @@ public class Voice extends EditAbstract {
 		editPlayButton = (Button) findViewById(R.id.edit_play_button);
 		editRerecordButton = (Button) findViewById(R.id.edit_rerecord_button);
 		////////********* Get id from intent extras ******** ////////////
-		intentExtras = getIntent().getBundleExtra("voiceBundle");
+		intentExtras = getIntent().getExtras();
 		typeOfEntry = R.string.voice;
 		typeOfEntryFinished = R.string.finished_voiceentry;
 		typeOfEntryUnfinished = R.string.unfinished_voiceentry;
@@ -236,7 +236,7 @@ public class Voice extends EditAbstract {
 	protected void startIntentAfterDelete(Bundle tempBundle) {
 		super.startIntentAfterDelete(tempBundle);
 		Intent mIntent = new Intent(this, ShowVoiceActivity.class);
-		mIntent.putExtra("voiceShowBundle", tempBundle);
+		mIntent.putExtras(tempBundle);
 		setResult(Activity.RESULT_CANCELED, mIntent);
 	}
 	
@@ -250,7 +250,7 @@ public class Voice extends EditAbstract {
 	@Override
 	protected void saveEntryStartIntent(Bundle tempBundle) {
 		Intent mIntent = new Intent(this, ShowVoiceActivity.class);
-		mIntent.putExtra("voiceShowBundle", tempBundle);
+		mIntent.putExtras(tempBundle);
 		setResult(Activity.RESULT_OK, mIntent);
 	}
 

@@ -71,7 +71,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		editDateBarDateview = (TextView) findViewById(R.id.edit_date_bar_dateview);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		mDatabaseAdapter = new DatabaseAdapter(this);
-		intentExtras = getIntent().getBundleExtra("favoriteBundle");
+		intentExtras = getIntent().getExtras();
 		
 		headerTitle.setText("Favorite Entry");
 		

@@ -111,7 +111,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				Intent intentTextEntry = new Intent(getContext(), TextEntry.class);
 				editDatabase(R.string.text);
 				bundle.putParcelable("mDisplayList", mTempClickedList);
-				intentTextEntry.putExtra("textEntryBundle", bundle);
+				intentTextEntry.putExtras(bundle);
 				getContext().startActivity(intentTextEntry);
 				dismiss();
 				break;
@@ -128,7 +128,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 					Intent intentVoice = new Intent(getContext(), Voice.class);
 					editDatabase(R.string.voice);
 					bundle.putParcelable("mDisplayList", mTempClickedList);
-					intentVoice.putExtra("voiceBundle", bundle);
+					intentVoice.putExtras(bundle);
 					getContext().startActivity(intentVoice);
 					dismiss();
 				} else {
@@ -141,7 +141,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 					Intent intentCamera = new Intent(getContext(), CameraActivity.class);
 					editDatabase(R.string.camera);
 					bundle.putParcelable("mDisplayList", mTempClickedList);
-					intentCamera.putExtra("cameraBundle", bundle);
+					intentCamera.putExtras(bundle);
 					getContext().startActivity(intentCamera);
 					dismiss();
 				} else {
@@ -153,7 +153,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				if(new ConvertCursorToListString(getContext()).getFavoriteList().size() >=1) {
 					Intent intentFavorite = new Intent(getContext(), FavoriteActivity.class);
 					bundle.putParcelable("mDisplayList", mTempClickedList);
-					intentFavorite.putExtra("favoriteBundle", bundle);
+					intentFavorite.putExtras(bundle);
 					getContext().startActivity(intentFavorite);
 					dismiss();
 				} else {

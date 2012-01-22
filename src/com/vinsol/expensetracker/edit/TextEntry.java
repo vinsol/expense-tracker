@@ -19,7 +19,7 @@ public class TextEntry extends EditAbstract {
 		super.onCreate(savedInstanceState);
 		////////********* Get id from intent extras ******** ////////////
 
-		intentExtras = getIntent().getBundleExtra("textEntryBundle");
+		intentExtras = getIntent().getExtras();
 		typeOfEntry = R.string.text;
 		typeOfEntryFinished = R.string.finished_textentry;
 		typeOfEntryUnfinished = R.string.unfinished_textentry;
@@ -29,7 +29,7 @@ public class TextEntry extends EditAbstract {
 	@Override
 	protected void saveEntryStartIntent(Bundle tempBundle) {
 		Intent mIntent = new Intent(this, ShowTextActivity.class);
-		mIntent.putExtra("textShowBundle", tempBundle);
+		mIntent.putExtras(tempBundle);
 		setResult(Activity.RESULT_OK, mIntent);
 	}
 	

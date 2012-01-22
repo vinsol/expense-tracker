@@ -146,46 +146,9 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 			Bundle bundle = new Bundle();
 			bundle.putParcelable("mDisplayList", mTempClickedList);
 			bundle.putInt("position", position);
+			
 			CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
-			if (mTempClickedList.type.equals(getString(R.string.camera))) {
-				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
-						Intent intentCamera = new Intent(this,CameraActivity.class);
-						intentCamera.putExtra("cameraBundle", bundle);
-						startActivityForResult(intentCamera,RESULT);
-					} else {
-						Intent intentCamera = new Intent(this,ShowCameraActivity.class);
-						intentCamera.putExtra("cameraShowBundle", bundle);
-						startActivityForResult(intentCamera,RESULT); 
-					}
-				} else {
-					Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
-				}
-			} else if (mTempClickedList.type.equals(getString(R.string.text))) {
-				if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
-					Intent intentTextEntry = new Intent(this, TextEntry.class);
-					intentTextEntry.putExtra("textEntryBundle", bundle);
-					startActivityForResult(intentTextEntry,RESULT); 
-				} else {
-					Intent intentTextShow = new Intent(this,ShowTextActivity.class);
-					intentTextShow.putExtra("textShowBundle", bundle);
-					startActivityForResult(intentTextShow,RESULT); 
-				}
-			} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
-				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
-						Intent intentVoice = new Intent(this, Voice.class);
-						intentVoice.putExtra("voiceBundle", bundle);
-						startActivityForResult(intentVoice,RESULT);
-					} else {
-						Intent intentVoiceShow = new Intent(this,ShowVoiceActivity.class);
-						intentVoiceShow.putExtra("voiceShowBundle", bundle);
-						startActivityForResult(intentVoiceShow,RESULT);
-					}
-				} else {
-					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
-				}
-			} else if (mTempClickedList.type.equals(getString(R.string.unknown))) {
+			if (mTempClickedList.type.equals(getString(R.string.unknown))) {
 				unknownDialog = new UnknownEntryDialog(this,mTempClickedList,new OnClickListener() {
 					
 					@Override
@@ -199,6 +162,39 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 						Toast.makeText(ListingAbstract.this, "Deleted", Toast.LENGTH_SHORT).show();
 					}
 				});
+			} else { 
+				Intent intent = null;
+				if (mTempClickedList.type.equals(getString(R.string.camera))) {
+					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+						if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
+							intent = new Intent(this,CameraActivity.class);
+						} else {
+							intent = new Intent(this,ShowCameraActivity.class); 
+						}
+					} else {
+						Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
+					}
+				} else if (mTempClickedList.type.equals(getString(R.string.text))) {
+					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
+						intent = new Intent(this, TextEntry.class); 
+					} else {
+						intent = new Intent(this,ShowTextActivity.class); 
+					}
+				} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
+					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+						if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
+							intent = new Intent(this, Voice.class);
+						} else {
+							intent = new Intent(this,ShowVoiceActivity.class);
+						}
+					} else {
+						Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
+					}
+				}
+				if(intent != null) {
+					intent.putExtras(bundle);
+					startActivityForResult(intent,RESULT);
+				}
 			}
 		} else {
 			onClickElse(mTempClickedList.id);
@@ -215,8 +211,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		}
 		registerForContextMenu(mListView);
 	}
-	
-	public abstract void noItemLayout();
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
@@ -243,13 +237,14 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
 		
   	    switch (item.getItemId()) {
-		//Edit itemId = 0	
+		//Edit Action	
   	    case 0:
   	    	FlurryAgent.onEvent(getString(R.string.context_item_edit));
   	    	//TODO open edit page
+  	    	startEditPage(info.position);
 			break;
 			
-		//Delete itemId = 1
+		//Delete Action
   	    case 1:
   	    	FlurryAgent.onEvent(getString(R.string.context_item_delete));
   	    	mDatabaseAdapter.open();
@@ -265,6 +260,31 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 			break;
 		}
 		return super.onContextItemSelected(item);
+	}
+	
+	private void startEditPage(int position) {
+		Entry mTempClickedList = mSeparatedListAdapter.getItem(position);
+		Intent intent = null;
+		Bundle bundle = new Bundle();
+		bundle.putParcelable("mDisplayList", mTempClickedList);
+		bundle.putInt("position", position);
+		if (mTempClickedList.type.equals(getString(R.string.text))) {
+			intent = new Intent(this, TextEntry.class);
+		} else {
+			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+				if (mTempClickedList.type.equals(getString(R.string.camera))) {
+					intent = new Intent(this,CameraActivity.class);
+				} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
+					intent = new Intent(this, Voice.class);
+				}
+			} else {
+				Toast.makeText(this, "sdcard not available",Toast.LENGTH_SHORT).show();
+			}
+		}
+		if(intent != null) {
+			intent.putExtras(bundle);
+			startActivityForResult(intent,RESULT);
+		}
 	}
 	
 	@Override
@@ -284,11 +304,9 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	}
 
 	protected abstract void updateListView();
-	
 	protected abstract void unknownDialogAction(String id);
-	
 	protected void onClickElse(String id) {}
-	
 	protected abstract void noItemButtonAction(Button noItemButton);
+	protected abstract void noItemLayout();
 	
 }

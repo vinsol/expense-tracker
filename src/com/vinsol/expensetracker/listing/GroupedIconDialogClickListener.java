@@ -76,7 +76,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 				case R.id.main_text:
 					Intent intentTextEntry = new Intent(activity, TextEntry.class);
 					createDatabaseEntry(R.string.text,toInsert);
-					intentTextEntry.putExtra("textEntryBundle", bundle);
+					intentTextEntry.putExtras(bundle);
 					activity.startActivity(intentTextEntry);
 					break;
 					
@@ -85,7 +85,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						Intent intentVoice = new Intent(activity, Voice.class);
 						createDatabaseEntry(R.string.voice,toInsert);
-						intentVoice.putExtra("voiceBundle", bundle);
+						intentVoice.putExtras(bundle);
 						activity.startActivity(intentVoice);
 					} else {
 						Toast.makeText(activity, "sdcard not available", Toast.LENGTH_SHORT).show();
@@ -99,7 +99,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 						if (timeInMillis != 0) {
 							bundle.putLong("timeInMillis", timeInMillis);
 						}
-						intentCamera.putExtra("cameraBundle", bundle);
+						intentCamera.putExtras(bundle);
 						activity.startActivity(intentCamera);
 					} else {
 						Toast.makeText(activity, "sdcard not available", Toast.LENGTH_SHORT).show();
@@ -114,7 +114,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 						if (timeInMillis != 0) {
 							bundle.putLong("timeInMillis", timeInMillis);
 						}
-						intentFavorite.putExtra("favoriteBundle", bundle);
+						intentFavorite.putExtras(bundle);
 						activity.startActivity(intentFavorite);	
 					}
 					else {

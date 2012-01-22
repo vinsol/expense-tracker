@@ -101,7 +101,7 @@ public class Home extends Activity implements OnClickListener {
 				FlurryAgent.onEvent(getString(R.string.finished_textentry));
 				Intent intentTextEntry = new Intent(this, TextEntry.class);
 				createDatabaseEntry(R.string.text);
-				intentTextEntry.putExtra("textEntryBundle", bundle);
+				intentTextEntry.putExtras(bundle);
 				startActivity(intentTextEntry);
 				break;
 				
@@ -111,7 +111,7 @@ public class Home extends Activity implements OnClickListener {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					Intent intentVoice = new Intent(this, Voice.class);
 					createDatabaseEntry(R.string.voice);
-					intentVoice.putExtra("voiceBundle", bundle);
+					intentVoice.putExtras(bundle);
 					startActivity(intentVoice);
 				} else {
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
@@ -124,7 +124,7 @@ public class Home extends Activity implements OnClickListener {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					Intent intentCamera = new Intent(this, CameraActivity.class);
 					bundle = new Bundle();
-					intentCamera.putExtra("cameraBundle", bundle);
+					intentCamera.putExtras(bundle);
 					startActivity(intentCamera);
 				} else {
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
@@ -137,7 +137,7 @@ public class Home extends Activity implements OnClickListener {
 				if(new ConvertCursorToListString(this).getFavoriteList().size() >=1) {
 					Intent intentFavorite = new Intent(this, FavoriteActivity.class);
 					bundle = new Bundle();
-					intentFavorite.putExtra("favoriteBundle", bundle);
+					intentFavorite.putExtras(bundle);
 					startActivity(intentFavorite);	
 				}
 				else {

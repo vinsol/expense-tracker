@@ -17,7 +17,7 @@ public class ShowTextActivity extends ShowAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		intentExtras = getIntent().getExtras().getBundle("textShowBundle");
+		intentExtras = getIntent().getExtras();
 		typeOfEntry = R.string.text;
 		typeOfEntryFinished = R.string.finished_textentry;
 		typeOfEntryUnfinished = R.string.unfinished_textentry;
@@ -50,7 +50,7 @@ public class ShowTextActivity extends ShowAbstract {
 	protected void editAction() {
 		super.editAction();
 		Intent editIntent = new Intent(this, TextEntry.class);
-		editIntent.putExtra("textEntryBundle", intentExtras);
+		editIntent.putExtras(intentExtras);
 		startActivityForResult(editIntent,SHOW_RESULT);
 	}
 }
