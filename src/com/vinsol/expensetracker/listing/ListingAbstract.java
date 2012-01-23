@@ -197,7 +197,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 				}
 			}
 		} else {
-			onClickElse(mTempClickedList.id);
+			onClickElse(mTempClickedList,position);
 		}
 	}
 	
@@ -307,7 +307,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		noItemLayout();
 	}
 	protected abstract void unknownDialogAction(String id);
-	protected void onClickElse(String id) {}
+	protected void onClickElse(Entry entry,int position) {}
 	protected abstract void noItemButtonAction(Button noItemButton);
 	protected abstract void noItemLayout();
 	

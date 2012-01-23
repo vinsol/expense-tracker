@@ -13,7 +13,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -27,7 +26,6 @@ import com.vinsol.expensetracker.models.Entry;
 
 public class ExpenseSubListing extends ListingAbstract {
 
-	private String idList;
 	private TextView listingHeader;
 	
 	@Override
@@ -39,10 +37,12 @@ public class ExpenseSubListing extends ListingAbstract {
 	@SuppressWarnings("unchecked")
 	private void initListView() {
 		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
-		idList = getIntent().getStringExtra("idList");
+		intentExtras = getIntent().getExtras();
+		Entry entry = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+		entry = getIntent().getParcelableExtra(Constants.ENTRY_LIST_EXTRA);
 		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
-		mDataDateList = mConvertCursorToListString.getDateListString(false,idList);
-		mSubList = mConvertCursorToListString.getListStringParticularDate(idList);
+		mDataDateList = mConvertCursorToListString.getDateListString(false,entry.id);
+		mSubList = mConvertCursorToListString.getListStringParticularDate(entry.id);
 		if(mSubList.size() > 0) {
 			Bundle intentExtras = getIntent().getExtras();
 			if(intentExtras != null){
@@ -108,16 +108,12 @@ public class ExpenseSubListing extends ListingAbstract {
 		});
 	}
 	
-	// /// ****************** Handling back press of key ********** ///////////
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			Intent intent = new Intent(this, ExpenseListing.class);
-			intent.putExtras(intentExtras);
-			setResult(Activity.RESULT_OK, intent);
-			finish();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(this, ExpenseListing.class);
+		intent.putExtras(intentExtras);
+		setResult(Activity.RESULT_OK, intent);
+		super.onBackPressed();
 	}
 	
 	@Override

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_selected="true" android:drawable="@drawable/listing_pressed_icon_bg"/>
+    <item android:state_pressed="true" android:state_selected="false" android:drawable="@drawable/listing_pressed_icon_bg" />
+    <item android:state_selected="false" android:drawable="@drawable/listing_icon_bg"/>
+</selector>

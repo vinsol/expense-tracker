@@ -123,11 +123,11 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			if (convertView == null) {
 				convertView = mInflater.inflate(R.layout.expense_listing_inflated_row, null);
 				viewHolder = new ViewHolder();
-				viewHolder.rowTag = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_tag);
-				viewHolder.rowAmount = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_amount);
-				viewHolder.rowImageview = (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_imageview);
-				viewHolder.rowLocationTime = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_location_time);
-				viewHolder.rowFavoriteIcon= (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_favorite_icon);
+				viewHolder.rowTag = (TextView) convertView.findViewById(R.id.row_tag);
+				viewHolder.rowAmount = (TextView) convertView.findViewById(R.id.row_amount);
+				viewHolder.rowImageview = (ImageView) convertView.findViewById(R.id.row_imageview);
+				viewHolder.rowLocationTime = (TextView) convertView.findViewById(R.id.row_location_time);
+				viewHolder.rowFavoriteIcon= (ImageView) convertView.findViewById(R.id.row_favorite_icon);
 				convertView.setTag(viewHolder);
 			} else {
 				viewHolder = (ViewHolder) convertView.getTag();
@@ -261,7 +261,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 
 		@Override
 		public void onClick(View v) {
-			if (v.getId() == R.id.expense_listing_inflated_row_imageview) {
+			if (v.getId() == R.id.row_imageview) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					String id = tempFavorite.favId;
 					if (tempFavorite.type.equals(getString(R.string.voice))) {

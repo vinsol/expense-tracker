@@ -18,11 +18,13 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
+import com.vinsol.expensetracker.utils.Log;
 
 public class ExpenseListing extends ListingAbstract {
 
@@ -142,10 +144,11 @@ public class ExpenseListing extends ListingAbstract {
 						}
 						mTempSubList.amount = mStringProcessing.getStringDoubleDecimal(totalAmountString);
 						mTempSubList.type = getString(R.string.sublist_weekwise);
+						mTempSubList.timeInMillis = 0L;
 						if(highlightID != null) {
 							if (j <= mSubList.size()) {
 								if(mTempSubList.id.contains(highlightID)) {
-									startSubListing(mTempSubList.id);
+									startSubListing(mTempSubList);
 								} 
 							}
 						}
@@ -164,12 +167,14 @@ public class ExpenseListing extends ListingAbstract {
 		doOperationsOnListview();
 	}
 
-	private void startSubListing(String string) {
-		ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(string);
+	private void startSubListing(Entry entry) {
+		ArrayList<String> mArrayList = new GetArrayListFromString().getListFromTextArea(entry.id);
 		for(int checkI=0;checkI<mArrayList.size();checkI++) {
 			if(mArrayList.get(checkI).equals(highlightID)) {
 				Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
-				expenseSubListing.putExtra("idList", string);
+				Bundle extras = new Bundle();
+				extras.putParcelable(Constants.ENTRY_LIST_EXTRA, entry);
+				expenseSubListing.putExtras(extras);
 				expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivityForResult(expenseSubListing,RESULT);
  				finish();
@@ -178,10 +183,14 @@ public class ExpenseListing extends ListingAbstract {
 	}
 	
 	@Override
-	protected void onClickElse(String id) {
+	protected void onClickElse(Entry entry,int position) {
 		Intent mSubListIntent = new Intent(this, ExpenseSubListing.class);
-		mSubListIntent.putExtra("idList", id);
+		Bundle extras = new Bundle();
+		extras.putParcelable(Constants.ENTRY_LIST_EXTRA, entry);
+		extras.putInt(Constants.POSITION, position);
+		mSubListIntent.putExtras(extras);
 		mSubListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Log.d("Starting SubList");
 		startActivityForResult(mSubListIntent,RESULT);
 	}
 	

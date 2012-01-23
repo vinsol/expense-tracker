@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.DateHelper;
@@ -80,15 +81,19 @@ class SeparatedListAdapter extends BaseAdapter {
 		for (Object section : sections.keySet()) {
 			Adapter adapter = sections.get(section);
 			int size = adapter.getCount() + 2;
-
+			Log.d("*******************************");
+			Log.d("position " +position);
+			Log.d("*******************************");
 			// check if position inside this section
 			if (position == 0) {
-				return (Entry) section;
+				return (Entry)section;
 			}
+			
 			if (position < size - 1)
-				return (Entry) adapter.getItem(position - 1);
+				return (Entry)adapter.getItem(position - 1);
+			
 			if (position < size)
-				return (Entry) section;
+				return (Entry)section;
 
 			// otherwise jump into next section
 			position -= size;
@@ -184,12 +189,13 @@ class SeparatedListAdapter extends BaseAdapter {
 				if (convertView == null) {
 					holderBody = new ViewHolderBody();
 					convertView = mInflater.inflate(R.layout.expense_listing_inflated_row, null);
-					holderBody.rowLocationTime = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_location_time);
-					holderBody.rowTag = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_tag);
-					holderBody.rowAmount = (TextView) convertView.findViewById(R.id.expense_listing_inflated_row_amount);
-					holderBody.rowImageview = (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_imageview);
-					holderBody.rowFavoriteIcon = (ImageView) convertView.findViewById(R.id.expense_listing_inflated_row_favorite_icon);
-					holderBody.rowListview = (RelativeLayout) convertView.findViewById(R.id.expense_listing_inflated_row_listview);
+					holderBody.rowLocationTime = (TextView) convertView.findViewById(R.id.row_location_time);
+					holderBody.rowTag = (TextView) convertView.findViewById(R.id.row_tag);
+					holderBody.rowAmount = (TextView) convertView.findViewById(R.id.row_amount);
+					holderBody.rowImageview = (ImageView) convertView.findViewById(R.id.row_imageview);
+					holderBody.dividerImageView = (ImageView) convertView.findViewById(R.id.row_imageview_divider);
+					holderBody.rowFavoriteIcon = (ImageView) convertView.findViewById(R.id.row_favorite_icon);
+					holderBody.rowListview = (RelativeLayout) convertView.findViewById(R.id.row_listview);
 					convertView.setTag(holderBody);
 				} else {
 					holderBody = (ViewHolderBody) convertView.getTag();
@@ -206,13 +212,13 @@ class SeparatedListAdapter extends BaseAdapter {
 								Drawable drawable = Drawable.createFromPath(mFile.getPath());
 								holderBody.rowImageview.setImageDrawable(drawable);
 							} else {
-								holderBody.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
+								holderBody.rowImageview.setImageResource(R.drawable.no_image_small);
 							}
 						} catch (Exception e) {
-							holderBody.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
+							holderBody.rowImageview.setImageResource(R.drawable.no_image_small);
 						}
 					} else {
-						holderBody.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
+						holderBody.rowImageview.setImageResource(R.drawable.no_image_small);
 					}
 				} else if (mlist.type.equals(mContext.getString(R.string.text))) {
 					setBackGround(holderBody, mCheckEntryComplete, mlist);
@@ -227,13 +233,12 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderBody.rowImageview.setImageResource(R.drawable.listing_reminder_icon);
 					holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unknown_states);
 				} else if (mlist.type.equals(mContext.getString(R.string.voice))) {
-
 					setBackGround(holderBody, mCheckEntryComplete, mlist);
 					File mFile = fileHelper.getAudioFileEntry(mlist.id);
 					if (mFile.canRead()) {
 						holderBody.rowImageview.setImageResource(R.drawable.listing_voice_entry_icon);
 					} else {
-						holderBody.rowImageview.setImageResource(R.drawable.no_voice_file_thumbnail);
+						holderBody.rowImageview.setImageResource(R.drawable.no_voice_file_small);
 					}
 				} 
 				if (mlist.favId != null) {
@@ -268,6 +273,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				if ((mlist.type.equals(mContext.getString(R.string.sublist_daywise))) || mlist.type.equals(mContext.getString(R.string.sublist_monthwise)) || mlist.type.equals(mContext.getString(R.string.sublist_yearwise))|| mlist.type.equals(mContext.getString(R.string.sublist_weekwise))) {
 					holderBody.rowImageview.setVisibility(View.GONE);
 					holderBody.rowLocationTime.setVisibility(View.GONE);
+					holderBody.dividerImageView.setVisibility(View.GONE);
 				}
 				
 				return convertView;
@@ -277,8 +283,6 @@ class SeparatedListAdapter extends BaseAdapter {
 		}
 		return null;
 	}
-
-	
 	
 	@Override
 	public long getItemId(int position) {
@@ -314,6 +318,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		sections.get(sectionNumber).insert(updatedEntry, toUpdate);
 		sections.get(sectionNumber).remove(prevEntry);
 		StringProcessing mStringProcessing = new StringProcessing();
+		Log.d(mDatadateList.get(Integer.parseInt(sectionNumber)).amount);
 		Double amountDouble = mStringProcessing.getAmount(mDatadateList.get(Integer.parseInt(sectionNumber)).amount);
 		amountDouble -= mStringProcessing.getAmount(prevEntry.amount);
 		if(!updatedEntry.amount.contains("?")) { 
@@ -344,11 +349,9 @@ class SeparatedListAdapter extends BaseAdapter {
 	
 	
 	/////////////////**********************Private Classes **********************////////////////////////
-
 	private class MyClickListener implements OnClickListener {
 
 		Entry mListenerList;
-
 		public MyClickListener(Entry mlist) {
 			mListenerList = mlist;
 		}
@@ -356,7 +359,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
-			case R.id.expense_listing_inflated_row_imageview:
+			case R.id.row_imageview:
 				if (mListenerList != null)
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						if (mListenerList.type.equals(mContext.getString(R.string.voice))) {
@@ -402,6 +405,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		ImageView rowImageview;
 		ImageView rowFavoriteIcon;
 		RelativeLayout rowListview;
+		ImageView dividerImageView;
 	}
 
 	private class ViewHolderHeader {
@@ -416,9 +420,8 @@ class SeparatedListAdapter extends BaseAdapter {
 	
 	private void setBackGround(ViewHolderBody holderBody,CheckEntryComplete mCheckEntryComplete,Entry mlist) {
 		if (mlist.id.equals(highlightID)) {
-			Log.d(true+" \t "+mlist.type);
-			highlightID = "";
-			//TODO for last entry
+			((Activity)mContext).getIntent().getExtras().remove(Constants.HIGHLIGHT);
+			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_highlighted_entry_states);
 		} else if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
 			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 		} else {

@@ -58,6 +58,12 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		super.onStart();
 		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
 	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -120,8 +126,11 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			entry.amount = mEditList.amount;
 			entry.description = mEditList.description;
 			if (!(entry.amount.equals("") || entry.amount == null)) {
-				if (!entry.amount.contains("?"))
-					editAmount.setText(entry.amount);
+				if (!entry.amount.contains("?")) {
+					if(entry.amount.endsWith(".00")) {
+						editAmount.setText(entry.amount.subSequence(0, entry.amount.length()-3));
+					}
+				}
 			}
 			if(entry.description.equals(getString(R.string.unknown_entry)) || mEditList.description.equals(getString(R.string.unknown))) {
 				setUnknown = true;
@@ -299,8 +308,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		saveEntry();
 		super.onBackPressed();
 	}
-		
-	abstract protected void saveEntryStartIntent(Bundle tempBundle);
 	
 	@Override
 	public void onClick(View v) {
@@ -342,13 +349,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		}
 	}
 
-	@Override
-	protected void onStop() {
-		super.onStop();
-		FlurryAgent.onEndSession(this);
-	}
-
 	protected void startIntentAfterDelete(Bundle tempBundle) {}
-
 	protected void deleteAction(){}
+	abstract protected void saveEntryStartIntent(Bundle tempBundle);
 }

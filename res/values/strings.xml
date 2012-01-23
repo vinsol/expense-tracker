@@ -20,6 +20,10 @@
     <string name="unfinished_cameraentry">Unfinished Camera Entry</string>
     <string name="unfinished_voiceentry">Unfinished Voice Entry</string>
     
+    <!-- XML Text -->
+    <string name="expense_list_header">Expenses List</string>
+    <string name="no_expenses_text">No expenses available to show, Please add expenses</string>
+    
     <!-- Context Menu Item Id -->
     <string name="contextitem_edit">0</string>
     <string name="contextitem_delete">1</string>

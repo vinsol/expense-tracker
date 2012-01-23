@@ -34,7 +34,7 @@ public class Entry extends Favorite implements Parcelable {
     	type = in.readString();
     	location = in.readString();
     	favId = in.readString();
-    	timeInMillis = new Long(in.readString());
+    	timeInMillis = in.readLong();
     };
     
     @Override
@@ -45,7 +45,7 @@ public class Entry extends Favorite implements Parcelable {
 		dest.writeString(type);
 		dest.writeString(location);
 		dest.writeString(favId);
-		dest.writeString(timeInMillis.toString());
+		dest.writeLong(timeInMillis);
 	}
 
 	@Override

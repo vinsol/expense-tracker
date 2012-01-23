@@ -3,7 +3,6 @@
  * See the file license.txt for copying permission.
 */     
 
-
 package com.vinsol.expensetracker;
 
 import android.content.ContentValues;
@@ -25,9 +24,6 @@ public class DatabaseAdapter {
 	private final String DATABASE_NAME = "ExpenseTrackerDB";
 	private final String ENTRY_TABLE = "EntryTable";
 	private final String FAVORITE_TABLE = "FavoriteTable";
-	
-//	private final String ENTRY_TABLE = "ExpenseTrackerTable";
-//	private final String FAVORITE_TABLE = "FavoriteTable";
 	
 	private final String PREVIOUS_VERSION_ENTRY_TABLE = "ExpenseTrackerTable";
 	
