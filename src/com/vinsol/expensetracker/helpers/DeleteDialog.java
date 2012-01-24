@@ -2,10 +2,7 @@ package com.vinsol.expensetracker.helpers;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,11 +15,9 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 	
 	private boolean isDelete;
 	private CheckBox checkBox;
-	private SharedPreferences sharedPreferences;
 	
 	public DeleteDialog(Context context) { 
 		super(context);
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
 	@Override
@@ -69,9 +64,7 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 		} else {
 			checkBox.setText(getContext().getString(R.string.delete_dialog_title_disable));
 		}
-		Editor prefEditor = sharedPreferences.edit();
-		prefEditor.putBoolean(getContext().getString(R.string.pref_key_delete_dialog), checkBox.isChecked());
-		prefEditor.commit();
+		new SharedPreferencesHelper(getContext()).setDeletePrefs(checkBox.isChecked());
 	}
 	
 }
