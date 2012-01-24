@@ -106,12 +106,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 				getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 		}
 	};
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		dateViewString = dateBarDateview.getText().toString();
-	}
 
 	protected void editHelper() {
 
@@ -303,13 +297,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		}
 		return false;
 	}
-
-	@Override
-	public void onBackPressed() {
-		FlurryAgent.onEvent(getString(R.string.back_pressed));
-		saveEntry();
-		super.onBackPressed();
-	}
 	
 	@Override
 	public void onClick(View v) {
@@ -351,6 +338,13 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		FlurryAgent.onEvent(getString(R.string.back_pressed));
+		saveEntry();
+		super.onBackPressed();
+	}
+	
 	protected void startIntentAfterDelete(Bundle tempBundle) {}
 	protected void deleteAction(){}
 	abstract protected void saveEntryStartIntent(Bundle tempBundle);

@@ -43,6 +43,12 @@ public class Home extends Activity implements OnClickListener {
 	}
 	
 	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
+	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home);
@@ -198,9 +204,4 @@ public class Home extends Activity implements OnClickListener {
 		return id;
 	}
 	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		FlurryAgent.onEndSession(this);
-	}
 }
