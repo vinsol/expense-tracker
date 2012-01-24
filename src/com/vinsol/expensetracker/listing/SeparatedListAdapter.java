@@ -317,7 +317,6 @@ class SeparatedListAdapter extends BaseAdapter {
 		sections.get(sectionNumber).insert(updatedEntry, toUpdate);
 		sections.get(sectionNumber).remove(prevEntry);
 		StringProcessing mStringProcessing = new StringProcessing();
-		Log.d(mDatadateList.get(Integer.parseInt(sectionNumber)).amount);
 		Double amountDouble = mStringProcessing.getAmount(mDatadateList.get(Integer.parseInt(sectionNumber)).amount);
 		amountDouble -= mStringProcessing.getAmount(prevEntry.amount);
 		if(!updatedEntry.amount.contains("?")) { 
@@ -429,7 +428,6 @@ class SeparatedListAdapter extends BaseAdapter {
 
 	private boolean isCurrentWeek(String dateViewString) {
 		if(dateViewString != null) {
-			Log.d(dateViewString.length());
 			if(!dateViewString.equals("")) {
 				return new DateHelper(dateViewString).isCurrentWeek();
 			}

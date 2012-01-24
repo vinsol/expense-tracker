@@ -6,6 +6,7 @@
 
 package com.vinsol.expensetracker.helpers;
 
+
 public class StringProcessing {
 	public String getStringDoubleDecimal(String totalAmountString) {
 		if (totalAmountString.contains("?")&& totalAmountString.length() > 1) {
@@ -44,7 +45,10 @@ public class StringProcessing {
 	
 	public Double getAmount(String amount) {
 		if(amount.contains("?")) {
-			amount = (String) amount.subSequence(0, amount.length()-1);		
+			amount = (String) amount.subSequence(0, amount.length()-1);
+			if(amount.trim().length() < 1) {
+				return 0.0;
+			}
 		}
 		return Double.parseDouble(amount);
 	}
