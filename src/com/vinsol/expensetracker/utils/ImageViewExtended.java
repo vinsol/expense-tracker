@@ -30,7 +30,7 @@ public class ImageViewExtended extends ImageView {
 	
 	@Override
 	public void setSelected(boolean selected) {
-		if (selected && ((View) getParent()).isPressed()) {
+		if (selected && ((View) getParent()).isSelected()) {
             return;
         }
 		super.setSelected(selected);
@@ -38,9 +38,10 @@ public class ImageViewExtended extends ImageView {
 	
 	@Override
 	protected void onFocusChanged(boolean gainFocus, int direction, Rect previouslyFocusedRect) {
-		if (gainFocus && ((View) getParent()).isPressed()) {
+		if (gainFocus && ((View) getParent()).isFocused()) {
             return;
         }
 		super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
 	}
+	
 }
