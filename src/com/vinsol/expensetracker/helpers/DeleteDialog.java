@@ -28,7 +28,6 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 
 	@Override
 	public void onClick(View v) {
-		dismiss();
 		switch (v.getId()) {
 		case R.id.delete_dialog_yes:
 			isDelete = true;
@@ -40,6 +39,7 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 		default:
 			break;
 		}
+		dismiss();
 	}
 
 	public boolean isDelete() {
