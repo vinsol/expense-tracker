@@ -32,8 +32,10 @@ import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.utils.Log;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
+	
 	protected Entry mEditList;
 	protected boolean setLocation = false;
 	protected EditText editAmount;
@@ -258,11 +260,11 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			mToHighLight.putString(Constants.HIGHLIGHT, toSave.id);
 			intentExpenseListing.putExtras(mToHighLight);
 			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			Log.d(intentExtras.containsKey(Constants.POSITION));
 			if(!intentExtras.containsKey(Constants.POSITION)) {
-				mToHighLight.putInt(Constants.POSITION, intentExtras.getInt(Constants.POSITION));
-				mToHighLight.putParcelable(Constants.ENTRY_LIST_EXTRA, getListOnResult(toSave));
 				startActivity(intentExpenseListing);
 			} else {
+				mToHighLight.putInt(Constants.POSITION, intentExtras.getInt(Constants.POSITION));
 				mToHighLight.putParcelable(Constants.ENTRY_LIST_EXTRA, getListOnResult(toSave));
 				setActivityResult(mToHighLight);
 				finish();

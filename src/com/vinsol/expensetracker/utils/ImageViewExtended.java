@@ -1,7 +1,6 @@
 package com.vinsol.expensetracker.utils;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;

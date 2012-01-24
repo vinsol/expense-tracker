@@ -29,7 +29,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.DateHelper;
@@ -420,7 +419,6 @@ class SeparatedListAdapter extends BaseAdapter {
 	
 	private void setBackGround(ViewHolderBody holderBody,CheckEntryComplete mCheckEntryComplete,Entry mlist) {
 		if (mlist.id.equals(highlightID)) {
-			((Activity)mContext).getIntent().getExtras().remove(Constants.HIGHLIGHT);
 			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_highlighted_entry_states);
 		} else if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
 			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
