@@ -59,4 +59,18 @@
     <string name="context_item_edit">Context Item Edit</string>
     <string name="context_item_delete">Context Item Delete</string>
     
+    <!-- Preferences Key -->
+    <string name="pref_key_delete_dialog">prefKeyDeleteDialog</string>
+    
+    <!-- Preferences Title-->
+    <string name="delete_dialog_title_disable">Delete Dialog Disabled</string>
+    <string name="delete_dialog_title_enable">Delete Dialog Enabled</string>
+    
+    <!-- Preferences Summary -->
+    <string name="delete_dialog_summary_disable">Click here to enable dialog</string>
+    <string name="delete_dialog_summary_enable">Click here to disable dialog</string>
+    
+    <!-- Dialog Text -->
+    <string name="delete_dialog_text">Are you sure you want to delete ?</string>
+    
 </resources>

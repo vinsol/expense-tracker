@@ -234,8 +234,7 @@ public class CameraActivity extends EditAbstract {
 	}
 
 	@Override
-	protected void deleteAction() {
-		super.deleteAction();
+	protected void deleteFile() {
 		fileHelper.deleteAllEntryFiles(entry.id);
 	}
 	

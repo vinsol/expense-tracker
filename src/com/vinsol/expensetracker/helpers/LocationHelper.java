@@ -22,16 +22,16 @@ import com.vinsol.expensetracker.utils.Log;
 
 public class LocationHelper {
 	
-	private static final int SIGNIFICANT_TIME_DELTA = 2 * 60 * 1000; // 2 MINS
+	private final int SIGNIFICANT_TIME_DELTA = 2 * 60 * 1000; // 2 MINS
 	// PROD
-	private static final int STALE_GPS_REQUEST_TIME_DELTA = 10 * 60 * 1000; // 10 MINS
+	private final int STALE_GPS_REQUEST_TIME_DELTA = 10 * 60 * 1000; // 10 MINS
 	
 	private static Location currentLocation;
 	public static String currentAddress = null;
 	
 	// This enables location listener, ir-respective if none of the providers are available
 	// this helps if a provider gets enabled in wait period
-	public static void requestLocationUpdate() {
+	public void requestLocationUpdate() {
 		final LocationManager locationManager = (LocationManager) ExpenseTrackerApplication.getContext().getSystemService(Context.LOCATION_SERVICE);
         for( String p : locationManager.getAllProviders() ) {
             Log.d("Starting Location Updates with " + p + " provider");
@@ -56,7 +56,7 @@ public class LocationHelper {
         gpsThread.start();
 	}
 	
-	private static LocationListener locationListener = new LocationListener() {
+	private LocationListener locationListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
 			if(isBetterLocation(location)) {
 				Log.d("Location updated to " + location.toString() );
@@ -72,7 +72,7 @@ public class LocationHelper {
 		public void onStatusChanged(String provider, int status, Bundle extras) { Log.d("**** Provider changed: " + provider + " " + "status: " + status);}
 	};
 	
-	public static Location getBestAvailableLocation() {
+	public Location getBestAvailableLocation() {
 		final LocationManager locationManager = (LocationManager) ExpenseTrackerApplication.getContext().getSystemService(Context.LOCATION_SERVICE);
 		for (String provider: locationManager.getAllProviders()) {
 			Location location = null;
@@ -108,7 +108,7 @@ public class LocationHelper {
 		return currentLocation;
 	}
 	
-	private static boolean isBetterLocation(Location newLocation) {
+	private boolean isBetterLocation(Location newLocation) {
 	    if (currentLocation == null) {
 	        // A new location is always better than no location
 	        return true;
@@ -150,7 +150,7 @@ public class LocationHelper {
 	}
 
 	//Checks whether two providers are the same
-	private static boolean isSameProvider(String provider1, String provider2) {
+	private boolean isSameProvider(String provider1, String provider2) {
 	    if (provider1 == null) {
 	    	return provider2 == null;
 	    }
@@ -158,7 +158,7 @@ public class LocationHelper {
 	}
 
 	// ///// ******** Asynctask to get info using geo-coder by passing latitude and longitude values ******** ///////
-	private static void getCurrentAddress() {
+	private void getCurrentAddress() {
 		currentAddress = null;
 		
 		AsyncTask<Void, Void, Void> getAddress = new AsyncTask<Void, Void, Void>() {

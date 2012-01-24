@@ -9,7 +9,9 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +28,7 @@ import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
+import com.vinsol.expensetracker.helpers.DeleteDialog;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
@@ -54,6 +57,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	protected Button editSaveEntry;
 	protected Entry entry;
 	protected FileHelper fileHelper;
+	private SharedPreferences sharedPreferences;
 	
 	@Override
 	protected void onStart() {
@@ -71,6 +75,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_page);
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		entry = new Entry();
 		editAmount = (EditText) findViewById(R.id.edit_amount);
 		editHeaderTitle = (TextView) findViewById(R.id.header_title);
@@ -244,7 +249,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 
 	protected void saveEntry() {
 		Entry toSave = getSaveEntryData(dateBarDateview,dateViewString);
-		////// ******* Update database if user added additional info *******		 ///////
+		////// ******* Update database if user added additional info *******///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editEntryTable(toSave);
 		mDatabaseAdapter.close();
@@ -311,31 +316,44 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		///////// ********* Adding action if delete button ********** /////////
 
 		if (v.getId() == R.id.edit_delete) {
-			FlurryAgent.onEvent(getString(R.string.delete_button));
-			isChanged = true;
-			deleteAction();
-			////// ******* Delete entry from database ******** /////////
-			mDatabaseAdapter.open();
-			mDatabaseAdapter.deleteEntryTableEntryID(entry.id);
-			mDatabaseAdapter.close();
-			Bundle tempBundle = new Bundle();
-			if(intentExtras.containsKey("isFromShowPage")) {
-				Entry displayList = new Entry();
-				tempBundle.putParcelable("mDisplayList", displayList);
-				mEditList = displayList;
-				startIntentAfterDelete(tempBundle);
+			if(sharedPreferences.getBoolean(getString(R.string.pref_key_delete_dialog), false)) {
+				showDeleteDialog();
+			} else {
+				delete();
 			}
-			if(intentExtras.containsKey("position")) {
-				tempBundle = new Bundle();
-				Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-				if(isChanged) {
-					tempBundle.putBoolean("isChanged", isChanged);
-				}
-				intentExpenseListing.putExtras(tempBundle);
-				setResult(Activity.RESULT_CANCELED, intentExpenseListing);
-			}
-			finish();
 		}
+	}
+	
+	private void showDeleteDialog() {
+		DeleteDialog mDeleteDialog = new DeleteDialog(this);
+		mDeleteDialog.show();
+	}
+
+	private void delete() {
+		FlurryAgent.onEvent(getString(R.string.delete_button));
+		isChanged = true;
+		deleteFile();
+		////// ******* Delete entry from database ******** /////////
+		mDatabaseAdapter.open();
+		mDatabaseAdapter.deleteEntryTableEntryID(entry.id);
+		mDatabaseAdapter.close();
+		Bundle tempBundle = new Bundle();
+		if(intentExtras.containsKey("isFromShowPage")) {
+			Entry displayList = new Entry();
+			tempBundle.putParcelable(Constants.ENTRY_LIST_EXTRA, displayList);
+			mEditList = displayList;
+			startIntentAfterDelete(tempBundle);
+		}
+		if(intentExtras.containsKey(Constants.POSITION)) {
+			tempBundle = new Bundle();
+			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			if(isChanged) {
+				tempBundle.putBoolean("isChanged", isChanged);
+			}
+			intentExpenseListing.putExtras(tempBundle);
+			setResult(Activity.RESULT_CANCELED, intentExpenseListing);
+		}
+		finish();
 	}
 
 	@Override
@@ -346,6 +364,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	}
 	
 	protected void startIntentAfterDelete(Bundle tempBundle) {}
-	protected void deleteAction(){}
+	protected void deleteFile(){}
 	abstract protected void saveEntryStartIntent(Bundle tempBundle);
 }

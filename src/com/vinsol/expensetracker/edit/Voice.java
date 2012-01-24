@@ -241,8 +241,7 @@ public class Voice extends EditAbstract {
 	}
 	
 	@Override
-	protected void deleteAction() {
-		super.deleteAction();
+	protected void deleteFile() {
 		editTimeDetailsChronometer.stop();
 		fileHelper.deleteAllEntryFiles(entry.id);
 	}

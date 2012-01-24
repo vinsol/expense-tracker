@@ -12,6 +12,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -85,11 +88,11 @@ public class Home extends Activity implements OnClickListener {
 
 	@Override
 	protected void onResume() {
-		
 		//finding current location
-		Location location = LocationHelper.getBestAvailableLocation();
+		LocationHelper mLocationHelper = new LocationHelper();
+		Location location = mLocationHelper.getBestAvailableLocation();
 		if(location == null) {
-			LocationHelper.requestLocationUpdate();
+			mLocationHelper.requestLocationUpdate();
 		}
 		mHandleGraph = new GraphHelper(this);
 		mHandleGraph.execute();
@@ -167,6 +170,27 @@ public class Home extends Activity implements OnClickListener {
 				break;
 		}//end switch
 	}//end onClick
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.home_optionsmenu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.settings:
+			Intent myIntent = new Intent(this, SetPreferences.class);
+            startActivity(myIntent);
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 	
 	private void createDatabaseEntry(int typeOfEntry) {
 		entry.id = insertToDatabase(typeOfEntry).toString();
