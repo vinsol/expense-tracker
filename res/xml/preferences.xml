@@ -3,6 +3,6 @@
     <PreferenceCategory android:title="Settings">
         <CheckBoxPreference
    			android:key="@string/pref_key_delete_dialog"
-   			android:defaultValue="false"/>
+   			android:defaultValue="true"/>
 	</PreferenceCategory>
 </PreferenceScreen>

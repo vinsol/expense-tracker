@@ -9,6 +9,7 @@ import java.io.File;
 
 import android.app.Application;
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.flurry.android.FlurryAgent;
 
@@ -25,6 +26,7 @@ public class ExpenseTrackerApplication extends Application {
     }
     
     private void Initialize() {
+    	PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     	SDCARD_PATH = getExternalCacheDir().toString();
 		File mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_AUDIO);
 		mFile.mkdirs();
