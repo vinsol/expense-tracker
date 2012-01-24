@@ -13,6 +13,7 @@ import com.vinsol.expensetracker.R;
 
 public class ConfirmSaveEntryDialog extends Dialog implements android.view.View.OnClickListener {
 
+	private boolean toSave;
 	
 	public ConfirmSaveEntryDialog(Context context) {
 		super(context);
@@ -40,15 +41,23 @@ public class ConfirmSaveEntryDialog extends Dialog implements android.view.View.
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		
 		case R.id.delete_dialog_yes:
+			toSave = true;
 			break;
 
 		case R.id.delete_dialog_no:
+			toSave = false;
 			break;
+			
 		default:
 			break;
 		}
 		dismiss();
+	}
+
+	public boolean isToSave() {
+		return toSave;
 	}
 
 }

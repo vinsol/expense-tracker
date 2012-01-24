@@ -21,7 +21,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.Constants;
@@ -122,7 +121,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			setLocation = intentExtras.getBoolean("setLocation");
 		}
 		
-		if (intentExtras.containsKey("mDisplayList")) {
+		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 			mEditList = intentExtras.getParcelable("mDisplayList");
 			entry.id = mEditList.id;
 			entry.amount = mEditList.amount;
@@ -369,7 +368,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	@Override
 	public void onBackPressed() {
 		FlurryAgent.onEvent(getString(R.string.back_pressed));
-		ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
+		final ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
 		if(intentExtras.containsKey("isFromShowPage") || intentExtras.containsKey(Constants.POSITION)) {
 			//TODO if coming from show page or listing
 		} else {
@@ -379,6 +378,17 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			} else {
 				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
 				mConfirmSaveEntryDialog.show();
+				mConfirmSaveEntryDialog.setOnDismissListener(new OnDismissListener() {
+					
+					@Override
+					public void onDismiss(DialogInterface dialog) {
+						if(mConfirmSaveEntryDialog.isToSave()) {
+							saveEntry();
+						} else {
+							finish();
+						}
+					}
+				});
 			}
 		}
 	}
