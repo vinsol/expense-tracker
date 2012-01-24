@@ -36,12 +36,4 @@ public class ImageViewExtended extends ImageView {
 		super.setSelected(selected);
 	}
 	
-	@Override
-	protected void onFocusChanged(boolean gainFocus, int direction, Rect previouslyFocusedRect) {
-		if (gainFocus && ((View) getParent()).isFocused()) {
-            return;
-        }
-		super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
-	}
-	
 }
