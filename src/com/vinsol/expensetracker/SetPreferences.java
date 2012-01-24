@@ -1,7 +1,5 @@
 package com.vinsol.expensetracker;
 
-import com.vinsol.expensetracker.R;
-
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;

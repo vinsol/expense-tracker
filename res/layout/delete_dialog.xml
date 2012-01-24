@@ -19,11 +19,12 @@
             />
         
         <CheckBox 
-            android:id="@+id/disable_delete_dialog"
+            android:id="@+id/disable_delete_dialog_checkbox"
             android:checked="true"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="@string/delete_dialog_summary_enable"/>
+            android:text="@string/delete_dialog_summary_enable"
+            />
         
         <LinearLayout
             android:layout_height="wrap_content"
