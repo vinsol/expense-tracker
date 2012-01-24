@@ -11,6 +11,7 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -182,10 +183,14 @@ public class Home extends Activity implements OnClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.settings:
-			Intent myIntent = new Intent(this, SetPreferences.class);
-            startActivity(myIntent);
+			Intent intent = new Intent(this, SetPreferences.class);
+            startActivity(intent);
 			break;
 
+		case R.id.rate_app:
+			Intent startMarket = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.EXPENSE_TRACKER_MARKET_URI));
+			startActivity(startMarket);
+			break;
 		default:
 			break;
 		}

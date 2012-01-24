@@ -21,4 +21,7 @@ public class Constants {
 	public static String ENTRY_LIST_EXTRA = "mDisplayList";
 	public static String POSITION = "position";
 	
+	//ExpenseTracker Market UI
+	public static final String EXPENSE_TRACKER_MARKET_URI = "market://details?id=com.vinsol.expensetracker";
+	
 }
