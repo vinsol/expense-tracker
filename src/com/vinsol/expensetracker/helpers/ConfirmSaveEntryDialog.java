@@ -13,7 +13,6 @@ import com.vinsol.expensetracker.R;
 
 public class ConfirmSaveEntryDialog extends Dialog implements android.view.View.OnClickListener {
 
-	private CheckBox checkBox;
 	
 	public ConfirmSaveEntryDialog(Context context,int stringResId) {
 		super(context);
@@ -29,8 +28,7 @@ public class ConfirmSaveEntryDialog extends Dialog implements android.view.View.
 		setContentView(R.layout.delete_dialog);
 		Button saveEntryButton = (Button) findViewById(R.id.delete_dialog_yes);
 		Button discardButton = (Button) findViewById(R.id.delete_dialog_no);
-		checkBox = (CheckBox) findViewById(R.id.disable_delete_dialog_checkbox);
-		checkBox.setVisibility(View.GONE);
+		((CheckBox) findViewById(R.id.disable_delete_dialog_checkbox)).setVisibility(View.GONE);
 		saveEntryButton.setText(getContext().getString(R.string.save_entry));
 		discardButton.setText(R.string.discard);
 		saveEntryButton.setOnClickListener(this);
