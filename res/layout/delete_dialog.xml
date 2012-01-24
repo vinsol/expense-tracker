@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:text="@string/delete_dialog_text"
+            android:id="@+id/dialog_message"
             />
         
         <CheckBox 

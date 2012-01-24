@@ -367,7 +367,16 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	@Override
 	public void onBackPressed() {
 		FlurryAgent.onEvent(getString(R.string.back_pressed));
-		saveEntry();
+		if(intentExtras.containsKey("isFromShowPage") || intentExtras.containsKey(Constants.POSITION)) {
+			//TODO if coming from show page or listing
+		} else {
+			if(editAmount.getText().equals("") && editTag.getText().equals("") && (typeOfEntry == R.string.text || typeOfEntryFinished == R.string.finished_textentry) || typeOfEntryUnfinished == R.string.unfinished_textentry) {
+				delete();
+				super.onBackPressed();
+			} else {
+				
+			}
+		}
 		super.onBackPressed();
 	}
 	

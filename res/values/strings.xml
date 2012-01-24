@@ -74,5 +74,9 @@
     <string name="delete_dialog_text">Are you sure you want to delete ?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="backpress_new_entry_text">Unsaved data</string>
+    <string name="backpress_edit_entry_text">Data has been changed</string>
+    <string name="save_entry">Save Entry</string>
+    <string name="discard">Discard</string>
     
 </resources>
