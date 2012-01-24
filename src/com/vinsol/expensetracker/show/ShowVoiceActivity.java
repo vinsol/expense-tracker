@@ -76,8 +76,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 	}
 
 	@Override
-	protected void deleteAction() {
-		super.deleteAction();
+	protected void deleteFile() {
 		// /// ******* If Audio PlayBack is there stop playing audio*******//////
 		try {
 			if (mAudioPlay.isAudioPlaying()) {

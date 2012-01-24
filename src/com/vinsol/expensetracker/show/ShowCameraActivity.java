@@ -71,8 +71,7 @@ public class ShowCameraActivity extends ShowAbstract {
 	}
 
 	@Override
-	protected void deleteAction() {
-		super.deleteAction();
+	protected void deleteFile() {
 		fileHelper.deleteAllEntryFiles(mShowList.id);
 	}
 	

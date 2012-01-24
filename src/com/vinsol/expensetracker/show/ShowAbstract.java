@@ -10,7 +10,9 @@ import java.io.File;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,7 +25,9 @@ import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
+import com.vinsol.expensetracker.helpers.DeleteDialog;
 import com.vinsol.expensetracker.helpers.FileHelper;
+import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.ExpenseSubListing;
 import com.vinsol.expensetracker.models.Entry;
@@ -162,20 +166,10 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		
 			case R.id.show_delete:
-				FlurryAgent.onEvent(getString(R.string.delete_button));
-				if (mShowList.id != null) {
-					deleteAction();
-					mDatabaseAdapter.open();
-					mDatabaseAdapter.deleteEntryTableEntryID(mShowList.id);
-					mDatabaseAdapter.close();
-					Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
-					if(intentExtras.containsKey("position")) {
-						intentExtras.putBoolean("isChanged", true);
-						setResultModifiedToListing();
-					}
-					finish();
+				if(new SharedPreferencesHelper(this).getSharedPreferences().getBoolean(getString(R.string.pref_key_delete_dialog), false)) {
+					showDeleteDialog();
 				} else {
-					Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+					delete();
 				}
 				break;
 	
@@ -207,6 +201,38 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		}
 	}
 
+	private void delete() {
+		FlurryAgent.onEvent(getString(R.string.delete_button));
+		if (mShowList.id != null) {
+			deleteFile();
+			mDatabaseAdapter.open();
+			mDatabaseAdapter.deleteEntryTableEntryID(mShowList.id);
+			mDatabaseAdapter.close();
+			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+			if(intentExtras.containsKey("position")) {
+				intentExtras.putBoolean("isChanged", true);
+				setResultModifiedToListing();
+			}
+			finish();
+		} else {
+			Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	private void showDeleteDialog() {
+		final DeleteDialog mDeleteDialog = new DeleteDialog(this);
+		mDeleteDialog.show();
+		mDeleteDialog.setOnDismissListener(new OnDismissListener() {
+			
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				if(mDeleteDialog.isDelete()) {
+					delete();
+				}
+			}
+		});
+	}
+
 	private void setResultModifiedToListing() {
 		if(!istempfavIdequalsfavId()) {
 			intentExtras.putBoolean("isChanged", true);
@@ -231,8 +257,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		}
 		return false;
 	}
-
-	protected void deleteAction() {}
 	
 	public void FavoriteHelper() {
 		showAddFavorite.setVisibility(View.VISIBLE);
@@ -344,5 +368,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	}
 	
 	protected abstract void editAction();
+
+	protected void deleteFile() {}
 
 }
