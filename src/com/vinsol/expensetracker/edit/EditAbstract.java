@@ -8,6 +8,8 @@ package com.vinsol.expensetracker.edit;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -325,8 +327,17 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	}
 	
 	private void showDeleteDialog() {
-		DeleteDialog mDeleteDialog = new DeleteDialog(this);
+		final DeleteDialog mDeleteDialog = new DeleteDialog(this);
 		mDeleteDialog.show();
+		mDeleteDialog.setOnDismissListener(new OnDismissListener() {
+			
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				if(mDeleteDialog.isDelete()) {
+					delete();
+				}
+			}
+		});
 	}
 
 	private void delete() {
