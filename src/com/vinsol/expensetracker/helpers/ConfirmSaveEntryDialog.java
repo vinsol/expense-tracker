@@ -14,23 +14,25 @@ import com.vinsol.expensetracker.R;
 public class ConfirmSaveEntryDialog extends Dialog implements android.view.View.OnClickListener {
 
 	
-	public ConfirmSaveEntryDialog(Context context,int stringResId) {
+	public ConfirmSaveEntryDialog(Context context) {
 		super(context);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		TextView dialogMessage = (TextView) findViewById(R.id.dialog_message);
-		dialogMessage.setText(stringResId);
+		setContentView(R.layout.delete_dialog);
 	}
 	
+	public void setMessage(String message) {
+		TextView dialogMessage = (TextView) findViewById(R.id.dialog_message);
+		dialogMessage.setText(message);
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.delete_dialog);
 		Button saveEntryButton = (Button) findViewById(R.id.delete_dialog_yes);
 		Button discardButton = (Button) findViewById(R.id.delete_dialog_no);
 		((CheckBox) findViewById(R.id.disable_delete_dialog_checkbox)).setVisibility(View.GONE);
 		saveEntryButton.setText(getContext().getString(R.string.save_entry));
-		discardButton.setText(R.string.discard);
+		discardButton.setText(getContext().getString(R.string.discard));
 		saveEntryButton.setOnClickListener(this);
 		discardButton.setOnClickListener(this);
 	}

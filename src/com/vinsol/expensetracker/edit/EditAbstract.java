@@ -21,11 +21,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.ConfirmSaveEntryDialog;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.DeleteDialog;
@@ -367,17 +369,18 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	@Override
 	public void onBackPressed() {
 		FlurryAgent.onEvent(getString(R.string.back_pressed));
+		ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
 		if(intentExtras.containsKey("isFromShowPage") || intentExtras.containsKey(Constants.POSITION)) {
 			//TODO if coming from show page or listing
 		} else {
-			if(editAmount.getText().equals("") && editTag.getText().equals("") && (typeOfEntry == R.string.text || typeOfEntryFinished == R.string.finished_textentry) || typeOfEntryUnfinished == R.string.unfinished_textentry) {
+			if((editAmount.getText().toString().equals("") && editTag.getText().toString().equals("")) && (typeOfEntry == R.string.text || typeOfEntryFinished == R.string.finished_textentry || typeOfEntryUnfinished == R.string.unfinished_textentry)) {
 				delete();
 				super.onBackPressed();
 			} else {
-				
+				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
+				mConfirmSaveEntryDialog.show();
 			}
 		}
-		super.onBackPressed();
 	}
 	
 	protected void startIntentAfterDelete(Bundle tempBundle) {}
