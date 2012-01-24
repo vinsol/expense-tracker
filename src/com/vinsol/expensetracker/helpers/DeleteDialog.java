@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -18,6 +19,7 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 	
 	public DeleteDialog(Context context) { 
 		super(context);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	}
 
 	@Override
