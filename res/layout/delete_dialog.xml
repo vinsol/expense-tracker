@@ -4,11 +4,12 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	>
-    <RelativeLayout
+    <LinearLayout
     	android:layout_width="fill_parent"
     	android:layout_marginLeft="10dp"
     	android:layout_marginRight="10dp"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         >
         
         <TextView 
@@ -17,5 +18,35 @@
             android:text="@string/delete_dialog_text"
             />
         
-	</RelativeLayout>
+        <CheckBox 
+            android:id="@+id/disable_delete_dialog"
+            android:checked="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/delete_dialog_summary_enable"/>
+        
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:orientation="horizontal"
+            >
+            <Button 
+                android:id="@+id/delete_dialog_yes"
+                android:layout_weight="1"
+                android:text="@string/yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                />
+            
+            <Button 
+                android:id="@+id/delete_dialog_no"
+                android:layout_weight="1"
+                android:text="@string/no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                />
+        </LinearLayout>
+	</LinearLayout>
 </ScrollView>

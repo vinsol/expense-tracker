@@ -72,5 +72,7 @@
     
     <!-- Dialog Text -->
     <string name="delete_dialog_text">Are you sure you want to delete ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     
 </resources>
