@@ -370,6 +370,12 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		FlurryAgent.onEvent(getString(R.string.back_pressed));
 		final ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
 		if(intentExtras.containsKey("isFromShowPage") || intentExtras.containsKey(Constants.POSITION)) {
+			if(intentExtras.containsKey("isChanged")) {
+				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
+				doConfirmDialogAction(mConfirmSaveEntryDialog);
+			} else {
+				super.onBackPressed();
+			}
 			//TODO if coming from show page or listing
 		} else {
 			if((editAmount.getText().toString().equals("") && editTag.getText().toString().equals("")) && (typeOfEntry == R.string.text || typeOfEntryFinished == R.string.finished_textentry || typeOfEntryUnfinished == R.string.unfinished_textentry)) {
@@ -377,20 +383,24 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 				super.onBackPressed();
 			} else {
 				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
-				mConfirmSaveEntryDialog.show();
-				mConfirmSaveEntryDialog.setOnDismissListener(new OnDismissListener() {
-					
-					@Override
-					public void onDismiss(DialogInterface dialog) {
-						if(mConfirmSaveEntryDialog.isToSave()) {
-							saveEntry();
-						} else {
-							finish();
-						}
-					}
-				});
+				doConfirmDialogAction(mConfirmSaveEntryDialog);
 			}
 		}
+	}
+	
+	private void doConfirmDialogAction(final ConfirmSaveEntryDialog mConfirmSaveEntryDialog) {
+		mConfirmSaveEntryDialog.show();
+		mConfirmSaveEntryDialog.setOnDismissListener(new OnDismissListener() {
+			
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				if(mConfirmSaveEntryDialog.isToSave()) {
+					saveEntry();
+				} else {
+					finish();
+				}	
+			}
+		});
 	}
 	
 	protected void startIntentAfterDelete(Bundle tempBundle) {}
