@@ -37,7 +37,6 @@ import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
-import com.vinsol.expensetracker.utils.Log;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
 	
@@ -259,7 +258,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			mToHighLight.putString(Constants.HIGHLIGHT, toSave.id);
 			intentExpenseListing.putExtras(mToHighLight);
 			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			Log.d(intentExtras.containsKey(Constants.POSITION));
 			if(!intentExtras.containsKey(Constants.POSITION)) {
 				startActivity(intentExpenseListing);
 			} else {
@@ -297,12 +295,24 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(mEditList.timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if (!editTag.getText().equals(mEditList.description) || Double.parseDouble(editAmount.getText().toString()) != Double.parseDouble(mEditList.amount) || !dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate())) {
+		if (!isTagModified() || Double.parseDouble(editAmount.getText().toString()) != Double.parseDouble(mEditList.amount) || !dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate())) {
 			return true;
 		}
 		return false;
 	}
 	
+	private boolean isTagModified() {
+		if(editTag.getText().equals("")) {
+			if(mEditList.description.equals(getString(typeOfEntryFinished)) || mEditList.description.equals(getString(typeOfEntryUnfinished))) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return !editTag.getText().equals(mEditList.description);
+		}
+	}
+
 	@Override
 	public void onClick(View v) {
 
@@ -370,13 +380,13 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		FlurryAgent.onEvent(getString(R.string.back_pressed));
 		final ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
 		if(intentExtras.containsKey("isFromShowPage") || intentExtras.containsKey(Constants.POSITION)) {
+			//if coming from show page or listing
 			if(intentExtras.containsKey("isChanged")) {
 				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
 				doConfirmDialogAction(mConfirmSaveEntryDialog);
 			} else {
 				super.onBackPressed();
 			}
-			//TODO if coming from show page or listing
 		} else {
 			if((editAmount.getText().toString().equals("") && editTag.getText().toString().equals("")) && (typeOfEntry == R.string.text || typeOfEntryFinished == R.string.finished_textentry || typeOfEntryUnfinished == R.string.unfinished_textentry)) {
 				delete();
