@@ -38,6 +38,7 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.ExpenseSubListing;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.utils.Log;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
 	
@@ -305,7 +306,9 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(mEditList.timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if (!isTagModified() || !isAmountModified() || !dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate())) {
+		Log.d(" text "+dateBarDateview.getText()+" \t "+new DisplayDate(mCalendar).getDisplayDate());
+		Log.d(isAmountModified() +" \t "+isTagModified() +" \t "+dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate()));
+		if (isTagModified() || isAmountModified() || !dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate())) {
 			return true;
 		}
 		return false;
@@ -332,13 +335,20 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	
 	private boolean isTagModified() {
 		if(editTag.getText().equals("")) {
-			if(mEditList.description.equals(getString(typeOfEntryFinished)) || mEditList.description.equals(getString(typeOfEntryUnfinished))) {
+			if(mEditList.description.equals(getString(typeOfEntryFinished)) || mEditList.description.equals(getString(typeOfEntryUnfinished)) || mEditList.description.equals("")) {
 				return false;
 			} else {
 				return true;
 			}
 		} else {
-			return !editTag.getText().equals(mEditList.description);
+			if(mEditList.description.equals(getString(typeOfEntryFinished)) || mEditList.description.equals(getString(typeOfEntryUnfinished)) || mEditList.description.equals("")) {
+				return false;
+			} else {
+				if(!editTag.getText().equals(mEditList.description))
+					return true;
+				else 
+					return false;
+			}
 		}
 	}
 
