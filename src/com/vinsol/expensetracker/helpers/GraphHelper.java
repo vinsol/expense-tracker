@@ -425,7 +425,6 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
     	Animation mAnimationHeader = new TranslateAnimation(graphHeaderTextview.getScrollX(), x, graphHeaderTextview.getScrollY(), graphHeaderTextview.getScrollY());
     	mAnimationHeader.setDuration(200);
     	mAnimationHeader.setFillAfter(false);
-    	
     	mainGraph.startAnimation(mAnimation);
     	graphHeaderTextview.startAnimation(mAnimationHeader);
 	}
