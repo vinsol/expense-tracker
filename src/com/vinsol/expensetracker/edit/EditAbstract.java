@@ -8,6 +8,7 @@ package com.vinsol.expensetracker.edit;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnKeyListener;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,7 +40,6 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.ExpenseSubListing;
 import com.vinsol.expensetracker.models.Entry;
-import com.vinsol.expensetracker.utils.Log;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
 	
@@ -111,9 +112,13 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		@Override
 		public void onFocusChange(View v, boolean hasFocus) {
 			if(!hasFocus)
-				getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+				setSoftPanToInputMode();
 		}
 	};
+	
+	private void setSoftPanToInputMode() {
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+	}
 
 	protected void editHelper() {
 
@@ -148,7 +153,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		}
 		
 		////////******** Handle Date Bar ********* ////////
-		if (intentExtras.containsKey("mDisplayList")) {
+		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 			new DateHandler(this, mEditList.timeInMillis);
 		} else if (intentExtras.containsKey("timeInMillis")) {
 			new DateHandler(this, intentExtras.getLong("timeInMillis"));
@@ -175,7 +180,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		list.description = entry.description;
 		if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 			try {
-				if (!intentExtras.containsKey("mDisplayList")) {
+				if (!intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 					DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 					list.timeInMillis = mDateHelper.getTimeMillis();
 				} else {
@@ -306,8 +311,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(mEditList.timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		Log.d(" text "+dateBarDateview.getText()+" \t "+new DisplayDate(mCalendar).getDisplayDate());
-		Log.d(isAmountModified() +" \t "+isTagModified() +" \t "+dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate()));
 		if (isTagModified() || isAmountModified() || !dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate())) {
 			return true;
 		}
@@ -354,22 +357,23 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-
+		setSoftPanToInputMode();
 		////////******** Adding Action to save entry ********* ///////////
-
-		if (v.getId() == R.id.edit_save_entry) {
+		switch (v.getId()) {
+		case R.id.edit_save_entry:
 			FlurryAgent.onEvent(getString(R.string.save_button));
 			saveEntry();
-		}
+			break;
 		
-		///////// ********* Adding action if delete button ********** /////////
-
-		if (v.getId() == R.id.edit_delete) {
+		case R.id.edit_delete:
 			if(new SharedPreferencesHelper(this).getSharedPreferences().getBoolean(getString(R.string.pref_key_delete_dialog), false)) {
 				showDeleteDialog();
 			} else {
 				delete();
 			}
+			break;
+		default:
+			break;
 		}
 	}
 	
@@ -460,10 +464,15 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	
 	@Override
 	protected void onPause() {
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+		setIMM();
 		super.onPause();
 	}
 	
+	private void setIMM() {
+		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputMethodManager.hideSoftInputFromWindow(editAmount.getWindowToken(), InputMethodManager.RESULT_HIDDEN);
+	}
+
 	protected void startIntentAfterDelete(Bundle tempBundle) {}
 	protected void deleteFile(){}
 	abstract protected void saveEntryStartIntent(Bundle tempBundle);
