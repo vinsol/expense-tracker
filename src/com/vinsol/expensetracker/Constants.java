@@ -20,6 +20,10 @@ public class Constants {
 	public static String HIGHLIGHT = "toHighLight";
 	public static String ENTRY_LIST_EXTRA = "mDisplayList";
 	public static String POSITION = "position";
+	public static String IS_COMING_FROM_SHOW_PAGE = "isFromShowPage";
+	public static String DATA_CHANGED = "isChanged";
+	public static String IS_COMING_FROM_EXPENSE_LISTING = "isFromExpenseListing";
+	public static String IS_COMING_FROM_EXPENSE_SUB_LISTING = "isFromExpenseSubListing";
 	
 	//ExpenseTracker Market UI
 	public static final String EXPENSE_TRACKER_MARKET_URI = "market://details?id=com.vinsol.expensetracker";

@@ -252,7 +252,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editEntryTable(toSave);
 		mDatabaseAdapter.close();
-		if(!intentExtras.containsKey("isFromShowPage")) {
+		if(!intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE)) {
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			Bundle mToHighLight = new Bundle();
 			mToHighLight.putString(Constants.HIGHLIGHT, toSave.id);
@@ -272,7 +272,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			if(intentExtras.containsKey(Constants.POSITION)) {
 				if(checkDataModified()) {
 					tempBundle.putInt(Constants.POSITION , intentExtras.getInt(Constants.POSITION));
-					tempBundle.putBoolean("isChanged", true);
+					tempBundle.putBoolean(Constants.DATA_CHANGED, true);
 				}
 			}
 			saveEntryStartIntent(tempBundle);
@@ -284,7 +284,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 		isChanged = checkDataModified();
 		if(isChanged) {
-			bundle.putBoolean("isChanged", isChanged);
+			bundle.putBoolean(Constants.DATA_CHANGED, isChanged);
 			intentExtras.putAll(bundle);
 		}
 		intentExpenseListing.putExtras(intentExtras);
@@ -295,10 +295,29 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(mEditList.timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if (!isTagModified() || Double.parseDouble(editAmount.getText().toString()) != Double.parseDouble(mEditList.amount) || !dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate())) {
+		if (!isTagModified() || !isAmountModified() || !dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate())) {
 			return true;
 		}
 		return false;
+	}
+	
+	private boolean isAmountModified() {
+		if(editAmount.getText().equals("")) {
+			if(mEditList.amount.equals("?") || mEditList.amount.equals("")) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			if(mEditList.amount.equals("?") || mEditList.amount.equals("")) {
+				return false;
+			} else {
+				if(Double.parseDouble(editAmount.getText().toString()) != Double.parseDouble(mEditList.amount))
+					return true;
+				else 
+					return false;
+			}
+		}
 	}
 	
 	private boolean isTagModified() {
@@ -367,7 +386,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			tempBundle = new Bundle();
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			if(isChanged) {
-				tempBundle.putBoolean("isChanged", isChanged);
+				tempBundle.putBoolean(Constants.DATA_CHANGED, isChanged);
 			}
 			intentExpenseListing.putExtras(tempBundle);
 			setResult(Activity.RESULT_CANCELED, intentExpenseListing);
@@ -378,19 +397,18 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	@Override
 	public void onBackPressed() {
 		FlurryAgent.onEvent(getString(R.string.back_pressed));
-		final ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
-		if(intentExtras.containsKey("isFromShowPage") || intentExtras.containsKey(Constants.POSITION)) {
+		ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
+		if(intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE) || intentExtras.containsKey(Constants.POSITION)) {
 			//if coming from show page or listing
-			if(intentExtras.containsKey("isChanged")) {
+			if(checkDataModified()) {
 				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
 				doConfirmDialogAction(mConfirmSaveEntryDialog);
 			} else {
-				super.onBackPressed();
+				finishAndSetResult();
 			}
 		} else {
 			if((editAmount.getText().toString().equals("") && editTag.getText().toString().equals("")) && (typeOfEntry == R.string.text || typeOfEntryFinished == R.string.finished_textentry || typeOfEntryUnfinished == R.string.unfinished_textentry)) {
 				delete();
-				super.onBackPressed();
 			} else {
 				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
 				doConfirmDialogAction(mConfirmSaveEntryDialog);
@@ -407,10 +425,17 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 				if(mConfirmSaveEntryDialog.isToSave()) {
 					saveEntry();
 				} else {
-					finish();
+					finishAndSetResult();
 				}	
 			}
 		});
+	}
+	
+	private void finishAndSetResult() {
+		Bundle bundle = new Bundle();
+		bundle.putInt(Constants.POSITION , intentExtras.getInt(Constants.POSITION));
+		setActivityResult(bundle);
+		finish();
 	}
 	
 	protected void startIntentAfterDelete(Bundle tempBundle) {}
