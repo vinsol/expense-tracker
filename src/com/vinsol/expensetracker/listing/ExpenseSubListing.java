@@ -124,4 +124,10 @@ public class ExpenseSubListing extends ListingAbstract {
 		}
 	}
 	
+	@Override
+	protected void setTab() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

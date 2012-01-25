@@ -16,7 +16,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TabHost;
 import android.widget.Toast;
+import android.widget.TabHost.TabSpec;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -216,4 +218,33 @@ public class ExpenseListing extends ListingAbstract {
 			noItemButtonAction(noItemButton);
 		}
 	}
+	
+	@Override
+	protected void setTab() {
+        TabHost tabHost=(TabHost) findViewById(R.id.main_tabhost);
+        tabHost.setup();
+
+        TabSpec spec1 = tabHost.newTabSpec("Daily");
+        spec1.setIndicator("Daily");
+        spec1.setContent(R.id.tab_daily);
+
+        TabSpec spec2 = tabHost.newTabSpec("Weekly");
+        spec2.setIndicator("Weekly");
+        spec2.setContent(R.id.tab_weekly);
+
+        TabSpec spec3 = tabHost.newTabSpec("Monthly");
+        spec3.setIndicator("Monthly");
+        spec3.setContent(R.id.tab_monthly);
+        
+        TabSpec spec4 = tabHost.newTabSpec("Yearly");
+        spec4.setIndicator("Yearly");
+        spec4.setContent(R.id.tab_yearly);
+        
+        tabHost.addTab(spec1);
+        tabHost.addTab(spec2);
+        tabHost.addTab(spec3);
+        tabHost.addTab(spec4);
+	}
+	
+	
 }

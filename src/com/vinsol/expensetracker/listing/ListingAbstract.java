@@ -323,6 +323,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	protected void onClickElse(Entry entry,int position) {}
 	protected abstract void noItemButtonAction(Button noItemButton);
 	protected abstract void noItemLayout();
-	protected abstract setTab();
+	protected abstract void setTab();
 	
 }
