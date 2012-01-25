@@ -22,6 +22,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -34,7 +36,6 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.GraphDataList;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
-import com.vinsol.expensetracker.utils.Log;
 
 public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickListener {
 
@@ -396,9 +397,8 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	}
 	
 	private boolean leftSwipeAction() {
-		Log.d("Left Swipe");
 		if(j == 0) {
-			overScrollingEffect();
+			overScrollingEffect(-30);
 			return true;
 		}
 		j--;
@@ -408,9 +408,8 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	}
 	
 	private boolean rightSwipeAction() {
-		Log.d("Right Swipe");
 		if(j == mGraphList.size()-1) {
-			overScrollingEffect();
+			overScrollingEffect(30);
 			return true;
 		}
 		j++;
@@ -419,8 +418,16 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 		return true;
 	}
 
-	private void overScrollingEffect() {
-		// TODO Auto-generated method stub
+	private void overScrollingEffect(int x) {
+		Animation mAnimation = new TranslateAnimation(mainGraph.getScrollX(), x, mainGraph.getScrollY(), mainGraph.getScrollY());
+    	mAnimation.setDuration(200);
+    	mAnimation.setFillAfter(false);
+    	Animation mAnimationHeader = new TranslateAnimation(graphHeaderTextview.getScrollX(), x, graphHeaderTextview.getScrollY(), graphHeaderTextview.getScrollY());
+    	mAnimationHeader.setDuration(200);
+    	mAnimationHeader.setFillAfter(false);
+    	
+    	mainGraph.startAnimation(mAnimation);
+    	graphHeaderTextview.startAnimation(mAnimationHeader);
 	}
 	
 }
