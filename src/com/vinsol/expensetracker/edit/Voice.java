@@ -50,8 +50,6 @@ public class Voice extends EditAbstract {
 		editStopButton = (Button) findViewById(R.id.edit_stop_button);
 		editPlayButton = (Button) findViewById(R.id.edit_play_button);
 		editRerecordButton = (Button) findViewById(R.id.edit_rerecord_button);
-		////////********* Get id from intent extras ******** ////////////
-		intentExtras = getIntent().getExtras();
 		typeOfEntry = R.string.voice;
 		typeOfEntryFinished = R.string.finished_voiceentry;
 		typeOfEntryUnfinished = R.string.unfinished_voiceentry;

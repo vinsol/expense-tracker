@@ -33,6 +33,7 @@ public class ExpenseListing extends ListingAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		intentExtras.putBoolean(Constants.IS_COMING_FROM_EXPENSE_LISTING, true);
 		bundle = new Bundle();
 		setContentView(R.layout.expense_listing);
 		initListView();

@@ -37,7 +37,6 @@ public class ShowCameraActivity extends ShowAbstract {
 		// //////********* Get id from intent extras ******** ////////////
 
 		setGraphicsCamera();
-		intentExtras = getIntent().getExtras();
 		typeOfEntry = R.string.camera;
 		typeOfEntryFinished = R.string.finished_cameraentry;
 		typeOfEntryUnfinished = R.string.unfinished_cameraentry;

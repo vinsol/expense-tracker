@@ -40,7 +40,6 @@ public class ShowVoiceActivity extends ShowAbstract {
 		showPlayButton = (Button) findViewById(R.id.show_play_button);
 		showStopButton = (Button) findViewById(R.id.show_stop_button);
 		showTimeDetailsChronometer = (Chronometer) findViewById(R.id.show_time_details_chronometer);
-		intentExtras = getIntent().getExtras();
 		typeOfEntry = R.string.voice;
 		typeOfEntryFinished = R.string.finished_voiceentry;
 		typeOfEntryUnfinished = R.string.unfinished_voiceentry;

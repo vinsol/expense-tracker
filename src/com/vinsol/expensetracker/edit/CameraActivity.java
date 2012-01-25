@@ -43,9 +43,6 @@ public class CameraActivity extends EditAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		// //////********* Get id from intent extras ******** ////////////
-		intentExtras = getIntent().getExtras();
 		fileHelper = new FileHelper();
 		// ////// ******** Initializing and assigning memory to UI Items ********** /////////
 		editCameraDetails = (LinearLayout) findViewById(R.id.edit_camera_details);

@@ -18,8 +18,6 @@ public class TextEntry extends EditAbstract {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		////////********* Get id from intent extras ******** ////////////
-
-		intentExtras = getIntent().getExtras();
 		typeOfEntry = R.string.text;
 		typeOfEntryFinished = R.string.finished_textentry;
 		typeOfEntryUnfinished = R.string.unfinished_textentry;

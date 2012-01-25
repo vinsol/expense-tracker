@@ -31,6 +31,7 @@ public class ExpenseSubListing extends ListingAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		intentExtras.putBoolean(Constants.IS_COMING_FROM_EXPENSE_LISTING, true);
 		initListView();
 	}
 	

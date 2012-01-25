@@ -88,6 +88,8 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		editAmount.setSelection(editAmount.getText().length());
 		editAmount.setOnKeyListener(focusTagOnEnter);
 		editAmount.setOnFocusChangeListener(focusChangeListener);
+		////////********* Get intent extras ******** ////////////
+		intentExtras = getIntent().getExtras();
 	}
 	
 	private OnKeyListener focusTagOnEnter = new OnKeyListener() {
@@ -376,7 +378,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mDatabaseAdapter.deleteEntryTableEntryID(entry.id);
 		mDatabaseAdapter.close();
 		Bundle tempBundle = new Bundle();
-		if(intentExtras.containsKey("isFromShowPage")) {
+		if(intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE)) {
 			Entry displayList = new Entry();
 			tempBundle.putParcelable(Constants.ENTRY_LIST_EXTRA, displayList);
 			mEditList = displayList;
@@ -436,6 +438,12 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		bundle.putInt(Constants.POSITION , intentExtras.getInt(Constants.POSITION));
 		setActivityResult(bundle);
 		finish();
+	}
+	
+	@Override
+	protected void onPause() {
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+		super.onPause();
 	}
 	
 	protected void startIntentAfterDelete(Bundle tempBundle) {}

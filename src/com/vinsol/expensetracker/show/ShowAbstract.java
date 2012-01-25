@@ -11,8 +11,8 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +22,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
@@ -78,13 +79,14 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		showTag = (TextView) findViewById(R.id.show_tag_textview);
 		showEdit.setOnClickListener(this);
 		showDelete.setOnClickListener(this);
+		intentExtras = getIntent().getExtras();
 	}
 	
 	public void showHelper() {
 		// ///// ****** Assigning memory ******* /////////
 		
-		if (intentExtras.containsKey("mDisplayList")) {
-			mShowList = intentExtras.getParcelable("mDisplayList");
+		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+			mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
 
 			if (!(mShowList.amount.equals("") || mShowList.amount == null)) {
 				if (!mShowList.amount.contains("?"))

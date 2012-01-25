@@ -146,7 +146,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 			Bundle bundle = new Bundle();
 			bundle.putParcelable(Constants.ENTRY_LIST_EXTRA, mTempClickedList);
 			bundle.putInt(Constants.POSITION, position);
-			
+			setBundleListingExtra(bundle);
 			CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 			if (mTempClickedList.type.equals(getString(R.string.unknown))) {
 				unknownDialog = new UnknownEntryDialog(this,mTempClickedList,new OnClickListener() {
@@ -201,6 +201,17 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		}
 	}
 	
+	private void setBundleListingExtra(Bundle bundle) {
+		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING)) {
+			bundle.putBoolean(Constants.IS_COMING_FROM_EXPENSE_LISTING, true);
+			return;
+		}
+		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_SUB_LISTING)) {
+			bundle.putBoolean(Constants.IS_COMING_FROM_EXPENSE_SUB_LISTING, true);
+			return;
+		}
+	}
+
 	protected void doOperationsOnListview() {
 		mListView = (ListView) findViewById(R.id.expense_listing_listview);
 		mListView.setOnItemClickListener(this);
@@ -267,6 +278,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(Constants.ENTRY_LIST_EXTRA, mTempClickedList);
 		bundle.putInt(Constants.POSITION, position);
+		setBundleListingExtra(bundle);
 		if (mTempClickedList.type.equals(getString(R.string.text))) {
 			intent = new Intent(this, TextEntry.class);
 		} else {
