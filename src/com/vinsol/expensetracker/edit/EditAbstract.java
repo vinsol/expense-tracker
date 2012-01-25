@@ -36,6 +36,7 @@ import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
+import com.vinsol.expensetracker.listing.ExpenseSubListing;
 import com.vinsol.expensetracker.models.Entry;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
@@ -283,14 +284,21 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	}
 	
 	private void setActivityResult(Bundle bundle) {
-		Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-		isChanged = checkDataModified();
-		if(isChanged) {
-			bundle.putBoolean(Constants.DATA_CHANGED, isChanged);
-			intentExtras.putAll(bundle);
+		Intent intent = null;
+		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING)) {
+			intent = new Intent(this, ExpenseListing.class);
+		} else if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_SUB_LISTING)) { 
+			intent = new Intent(this, ExpenseSubListing.class);
 		}
-		intentExpenseListing.putExtras(intentExtras);
-		setResult(Activity.RESULT_OK, intentExpenseListing);
+		if(intent != null) {
+			isChanged = checkDataModified();
+			if(isChanged) {
+				bundle.putBoolean(Constants.DATA_CHANGED, isChanged);
+				intentExtras.putAll(bundle);
+			}
+			intent.putExtras(intentExtras);
+			setResult(Activity.RESULT_OK, intent);
+		}
 	}
 
 	protected Boolean checkDataModified() {
