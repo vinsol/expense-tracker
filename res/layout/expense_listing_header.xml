@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/expense_listing_header"
     android:layout_width="fill_parent"
@@ -17,4 +17,4 @@
 		android:textColor="@color/white" 
 		/>
         
-</RelativeLayout>
+</LinearLayout>
