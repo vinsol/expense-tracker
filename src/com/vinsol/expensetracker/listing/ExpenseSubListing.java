@@ -83,7 +83,7 @@ public class ExpenseSubListing extends ListingAbstract {
 				listString.add(mList);
 				@SuppressWarnings("rawtypes")
 				List tt = (List) listString.get(i);
-				mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing, tt), mDataDateList);
+				mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing_no_tab, tt), mDataDateList);
 			}
 			doOperationsOnListview();
 		} else {
@@ -125,9 +125,8 @@ public class ExpenseSubListing extends ListingAbstract {
 	}
 	
 	@Override
-	protected void setTab() {
-		// TODO Auto-generated method stub
-		
+	protected void setContentView() {
+		setContentView(R.layout.expense_listing_no_tab);
 	}
 	
 }

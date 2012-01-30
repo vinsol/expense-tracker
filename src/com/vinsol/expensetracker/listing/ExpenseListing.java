@@ -17,8 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
-import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
+import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -26,7 +26,6 @@ import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
-import com.vinsol.expensetracker.utils.Log;
 
 public class ExpenseListing extends ListingAbstract {
 
@@ -35,9 +34,9 @@ public class ExpenseListing extends ListingAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTab();
 		intentExtras.putBoolean(Constants.IS_COMING_FROM_EXPENSE_LISTING, true);
 		bundle = new Bundle();
-		setContentView(R.layout.expense_listing);
 		initListView();
 	}
 	
@@ -165,7 +164,7 @@ public class ExpenseListing extends ListingAbstract {
 			listString.add(mList);
 			@SuppressWarnings("rawtypes")
 			List tt = (List) listString.get(i);
-			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing, tt), mDataDateList);
+			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing_tab, tt), mDataDateList);
 		}
 		doOperationsOnListview();
 	}
@@ -193,7 +192,6 @@ public class ExpenseListing extends ListingAbstract {
 		extras.putInt(Constants.POSITION, position);
 		mSubListIntent.putExtras(extras);
 		mSubListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		Log.d("Starting SubList");
 		startActivityForResult(mSubListIntent,RESULT);
 	}
 	
@@ -219,14 +217,13 @@ public class ExpenseListing extends ListingAbstract {
 		}
 	}
 	
-	@Override
-	protected void setTab() {
-        TabHost tabHost=(TabHost) findViewById(R.id.main_tabhost);
+	private void setTab() {
+        TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
         tabHost.setup();
-
-        TabSpec spec1 = tabHost.newTabSpec("Daily");
-        spec1.setIndicator("Daily");
-        spec1.setContent(R.id.tab_daily);
+        
+        TabSpec spec1 = tabHost.newTabSpec("Today");
+        spec1.setIndicator("Today");
+        spec1.setContent(R.id.tab_today);
 
         TabSpec spec2 = tabHost.newTabSpec("Weekly");
         spec2.setIndicator("Weekly");
@@ -244,7 +241,11 @@ public class ExpenseListing extends ListingAbstract {
         tabHost.addTab(spec2);
         tabHost.addTab(spec3);
         tabHost.addTab(spec4);
+        
 	}
 	
-	
+	@Override
+	protected void setContentView() {
+		setContentView(R.layout.expense_listing_tab);
+	}
 }

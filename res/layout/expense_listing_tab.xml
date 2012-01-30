@@ -1,37 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" 
-    android:background="@color/white" >
+    android:layout_height="fill_parent">
        
     <!-- Header -->
-    <RelativeLayout
-        android:id="@+id/expense_listing_header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/topbar_bg" 
-        android:gravity="center" >
-        
-        <TextView
-            android:id="@+id/expense_listing_header_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/expense_list_header"
-            android:textSize="20dip"
-            android:textStyle="bold"
-            android:textColor="@color/white" 
-            />
-        
-    </RelativeLayout>    
+    <include 
+        layout="@layout/expense_listing_header"/>  
     
     <!-- Tab Layout For Listing -->
-    
     <TabHost 
         android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
-    	android:layout_above="@+id/main_make_route_button"
-    	android:id="@+id/main_tabhost"
+    	android:layout_below="@id/expense_listing_header"
+    	android:id="@android:id/tabhost"
     	>
+        
     	<TabWidget
   	    	android:layout_width="fill_parent"
     		android:layout_height="wrap_content"
@@ -46,14 +29,14 @@
      			<LinearLayout
      				android:layout_width="fill_parent"
     				android:layout_height="fill_parent"
-    				android:id="@+id/tab_daily"
+    				android:id="@+id/tab_today"
     				android:orientation="vertical"
     				android:paddingTop="60dp"
     				>
     				
-    				<!-- ListView -->
-    				<include 
-    				    layout="@layout/listview_tab_layout"/>
+     			    <!-- ListView -->
+     			    <include 
+     			        layout="@layout/expense_listing_listview_common"/>
 					     			    
      			</LinearLayout>
 
@@ -65,8 +48,8 @@
     				android:paddingTop="60dp"
      				>
 					<!-- ListView -->
-    				<include 
-    				    layout="@layout/listview_tab_layout"/>
+     			    <include 
+     			        layout="@layout/expense_listing_listview_common"/>
     			</LinearLayout>
     			
       			<LinearLayout
@@ -76,9 +59,9 @@
     				android:orientation="vertical"
     				android:paddingTop="60dp"
      				>
-					<!-- ListView -->
-    				<include 
-    				    layout="@layout/listview_tab_layout"/>
+    				<!-- ListView -->
+     			    <include 
+     			        layout="@layout/expense_listing_listview_common"/>
     			</LinearLayout>
     			
       			<LinearLayout
@@ -90,7 +73,7 @@
      				>
 					<!-- ListView -->
     				<include 
-    				    layout="@layout/listview_tab_layout"/>
+     			        layout="@layout/expense_listing_listview_common"/>
     			</LinearLayout>
      		</FrameLayout>
     </TabHost>

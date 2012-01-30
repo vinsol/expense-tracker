@@ -70,7 +70,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.expense_listing);
+		setContentView();
 		intentExtras = new Bundle();
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		mStringProcessing = new StringProcessing();
@@ -323,6 +323,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	protected void onClickElse(Entry entry,int position) {}
 	protected abstract void noItemButtonAction(Button noItemButton);
 	protected abstract void noItemLayout();
-	protected abstract void setTab();
+	protected abstract void setContentView();
 	
 }
