@@ -14,97 +14,24 @@
     	android:layout_below="@id/expense_listing_header"
     	android:id="@android:id/tabhost"
     	>
-        
-    	<TabWidget
-  	    	android:layout_width="fill_parent"
-    		android:layout_height="wrap_content"
-        	android:id="@android:id/tabs"
-    		/>
-     		<FrameLayout
-    			android:layout_width="fill_parent"
-    			android:layout_height="fill_parent"
-    			android:id="@android:id/tabcontent"
-    			>
+    	
+    	<LinearLayout
+	        android:orientation="vertical"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        >
+	    	<TabWidget
+	            android:id="@android:id/tabs"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content" 
+	            />
+	        <FrameLayout
+	            android:id="@android:id/tabcontent"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            />
+   		</LinearLayout>
 
-     			<LinearLayout
-     				android:layout_width="fill_parent"
-    				android:layout_height="fill_parent"
-    				android:id="@+id/tab_today"
-    				android:orientation="vertical"
-    				android:paddingTop="60dp"
-    				>
-    				
-     			    <!-- ListView -->
-     			    <include 
-     			        layout="@layout/expense_listing_listview_common"/>
-					     			    
-     			</LinearLayout>
-
-      			<LinearLayout
-     				android:layout_width="fill_parent"
-    				android:layout_height="fill_parent"
-    				android:id="@+id/tab_weekly"
-    				android:orientation="vertical"
-    				android:paddingTop="60dp"
-     				>
-					<!-- ListView -->
-     			    <include 
-     			        layout="@layout/expense_listing_listview_common"/>
-    			</LinearLayout>
-    			
-      			<LinearLayout
-     				android:layout_width="fill_parent"
-    				android:layout_height="fill_parent"
-    				android:id="@+id/tab_monthly"
-    				android:orientation="vertical"
-    				android:paddingTop="60dp"
-     				>
-    				<!-- ListView -->
-     			    <include 
-     			        layout="@layout/expense_listing_listview_common"/>
-    			</LinearLayout>
-    			
-      			<LinearLayout
-     				android:layout_width="fill_parent"
-    				android:layout_height="fill_parent"
-    				android:id="@+id/tab_yearly"
-    				android:orientation="vertical"
-    				android:paddingTop="60dp"
-     				>
-					<!-- ListView -->
-    				<include 
-     			        layout="@layout/expense_listing_listview_common"/>
-    			</LinearLayout>
-     		</FrameLayout>
     </TabHost>
     
-    <!-- Body if no list item -->
-    <RelativeLayout
-        android:id="@+id/expense_listing_listview_no_item"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/expense_listing_header"
-		android:gravity="center"
-		android:visibility="gone" >
-         
-        <TextView
-            android:id="@+id/expense_listing_listview_no_item_textview"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:text="@string/no_expenses_text"
-            android:textSize="16dip"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:layout_marginBottom="5dp" />
-        
-        <Button
-    	    android:id="@+id/expense_listing_listview_no_item_button"
-        	android:layout_height="wrap_content"
-        	android:layout_width="wrap_content"
-        	android:background="@drawable/add_expenses_with_text_states"
-       		android:layout_below="@id/expense_listing_listview_no_item_textview"
-       		android:layout_centerHorizontal="true" />
-        
-	</RelativeLayout>
-	
 </RelativeLayout>

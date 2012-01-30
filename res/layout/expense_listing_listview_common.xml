@@ -1,11 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- ListView -->
-<ListView 
+<RelativeLayout 
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/expense_listing_listview"
-   	android:layout_height="fill_parent"
-   	android:layout_width="fill_parent"
-   	android:cacheColorHint="#00000000"
-	android:divider="@drawable/list_divider"
-   	android:background="@color/white" 
-   	/>
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent"
+	android:background="@color/white">
+	
+	<!-- ListView -->
+	<ListView 
+		android:id="@+id/expense_listing_listview"
+	   	android:layout_height="fill_parent"
+	   	android:layout_width="fill_parent"
+	   	android:cacheColorHint="#00000000"
+		android:divider="@drawable/list_divider"
+	   	/>
+
+	<!-- Body if no list item -->
+    <RelativeLayout
+        android:id="@+id/expense_listing_listview_no_item"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/expense_listing_header"
+		android:gravity="center"
+		android:visibility="gone" >
+         
+        <TextView
+            android:id="@+id/expense_listing_listview_no_item_textview"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="@string/no_expenses_text"
+            android:textSize="16dip"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:layout_marginBottom="5dp" />
+        
+        <Button
+    	    android:id="@+id/expense_listing_listview_no_item_button"
+        	android:layout_height="wrap_content"
+        	android:layout_width="wrap_content"
+        	android:background="@drawable/add_expenses_with_text_states"
+       		android:layout_below="@id/expense_listing_listview_no_item_textview"
+       		android:layout_centerHorizontal="true" />
+        
+	</RelativeLayout>
+</RelativeLayout>

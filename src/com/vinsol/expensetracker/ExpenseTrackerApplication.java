@@ -27,7 +27,7 @@ public class ExpenseTrackerApplication extends Application {
     
     private void Initialize() {
     	PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-    	SDCARD_PATH = getExternalCacheDir().toString();
+    	SDCARD_PATH = getExternalFilesDir(null).toString();
 		File mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_AUDIO);
 		mFile.mkdirs();
 		mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + Constants.DIRECTORY_AUDIO);
