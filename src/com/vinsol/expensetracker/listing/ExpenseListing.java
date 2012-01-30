@@ -30,23 +30,23 @@ public class ExpenseListing extends TabActivity {
         tabHost.setup();
         
         // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent().setClass(this, ExpenseListingToday.class);
+        intent = new Intent().setClass(this, ExpenseListingThisWeek.class);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("today").setIndicator("Today").setContent(intent);
+        spec = tabHost.newTabSpec("thisweek").setIndicator("This Week").setContent(intent);
         tabHost.addTab(spec);
 
         // Do the same for the other tabs
-        intent = new Intent().setClass(this, ExpenseListingWeekly.class);
-        spec = tabHost.newTabSpec("weekly").setIndicator("Weekly").setContent(intent);
+        intent = new Intent().setClass(this, ExpenseListingThisMonth.class);
+        spec = tabHost.newTabSpec("thismonth").setIndicator("This Month").setContent(intent);
         tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, ExpenseListingMonthly.class);
-        spec = tabHost.newTabSpec("monthly").setIndicator("Monthly").setContent(intent);
+        intent = new Intent().setClass(this, ExpenseListingThisYear.class);
+        spec = tabHost.newTabSpec("thisyear").setIndicator("This Year").setContent(intent);
         tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, ExpenseListingYearly.class);
-        spec = tabHost.newTabSpec("yearly").setIndicator("Yearly").setContent(intent);
+        intent = new Intent().setClass(this, ExpenseListingPrevYears.class);
+        spec = tabHost.newTabSpec("prevyears").setIndicator("Prev Years").setContent(intent);
         tabHost.addTab(spec);
         
 	}

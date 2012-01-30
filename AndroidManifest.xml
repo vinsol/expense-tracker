@@ -91,22 +91,22 @@
     		android:configChanges="keyboardHidden|orientation"
             />
         <activity 
-            android:name=".listing.ExpenseListingToday"
+            android:name=".listing.ExpenseListingThisWeek"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
             />
         <activity 
-            android:name=".listing.ExpenseListingWeekly"
+            android:name=".listing.ExpenseListingThisMonth"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
             />
         <activity 
-            android:name=".listing.ExpenseListingMonthly"
+            android:name=".listing.ExpenseListingThisYear"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
             />
         <activity 
-            android:name=".listing.ExpenseListingYearly"
+            android:name=".listing.ExpenseListingPrevYears"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
             />

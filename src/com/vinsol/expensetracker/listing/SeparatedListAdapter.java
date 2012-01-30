@@ -269,7 +269,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				}
 				holderBody.rowTag.setText(mlist.description);
 				holderBody.rowAmount.setText(mlist.amount);
-				if ((mlist.type.equals(mContext.getString(R.string.sublist_daywise))) || mlist.type.equals(mContext.getString(R.string.sublist_monthwise)) || mlist.type.equals(mContext.getString(R.string.sublist_yearwise))|| mlist.type.equals(mContext.getString(R.string.sublist_weekwise))) {
+				if ((mlist.type.equals(mContext.getString(R.string.sublist_thisweek))) || mlist.type.equals(mContext.getString(R.string.sublist_prevyears)) || mlist.type.equals(mContext.getString(R.string.sublist_prevyears))|| mlist.type.equals(mContext.getString(R.string.sublist_thismonth))) {
 					holderBody.rowImageview.setVisibility(View.GONE);
 					holderBody.rowLocationTime.setVisibility(View.GONE);
 					holderBody.dividerImageView.setVisibility(View.GONE);

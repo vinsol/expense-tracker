@@ -8,6 +8,8 @@ package com.vinsol.expensetracker.helpers;
 
 import java.util.Calendar;
 
+import com.vinsol.expensetracker.R;
+
 public class DisplayDate {
 
 	// /////// ******* Class to pass Calender and get date in display format
@@ -207,21 +209,18 @@ public class DisplayDate {
 		return null;
 	}
 
-	public String getSubListTag() {
+	public String getSubListTag(int type) {
 		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if (isCurrentMonth()) {
+		switch (type) {
+		case R.string.sublist_thismonth:
+		case R.string.sublist_thisyear:
 			return "Week " + mCalendar.get(Calendar.WEEK_OF_MONTH);
-		}
-
-		if (isPrevMonths()) {
-			return "Week " + mCalendar.get(Calendar.WEEK_OF_MONTH);
-		}
-
-		if (isPrevYears()) {
+		case R.string.sublist_prevyears:
 			return getMonth(mCalendar.get(Calendar.MONTH)) + " " + mCalendar.get(Calendar.YEAR) + "";
+		default:
+			return null;
 		}
-		return null;
 	}
 	
 	public String getLocationDate(Long timeInMillis, String locationData) {

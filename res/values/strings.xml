@@ -11,10 +11,10 @@
     <string name="camera">2</string>
     <string name="voice">3</string>
     <string name="favorite_entry">4</string>
-    <string name="sublist_daywise">5</string>
-    <string name="sublist_weekwise">6</string>
-    <string name="sublist_monthwise">7</string>
-    <string name="sublist_yearwise">8</string>
+    <string name="sublist_thisweek">5</string>
+    <string name="sublist_thismonth">6</string>
+    <string name="sublist_thisyear">7</string>
+    <string name="sublist_prevyears">8</string>
     <string name="unfinished_textentry">Unfinished Text Entry</string>
     <string name="unknown_entry">Unknown Entry</string>
     <string name="unfinished_cameraentry">Unfinished Camera Entry</string>
