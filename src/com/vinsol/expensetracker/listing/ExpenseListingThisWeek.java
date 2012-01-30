@@ -1,5 +1,8 @@
 package com.vinsol.expensetracker.listing;
 
+import java.util.Calendar;
+import java.util.List;
+
 import android.os.Bundle;
 
 import com.vinsol.expensetracker.R;
@@ -21,7 +24,7 @@ public class ExpenseListingThisWeek extends TabLayoutListingAbstract {
 	}
 	
 	@Override
-	protected Entry getList(int j) {
+	protected Entry getList(Calendar toCHeckCal, int i, int j, List<Entry> mList, DisplayDate mDisplayDate) {
 		return getListCurrentWeek(j);
 	}
 	
