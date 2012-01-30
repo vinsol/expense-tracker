@@ -219,28 +219,29 @@ public class ExpenseListing extends ListingAbstract {
 	
 	private void setTab() {
         TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
+        TabSpec spec;
+        Intent intent;
         tabHost.setup();
         
-        TabSpec spec1 = tabHost.newTabSpec("Today");
-        spec1.setIndicator("Today");
-        spec1.setContent(R.id.tab_today);
+     // Create an Intent to launch an Activity for the tab (to be reused)
+        intent = new Intent().setClass(this, ExpenseListingToday.class);
 
-        TabSpec spec2 = tabHost.newTabSpec("Weekly");
-        spec2.setIndicator("Weekly");
-        spec2.setContent(R.id.tab_weekly);
+        // Initialize a TabSpec for each tab and add it to the TabHost
+        spec = tabHost.newTabSpec("today").setIndicator("Today").setContent(intent);
+        tabHost.addTab(spec);
 
-        TabSpec spec3 = tabHost.newTabSpec("Monthly");
-        spec3.setIndicator("Monthly");
-        spec3.setContent(R.id.tab_monthly);
-        
-        TabSpec spec4 = tabHost.newTabSpec("Yearly");
-        spec4.setIndicator("Yearly");
-        spec4.setContent(R.id.tab_yearly);
-        
-        tabHost.addTab(spec1);
-        tabHost.addTab(spec2);
-        tabHost.addTab(spec3);
-        tabHost.addTab(spec4);
+        // Do the same for the other tabs
+        intent = new Intent().setClass(this, ExpenseListingWeekly.class);
+        spec = tabHost.newTabSpec("weekly").setIndicator("Weekly").setContent(intent);
+        tabHost.addTab(spec);
+
+        intent = new Intent().setClass(this, ExpenseListingMonthly.class);
+        spec = tabHost.newTabSpec("monthly").setIndicator("Monthly").setContent(intent);
+        tabHost.addTab(spec);
+
+        intent = new Intent().setClass(this, ExpenseListingYearly.class);
+        spec = tabHost.newTabSpec("yearly").setIndicator("Yearly").setContent(intent);
+        tabHost.addTab(spec);
         
 	}
 	
@@ -248,4 +249,5 @@ public class ExpenseListing extends ListingAbstract {
 	protected void setContentView() {
 		setContentView(R.layout.expense_listing_tab);
 	}
+	
 }
