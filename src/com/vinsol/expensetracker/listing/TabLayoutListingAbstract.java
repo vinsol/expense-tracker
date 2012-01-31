@@ -55,7 +55,11 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 				mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-				if (mDisplayDate.isCurrentWeek()) {
+				if(!condition(mDisplayDate)) {
+					j = mSubList.size();
+					break;
+				}
+				if (type == R.string.sublist_thisweek) {
 					templist = getListCurrentWeek(j);
 					mList.add(templist);
 					j++;
@@ -65,7 +69,7 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 					} else {
 						break;
 					}
-				} else if (mDisplayDate.isCurrentMonth() || mDisplayDate.isPrevMonths() || mDisplayDate.isPrevYears()) {
+				} else if (type == R.string.sublist_thismonth || type == R.string.sublist_thisyear || type == R.string.sublist_prevyears) {
 					toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
 					toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
 					while (mDataDateList.get(i).dateTime.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
@@ -108,16 +112,12 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 								tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 								tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								tempDisplayDate = new DisplayDate(tempCalendar);
-								if(tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth
-										&& tempCalendar.get(Calendar.MONTH) == isCurrentMonth
-										&& tempCalendar.get(Calendar.YEAR) == isCurrentYear)
+								if(getLoopCondition(tempCalendar,isWeekOfMonth,isCurrentMonth,isCurrentYear))
 									mTempSubList.id = mTempSubList.id+mSubList.get(j).id+",";
 							} else {
 								break;
 							}
-						} while (tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth
-								&& tempCalendar.get(Calendar.MONTH) == isCurrentMonth
-								&& tempCalendar.get(Calendar.YEAR) == isCurrentYear);
+						} while (getLoopCondition(tempCalendar,isWeekOfMonth,isCurrentMonth,isCurrentYear));
 						
 						if (isTempAmountNull) {
 							if (temptotalAmount != 0) {
@@ -144,6 +144,9 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 						}
 					}
 				}
+			}
+			if(j == mSubList.size()) {
+				break;
 			}
 			listString.add(mList);
 			@SuppressWarnings("rawtypes")
@@ -208,5 +211,6 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 	
 	protected abstract boolean condition(DisplayDate mDisplayDate);
 	protected abstract void setType();
+	protected abstract boolean getLoopCondition(Calendar tempCalendar, int isWeekOfMonth, int isCurrentMonth, int isCurrentYear);
 	
 }

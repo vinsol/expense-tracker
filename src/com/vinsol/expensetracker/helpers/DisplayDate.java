@@ -227,10 +227,11 @@ public class DisplayDate {
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		switch (type) {
 		case R.string.sublist_thismonth:
-		case R.string.sublist_thisyear:
 			return "Week " + mCalendar.get(Calendar.WEEK_OF_MONTH);
-		case R.string.sublist_prevyears:
+		case R.string.sublist_thisyear:
 			return getMonth(mCalendar.get(Calendar.MONTH)) + " " + mCalendar.get(Calendar.YEAR) + "";
+		case R.string.sublist_prevyears:
+			return mCalendar.get(Calendar.YEAR) + "";
 		default:
 			return null;
 		}
