@@ -59,32 +59,20 @@ public class BarGraph extends View {
 			calculatedInterval /= 10;
 			multiplier *= 10; 
 		}
+		double basevalue = .1;
 		
-		if(calculatedInterval < .1) {
-			calculatedInterval = .1;
-		} else if(calculatedInterval < .2) {
-			calculatedInterval = .2;
-		} else if(calculatedInterval < .25) {
-			calculatedInterval = .25;
-		} else if(calculatedInterval < .3) {
-			calculatedInterval = .3;
-		} else if(calculatedInterval < .4) {
-			calculatedInterval = .4;
-		} else if(calculatedInterval < .5) {
-			calculatedInterval = .5;
-		} else if(calculatedInterval < .6) {
-			calculatedInterval = .6;
-		} else if(calculatedInterval < .7) {
-			calculatedInterval = .7;
-		} else if(calculatedInterval < .75) {
-			calculatedInterval = .75;
-		} else if(calculatedInterval < .8) {
-			calculatedInterval = .8;
-		} else if(calculatedInterval < .9) {
-			calculatedInterval = .9;
-		} else if(calculatedInterval < 1.0) {
-			calculatedInterval = 1.0;
-		} 
+		while (calculatedInterval <= 1.0) {
+			if(calculatedInterval < basevalue) {
+				calculatedInterval = basevalue;
+				break;
+			} else {
+				if(basevalue == .2 || basevalue == .7 || basevalue == .25 || basevalue == .75) {
+					basevalue = basevalue + .05;
+				} else {
+					basevalue = basevalue + .1;
+				}
+			}
+		}
 		
 		interval = calculatedInterval * multiplier;
 		
