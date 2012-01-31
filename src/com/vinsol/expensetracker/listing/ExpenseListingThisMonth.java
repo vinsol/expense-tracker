@@ -3,19 +3,11 @@ package com.vinsol.expensetracker.listing;
 import java.util.Calendar;
 import java.util.List;
 
-import android.os.Bundle;
-
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
 
 public class ExpenseListingThisMonth extends TabLayoutListingAbstract {
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		type = R.string.sublist_thismonth;
-	}
 	
 	@Override
 	protected boolean condition(DisplayDate mDisplayDate) {
@@ -26,7 +18,7 @@ public class ExpenseListingThisMonth extends TabLayoutListingAbstract {
 	protected Entry getList(Calendar toCHeckCal, int i, int j, List<Entry> mList, DisplayDate mDisplayDate) {
 		toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
 		toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
-		while (mDataDateList.get(i).dateTime.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate())) {
+		while (mDataDateList.get(i).dateTime.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
 			////// Adding i+" "+j as id
 			Entry mTempSubList = new Entry();
 			mTempSubList.id = mSubList.get(j).id +",";
@@ -86,7 +78,7 @@ public class ExpenseListingThisMonth extends TabLayoutListingAbstract {
 				totalAmountString = temptotalAmount + "";
 			}
 			mTempSubList.amount = mStringProcessing.getStringDoubleDecimal(totalAmountString);
-			mTempSubList.type = getString(type);
+			mTempSubList.type = getString(R.string.sublist_thismonth);
 			mTempSubList.timeInMillis = 0L;
 			if(highlightID != null) {
 				if (j <= mSubList.size()) {
@@ -102,6 +94,11 @@ public class ExpenseListingThisMonth extends TabLayoutListingAbstract {
 			return mTempSubList;
 		}
 		return null;
+	}
+	
+	@Override
+	protected void setType() {
+		type = R.string.sublist_thismonth;
 	}
 	
 }

@@ -42,7 +42,7 @@ public class ExpenseSubListing extends ListingAbstract {
 		Entry entry = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
 		entry = getIntent().getParcelableExtra(Constants.ENTRY_LIST_EXTRA);
 		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
-		mDataDateList = mConvertCursorToListString.getDateListString(false,entry.id);
+		mDataDateList = mConvertCursorToListString.getDateListString(false,entry.id,R.string.sublist_thisweek);
 		mSubList = mConvertCursorToListString.getListStringParticularDate(entry.id);
 		if(mSubList.size() > 0) {
 			Bundle intentExtras = getIntent().getExtras();

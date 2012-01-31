@@ -47,9 +47,8 @@ public class DisplayDate {
 		return month + " " + day + ", " + year;
 	}
 
-	// //////******** Function to get date in proper format to display in
-	// various activities ****** ///////
-	public String getHeaderFooterListDisplayDate() {
+	// //////******** Function to get date in proper format to display in various activities ****** ///////
+	public String getHeaderFooterListDisplayDate(int type) {
 		String month, day, year;
 		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
@@ -60,23 +59,37 @@ public class DisplayDate {
 		Calendar currentDate = Calendar.getInstance();
 		currentDate.set(currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH),0,0,0);
 		currentDate.setFirstDayOfWeek(Calendar.MONDAY);
-		if (Integer.parseInt(day) == currentDate.get(Calendar.DAY_OF_MONTH)
+		switch (type) {
+		
+		case R.string.sublist_thisweek:
+			if (Integer.parseInt(day) == currentDate.get(Calendar.DAY_OF_MONTH)
 				&& mCalendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH)
 				&& Integer.parseInt(year) == currentDate.get(Calendar.YEAR)) {
-			return "Today, " + month + " " + day;
-		}
-
-		if (isCurrentWeek()) {
-			return month + " " + day + ", " + year;
-		}
-
-		if (isPrevMonths() || isCurrentMonth()) {
+				return "Today, " + month + " " + day;
+			}
+		
+			if (isCurrentWeek()) {
+				return month + " " + day + ", " + year;
+			}
+			
+			if (isPrevMonths() || isCurrentMonth()) {
+				return month + " " + mCalendar.get(Calendar.YEAR);
+			}
+			
+			if (isPrevYears()) {
+				return mCalendar.get(Calendar.YEAR) + "";
+			}
+			break;
+		case R.string.sublist_thismonth:
 			return month + " " + mCalendar.get(Calendar.YEAR);
-		}
-
-		if (isPrevYears()) {
+		case R.string.sublist_thisyear:
 			return mCalendar.get(Calendar.YEAR) + "";
+		case R.string.sublist_prevyears:
+			return "Select Year";
+		default:
+			break;
 		}
+		
 		return null;
 	}
 	

@@ -18,6 +18,7 @@ import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
+import com.vinsol.expensetracker.utils.Log;
 
 abstract class TabLayoutListingAbstract extends ListingAbstract {
 	
@@ -27,16 +28,17 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setType();
 		intentExtras.putBoolean(Constants.IS_COMING_FROM_EXPENSE_LISTING, true);
 		bundle = new Bundle();
 		initListView();
 	}
 
 	@SuppressWarnings("unchecked")
-	private void initListView() {
+	protected void initListView() {
 		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
-		mDataDateList = mConvertCursorToListString.getDateListString(false,"");
+		mDataDateList = mConvertCursorToListString.getDateListString(false,"",R.string.sublist_thisweek);
 		mSubList = mConvertCursorToListString.getListStringParticularDate("");
 		int j = 0;
 		@SuppressWarnings("rawtypes")
@@ -47,7 +49,8 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 			Calendar toCHeckCal = Calendar.getInstance();
 			toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
 			toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
-			while (j < mSubList.size() && date.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate())) {
+			Log.d(j +" \t "+mSubList.size()+" \t "+ type +" \t "+new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type) +" \t "+ date);
+			while (j < mSubList.size() && date.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
 				Calendar mCalendar = Calendar.getInstance();
 				mCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
 				mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
@@ -130,6 +133,7 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 	}
 	
 	protected abstract boolean condition(DisplayDate mDisplayDate);
+	protected abstract void setType();
 	protected abstract Entry getList(Calendar toCHeckCal, int i, int j, List<Entry> mList, DisplayDate mDisplayDate);
 	
 }

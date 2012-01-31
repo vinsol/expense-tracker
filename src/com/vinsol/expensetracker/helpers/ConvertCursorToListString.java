@@ -48,18 +48,18 @@ public class ConvertCursorToListString {
 		return mainlist;
 	}
 	
-	private String getValue(DisplayDate mDisplayDate,boolean isGraph,String id) {
+	private String getValue(DisplayDate mDisplayDate,boolean isGraph,String id,int type) {
 		if(isGraph == true) {
 			return mDisplayDate.getDisplayDateHeaderGraph();
 		} else {
 			if(id == null || id.equals(""))
-				return mDisplayDate.getHeaderFooterListDisplayDate();
+				return mDisplayDate.getHeaderFooterListDisplayDate(type);
 			else 
 				return mDisplayDate.getDisplayDate();
 		}
 	}
 	
-	public List<ListDatetimeAmount> getDateListString(boolean isGraph,String id) {
+	public List<ListDatetimeAmount> getDateListString(boolean isGraph,String id,int type) {
 		ListDatetimeAmount listDatetimeAmount = new ListDatetimeAmount();
 		adapter.open();
 		Cursor cursor;
@@ -80,7 +80,7 @@ public class ConvertCursorToListString {
 				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
-				listDatetimeAmount.dateTime = getValue(mDisplayDate, isGraph, id);
+				listDatetimeAmount.dateTime = getValue(mDisplayDate, isGraph, id, type);
 				String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
 				if (tempAmount != null && !tempAmount.equals("")) {
 					try {
@@ -97,7 +97,7 @@ public class ConvertCursorToListString {
 					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
-					if (!listDatetimeAmount.dateTime.equals(getValue(mTempDisplayDate, isGraph, id))) { 
+					if (!listDatetimeAmount.dateTime.equals(getValue(mTempDisplayDate, isGraph, id, type))) { 
 						totalAmountString = getTotalAmount(isTempAmountNull, temptotalAmount, totalAmountString);
 						isTempAmountNull = false;
 						totalAmountString = mStringProcessing.getStringDoubleDecimal(totalAmountString);
