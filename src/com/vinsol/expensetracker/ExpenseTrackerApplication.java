@@ -16,7 +16,7 @@ import com.flurry.android.FlurryAgent;
 public class ExpenseTrackerApplication extends Application {
 	
 	private static Context applicationContext; 
-	public static String SDCARD_PATH ;
+	public static String FILES_DIR ;
 	
     @Override
     public void onCreate() {
@@ -27,7 +27,7 @@ public class ExpenseTrackerApplication extends Application {
     
     private void Initialize() {
     	PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-    	SDCARD_PATH = getExternalFilesDir(null).toString();
+    	FILES_DIR = getExternalFilesDir(null).toString();
 		File mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_AUDIO);
 		mFile.mkdirs();
 		mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + Constants.DIRECTORY_AUDIO);

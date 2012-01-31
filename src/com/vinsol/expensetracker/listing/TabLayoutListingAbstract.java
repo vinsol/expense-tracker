@@ -18,7 +18,6 @@ import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
-import com.vinsol.expensetracker.utils.Log;
 
 abstract class TabLayoutListingAbstract extends ListingAbstract {
 	
@@ -35,10 +34,10 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void initListView() {
+	private void initListView() {
 		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
-		mDataDateList = mConvertCursorToListString.getDateListString(false,"",R.string.sublist_thisweek);
+		mDataDateList = mConvertCursorToListString.getDateListString(false,"",type);
 		mSubList = mConvertCursorToListString.getListStringParticularDate("");
 		int j = 0;
 		@SuppressWarnings("rawtypes")
@@ -49,27 +48,102 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 			Calendar toCHeckCal = Calendar.getInstance();
 			toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
 			toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
-			Log.d(j +" \t "+mSubList.size()+" \t "+ type +" \t "+new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type) +" \t "+ date);
 			while (j < mSubList.size() && date.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
+				Entry templist = new Entry();
 				Calendar mCalendar = Calendar.getInstance();
 				mCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
 				mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-				Entry templist = getList(toCHeckCal, i, j, mList, mDisplayDate);
-				mList.add(templist);
-				j++;
-				
-				if(j == mSubList.size() || !condition(mDisplayDate)) {
-					j = mSubList.size();
-					break;
-				} else {
+				if (mDisplayDate.isCurrentWeek()) {
+					templist = getListCurrentWeek(j);
+					mList.add(templist);
+					j++;
+					if (j < mSubList.size()) {
+						toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+						toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
+					} else {
+						break;
+					}
+				} else if (mDisplayDate.isCurrentMonth() || mDisplayDate.isPrevMonths() || mDisplayDate.isPrevYears()) {
 					toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
 					toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
+					while (mDataDateList.get(i).dateTime.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
+						// //// Adding i+" "+j as id
+						Entry mTempSubList = new Entry();
+						mTempSubList.id = mSubList.get(j).id +",";
+						
+						// /// Adding tag
+						Calendar tempCalendar = Calendar.getInstance();
+						tempCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
+						tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+						mDisplayDate = new DisplayDate(tempCalendar);
+						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
+						int isWeekOfMonth = tempCalendar.get(Calendar.WEEK_OF_MONTH);
+						int isCurrentMonth = tempCalendar.get(Calendar.MONTH);
+						int isCurrentYear = tempCalendar.get(Calendar.YEAR);
+						
+						mTempSubList.description = tempDisplayDate.getSubListTag(type);
+						
+						// /// Adding Amount
+						double temptotalAmount = 0;
+						String totalAmountString = null;
+						boolean isTempAmountNull = false;
+						do {
+							String tempAmount = mSubList.get(j).amount;
+							if (tempAmount != null && !tempAmount.equals("")) {
+								try {
+									temptotalAmount += Double.parseDouble(tempAmount);
+								} catch (NumberFormatException e) {
+								}
+							} else {
+								isTempAmountNull = true;
+							}
+							j++;
+							if (j < mSubList.size()) {
+								toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+								toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
+								tempCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
+								tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+								tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+								tempDisplayDate = new DisplayDate(tempCalendar);
+								if(tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth
+										&& tempCalendar.get(Calendar.MONTH) == isCurrentMonth
+										&& tempCalendar.get(Calendar.YEAR) == isCurrentYear)
+									mTempSubList.id = mTempSubList.id+mSubList.get(j).id+",";
+							} else {
+								break;
+							}
+						} while (tempCalendar.get(Calendar.WEEK_OF_MONTH) == isWeekOfMonth
+								&& tempCalendar.get(Calendar.MONTH) == isCurrentMonth
+								&& tempCalendar.get(Calendar.YEAR) == isCurrentYear);
+						
+						if (isTempAmountNull) {
+							if (temptotalAmount != 0) {
+								totalAmountString = temptotalAmount + " ?";
+							} else {
+								totalAmountString = "?";
+							}
+						} else {
+							totalAmountString = temptotalAmount + "";
+						}
+						mTempSubList.amount = mStringProcessing.getStringDoubleDecimal(totalAmountString);
+						mTempSubList.type = getString(type);
+						mTempSubList.timeInMillis = 0L;
+						if(highlightID != null) {
+							if (j <= mSubList.size()) {
+								if(mTempSubList.id.contains(highlightID)) {
+									startSubListing(mTempSubList);
+								}
+							}
+						}
+						mList.add(mTempSubList);
+						if (j == mSubList.size()) {
+							break;
+						}
+					}
 				}
-			}
-			if(j == mSubList.size()) {
-				break;
 			}
 			listString.add(mList);
 			@SuppressWarnings("rawtypes")
@@ -134,6 +208,5 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 	
 	protected abstract boolean condition(DisplayDate mDisplayDate);
 	protected abstract void setType();
-	protected abstract Entry getList(Calendar toCHeckCal, int i, int j, List<Entry> mList, DisplayDate mDisplayDate);
 	
 }

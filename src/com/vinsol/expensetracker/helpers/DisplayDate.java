@@ -85,7 +85,7 @@ public class DisplayDate {
 		case R.string.sublist_thisyear:
 			return mCalendar.get(Calendar.YEAR) + "";
 		case R.string.sublist_prevyears:
-			return "Select Year";
+			return mCalendar.get(Calendar.YEAR) + "";
 		default:
 			break;
 		}
