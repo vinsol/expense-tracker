@@ -106,7 +106,7 @@
     		android:configChanges="keyboardHidden|orientation"
             />
         <activity 
-            android:name=".listing.ExpenseListingPrevYears"
+            android:name=".listing.ExpenseListingAll"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
             />

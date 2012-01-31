@@ -5,16 +5,16 @@ import java.util.Calendar;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 
-public class ExpenseListingPrevYears extends TabLayoutListingAbstract {
+public class ExpenseListingAll extends TabLayoutListingAbstract {
 
 	@Override
 	protected boolean condition(DisplayDate mDisplayDate) {
-		return mDisplayDate.isPrevYears();
+		return true;
 	}
 	
 	@Override
 	protected void setType() {
-		type = R.string.sublist_prevyears;
+		type = R.string.sublist_all;
 	}
 	
 	@Override

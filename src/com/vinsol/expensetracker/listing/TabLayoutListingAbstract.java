@@ -56,7 +56,7 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mCalendar);
 				if(!condition(mDisplayDate)) {
-					j = mSubList.size();
+					j = mSubList.size()+1;
 					break;
 				}
 				if (type == R.string.sublist_thisweek) {
@@ -69,15 +69,15 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 					} else {
 						break;
 					}
-				} else if (type == R.string.sublist_thismonth || type == R.string.sublist_thisyear || type == R.string.sublist_prevyears) {
+				} else if (type == R.string.sublist_thismonth || type == R.string.sublist_thisyear || type == R.string.sublist_all) {
 					toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
 					toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
 					while (mDataDateList.get(i).dateTime.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
-						// //// Adding i+" "+j as id
+						////// Adding i+" "+j as id
 						Entry mTempSubList = new Entry();
 						mTempSubList.id = mSubList.get(j).id +",";
 						
-						// /// Adding tag
+						///// Adding tag
 						Calendar tempCalendar = Calendar.getInstance();
 						tempCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
 						tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
@@ -145,13 +145,14 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 					}
 				}
 			}
-			if(j == mSubList.size()) {
+			if(j > mSubList.size()) {
 				break;
 			}
 			listString.add(mList);
 			@SuppressWarnings("rawtypes")
 			List tt = (List) listString.get(i);
 			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing_tab, tt), mDataDateList);
+			
 		}
 		doOperationsOnListview();
 	}

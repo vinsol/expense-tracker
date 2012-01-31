@@ -14,7 +14,7 @@
     <string name="sublist_thisweek">5</string>
     <string name="sublist_thismonth">6</string>
     <string name="sublist_thisyear">7</string>
-    <string name="sublist_prevyears">8</string>
+    <string name="sublist_all">8</string>
     <string name="unfinished_textentry">Unfinished Text Entry</string>
     <string name="unknown_entry">Unknown Entry</string>
     <string name="unfinished_cameraentry">Unfinished Camera Entry</string>

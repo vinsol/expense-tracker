@@ -84,7 +84,7 @@ public class DisplayDate {
 			return month + " " + mCalendar.get(Calendar.YEAR);
 		case R.string.sublist_thisyear:
 			return mCalendar.get(Calendar.YEAR) + "";
-		case R.string.sublist_prevyears:
+		case R.string.sublist_all:
 			return mCalendar.get(Calendar.YEAR) + "";
 		default:
 			break;
@@ -230,7 +230,7 @@ public class DisplayDate {
 			return "Week " + mCalendar.get(Calendar.WEEK_OF_MONTH);
 		case R.string.sublist_thisyear:
 			return getMonth(mCalendar.get(Calendar.MONTH)) + " " + mCalendar.get(Calendar.YEAR) + "";
-		case R.string.sublist_prevyears:
+		case R.string.sublist_all:
 			return mCalendar.get(Calendar.YEAR) + "";
 		default:
 			return null;

@@ -45,8 +45,8 @@ public class ExpenseListing extends TabActivity {
         spec = tabHost.newTabSpec("thisyear").setIndicator("This Year").setContent(intent);
         tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, ExpenseListingPrevYears.class);
-        spec = tabHost.newTabSpec("prevyears").setIndicator("Prev Years").setContent(intent);
+        intent = new Intent().setClass(this, ExpenseListingAll.class);
+        spec = tabHost.newTabSpec("all").setIndicator("All").setContent(intent);
         tabHost.addTab(spec);
         
 	}
