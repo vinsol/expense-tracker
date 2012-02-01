@@ -39,12 +39,14 @@
 	    android:layout_below="@id/main_header"
 	    android:layout_above="@+id/versionName"
 	    android:background="@drawable/home_bg"
-	    android:id="@+id/main_body" >
+	    android:id="@+id/main_body" 
+	    >
         
 	    <!-- ScrollView for body-->
 	    <ScrollView
 	        android:layout_height="fill_parent"
-	        android:layout_width="fill_parent" >
+	        android:layout_width="fill_parent" 
+	        >
 	    
 	        <LinearLayout
 	            android:layout_width="fill_parent"
@@ -61,7 +63,8 @@
 	                android:textColor="@color/black"
 	            	android:textSize="16sp"
 	            	android:textStyle="bold"
-	            	android:gravity="center"/>
+	            	android:gravity="center"
+	            	/>
 	            
 	       		<LinearLayout
 	        		android:id="@+id/main_graph"
@@ -81,7 +84,7 @@
 	       		
 	        	</LinearLayout>
 	       		
-	    		<include 
+	       		<include 
 	     			layout="@layout/new_entry_icons_grid" />
 	    		
 			</LinearLayout>  

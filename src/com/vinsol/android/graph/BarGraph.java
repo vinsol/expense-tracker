@@ -136,7 +136,7 @@ public class BarGraph extends View {
 			}
 		}
 	}
-	
+
 	private String getVal(int value,int i) {
 		int divisor = getDivisor(value,i);
 		String temp = (double)value/divisor+"";

@@ -48,7 +48,7 @@ class SeparatedListAdapter extends BaseAdapter {
 	public final static int TYPE_SECTION_HEADER = 0;
 	public final static int TYPE_SECTION_FOOTER = 0;
 	private Context mContext;
-	private List<ListDatetimeAmount> mDatadateList;
+	private List<ListDatetimeAmount> mDataDateList;
 	private LayoutInflater mInflater;
 	private UnknownEntryDialog unknownEntryDialog;
 	private View viewHeader = null;
@@ -69,7 +69,7 @@ class SeparatedListAdapter extends BaseAdapter {
 	}
 
 	public void addSection(String section, ArrayAdapter<Entry> adapter,List<ListDatetimeAmount> mDataDateList) {
-		this.mDatadateList = mDataDateList;
+		this.mDataDateList = mDataDateList;
 		this.headers.add(section);
 		this.footers.add(section);
 		this.sections.put(section, adapter);
@@ -161,8 +161,8 @@ class SeparatedListAdapter extends BaseAdapter {
 				viewHeader = mInflater.inflate(R.layout.mainlist_header_view,null);
 				holderHeader.listDateView = (TextView) viewHeader.findViewById(R.id.expenses_listing_list_date_view);
 				holderHeader.listAmountView = (TextView) viewHeader.findViewById(R.id.expenses_listing_list_amount_view);
-				holderHeader.listDateView.setText(mDatadateList.get(sectionnum).dateTime);
-				holderHeader.listAmountView.setText(mDatadateList.get(sectionnum).amount);
+				holderHeader.listDateView.setText(mDataDateList.get(sectionnum).dateTime);
+				holderHeader.listAmountView.setText(mDataDateList.get(sectionnum).amount);
 				return viewHeader;
 			}
 
@@ -171,14 +171,14 @@ class SeparatedListAdapter extends BaseAdapter {
 				viewFooter = mInflater.inflate(R.layout.main_list_footerview, null);
 				holderFooter.addExpensesButton = (Button) viewFooter.findViewById(R.id.expenses_listing_add_expenses_button);
 				holderFooter.addExpenses = (LinearLayout) viewFooter.findViewById(R.id.expense_listing_list_add_expenses);
-				if (!isCurrentWeek(mDatadateList.get(sectionnum).dateTime)) {
+				if (!isCurrentWeek(mDataDateList.get(sectionnum).dateTime)) {
 					holderFooter.addExpenses.setBackgroundResource(0);
 					holderFooter.addExpenses.setVisibility(View.GONE);
 					holderFooter.addExpensesButton.setVisibility(View.GONE);
 				} else {
-					holderFooter.addExpensesButton.setText("Add expenses to "+ mDatadateList.get(sectionnum).dateTime);
+					holderFooter.addExpensesButton.setText("Add expenses to "+ mDataDateList.get(sectionnum).dateTime);
 					holderFooter.addExpensesButton.setFocusable(false);
-					DateHelper mDateHelper = new DateHelper(mDatadateList.get(sectionnum).dateTime);
+					DateHelper mDateHelper = new DateHelper(mDataDateList.get(sectionnum).dateTime);
 					holderFooter.addExpensesButton.setOnClickListener(new GroupedIconDialogClickListener(unknownEntryDialog, (Activity)mContext, null, mDateHelper.getTimeMillis()));
 				}
 				return viewFooter;
@@ -243,7 +243,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				if (mlist.favId != null) {
 					if(!mlist.favId.equals("")) {
 						try{
-							if(isCurrentWeek(mDatadateList.get(sectionnum).dateTime)) {
+							if(isCurrentWeek(mDataDateList.get(sectionnum).dateTime)) {
 								holderBody.rowFavoriteIcon.setVisibility(View.VISIBLE);
 							} else {
 								holderBody.rowFavoriteIcon.setVisibility(View.INVISIBLE);
@@ -317,15 +317,15 @@ class SeparatedListAdapter extends BaseAdapter {
 		sections.get(sectionNumber).insert(updatedEntry, toUpdate);
 		sections.get(sectionNumber).remove(prevEntry);
 		StringProcessing mStringProcessing = new StringProcessing();
-		Double amountDouble = mStringProcessing.getAmount(mDatadateList.get(Integer.parseInt(sectionNumber)).amount);
+		Double amountDouble = mStringProcessing.getAmount(mDataDateList.get(Integer.parseInt(sectionNumber)).amount);
 		amountDouble -= mStringProcessing.getAmount(prevEntry.amount);
 		if(!updatedEntry.amount.contains("?")) { 
 			updatedEntry.amount = mStringProcessing.getStringDoubleDecimal(updatedEntry.amount);
 			amountDouble += mStringProcessing.getAmount(updatedEntry.amount);
-			if(mDatadateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
-				mDatadateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"?");
+			if(mDataDateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
+				mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"?");
 			} else {
-				mDatadateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"");
+				mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"");
 			}
 		}
 		notifyDataSetChanged();
@@ -393,7 +393,7 @@ class SeparatedListAdapter extends BaseAdapter {
 
 	private void removeSection(String sectionKey) {
 		sections.remove(sectionKey);
-		mDatadateList.remove(Integer.parseInt(sectionKey));
+		mDataDateList.remove(Integer.parseInt(sectionKey));
 	}
 
 	private class ViewHolderBody {
@@ -434,4 +434,9 @@ class SeparatedListAdapter extends BaseAdapter {
 		}
 		return false;
 	}
+	
+	public List<ListDatetimeAmount> getDataDateList() {
+		return mDataDateList;
+	}
+
 }

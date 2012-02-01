@@ -24,8 +24,8 @@ public class ExpenseTrackerApplication extends Application {
         applicationContext = this;
         Initialize();
     }
-    
-    private void Initialize() {
+
+	private void Initialize() {
     	PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     	FILES_DIR = getExternalFilesDir(null).toString();
 		File mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_AUDIO);

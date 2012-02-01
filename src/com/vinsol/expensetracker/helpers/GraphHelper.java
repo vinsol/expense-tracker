@@ -94,8 +94,9 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	
 	@Override
 	protected void onPostExecute(Void result) {
-		//view of graph******start view******//
 		graphProgressBar.setVisibility(View.GONE);
+		//view of graph******start view******//
+		j = 0;
 		if(mGraphList != null) {
 			if(mGraphList.size() >= 1 ) {
 				createBarGraph();
@@ -379,7 +380,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 		private int SWIPE_MIN_DISTANCE ;
 	    
 		public MyGestureDetector() {
-			SWIPE_MIN_DISTANCE = ViewConfiguration.getTouchSlop();
+			SWIPE_MIN_DISTANCE = new ViewConfiguration().getScaledTouchSlop();
 		}
 		
 	    @Override
@@ -394,6 +395,47 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 
 	        return true;
 	    }
+	    
+	    @Override
+	    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+	    	return true;
+	    }
+	    
+	    @Override
+	    public boolean onDoubleTap(MotionEvent e) {
+	    	return false;
+	    }
+	    
+	    @Override
+	    public boolean onDown(MotionEvent e) {
+	    	return true;
+	    }
+	    
+	    @Override
+	    public void onLongPress(MotionEvent e) {
+	    	// Do Nothing
+	    }
+	    
+	    @Override
+	    public void onShowPress(MotionEvent e) {
+	    	//DO Nothing
+	    }
+	    
+	    @Override
+	    public boolean onSingleTapConfirmed(MotionEvent e) {
+	    	return true;
+	    }
+	    
+	    @Override
+	    public boolean onSingleTapUp(MotionEvent e) {
+	    	return true;
+	    }
+	    
+	    @Override
+	    public boolean onDoubleTapEvent(MotionEvent e) {
+	    	return false;
+	    }
+	    
 	}
 	
 	private boolean leftSwipeAction() {

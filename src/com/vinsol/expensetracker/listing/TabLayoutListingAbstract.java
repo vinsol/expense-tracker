@@ -17,7 +17,9 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
+import com.vinsol.expensetracker.utils.Log;
 
 abstract class TabLayoutListingAbstract extends ListingAbstract {
 	
@@ -32,6 +34,12 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 		bundle = new Bundle();
 		initListView();
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mSeparatedListAdapter.notifyDataSetChanged();
+	}
 
 	@SuppressWarnings("unchecked")
 	private void initListView() {
@@ -40,6 +48,7 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 		mDataDateList = mConvertCursorToListString.getDateListString(false,"",type);
 		mSubList = mConvertCursorToListString.getListStringParticularDate("");
 		int j = 0;
+		List<ListDatetimeAmount> dateListToSend = new ArrayList<ListDatetimeAmount>();
 		@SuppressWarnings("rawtypes")
 		List listString = new ArrayList<List<Entry>>();
 		for (int i = 0; i < mDataDateList.size(); i++) {
@@ -90,7 +99,7 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 						
 						mTempSubList.description = tempDisplayDate.getSubListTag(type);
 						
-						// /// Adding Amount
+						///// Adding Amount
 						double temptotalAmount = 0;
 						String totalAmountString = null;
 						boolean isTempAmountNull = false;
@@ -151,8 +160,8 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 			listString.add(mList);
 			@SuppressWarnings("rawtypes")
 			List tt = (List) listString.get(i);
-			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing_tab, tt), mDataDateList);
-			
+			dateListToSend.add(mDataDateList.get(i));
+			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing_tab, tt), dateListToSend);
 		}
 		doOperationsOnListview();
 	}
@@ -201,7 +210,9 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 	
 	@Override
 	public void noItemLayout() {
-		if (mDataDateList.size() == 0) {
+		if(mSeparatedListAdapter.getDataDateList() != null)
+		Log.d("NoItemLayout "+mSeparatedListAdapter.getDataDateList().size());
+		if (mSeparatedListAdapter.getDataDateList() == null || mSeparatedListAdapter.getDataDateList().isEmpty()) {
 			mListView.setVisibility(View.GONE);
 			RelativeLayout mRelativeLayout = (RelativeLayout) findViewById(R.id.expense_listing_listview_no_item);
 			mRelativeLayout.setVisibility(View.VISIBLE);
