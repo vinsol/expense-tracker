@@ -66,31 +66,17 @@ public class DisplayDate {
 				&& mCalendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH)
 				&& Integer.parseInt(year) == currentDate.get(Calendar.YEAR)) {
 				return "Today, " + month + " " + day;
-			}
-		
-			if (isCurrentWeek()) {
+			} else {
 				return month + " " + day + ", " + year;
 			}
-			
-			if (isPrevMonths() || isCurrentMonth()) {
-				return month + " " + mCalendar.get(Calendar.YEAR);
-			}
-			
-			if (isPrevYears()) {
-				return mCalendar.get(Calendar.YEAR) + "";
-			}
-			break;
 		case R.string.sublist_thismonth:
 			return month + " " + mCalendar.get(Calendar.YEAR);
 		case R.string.sublist_thisyear:
-			return mCalendar.get(Calendar.YEAR) + "";
 		case R.string.sublist_all:
 			return mCalendar.get(Calendar.YEAR) + "";
 		default:
-			break;
+			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
 		}
-		
-		return null;
 	}
 	
 	public String getDisplayDateGraph() {
@@ -122,20 +108,6 @@ public class DisplayDate {
 		
 		if (isPrevMonths() || isPrevYears()) {
 			return month + " " + year;
-		}
-		
-		return year;
-	}
-	
-	public String getDisplayDateSubListingHeader() {
-		String month, year;
-		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
-		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		month = getMonth(mCalendar.get(Calendar.MONTH));
-		year = mCalendar.get(Calendar.YEAR) + "";
-		
-		if(isCurrentMonth() || isPrevMonths() || isPrevYears()) {
-			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
 		}
 		
 		return year;

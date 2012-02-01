@@ -52,10 +52,7 @@ public class ConvertCursorToListString {
 		if(isGraph == true) {
 			return mDisplayDate.getDisplayDateHeaderGraph();
 		} else {
-			if(id == null || id.equals(""))
-				return mDisplayDate.getHeaderFooterListDisplayDate(type);
-			else 
-				return mDisplayDate.getDisplayDate();
+			return mDisplayDate.getHeaderFooterListDisplayDate(type);
 		}
 	}
 	

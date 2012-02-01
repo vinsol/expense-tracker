@@ -24,6 +24,7 @@ public class Constants {
 	public static String DATA_CHANGED = "isChanged";
 	public static String IS_COMING_FROM_EXPENSE_LISTING = "isFromExpenseListing";
 	public static String IS_COMING_FROM_EXPENSE_SUB_LISTING = "isFromExpenseSubListing";
+	public static String TYPE = "type";
 	
 	//ExpenseTracker Market UI
 	public static final String EXPENSE_TRACKER_MARKET_URI = "market://details?id=com.vinsol.expensetracker";
