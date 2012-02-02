@@ -172,7 +172,7 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
                 }
             }
         }
-        Log.d("optimalSize "+optimalSize.height+" \t "+optimalSize.width+" \t "+w+" \t "+h);
+        
         return optimalSize;
     }
 	

@@ -12,32 +12,35 @@ import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.TypedValue;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewConfiguration;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.BaseAdapter;
+import android.widget.Gallery;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.flurry.android.FlurryAgent;
 import com.vinsol.android.graph.BarGraph;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.GraphDataList;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 
-public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickListener {
+public class GraphHelper extends AsyncTask<Void, Void, Void> {
 
 	private List<ListDatetimeAmount> mDataDateListGraph;
 	private ConvertCursorToListString mConvertCursorToListString;
@@ -51,25 +54,54 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	private static BarGraph barGraph;
 	private static TextView graphNoItem;
 	private TextView graphHeaderTextview;
-	private View.OnTouchListener gestureListener;
 	private ProgressBar graphProgressBar;
+	private Gallery graphGallery;
+	private ImageAdapter imageAdapter;
+	private LinearLayout graphContainer;
+	private boolean isToNotifyDataSetChanged;
 	
-	public GraphHelper(Activity activity) {
+	public GraphHelper(final Activity activity) {
 		this.activity = activity;
 		lastDateCalendar = Calendar.getInstance();
+		imageAdapter = new ImageAdapter(activity);
 		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mainGraph = (LinearLayout) activity.findViewById(R.id.main_graph);
 		graphHeaderTextview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
 		graphProgressBar = (ProgressBar) activity.findViewById(R.id.main_graph_progress_bar);
+		graphGallery = (Gallery) activity.findViewById(R.id.graph_gallery);
+		graphContainer = (LinearLayout) activity.findViewById(R.id.graph_container);
 		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
-		final GestureDetector gestureDetector = new GestureDetector(new MyGestureDetector());
-		gestureListener = new View.OnTouchListener() {
+		graphContainer.setDrawingCacheEnabled(true);
+		graphGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
+			public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
+				j = mDataDateListGraph.size() - position - 1 ;
+				createBarGraph();
+				if(isToNotifyDataSetChanged) {
+					imageAdapter.notifyDataSetChanged();
+				}
 			}
-        };
+
+			@Override
+			public void onNothingSelected(AdapterView<?> adapter) {
+				//DO Nothing
+			}
+		});
+		graphGallery.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+					isToNotifyDataSetChanged = false;
+				}
+				if(event.getAction() == MotionEvent.ACTION_UP) {
+					isToNotifyDataSetChanged = true;
+					imageAdapter.notifyDataSetChanged();
+				}
+				return false;
+			}
+		});
 	}
 	
 	@Override
@@ -107,6 +139,11 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 			mainGraph.addView(graphNoItem);
 			graphHeaderTextview.setText("");
 		}
+		graphGallery.setLayoutParams(new LinearLayout.LayoutParams(graphContainer.getLayoutParams()));
+        graphContainer.setVisibility(View.GONE);
+        graphGallery.setVisibility(View.VISIBLE);
+		graphGallery.setAdapter(imageAdapter);
+		graphGallery.setSelection(mDataDateListGraph.size() - 1);
 		super.onPostExecute(result);
 	}
 	
@@ -125,9 +162,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 				mainGraph.addView(graphNoItem);
 			}
 		}
-		mainGraph.setOnTouchListener(gestureListener);
-		mainGraph.setOnClickListener(this);
-		graphHeaderTextview.setText(mGraphList.get(j).get(3).get(0));
+		graphHeaderTextview.setText(mDataDateListGraph.get(j).dateTime);
 	}
 	
 	private void graphNoItem() {
@@ -158,17 +193,11 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 			DisplayDate mDisplayDate = new DisplayDate(mTempCalender);
 			while(mDisplayDate.isCurrentWeek()) {
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
-				if(j < mList.size()) {
-					if(mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())) {
-						mArrayIDList.add(mList.get(j).idList);
-						mArrayValues.add(mList.get(j).amount);
-						mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
-						j++;
-					} else {
-						mArrayIDList.add(null);
-						mArrayValues.add(null);
-						mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
-					}
+				if(j < mList.size() && mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())) {
+					mArrayIDList.add(mList.get(j).idList);
+					mArrayValues.add(mList.get(j).amount);
+					mArrayHorLabels.add(getWeekDay(mTempCalender.get(Calendar.DAY_OF_WEEK)));
+					j++;
 				} else {
 					mArrayIDList.add(null);
 					mArrayValues.add(null);
@@ -246,17 +275,11 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 				mDisplayDate = new DisplayDate(mTempCalender);
 				String toCheckGraphDate = mDisplayDate.getDisplayDateHeaderGraph();
 				while(mDisplayDate.getDisplayDateHeaderGraph().equals(toCheckGraphDate)) {
-					if(j < mList.size()) {
-						if(mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())) {
-							mArrayIDList.add(mList.get(j).idList);
-							mArrayValues.add(mList.get(j).amount);
-							mArrayHorLabels.add("W "+mTempCalender.get(Calendar.WEEK_OF_MONTH));
-							j++;
-						} else {
-							mArrayIDList.add(null);
-							mArrayValues.add(null);
-							mArrayHorLabels.add("W "+mTempCalender.get(Calendar.WEEK_OF_MONTH));
-						}
+					if(j < mList.size() && mList.get(j).dateTime.equals(mDisplayDate.getDisplayDateGraph())) {
+						mArrayIDList.add(mList.get(j).idList);
+						mArrayValues.add(mList.get(j).amount);
+						mArrayHorLabels.add("W "+mTempCalender.get(Calendar.WEEK_OF_MONTH));
+						j++;
 					} else {
 						mArrayIDList.add(null);
 						mArrayValues.add(null);
@@ -371,73 +394,6 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 		return null;
 	}
 	
-	@Override
-	public void onClick(View v) {
-	}
-
-	class MyGestureDetector extends SimpleOnGestureListener {
-		
-		private int SWIPE_MIN_DISTANCE ;
-	    
-		public MyGestureDetector() {
-			SWIPE_MIN_DISTANCE = new ViewConfiguration().getScaledTouchSlop();
-		}
-		
-	    @Override
-	    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-	    	FlurryAgent.onEvent(activity.getString(R.string.graph_swipe));
-	    	
-	    	if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
-                leftSwipeAction();
-            }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
-                rightSwipeAction();
-            }
-
-	        return true;
-	    }
-	    
-	    @Override
-	    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-	    	return true;
-	    }
-	    
-	    @Override
-	    public boolean onDoubleTap(MotionEvent e) {
-	    	return false;
-	    }
-	    
-	    @Override
-	    public boolean onDown(MotionEvent e) {
-	    	return true;
-	    }
-	    
-	    @Override
-	    public void onLongPress(MotionEvent e) {
-	    	// Do Nothing
-	    }
-	    
-	    @Override
-	    public void onShowPress(MotionEvent e) {
-	    	//DO Nothing
-	    }
-	    
-	    @Override
-	    public boolean onSingleTapConfirmed(MotionEvent e) {
-	    	return true;
-	    }
-	    
-	    @Override
-	    public boolean onSingleTapUp(MotionEvent e) {
-	    	return true;
-	    }
-	    
-	    @Override
-	    public boolean onDoubleTapEvent(MotionEvent e) {
-	    	return false;
-	    }
-	    
-	}
-	
 	private boolean leftSwipeAction() {
 		if(j == 0) {
 			overScrollingEffect(-30);
@@ -469,6 +425,51 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
     	mAnimationHeader.setFillAfter(false);
     	mainGraph.startAnimation(mAnimation);
     	graphHeaderTextview.startAnimation(mAnimationHeader);
+	}
+	
+	public class ImageAdapter extends BaseAdapter {
+		
+	    private Context mContext;
+	    
+	    public ImageAdapter(Context c) {
+	        mContext = c;
+	    }
+
+	    @Override
+	    public int getCount() {
+	        return mDataDateListGraph.size();
+	    }
+
+	    @Override
+	    public Object getItem(int position) {
+	        return position;
+	    }
+
+	    @Override
+	    public long getItemId(int position) {
+	        return position;
+	    }
+
+	    @Override
+	    public View getView(int position, View convertView, ViewGroup parent) {
+//	    	j = mDataDateListGraph.size() - position - 1;
+//	    	Toast.makeText(mContext, "position "+position+" \t "+mDataDateListGraph.get(j).dateTime, Toast.LENGTH_SHORT).show();
+	    	ImageView imageView;
+    		if(convertView == null) {
+	    		imageView = new ImageView(mContext);
+	    		convertView = imageView;
+	    		convertView.setTag(position);
+	    	} else {
+	    		imageView = (ImageView) convertView.getTag(position);
+	    	}
+			imageView.setImageBitmap(graphContainer.getDrawingCache());
+	        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+	        
+    		return convertView;
+	    }
+	    
+	    
+	    
 	}
 	
 }

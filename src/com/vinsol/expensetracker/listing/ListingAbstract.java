@@ -45,7 +45,6 @@ import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
-import com.vinsol.expensetracker.utils.Log;
 
 abstract class ListingAbstract extends Activity implements OnItemClickListener {
 
@@ -343,8 +342,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 			Calendar toCHeckCal = Calendar.getInstance();
 			toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
 			toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
-			Log.d(getString(type));
-			Log.d(date +" \t "+new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type));
 			while (j < mSubList.size() && date.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
 				Entry templist = new Entry();
 				Calendar mCalendar = Calendar.getInstance();

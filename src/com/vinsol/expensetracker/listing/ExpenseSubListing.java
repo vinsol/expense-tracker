@@ -40,12 +40,6 @@ public class ExpenseSubListing extends ListingAbstract {
 		mDataDateList = mConvertCursorToListString.getDateListString(false,entry.id,type);
 		mSubList = mConvertCursorToListString.getListStringParticularDate(entry.id);
 		if(mSubList.size() > 0) {
-			Bundle intentExtras = getIntent().getExtras();
-			if(intentExtras != null){
-				if(intentExtras.containsKey(Constants.HIGHLIGHT)) {
-					highlightID = intentExtras.getString(Constants.HIGHLIGHT);
-				}	
-			}
 			Calendar mTempCalendar = Calendar.getInstance();
 			mTempCalendar.setTimeInMillis(mSubList.get(0).timeInMillis);
 			mTempCalendar.set(mTempCalendar.get(Calendar.YEAR),mTempCalendar.get(Calendar.MONTH),mTempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
