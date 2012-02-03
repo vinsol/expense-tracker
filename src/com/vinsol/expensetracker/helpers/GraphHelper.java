@@ -13,25 +13,14 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.vinsol.android.graph.BarGraph;
@@ -51,62 +40,26 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	private int j = 0;
 	private LinearLayout mainGraph ;
 	private LinearLayout.LayoutParams params ;
-	private static BarGraph barGraph;
-	private static TextView graphNoItem;
-	private TextView graphHeaderTextview;
+//	private static TextView graphNoItem;
 	private ProgressBar graphProgressBar;
 	private Gallery graphGallery;
 	private ImageAdapter imageAdapter;
 	private LinearLayout graphContainer;
-	private boolean isToNotifyDataSetChanged;
 	
 	public GraphHelper(final Activity activity) {
 		this.activity = activity;
 		lastDateCalendar = Calendar.getInstance();
-		imageAdapter = new ImageAdapter(activity);
+		imageAdapter = new ImageAdapter();
 		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		mainGraph = (LinearLayout) activity.findViewById(R.id.main_graph);
-		graphHeaderTextview = (TextView) activity.findViewById(R.id.main_graph_header_textview);
-		graphProgressBar = (ProgressBar) activity.findViewById(R.id.main_graph_progress_bar);
+		mainGraph = (LinearLayout) activity.findViewById(R.id.graph);
+		graphProgressBar = (ProgressBar) activity.findViewById(R.id.graph_progress_bar);
 		graphGallery = (Gallery) activity.findViewById(R.id.graph_gallery);
 		graphContainer = (LinearLayout) activity.findViewById(R.id.graph_container);
 		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
-		graphContainer.setDrawingCacheEnabled(true);
-		graphGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
-				j = mDataDateListGraph.size() - position - 1 ;
-				createBarGraph();
-				if(isToNotifyDataSetChanged) {
-					imageAdapter.notifyDataSetChanged();
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> adapter) {
-				//DO Nothing
-			}
-		});
-		graphGallery.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if(event.getAction() == MotionEvent.ACTION_DOWN) {
-					isToNotifyDataSetChanged = false;
-				}
-				if(event.getAction() == MotionEvent.ACTION_UP) {
-					isToNotifyDataSetChanged = true;
-					imageAdapter.notifyDataSetChanged();
-				}
-				return false;
-			}
-		});
 	}
 	
 	@Override
 	protected void onPreExecute() {
-		removeGraphView();
 		graphProgressBar.setVisibility(View.VISIBLE);
 		super.onPreExecute();
 	}
@@ -128,53 +81,53 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	protected void onPostExecute(Void result) {
 		graphProgressBar.setVisibility(View.GONE);
 		//view of graph******start view******//
-		j = 0;
-		if(mGraphList != null) {
-			if(mGraphList.size() >= 1 ) {
-				createBarGraph();
-			}
-			
-		} else {
-			graphNoItem();
-			mainGraph.addView(graphNoItem);
-			graphHeaderTextview.setText("");
-		}
-		graphGallery.setLayoutParams(new LinearLayout.LayoutParams(graphContainer.getLayoutParams()));
-        graphContainer.setVisibility(View.GONE);
+//		j = 0;
+//		if(mGraphList != null) {
+//			if(mGraphList.size() >= 1 ) {
+//				createBarGraph();
+//			}
+//			
+//		} else {
+//			graphNoItem();
+//			mainGraph.addView(graphNoItem);
+//			graphHeaderTextview.setText("");
+//		}
+//		graphGallery.setLayoutParams(new LinearLayout.LayoutParams(graphContainer.getLayoutParams()));
+		graphContainer.setVisibility(View.GONE);
         graphGallery.setVisibility(View.VISIBLE);
 		graphGallery.setAdapter(imageAdapter);
 		graphGallery.setSelection(mDataDateListGraph.size() - 1);
 		super.onPostExecute(result);
 	}
 	
-	private void removeGraphView() {
-		mainGraph.removeView(barGraph);
-		mainGraph.removeView(graphNoItem);
-	}
-	
-	private void createBarGraph() {
-		barGraph = new BarGraph(activity,mGraphList.get(j).get(1),mGraphList.get(j).get(2));
-		mainGraph.addView(barGraph, params);
-		if(j == 0) {
-			if(!isNotNullAll(mGraphList.get(j).get(0))) {
-				mainGraph.removeView(barGraph);
-				graphNoItem();
-				mainGraph.addView(graphNoItem);
-			}
-		}
-		graphHeaderTextview.setText(mDataDateListGraph.get(j).dateTime);
-	}
-	
-	private void graphNoItem() {
-		graphNoItem = new TextView(activity);
-		graphNoItem.setGravity(Gravity.CENTER);
-		graphNoItem.setText("No Items to Show");
-		LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, mainGraph.getBackground().getIntrinsicHeight());
-		graphNoItem.setTextColor(Color.BLACK);
-		graphNoItem.setPadding(0, 0, 0, 15);
-		graphNoItem.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-		graphNoItem.setLayoutParams(textParams);
-	}
+//	private void removeGraphView() {
+//		mainGraph.removeView(barGraph);
+//		mainGraph.removeView(graphNoItem);
+//	}
+//	
+//	private void createBarGraph() {
+//		barGraph = new BarGraph(activity, mGraphList.get(j).get(1), mGraphList.get(j).get(2));
+//		mainGraph.addView(barGraph , params);
+//		if(j == 0) {
+//			if(!isNotNullAll(mGraphList.get(j).get(0))) {
+//				mainGraph.removeView(barGraph);
+//				graphNoItem();
+//				mainGraph.addView(graphNoItem);
+//			}
+//		}
+//		graphHeaderTextview.setText(mDataDateListGraph.get(j).dateTime);
+//	}
+//	
+//	private void graphNoItem() {
+//		graphNoItem = new TextView(activity);
+//		graphNoItem.setGravity(Gravity.CENTER);
+//		graphNoItem.setText("No Items to Show");
+//		LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, mainGraph.getBackground().getIntrinsicHeight());
+//		graphNoItem.setTextColor(Color.BLACK);
+//		graphNoItem.setPadding(0, 0, 0, 15);
+//		graphNoItem.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+//		graphNoItem.setLayoutParams(textParams);
+//	}
 	
 	private ArrayList<ArrayList<ArrayList<String>>> getGraphList() {
 		DisplayDate lastDateDisplayDate = new DisplayDate(lastDateCalendar);
@@ -394,46 +347,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 		return null;
 	}
 	
-	private boolean leftSwipeAction() {
-		if(j == 0) {
-			overScrollingEffect(-30);
-			return true;
-		}
-		j--;
-		removeGraphView();
-		createBarGraph();
-		return true;
-	}
-	
-	private boolean rightSwipeAction() {
-		if(j == mGraphList.size()-1) {
-			overScrollingEffect(30);
-			return true;
-		}
-		j++;
-		removeGraphView();
-		createBarGraph();
-		return true;
-	}
-
-	private void overScrollingEffect(int x) {
-		Animation mAnimation = new TranslateAnimation(mainGraph.getScrollX(), x, mainGraph.getScrollY(), mainGraph.getScrollY());
-    	mAnimation.setDuration(200);
-    	mAnimation.setFillAfter(false);
-    	Animation mAnimationHeader = new TranslateAnimation(graphHeaderTextview.getScrollX(), x, graphHeaderTextview.getScrollY(), graphHeaderTextview.getScrollY());
-    	mAnimationHeader.setDuration(200);
-    	mAnimationHeader.setFillAfter(false);
-    	mainGraph.startAnimation(mAnimation);
-    	graphHeaderTextview.startAnimation(mAnimationHeader);
-	}
-	
 	public class ImageAdapter extends BaseAdapter {
-		
-	    private Context mContext;
-	    
-	    public ImageAdapter(Context c) {
-	        mContext = c;
-	    }
 
 	    @Override
 	    public int getCount() {
@@ -452,24 +366,31 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 
 	    @Override
 	    public View getView(int position, View convertView, ViewGroup parent) {
-//	    	j = mDataDateListGraph.size() - position - 1;
-//	    	Toast.makeText(mContext, "position "+position+" \t "+mDataDateListGraph.get(j).dateTime, Toast.LENGTH_SHORT).show();
-	    	ImageView imageView;
-    		if(convertView == null) {
-	    		imageView = new ImageView(mContext);
-	    		convertView = imageView;
-	    		convertView.setTag(position);
+	    	GraphViewHolder graphViewHolder;
+	    	if(convertView == null) {
+	    		LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    		convertView = inflater.inflate(R.layout.graph, null);
+	    		graphViewHolder = new GraphViewHolder();
+	    		convertView.setTag(graphViewHolder);
 	    	} else {
-	    		imageView = (ImageView) convertView.getTag(position);
+	    		graphViewHolder = (GraphViewHolder) convertView.getTag();
 	    	}
-			imageView.setImageBitmap(graphContainer.getDrawingCache());
-	        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-	        
+	    	
+	    	j = mDataDateListGraph.size() - position - 1;
+	    	graphViewHolder.grahHeaderTextView = (TextView) convertView.findViewById(R.id.graph_header_textview);
+	    	graphViewHolder.barGraph = new BarGraph(activity, mGraphList.get(j).get(1), mGraphList.get(j).get(2));
+	    	graphViewHolder.graphMainView = (LinearLayout) convertView.findViewById(R.id.graph);
+	    	graphViewHolder.grahHeaderTextView.setText(mDataDateListGraph.get(j).dateTime);
+	    	graphViewHolder.graphMainView.addView(graphViewHolder.barGraph, params);
     		return convertView;
 	    }
 	    
-	    
-	    
+	}
+	
+	private class GraphViewHolder {
+		TextView grahHeaderTextView;
+		BarGraph barGraph;
+		LinearLayout graphMainView;
 	}
 	
 }
