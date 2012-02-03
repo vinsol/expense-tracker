@@ -13,7 +13,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,8 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.vinsol.android.graph.BarGraph;
@@ -40,7 +45,6 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	private int j = 0;
 	private LinearLayout mainGraph ;
 	private LinearLayout.LayoutParams params ;
-//	private static TextView graphNoItem;
 	private ProgressBar graphProgressBar;
 	private Gallery graphGallery;
 	private ImageAdapter imageAdapter;
@@ -80,54 +84,24 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected void onPostExecute(Void result) {
 		graphProgressBar.setVisibility(View.GONE);
-		//view of graph******start view******//
-//		j = 0;
-//		if(mGraphList != null) {
-//			if(mGraphList.size() >= 1 ) {
-//				createBarGraph();
-//			}
-//			
-//		} else {
-//			graphNoItem();
-//			mainGraph.addView(graphNoItem);
-//			graphHeaderTextview.setText("");
-//		}
-//		graphGallery.setLayoutParams(new LinearLayout.LayoutParams(graphContainer.getLayoutParams()));
 		graphContainer.setVisibility(View.GONE);
         graphGallery.setVisibility(View.VISIBLE);
-		graphGallery.setAdapter(imageAdapter);
-		graphGallery.setSelection(mDataDateListGraph.size() - 1);
+        graphGallery.setAdapter(imageAdapter);
+        graphGallery.setSelection(imageAdapter.getCount() - 1);
 		super.onPostExecute(result);
 	}
 	
-//	private void removeGraphView() {
-//		mainGraph.removeView(barGraph);
-//		mainGraph.removeView(graphNoItem);
-//	}
-//	
-//	private void createBarGraph() {
-//		barGraph = new BarGraph(activity, mGraphList.get(j).get(1), mGraphList.get(j).get(2));
-//		mainGraph.addView(barGraph , params);
-//		if(j == 0) {
-//			if(!isNotNullAll(mGraphList.get(j).get(0))) {
-//				mainGraph.removeView(barGraph);
-//				graphNoItem();
-//				mainGraph.addView(graphNoItem);
-//			}
-//		}
-//		graphHeaderTextview.setText(mDataDateListGraph.get(j).dateTime);
-//	}
-//	
-//	private void graphNoItem() {
-//		graphNoItem = new TextView(activity);
-//		graphNoItem.setGravity(Gravity.CENTER);
-//		graphNoItem.setText("No Items to Show");
-//		LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, mainGraph.getBackground().getIntrinsicHeight());
-//		graphNoItem.setTextColor(Color.BLACK);
-//		graphNoItem.setPadding(0, 0, 0, 15);
-//		graphNoItem.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-//		graphNoItem.setLayoutParams(textParams);
-//	}
+	private TextView graphNoItem() {
+		TextView graphNoItem = new TextView(activity);
+		graphNoItem.setGravity(Gravity.CENTER);
+		graphNoItem.setText("No Items to Show");
+		LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, mainGraph.getBackground().getIntrinsicHeight());
+		graphNoItem.setTextColor(Color.BLACK);
+		graphNoItem.setPadding(0, 0, 0, 15);
+		graphNoItem.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+		graphNoItem.setLayoutParams(textParams);
+		return graphNoItem;
+	}
 	
 	private ArrayList<ArrayList<ArrayList<String>>> getGraphList() {
 		DisplayDate lastDateDisplayDate = new DisplayDate(lastDateCalendar);
@@ -351,7 +325,10 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 
 	    @Override
 	    public int getCount() {
-	        return mDataDateListGraph.size();
+	    	if(mDataDateListGraph.size() > 0 )
+	    		return mDataDateListGraph.size();
+	    	else 
+	    		return 1;
 	    }
 
 	    @Override
@@ -375,14 +352,23 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	    	} else {
 	    		graphViewHolder = (GraphViewHolder) convertView.getTag();
 	    	}
-	    	
-	    	j = mDataDateListGraph.size() - position - 1;
 	    	graphViewHolder.grahHeaderTextView = (TextView) convertView.findViewById(R.id.graph_header_textview);
-	    	graphViewHolder.barGraph = new BarGraph(activity, mGraphList.get(j).get(1), mGraphList.get(j).get(2));
 	    	graphViewHolder.graphMainView = (LinearLayout) convertView.findViewById(R.id.graph);
-	    	graphViewHolder.grahHeaderTextView.setText(mDataDateListGraph.get(j).dateTime);
-	    	graphViewHolder.graphMainView.addView(graphViewHolder.barGraph, params);
-    		return convertView;
+	    	if(mGraphList != null && mGraphList.size() > 0) {
+	    		j = mDataDateListGraph.size() - position - 1;
+			    graphViewHolder.barGraph = new BarGraph(activity, mGraphList.get(j).get(1), mGraphList.get(j).get(2));
+			    if(j == 0 && !isNotNullAll(mGraphList.get(j).get(0))) {
+			    	graphViewHolder.graphMainView.addView(graphNoItem(), params);
+				} else {
+					graphViewHolder.graphMainView.addView(graphViewHolder.barGraph, params);
+				}
+			    graphViewHolder.grahHeaderTextView.setText(mDataDateListGraph.get(j).dateTime);
+		    	return convertView;
+	    	} else {
+	    		graphViewHolder.grahHeaderTextView.setText("");
+	    		graphViewHolder.graphMainView.addView(graphNoItem(), params);
+	    		return convertView;
+	    	}
 	    }
 	    
 	}
