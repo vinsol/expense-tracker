@@ -55,15 +55,25 @@
 	            android:gravity="center_horizontal"
 	            >
 	            
-	            <Gallery 
-                	android:id="@+id/graph_gallery"
-                	android:layout_width="fill_parent"
-                	android:layout_height="wrap_content"
-                	android:visibility="gone" />
+	            <com.vinsol.expensetracker.titlepagerindicator.TitlePageIndicator
+        			android:id="@+id/graph_title_indicator"
+       				android:padding="10dip"
+			        android:layout_height="wrap_content"
+			        android:layout_width="fill_parent"
+			        android:background="@drawable/graph_header"/>
 	            
-	            <include 
-	                layout="@layout/graph"/>
-	            	
+	            <LinearLayout
+	                android:layout_height="fill_parent"
+	                android:layout_width="fill_parent"
+	                android:background="@drawable/graph"
+					android:layout_marginBottom="10dp">
+	            
+	    			<android.support.v4.view.ViewPager
+	        			android:id="@+id/graph_viewpager"
+	        			android:layout_width="fill_parent"
+	        			android:layout_height="0dp"/>
+	    			
+	            </LinearLayout>
 	       		<include 
 	     			layout="@layout/new_entry_icons_grid" />
 	    		

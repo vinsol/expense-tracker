@@ -15,17 +15,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Parcelable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Gallery;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.vinsol.android.graph.BarGraph;
@@ -33,6 +32,9 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.GraphDataList;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
+import com.vinsol.expensetracker.titlepagerindicator.TitlePageIndicator;
+import com.vinsol.expensetracker.titlepagerindicator.TitleProvider;
+import com.vinsol.expensetracker.utils.Log;
 
 public class GraphHelper extends AsyncTask<Void, Void, Void> {
 
@@ -42,29 +44,33 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	private ArrayList<ArrayList<ArrayList<String>>> mGraphList;
 	private Calendar lastDateCalendar;
 	private Activity activity;
-	private int j = 0;
-	private LinearLayout mainGraph ;
-	private LinearLayout.LayoutParams params ;
-	private ProgressBar graphProgressBar;
-	private Gallery graphGallery;
-	private ImageAdapter imageAdapter;
-	private LinearLayout graphContainer;
+//	private int j = 0;
+//	private LinearLayout mainGraph ;
+//	private LinearLayout.LayoutParams params ;
+//	private ProgressBar graphProgressBar;
+	private TitlePageIndicator graphTitleIndicator;
+//	private ImageAdapter imageAdapter;
+	private ViewPager graphViewPager;
+	private GraphPagerAdapter pagerAdapter;
 	
 	public GraphHelper(final Activity activity) {
 		this.activity = activity;
 		lastDateCalendar = Calendar.getInstance();
-		imageAdapter = new ImageAdapter();
+//		imageAdapter = new ImageAdapter();
+		pagerAdapter = new GraphPagerAdapter();
 		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		mainGraph = (LinearLayout) activity.findViewById(R.id.graph);
-		graphProgressBar = (ProgressBar) activity.findViewById(R.id.graph_progress_bar);
-		graphGallery = (Gallery) activity.findViewById(R.id.graph_gallery);
-		graphContainer = (LinearLayout) activity.findViewById(R.id.graph_container);
-		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
+//		mainGraph = (LinearLayout) activity.findViewById(R.id.graph_main);
+//		graphProgressBar = (ProgressBar) activity.findViewById(R.id.graph_progress_bar);
+		graphTitleIndicator = (TitlePageIndicator) activity.findViewById(R.id.graph_title_indicator);
+		graphViewPager = (ViewPager) activity.findViewById(R.id.graph_viewpager);
+		
+//		graphGallery = (Gallery) activity.findViewById(R.id.graph_gallery);
+//		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
 	}
 	
 	@Override
 	protected void onPreExecute() {
-		graphProgressBar.setVisibility(View.VISIBLE);
+//		graphProgressBar.setVisibility(View.VISIBLE);
 		super.onPreExecute();
 	}
 	
@@ -83,23 +89,24 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	
 	@Override
 	protected void onPostExecute(Void result) {
-		graphProgressBar.setVisibility(View.GONE);
-		graphContainer.setVisibility(View.GONE);
-        graphGallery.setVisibility(View.VISIBLE);
-        graphGallery.setAdapter(imageAdapter);
-        graphGallery.setSelection(imageAdapter.getCount() - 1);
+//		graphProgressBar.setVisibility(View.GONE);
+//		mainGraph.setVisibility(View.GONE);
+		graphViewPager.setAdapter(pagerAdapter);
+		graphTitleIndicator.setViewPager(graphViewPager);
+//        graphGallery.setVisibility(View.VISIBLE);
+//        graphGallery.setAdapter(imageAdapter);
+//        graphGallery.setSelection(imageAdapter.getCount() - 1);
 		super.onPostExecute(result);
 	}
 	
-	private TextView graphNoItem() {
+	private TextView graphNoItem(RelativeLayout.LayoutParams params) {
 		TextView graphNoItem = new TextView(activity);
 		graphNoItem.setGravity(Gravity.CENTER);
 		graphNoItem.setText("No Items to Show");
-		LayoutParams textParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, mainGraph.getBackground().getIntrinsicHeight());
 		graphNoItem.setTextColor(Color.BLACK);
 		graphNoItem.setPadding(0, 0, 0, 15);
 		graphNoItem.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-		graphNoItem.setLayoutParams(textParams);
+		graphNoItem.setLayoutParams(params);
 		return graphNoItem;
 	}
 	
@@ -321,60 +328,163 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 		return null;
 	}
 	
-	public class ImageAdapter extends BaseAdapter {
+	
+private class GraphPagerAdapter extends PagerAdapter implements TitleProvider{
 
-	    @Override
-	    public int getCount() {
-	    	if(mDataDateListGraph.size() > 0 )
+		@Override
+		public int getCount() {
+			if(mDataDateListGraph.size() > 0 )
 	    		return mDataDateListGraph.size();
 	    	else 
 	    		return 1;
-	    }
+		}
 
-	    @Override
-	    public Object getItem(int position) {
-	        return position;
-	    }
-
-	    @Override
-	    public long getItemId(int position) {
-	        return position;
-	    }
-
-	    @Override
-	    public View getView(int position, View convertView, ViewGroup parent) {
-	    	GraphViewHolder graphViewHolder;
-	    	if(convertView == null) {
+	    /**
+	     * Create the page for the given position.  The adapter is responsible
+	     * for adding the view to the container given here, although it only
+	     * must ensure this is done by the time it returns from
+	     * {@link #finishUpdate()}.
+	     *
+	     * @param container The containing View in which the page will be shown.
+	     * @param position The page position to be instantiated.
+	     * @return Returns an Object representing the new page.  This does not
+	     * need to be a View, but can be some other container of the page.
+	     */
+		@Override
+		public Object instantiateItem(ViewGroup collection, int position) {
+			GraphViewHolder graphViewHolder;
+			LinearLayout.LayoutParams paramsLinearLayout = null;
+			RelativeLayout.LayoutParams paramsRelativeLayout = null;
+//	    	if(convertView == null) {
 	    		LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	    		convertView = inflater.inflate(R.layout.graph, null);
+	    		ViewGroup convertView = (ViewGroup) inflater.inflate(R.layout.graph, collection);
 	    		graphViewHolder = new GraphViewHolder();
-	    		convertView.setTag(graphViewHolder);
-	    	} else {
-	    		graphViewHolder = (GraphViewHolder) convertView.getTag();
-	    	}
-	    	graphViewHolder.grahHeaderTextView = (TextView) convertView.findViewById(R.id.graph_header_textview);
-	    	graphViewHolder.graphMainView = (LinearLayout) convertView.findViewById(R.id.graph);
+		    	graphViewHolder.graphMainView = (LinearLayout) convertView.findViewById(R.id.graph_main);
+	    		paramsLinearLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,graphViewHolder.graphMainView.getBackground().getIntrinsicHeight());
+	    		paramsRelativeLayout = new RelativeLayout.LayoutParams(paramsLinearLayout.width, paramsLinearLayout.height);
+//	    		convertView.setTag(graphViewHolder);
+//	    	} else {
+//	    		graphViewHolder = (GraphViewHolder) convertView.getTag();
+//	    	}
+//	    		convertView.setLayoutParams(paramsLinearLayout);
 	    	if(mGraphList != null && mGraphList.size() > 0) {
-	    		j = mDataDateListGraph.size() - position - 1;
-			    graphViewHolder.barGraph = new BarGraph(activity, mGraphList.get(j).get(1), mGraphList.get(j).get(2));
-			    if(j == 0 && !isNotNullAll(mGraphList.get(j).get(0))) {
-			    	graphViewHolder.graphMainView.addView(graphNoItem(), params);
+			    graphViewHolder.barGraph = new BarGraph(activity, mGraphList.get(position).get(1), mGraphList.get(position).get(2));
+			    if(position == mDataDateListGraph.size() && !isNotNullAll(mGraphList.get(position).get(0))) {
+			    	graphViewHolder.graphMainView.addView(graphNoItem(paramsRelativeLayout), paramsLinearLayout);
 				} else {
-					graphViewHolder.graphMainView.addView(graphViewHolder.barGraph, params);
+					graphViewHolder.graphMainView.addView(graphViewHolder.barGraph, paramsLinearLayout);
 				}
-			    graphViewHolder.grahHeaderTextView.setText(mDataDateListGraph.get(j).dateTime);
-		    	return convertView;
+			    ((ViewPager) collection).addView(convertView);
+		    	return graphViewHolder.graphMainView;
 	    	} else {
-	    		graphViewHolder.grahHeaderTextView.setText("");
-	    		graphViewHolder.graphMainView.addView(graphNoItem(), params);
-	    		return convertView;
+	    		graphViewHolder.graphMainView.addView(graphNoItem(paramsRelativeLayout), paramsLinearLayout);
+	    		((ViewPager) collection).addView(convertView);
+	    		return graphViewHolder.graphMainView;
 	    	}
-	    }
-	    
-	}
+		}
+
+	    /**
+	     * Remove a page for the given position.  The adapter is responsible
+	     * for removing the view from its container, although it only must ensure
+	     * this is done by the time it returns from {@link #finishUpdate()}.
+	     *
+	     * @param container The containing View from which the page will be removed.
+	     * @param position The page position to be removed.
+	     * @param object The same object that was returned by
+	     * {@link #instantiateItem(View, int)}.
+	     */
+		@Override
+		public void destroyItem(View collection, int position, Object view) {
+			((ViewPager) collection).removeView((View) view);
+		}
+
+		@Override
+		public boolean isViewFromObject(View view, Object object) {
+			return view==(object);
+		}
+
+	    /**
+	     * Called when the a change in the shown pages has been completed.  At this
+	     * point you must ensure that all of the pages have actually been added or
+	     * removed from the container as appropriate.
+	     * @param container The containing View which is displaying this adapter's
+	     * page views.
+	     */
+		@Override
+		public void finishUpdate(View arg0) {}
+		
+
+		@Override
+		public void restoreState(Parcelable arg0, ClassLoader arg1) {}
+
+		@Override
+		public Parcelable saveState() {
+			return null;
+		}
+
+		@Override
+		public void startUpdate(View arg0) {}
+
+		@Override
+		public String getTitle(int position) {
+			return mDataDateListGraph.get(position).dateTime;
+		}
+    	
+    }
+	
+//	public class ImageAdapter extends BaseAdapter {
+//
+//	    @Override
+//	    public int getCount() {
+//	    	if(mDataDateListGraph.size() > 0 )
+//	    		return mDataDateListGraph.size();
+//	    	else 
+//	    		return 1;
+//	    }
+//
+//	    @Override
+//	    public Object getItem(int position) {
+//	        return position;
+//	    }
+//
+//	    @Override
+//	    public long getItemId(int position) {
+//	        return position;
+//	    }
+//
+//	    @Override
+//	    public View getView(int position, View convertView, ViewGroup parent) {
+//	    	GraphViewHolder graphViewHolder;
+//	    	if(convertView == null) {
+//	    		LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//	    		convertView = inflater.inflate(R.layout.graph, null);
+//	    		graphViewHolder = new GraphViewHolder();
+//	    		convertView.setTag(graphViewHolder);
+//	    	} else {
+//	    		graphViewHolder = (GraphViewHolder) convertView.getTag();
+//	    	}
+//	    	graphViewHolder.grahHeaderTextView = (TextView) convertView.findViewById(R.id.graph_header_textview);
+//	    	graphViewHolder.graphMainView = (LinearLayout) convertView.findViewById(R.id.graph);
+//	    	if(mGraphList != null && mGraphList.size() > 0) {
+//	    		j = mDataDateListGraph.size() - position - 1;
+//			    graphViewHolder.barGraph = new BarGraph(activity, mGraphList.get(j).get(1), mGraphList.get(j).get(2));
+//			    if(j == 0 && !isNotNullAll(mGraphList.get(j).get(0))) {
+//			    	graphViewHolder.graphMainView.addView(graphNoItem(), params);
+//				} else {
+//					graphViewHolder.graphMainView.addView(graphViewHolder.barGraph, params);
+//				}
+//			    graphViewHolder.grahHeaderTextView.setText(mDataDateListGraph.get(j).dateTime);
+//		    	return convertView;
+//	    	} else {
+//	    		graphViewHolder.grahHeaderTextView.setText("");
+//	    		graphViewHolder.graphMainView.addView(graphNoItem(), params);
+//	    		return convertView;
+//	    	}
+//	    }
+//	    
+//	}
 	
 	private class GraphViewHolder {
-		TextView grahHeaderTextView;
 		BarGraph barGraph;
 		LinearLayout graphMainView;
 	}
