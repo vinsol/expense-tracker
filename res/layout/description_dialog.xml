@@ -1,49 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/audio_play_dialog_bg"
-    >
-    	<ScrollView
-	    android:id="@+id/textview_scroll"
-	    android:layout_height="wrap_content"
-	    android:layout_width="fill_parent"
-	    >
-	    <RelativeLayout
-	        android:layout_height="fill_parent"
-	        android:layout_width="fill_parent"
-	        android:paddingBottom="10dip"
-	        >
-			<TextView
-	   		    android:id="@+id/textview"
-	   		    android:layout_height="wrap_content"
-			    android:layout_width="wrap_content"
-			   	android:text="text"
-			   	android:textColor="@color/black"
-			   	android:layout_alignParentTop="true"
-			   	android:padding="10dip"
-			   	android:layout_marginBottom="30dip"
-			   	android:textSize="18sp"
-				>
-			</TextView>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@drawable/audio_play_dialog_bg"
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent"
+	android:paddingBottom="10dip"
+	>
 	
-			<LinearLayout
-			    android:id="@+id/cancel_button_view"
-			    android:layout_below="@id/textview"
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content"
-				android:layout_marginBottom="10dp"
-				android:gravity="center_horizontal"
-				>
+	<TextView
+		android:id="@+id/textview"
+	   	android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="text"
+		android:textColor="@color/black"
+		android:layout_alignParentTop="true"
+		android:padding="10dip"
+		android:layout_marginBottom="30dip"
+		android:textSize="18sp"
+		/>
+	
+	<LinearLayout
+	    android:id="@+id/cancel_button_view"
+	    android:layout_below="@id/textview"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+		android:layout_marginBottom="10dp"
+		android:gravity="center_horizontal"
+		>
 		    
-				<Button 
-				    android:id="@+id/cancel_button"
-				    android:background="@drawable/cancel_states"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    >
-			    </Button>
-			</LinearLayout>
-		</RelativeLayout>
-	</ScrollView>
+		<Button 
+		    android:id="@+id/cancel_button"
+		    android:background="@drawable/cancel_states"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    />
+	</LinearLayout>
 </RelativeLayout>

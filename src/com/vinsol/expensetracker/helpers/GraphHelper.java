@@ -18,8 +18,12 @@ import android.os.AsyncTask;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.LinearLayout;
@@ -49,21 +53,24 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	private ProgressBar graphProgressBar;
 	private Gallery graphGallery;
 	private GalleryAdapter galleryAdapter;
-	private LinearLayout graphContainer;
+//	private LinearLayout graphContainer;
+	private TextView graphHeaderTextView;
 	
 	public GraphHelper(Activity activity,ProgressBar graphProgressBar) {
 		this.activity = activity;
 		lastDateCalendar = Calendar.getInstance();
 		galleryAdapter = new GalleryAdapter();
 		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		mainGraph = (LinearLayout) activity.findViewById(R.id.graph);
+		mainGraph = (LinearLayout) activity.findViewById(R.id.main_graph);
 		this.graphProgressBar = graphProgressBar;
 		graphGallery = (Gallery) activity.findViewById(R.id.graph_gallery);
-		graphContainer = (LinearLayout) activity.findViewById(R.id.graph_container);
+		graphHeaderTextView = (TextView) activity.findViewById(R.id.graph_header_textview);
+//		graphContainer = (LinearLayout) activity.findViewById(R.id.graph_container);
 		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
 		graphGallery.setSpacing(0);
 		graphGallery.setFadingEdgeLength(0);
-		Log.d(graphContainer.getHeight());
+		
+		
 	}
 	
 	@Override
@@ -82,10 +89,31 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected void onPostExecute(Void result) {
 		graphProgressBar.setVisibility(View.GONE);
-		graphContainer.setVisibility(View.GONE);
+		mainGraph.setVisibility(View.GONE);
         graphGallery.setVisibility(View.VISIBLE);
         graphGallery.setAdapter(galleryAdapter);
         graphGallery.setSelection(galleryAdapter.getCount() - 1);
+        graphGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
+				graphHeaderTextView.setText(mDataDateListGraph.get(mDataDateListGraph.size() - position - 1).dateTime);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> adapter) {
+				graphHeaderTextView.setText("");
+			}
+		});
+//        graphGallery.setOnTouchListener(new OnTouchListener() {
+//			
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				Log.d("Graph Horizontal Position "+event.getX());
+//				graphHeaderTextView.setText(mDataDateListGraph.get(graphGallery.getSelectedItemPosition()).dateTime);
+//				return false;
+//			}
+//		});
 		super.onPostExecute(result);
 	}
 	
@@ -351,8 +379,8 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	    	} else {
 	    		graphViewHolder = (GraphViewHolder) convertView.getTag();
 	    	}
-	    	graphViewHolder.grahHeaderTextView = (TextView) convertView.findViewById(R.id.graph_header_textview);
-	    	graphViewHolder.graphMainView = (LinearLayout) convertView.findViewById(R.id.graph);
+//	    	graphViewHolder.grahHeaderTextView = (TextView) convertView.findViewById(R.id.graph_header_textview);
+	    	graphViewHolder.graphMainView = (LinearLayout) convertView.findViewById(R.id.main_graph);
 	    	if(mGraphList != null && mGraphList.size() > 0) {
 	    		j = mDataDateListGraph.size() - position - 1;
 			    graphViewHolder.barGraph = new BarGraph(activity, mGraphList.get(j).get(1), mGraphList.get(j).get(2));
@@ -361,10 +389,10 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 				} else {
 					graphViewHolder.graphMainView.addView(graphViewHolder.barGraph, params);
 				}
-			    graphViewHolder.grahHeaderTextView.setText(mDataDateListGraph.get(j).dateTime);
+//			    graphViewHolder.grahHeaderTextView.setText(mDataDateListGraph.get(j).dateTime);
 		    	return convertView;
 	    	} else {
-	    		graphViewHolder.grahHeaderTextView.setText("");
+//	    		graphViewHolder.grahHeaderTextView.setText("");
 	    		graphViewHolder.graphMainView.addView(graphNoItem(), params);
 	    		return convertView;
 	    	}
@@ -374,7 +402,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	
 	
 	private class GraphViewHolder {
-		TextView grahHeaderTextView;
+//		TextView grahHeaderTextView;
 		BarGraph barGraph;
 		LinearLayout graphMainView;
 	}
