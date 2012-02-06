@@ -59,6 +59,7 @@
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
 	                android:background="@drawable/graph_header"
+	                android:padding="5dp"
 	                >
 	                
 		            <TextView 
@@ -83,7 +84,7 @@
 						android:maxLines="1"
 						android:layout_centerInParent="true"
 						android:scrollHorizontally="true"
-						android:textStyle="bold" />
+						android:textStyle="bold"/>
 		            
 		            <TextView 
 					    android:id="@+id/graph_header_textview_right"

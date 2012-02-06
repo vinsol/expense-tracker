@@ -19,6 +19,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -35,8 +36,9 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.GraphDataList;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
+import com.vinsol.expensetracker.utils.Log;
 
-public class GraphHelper extends AsyncTask<Void, Void, Void> {
+public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickListener{
 
 	private List<ListDatetimeAmount> mDataDateListGraph;
 	private ConvertCursorToListString mConvertCursorToListString;
@@ -44,7 +46,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	private ArrayList<ArrayList<ArrayList<String>>> mGraphList;
 	private Calendar lastDateCalendar;
 	private Activity activity;
-	private int j = 0;
+//	private int j = 0;
 	private LinearLayout mainGraph ;
 	private LinearLayout.LayoutParams params ;
 	private ProgressBar graphProgressBar;
@@ -70,8 +72,9 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
 		graphGallery.setSpacing(0);
 		graphGallery.setFadingEdgeLength(0);
-		
-		
+		graphHeaderTextViewLeft.setOnClickListener(this);
+		graphHeaderTextViewRight.setOnClickListener(this);
+		graphHeaderTextViewCenter.setOnClickListener(this);
 	}
 	
 	@Override
@@ -98,6 +101,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 
 			@Override
 			public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
+				int j;
 				if(mDataDateListGraph != null && !mDataDateListGraph.isEmpty()) {
 					j = mDataDateListGraph.size() - position - 1;
 					graphHeaderTextViewCenter.setText(mDataDateListGraph.get(j).dateTime);
@@ -398,6 +402,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	    	}
 //	    	graphViewHolder.grahHeaderTextView = (TextView) convertView.findViewById(R.id.graph_header_textview);
 	    	graphViewHolder.graphMainView = (LinearLayout) convertView.findViewById(R.id.main_graph);
+	    	int j;
 	    	if(mGraphList != null && mGraphList.size() > 0) {
 	    		j = mDataDateListGraph.size() - position - 1;
 			    graphViewHolder.barGraph = new BarGraph(activity, mGraphList.get(j).get(1), mGraphList.get(j).get(2));
@@ -422,6 +427,26 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 //		TextView grahHeaderTextView;
 		BarGraph barGraph;
 		LinearLayout graphMainView;
+	}
+
+
+	@Override
+	public void onClick(View v) {
+		int j;
+		Log.d(graphGallery.getSelectedItemPosition());
+		j = graphGallery.getSelectedItemPosition();
+		switch (v.getId()) {
+		case R.id.graph_header_textview_left:
+			j--;
+			break;
+
+		case R.id.graph_header_textview_right:
+			j++;
+			break;
+		default:
+			break;
+		}
+		graphGallery.setSelection(j);
 	}
 	
 	
