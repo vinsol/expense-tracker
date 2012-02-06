@@ -74,7 +74,6 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 		graphGallery.setFadingEdgeLength(0);
 		graphHeaderTextViewLeft.setOnClickListener(this);
 		graphHeaderTextViewRight.setOnClickListener(this);
-		graphHeaderTextViewCenter.setOnClickListener(this);
 	}
 	
 	@Override
