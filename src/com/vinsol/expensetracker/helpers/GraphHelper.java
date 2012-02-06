@@ -18,9 +18,7 @@ import android.os.AsyncTask;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -37,7 +35,6 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.GraphDataList;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
-import com.vinsol.expensetracker.utils.Log;
 
 public class GraphHelper extends AsyncTask<Void, Void, Void> {
 
@@ -54,7 +51,9 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	private Gallery graphGallery;
 	private GalleryAdapter galleryAdapter;
 //	private LinearLayout graphContainer;
-	private TextView graphHeaderTextView;
+	private TextView graphHeaderTextViewCenter;
+	private TextView graphHeaderTextViewLeft;
+	private TextView graphHeaderTextViewRight;
 	
 	public GraphHelper(Activity activity,ProgressBar graphProgressBar) {
 		this.activity = activity;
@@ -64,7 +63,9 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 		mainGraph = (LinearLayout) activity.findViewById(R.id.main_graph);
 		this.graphProgressBar = graphProgressBar;
 		graphGallery = (Gallery) activity.findViewById(R.id.graph_gallery);
-		graphHeaderTextView = (TextView) activity.findViewById(R.id.graph_header_textview);
+		graphHeaderTextViewCenter = (TextView) activity.findViewById(R.id.graph_header_textview_center);
+		graphHeaderTextViewLeft = (TextView) activity.findViewById(R.id.graph_header_textview_left);
+		graphHeaderTextViewRight = (TextView) activity.findViewById(R.id.graph_header_textview_right);
 //		graphContainer = (LinearLayout) activity.findViewById(R.id.graph_container);
 		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
 		graphGallery.setSpacing(0);
@@ -97,12 +98,28 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 
 			@Override
 			public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
-				graphHeaderTextView.setText(mDataDateListGraph.get(mDataDateListGraph.size() - position - 1).dateTime);
+				if(mDataDateListGraph != null && !mDataDateListGraph.isEmpty()) {
+					j = mDataDateListGraph.size() - position - 1;
+					graphHeaderTextViewCenter.setText(mDataDateListGraph.get(j).dateTime);
+					if(j + 1  != mDataDateListGraph.size())
+						graphHeaderTextViewLeft.setText(mDataDateListGraph.get(j + 1).dateTime);
+					else 
+						graphHeaderTextViewLeft.setText("");
+					if(j - 1 != -1)
+						graphHeaderTextViewRight.setText(mDataDateListGraph.get(j - 1).dateTime);
+					else
+						graphHeaderTextViewRight.setText("");
+				}
+//				else {
+//					graphHeaderTextViewCenter.setText("");
+//					graphHeaderTextViewRight.setText("");
+//					graphHeaderTextViewLeft.setText("");
+//				}
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> adapter) {
-				graphHeaderTextView.setText("");
+				graphHeaderTextViewCenter.setText("");
 			}
 		});
 //        graphGallery.setOnTouchListener(new OnTouchListener() {
