@@ -59,7 +59,8 @@
                 	android:id="@+id/graph_gallery"
                 	android:layout_width="fill_parent"
                 	android:layout_height="wrap_content"
-                	android:visibility="gone" />
+                	android:visibility="gone" 
+                	/>
 	            
 	            <include 
 	                layout="@layout/graph"/>

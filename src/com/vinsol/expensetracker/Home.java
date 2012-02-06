@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
@@ -39,6 +40,7 @@ public class Home extends Activity implements OnClickListener {
 	private Bundle bundle;
 	private Entry entry;
 	private GraphHelper mHandleGraph;
+	private ProgressBar graphProgressBar;
 	
 	@Override
 	protected void onStart() {
@@ -85,6 +87,8 @@ public class Home extends Activity implements OnClickListener {
 		ImageView showListingButton = (ImageView) findViewById(R.id.main_listview);
 		showListingButton.setOnClickListener(this);
 		
+		graphProgressBar = (ProgressBar) findViewById(R.id.graph_progress_bar);
+		graphProgressBar.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -95,7 +99,9 @@ public class Home extends Activity implements OnClickListener {
 		if(location == null) {
 			mLocationHelper.requestLocationUpdate();
 		}
-		mHandleGraph = new GraphHelper(this);
+		
+		
+		mHandleGraph = new GraphHelper(this,graphProgressBar);
 		mHandleGraph.execute();
 		super.onResume();
 	}
@@ -231,6 +237,14 @@ public class Home extends Activity implements OnClickListener {
 		long id = mDatabaseAdapter.insertToEntryTable(list);
 		mDatabaseAdapter.close();
 		return id;
+	}
+	
+	@Override
+	protected void onPause() {
+		if(mHandleGraph != null && !mHandleGraph.isCancelled()) {
+			mHandleGraph.cancel(true);
+		}
+		super.onPause();
 	}
 	
 }

@@ -33,6 +33,7 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.GraphDataList;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
+import com.vinsol.expensetracker.utils.Log;
 
 public class GraphHelper extends AsyncTask<Void, Void, Void> {
 
@@ -47,25 +48,22 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	private LinearLayout.LayoutParams params ;
 	private ProgressBar graphProgressBar;
 	private Gallery graphGallery;
-	private ImageAdapter imageAdapter;
+	private GalleryAdapter galleryAdapter;
 	private LinearLayout graphContainer;
 	
-	public GraphHelper(final Activity activity) {
+	public GraphHelper(Activity activity,ProgressBar graphProgressBar) {
 		this.activity = activity;
 		lastDateCalendar = Calendar.getInstance();
-		imageAdapter = new ImageAdapter();
+		galleryAdapter = new GalleryAdapter();
 		lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mainGraph = (LinearLayout) activity.findViewById(R.id.graph);
-		graphProgressBar = (ProgressBar) activity.findViewById(R.id.graph_progress_bar);
+		this.graphProgressBar = graphProgressBar;
 		graphGallery = (Gallery) activity.findViewById(R.id.graph_gallery);
 		graphContainer = (LinearLayout) activity.findViewById(R.id.graph_container);
 		params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,mainGraph.getBackground().getIntrinsicHeight());
-	}
-	
-	@Override
-	protected void onPreExecute() {
-		graphProgressBar.setVisibility(View.VISIBLE);
-		super.onPreExecute();
+		graphGallery.setSpacing(0);
+		graphGallery.setFadingEdgeLength(0);
+		Log.d(graphContainer.getHeight());
 	}
 	
 	@Override
@@ -86,8 +84,8 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 		graphProgressBar.setVisibility(View.GONE);
 		graphContainer.setVisibility(View.GONE);
         graphGallery.setVisibility(View.VISIBLE);
-        graphGallery.setAdapter(imageAdapter);
-        graphGallery.setSelection(imageAdapter.getCount() - 1);
+        graphGallery.setAdapter(galleryAdapter);
+        graphGallery.setSelection(galleryAdapter.getCount() - 1);
 		super.onPostExecute(result);
 	}
 	
@@ -321,11 +319,12 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 		return null;
 	}
 	
-	public class ImageAdapter extends BaseAdapter {
+	
+	public class GalleryAdapter extends BaseAdapter {
 
 	    @Override
 	    public int getCount() {
-	    	if(mDataDateListGraph.size() > 0 )
+	    	if(mDataDateListGraph != null && mDataDateListGraph.size() > 0 )
 	    		return mDataDateListGraph.size();
 	    	else 
 	    		return 1;
@@ -373,10 +372,12 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> {
 	    
 	}
 	
+	
 	private class GraphViewHolder {
 		TextView grahHeaderTextView;
 		BarGraph barGraph;
 		LinearLayout graphMainView;
 	}
+	
 	
 }
