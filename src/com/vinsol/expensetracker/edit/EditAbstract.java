@@ -266,14 +266,13 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			Bundle mToHighLight = new Bundle();
 			mToHighLight.putString(Constants.HIGHLIGHT, toSave.id);
 			intentExpenseListing.putExtras(mToHighLight);
-			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			if(!intentExtras.containsKey(Constants.POSITION)) {
 				startActivity(intentExpenseListing);
 			} else {
 				mToHighLight.putInt(Constants.POSITION, intentExtras.getInt(Constants.POSITION));
 				mToHighLight.putParcelable(Constants.ENTRY_LIST_EXTRA, getListOnResult(toSave));
 				setActivityResult(mToHighLight);
-				finish();
 			}
 		} else {
 			Bundle tempBundle = new Bundle();

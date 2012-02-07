@@ -515,5 +515,4 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	protected abstract void setContentView();
 	protected abstract boolean condition(DisplayDate mDisplayDate);
 	
-	
 }

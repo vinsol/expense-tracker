@@ -46,7 +46,6 @@
     <string name="camera_cancel_button">Camera Cancel Button</string>
     <string name="camera_use_button">Camera use Button</string>
     <string name="camera_retake_button">Camera Retake Button</string>
-    <string name="graph_swipe">Graph Swipe</string>
     <string name="list_image_dialog">Listing ImageView Dialog</string>
     <string name="list_text_dialog">Listing TextView Dialog</string>
     <string name="list_audio_dialog">Listing AudioDialog</string>

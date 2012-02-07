@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="Widget"></style>
-    <style name="Widget.TitlePageIndicator" parent="Widget">
-        <item name="selectedBold">@bool/default_title_indicator_selected_bold</item>
-    </style>
-</resources>
