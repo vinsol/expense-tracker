@@ -93,6 +93,9 @@ public class FileHelper {
 			while ((len = in.read(buf)) > 0) {
 				out.write(buf, 0, len);
 			}
+			out.flush();
+			in.close();
+			out.close();
 		} catch (Exception e) {
 			//Do Nothing
 		}

@@ -45,7 +45,6 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 	}
 	
 	private void doCommonTaskBefore(Context context, String id) {
-		
 		mContext = context;
 		mFile = id;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);

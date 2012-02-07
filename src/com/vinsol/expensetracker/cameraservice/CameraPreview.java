@@ -15,6 +15,7 @@ import android.graphics.Matrix;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
@@ -337,7 +338,15 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 	private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
 		public void onPictureTaken(byte[] imageData, Camera c) {
 			if (imageData != null) {
-				imageData=rotateImage(imageData, 90);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				imageData=rotateImage(baos, imageData, 90);
+				
+				try {
+					baos.flush();
+					baos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				File mTempFile = saveImage(imageData);
 				if (mTempFile != null) {
 					updatePicConfirmationScreen();
@@ -353,8 +362,7 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 		}
 	};
 		
-	private byte[] rotateImage(byte[] imageData, int degrees) {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	private byte[] rotateImage(ByteArrayOutputStream baos, byte[] imageData, int degrees) {
 		int width = 0;
 		int height = 0;
 		Bitmap image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
@@ -366,8 +374,9 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 		Matrix matrix = new Matrix();
 		matrix.postRotate(degrees);
 		Bitmap rotatedBitmap = Bitmap.createBitmap(image, 0, 0, width, height, matrix, true);
-		rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+		rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos);
 		image.recycle();
+		rotatedBitmap.recycle();
 		return baos.toByteArray();
 	}
 	
@@ -403,7 +412,9 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 			retakeButton.setVisibility(View.VISIBLE);
 			cancelButton.setVisibility(View.VISIBLE);
 			takePicPreviewContainer.setVisibility(View.VISIBLE);
-			takePicPreviewContainer.setBackgroundDrawable(new BitmapDrawable(mTempFile.toString()));
+			Drawable drawable = new BitmapDrawable(mTempFile.toString());
+			takePicPreviewContainer.setBackgroundDrawable(drawable);
+			drawable.invalidateSelf();
  		}
 	}
 	
@@ -423,7 +434,8 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 		try {
 			BitmapFactory.Options options=new BitmapFactory.Options();
 			options.inSampleSize = 1;
-			Bitmap myImage = BitmapFactory.decodeByteArray(imageData, 0,imageData.length,options);
+			options.inPurgeable = true;
+			Bitmap myImage = BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
 			fileOutputStream = new FileOutputStream(mTempFile.toString());
 			BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
 			if(quality!=49) {
@@ -432,7 +444,10 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 			else {
 				bos.write(imageData);
 			}
+			myImage.recycle();
+			fileOutputStream.flush();
 			bos.flush();
+			fileOutputStream.close();
 			bos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

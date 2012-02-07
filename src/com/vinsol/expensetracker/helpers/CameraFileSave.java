@@ -50,6 +50,7 @@ public class CameraFileSave {
 			Drawable fullSizeImageDrawable = Drawable.createFromPath(fullSizeImage.toString());
 			FULL_SIZE_IMAGE_WIDTH = fullSizeImageDrawable.getIntrinsicHeight();
 			FULL_SIZE_IMAGE_HEIGHT = fullSizeImageDrawable.getIntrinsicWidth();
+			fullSizeImageDrawable.invalidateSelf();
 			Log.d("*********************************************");
 			Log.d("FULL_SIZE_IMAGE_WIDTH "+FULL_SIZE_IMAGE_WIDTH);
 			Log.d("FULL_SIZE_IMAGE_HEIGHT "+FULL_SIZE_IMAGE_HEIGHT);
@@ -60,15 +61,24 @@ public class CameraFileSave {
 				SMALL_MAX_WIDTH = 120;
 				SMALL_MAX_HEIGHT = 160;
 			}
-			
-			//Save small image
-			File smallImage = fileHelper.getCameraFileSmallEntry(filename);
-			saveImage(smallImage, getBitmap(fullSizeImage, SMALL_MAX_WIDTH, SMALL_MAX_HEIGHT));
-			
-			//save Small thumbnail
-			File thumbnail = fileHelper.getCameraFileThumbnailEntry(filename);
-			saveImage(thumbnail, getBitmap(fullSizeImage, THUMBNAIL_MAX_WIDTH, THUMBNAIL_MAX_HEIGHT));
-			
+			try {
+				FileInputStream fileInputStream = new FileInputStream(fullSizeImage);
+				//Save small image
+				Bitmap bitmap = getBitmap(fileInputStream, SMALL_MAX_WIDTH, SMALL_MAX_HEIGHT);
+				File smallImage = fileHelper.getCameraFileSmallEntry(filename);
+				saveImage(smallImage, bitmap);
+//				bitmap.recycle();
+				//save Small thumbnail
+				bitmap = getBitmap(fileInputStream, THUMBNAIL_MAX_WIDTH, THUMBNAIL_MAX_HEIGHT);
+				File thumbnail = fileHelper.getCameraFileThumbnailEntry(filename);
+				saveImage(thumbnail, bitmap);
+				bitmap.recycle();
+				fileInputStream.close();
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		} else {
 			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
@@ -82,7 +92,7 @@ public class CameraFileSave {
 				out = new FileOutputStream(file);
 			} catch (FileNotFoundException e1) {
 			}
-			bitmapToSave.compress(Bitmap.CompressFormat.JPEG, 90, out);
+			bitmapToSave.compress(Bitmap.CompressFormat.JPEG, 60, out);
 			try {
 				out.flush();
 				out.close();
@@ -97,20 +107,11 @@ public class CameraFileSave {
 	}
 
 	//////////// ******** To get Bitmap Image of the picture clicked through camera ********* ///////
-	private Bitmap getBitmap(File originalImage, int width, int height) {
-		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-			int scale = getScale(FULL_SIZE_IMAGE_WIDTH, FULL_SIZE_IMAGE_HEIGHT, width, height);
-			BitmapFactory.Options o2 = new BitmapFactory.Options();
-			o2.inSampleSize = scale;
-			try {
-				return BitmapFactory.decodeStream(new FileInputStream(originalImage), null, o2);
-			} catch (FileNotFoundException e) {
-				Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
-			}
-		} else {
-			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
-		}
-		return null;
+	private Bitmap getBitmap(FileInputStream fileInputStream, int width, int height) {
+		int scale = getScale(FULL_SIZE_IMAGE_WIDTH, FULL_SIZE_IMAGE_HEIGHT, width, height);
+		BitmapFactory.Options o2 = new BitmapFactory.Options();
+		o2.inSampleSize = scale;
+		return BitmapFactory.decodeStream(fileInputStream, null, o2);
 	}
 
 	// //////// ********** Scale to which Image Reduced ********* ////////////

@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.utils.ImagePreview;
@@ -41,7 +42,7 @@ public class ShowCameraActivity extends ShowAbstract {
 		typeOfEntryFinished = R.string.finished_cameraentry;
 		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
 		showHelper();
-		if (intentExtras.containsKey("mDisplayList")) {
+		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 			File mFile = fileHelper.getCameraFileSmallEntry(mShowList.id);
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
@@ -52,6 +53,7 @@ public class ShowCameraActivity extends ShowAbstract {
 					showImageDisplay.setLayoutParams(new LayoutParams(width, height));
 				}
 				showImageDisplay.setImageDrawable(mDrawable);
+				mDrawable.invalidateSelf();
 			} else {
 				showImageDisplay.setImageResource(R.drawable.no_image_small);
 			}
@@ -102,9 +104,10 @@ public class ShowCameraActivity extends ShowAbstract {
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getExtras();
 				doTaskOnActivityResult();
-				if (intentExtras.containsKey("mDisplayList")) {
+				if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 					File mFile = fileHelper.getCameraFileSmallEntry(mShowList.id);
-					if (mFile.canRead()) {Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
+					if (mFile.canRead()) {
+						Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 						if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
 							final float scale = this.getResources().getDisplayMetrics().density;
 							int width = (int) (84 * scale + 0.5f);
@@ -112,10 +115,11 @@ public class ShowCameraActivity extends ShowAbstract {
 							showImageDisplay.setLayoutParams(new LayoutParams(width, height));
 						}
 						showImageDisplay.setImageDrawable(mDrawable);
+						mDrawable.invalidateSelf();
 					} else {
 						showImageDisplay.setImageResource(R.drawable.no_image_small);
 					}
-					mShowList = intentExtras.getParcelable("mDisplayList");
+					mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
 					FavoriteHelper();
 				}
 				showImageDisplay.setOnClickListener(this);

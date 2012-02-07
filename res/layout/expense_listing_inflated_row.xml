@@ -9,9 +9,10 @@
   	<com.vinsol.expensetracker.utils.ImageViewExtended
   		android:id="@+id/row_imageview"
 		android:layout_width="64dp"
-  		android:layout_height="fill_parent"
-  		android:scaleType="center"
- 		android:background="@drawable/listing_row_icon_bg_states" 
+  		android:layout_height="59dp"
+ 		android:background="@drawable/listing_row_icon_bg_states"
+ 		android:scaleType="centerInside"  
+ 		android:padding="2dp"
  		/>
   	
   	<ImageView 

@@ -6,9 +6,6 @@
 
 package com.vinsol.expensetracker.utils;
 
-import com.vinsol.expensetracker.Constants;
-import com.vinsol.expensetracker.R;
-
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -17,6 +14,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.vinsol.expensetracker.Constants;
+import com.vinsol.expensetracker.R;
 
 public class ImagePreview extends Activity {
 
@@ -38,7 +38,7 @@ public class ImagePreview extends Activity {
 		id = getIntent().getStringExtra("id");
 		boolean isFavorite = getIntent().getBooleanExtra("isFavorite", false);
 		
-		path = "/mnt/sdcard/ExpenseTracker/" + (isFavorite ? "Favorite/" : "") + id + Constants.IMAGE_LARGE_SUFFIX;
+		path = Constants.DIRECTORY + (isFavorite ? "Favorite/" : "") + id + Constants.IMAGE_LARGE_SUFFIX;
 		mImageView = (android.widget.ImageView) findViewById(R.id.image_view_full_screen_id);
 		progressBar = (LinearLayout) findViewById(R.id.image_view_full_screen_progress);
 
@@ -72,15 +72,14 @@ public class ImagePreview extends Activity {
 			progressBar.setVisibility(View.GONE);
 			mImageView.setVisibility(View.VISIBLE);
 			mImageView.setImageDrawable(imageDrawable);
+			imageDrawable.invalidateSelf();
 			super.onPostExecute(result);
 		}
 	}
 
-	@Override
-	protected void onStop() {
-		super.onStop();
-		
-		imageDrawable = null;
-		mImageView.setImageDrawable(null);
-	}
+//	@Override
+//	protected void onStop() {
+//		super.onStop();
+//		imageDrawable.invalidateSelf();
+//	}
 }
