@@ -110,11 +110,6 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 					else
 						graphHeaderTextViewRight.setText("");
 				}
-//				else {
-//					graphHeaderTextViewCenter.setText("");
-//					graphHeaderTextViewRight.setText("");
-//					graphHeaderTextViewLeft.setText("");
-//				}
 			}
 
 			@Override
@@ -355,7 +350,6 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 		return null;
 	}
 	
-	
 	public class GalleryAdapter extends BaseAdapter {
 
 	    @Override
@@ -406,12 +400,10 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	    
 	}
 	
-	
 	private class GraphViewHolder {
 		BarGraph barGraph;
 		LinearLayout graphMainView;
 	}
-
 
 	@Override
 	public void onClick(View v) {
@@ -431,6 +423,5 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 		}
 		graphGallery.setSelection(j);
 	}
-	
 	
 }

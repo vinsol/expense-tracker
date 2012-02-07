@@ -28,10 +28,11 @@ public class ExpenseListing extends TabActivity {
         TabSpec spec;
         Intent intent;
         tabHost.setup();
-        
+        Bundle intentExtras = getIntent().getExtras();
         // Create an Intent to launch an Activity for the tab (to be reused)
         intent = new Intent().setClass(this, ExpenseListingThisWeek.class);
-        intent.putExtras(getIntent().getExtras());
+        if(intentExtras != null)
+        	intent.putExtras(intentExtras);
         
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("thisweek").setIndicator("This Week").setContent(intent);
