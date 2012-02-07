@@ -44,7 +44,6 @@ import com.vinsol.expensetracker.listing.ExpenseListingThisWeek;
 import com.vinsol.expensetracker.listing.ExpenseListingThisYear;
 import com.vinsol.expensetracker.listing.ExpenseSubListing;
 import com.vinsol.expensetracker.models.Entry;
-import com.vinsol.expensetracker.utils.Log;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
 	
@@ -323,7 +322,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(mEditList.timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		Log.d(isTagModified()+" \t "+isAmountModified());
 		if (isTagModified() || isAmountModified() || !dateBarDateview.getText().toString().equals(new DisplayDate(mCalendar).getDisplayDate())) {
 			return true;
 		}
@@ -331,7 +329,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	}
 	
 	private boolean isAmountModified() {
-		Log.d("Amount "+mEditList.amount+" \t "+editAmount.getText()+" \t " + (Double.parseDouble(editAmount.getText().toString()) != Double.parseDouble(mEditList.amount)));
 		if(editAmount.getText().toString().equals("")) {
 			if(mEditList.amount.equals("?") || mEditList.amount.equals("")) {
 				return false;
