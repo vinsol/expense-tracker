@@ -35,26 +35,33 @@ public class ExpenseListing extends TabActivity {
         Bundle intentExtras = getIntent().getExtras();
         // Create an Intent to launch an Activity for the tab (to be reused)
         intent = new Intent(this, ExpenseListingThisWeek.class);
-        if(intentExtras != null)
-        	intent.putExtras(intentExtras);	
+        setExtras(intent, intentExtras);
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec(getString(R.string.tab_thisweek)).setIndicator("This Week").setContent(intent);
         tabHost.addTab(spec);
 
         // Do the same for the other tabs
-        intent.setClass(this, ExpenseListingThisMonth.class);
+        intent = new Intent(this, ExpenseListingThisMonth.class);
+        setExtras(intent, intentExtras);
         spec = tabHost.newTabSpec(getString(R.string.tab_thismonth)).setIndicator("This Month").setContent(intent);
         tabHost.addTab(spec);
 
-        intent.setClass(this, ExpenseListingThisYear.class);
+        intent = new Intent(this, ExpenseListingThisYear.class);
+        setExtras(intent, intentExtras);
         spec = tabHost.newTabSpec(getString(R.string.tab_thisyear)).setIndicator("This Year").setContent(intent);
         tabHost.addTab(spec);
 
-        intent.setClass(this, ExpenseListingAll.class);
+        intent = new Intent(this, ExpenseListingAll.class);
+        setExtras(intent, intentExtras);
         spec = tabHost.newTabSpec(getString(R.string.tab_all)).setIndicator("All").setContent(intent);
         tabHost.addTab(spec);
         
         tabHost.setCurrentTabByTag(getTag(intentExtras));
+	}
+	
+	private void setExtras(Intent intent, Bundle intentExtras) {
+		if(intentExtras != null)
+        	intent.putExtras(intentExtras);	
 	}
 
 	private String getTag(Bundle intentExtras) {
