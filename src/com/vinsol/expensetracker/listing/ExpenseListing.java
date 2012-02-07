@@ -29,39 +29,49 @@ public class ExpenseListing extends TabActivity {
 	
 	private void setTab() {
         TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
-        TabSpec spec;
-        Intent intent;
         tabHost.setup();
         Bundle intentExtras = getIntent().getExtras();
-        // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent(this, ExpenseListingThisWeek.class);
-        setExtras(intent, intentExtras);
-        // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec(getString(R.string.tab_thisweek)).setIndicator("This Week").setContent(intent);
-        tabHost.addTab(spec);
-
-        // Do the same for the other tabs
-        intent = new Intent(this, ExpenseListingThisMonth.class);
-        setExtras(intent, intentExtras);
-        spec = tabHost.newTabSpec(getString(R.string.tab_thismonth)).setIndicator("This Month").setContent(intent);
-        tabHost.addTab(spec);
-
-        intent = new Intent(this, ExpenseListingThisYear.class);
-        setExtras(intent, intentExtras);
-        spec = tabHost.newTabSpec(getString(R.string.tab_thisyear)).setIndicator("This Year").setContent(intent);
-        tabHost.addTab(spec);
-
-        intent = new Intent(this, ExpenseListingAll.class);
-        setExtras(intent, intentExtras);
-        spec = tabHost.newTabSpec(getString(R.string.tab_all)).setIndicator("All").setContent(intent);
-        tabHost.addTab(spec);
         
+        // Create an Intent to launch an Activity for the tab (to be reused)
+        
+        Intent intentThisWeek = new Intent(this, ExpenseListingThisWeek.class);
+        Intent intentThisMonth = new Intent(this, ExpenseListingThisMonth.class);
+        Intent intentThisYear = new Intent(this, ExpenseListingThisYear.class);
+        Intent intentAll = new Intent(this, ExpenseListingAll.class);
+        setExtras(tabHost, intentThisWeek, intentThisMonth, intentThisYear, intentAll, intentExtras);
+        // Initialize a TabSpec for each tab and add it to the TabHost
+        TabSpec tabThisWeek = tabHost.newTabSpec(getString(R.string.tab_thisweek)).setIndicator("This Week").setContent(intentThisWeek);
+        TabSpec tabThisMonth = tabHost.newTabSpec(getString(R.string.tab_thismonth)).setIndicator("This Month").setContent(intentThisMonth);
+        TabSpec tabThisYear = tabHost.newTabSpec(getString(R.string.tab_thisyear)).setIndicator("This Year").setContent(intentThisYear);
+        TabSpec tabAll = tabHost.newTabSpec(getString(R.string.tab_all)).setIndicator("All").setContent(intentAll);
+        tabHost.addTab(tabThisWeek);
+        tabHost.addTab(tabThisMonth);
+        tabHost.addTab(tabThisYear);
+        tabHost.addTab(tabAll);
         tabHost.setCurrentTabByTag(getTag(intentExtras));
 	}
-	
-	private void setExtras(Intent intent, Bundle intentExtras) {
-		if(intentExtras != null)
-        	intent.putExtras(intentExtras);	
+
+	private void setExtras(TabHost tabHost, Intent intentThisWeek, Intent intentThisMonth, Intent intentThisYear, Intent intentAll, Bundle intentExtras) {
+		if(intentExtras != null && intentExtras.containsKey(Constants.TIME_IN_MILLIS_TO_SET_TAB)) {
+			Long timeInMillis = intentExtras.getLong(Constants.TIME_IN_MILLIS_TO_SET_TAB);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(timeInMillis);
+			calendar.setFirstDayOfWeek(Calendar.MONDAY);
+			DisplayDate displayDate = new DisplayDate(calendar);
+			if(displayDate.isCurrentWeek()) {
+				intentThisWeek.putExtras(intentExtras);
+				return;
+			} else if (displayDate.isCurrentMonth()){
+				intentThisMonth.putExtras(intentExtras);
+				return;
+			} else if (displayDate.isCurrentYear()){
+				intentThisYear.putExtras(intentExtras);
+				return;
+			} else {
+				intentAll.putExtras(intentExtras);
+				return;
+			}
+		}
 	}
 
 	private String getTag(Bundle intentExtras) {

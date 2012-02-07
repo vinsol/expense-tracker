@@ -265,7 +265,8 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			Bundle mToHighLight = new Bundle();
 			mToHighLight.putString(Constants.HIGHLIGHT, toSave.id);
-			mToHighLight.putLong(Constants.TIME_IN_MILLIS_TO_SET_TAB, toSave.timeInMillis);
+			if(toSave.timeInMillis != null)
+				mToHighLight.putLong(Constants.TIME_IN_MILLIS_TO_SET_TAB, toSave.timeInMillis);
 			intentExpenseListing.putExtras(mToHighLight);
 //			intentExpenseListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			if(!intentExtras.containsKey(Constants.POSITION)) {

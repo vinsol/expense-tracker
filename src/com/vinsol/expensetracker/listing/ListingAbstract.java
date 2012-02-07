@@ -45,7 +45,6 @@ import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
-import com.vinsol.expensetracker.utils.Log;
 
 abstract class ListingAbstract extends Activity implements OnItemClickListener {
 
@@ -365,7 +364,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 						break;
 					}
 				} else if (type == R.string.sublist_thismonth || type == R.string.sublist_thisyear || type == R.string.sublist_all) {
-					Log.d("type "+getString(type));
 					toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
 					toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
 					while (mDataDateList.get(i).dateTime.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
