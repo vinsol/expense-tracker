@@ -350,7 +350,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				DisplayDate mDisplayDate = new DisplayDate(mCalendar);
 				if(!condition(mDisplayDate)) {
-					j = mSubList.size()+1;
+					j = mSubList.size() + 1;
 					break;
 				}
 				if (type == R.string.sublist_thisweek) {
@@ -413,6 +413,8 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 							}
 						} while (getLoopCondition(tempCalendar,isWeekOfMonth,isCurrentMonth,isCurrentYear));
 						
+						
+						
 						if (isTempAmountNull) {
 							if (temptotalAmount != 0) {
 								totalAmountString = temptotalAmount + " ?";
@@ -459,8 +461,9 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 				Bundle extras = new Bundle();
 				extras.putParcelable(Constants.ENTRY_LIST_EXTRA, entry);
 				extras.putInt(Constants.TYPE, getSubListType());
+				if(highlightID != null)
+					extras.putString(Constants.HIGHLIGHT, highlightID);
 				expenseSubListing.putExtras(extras);
-//				expenseSubListing.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivityForResult(expenseSubListing, RESULT);
  				finish();
 			}

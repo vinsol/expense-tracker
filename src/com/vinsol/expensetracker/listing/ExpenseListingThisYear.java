@@ -7,7 +7,7 @@ public class ExpenseListingThisYear extends TabLayoutListingAbstract {
 	
 	@Override
 	protected boolean condition(DisplayDate mDisplayDate) {
-		return mDisplayDate.isCurrentWeek() || mDisplayDate.isCurrentMonth() || mDisplayDate.isPrevMonths();
+		return mDisplayDate.isCurrentWeek() || mDisplayDate.isCurrentMonth() || mDisplayDate.isCurrentYear();
 	}
 	
 	@Override

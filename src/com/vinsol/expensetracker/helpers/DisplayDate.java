@@ -89,7 +89,7 @@ public class DisplayDate {
 			return getDisplayDate();
 		}
 		
-		if (isPrevMonths() || isPrevYears()) {
+		if (isCurrentYear() || isPrevYears()) {
 			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
 		}
 		
@@ -106,7 +106,7 @@ public class DisplayDate {
 			return "Week "+mCalendar.get(Calendar.WEEK_OF_MONTH)+", "+month+" "+year;
 		}
 		
-		if (isPrevMonths() || isPrevYears()) {
+		if (isCurrentYear() || isPrevYears()) {
 			return month + " " + year;
 		}
 		
@@ -125,7 +125,7 @@ public class DisplayDate {
 		return false;
 	}
 
-	public boolean isPrevMonths() {
+	public boolean isCurrentYear() {
 		Calendar mTempCalender = Calendar.getInstance();
 		mTempCalender.set(mTempCalender.get(Calendar.YEAR), mTempCalender.get(Calendar.MONTH), mTempCalender.get(Calendar.DAY_OF_MONTH),0,0,0);
 		mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);

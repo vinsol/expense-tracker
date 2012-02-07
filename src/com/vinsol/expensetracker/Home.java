@@ -100,7 +100,6 @@ public class Home extends Activity implements OnClickListener {
 			mLocationHelper.requestLocationUpdate();
 		}
 		
-		
 		mHandleGraph = new GraphHelper(this,graphProgressBar);
 		mHandleGraph.execute();
 		super.onResume();
