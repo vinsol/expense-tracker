@@ -348,7 +348,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			if(mEditList.description.equals(getString(typeOfEntryFinished)) || mEditList.description.equals(getString(typeOfEntryUnfinished)) || mEditList.description.equals("")) {
 				return false;
 			} else {
-				if(!editTag.getText().equals(mEditList.description))
+				if(!editTag.getText().toString().equals(mEditList.description))
 					return true;
 				else 
 					return false;

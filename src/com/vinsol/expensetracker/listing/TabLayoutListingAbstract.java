@@ -37,7 +37,6 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 		addSections();
 	}
 
-	
 	@Override
 	protected void unknownDialogAction(String id) {
 		initListView();
