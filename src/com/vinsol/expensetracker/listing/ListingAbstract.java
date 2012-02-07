@@ -213,8 +213,20 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	}
 	
 	private void setBundleListingExtra(Bundle bundle) {
-		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING)) {
-			bundle.putBoolean(Constants.IS_COMING_FROM_EXPENSE_LISTING, true);
+		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_ALL)) {
+			bundle.putBoolean(Constants.IS_COMING_FROM_EXPENSE_LISTING_ALL, true);
+			return;
+		}
+		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_MONTH)) {
+			bundle.putBoolean(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_MONTH, true);
+			return;
+		}
+		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_WEEK)) {
+			bundle.putBoolean(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_WEEK, true);
+			return;
+		}
+		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_YEAR)) {
+			bundle.putBoolean(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_YEAR, true);
 			return;
 		}
 		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_SUB_LISTING)) {

@@ -38,8 +38,13 @@ import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
+import com.vinsol.expensetracker.listing.ExpenseListingAll;
+import com.vinsol.expensetracker.listing.ExpenseListingThisMonth;
+import com.vinsol.expensetracker.listing.ExpenseListingThisWeek;
+import com.vinsol.expensetracker.listing.ExpenseListingThisYear;
 import com.vinsol.expensetracker.listing.ExpenseSubListing;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.utils.Log;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
 	
@@ -251,6 +256,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			displayList.timeInMillis = mEditList.timeInMillis;
 		}
 		displayList.location = mEditList.location;
+		isChanged = checkDataModified();
 		mEditList = displayList;
 		return displayList;
 	}
@@ -292,13 +298,18 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	
 	private void setActivityResult(Bundle bundle) {
 		Intent intent = null;
-		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING)) {
-			intent = new Intent(this, ExpenseListing.class);
+		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_ALL)) {
+			intent = new Intent(this, ExpenseListingAll.class);
+		} else if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_MONTH)) {
+			intent = new Intent(this, ExpenseListingThisMonth.class);
+		} else if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_WEEK)) {
+			intent = new Intent(this, ExpenseListingThisWeek.class);
+		} else if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_YEAR)) {
+			intent = new Intent(this, ExpenseListingThisYear.class);
 		} else if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_SUB_LISTING)) { 
 			intent = new Intent(this, ExpenseSubListing.class);
 		}
 		if(intent != null) {
-			isChanged = checkDataModified();
 			if(isChanged) {
 				bundle.putBoolean(Constants.DATA_CHANGED, isChanged);
 				intentExtras.putAll(bundle);
@@ -312,14 +323,16 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(mEditList.timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if (isTagModified() || isAmountModified() || !dateBarDateview.getText().equals(new DisplayDate(mCalendar).getDisplayDate())) {
+		Log.d(isTagModified()+" \t "+isAmountModified());
+		if (isTagModified() || isAmountModified() || !dateBarDateview.getText().toString().equals(new DisplayDate(mCalendar).getDisplayDate())) {
 			return true;
 		}
 		return false;
 	}
 	
 	private boolean isAmountModified() {
-		if(editAmount.getText().equals("")) {
+		Log.d("Amount "+mEditList.amount+" \t "+editAmount.getText()+" \t " + (Double.parseDouble(editAmount.getText().toString()) != Double.parseDouble(mEditList.amount)));
+		if(editAmount.getText().toString().equals("")) {
 			if(mEditList.amount.equals("?") || mEditList.amount.equals("")) {
 				return false;
 			} else {

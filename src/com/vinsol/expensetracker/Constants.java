@@ -22,7 +22,10 @@ public class Constants {
 	public static String POSITION = "position";
 	public static String IS_COMING_FROM_SHOW_PAGE = "isFromShowPage";
 	public static String DATA_CHANGED = "isChanged";
-	public static String IS_COMING_FROM_EXPENSE_LISTING = "isFromExpenseListing";
+	public static String IS_COMING_FROM_EXPENSE_LISTING_ALL = "isFromExpenseListingAll";
+	public static String IS_COMING_FROM_EXPENSE_LISTING_THIS_WEEK = "isFromExpenseListingThisWeek";
+	public static String IS_COMING_FROM_EXPENSE_LISTING_THIS_MONTH = "isFromExpenseListingThisMonth";
+	public static String IS_COMING_FROM_EXPENSE_LISTING_THIS_YEAR = "isFromExpenseListingThisYear";
 	public static String IS_COMING_FROM_EXPENSE_SUB_LISTING = "isFromExpenseSubListing";
 	public static String TYPE = "type";
 	public static String TIME_IN_MILLIS_TO_SET_TAB = "timeInMillisToSetTab";

@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 
@@ -18,7 +17,6 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setType();
-		intentExtras.putBoolean(Constants.IS_COMING_FROM_EXPENSE_LISTING, true);
 		bundle = new Bundle();
 		initListView();
 	}
