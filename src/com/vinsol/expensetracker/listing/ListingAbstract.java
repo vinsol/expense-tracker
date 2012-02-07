@@ -278,7 +278,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		mDatabaseAdapter.open();
     	mDatabaseAdapter.deleteEntryTableEntryID(mSeparatedListAdapter.getItem(position).id);
     	mDatabaseAdapter.close();
-    	mDataDateList.remove(mSeparatedListAdapter.getSectionNumber(position));
+//    	mDataDateList.remove(mSeparatedListAdapter.getSectionNumber(position));
     	mSeparatedListAdapter.remove(position);
     	noItemLayout();
 	}

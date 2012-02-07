@@ -304,10 +304,12 @@ class SeparatedListAdapter extends BaseAdapter {
 
 	public void remove(int toRemove) {
 		String sectionNumber = getSectionNumber(toRemove);
+		Entry prevEntry = getItem(toRemove);
 		sections.get(sectionNumber).remove(getItem(toRemove));
 		if(sections.get(sectionNumber).getCount() == 0) {
 			removeSection(sectionNumber);
 		}
+		updateAmount(sectionNumber, prevEntry, null);
 		notifyDataSetChanged();
 	}
 	
@@ -316,19 +318,23 @@ class SeparatedListAdapter extends BaseAdapter {
 		Entry prevEntry = getItem(toUpdate);
 		sections.get(sectionNumber).insert(updatedEntry, toUpdate);
 		sections.get(sectionNumber).remove(prevEntry);
+		updateAmount(sectionNumber, prevEntry, updatedEntry);
+		notifyDataSetChanged();
+	}
+	
+	private void updateAmount(String sectionNumber, Entry prevEntry, Entry updatedEntry) {
 		StringProcessing mStringProcessing = new StringProcessing();
 		Double amountDouble = mStringProcessing.getAmount(mDataDateList.get(Integer.parseInt(sectionNumber)).amount);
 		amountDouble -= mStringProcessing.getAmount(prevEntry.amount);
-		if(!updatedEntry.amount.contains("?")) { 
+		if(updatedEntry != null && !updatedEntry.amount.contains("?")) { 
 			updatedEntry.amount = mStringProcessing.getStringDoubleDecimal(updatedEntry.amount);
 			amountDouble += mStringProcessing.getAmount(updatedEntry.amount);
-			if(mDataDateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
-				mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"?");
-			} else {
-				mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"");
-			}
 		}
-		notifyDataSetChanged();
+		if(mDataDateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
+			mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"?");
+		} else {
+			mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"");
+		}
 	}
 	
 	public String  getSectionNumber(int position) {
