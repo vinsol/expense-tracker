@@ -60,7 +60,6 @@ public class CameraActivity extends EditAbstract {
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 				setImageResource(mDrawable);
-				mDrawable.invalidateSelf();
 			} else {
 				editImageDisplay.setImageResource(R.drawable.no_image_small);
 			}
@@ -125,7 +124,6 @@ public class CameraActivity extends EditAbstract {
 			editImageDisplay.setLayoutParams(new LayoutParams(width, height));
 		}
 		editImageDisplay.setImageDrawable(mDrawable);
-		mDrawable.invalidateSelf();
 	}
 	
 	private void startCamera() {
@@ -154,7 +152,6 @@ public class CameraActivity extends EditAbstract {
 					if (mFile.canRead()) {
 						Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 						setImageResource(mDrawable);
-						mDrawable.invalidateSelf();
 					} else {
 						DatabaseAdapter adapter = new DatabaseAdapter(this);
 						adapter.open();
@@ -192,7 +189,6 @@ public class CameraActivity extends EditAbstract {
 			File mFile = fileHelper.getCameraFileSmallEntry(entry.id);
 			Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 			setImageResource(mDrawable);
-			mDrawable.invalidateSelf();
 			editDelete.setEnabled(true);
 			editSaveEntry.setEnabled(true);
 			super.onPostExecute(result);

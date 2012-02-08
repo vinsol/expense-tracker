@@ -414,7 +414,6 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback, O
 			takePicPreviewContainer.setVisibility(View.VISIBLE);
 			Drawable drawable = new BitmapDrawable(mTempFile.toString());
 			takePicPreviewContainer.setBackgroundDrawable(drawable);
-			drawable.invalidateSelf();
  		}
 	}
 	

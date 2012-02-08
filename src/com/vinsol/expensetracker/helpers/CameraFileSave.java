@@ -7,18 +7,17 @@
 package com.vinsol.expensetracker.helpers;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import com.vinsol.expensetracker.utils.Log;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.widget.Toast;
+
+import com.vinsol.expensetracker.utils.Log;
 
 public class CameraFileSave {
 	private String filename;
@@ -50,7 +49,6 @@ public class CameraFileSave {
 			Drawable fullSizeImageDrawable = Drawable.createFromPath(fullSizeImage.toString());
 			FULL_SIZE_IMAGE_WIDTH = fullSizeImageDrawable.getIntrinsicHeight();
 			FULL_SIZE_IMAGE_HEIGHT = fullSizeImageDrawable.getIntrinsicWidth();
-			fullSizeImageDrawable.invalidateSelf();
 			Log.d("*********************************************");
 			Log.d("FULL_SIZE_IMAGE_WIDTH "+FULL_SIZE_IMAGE_WIDTH);
 			Log.d("FULL_SIZE_IMAGE_HEIGHT "+FULL_SIZE_IMAGE_HEIGHT);
@@ -61,24 +59,22 @@ public class CameraFileSave {
 				SMALL_MAX_WIDTH = 120;
 				SMALL_MAX_HEIGHT = 160;
 			}
-			try {
-				FileInputStream fileInputStream = new FileInputStream(fullSizeImage);
+//			try {
 				//Save small image
-				Bitmap bitmap = getBitmap(fileInputStream, SMALL_MAX_WIDTH, SMALL_MAX_HEIGHT);
+				Bitmap bitmap = getBitmap(fullSizeImage, SMALL_MAX_WIDTH, SMALL_MAX_HEIGHT);
 				File smallImage = fileHelper.getCameraFileSmallEntry(filename);
 				saveImage(smallImage, bitmap);
-//				bitmap.recycle();
+				bitmap.recycle();
 				//save Small thumbnail
-				bitmap = getBitmap(fileInputStream, THUMBNAIL_MAX_WIDTH, THUMBNAIL_MAX_HEIGHT);
+				bitmap = getBitmap(fullSizeImage, THUMBNAIL_MAX_WIDTH, THUMBNAIL_MAX_HEIGHT);
 				File thumbnail = fileHelper.getCameraFileThumbnailEntry(filename);
 				saveImage(thumbnail, bitmap);
 				bitmap.recycle();
-				fileInputStream.close();
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			} catch (FileNotFoundException e1) {
+//				e1.printStackTrace();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 		} else {
 			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
@@ -100,19 +96,23 @@ public class CameraFileSave {
 			}
 
 			// ///////// ********* Clear Bitmap to save VM space ********* /////////
-			bitmapToSave.recycle();
+//			bitmapToSave.recycle();
 		} else {
 			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 	}
 
 	//////////// ******** To get Bitmap Image of the picture clicked through camera ********* ///////
-	private Bitmap getBitmap(FileInputStream fileInputStream, int width, int height) {
-		int scale = getScale(FULL_SIZE_IMAGE_WIDTH, FULL_SIZE_IMAGE_HEIGHT, width, height);
-		BitmapFactory.Options o2 = new BitmapFactory.Options();
-		o2.inSampleSize = scale;
-		return BitmapFactory.decodeStream(fileInputStream, null, o2);
+	private Bitmap getBitmap(File file, int width, int height) {
+		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+			int scale = getScale(FULL_SIZE_IMAGE_WIDTH, FULL_SIZE_IMAGE_HEIGHT, width, height);
+			BitmapFactory.Options o2 = new BitmapFactory.Options();
+			o2.inSampleSize = scale;
+			return BitmapFactory.decodeFile(file.toString(), o2);
+		}
+		return null;
 	}
+
 
 	// //////// ********** Scale to which Image Reduced ********* ////////////
 

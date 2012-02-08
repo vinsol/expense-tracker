@@ -53,7 +53,6 @@ public class ShowCameraActivity extends ShowAbstract {
 					showImageDisplay.setLayoutParams(new LayoutParams(width, height));
 				}
 				showImageDisplay.setImageDrawable(mDrawable);
-				mDrawable.invalidateSelf();
 			} else {
 				showImageDisplay.setImageResource(R.drawable.no_image_small);
 			}
@@ -115,7 +114,6 @@ public class ShowCameraActivity extends ShowAbstract {
 							showImageDisplay.setLayoutParams(new LayoutParams(width, height));
 						}
 						showImageDisplay.setImageDrawable(mDrawable);
-						mDrawable.invalidateSelf();
 					} else {
 						showImageDisplay.setImageResource(R.drawable.no_image_small);
 					}

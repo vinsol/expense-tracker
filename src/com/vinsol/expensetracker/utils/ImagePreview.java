@@ -72,14 +72,7 @@ public class ImagePreview extends Activity {
 			progressBar.setVisibility(View.GONE);
 			mImageView.setVisibility(View.VISIBLE);
 			mImageView.setImageDrawable(imageDrawable);
-			imageDrawable.invalidateSelf();
 			super.onPostExecute(result);
 		}
 	}
-
-//	@Override
-//	protected void onStop() {
-//		super.onStop();
-//		imageDrawable.invalidateSelf();
-//	}
 }
