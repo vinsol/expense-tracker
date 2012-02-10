@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:baselineAligned="false"
+	android:background="@drawable/camera_background"
+    android:id="@+id/camera"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <com.vinsol.expensetracker.cameraservice.PreviewFrameLayout 
+        android:id="@+id/frame_layout"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="2dp"
+        android:layout_weight="1">
+        <FrameLayout 
+            android:id="@+id/frame"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/border_view_finder">
+            <SurfaceView 
+                android:id="@+id/camera_preview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"/>
+            <com.vinsol.expensetracker.cameraservice.FocusRectangle
+                android:id="@+id/focus_rectangle"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"/>
+        </FrameLayout>
+    </com.vinsol.expensetracker.cameraservice.PreviewFrameLayout>
+</LinearLayout>

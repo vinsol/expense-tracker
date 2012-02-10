@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/control_bar"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="76dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentRight="true">
+
+    <com.vinsol.expensetracker.cameraservice.CameraFlashButton
+            android:id="@+id/flash_button"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_height="58dp"
+            android:layout_width="58dp"
+            android:clickable="true"
+            android:focusable="false"/>
+
+    <com.vinsol.expensetracker.cameraservice.ShutterButton android:id="@+id/shutter_button"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:scaleType="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/btn_ic_camera_shutter"
+            android:background="@drawable/btn_shutter"/>
+</RelativeLayout>
+

@@ -81,8 +81,9 @@
     		android:configChanges="keyboardHidden|orientation" 
     		/>
         <activity 
-            android:name=".cameraservice.CameraPreview"
-    		android:screenOrientation="portrait"
+            android:name=".cameraservice.Camera"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+    		android:screenOrientation="landscape"
     		android:configChanges="keyboardHidden|orientation" 
     		/>
         <activity 

@@ -107,6 +107,7 @@ public class CameraFileSave {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			int scale = getScale(FULL_SIZE_IMAGE_WIDTH, FULL_SIZE_IMAGE_HEIGHT, width, height);
 			BitmapFactory.Options o2 = new BitmapFactory.Options();
+			o2.inPurgeable = true;
 			o2.inSampleSize = scale;
 			return BitmapFactory.decodeFile(file.toString(), o2);
 		}

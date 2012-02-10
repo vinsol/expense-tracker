@@ -29,6 +29,7 @@ public class Constants {
 	public static String IS_COMING_FROM_EXPENSE_SUB_LISTING = "isFromExpenseSubListing";
 	public static String TYPE = "type";
 	public static String TIME_IN_MILLIS_TO_SET_TAB = "timeInMillisToSetTab";
+	public static String FULL_SIZE_IMAGE_PATH = "FullSizeImagePath";
 	
 	//ExpenseTracker Market UI
 	public static final String EXPENSE_TRACKER_MARKET_URI = "market://details?id=com.vinsol.expensetracker";

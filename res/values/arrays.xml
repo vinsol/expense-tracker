@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- When launching the camera app first time, we will set the picture
+         size to the first one in the list that is also supported by the
+         driver -->
+    <string-array name="pref_camera_picturesize_entryvalues" translatable="false">
+        <item>2592x1944</item>
+        <item>2592x1936</item>
+        <item>2048x1536</item>
+        <item>1600x1200</item>
+        <item>1024x768</item>
+        <item>320x240</item>
+    </string-array>
+
+</resources>

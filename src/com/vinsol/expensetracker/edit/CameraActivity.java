@@ -22,9 +22,10 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.cameraservice.CameraPreview;
+import com.vinsol.expensetracker.cameraservice.Camera;
 import com.vinsol.expensetracker.helpers.CameraFileSave;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.FileHelper;
@@ -129,9 +130,9 @@ public class CameraActivity extends EditAbstract {
 	private void startCamera() {
 		/////// ******* Starting Camera to capture Image ******** //////////
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-			Intent camera = new Intent(this,CameraPreview.class);
+			Intent camera = new Intent(this,Camera.class);
 			File file = fileHelper.getCameraFileLargeEntry(entry.id);
-			camera.putExtra("FullSizeImagePath", file.toString());
+			camera.putExtra(Constants.FULL_SIZE_IMAGE_PATH, file.toString());
 			startActivityForResult(camera, PICTURE_RESULT);
 		} else {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
