@@ -44,6 +44,7 @@ import com.vinsol.expensetracker.listing.ExpenseListingThisWeek;
 import com.vinsol.expensetracker.listing.ExpenseListingThisYear;
 import com.vinsol.expensetracker.listing.ExpenseSubListing;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.utils.Log;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
 	
@@ -322,6 +323,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(mEditList.timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		Log.d("isTagModified "+isTagModified());
 		if (isTagModified() || isAmountModified() || !dateBarDateview.getText().toString().equals(new DisplayDate(mCalendar).getDisplayDate())) {
 			return true;
 		}
@@ -348,6 +350,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	}
 	
 	private boolean isTagModified() {
+		Log.d(editTag.getText()+" \t "+mEditList.description+" \t Yo");
 		if(editTag.getText().equals("")) {
 			if(mEditList.description.equals(getString(typeOfEntryFinished)) || mEditList.description.equals(getString(typeOfEntryUnfinished)) || mEditList.description.equals("")) {
 				return false;
@@ -355,14 +358,10 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 				return true;
 			}
 		} else {
-			if(mEditList.description.equals(getString(typeOfEntryFinished)) || mEditList.description.equals(getString(typeOfEntryUnfinished)) || mEditList.description.equals("")) {
+			if(!editTag.getText().toString().equals(mEditList.description))
+				return true;
+			else 
 				return false;
-			} else {
-				if(!editTag.getText().toString().equals(mEditList.description))
-					return true;
-				else 
-					return false;
-			}
 		}
 	}
 
