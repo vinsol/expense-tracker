@@ -53,12 +53,12 @@ public class CameraActivity extends EditAbstract {
 		typeOfEntryFinished = R.string.finished_cameraentry;
 		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
 		editHelper();
-		if (intentExtras.containsKey("mDisplayList")) {
+		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 			if(setUnknown) {
 				startCamera();
 			}
 			File mFile = fileHelper.getCameraFileSmallEntry(entry.id);
-			if (mFile.canRead()) {
+			if (mFile.canRead() && mFile.exists()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 				setImageResource(mDrawable);
 			} else {
@@ -112,7 +112,7 @@ public class CameraActivity extends EditAbstract {
 			}
 		}
 		
-		if (!intentExtras.containsKey("mDisplayList"))
+		if (!intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA))
 			startCamera();
 		
 	}
@@ -130,7 +130,7 @@ public class CameraActivity extends EditAbstract {
 	private void startCamera() {
 		/////// ******* Starting Camera to capture Image ******** //////////
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-			Intent camera = new Intent(this,Camera.class);
+			Intent camera = new Intent(this, Camera.class);
 			File file = fileHelper.getCameraFileLargeEntry(entry.id);
 			camera.putExtra(Constants.FULL_SIZE_IMAGE_PATH, file.toString());
 			startActivityForResult(camera, PICTURE_RESULT);

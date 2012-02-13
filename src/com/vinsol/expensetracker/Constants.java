@@ -25,6 +25,7 @@ public class Constants {
 	public static final String TYPE = "type";
 	public static final String TIME_IN_MILLIS_TO_SET_TAB = "timeInMillisToSetTab";
 	public static final String FULL_SIZE_IMAGE_PATH = "FullSizeImagePath";
+	public static final String TIME_IN_MILLIS = "timeInMillis";
 	
 	//ExpenseTracker Market UI
 	public static final String EXPENSE_TRACKER_MARKET_URI = "market://details?id=com.vinsol.expensetracker";

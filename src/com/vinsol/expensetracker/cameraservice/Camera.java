@@ -59,11 +59,11 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     private static final int RESTART_PREVIEW = 3;
     private static final int CLEAR_SCREEN_DELAY = 4;
     private static final int SET_CAMERA_PARAMETERS_WHEN_IDLE = 5;
-    public static final String KEY_PICTURE_SIZE = "pref_camera_picturesize_key";
+    private static final String KEY_PICTURE_SIZE = "pref_camera_picturesize_key";
     private static final int UPDATE_PARAM_INITIALIZE = 1;
     private static final int UPDATE_PARAM_PREFERENCE = 4;
     private static final int UPDATE_PARAM_ALL = -1;
-    public static final int ORIENTATION_HYSTERESIS = 5;
+    private static final int ORIENTATION_HYSTERESIS = 5;
     private int mUpdateSet;
     private static final float DEFAULT_CAMERA_BRIGHTNESS = 0.7f;
     private static final int SCREEN_DELAY = 2 * 60 * 1000;
@@ -85,8 +85,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     private ShutterButton mShutterButton;
     private FocusRectangle mFocusRectangle;
     private boolean mStartPreviewFail = false;
-    public static final int NO_STORAGE_ERROR = -1;
-    public static final int CANNOT_STAT_ERROR = -2;
+    private static final int NO_STORAGE_ERROR = -1;
+    private static final int CANNOT_STAT_ERROR = -2;
     
     private Uri mSaveUri;
 
@@ -148,8 +148,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
                 }
 
                 case CLEAR_SCREEN_DELAY: {
-                    getWindow().clearFlags(
-                            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                     break;
                 }
 
@@ -331,8 +330,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         byte[] mCaptureOnlyData;
 
         public void storeImage(final byte[] data,android.hardware.Camera camera) {
-                mCaptureOnlyData = data;
-                showPostCaptureAlert();
+            mCaptureOnlyData = data;
+            showPostCaptureAlert();
         }
 
         public void initiate() {
@@ -409,9 +408,16 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             }
         } catch (InterruptedException ex) {
         }
+        ((CameraButton) findViewById(R.id.btn_cancel)).setOnClickListener(this);
+        ((CameraButton) findViewById(R.id.btn_done)).setOnClickListener(this);
+        ((CameraButton) findViewById(R.id.btn_retake)).setOnClickListener(this);
+        
     }
     private void setOrientationIndicator(int degree) {
     	((CameraFlashButton) findViewById(R.id.flash_button)).setDegree(degree);
+    	((CameraButton) findViewById(R.id.btn_cancel)).setDegree(degree);
+    	((CameraButton) findViewById(R.id.btn_done)).setDegree(degree);
+    	((CameraButton) findViewById(R.id.btn_retake)).setDegree(degree);
     }
     
     private CameraFlashButtonCBInterface flashCB = new CameraFlashButtonCBInterface() {
@@ -445,17 +451,17 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
 
     public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.btn_retake:
-//                hidePostCaptureAlert();
-//                restartPreview();
-//                break;
-//            case R.id.btn_done:
-//                doAttach();
-//                break;
-//            case R.id.btn_cancel:
-//                doCancel();
-//        }
+        switch (v.getId()) {
+            case R.id.btn_retake:
+                hidePostCaptureAlert();
+                restartPreview();
+                break;
+            case R.id.btn_done:
+		        finish();
+                break;
+            case R.id.btn_cancel:
+                doCancel();
+        }
     }
 
     private Bitmap makeBitmap(final byte[] jpegData) {
@@ -479,8 +485,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         return null;
     }
     
-    private void doSaveImage() {
-        if (mPausing) {
+    private void doAttach() {
+    	if (mPausing) {
             return;
         }
 
@@ -503,9 +509,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         } else {
         	setResult(RESULT_CANCELED);
         }
-        finish();
     }
-    
+        
     private Bitmap rotate(Bitmap b, int degrees) {
         if (degrees != 0 && b != null) {
             Matrix m = new Matrix();
@@ -1070,28 +1075,25 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 
     private void showPostCaptureAlert() {
     	mStatus = IMAGE_DISPLAYED;
-    	doSaveImage();
-    	mOrientationListener.disable();
-    	
-//        if (mIsImageCaptureIntent) {
-//            findViewById(R.id.shutter_button).setVisibility(View.INVISIBLE);
-//            int[] pickIds = {R.id.btn_retake, R.id.btn_done};
-//            for (int id : pickIds) {
-//                View button = findViewById(id);
-//                ((View) button.getParent()).setVisibility(View.VISIBLE);
-//            }
-//        }
+        doAttach();
+        findViewById(R.id.shutter_button).setVisibility(View.GONE);
+        flashButton.setVisibility(View.GONE);
+        int[] pickIds = {R.id.btn_retake, R.id.btn_done, R.id.btn_cancel};
+        for (int id : pickIds) {
+            CameraButton button = (CameraButton) findViewById(id);
+            button.setVisibility(View.VISIBLE);
+        }
+        mStatus = IDLE;
     }
 
     private void hidePostCaptureAlert() {
-//        if (mIsImageCaptureIntent) {
-//            findViewById(R.id.shutter_button).setVisibility(View.VISIBLE);
-//            int[] pickIds = {R.id.btn_retake, R.id.btn_done};
-//            for (int id : pickIds) {
-//                View button = findViewById(id);
-//                ((View) button.getParent()).setVisibility(View.GONE);
-//            }
-//        }
+        int[] pickIds = {R.id.btn_retake, R.id.btn_done, R.id.btn_cancel};
+        for (int id : pickIds) {
+            CameraButton button = (CameraButton) findViewById(id);
+            button.setVisibility(View.GONE);
+        }
+        findViewById(R.id.shutter_button).setVisibility(View.VISIBLE);
+        flashButton.setVisibility(View.VISIBLE);
     }
 
     private int calculatePicturesRemaining() {

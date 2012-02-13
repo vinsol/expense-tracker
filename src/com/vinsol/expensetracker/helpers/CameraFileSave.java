@@ -14,7 +14,6 @@ import java.io.IOException;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.utils.Log;
@@ -46,21 +45,26 @@ public class CameraFileSave {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			filename = _filename;
 			File fullSizeImage = fileHelper.getCameraFileLargeEntry(filename);
-			Drawable fullSizeImageDrawable = Drawable.createFromPath(fullSizeImage.toString());
-			FULL_SIZE_IMAGE_WIDTH = fullSizeImageDrawable.getIntrinsicHeight();
-			FULL_SIZE_IMAGE_HEIGHT = fullSizeImageDrawable.getIntrinsicWidth();
-			Log.d("*********************************************");
-			Log.d("FULL_SIZE_IMAGE_WIDTH "+FULL_SIZE_IMAGE_WIDTH);
-			Log.d("FULL_SIZE_IMAGE_HEIGHT "+FULL_SIZE_IMAGE_HEIGHT);
-			Log.d("*********************************************");
-			
-			////////// ******* To handle Portrait Layout ******* /////////
-			if (FULL_SIZE_IMAGE_HEIGHT > FULL_SIZE_IMAGE_WIDTH) {
-				SMALL_MAX_WIDTH = 120;
-				SMALL_MAX_HEIGHT = 160;
-			}
-//			try {
-				//Save small image
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inPurgeable = true;
+			options.inJustDecodeBounds = true;
+			Bitmap fullSizeBitmap = BitmapFactory.decodeFile(fullSizeImage.toString(), options);
+			if(options.outWidth > 0 && options.outHeight > 0) {
+				FULL_SIZE_IMAGE_WIDTH = options.outHeight;
+				FULL_SIZE_IMAGE_HEIGHT = options.outWidth;
+				if(fullSizeBitmap != null)
+					fullSizeBitmap.recycle();
+				Log.d("*********************************************");
+				Log.d("FULL_SIZE_IMAGE_WIDTH "+FULL_SIZE_IMAGE_WIDTH);
+				Log.d("FULL_SIZE_IMAGE_HEIGHT "+FULL_SIZE_IMAGE_HEIGHT);
+				Log.d("*********************************************");
+				
+				////////// ******* To handle Portrait Layout ******* /////////
+				if (FULL_SIZE_IMAGE_HEIGHT > FULL_SIZE_IMAGE_WIDTH) {
+					SMALL_MAX_WIDTH = 120;
+					SMALL_MAX_HEIGHT = 160;
+				}
+					//Save small image
 				Bitmap bitmap = getBitmap(fullSizeImage, SMALL_MAX_WIDTH, SMALL_MAX_HEIGHT);
 				File smallImage = fileHelper.getCameraFileSmallEntry(filename);
 				saveImage(smallImage, bitmap);
@@ -70,13 +74,7 @@ public class CameraFileSave {
 				File thumbnail = fileHelper.getCameraFileThumbnailEntry(filename);
 				saveImage(thumbnail, bitmap);
 				bitmap.recycle();
-//			} catch (FileNotFoundException e1) {
-//				e1.printStackTrace();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-		} else {
-			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 
@@ -96,7 +94,6 @@ public class CameraFileSave {
 			}
 
 			// ///////// ********* Clear Bitmap to save VM space ********* /////////
-//			bitmapToSave.recycle();
 		} else {
 			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}

@@ -113,7 +113,6 @@ public class CameraFlashButton extends ImageView implements OnClickListener {
         canvas.translate(-w / 2, -h / 2);
         drawable.draw(canvas);
         canvas.restoreToCount(saveCount);
-        
     }
 
 }
