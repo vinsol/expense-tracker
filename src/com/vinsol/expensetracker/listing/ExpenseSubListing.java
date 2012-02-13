@@ -32,7 +32,8 @@ public class ExpenseSubListing extends ListingAbstract {
 		initListView();
 	}
 	
-	private void initListView() {
+	@Override
+	protected void initListView() {
 		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		intentExtras = getIntent().getExtras();
 		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
@@ -47,9 +48,9 @@ public class ExpenseSubListing extends ListingAbstract {
 			listingHeader.setText(new DisplayDate(mTempCalendar).getHeaderFooterListDisplayDate(getSubListHeaderType()));
 			addSections();
 		} else {
-			Intent mIntent = new Intent(this, ExpenseListing.class);
-			mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(mIntent);
+//			Intent mIntent = new Intent(this, ExpenseListing.class);
+//			mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//			startActivity(mIntent);
 			finish();
 		}
 	}
@@ -84,7 +85,7 @@ public class ExpenseSubListing extends ListingAbstract {
 	
 	@Override
 	public void onBackPressed() {
-		Intent intent = new Intent(this, ExpenseListing.class);
+		Intent intent = new Intent();
 		intent.putExtras(intentExtras);
 		setResult(Activity.RESULT_OK, intent);
 		super.onBackPressed();

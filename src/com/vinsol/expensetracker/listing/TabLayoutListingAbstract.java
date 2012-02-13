@@ -27,7 +27,8 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 		mSeparatedListAdapter.notifyDataSetChanged();
 	}
 
-	private void initListView() {
+	@Override
+	protected void initListView() {
 		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,"",type);
