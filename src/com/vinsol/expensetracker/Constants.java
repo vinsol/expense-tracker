@@ -22,11 +22,6 @@ public class Constants {
 	public static final String POSITION = "position";
 	public static final String IS_COMING_FROM_SHOW_PAGE = "isFromShowPage";
 	public static final String DATA_CHANGED = "isChanged";
-	public static final String IS_COMING_FROM_EXPENSE_LISTING_ALL = "isFromExpenseListingAll";
-	public static final String IS_COMING_FROM_EXPENSE_LISTING_THIS_WEEK = "isFromExpenseListingThisWeek";
-	public static final String IS_COMING_FROM_EXPENSE_LISTING_THIS_MONTH = "isFromExpenseListingThisMonth";
-	public static final String IS_COMING_FROM_EXPENSE_LISTING_THIS_YEAR = "isFromExpenseListingThisYear";
-	public static final String IS_COMING_FROM_EXPENSE_SUB_LISTING = "isFromExpenseSubListing";
 	public static final String TYPE = "type";
 	public static final String TIME_IN_MILLIS_TO_SET_TAB = "timeInMillisToSetTab";
 	public static final String FULL_SIZE_IMAGE_PATH = "FullSizeImagePath";

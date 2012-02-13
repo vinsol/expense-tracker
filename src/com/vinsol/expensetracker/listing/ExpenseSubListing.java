@@ -28,7 +28,6 @@ public class ExpenseSubListing extends ListingAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		intentExtras.putBoolean(Constants.IS_COMING_FROM_EXPENSE_SUB_LISTING, true);
 		initListView();
 	}
 	
@@ -48,9 +47,6 @@ public class ExpenseSubListing extends ListingAbstract {
 			listingHeader.setText(new DisplayDate(mTempCalendar).getHeaderFooterListDisplayDate(getSubListHeaderType()));
 			addSections();
 		} else {
-//			Intent mIntent = new Intent(this, ExpenseListing.class);
-//			mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//			startActivity(mIntent);
 			finish();
 		}
 	}
