@@ -38,11 +38,6 @@ import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
-import com.vinsol.expensetracker.listing.ExpenseListingAll;
-import com.vinsol.expensetracker.listing.ExpenseListingThisMonth;
-import com.vinsol.expensetracker.listing.ExpenseListingThisWeek;
-import com.vinsol.expensetracker.listing.ExpenseListingThisYear;
-import com.vinsol.expensetracker.listing.ExpenseSubListing;
 import com.vinsol.expensetracker.models.Entry;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
@@ -295,26 +290,13 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	}
 	
 	private void setActivityResult(Bundle bundle) {
-		Intent intent = null;
-		if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_ALL)) {
-			intent = new Intent(this, ExpenseListingAll.class);
-		} else if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_MONTH)) {
-			intent = new Intent(this, ExpenseListingThisMonth.class);
-		} else if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_WEEK)) {
-			intent = new Intent(this, ExpenseListingThisWeek.class);
-		} else if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_LISTING_THIS_YEAR)) {
-			intent = new Intent(this, ExpenseListingThisYear.class);
-		} else if(intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_SUB_LISTING)) { 
-			intent = new Intent(this, ExpenseSubListing.class);
+		Intent intent = new Intent();
+		if(isChanged) {
+			bundle.putBoolean(Constants.DATA_CHANGED, isChanged);
+			intentExtras.putAll(bundle);
 		}
-		if(intent != null) {
-			if(isChanged) {
-				bundle.putBoolean(Constants.DATA_CHANGED, isChanged);
-				intentExtras.putAll(bundle);
-			}
-			intent.putExtras(intentExtras);
-			setResult(Activity.RESULT_OK, intent);
-		}
+		intent.putExtras(intentExtras);
+		setResult(Activity.RESULT_OK, intent);
 	}
 
 	protected Boolean checkDataModified() {

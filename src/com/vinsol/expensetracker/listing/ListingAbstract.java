@@ -293,6 +293,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 //    	mDataDateList.remove(mSeparatedListAdapter.getSectionNumber(position));
     	mSeparatedListAdapter.remove(position);
     	noItemLayout();
+    	intentExtras.putBoolean(Constants.DATA_DELETED, true);
 	}
 	
 	private void startEditPage(int position) {
@@ -327,12 +328,11 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		if (RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getExtras();
-				if(intentExtras != null && intentExtras.containsKey("isChanged")) {
+				if(intentExtras != null && intentExtras.containsKey(Constants.DATA_CHANGED)) {
 					updateListView(intentExtras,intentExtras.getInt(Constants.POSITION));
+					intentExtras.remove(Constants.DATA_CHANGED);
 				} else {
-					if(intentExtras != null && intentExtras.containsKey(Constants.IS_COMING_FROM_EXPENSE_SUB_LISTING)) {
-						initListView();
-					}
+					initListView();
 				}
 			} else if(Activity.RESULT_CANCELED == resultCode) {
 				removeItem(intentExtras.getInt(Constants.POSITION));

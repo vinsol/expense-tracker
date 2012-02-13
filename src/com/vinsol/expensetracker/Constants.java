@@ -22,6 +22,7 @@ public class Constants {
 	public static String POSITION = "position";
 	public static String IS_COMING_FROM_SHOW_PAGE = "isFromShowPage";
 	public static String DATA_CHANGED = "isChanged";
+	public static String DATA_DELETED = "isDeleted";
 	public static String IS_COMING_FROM_EXPENSE_LISTING_ALL = "isFromExpenseListingAll";
 	public static String IS_COMING_FROM_EXPENSE_LISTING_THIS_WEEK = "isFromExpenseListingThisWeek";
 	public static String IS_COMING_FROM_EXPENSE_LISTING_THIS_MONTH = "isFromExpenseListingThisMonth";
