@@ -306,9 +306,10 @@ class SeparatedListAdapter extends BaseAdapter {
 		String sectionNumber = getSectionNumber(toRemove);
 		Entry prevEntry = getItem(toRemove);
 		sections.get(sectionNumber).remove(getItem(toRemove));
-		updateAmount(sectionNumber, prevEntry, null);
 		if(sections.get(sectionNumber).getCount() == 0) {
 			removeSection(sectionNumber);
+		} else {
+			updateAmount(sectionNumber, prevEntry, null);
 		}
 		notifyDataSetChanged();
 	}
