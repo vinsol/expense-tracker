@@ -96,9 +96,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		editAmount.setOnFocusChangeListener(focusChangeListener);
 		////////********* Get intent extras ******** ////////////
 		intentExtras = getIntent().getExtras();
-		if(intentExtras != null && intentExtras.containsKey(Constants.IS_COMING_FROM_FAVORITE)) {
-			isFromFavorite = true;
-		}
+		if(intentExtras != null && intentExtras.containsKey(Constants.IS_COMING_FROM_FAVORITE)) {isFromFavorite = true;}
 	}
 	
 	private OnKeyListener focusTagOnEnter = new OnKeyListener() {
@@ -179,7 +177,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		
 	}
 	
-	protected Entry getSaveEntryData(TextView editDateBarDateview,String dateViewString) {
+	private Entry getSaveEntryData(TextView editDateBarDateview,String dateViewString) {
 		/////// ******* Creating HashMap to update info ******* ////////
 		Entry list = new Entry();
 		list.id = entry.id;
@@ -221,7 +219,26 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		return list;
 	}
 	
-	protected Entry getListOnResult(Entry list) {
+	private Favorite getSaveFavoriteData() {
+		/////// ******* Creating HashMap to update info ******* ////////
+		Favorite favorite = new Favorite();
+		favorite.favId = mFavoriteList.favId;
+		mFavoriteList.amount = editAmount.getText().toString();
+		mFavoriteList.description = editTag.getText().toString();
+		if (!mFavoriteList.amount.equals(".") && !mFavoriteList.amount.equals("")) {
+			Double mAmount = Double.parseDouble(mFavoriteList.amount);
+			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
+			favorite.amount = mAmount+"";
+		} else {
+			favorite.amount = "";
+		}
+		
+		favorite.description = mFavoriteList.description;
+		
+		return favorite;
+	}
+	
+	private Entry getEntryListOnResult(Entry list) {
 		Entry displayList = new Entry();
 		displayList.id = mEditList.id;
 		displayList.description = list.description;
@@ -267,12 +284,51 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			displayList.timeInMillis = mEditList.timeInMillis;
 		}
 		displayList.location = mEditList.location;
-		isChanged = checkDataModified();
+		isChanged = checkEntryModified();
 		mEditList = displayList;
 		return displayList;
 	}
+	
+	private Favorite getFavoriteListOnResult(Favorite favList) {
+		Favorite favorite = new Favorite();
+		favorite.favId = mFavoriteList.favId;
+		favorite.description = favList.description;
+		favorite.amount = favList.amount;
+		if(favorite.amount == null || favorite.amount.equals("")) {
+			favorite.amount = "?";
+		}
+		
+		if (favorite.description == null || favorite.description.equals("") || favorite.description.equals(getString(typeOfEntryUnfinished)) || favorite.description.equals(getString(typeOfEntryFinished)) || favorite.description.equals(getString(R.string.unknown_entry))) {
+			favorite.description = getString(typeOfEntryFinished);
+		}
+		
+		if (mFavoriteList.description == null || mFavoriteList.description.equals("") || mFavoriteList.description.equals(getString(typeOfEntryUnfinished)) || mFavoriteList.description.equals(getString(typeOfEntryFinished)) || mFavoriteList.description.equals(getString(R.string.unknown_entry))) {
+			mFavoriteList.description = getString(typeOfEntryFinished);
+		}	
+		
+		Boolean isAmountNotEqual = false;
+		try {
+			isAmountNotEqual = Double.parseDouble(new StringProcessing().getStringDoubleDecimal(favorite.amount)) != Double.parseDouble(mFavoriteList.amount);
+		}catch(Exception e) {
+			isAmountNotEqual = true;
+		}
+		
+		if((!mFavoriteList.description.equals(favorite.description)) || isAmountNotEqual || isChanged ) {
+			isChanged = false;
+			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
+			mDatabaseAdapter.open();
+			mDatabaseAdapter.editFavoriteIdEntryTable(Long.parseLong(mFavoriteList.favId));
+			mDatabaseAdapter.close();
+		}
+			
+		favorite.type = mEditList.type;	
 
-	protected void saveEntry() {
+		isChanged = checkFavoriteModified();
+		mFavoriteList = favorite;
+		return favorite;
+	}
+
+	private void saveEntry() {
 		Entry toSave = getSaveEntryData(dateBarDateview,dateViewString);
 		////// ******* Update database if user added additional info *******///////
 		mDatabaseAdapter.open();
@@ -289,20 +345,32 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 				startActivity(intentExpenseListing);
 			} else {
 				mToHighLight.putInt(Constants.POSITION, intentExtras.getInt(Constants.POSITION));
-				mToHighLight.putParcelable(Constants.ENTRY_LIST_EXTRA, getListOnResult(toSave));
+				mToHighLight.putParcelable(Constants.ENTRY_LIST_EXTRA, getEntryListOnResult(toSave));
 				setActivityResult(mToHighLight);
 			}
 		} else {
 			Bundle tempBundle = new Bundle();
-			tempBundle.putParcelable(Constants.ENTRY_LIST_EXTRA, getListOnResult(toSave));
+			tempBundle.putParcelable(Constants.ENTRY_LIST_EXTRA, getEntryListOnResult(toSave));
 			if(intentExtras.containsKey(Constants.POSITION)) {
-				if(checkDataModified()) {
+				if(checkEntryModified()) {
 					tempBundle.putInt(Constants.POSITION , intentExtras.getInt(Constants.POSITION));
 					tempBundle.putBoolean(Constants.DATA_CHANGED, true);
 				}
 			}
 			saveEntryStartIntent(tempBundle);
 		}
+		finish();
+	}
+	
+	private void saveFavoriteEntry() {
+		Favorite toSaveFav = getSaveFavoriteData();
+		////// ******* Update database if user added additional info *******///////
+		mDatabaseAdapter.open();
+		mDatabaseAdapter.editFavoriteTable(toSaveFav);
+		mDatabaseAdapter.close();
+		Bundle bundle = new Bundle();
+		bundle.putParcelable(Constants.ENTRY_LIST_EXTRA, getFavoriteListOnResult(toSaveFav));
+		setActivityResult(bundle);
 		finish();
 	}
 	
@@ -316,28 +384,35 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		setResult(Activity.RESULT_OK, intent);
 	}
 
-	protected Boolean checkDataModified() {
+	protected Boolean checkEntryModified() {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(mEditList.timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if ((isTagModified() || isAmountModified()) && dateBarDateview.getText().toString().equals(new DisplayDate(mCalendar).getDisplayDate())) {
+		if ((isTagModified(mEditList.description) || isAmountModified(mEditList.amount)) && dateBarDateview.getText().toString().equals(new DisplayDate(mCalendar).getDisplayDate())) {
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean isAmountModified() {
+	protected Boolean checkFavoriteModified() {
+		if (isTagModified(mFavoriteList.description) || isAmountModified(mFavoriteList.amount)) {
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isAmountModified(String amount) {
 		if(editAmount.getText().toString().equals("")) {
-			if(mEditList.amount.equals("?") || mEditList.amount.equals("")) {
+			if(amount.equals("?") || amount.equals("")) {
 				return false;
 			} else {
 				return true;
 			}
 		} else {
-			if(mEditList.amount.equals("?") || mEditList.amount.equals("")) {
+			if(amount.equals("?") || amount.equals("")) {
 				return false;
 			} else {
-				if(Double.parseDouble(editAmount.getText().toString()) != Double.parseDouble(mEditList.amount))
+				if(Double.parseDouble(editAmount.getText().toString()) != Double.parseDouble(amount))
 					return true;
 				else 
 					return false;
@@ -345,15 +420,15 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		}
 	}
 	
-	private boolean isTagModified() {
+	private boolean isTagModified(String description) {
 		if(editTag.getText().equals("")) {
-			if(mEditList.description.equals(getString(typeOfEntryFinished)) || mEditList.description.equals(getString(typeOfEntryUnfinished)) || mEditList.description.equals("")) {
+			if(description.equals(getString(typeOfEntryFinished)) || description.equals(getString(typeOfEntryUnfinished)) || description.equals("")) {
 				return false;
 			} else {
 				return true;
 			}
 		} else {
-			if(!editTag.getText().toString().equals(mEditList.description))
+			if(!editTag.getText().toString().equals(description))
 				return true;
 			else 
 				return false;
@@ -367,7 +442,11 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.edit_save_entry:
 			FlurryAgent.onEvent(getString(R.string.save_button));
-			saveEntry();
+			if(isFromFavorite) {
+				saveFavoriteEntry();
+			} else {
+				saveEntry();
+			}
 			break;
 		
 		case R.id.edit_delete:
@@ -429,7 +508,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
 		if(intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE) || intentExtras.containsKey(Constants.POSITION)) {
 			//if coming from show page or listing
-			if(checkDataModified()) {
+			if(checkEntryModified()) {
 				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
 				doConfirmDialogAction(mConfirmSaveEntryDialog);
 			} else {
@@ -452,7 +531,12 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
 				if(mConfirmSaveEntryDialog.isToSave()) {
-					saveEntry();
+					if(isFromFavorite) {
+						saveFavoriteEntry();
+					} else {
+						saveEntry();
+					}
+					
 				} else {
 					finishAndSetResult();
 				}	

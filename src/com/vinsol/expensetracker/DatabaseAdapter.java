@@ -105,7 +105,7 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
-	protected boolean editFavoriteTable(Favorite list) {
+	public boolean editFavoriteTable(Favorite list) {
 		ContentValues contentValues = new ContentValues();
 		if (list.description != null)
 			contentValues.put(KEY_TAG, list.description);
@@ -177,9 +177,7 @@ public class DatabaseAdapter {
 	}
 
 	public Cursor getEntryTableDateDatabase() {
-
 		return db.query(ENTRY_TABLE, null, null, null, null, null, KEY_DATE_TIME+" desc");
-		
 	}
 	
 	public Cursor getEntryTableDateDatabase(String id) {

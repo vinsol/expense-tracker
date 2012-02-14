@@ -105,7 +105,8 @@ public class ShowVoiceActivity extends ShowAbstract {
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
-		if (v.getId() == R.id.show_play_button) {
+		switch (v.getId()) {
+		case R.id.show_play_button:
 			// //// ******** to handle playback of recorded file *********
 			// ////////
 			mAudioPlay = new AudioPlay(mShowList.id, this, false);
@@ -117,7 +118,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 			showPlayButton.setVisibility(View.GONE);
 			showStopButton.setVisibility(View.VISIBLE);
 
-			// /// ******** Start Audio Playback and counter to play audio
+			///// ******** Start Audio Playback and counter to play audio
 			// ****** ///////
 			if (!mAudioPlay.isAudioPlaying()) {
 				mAudioPlay.startPlayBack();
@@ -126,36 +127,31 @@ public class ShowVoiceActivity extends ShowAbstract {
 				mAudioPlay.startPlayBack();
 			}
 			countDownTimer.start();
-		}
-
-		if (v.getId() == R.id.show_stop_button) {
-			try {
-				countDownTimer.cancel();
-			} catch (NullPointerException e) {
-			}
+			break;
 			
-			// //// ****** Handles UI items on button click ****** ///////
+		case R.id.show_stop_button:
+			if(countDownTimer != null) {countDownTimer.cancel();}
+			
+			////// ****** Handles UI items on button click ****** ///////
 			showStopButton.setVisibility(View.GONE);
 			showPlayButton.setVisibility(View.VISIBLE);
 
-			// //// ******* Stop Recording Audio and stop chronometer ********
-			// ////////
+			////// ******* Stop Recording Audio and stop chronometer ********
+			//////////
 			showTimeDetailsChronometer.stop();
-			try {
-				if (mAudioPlay.isAudioPlaying()) {
-					mAudioPlay.stopPlayBack();
-				}
-			} catch (Exception e) {
-			}
+			if (mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
 			showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
+			break;
+
+		default:
+			break;
 		}
 	}
 
 	@Override
 	protected void onPause() {
-
-		// //// ***** Check whether audio is recording or not ******* ///////
-		// //// ****** If audio recording started then stop recording audio ***** ///////
+		////// ***** Check whether audio is recording or not ******* ///////
+		////// ****** If audio recording started then stop recording audio ***** ///////
 		try {
 			countDownTimer.cancel();
 		} catch (NullPointerException e) {
@@ -171,42 +167,39 @@ public class ShowVoiceActivity extends ShowAbstract {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
 		super.onActivityResult(requestCode, resultCode, data);
-		if (SHOW_RESULT == requestCode) {
-			if(Activity.RESULT_OK == resultCode) {
-				intentExtras = data.getExtras();
-				doTaskOnActivityResult();
-				showDelete.setOnClickListener(this);
-				showPlayButton.setOnClickListener(this);
-				showStopButton.setOnClickListener(this);
-				showEdit.setOnClickListener(this);
+		if (SHOW_RESULT == requestCode && Activity.RESULT_OK == resultCode) {
+			intentExtras = data.getExtras();
+			doTaskOnActivityResult();
+			showDelete.setOnClickListener(this);
+			showPlayButton.setOnClickListener(this);
+			showStopButton.setOnClickListener(this);
+			showEdit.setOnClickListener(this);
 
-				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					updateUI();
-					if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
-						File tempFile = fileHelper.getAudioFileEntry(mShowList.id);
+			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+				updateUI();
+				if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+					File tempFile = fileHelper.getAudioFileEntry(mShowList.id);
 
-						if (tempFile.canRead()) {
-							mAudioPlay = new AudioPlay(mShowList.id, this, false);
-							showStopButton.setVisibility(View.GONE);
-							showPlayButton.setVisibility(View.VISIBLE);
-							showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
-						} else {
-							showTimeDetailsChronometer.setText("Audio File Missing");
-							showStopButton.setVisibility(View.GONE);
-							showPlayButton.setVisibility(View.GONE);
-						}
-						mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
-						mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
+					if (tempFile.canRead()) {
+						mAudioPlay = new AudioPlay(mShowList.id, this, false);
+						showStopButton.setVisibility(View.GONE);
+						showPlayButton.setVisibility(View.VISIBLE);
+						showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
+					} else {
+						showTimeDetailsChronometer.setText("Audio File Missing");
+						showStopButton.setVisibility(View.GONE);
+						showPlayButton.setVisibility(View.GONE);
 					}
-				} else {
-					Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
+					mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+					mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
 				}
+			} else {
+				Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 			}
 		}
 
-		if(resultCode == Activity.RESULT_CANCELED) {
+		if(SHOW_RESULT == requestCode && resultCode == Activity.RESULT_CANCELED) {
 			finish();
 		}
 	}

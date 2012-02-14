@@ -252,8 +252,16 @@ public class CameraActivity extends EditAbstract {
 	}
 
 	@Override
-	protected Boolean checkDataModified() {
-		if(super.checkDataModified() || isChanged)
+	protected Boolean checkEntryModified() {
+		if(super.checkEntryModified() || isChanged)
+			return true;
+		else 
+			return false;
+	}
+	
+	@Override
+	protected Boolean checkFavoriteModified() {
+		if(super.checkFavoriteModified() || isChanged)
 			return true;
 		else 
 			return false;
