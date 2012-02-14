@@ -129,7 +129,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		}
 		
 		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
-			mEditList = intentExtras.getParcelable("mDisplayList");
+			mEditList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
 			entry.id = mEditList.id;
 			entry.amount = mEditList.amount;
 			entry.description = mEditList.description;
@@ -154,8 +154,8 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		////////******** Handle Date Bar ********* ////////
 		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 			new DateHandler(this, mEditList.timeInMillis);
-		} else if (intentExtras.containsKey("timeInMillis")) {
-			new DateHandler(this, intentExtras.getLong("timeInMillis"));
+		} else if (intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
+			new DateHandler(this, intentExtras.getLong(Constants.TIME_IN_MILLIS));
 		} else {
 			new DateHandler(this);
 		}
@@ -183,12 +183,12 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 					DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 					list.timeInMillis = mDateHelper.getTimeMillis();
 				} else {
-					if(!intentExtras.containsKey("timeInMillis")) {
+					if(!intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
 						DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 						list.timeInMillis = mDateHelper.getTimeMillis();
 					} else {
 						Calendar mCalendar = Calendar.getInstance();
-						mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+						mCalendar.setTimeInMillis(intentExtras.getLong(Constants.TIME_IN_MILLIS));
 						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString(),mCalendar);
 						list.timeInMillis = mDateHelper.getTimeMillis();
@@ -303,7 +303,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(mEditList.timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if (isTagModified() || isAmountModified() || !dateBarDateview.getText().toString().equals(new DisplayDate(mCalendar).getDisplayDate())) {
+		if ((isTagModified() || isAmountModified()) && dateBarDateview.getText().toString().equals(new DisplayDate(mCalendar).getDisplayDate())) {
 			return true;
 		}
 		return false;

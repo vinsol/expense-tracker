@@ -78,16 +78,16 @@ public class CameraActivity extends EditAbstract {
 				Entry toInsert = new Entry();
 				if (!dateBarDateview.getText().toString().equals(dateViewString)) {
 					try {
-						if (!intentExtras.containsKey("mDisplayList")) {
+						if (!intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 							DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString());
 							toInsert.timeInMillis = mDateHelper.getTimeMillis();
 						} else {
-							if(!intentExtras.containsKey("timeInMillis")) {
+							if(!intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
 								DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString());
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
 								Calendar mCalendar = Calendar.getInstance();
-								mCalendar.setTimeInMillis(intentExtras.getLong("timeInMillis"));
+								mCalendar.setTimeInMillis(intentExtras.getLong(Constants.TIME_IN_MILLIS));
 								mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString(),mCalendar);
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
@@ -160,7 +160,7 @@ public class CameraActivity extends EditAbstract {
 						adapter.close();
 					}
 				}
-				if(!intentExtras.containsKey("isFromShowPage")) {
+				if(!intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE)) {
 					finish();
 				}
 			}

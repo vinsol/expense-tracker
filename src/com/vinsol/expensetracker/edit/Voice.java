@@ -19,6 +19,7 @@ import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.AudioPlay;
 import com.vinsol.expensetracker.helpers.FileHelper;
@@ -58,7 +59,7 @@ public class Voice extends EditAbstract {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			setGraphicsVoice();
 
-			if (intentExtras.containsKey("mDisplayList") && !setUnknown) {
+			if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA) && !setUnknown) {
 				File tempFile = fileHelper.getAudioFileEntry(entry.id);
 
 				if (tempFile.canRead()) {
