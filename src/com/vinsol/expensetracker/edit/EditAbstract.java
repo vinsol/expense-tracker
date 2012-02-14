@@ -22,6 +22,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flurry.android.FlurryAgent;
@@ -39,10 +40,12 @@ import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.models.Favorite;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
 	
 	protected Entry mEditList;
+	protected Favorite mFavoriteList;
 	protected boolean setLocation = false;
 	protected EditText editAmount;
 	protected EditText editTag;
@@ -60,6 +63,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	protected Button editSaveEntry;
 	protected Entry entry;
 	protected FileHelper fileHelper;
+	protected boolean isFromFavorite = false; 
 	
 	@Override
 	protected void onStart() {
@@ -92,6 +96,9 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		editAmount.setOnFocusChangeListener(focusChangeListener);
 		////////********* Get intent extras ******** ////////////
 		intentExtras = getIntent().getExtras();
+		if(intentExtras != null && intentExtras.containsKey(Constants.IS_COMING_FROM_FAVORITE)) {
+			isFromFavorite = true;
+		}
 	}
 	
 	private OnKeyListener focusTagOnEnter = new OnKeyListener() {
@@ -128,36 +135,46 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			setLocation = intentExtras.getBoolean("setLocation");
 		}
 		
-		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+		if (!isFromFavorite && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 			mEditList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+			mFavoriteList = null;
 			entry.id = mEditList.id;
 			entry.amount = mEditList.amount;
 			entry.description = mEditList.description;
-			if (!(entry.amount.equals("") || entry.amount == null)) {
-				if (!entry.amount.contains("?")) {
-					if(entry.amount.endsWith(".00")) {
-						editAmount.setText(entry.amount.subSequence(0, entry.amount.length()-3));
-					}
-				}
-			}
-			if(entry.description.equals(getString(R.string.unknown_entry)) || mEditList.description.equals(getString(R.string.unknown))) {
-				setUnknown = true;
-			}
-			
-			if (!(entry.description.equals("") || entry.description == null || 
-					entry.description.equals(getString(typeOfEntryUnfinished)) || entry.description.equals(getString(typeOfEntryFinished))  || entry.description.equals(getString(R.string.unknown_entry)))) {
-				editTag.setText(entry.description);
-			}
+			setText(entry.amount, entry.description);
 			editHeaderTitle.setText(new DisplayDate().getLocationDate(mEditList.timeInMillis, mEditList.location));
+			////////******** Handle Date Bar ********* ////////
+			if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+				new DateHandler(this, mEditList.timeInMillis);
+			} else if (intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
+				new DateHandler(this, intentExtras.getLong(Constants.TIME_IN_MILLIS));
+			} else {
+				new DateHandler(this);
+			}
+		} else if(isFromFavorite && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+			mEditList = null;
+			((LinearLayout)findViewById(R.id.edit_date_bar)).setVisibility(View.GONE);
+			mFavoriteList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA); 
+			setText(mFavoriteList.amount, mFavoriteList.description);
 		}
 		
-		////////******** Handle Date Bar ********* ////////
-		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
-			new DateHandler(this, mEditList.timeInMillis);
-		} else if (intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
-			new DateHandler(this, intentExtras.getLong(Constants.TIME_IN_MILLIS));
-		} else {
-			new DateHandler(this);
+	}
+	
+	private void setText(String amount, String description) {
+		if (!(amount.equals("") || amount == null)) {
+			if (!amount.contains("?")) {
+				if(amount.endsWith(".00")) {
+					editAmount.setText(amount.subSequence(0, amount.length()-3));
+				}
+			}
+		}
+		if(description.equals(getString(R.string.unknown_entry)) || description.equals(getString(R.string.unknown))) {
+			setUnknown = true;
+		}
+		
+		if (!(description.equals("") || description == null || 
+				description.equals(getString(typeOfEntryUnfinished)) || description.equals(getString(typeOfEntryFinished))  || description.equals(getString(R.string.unknown_entry)))) {
+			editTag.setText(description);
 		}
 		
 	}

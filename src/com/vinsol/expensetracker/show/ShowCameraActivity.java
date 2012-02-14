@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
+import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
 public class ShowCameraActivity extends ShowAbstract {
@@ -56,7 +57,7 @@ public class ShowCameraActivity extends ShowAbstract {
 			} else {
 				showImageDisplay.setImageResource(R.drawable.no_image_small);
 			}
-			FavoriteHelper();
+			mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
 		}
 
 		showImageDisplay.setOnClickListener(this);
@@ -118,7 +119,7 @@ public class ShowCameraActivity extends ShowAbstract {
 						showImageDisplay.setImageResource(R.drawable.no_image_small);
 					}
 					mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
-					FavoriteHelper();
+					mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
 				}
 				showImageDisplay.setOnClickListener(this);
 				showDelete.setOnClickListener(this);

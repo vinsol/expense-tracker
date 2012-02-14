@@ -17,9 +17,11 @@ import android.widget.Chronometer;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.helpers.AudioPlay;
+import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
 import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
@@ -49,7 +51,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			updateUI();
-			if (intentExtras.containsKey("mDisplayList")) {
+			if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 				File tempFile = fileHelper.getAudioFileEntry(mShowList.id);
 
 				if (tempFile.canRead()) {
@@ -62,7 +64,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 					showStopButton.setVisibility(View.GONE);
 					showPlayButton.setVisibility(View.GONE);
 				}
-				FavoriteHelper();
+				mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
 			}
 		} else {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
@@ -182,7 +184,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					updateUI();
-					if (intentExtras.containsKey("mDisplayList")) {
+					if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 						File tempFile = fileHelper.getAudioFileEntry(mShowList.id);
 
 						if (tempFile.canRead()) {
@@ -195,8 +197,8 @@ public class ShowVoiceActivity extends ShowAbstract {
 							showStopButton.setVisibility(View.GONE);
 							showPlayButton.setVisibility(View.GONE);
 						}
-						mShowList = intentExtras.getParcelable("mDisplayList");
-						FavoriteHelper();
+						mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+						mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
 					}
 				} else {
 					Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();

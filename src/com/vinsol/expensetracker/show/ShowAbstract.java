@@ -6,7 +6,6 @@
 
 package com.vinsol.expensetracker.show;
 
-import java.io.File;
 import java.util.Calendar;
 
 import android.app.Activity;
@@ -19,7 +18,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.Constants;
@@ -27,6 +25,7 @@ import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.DeleteDialog;
+import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.listing.ExpenseListing;
@@ -47,10 +46,9 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	protected DatabaseAdapter mDatabaseAdapter;	
 	protected Button showDelete;
 	protected Button showEdit;
-	private ToggleButton showAddFavorite;
-	private TextView showAddFavoriteTextView;
 	private String tempfavID;
 	protected FileHelper fileHelper;
+	protected FavoriteHelper mFavoriteHelper;
 	
 	@Override
 	protected void onStart() {
@@ -70,8 +68,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		setContentView(R.layout.show_page);
 		fileHelper = new FileHelper();
 		showEdit = (Button) findViewById(R.id.show_edit);
-		showAddFavorite = (ToggleButton) findViewById(R.id.show_add_favorite);
-		showAddFavoriteTextView = (TextView) findViewById(R.id.show_add_favorite_textView);
 		showDelete = (Button) findViewById(R.id.show_delete);
 		showHeaderTitle = (TextView) findViewById(R.id.header_title);
 		mDatabaseAdapter = new DatabaseAdapter(this);
@@ -186,18 +182,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 				editAction();
 				break;
 				
-			case R.id.show_add_favorite:
-			case R.id.show_add_favorite_textView:
-				FlurryAgent.onEvent(getString(R.string.added_to_favorite));
-				Boolean toCheck;
-				if(v.getId() == R.id.show_add_favorite) {
-					toCheck = showAddFavorite.isChecked();
-				} else {
-					toCheck = !showAddFavorite.isChecked();
-				}
-				onClickFavorite(toCheck);
-				break;
-				
 			default:
 				break;
 		}
@@ -259,107 +243,6 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		}
 		return false;
 	}
-	
-	public void FavoriteHelper() {
-		showAddFavorite.setVisibility(View.VISIBLE);
-		showAddFavoriteTextView.setVisibility(View.VISIBLE);
-		if(mShowList.favId != null) {
-			if(!mShowList.favId.equals("")) {
-				showAddFavorite.setChecked(true);
-				showAddFavoriteTextView.setText("Remove from Favorite");
-			} else {
-				showAddFavoriteTextView.setText("Add to Favorite");
-				showAddFavorite.setChecked(false);
-			}
-		} else {
-			showAddFavoriteTextView.setText("Add to Favorite");
-			showAddFavorite.setChecked(false);
-		}
-		showAddFavorite.setOnClickListener(this);
-		showAddFavoriteTextView.setOnClickListener(this);
-	}
-
-	public void onClickFavorite(Boolean toCheck) {
-		Long favID = null;
-		if(toCheck) {
-			if(mShowList.type.equals(getString(R.string.text))) {
-				mDatabaseAdapter.open();
-				favID = mDatabaseAdapter.insertToFavoriteTable(mShowList);
-				mDatabaseAdapter.close();
-			} else if(mShowList.type.equals(getString(R.string.camera))) {
-				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					try {
-						mDatabaseAdapter.open();
-						favID = mDatabaseAdapter.insertToFavoriteTable(mShowList);
-						mDatabaseAdapter.close();
-						
-						fileHelper.copyAllToFavorite(mShowList.id, favID.toString());
-						File mFile = fileHelper.getCameraFileLargeFavorite(favID.toString());
-						File mFileSmall = fileHelper.getCameraFileSmallFavorite(favID.toString());
-						File mFileThumbnail = fileHelper.getCameraFileThumbnailFavorite(favID.toString());
-						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
-						} else {
-							mDatabaseAdapter.open();
-							mDatabaseAdapter.deleteFavoriteTableEntryID(favID);
-							mDatabaseAdapter.close();
-						}
-					} catch (Exception e) {	
-					}
-				} else {
-					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
-				}
-			} else if(mShowList.type.equals(getString(R.string.voice))) {
-				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					try {
-						mDatabaseAdapter.open();
-						favID = mDatabaseAdapter.insertToFavoriteTable(mShowList);
-						mDatabaseAdapter.close();
-						fileHelper.copyAllToFavorite(mShowList.id, favID.toString());
-						File mFile = fileHelper.getAudioFileFavorite(favID.toString());
-						if(!mFile.canRead()) {
-							mDatabaseAdapter.open();
-							mDatabaseAdapter.deleteFavoriteTableEntryID(favID);
-							mDatabaseAdapter.close();
-						}
-					} catch (Exception e) {	
-					}
-				} else {
-					Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
-				}
-			}
-			mShowList.favId = favID+"";
-			mDatabaseAdapter.open();
-			mDatabaseAdapter.editEntryTable(mShowList);
-			mDatabaseAdapter.close();
-			showAddFavorite.setChecked(true);
-			showAddFavoriteTextView.setText("Remove from Favorite");
-		} else if(mShowList.id.equals(getString(R.string.text))) {
-				mDatabaseAdapter.open();
-				favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
-				mDatabaseAdapter.close();
-				doTaskAfter(favID);
-			} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-				mDatabaseAdapter.open();
-				favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
-				mDatabaseAdapter.close();
-				fileHelper.deleteAllFavoriteFiles(favID.toString());
-				doTaskAfter(favID);
-			} else {
-				Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();
-			}
-	}
-
-	private void doTaskAfter(Long favID) {
-		mDatabaseAdapter.open();
-		mDatabaseAdapter.deleteFavoriteTableEntryID(favID);
-		mDatabaseAdapter.close();
-		mDatabaseAdapter.open();
-		mDatabaseAdapter.editFavoriteIdEntryTable(favID);
-		mDatabaseAdapter.close();
-		showAddFavorite.setChecked(false);
-		mShowList.favId = null;
-		showAddFavoriteTextView.setText("Add to Favorite");
-	}	
 
 	@Override
 	public void onBackPressed() {

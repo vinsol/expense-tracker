@@ -196,6 +196,9 @@
 	            android:layout_marginRight="7dp"
             	android:layout_marginLeft="7dp"
             	android:hint="description" />
+	        
+	        <include 
+	            layout="@layout/favorite"/>
         </LinearLayout>	
     </ScrollView>
     

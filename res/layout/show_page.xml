@@ -186,44 +186,8 @@
               	android:layout_marginLeft="7dp"
             	android:layout_marginRight="7dp" />
             
-           	<!-- divider -->    
-            <View 
-	           	android:layout_width="fill_parent"
-	           	android:layout_height="wrap_content"
-	           	android:background="@drawable/list_divider"
-	           	android:layout_marginTop="10dp"
-	           	android:layout_marginBottom="15dp" />  
-           	
-            <!-- Favorite -->
-            <LinearLayout
-                android:id="@+id/show_add_favorite_layout" 
-                android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginBottom="15dip"
-	            android:layout_marginLeft="7dp"
-	            android:layout_marginRight="7dp"
-	            android:orientation="horizontal"
-	            android:gravity="center_vertical" >    
-                
-	            <ToggleButton
-	                android:id="@+id/show_add_favorite"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:background="@drawable/add_to_favorite_states"
-	                android:textOn=""
-	                android:textOff=""
-	                android:layout_marginRight="7dp" 
-	                android:visibility="gone" />
-	            
-	            <TextView 
-	                android:id="@+id/show_add_favorite_textView"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:textSize="20dip"
-	                android:textColor="@color/black"
-	                android:visibility="gone" />
-	            
-            </LinearLayout>
+           	<include 
+           	    layout="@layout/favorite"/>
             
         </LinearLayout>
         
