@@ -26,6 +26,8 @@
     <!-- XML Text -->
     <string name="expense_list_header">Expenses List</string>
     <string name="no_expenses_text">No expenses available to show, Please add expenses</string>
+    <string name="favorite_selection_text">Choose an entry to add to expenses</string>
+    <string name="search">Search</string>
     
     <!-- Flurry And Other Strings -->
     <string name="finished_textentry">Text Entry</string>

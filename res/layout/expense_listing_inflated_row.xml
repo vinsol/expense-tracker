@@ -18,8 +18,7 @@
   		android:layout_height="59dp"
  		android:background="@drawable/listing_row_icon_bg_states"
  		android:scaleType="centerInside"  
- 		android:padding="2dp"
- 		/>
+ 		android:padding="2dp" />
   	
   	<ImageView 
  		android:background="@drawable/horizontal_divider_list"
@@ -27,8 +26,7 @@
  		android:layout_height="fill_parent"
 		android:scaleType="fitXY" 
 		android:layout_toRightOf="@id/row_imageview"
-		android:id="@+id/row_imageview_divider"
-		/>
+		android:id="@+id/row_imageview_divider" />
 	
   	<RelativeLayout
   	    android:layout_width="fill_parent"
@@ -57,8 +55,7 @@
 	           	android:textSize="16sp"
 	   	        android:singleLine="true"
 	   	        android:ellipsize="end"
-	   	        android:layout_marginTop="3dip"
-	   	        />
+	   	        android:layout_marginTop="3dip" />
 	   	    
 	   	    <!-- time and location -->    
 	   	    <TextView 
@@ -70,8 +67,7 @@
 	   	        android:singleLine="true"
 	   	        android:ellipsize="end"
 	   	        android:layout_below="@id/row_tag"
-	   	        android:layout_marginTop="5dip" 
-	   	        />
+	   	        android:layout_marginTop="5dip" />
 	   	    
 	   	</RelativeLayout>
 	   	    
@@ -83,8 +79,7 @@
 	       	android:visibility="invisible"
 	       	android:layout_alignParentTop="true"
 	       	android:layout_alignParentRight="true"
-	       	android:src="@drawable/listing_favorite_icon" 
-	       	/>
+	       	android:src="@drawable/listing_favorite_icon" />
 		
 		<!-- amount -->
 	    <TextView
@@ -98,7 +93,13 @@
 	        android:textColor="@color/black"
 	        android:textStyle="bold"
 	        android:layout_marginRight="7dip"
-	        android:layout_centerVertical="true" 
-	        />
+	        android:layout_centerVertical="true" />
+	    
 	</RelativeLayout>
+	
+	<ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+    	android:layout_alignParentBottom="true"
+        android:background="@drawable/list_divider" />
 </RelativeLayout>

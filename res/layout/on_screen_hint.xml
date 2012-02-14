@@ -19,8 +19,7 @@
         android:textAppearance="@style/OnScreenHintTextAppearance.Small"
         android:textColor="#ffffffff"
         android:shadowColor="#BB000000"
-        android:shadowRadius="2.75"
-        />
+        android:shadowRadius="2.75" />
 </LinearLayout>
 
 

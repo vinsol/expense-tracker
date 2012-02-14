@@ -196,6 +196,13 @@ public class Home extends Activity implements OnClickListener {
 			Intent startMarket = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.EXPENSE_TRACKER_MARKET_URI));
 			startActivity(startMarket);
 			break;
+			
+		case R.id.manage_favorite:
+			Intent startManagingFavorite = new Intent(this, FavoriteActivity.class);
+			startManagingFavorite.putExtra(Constants.MANAGE_FAVORITE, true);
+			startActivity(startManagingFavorite);
+			break;
+			
 		default:
 			break;
 		}

@@ -200,36 +200,43 @@
     </ScrollView>
     
     <!-- Body for favorite entry -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/edit_footer"
         android:layout_below="@+id/edit_date_bar"
-        android:background="@drawable/home_bg"
+        android:background="@color/white"
         android:id="@+id/edit_body_favorite"
         android:visibility="gone"
+        android:orientation="vertical"
         >
+        
+        <EditText 
+            android:id="@+id/edit_body_favorite_search"
+            android:hint="@string/search"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:visibility="gone"
+            />
         
         <TextView 
             android:id="@+id/edit_body_favorite_tag"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:background="@drawable/notification_bg"
-            android:text="Choose an entry to add to expenses"
+            android:text="@string/favorite_selection_text"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:gravity="center_vertical"
             android:paddingLeft="7dip" />
-        
+                
         <ListView 
             android:id="@+id/edit_body_favorite_listview"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edit_body_favorite_tag"
             android:layout_width="fill_parent"
-            android:cacheColorHint="#00000000"
-            android:divider="@drawable/list_divider" />
+            android:cacheColorHint="#00000000" />
         
-    </RelativeLayout>
+    </LinearLayout>
         
     <!-- Footer -->
     <LinearLayout
@@ -258,4 +265,5 @@
             android:layout_marginLeft="5dp" />
 
     </LinearLayout>
+
 </RelativeLayout>

@@ -25,7 +25,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +32,9 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.edit.CameraActivity;
+import com.vinsol.expensetracker.edit.TextEntry;
+import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
@@ -56,6 +58,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 	private String dateViewString;
 	private String id = null;
 	private FileHelper fileHelper;
+	private boolean isManaging = false;
+	private static final int ACTIVITY_RESULT = 1135;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,21 +77,27 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		intentExtras = getIntent().getExtras();
 		
-		headerTitle.setText("Favorite Entry");
-		
-		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
-			mEditList = new Entry();
-			mEditList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
-			id = mEditList.id;
-		}
-		
-		// ////// ******** Handle Date Bar ********* ////////
-		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
-			new DateHandler(this, mEditList.timeInMillis);
-		} else if (intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
-			new DateHandler(this, intentExtras.getLong(Constants.TIME_IN_MILLIS));
+		if(intentExtras != null && intentExtras.containsKey(Constants.MANAGE_FAVORITE)) {
+			isManaging = true;
+			headerTitle.setText("Managing Favorites");
+			((LinearLayout)findViewById(R.id.edit_date_bar)).setVisibility(View.GONE);
+			((TextView)findViewById(R.id.edit_body_favorite_tag)).setText("Choose an entry to edit or delete");
 		} else {
-			new DateHandler(this);
+			headerTitle.setText("Favorite Entry");
+			if (intentExtras != null && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+				mEditList = new Entry();
+				mEditList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+				id = mEditList.id;
+			}
+			
+			// ////// ******** Handle Date Bar ********* ////////
+			if (intentExtras != null && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+				new DateHandler(this, mEditList.timeInMillis);
+			} else if (intentExtras != null && intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
+				new DateHandler(this, intentExtras.getLong(Constants.TIME_IN_MILLIS));
+			} else {
+				new DateHandler(this);
+			}
 		}
 	}
 
@@ -245,8 +255,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		/////// ******* Hide Main Body of layout and make favorite body visible ******* ///////
 		ScrollView mScrollView = (ScrollView) findViewById(R.id.edit_body);
 		mScrollView.setVisibility(View.GONE);
-		RelativeLayout mRelativeLayout = (RelativeLayout) findViewById(R.id.edit_body_favorite);
-		mRelativeLayout.setVisibility(View.VISIBLE);
+		LinearLayout mLinearLayout = (LinearLayout) findViewById(R.id.edit_body_favorite);
+		mLinearLayout.setVisibility(View.VISIBLE);
 		LinearLayout editFooter = (LinearLayout) findViewById(R.id.edit_footer);
 		editFooter.setVisibility(View.GONE);
 	}
@@ -293,7 +303,24 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
-		saveEntry((Favorite) adapter.getItemAtPosition(position));
+		Favorite favoriteEntry = (Favorite) adapter.getItemAtPosition(position);
+		if(isManaging) {
+			Intent intent = null;
+			if(favoriteEntry.type.equals(getString(R.string.text))) {
+				intent = new Intent(this, TextEntry.class);
+			} else if(favoriteEntry.type.equals(getString(R.string.voice))) {
+				intent = new Intent(this, Voice.class);
+			} else if(favoriteEntry.type.equals(getString(R.string.camera))) {
+				intent = new Intent(this, CameraActivity.class);
+			}
+			Bundle intentExtras = new Bundle();
+			intentExtras.putParcelable(Constants.ENTRY_LIST_EXTRA, favoriteEntry);
+			intentExtras.putBoolean(Constants.IS_COMING_FROM_FAVORITE, true);
+			intent.putExtras(intentExtras);
+			startActivityForResult(intent, ACTIVITY_RESULT);
+		} else {
+			saveEntry(favoriteEntry);
+		}
 	}
 
 	private void saveEntry(Favorite adapterList) {
