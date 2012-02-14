@@ -49,73 +49,59 @@
             android:name=".edit.CameraActivity"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
-    		android:windowSoftInputMode="adjustPan|stateAlwaysVisible" 
-    		/>
+    		android:windowSoftInputMode="adjustPan|stateAlwaysVisible" />
         <activity 
             android:name=".listing.ExpenseListing"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation" 
-    		/>
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".listing.ExpenseSubListing"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation" 
-    		/>
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".listing.FavoriteActivity"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation" 
-    		/>
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".show.ShowVoiceActivity"
         	android:screenOrientation="portrait"
-        	android:configChanges="keyboardHidden|orientation" 
-        	/>
+        	android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".show.ShowCameraActivity"
         	android:screenOrientation="portrait"
-        	android:configChanges="keyboardHidden|orientation" 
-        	/>
+        	android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".show.ShowTextActivity"
         	android:screenOrientation="portrait"
-        	android:configChanges="keyboardHidden|orientation" 
-        	/>
+        	android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".utils.ImagePreview"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation" 
-    		/>
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".cameraservice.Camera"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
     		android:screenOrientation="landscape"
-    		android:configChanges="keyboardHidden|orientation" 
-    		/>
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".SetPreferences"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation"
-            />
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".listing.ExpenseListingThisWeek"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation"
-            />
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".listing.ExpenseListingThisMonth"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation"
-            />
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".listing.ExpenseListingThisYear"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation"
-            />
+    		android:configChanges="keyboardHidden|orientation" />
         <activity 
             android:name=".listing.ExpenseListingAll"
     		android:screenOrientation="portrait"
-    		android:configChanges="keyboardHidden|orientation"
-            />
+    		android:configChanges="keyboardHidden|orientation" />
     </application>
 </manifest>
