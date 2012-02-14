@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+/**
+ * Copyright (c) 2012 Vinayak Solutions Private Limited 
+ * See the file license.txt for copying permission.
+*/     
+ -->
 <resources>
     <!-- When launching the camera app first time, we will set the picture
          size to the first one in the list that is also supported by the

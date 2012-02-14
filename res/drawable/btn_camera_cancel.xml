@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!-- 
+/**
+ * Copyright (c) 2012 Vinayak Solutions Private Limited 
+ * See the file license.txt for copying permission.
+*/     
+ -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true" android:drawable="@drawable/camera_cancel_pressed" />
     <item android:state_window_focused="true"

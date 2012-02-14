@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+/**
+ * Copyright (c) 2012 Vinayak Solutions Private Limited 
+ * See the file license.txt for copying permission.
+*/     
+ -->
+ 
 <!-- Header -->
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/topbar_bg" 
+    android:gravity="center"
+    >
+    <TextView
+        android:id="@+id/header_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/topbar_bg" 
-        android:gravity="center"
-        >
-        <TextView
-            android:id="@+id/header_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/finished_textentry"
-            android:textSize="20dip"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:maxLines="1"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" />
-    </RelativeLayout>
+        android:text="@string/finished_textentry"
+        android:textSize="20dip"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:maxLines="1"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
+</RelativeLayout>
