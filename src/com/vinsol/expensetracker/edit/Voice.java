@@ -153,12 +153,10 @@ public class Voice extends EditAbstract {
 			if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
 			editTimeDetailsChronometer.stop();
 			
-			if(mAudioPlay != null) {
-				if(mAudioPlay.isAudioPlaying())
-				mAudioPlay.stopPlayBack();
-				mAudioPlay = new AudioPlay(entry.id , this, false);
-				editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
-			}
+			if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
+			
+			mAudioPlay = new AudioPlay(entry.id , this, false);
+			editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 			break;
 		
 		// // ***** if play button pressed ****** //////			
