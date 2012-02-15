@@ -37,7 +37,6 @@ import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
-import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
@@ -181,6 +180,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		/////// ******* Creating HashMap to update info ******* ////////
 		Entry list = new Entry();
 		list.id = entry.id;
+		isChanged = checkEntryModified();
 		entry.amount = editAmount.getText().toString();
 		entry.description = editTag.getText().toString();
 		if (!entry.amount.equals(".") && !entry.amount.equals("")) {
@@ -223,6 +223,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		/////// ******* Creating HashMap to update info ******* ////////
 		Favorite favorite = new Favorite();
 		favorite.favId = mFavoriteList.favId;
+		isChanged = checkFavoriteModified();
 		mFavoriteList.amount = editAmount.getText().toString();
 		mFavoriteList.description = editTag.getText().toString();
 		if (!mFavoriteList.amount.equals(".") && !mFavoriteList.amount.equals("")) {
@@ -253,21 +254,12 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		
 		if (mEditList.description == null || mEditList.description.equals("") || mEditList.description.equals(getString(typeOfEntryUnfinished)) || mEditList.description.equals(getString(typeOfEntryFinished)) || mEditList.description.equals(getString(R.string.unknown_entry))) {
 			mEditList.description = getString(typeOfEntryFinished);
-		}	
-		
-		Boolean isAmountNotEqual = false;
-		try {
-			isAmountNotEqual = Double.parseDouble(new StringProcessing().getStringDoubleDecimal(displayList.amount)) != Double.parseDouble(mEditList.amount);
-		}catch(Exception e) {
-			isAmountNotEqual = true;
 		}
 		
-		if((!mEditList.description.equals(displayList.description)) || isAmountNotEqual || isChanged ) {
-			isChanged = false;
+		if( isChanged ) {
 			Entry listForFav = new Entry();
 			listForFav.favId = "";
 			listForFav.id = mEditList.id;
-			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editEntryTable(listForFav);
 			mDatabaseAdapter.close();
@@ -284,7 +276,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			displayList.timeInMillis = mEditList.timeInMillis;
 		}
 		displayList.location = mEditList.location;
-		isChanged = checkEntryModified();
 		mEditList = displayList;
 		return displayList;
 	}
@@ -306,15 +297,13 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			mFavoriteList.description = getString(typeOfEntryFinished);
 		}	
 		
-		favorite.type = mFavoriteList.type;	
-
-		isChanged = checkFavoriteModified();
-		if(isChanged) {
-			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
+		if( isChanged ) {
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.editFavoriteIdEntryTable(Long.parseLong(mFavoriteList.favId));
+			mDatabaseAdapter.editFavoriteIdEntryTable(favorite.favId);
 			mDatabaseAdapter.close();
 		}
+			
+		favorite.type = mFavoriteList.type;	
 		mFavoriteList = favorite;
 		return favorite;
 	}
@@ -444,7 +433,11 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			if(new SharedPreferencesHelper(this).getSharedPreferences().getBoolean(getString(R.string.pref_key_delete_dialog), false)) {
 				showDeleteDialog();
 			} else {
-				delete();
+				if(isFromFavorite) {
+					deleteFavorite();
+				} else {
+					deleteEntry();
+				}
 			}
 			break;
 		default:
@@ -460,13 +453,17 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
 				if(mDeleteDialog.isDelete()) {
-					delete();
+					if(isFromFavorite) {
+						deleteFavorite();
+					} else {
+						deleteEntry();
+					}
 				}
 			}
 		});
 	}
 
-	private void delete() {
+	private void deleteEntry() {
 		FlurryAgent.onEvent(getString(R.string.delete_button));
 		isChanged = true;
 		deleteFile();
@@ -492,25 +489,62 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		}
 		finish();
 	}
+	
+	private void deleteFavorite() {
+		FlurryAgent.onEvent(getString(R.string.delete_button));
+		isChanged = true;
+		fileHelper.deleteAllFavoriteFiles(mFavoriteList.favId);
+		////// ******* Delete entry from database ******** /////////
+		mDatabaseAdapter.open();
+		mDatabaseAdapter.editFavoriteIdEntryTable(mFavoriteList.favId);
+		mDatabaseAdapter.deleteFavoriteTableEntryID(mFavoriteList.favId);
+		mDatabaseAdapter.close();
+		Bundle tempBundle = new Bundle();
+		if(intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE)) {
+			Entry displayList = new Entry();
+			tempBundle.putParcelable(Constants.ENTRY_LIST_EXTRA, displayList);
+			mEditList = displayList;
+			startIntentAfterDelete(tempBundle);
+		}
+		if(intentExtras.containsKey(Constants.POSITION)) {
+			tempBundle = new Bundle();
+			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			if(isChanged) {
+				tempBundle.putBoolean(Constants.DATA_CHANGED, isChanged);
+			}
+			intentExpenseListing.putExtras(tempBundle);
+			setResult(Activity.RESULT_CANCELED, intentExpenseListing);
+		}
+		finish();
+	}
 
 	@Override
 	public void onBackPressed() {
 		FlurryAgent.onEvent(getString(R.string.back_pressed));
 		ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
-		if(intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE) || intentExtras.containsKey(Constants.POSITION)) {
-			//if coming from show page or listing
-			if(checkEntryModified()) {
-				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
-				doConfirmDialogAction(mConfirmSaveEntryDialog);
+		if(!isFromFavorite) {
+			if(intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE) || intentExtras.containsKey(Constants.POSITION)) {
+				//if coming from show page or listing
+				if(checkEntryModified()) {
+					mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
+					doConfirmDialogAction(mConfirmSaveEntryDialog);
+				} else {
+					finishAndSetResult();
+				}
 			} else {
-				finishAndSetResult();
+				if((editAmount.getText().toString().equals("") && editTag.getText().toString().equals("")) && (typeOfEntry == R.string.text || typeOfEntryFinished == R.string.finished_textentry || typeOfEntryUnfinished == R.string.unfinished_textentry)) {
+					deleteEntry();
+				} else {
+					mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
+					doConfirmDialogAction(mConfirmSaveEntryDialog);
+				}
 			}
 		} else {
-			if((editAmount.getText().toString().equals("") && editTag.getText().toString().equals("")) && (typeOfEntry == R.string.text || typeOfEntryFinished == R.string.finished_textentry || typeOfEntryUnfinished == R.string.unfinished_textentry)) {
-				delete();
-			} else {
+			if(checkFavoriteModified()) {
 				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
 				doConfirmDialogAction(mConfirmSaveEntryDialog);
+			} else {
+				super.onBackPressed();
 			}
 		}
 	}

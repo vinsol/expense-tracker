@@ -89,7 +89,7 @@ public class FavoriteHelper implements OnClickListener{
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 						} else {
 							mDatabaseAdapter.open();
-							mDatabaseAdapter.deleteFavoriteTableEntryID(favID);
+							mDatabaseAdapter.deleteFavoriteTableEntryID(favID+"");
 							mDatabaseAdapter.close();
 						}
 					} catch (Exception e) {	
@@ -107,7 +107,7 @@ public class FavoriteHelper implements OnClickListener{
 						File mFile = fileHelper.getAudioFileFavorite(favID.toString());
 						if(!mFile.canRead()) {
 							mDatabaseAdapter.open();
-							mDatabaseAdapter.deleteFavoriteTableEntryID(favID);
+							mDatabaseAdapter.deleteFavoriteTableEntryID(favID+"");
 							mDatabaseAdapter.close();
 						}
 					} catch (Exception e) {	
@@ -140,10 +140,10 @@ public class FavoriteHelper implements OnClickListener{
 	
 	private void doTaskAfter(Long favID) {
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.deleteFavoriteTableEntryID(favID);
+		mDatabaseAdapter.deleteFavoriteTableEntryID(favID+"");
 		mDatabaseAdapter.close();
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editFavoriteIdEntryTable(favID);
+		mDatabaseAdapter.editFavoriteIdEntryTable(favID+"");
 		mDatabaseAdapter.close();
 		showAddFavorite.setChecked(false);
 		mShowList.favId = null;

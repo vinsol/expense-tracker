@@ -93,7 +93,7 @@ public class DatabaseAdapter {
 		return id;
 	}
 	
-	public boolean deleteFavoriteTableEntryID(Long favID) {
+	public boolean deleteFavoriteTableEntryID(String favID) {
 		String where = KEY_ID + "=" + favID;
 		try {
 			Log.d("Deleting");
@@ -201,7 +201,7 @@ public class DatabaseAdapter {
 		return favId;
 	}
 
-	public void editFavoriteIdEntryTable(Long favID) {
+	public void editFavoriteIdEntryTable(String favID) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_FAVORITE, "");
 		String where = KEY_FAVORITE+" = "+favID;
