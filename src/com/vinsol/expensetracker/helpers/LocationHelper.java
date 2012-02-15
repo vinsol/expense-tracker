@@ -178,13 +178,13 @@ public class LocationHelper {
 				if (list != null) {
 					if(list.size() > 0) {
 						Address address = (Address)list.get(0);
-						if (address.getFeatureName() != null) {
+						if (address.getFeatureName() != null && !address.getFeatureName().equals("")) {
 							currentAddress += address.getFeatureName() + ", ";
 						} 
-						if(address.getLocality() != null) {
+						if(address.getLocality() != null && !address.getLocality().equals("")) {
 							currentAddress += address.getLocality() + ", ";
 						}
-						if(address.getAdminArea() != null) {
+						if(address.getAdminArea() != null && !address.getAdminArea().equals("")) {
 							currentAddress += address.getAdminArea();
 						}
 					}

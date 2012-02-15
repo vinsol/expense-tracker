@@ -141,6 +141,14 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			entry.description = mEditList.description;
 			setText(entry.amount, entry.description);
 			editHeaderTitle.setText(new DisplayDate().getLocationDate(mEditList.timeInMillis, mEditList.location));
+		} else if(isFromFavorite && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+			mEditList = null;
+			((LinearLayout)findViewById(R.id.edit_date_bar)).setVisibility(View.GONE);
+			mFavoriteList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA); 
+			setText(mFavoriteList.amount, mFavoriteList.description);
+		}
+		
+		if(!isFromFavorite) {
 			////////******** Handle Date Bar ********* ////////
 			if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 				new DateHandler(this, mEditList.timeInMillis);
@@ -149,11 +157,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			} else {
 				new DateHandler(this);
 			}
-		} else if(isFromFavorite && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
-			mEditList = null;
-			((LinearLayout)findViewById(R.id.edit_date_bar)).setVisibility(View.GONE);
-			mFavoriteList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA); 
-			setText(mFavoriteList.amount, mFavoriteList.description);
 		}
 		
 	}
@@ -181,7 +184,8 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		/////// ******* Creating HashMap to update info ******* ////////
 		Entry list = new Entry();
 		list.id = entry.id;
-		isChanged = checkEntryModified();
+		if(mEditList != null)
+			isChanged = checkEntryModified();
 		entry.amount = editAmount.getText().toString();
 		entry.description = editTag.getText().toString();
 		if (!entry.amount.equals(".") && !entry.amount.equals("")) {
