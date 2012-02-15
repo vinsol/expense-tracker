@@ -9,11 +9,10 @@ package com.vinsol.expensetracker.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Entry extends Favorite implements Parcelable {
+public class Entry extends Favorite {
 	
 	public String id;
 	public Long timeInMillis;
-	public String location;
 	
 	public static final Parcelable.Creator<Entry> CREATOR = new Parcelable.Creator<Entry>() {
     	public Entry createFromParcel(Parcel in) {
