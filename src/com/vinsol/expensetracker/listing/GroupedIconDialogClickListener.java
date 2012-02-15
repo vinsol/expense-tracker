@@ -21,7 +21,6 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
-import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.models.Entry;
 
@@ -108,18 +107,12 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 					
 				// //// ******* opens Favorite Activity ******** ///////////
 				case R.id.main_favorite:
-					
-					if(new ConvertCursorToListString(activity).getFavoriteList().size() >=1) {
-						Intent intentFavorite = new Intent(activity, FavoriteActivity.class);
-						if (timeInMillis != 0) {
-							bundle.putLong("timeInMillis", timeInMillis);
-						}
-						intentFavorite.putExtras(bundle);
-						activity.startActivity(intentFavorite);	
+					Intent intentFavorite = new Intent(activity, FavoriteActivity.class);
+					if (timeInMillis != 0) {
+						bundle.putLong("timeInMillis", timeInMillis);
 					}
-					else {
-						Toast.makeText(activity, "no favorite added", Toast.LENGTH_SHORT).show();
-					}
+					intentFavorite.putExtras(bundle);
+					activity.startActivity(intentFavorite);	
 					break;
 				case R.id.unknown_entry_dialog_cancel:
 					unknownDialog.dismiss();

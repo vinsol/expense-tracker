@@ -169,7 +169,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			viewHolder.rowImageview.setFocusable(false);
 			viewHolder.rowImageview.setOnClickListener(new MyClickListener(tempFavorite));
 			viewHolder.rowFavoriteIcon.setVisibility(View.INVISIBLE);
-			viewHolder.rowLocationTime.setVisibility(View.GONE);
 			if(tempFavorite.type.equals(getString(R.string.voice))) {
 				if(tempFavorite.description != null) {
 					if(!tempFavorite.description.equals("") &&!tempFavorite.description.equals(R.string.unfinished_voiceentry)) {
@@ -184,6 +183,9 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 					}
 				} else {
 					viewHolder.rowAmount.setText("?");
+				}
+				if(tempFavorite.location != null && !tempFavorite.location.equals("")) {
+					viewHolder.rowLocationTime.setText(tempFavorite.location);
 				}
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					try {
@@ -217,6 +219,9 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 				} else {
 					viewHolder.rowAmount.setText("?");
 				}
+				if(tempFavorite.location != null && !tempFavorite.location.equals("")) {
+					viewHolder.rowLocationTime.setText(tempFavorite.location);
+				}
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					try {
 						File mFileThumbnail = fileHelper.getCameraFileThumbnailFavorite(tempFavorite.favId);
@@ -237,17 +242,13 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 				}
 			}
 			else if(tempFavorite.type.equals(getString(R.string.text))) {
-				if(tempFavorite.description != null) {
-					if(!tempFavorite.description.equals("") && !tempFavorite.description.equals(R.string.unfinished_textentry)) {
-						viewHolder.rowTag.setText(tempFavorite.description);
-					}
+				if(tempFavorite.description != null && !tempFavorite.description.equals("") && !tempFavorite.description.equals(R.string.unfinished_textentry)) {
+					viewHolder.rowTag.setText(tempFavorite.description);
 				} else {
 					viewHolder.rowTag.setText(getString(R.string.finished_textentry));
 				}
-				if(tempFavorite.amount != null ) {
-					if(!tempFavorite.amount.equals("")) {
-						viewHolder.rowAmount.setText(new StringProcessing().getStringDoubleDecimal(tempFavorite.amount));
-					}
+				if(tempFavorite.amount != null && !tempFavorite.amount.equals("")) {
+					viewHolder.rowAmount.setText(new StringProcessing().getStringDoubleDecimal(tempFavorite.amount));
 				} else {
 					viewHolder.rowAmount.setText("?");
 				}
@@ -260,6 +261,9 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 					}
 				} else {
 					viewHolder.rowImageview.setImageResource(R.drawable.text_list_icon_no_tag);
+				}
+				if(tempFavorite.location != null && !tempFavorite.location.equals("")) {
+					viewHolder.rowLocationTime.setText(tempFavorite.location);
 				}
 			}
 			return convertView;

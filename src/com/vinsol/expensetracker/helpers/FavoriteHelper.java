@@ -54,6 +54,7 @@ public class FavoriteHelper implements OnClickListener{
 		mShowList = new Entry();
 		mShowList.id = id;
 		mShowList.type = type;
+		mShowList.location = LocationHelper.currentAddress;
 		setUIandClickListeners();
 		showAddFavoriteTextView.setText("Add to Favorite");
 		showAddFavorite.setChecked(false);

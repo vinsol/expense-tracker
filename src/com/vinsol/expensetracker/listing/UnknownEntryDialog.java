@@ -7,15 +7,6 @@
 package com.vinsol.expensetracker.listing;
 
 import java.util.Calendar;
-import com.vinsol.expensetracker.DatabaseAdapter;
-import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.edit.CameraActivity;
-import com.vinsol.expensetracker.edit.TextEntry;
-import com.vinsol.expensetracker.edit.Voice;
-import com.vinsol.expensetracker.listing.FavoriteActivity;
-import com.vinsol.expensetracker.models.Entry;
-import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
-import com.vinsol.expensetracker.helpers.DisplayDate;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -26,6 +17,14 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.edit.CameraActivity;
+import com.vinsol.expensetracker.edit.TextEntry;
+import com.vinsol.expensetracker.edit.Voice;
+import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.models.Entry;
 
 public class UnknownEntryDialog extends Dialog implements android.view.View.OnClickListener {
 
@@ -150,15 +149,11 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				break;
 				
 			case R.id.main_favorite:
-				if(new ConvertCursorToListString(getContext()).getFavoriteList().size() >=1) {
-					Intent intentFavorite = new Intent(getContext(), FavoriteActivity.class);
-					bundle.putParcelable("mDisplayList", mTempClickedList);
-					intentFavorite.putExtras(bundle);
-					getContext().startActivity(intentFavorite);
-					dismiss();
-				} else {
-					Toast.makeText(getContext(), "no favorite added", Toast.LENGTH_SHORT).show();
-				}
+				Intent intentFavorite = new Intent(getContext(), FavoriteActivity.class);
+				bundle.putParcelable("mDisplayList", mTempClickedList);
+				intentFavorite.putExtras(bundle);
+				getContext().startActivity(intentFavorite);
+				dismiss();
 				break;
 				
 			case R.id.unknown_entry_dialog_cancel:

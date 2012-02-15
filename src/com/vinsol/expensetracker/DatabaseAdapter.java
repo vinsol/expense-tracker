@@ -88,6 +88,7 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_TAG, list.description);
 		contentValues.put(KEY_AMOUNT, list.amount);
 		contentValues.put(KEY_TYPE, list.type);
+		contentValues.put(KEY_LOCATION, list.location);
 		Log.d("TRYING");
 		long id = db.insert(FAVORITE_TABLE, null, contentValues);
 		Log.d("ADDED");
@@ -210,7 +211,7 @@ public class DatabaseAdapter {
 	}
  
 	public Cursor getFavoriteTableComplete() {
-		return db.query(FAVORITE_TABLE, new String[] { KEY_ID, KEY_TAG, KEY_AMOUNT, KEY_TYPE }, null,null, null, null, null);
+		return db.query(FAVORITE_TABLE, null, null,null, null, null, null);
 	}
 	
 	private class MyCreateOpenHelper extends SQLiteOpenHelper {

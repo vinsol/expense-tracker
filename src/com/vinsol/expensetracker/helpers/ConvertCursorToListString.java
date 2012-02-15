@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import android.content.Context;
+import android.database.Cursor;
+
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
-
-import android.content.Context;
-import android.database.Cursor;
 
 public class ConvertCursorToListString {
 	Context context;
