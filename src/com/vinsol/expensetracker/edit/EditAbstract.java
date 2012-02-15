@@ -481,7 +481,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		}
 		if(intentExtras.containsKey(Constants.POSITION)) {
 			tempBundle = new Bundle();
-			Intent intent = new Intent(this, ExpenseListing.class);
+			Intent intent = new Intent();
 			if(isChanged) {
 				tempBundle.putBoolean(Constants.DATA_CHANGED, isChanged);
 			}

@@ -135,45 +135,34 @@ public class Voice extends EditAbstract {
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
-		// ///// ******** Adding On Click Actions to click listeners *********
-		// //////////
+		// ///// ******** Adding On Click Actions to click listeners ********* //////////
 
+		
+		switch (v.getId()) {
+		
 		// // ***** if stop button pressed ****** //////
-		if (v.getId() == R.id.edit_stop_button) {
-			try {
-				countDownTimer.cancel();
-			} catch (NullPointerException e) {
-			}
-			
+		case R.id.edit_stop_button:
+			if(countDownTimer != null){countDownTimer.cancel();}
 
 			// //// ****** Handles UI items on button click ****** ///////
 			editStopButton.setVisibility(View.GONE);
 			editPlayButton.setVisibility(View.VISIBLE);
 			editRerecordButton.setVisibility(View.VISIBLE);
 
-			// //// ******* Stop Recording Audio and stop chronometer ********
-			// ////////
-			try {
-				if (mRecordingHelper.isRecording())
-					mRecordingHelper.stopRecording();
-			} catch (Exception e) {
-			}
+			// //// ******* Stop Recording Audio and stop chronometer ******** ////////
+			if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
 			editTimeDetailsChronometer.stop();
-			try {
-				if (mAudioPlay.isAudioPlaying())
-					mAudioPlay.stopPlayBack();
-			} catch (Exception e) {
-			}
-			try {
+			
+			if(mAudioPlay != null) {
+				if(mAudioPlay.isAudioPlaying())
+				mAudioPlay.stopPlayBack();
 				mAudioPlay = new AudioPlay(entry.id , this, false);
 				editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
-			} catch (NullPointerException e) {
-
 			}
-		}
-
-		// // ***** if play button pressed ****** //////
-		else if (v.getId() == R.id.edit_play_button) {
+			break;
+		
+		// // ***** if play button pressed ****** //////			
+		case R.id.edit_play_button:
 			// //// ******** to handle playback of recorded file ********* ////////
 			mAudioPlay = new AudioPlay(entry.id, this, false);
 
@@ -194,24 +183,15 @@ public class Voice extends EditAbstract {
 				mAudioPlay.startPlayBack();
 			}
 			countDownTimer.start();
-		}
+			break;
 
 		// // ***** if rerecord button pressed ****** //////
-		else if (v.getId() == R.id.edit_rerecord_button) {
+		case R.id.edit_rerecord_button:
 			isChanged = true;
-			try {
-				countDownTimer.cancel();
-			} catch (NullPointerException e) {
-			}
+			if(countDownTimer != null) {countDownTimer.cancel();}
 
-			// /// ******* If Audio PlayBack is there stop playing audio
-			// *******//////
-			try {
-				if (mAudioPlay.isAudioPlaying()) {
-					mAudioPlay.stopPlayBack();
-				}
-			} catch (NullPointerException e) {
-			}
+			// /// ******* If Audio PlayBack is there stop playing audio *******//////
+			if (mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
 
 			// //// ****** Handles UI items on button click ****** ///////
 			editPlayButton.setVisibility(View.GONE);
@@ -219,13 +199,15 @@ public class Voice extends EditAbstract {
 			editRerecordButton.setVisibility(View.GONE);
 
 			// //// ****** Restarts chronometer and recording ******* ////////
-			if(mRecordingHelper != null)
-				if (mRecordingHelper.isRecording())
-					mRecordingHelper.stopRecording();
+			if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
 			mRecordingHelper = new RecordingHelper(entry.id + "", this);
 			mRecordingHelper.startRecording();
 			editTimeDetailsChronometer.setBase(SystemClock.elapsedRealtime());
 			editTimeDetailsChronometer.start();
+			break;
+			
+		default:
+			break;
 		}
 	}
 	

@@ -56,7 +56,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	protected ListView mListView;
 	protected String highlightID = null;
 	protected UnknownEntryDialog unknownDialog;
-	protected final int RESULT = 35;
+	private static final int RESULT = 35;
 	protected Bundle intentExtras;
 	private DatabaseAdapter mDatabaseAdapter;
 	protected int type;
@@ -297,7 +297,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
 		if (RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getExtras();

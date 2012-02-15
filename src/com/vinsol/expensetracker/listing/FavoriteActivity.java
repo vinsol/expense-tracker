@@ -100,24 +100,38 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 				new DateHandler(this);
 			}
 		}
-	}
-
-	@Override
-	protected void onResume() {
+		
 		mList = mConvertCursorToListString.getFavoriteList();
 		mAdapter = new MyAdapter(this, R.layout.expense_listing_inflated_row , mList);
 		editFavoriteListview.setAdapter(mAdapter);
-		mAdapter.notifyDataSetChanged();
 		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 			dateViewString = editDateBarDateview.getText().toString();
 		} else {
 			dateViewString = "";
 		}
 		editFavoriteListview.setOnItemClickListener(this);
-		super.onResume();
 	}
 	
-	private class MyAdapter extends ArrayAdapter<String> {
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (ACTIVITY_RESULT == requestCode) {
+			if(Activity.RESULT_OK == resultCode) {
+				intentExtras = data.getExtras();
+				if(intentExtras != null && intentExtras.containsKey(Constants.DATA_CHANGED)) {
+					int position = -1;
+					if(intentExtras.containsKey(Constants.POSITION)) {
+						position = intentExtras.getInt(Constants.POSITION);
+					}
+					if(position != -1) {
+						mAdapter.mList.set(position, (Favorite) intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA));
+					}
+					mAdapter.notifyDataSetChanged();
+				}
+			}
+		}
+	}
+	
+	private class MyAdapter extends ArrayAdapter<Favorite> {
 		
 		private LayoutInflater mInflater;
 		List<Favorite> mList;
@@ -322,14 +336,15 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			Bundle intentExtras = new Bundle();
 			intentExtras.putParcelable(Constants.ENTRY_LIST_EXTRA, favoriteEntry);
 			intentExtras.putBoolean(Constants.IS_COMING_FROM_FAVORITE, true);
+			intentExtras.putInt(Constants.POSITION, position);
 			intent.putExtras(intentExtras);
 			startActivityForResult(intent, ACTIVITY_RESULT);
 		} else {
-			saveEntry(favoriteEntry);
+			createNewEntry(favoriteEntry);
 		}
 	}
 
-	private void saveEntry(Favorite adapterList) {
+	private void createNewEntry(Favorite adapterList) {
 		String favID = adapterList.favId;
 		String type = adapterList.type;
 		String tag = adapterList.description;

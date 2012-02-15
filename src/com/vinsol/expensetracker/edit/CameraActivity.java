@@ -158,9 +158,7 @@ public class CameraActivity extends EditAbstract {
 						adapter.close();
 					}
 				}
-				if(!intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE)) {
-					finish();
-				}
+				if(!intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE)) {finish();}
 			}
 		}
 	}
@@ -210,9 +208,8 @@ public class CameraActivity extends EditAbstract {
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
-		
-		////////// ********** Adding action if image is pressed ********		 ///////////
-		if (v.getId() == R.id.edit_image_display) {
+		switch (v.getId()) {
+		case R.id.edit_image_display:
 			File mFile = fileHelper.getCameraFileLargeEntry(entry.id);
 			if(mFile.canRead()) {
 				Intent intent = new Intent(this, ImagePreview.class);
@@ -221,11 +218,13 @@ public class CameraActivity extends EditAbstract {
 			} else {
 				Toast.makeText(this, "no image to preview", Toast.LENGTH_SHORT).show();
 			}
-		}
+			break;
 
 		///////// ********** Adding action if retake button is pressed ******//////////
-		if (v.getId() == R.id.edit_retake_button) {
+		case R.id.edit_retake_button:
 			startCamera();
+		default:
+			break;
 		}
 	}
 
