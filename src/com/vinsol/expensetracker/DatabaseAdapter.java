@@ -20,7 +20,7 @@ import com.vinsol.expensetracker.utils.Log;
 public class DatabaseAdapter {
 
 	// database and table name
-	private static int DB_VERSION = 2;
+	private static int DB_VERSION = 3;
 	private final String DATABASE_NAME = "ExpenseTrackerDB";
 	private final String ENTRY_TABLE = "EntryTable";
 	private final String FAVORITE_TABLE = "FavoriteTable";
@@ -54,7 +54,8 @@ public class DatabaseAdapter {
 			+ KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," 
 			+ KEY_TAG + " TEXT,"
 			+ KEY_AMOUNT + " TEXT, " 
-			+ KEY_TYPE + " VARCHAR(1) NOT NULL " 
+			+ KEY_TYPE + " VARCHAR(1) NOT NULL, " 
+			+ KEY_LOCATION + " TEXT " 
 			+ ")";
 	
 	
@@ -234,6 +235,9 @@ public class DatabaseAdapter {
 			Log.d("********** prevVersion "+prevVersion+" ********newVersion "+newVersion+" ********");
 			if(prevVersion == 1) {
 				db.execSQL("ALTER TABLE " + PREVIOUS_VERSION_ENTRY_TABLE +" RENAME TO "+ENTRY_TABLE);
+			}
+			if(prevVersion == 2) {
+				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_LOCATION+" TEXT");
 			}
 			Log.d("********** prevVersion "+prevVersion+" ********newVersion "+newVersion+" ********");
 		}
