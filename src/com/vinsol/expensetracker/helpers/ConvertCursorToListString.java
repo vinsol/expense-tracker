@@ -40,6 +40,7 @@ public class ConvertCursorToListString {
 				listFavorite.favId = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
 				listFavorite.description = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TAG));
 				listFavorite.type = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TYPE));
+				listFavorite.location = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_LOCATION));
 				mainlist.add(listFavorite);
 				cursor.moveToNext();
 			} while (!cursor.isAfterLast());
