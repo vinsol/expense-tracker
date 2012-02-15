@@ -159,11 +159,11 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	}
 	
 	private void setText(String amount, String description) {
-		if (!(amount.equals("") || amount == null)) {
-			if (!amount.contains("?")) {
-				if(amount.endsWith(".00")) {
-					editAmount.setText(amount.subSequence(0, amount.length()-3));
-				}
+		if (!((amount == null || amount.equals(""))) && !amount.contains("?")) {
+			if(amount.endsWith(".00") || amount.endsWith(".0")) {
+				editAmount.setText(((int) Double.parseDouble(amount))+"");
+			} else {
+				editAmount.setText(amount);
 			}
 		}
 		if(description.equals(getString(R.string.unknown_entry)) || description.equals(getString(R.string.unknown))) {
@@ -306,24 +306,15 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			mFavoriteList.description = getString(typeOfEntryFinished);
 		}	
 		
-		Boolean isAmountNotEqual = false;
-		try {
-			isAmountNotEqual = Double.parseDouble(new StringProcessing().getStringDoubleDecimal(favorite.amount)) != Double.parseDouble(mFavoriteList.amount);
-		}catch(Exception e) {
-			isAmountNotEqual = true;
-		}
-		
-		if((!mFavoriteList.description.equals(favorite.description)) || isAmountNotEqual || isChanged ) {
-			isChanged = false;
+		favorite.type = mFavoriteList.type;	
+
+		isChanged = checkFavoriteModified();
+		if(isChanged) {
 			DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(this);
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editFavoriteIdEntryTable(Long.parseLong(mFavoriteList.favId));
 			mDatabaseAdapter.close();
 		}
-			
-		favorite.type = mEditList.type;	
-
-		isChanged = checkFavoriteModified();
 		mFavoriteList = favorite;
 		return favorite;
 	}

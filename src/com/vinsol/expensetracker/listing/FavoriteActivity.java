@@ -40,6 +40,7 @@ import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
+import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.ImagePreview;
@@ -90,7 +91,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 				id = mEditList.id;
 			}
 			
-			// ////// ******** Handle Date Bar ********* ////////
+			//////// ******** Handle Date Bar ********* ////////
 			if (intentExtras != null && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 				new DateHandler(this, mEditList.timeInMillis);
 			} else if (intentExtras != null && intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
@@ -223,7 +224,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 				}
 				if(tempFavorite.amount != null ) {
 					if(!tempFavorite.amount.equals("")) {
-						viewHolder.rowAmount.setText(tempFavorite.amount);
+						viewHolder.rowAmount.setText(new StringProcessing().getStringDoubleDecimal(tempFavorite.amount));
 					}
 				} else {
 					viewHolder.rowAmount.setText("?");
@@ -271,7 +272,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 
 		@Override
 		public void onClick(View v) {
-			if (v.getId() == R.id.row_imageview) {
+			switch (v.getId()) {
+			case R.id.row_imageview:
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					String id = tempFavorite.favId;
 					if (tempFavorite.type.equals(getString(R.string.voice))) {
@@ -297,6 +299,10 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 						new DescriptionDialog(FavoriteActivity.this, tempFavorite.description);
 					}
 				}
+				break;
+
+			default:
+				break;
 			}
 		}
 	}
