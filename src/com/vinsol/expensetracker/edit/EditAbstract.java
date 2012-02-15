@@ -34,6 +34,7 @@ import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.DeleteDialog;
 import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
@@ -139,6 +140,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			entry.id = mEditList.id;
 			entry.amount = mEditList.amount;
 			entry.description = mEditList.description;
+			((LinearLayout)findViewById(R.id.favorite_layout)).setVisibility(View.GONE);
 			setText(entry.amount, entry.description);
 			editHeaderTitle.setText(new DisplayDate().getLocationDate(mEditList.timeInMillis, mEditList.location));
 		} else if(isFromFavorite && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
@@ -157,6 +159,10 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			} else {
 				new DateHandler(this);
 			}
+		}
+		
+		if (!isFromFavorite && !intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+			new FavoriteHelper(this, mDatabaseAdapter, fileHelper, getString(typeOfEntry),entry.id, editAmount, editTag , isChanged);
 		}
 		
 	}
