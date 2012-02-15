@@ -500,7 +500,14 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mDatabaseAdapter.editFavoriteIdEntryTable(mFavoriteList.favId);
 		mDatabaseAdapter.deleteFavoriteTableEntryID(mFavoriteList.favId);
 		mDatabaseAdapter.close();
-		setResult(Activity.RESULT_OK,new Intent().putExtra(Constants.DATA_CHANGED, true));
+		Intent intent = new Intent();
+		Bundle bundle = new Bundle();
+		bundle.putBoolean(Constants.DATA_CHANGED, true);
+		if(intentExtras != null && intentExtras.containsKey(Constants.POSITION)) {
+			bundle.putInt(Constants.POSITION, intentExtras.getInt(Constants.POSITION));
+		}
+		intent.putExtras(bundle);
+		setResult(Activity.RESULT_CANCELED,intent);
 		finish();
 	}
 

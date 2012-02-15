@@ -27,7 +27,6 @@ import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
-import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.GraphHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.listing.ExpenseListing;
@@ -149,15 +148,10 @@ public class Home extends Activity implements OnClickListener {
 			// //// ******* opens Favorite Activity ******** ///////////
 			case R.id.main_favorite:
 				FlurryAgent.onEvent(getString(R.string.favorite));
-				if(new ConvertCursorToListString(this).getFavoriteList().size() >=1) {
-					Intent intentFavorite = new Intent(this, FavoriteActivity.class);
-					bundle = new Bundle();
-					intentFavorite.putExtras(bundle);
-					startActivity(intentFavorite);	
-				}
-				else {
-					Toast.makeText(this, "no favorite added", Toast.LENGTH_SHORT).show();
-				}
+				Intent intentFavorite = new Intent(this, FavoriteActivity.class);
+				bundle = new Bundle();
+				intentFavorite.putExtras(bundle);
+				startActivity(intentFavorite);	
 				break;
 				
 			// //// ******* opens List Activity and adds unknown entry to database ******** ///////////

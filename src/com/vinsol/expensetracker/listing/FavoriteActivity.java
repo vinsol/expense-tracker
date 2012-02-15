@@ -102,6 +102,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		}
 		
 		mList = mConvertCursorToListString.getFavoriteList();
+		if(mList.size() == 0) {favListEmpty();}
 		mAdapter = new MyAdapter(this, R.layout.expense_listing_inflated_row , mList);
 		editFavoriteListview.setAdapter(mAdapter);
 		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
@@ -112,22 +113,29 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		editFavoriteListview.setOnItemClickListener(this);
 	}
 	
+	private void favListEmpty() {
+		Toast.makeText(getApplicationContext(), "favorite list empty", Toast.LENGTH_LONG).show();
+		finish();
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (ACTIVITY_RESULT == requestCode) {
-			if(Activity.RESULT_OK == resultCode) {
-				intentExtras = data.getExtras();
-				if(intentExtras != null && intentExtras.containsKey(Constants.DATA_CHANGED)) {
-					int position = -1;
-					if(intentExtras.containsKey(Constants.POSITION)) {
-						position = intentExtras.getInt(Constants.POSITION);
-					}
-					if(position != -1) {
-						mAdapter.mList.set(position, (Favorite) intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA));
-					}
-					mAdapter.notifyDataSetChanged();
+		if (ACTIVITY_RESULT == requestCode && data != null && data.getExtras() != null) {
+			intentExtras = data.getExtras();
+			int position = -1;
+			if(intentExtras != null && intentExtras.containsKey(Constants.POSITION)) {
+				position = intentExtras.getInt(Constants.POSITION);
+			}
+			if(Activity.RESULT_OK == resultCode && intentExtras != null && intentExtras.containsKey(Constants.DATA_CHANGED) && position != -1) {
+				mAdapter.mList.set(position, (Favorite) intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA));
+			}
+			if(Activity.RESULT_CANCELED == resultCode && intentExtras != null && intentExtras.containsKey(Constants.DATA_CHANGED) && position != -1) {
+				mAdapter.mList.remove(position);
+				if(mAdapter.mList.size() == 0) {
+					favListEmpty();
 				}
 			}
+			mAdapter.notifyDataSetChanged();
 		}
 	}
 	
