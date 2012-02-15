@@ -302,7 +302,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 			if(Activity.RESULT_OK == resultCode) {
 				intentExtras = data.getExtras();
 				if(intentExtras != null && intentExtras.containsKey(Constants.DATA_CHANGED)) {
-					updateListView(intentExtras,intentExtras.getInt(Constants.POSITION));
+					updateListView(intentExtras);
 					intentExtras.remove(Constants.DATA_CHANGED);
 				} else {
 					initListView();
@@ -313,9 +313,9 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		}
 	}
 
-	protected void updateListView(Bundle bundle,int toUpdate) {
+	protected void updateListView(Bundle bundle) {
 		Entry updatedEntry = bundle.getParcelable(Constants.ENTRY_LIST_EXTRA);
-		mSeparatedListAdapter.update(updatedEntry, toUpdate);
+		mSeparatedListAdapter.update(updatedEntry, bundle.getInt(Constants.POSITION));
 		noItemLayout();
 	}
 	

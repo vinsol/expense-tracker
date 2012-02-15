@@ -84,15 +84,14 @@ class SeparatedListAdapter extends BaseAdapter {
 			Log.d("position " +position);
 			Log.d("*******************************");
 			// check if position inside this section
-			if (position == 0) {
-				return (Entry)section;
+			
+			if (position < size - 1) {
+				return (Entry)adapter.getItem(position - 1);
 			}
 			
-			if (position < size - 1)
-				return (Entry)adapter.getItem(position - 1);
-			
-			if (position < size)
+			if (position < size) {
 				return (Entry)section;
+			}
 
 			// otherwise jump into next section
 			position -= size;
@@ -162,7 +161,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				holderHeader.listDateView = (TextView) viewHeader.findViewById(R.id.expenses_listing_list_date_view);
 				holderHeader.listAmountView = (TextView) viewHeader.findViewById(R.id.expenses_listing_list_amount_view);
 				holderHeader.listDateView.setText(mDataDateList.get(sectionnum).dateTime);
-				holderHeader.listAmountView.setText(mDataDateList.get(sectionnum).amount);
+				holderHeader.listAmountView.setText(new StringProcessing().getStringDoubleDecimal(mDataDateList.get(sectionnum).amount));
 				return viewHeader;
 			}
 
@@ -268,7 +267,7 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderBody.rowLocationTime.setText("Unknown time at Unknown Location");
 				}
 				holderBody.rowTag.setText(mlist.description);
-				holderBody.rowAmount.setText(mlist.amount);
+				holderBody.rowAmount.setText(new StringProcessing().getStringDoubleDecimal(mlist.amount));
 				if (mlist.type.equals(mContext.getString(R.string.sublist_thisyear)) || mlist.type.equals(mContext.getString(R.string.sublist_all))|| mlist.type.equals(mContext.getString(R.string.sublist_thismonth))) {
 					holderBody.rowImageview.setVisibility(View.GONE);
 					holderBody.rowLocationTime.setVisibility(View.GONE);

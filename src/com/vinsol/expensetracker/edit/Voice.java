@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.AudioPlay;
-import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.RecordingHelper;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
@@ -45,7 +44,6 @@ public class Voice extends EditAbstract {
 		super.onCreate(savedInstanceState);
 
 		// ////// ******** Initializing and assigning memory to UI Items ********** /////////
-		fileHelper = new FileHelper();
 		editVoiceDetails = (RelativeLayout) findViewById(R.id.edit_voice_details);
 		editTimeDetailsChronometer = (Chronometer) findViewById(R.id.edit_time_details_chronometer);
 		editStopButton = (Button) findViewById(R.id.edit_stop_button);

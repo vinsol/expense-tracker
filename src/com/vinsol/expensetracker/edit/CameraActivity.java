@@ -28,7 +28,6 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.cameraservice.Camera;
 import com.vinsol.expensetracker.helpers.CameraFileSave;
 import com.vinsol.expensetracker.helpers.DateHelper;
-import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
@@ -44,7 +43,6 @@ public class CameraActivity extends EditAbstract {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		fileHelper = new FileHelper();
 		// ////// ******** Initializing and assigning memory to UI Items ********** /////////
 		editCameraDetails = (LinearLayout) findViewById(R.id.edit_camera_details);
 		editImageDisplay = (ImageView) findViewById(R.id.edit_image_display);

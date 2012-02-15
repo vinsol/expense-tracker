@@ -81,6 +81,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_page);
 		entry = new Entry();
+		fileHelper = new FileHelper();
 		editAmount = (EditText) findViewById(R.id.edit_amount);
 		editHeaderTitle = (TextView) findViewById(R.id.header_title);
 		editTag = (EditText) findViewById(R.id.edit_tag);
@@ -480,12 +481,12 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		}
 		if(intentExtras.containsKey(Constants.POSITION)) {
 			tempBundle = new Bundle();
-			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			Intent intent = new Intent(this, ExpenseListing.class);
 			if(isChanged) {
 				tempBundle.putBoolean(Constants.DATA_CHANGED, isChanged);
 			}
-			intentExpenseListing.putExtras(tempBundle);
-			setResult(Activity.RESULT_CANCELED, intentExpenseListing);
+			intent.putExtras(tempBundle);
+			setResult(Activity.RESULT_CANCELED, intent);
 		}
 		finish();
 	}
@@ -499,22 +500,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mDatabaseAdapter.editFavoriteIdEntryTable(mFavoriteList.favId);
 		mDatabaseAdapter.deleteFavoriteTableEntryID(mFavoriteList.favId);
 		mDatabaseAdapter.close();
-		Bundle tempBundle = new Bundle();
-		if(intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE)) {
-			Entry displayList = new Entry();
-			tempBundle.putParcelable(Constants.ENTRY_LIST_EXTRA, displayList);
-			mEditList = displayList;
-			startIntentAfterDelete(tempBundle);
-		}
-		if(intentExtras.containsKey(Constants.POSITION)) {
-			tempBundle = new Bundle();
-			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
-			if(isChanged) {
-				tempBundle.putBoolean(Constants.DATA_CHANGED, isChanged);
-			}
-			intentExpenseListing.putExtras(tempBundle);
-			setResult(Activity.RESULT_CANCELED, intentExpenseListing);
-		}
+		setResult(Activity.RESULT_OK,new Intent().putExtra(Constants.DATA_CHANGED, true));
 		finish();
 	}
 
