@@ -163,6 +163,8 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		
 		if (!isFromFavorite && !intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 			new FavoriteHelper(this, mDatabaseAdapter, fileHelper, getString(typeOfEntry),entry.id, editAmount, editTag , isChanged);
+		} else {
+			findViewById(R.id.favorite_divider).setVisibility(View.GONE);
 		}
 		
 	}
