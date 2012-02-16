@@ -7,21 +7,20 @@ package com.vinsol.expensetracker.helpers;
 
 import java.io.File;
 
-import com.flurry.android.FlurryAgent;
-import com.vinsol.expensetracker.DatabaseAdapter;
-import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.models.Entry;
-
 import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.models.Entry;
 
 public class FavoriteHelper implements OnClickListener{
 	
@@ -63,7 +62,7 @@ public class FavoriteHelper implements OnClickListener{
 		setUIandClickListeners();
 		showAddFavoriteTextView.setText("Add to Favorite");
 		showAddFavorite.setChecked(false);
-		MyTextWatcher myTextWatcher = new MyTextWatcher(amount, description, isChanged);
+		MyTextWatcher myTextWatcher = new MyTextWatcher(amount, description, type, isChanged);
 		amount.addTextChangedListener(myTextWatcher);
 		description.addTextChangedListener(myTextWatcher);
 	}
@@ -73,19 +72,19 @@ public class FavoriteHelper implements OnClickListener{
 		private EditText amount;
 		private EditText description;
 		private Boolean isChanged = false;
-		private LinearLayout favLayout;
+		private String type;
 		
-		public MyTextWatcher(EditText amount,EditText description,Boolean isChanged) {
+		public MyTextWatcher(EditText amount,EditText description,String type, Boolean isChanged) {
 			this.amount = amount;
 			this.description = description;
 			this.isChanged = isChanged;
-			favLayout = (LinearLayout)activity.findViewById(R.id.favorite_layout);
-			favLayoutHandle(amount, description, favLayout, isChanged);
+			this.type = type;
+			favLayoutHandle(amount, description, type, isChanged);
 		}
 		
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
-			favLayoutHandle(amount, description, favLayout, isChanged);
+			favLayoutHandle(amount, description, type, isChanged);
 			if(showAddFavorite.isChecked()) {onClickFavorite(false);}
 		}
 		
@@ -102,8 +101,21 @@ public class FavoriteHelper implements OnClickListener{
 		
 	}
 	
-	private void favLayoutHandle(EditText amount, EditText description, LinearLayout favLayout, Boolean isChanged) {
-		if(!amount.getText().toString().equals("") && !description.getText().toString().equals("") && !isChanged ) {
+	private void favLayoutHandle(EditText amount, EditText description,String type, Boolean isChanged) {
+		boolean checkStatus;
+		switch (Integer.parseInt(type)) {
+		case R.string.text:
+			checkStatus = !amount.getText().toString().equals("") && !description.getText().toString().equals("") && !isChanged;
+			break;
+		case R.string.voice:
+		case R.string.camera:
+			checkStatus = !amount.getText().toString().equals("") && !isChanged;
+			break;
+		default:
+			checkStatus = false;
+			break;
+		}
+		if(checkStatus) {
 			showAddFavorite.setEnabled(true);
 			showAddFavoriteTextView.setEnabled(true);
 		} else {

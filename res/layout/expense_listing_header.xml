@@ -20,7 +20,6 @@
 		android:text="@string/expense_list_header"
 		android:textSize="20dip"
 		android:textStyle="bold"
-		android:textColor="@color/white" 
-		/>
+		android:textColor="@color/white" />
         
 </LinearLayout>
