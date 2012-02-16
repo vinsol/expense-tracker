@@ -215,12 +215,11 @@
         >
         
         <EditText 
-            android:id="@+id/edit_body_favorite_search"
+            android:id="@+id/favorite_search"
             android:hint="@string/search"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
         
         <TextView 
             android:id="@+id/edit_body_favorite_tag"

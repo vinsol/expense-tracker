@@ -7,14 +7,18 @@
 package com.vinsol.expensetracker.listing;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -44,24 +49,19 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.ImagePreview;
-import com.vinsol.expensetracker.utils.Log;
 
 public class FavoriteActivity extends Activity implements OnItemClickListener {
 	
-	private TextView headerTitle;
-	private ConvertCursorToListString mConvertCursorToListString;
 	private List<Favorite> mList;
 	private DatabaseAdapter mDatabaseAdapter;
 	private TextView editDateBarDateview;
 	private Bundle intentExtras;
 	private MyAdapter mAdapter;
-	private Entry mEditList;
 	private String dateViewString;
 	private String id = null;
 	private FileHelper fileHelper;
 	private boolean isManaging = false;
 	private static final int ACTIVITY_RESULT = 1135;
-	private int maxItemsVisible;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +71,13 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 
 		// ///// ******* Hide Main Body of layout and make favorite body visible ******* ///////
 		handleUI();
+		Entry mEditList = null;
 		fileHelper = new FileHelper();
-		headerTitle = (TextView) findViewById(R.id.header_title);
-		ListView mFavoriteListview = (ListView) findViewById(R.id.edit_body_favorite_listview);
+		final List<Favorite> mList_sort = new ArrayList<Favorite>();
+		TextView headerTitle = (TextView) findViewById(R.id.header_title);
+		final ListView mFavoriteListview = (ListView) findViewById(R.id.edit_body_favorite_listview);
 		editDateBarDateview = (TextView) findViewById(R.id.edit_date_bar_dateview);
-		mConvertCursorToListString = new ConvertCursorToListString(this);
+		ConvertCursorToListString mConvertCursorToListString = new ConvertCursorToListString(this);
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		intentExtras = getIntent().getExtras();
 		
@@ -106,16 +108,47 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		if(mList.size() == 0) {favListEmpty();}
 		mAdapter = new MyAdapter(this, R.layout.expense_listing_inflated_row , mList);
 		mFavoriteListview.setAdapter(mAdapter);
-		maxItemsVisible = mFavoriteListview.getLastVisiblePosition() - mFavoriteListview.getFirstVisiblePosition() + 1;
-		Log.d("*******************************************");
-		Log.d("******** Max Items Visible "+mFavoriteListview.getLastVisiblePosition() + " \t " + getWindowManager().getDefaultDisplay().getHeight());
-		Log.d("*******************************************");
 		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 			dateViewString = editDateBarDateview.getText().toString();
 		} else {
 			dateViewString = "";
 		}
 		mFavoriteListview.setOnItemClickListener(this);
+		
+		final EditText searchBox = (EditText) findViewById(R.id.favorite_search);
+		searchBox.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				//do nothing
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,int after) {
+				//do nothing
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				int textlength = searchBox.getText().length();
+				mList_sort.clear();
+				for (int i = 0; i < mList.size(); i++) {
+					if (textlength <= mList.get(i).description.length() || textlength <= mList.get(i).location.length() || textlength <= mList.get(i).amount.length()) {
+						if(containsStringIgnoreCase(i)){
+							mList_sort.add(mList.get(i));
+						}	
+					}
+				}
+				mAdapter = new MyAdapter(FavoriteActivity.this, R.layout.expense_listing_inflated_row , mList_sort);
+				mFavoriteListview.setAdapter(mAdapter);
+			}
+			
+			private boolean containsStringIgnoreCase(int i) {
+				return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).description).find()
+						|| Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).location).find()
+						|| Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).amount).find());
+			}
+		});
 	}
 	
 	private void favListEmpty() {
@@ -285,12 +318,10 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 	
 	private void handleUI() {
 		/////// ******* Hide Main Body of layout and make favorite body visible ******* ///////
-		ScrollView mScrollView = (ScrollView) findViewById(R.id.edit_body);
-		mScrollView.setVisibility(View.GONE);
-		LinearLayout mLinearLayout = (LinearLayout) findViewById(R.id.edit_body_favorite);
-		mLinearLayout.setVisibility(View.VISIBLE);
-		LinearLayout editFooter = (LinearLayout) findViewById(R.id.edit_footer);
-		editFooter.setVisibility(View.GONE);
+		((ScrollView) findViewById(R.id.edit_body)).setVisibility(View.GONE);
+		((LinearLayout) findViewById(R.id.edit_body_favorite)).setVisibility(View.VISIBLE);
+		((LinearLayout) findViewById(R.id.edit_footer)).setVisibility(View.GONE);
+		((EditText) findViewById(R.id.favorite_search)).setVisibility(View.VISIBLE);
 	}
 	
 	private class MyClickListener implements OnClickListener {
