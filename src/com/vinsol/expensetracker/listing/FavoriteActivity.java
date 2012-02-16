@@ -376,8 +376,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 						File mFileThumbnail = fileHelper.getCameraFileThumbnailFavorite(id);
 						if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Intent intent = new Intent(FavoriteActivity.this, ImagePreview.class);
-							intent.putExtra("id", id);
-							intent.putExtra("isFavorite", true);
+							intent.putExtra(Constants.KEY_ID, id);
+							intent.putExtra(Constants.KEY_IS_FAVORITE, true);
 							startActivity(intent);
 						}
 					}

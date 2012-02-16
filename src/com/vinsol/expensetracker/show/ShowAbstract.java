@@ -171,12 +171,12 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	
 			case R.id.show_edit:
 				FlurryAgent.onEvent(getString(R.string.edit_button));
-				intentExtras.putBoolean("isFromShowPage", true);
-				intentExtras.remove("mDisplayList");
+				intentExtras.putBoolean(Constants.KEY_IS_COMING_FROM_SHOW_PAGE, true);
+				intentExtras.remove(Constants.KEY_ENTRY_LIST_EXTRA);
 				if(mShowList.amount.endsWith(".00")) {
 					mShowList.amount = mShowList.amount.substring(0, mShowList.amount.length()-3);
 				}
-				intentExtras.putParcelable("mDisplayList", mShowList);
+				intentExtras.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, mShowList);
 				editAction();
 				break;
 				

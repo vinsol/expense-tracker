@@ -35,8 +35,8 @@ public class ImagePreview extends Activity {
 		setContentView(R.layout.image_view_full_screen);
 
 		//Extras
-		id = getIntent().getStringExtra("id");
-		boolean isFavorite = getIntent().getBooleanExtra("isFavorite", false);
+		id = getIntent().getStringExtra(Constants.KEY_ID);
+		boolean isFavorite = getIntent().getBooleanExtra(Constants.KEY_IS_FAVORITE, false);
 		
 		path = Constants.DIRECTORY + (isFavorite ? "Favorite/" : "") + id + Constants.IMAGE_LARGE_SUFFIX;
 		mImageView = (android.widget.ImageView) findViewById(R.id.image_view_full_screen_id);

@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.DateHelper;
@@ -381,7 +382,7 @@ class SeparatedListAdapter extends BaseAdapter {
 							File mFile = fileHelper.getCameraFileLargeEntry(mListenerList.id);
 							if (mFile.canRead()) {
 								Intent intent = new Intent(mContext, ImagePreview.class);
-								intent.putExtra("id", mListenerList.id);
+								intent.putExtra(Constants.KEY_ID, mListenerList.id);
 								mContext.startActivity(intent);
 
 							}

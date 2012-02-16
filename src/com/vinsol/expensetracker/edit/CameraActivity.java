@@ -212,7 +212,7 @@ public class CameraActivity extends EditAbstract {
 			File mFile = fileHelper.getCameraFileLargeEntry(entry.id);
 			if(mFile.canRead()) {
 				Intent intent = new Intent(this, ImagePreview.class);
-				intent.putExtra("id", entry.id);
+				intent.putExtra(Constants.KEY_ID, entry.id);
 				startActivity(intent);
 			} else {
 				Toast.makeText(this, "no image to preview", Toast.LENGTH_SHORT).show();

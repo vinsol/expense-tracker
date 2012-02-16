@@ -19,10 +19,12 @@ public class Constants {
 	//Intent Extras
 	public static final String KEY_HIGHLIGHT = "toHighLight";
 	public static final String KEY_ID = "_id";
+	public static final String KEY_SET_LOCATION = "setLocation";
 	public static final String KEY_ENTRY_LIST_EXTRA = "mDisplayList";
 	public static final String KEY_POSITION = "position";
 	public static final String KEY_IS_COMING_FROM_SHOW_PAGE = "isFromShowPage";
 	public static final String KEY_IS_COMING_FROM_FAVORITE = "isFromFavorite";
+	public static final String KEY_IS_FAVORITE = "isFavorite";
 	public static final String KEY_DATA_CHANGED = "isChanged";
 	public static final String KEY_TYPE = "type";
 	public static final String KEY_TIME_IN_MILLIS_TO_SET_TAB = "timeInMillisToSetTab";

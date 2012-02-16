@@ -89,7 +89,7 @@ public class ShowCameraActivity extends ShowAbstract {
 		if (v.getId() == R.id.show_image_display) {
 			if (mShowList.id != null) {
 				Intent intent = new Intent(this, ImagePreview.class);
-				intent.putExtra("id", mShowList.id);
+				intent.putExtra(Constants.KEY_ID, mShowList.id);
 				startActivity(intent);
 			} else {
 				Toast.makeText(this, "Error Opening Image", Toast.LENGTH_SHORT).show();
