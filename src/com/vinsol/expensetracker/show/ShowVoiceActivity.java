@@ -167,40 +167,41 @@ public class ShowVoiceActivity extends ShowAbstract {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (SHOW_RESULT == requestCode && Activity.RESULT_OK == resultCode) {
+		if(SHOW_RESULT == requestCode) {
 			intentExtras = data.getExtras();
-			doTaskOnActivityResult();
-			showDelete.setOnClickListener(this);
-			showPlayButton.setOnClickListener(this);
-			showStopButton.setOnClickListener(this);
-			showEdit.setOnClickListener(this);
-
-			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-				updateUI();
-				if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
-					File tempFile = fileHelper.getAudioFileEntry(mShowList.id);
-
-					if (tempFile.canRead()) {
-						mAudioPlay = new AudioPlay(mShowList.id, this, false);
-						showStopButton.setVisibility(View.GONE);
-						showPlayButton.setVisibility(View.VISIBLE);
-						showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
-					} else {
-						showTimeDetailsChronometer.setText("Audio File Missing");
-						showStopButton.setVisibility(View.GONE);
-						showPlayButton.setVisibility(View.GONE);
+			if (Activity.RESULT_OK == resultCode) {
+				doTaskOnActivityResult();
+				showDelete.setOnClickListener(this);
+				showPlayButton.setOnClickListener(this);
+				showStopButton.setOnClickListener(this);
+				showEdit.setOnClickListener(this);
+	
+				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+					updateUI();
+					if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+						File tempFile = fileHelper.getAudioFileEntry(mShowList.id);
+	
+						if (tempFile.canRead()) {
+							mAudioPlay = new AudioPlay(mShowList.id, this, false);
+							showStopButton.setVisibility(View.GONE);
+							showPlayButton.setVisibility(View.VISIBLE);
+							showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
+						} else {
+							showTimeDetailsChronometer.setText("Audio File Missing");
+							showStopButton.setVisibility(View.GONE);
+							showPlayButton.setVisibility(View.GONE);
+						}
+						mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+						mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
 					}
-					mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
-					mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
+				} else {
+					Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 				}
-			} else {
-				Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 			}
-		}
-
-		if(SHOW_RESULT == requestCode && resultCode == Activity.RESULT_CANCELED) {
-			finish();
+	
+			if(resultCode == Activity.RESULT_CANCELED) {
+				finish();
+			}
 		}
 	}
 	

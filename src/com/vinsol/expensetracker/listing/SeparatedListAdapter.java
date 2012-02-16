@@ -76,7 +76,7 @@ class SeparatedListAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Entry getItem(int position) {
+	public Object getItem(int position) {
 		for (Object section : sections.keySet()) {
 			Adapter adapter = sections.get(section);
 			int size = adapter.getCount() + 2;
@@ -85,12 +85,16 @@ class SeparatedListAdapter extends BaseAdapter {
 			Log.d("*******************************");
 			// check if position inside this section
 			
+			if (position == 0) {
+				return section;
+			}
+			
 			if (position < size - 1) {
-				return (Entry)adapter.getItem(position - 1);
+				return adapter.getItem(position - 1);
 			}
 			
 			if (position < size) {
-				return (Entry)section;
+				return section;
 			}
 
 			// otherwise jump into next section
@@ -303,8 +307,8 @@ class SeparatedListAdapter extends BaseAdapter {
 
 	public void remove(int toRemove) {
 		String sectionNumber = getSectionNumber(toRemove);
-		Entry prevEntry = getItem(toRemove);
-		sections.get(sectionNumber).remove(getItem(toRemove));
+		Entry prevEntry = (Entry) getItem(toRemove);
+		sections.get(sectionNumber).remove((Entry)getItem(toRemove));
 		if(sections.get(sectionNumber).getCount() == 0) {
 			removeSection(sectionNumber);
 		} else {
@@ -315,7 +319,7 @@ class SeparatedListAdapter extends BaseAdapter {
 	
 	public void update(Entry updatedEntry,int toUpdate) {
 		String sectionNumber = getSectionNumber(toUpdate);
-		Entry prevEntry = getItem(toUpdate);
+		Entry prevEntry = (Entry) getItem(toUpdate);
 		sections.get(sectionNumber).insert(updatedEntry, toUpdate);
 		sections.get(sectionNumber).remove(prevEntry);
 		updateAmount(sectionNumber, prevEntry, updatedEntry);

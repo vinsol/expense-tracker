@@ -14,6 +14,7 @@ import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class ShowTextActivity extends ShowAbstract {
 	
@@ -31,20 +32,18 @@ public class ShowTextActivity extends ShowAbstract {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
-		super.onActivityResult(requestCode, resultCode, data);
 		if (SHOW_RESULT == requestCode) {
+			intentExtras = data.getExtras();
 			if(Activity.RESULT_OK == resultCode) {
-				intentExtras = data.getExtras();
 				doTaskOnActivityResult();
 				mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
 				mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
 				showDelete.setOnClickListener(this);
 				showEdit.setOnClickListener(this);
 			}
-		}
-		if(resultCode == Activity.RESULT_CANCELED) {
-			finish();
+			if(resultCode == Activity.RESULT_CANCELED) {
+				finish();
+			}
 		}
 	}
 

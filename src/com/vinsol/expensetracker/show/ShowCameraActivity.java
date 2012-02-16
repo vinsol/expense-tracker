@@ -101,8 +101,8 @@ public class ShowCameraActivity extends ShowAbstract {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (SHOW_RESULT == requestCode) {
+			intentExtras = data.getExtras();
 			if(Activity.RESULT_OK == resultCode) {
-				intentExtras = data.getExtras();
 				doTaskOnActivityResult();
 				if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 					File mFile = fileHelper.getCameraFileSmallEntry(mShowList.id);

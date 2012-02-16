@@ -30,7 +30,6 @@ import com.vinsol.expensetracker.helpers.CameraFileSave;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.models.Entry;
-import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
 public class CameraActivity extends EditAbstract {
@@ -231,21 +230,6 @@ public class CameraActivity extends EditAbstract {
 	@Override
 	protected void deleteFile() {
 		fileHelper.deleteAllEntryFiles(entry.id);
-	}
-	
-	@Override
-	protected void startIntentAfterDelete(Bundle tempBundle) {
-		super.startIntentAfterDelete(tempBundle);
-		Intent mIntent = new Intent(this, ShowCameraActivity.class);
-		mIntent.putExtras(tempBundle);
-		setResult(Activity.RESULT_CANCELED, mIntent);
-	}
-	
-	@Override
-	protected void saveEntryStartIntent(Bundle tempBundle) {
-		Intent mIntent = new Intent(this, ShowCameraActivity.class);
-		mIntent.putExtras(tempBundle);
-		setResult(Activity.RESULT_OK, mIntent);
 	}
 
 	@Override

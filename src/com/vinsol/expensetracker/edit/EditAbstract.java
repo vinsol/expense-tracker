@@ -343,12 +343,14 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			Bundle tempBundle = new Bundle();
 			tempBundle.putParcelable(Constants.ENTRY_LIST_EXTRA, getEntryListOnResult(toSave));
 			if(intentExtras.containsKey(Constants.POSITION)) {
+				tempBundle.putInt(Constants.POSITION , intentExtras.getInt(Constants.POSITION));
 				if(checkEntryModified()) {
-					tempBundle.putInt(Constants.POSITION , intentExtras.getInt(Constants.POSITION));
 					tempBundle.putBoolean(Constants.DATA_CHANGED, true);
 				}
 			}
-			saveEntryStartIntent(tempBundle);
+			Intent mIntent = new Intent();
+			mIntent.putExtras(tempBundle);
+			setResult(Activity.RESULT_OK, mIntent);
 		}
 		finish();
 	}
@@ -492,6 +494,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		if(intentExtras.containsKey(Constants.POSITION)) {
 			tempBundle = new Bundle();
 			Intent intent = new Intent();
+			tempBundle.putInt(Constants.POSITION, intentExtras.getInt(Constants.POSITION));
 			if(isChanged) {
 				tempBundle.putBoolean(Constants.DATA_CHANGED, isChanged);
 			}
@@ -590,7 +593,11 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		inputMethodManager.hideSoftInputFromWindow(editAmount.getWindowToken(), InputMethodManager.RESULT_HIDDEN);
 	}
 
-	protected void startIntentAfterDelete(Bundle tempBundle) {}
+	protected void startIntentAfterDelete(Bundle tempBundle){
+		Intent mIntent = new Intent();
+		mIntent.putExtras(tempBundle);
+		setResult(Activity.RESULT_CANCELED, mIntent);
+	}
+	
 	protected void deleteFile(){}
-	abstract protected void saveEntryStartIntent(Bundle tempBundle);
 }

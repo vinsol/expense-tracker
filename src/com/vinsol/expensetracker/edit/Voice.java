@@ -8,8 +8,6 @@ package com.vinsol.expensetracker.edit;
 
 import java.io.File;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -23,7 +21,6 @@ import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.AudioPlay;
 import com.vinsol.expensetracker.helpers.RecordingHelper;
-import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
 import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
@@ -210,24 +207,9 @@ public class Voice extends EditAbstract {
 	}
 	
 	@Override
-	protected void startIntentAfterDelete(Bundle tempBundle) {
-		super.startIntentAfterDelete(tempBundle);
-		Intent mIntent = new Intent(this, ShowVoiceActivity.class);
-		mIntent.putExtras(tempBundle);
-		setResult(Activity.RESULT_CANCELED, mIntent);
-	}
-	
-	@Override
 	protected void deleteFile() {
 		editTimeDetailsChronometer.stop();
 		fileHelper.deleteAllEntryFiles(entry.id);
-	}
-	
-	@Override
-	protected void saveEntryStartIntent(Bundle tempBundle) {
-		Intent mIntent = new Intent(this, ShowVoiceActivity.class);
-		mIntent.putExtras(tempBundle);
-		setResult(Activity.RESULT_OK, mIntent);
 	}
 
 	@Override

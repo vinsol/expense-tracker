@@ -45,6 +45,7 @@ import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
+import com.vinsol.expensetracker.utils.Log;
 
 abstract class ListingAbstract extends Activity implements OnItemClickListener {
 
@@ -264,14 +265,14 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	
 	private void removeItem(int position) {
 		mDatabaseAdapter.open();
-    	mDatabaseAdapter.deleteEntryTableEntryID(mSeparatedListAdapter.getItem(position).id);
+    	mDatabaseAdapter.deleteEntryTableEntryID(((Entry)mSeparatedListAdapter.getItem(position)).id);
     	mDatabaseAdapter.close();
     	mSeparatedListAdapter.remove(position);
     	noItemLayout();
 	}
 	
 	private void startEditPage(int position) {
-		Entry mTempClickedList = mSeparatedListAdapter.getItem(position);
+		Entry mTempClickedList = (Entry) mSeparatedListAdapter.getItem(position);
 		Intent intent = null;
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(Constants.ENTRY_LIST_EXTRA, mTempClickedList);
@@ -298,8 +299,8 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (RESULT == requestCode) {
+			intentExtras = data.getExtras();
 			if(Activity.RESULT_OK == resultCode) {
-				intentExtras = data.getExtras();
 				if(intentExtras != null && intentExtras.containsKey(Constants.DATA_CHANGED)) {
 					updateListView(intentExtras);
 					intentExtras.remove(Constants.DATA_CHANGED);
@@ -307,15 +308,26 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 					initListView();
 				}
 			} else if(Activity.RESULT_CANCELED == resultCode) {
-				removeItem(intentExtras.getInt(Constants.POSITION));
+				int position = -1;
+				if(intentExtras.containsKey(Constants.POSITION)) {position = intentExtras.getInt(Constants.POSITION);}
+				if(position != -1) {
+					removeItem(position);
+				}
 			}
 		}
 	}
 
 	protected void updateListView(Bundle bundle) {
 		Entry updatedEntry = bundle.getParcelable(Constants.ENTRY_LIST_EXTRA);
-		mSeparatedListAdapter.update(updatedEntry, bundle.getInt(Constants.POSITION));
-		noItemLayout();
+		int position = -1;
+		if(bundle.containsKey(Constants.POSITION)) {position = bundle.getInt(Constants.POSITION);}
+		Log.d("************************");
+		Log.d("updating "+position);
+		Log.d("************************");
+		if(position != -1) {
+			mSeparatedListAdapter.update(updatedEntry, position);
+			noItemLayout();
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -496,7 +508,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		extras.putInt(Constants.POSITION, position);
 		extras.putInt(Constants.TYPE, getSubListType());
 		mSubListIntent.putExtras(extras);
-//		mSubListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivityForResult(mSubListIntent,RESULT);
 	}
 	

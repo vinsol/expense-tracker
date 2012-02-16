@@ -44,11 +44,11 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.ImagePreview;
+import com.vinsol.expensetracker.utils.Log;
 
 public class FavoriteActivity extends Activity implements OnItemClickListener {
 	
 	private TextView headerTitle;
-	private ListView editFavoriteListview;
 	private ConvertCursorToListString mConvertCursorToListString;
 	private List<Favorite> mList;
 	private DatabaseAdapter mDatabaseAdapter;
@@ -61,6 +61,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 	private FileHelper fileHelper;
 	private boolean isManaging = false;
 	private static final int ACTIVITY_RESULT = 1135;
+	private int maxItemsVisible;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		handleUI();
 		fileHelper = new FileHelper();
 		headerTitle = (TextView) findViewById(R.id.header_title);
-		editFavoriteListview = (ListView) findViewById(R.id.edit_body_favorite_listview);
+		ListView mFavoriteListview = (ListView) findViewById(R.id.edit_body_favorite_listview);
 		editDateBarDateview = (TextView) findViewById(R.id.edit_date_bar_dateview);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		mDatabaseAdapter = new DatabaseAdapter(this);
@@ -104,13 +105,17 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		mList = mConvertCursorToListString.getFavoriteList();
 		if(mList.size() == 0) {favListEmpty();}
 		mAdapter = new MyAdapter(this, R.layout.expense_listing_inflated_row , mList);
-		editFavoriteListview.setAdapter(mAdapter);
+		mFavoriteListview.setAdapter(mAdapter);
+		maxItemsVisible = mFavoriteListview.getLastVisiblePosition() - mFavoriteListview.getFirstVisiblePosition() + 1;
+		Log.d("*******************************************");
+		Log.d("******** Max Items Visible "+mFavoriteListview.getLastVisiblePosition() + " \t " + getWindowManager().getDefaultDisplay().getHeight());
+		Log.d("*******************************************");
 		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 			dateViewString = editDateBarDateview.getText().toString();
 		} else {
 			dateViewString = "";
 		}
-		editFavoriteListview.setOnItemClickListener(this);
+		mFavoriteListview.setOnItemClickListener(this);
 	}
 	
 	private void favListEmpty() {
@@ -584,5 +589,4 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			}
 		}
 	}
-
 }

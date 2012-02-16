@@ -28,8 +28,6 @@ import com.vinsol.expensetracker.helpers.DeleteDialog;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
-import com.vinsol.expensetracker.listing.ExpenseListing;
-import com.vinsol.expensetracker.listing.ExpenseSubListing;
 import com.vinsol.expensetracker.models.Entry;
 
 abstract class ShowAbstract extends Activity implements OnClickListener {
@@ -114,8 +112,8 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	}
 	
 	public void doTaskOnActivityResult() {
-		if (intentExtras.containsKey("mDisplayList")) {
-			mShowList = intentExtras.getParcelable("mDisplayList");
+		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+			mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
 			
 			if(!new CheckEntryComplete().isEntryComplete(mShowList, this)) {
 				finish();
@@ -195,8 +193,8 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 			mDatabaseAdapter.deleteEntryTableEntryID(mShowList.id);
 			mDatabaseAdapter.close();
 			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
-			if(intentExtras.containsKey("position")) {
-				intentExtras.putBoolean("isChanged", true);
+			if(intentExtras.containsKey(Constants.POSITION)) {
+				intentExtras.putBoolean(Constants.DATA_CHANGED, true);
 				setResultModifiedToListing();
 			}
 			finish();
@@ -221,12 +219,9 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 
 	private void setResultModifiedToListing() {
 		if(!istempfavIdequalsfavId()) {
-			intentExtras.putBoolean("isChanged", true);
+			intentExtras.putBoolean(Constants.DATA_CHANGED, true);
 		}
-		Intent intent = new Intent(this, ExpenseListing.class);
-		intent.putExtras(intentExtras);
-		setResult(Activity.RESULT_OK, intent);
-		intent = new Intent(this, ExpenseSubListing.class);
+		Intent intent = new Intent();
 		intent.putExtras(intentExtras);
 		setResult(Activity.RESULT_OK, intent);
 	}
