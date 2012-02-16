@@ -50,8 +50,8 @@ public class CameraFileSave {
 			options.inJustDecodeBounds = true;
 			Bitmap fullSizeBitmap = BitmapFactory.decodeFile(fullSizeImage.toString(), options);
 			if(options.outWidth > 0 && options.outHeight > 0) {
-				FULL_SIZE_IMAGE_WIDTH = options.outHeight;
-				FULL_SIZE_IMAGE_HEIGHT = options.outWidth;
+				FULL_SIZE_IMAGE_WIDTH = options.outWidth;
+				FULL_SIZE_IMAGE_HEIGHT = options.outHeight;
 				if(fullSizeBitmap != null)
 					fullSizeBitmap.recycle();
 				Log.d("*********************************************");

@@ -80,7 +80,6 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     private static final int IDLE = 1;
     private static final int IMAGE_DISPLAYED = 1000;
     private static final int SNAPSHOT_IN_PROGRESS = 2;
-    private CameraFlashButton flashButton;
     private int mStatus = IDLE;
 
     private android.hardware.Camera mCameraDevice;
@@ -403,8 +402,6 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 
         ViewGroup rootView = (ViewGroup) findViewById(R.id.camera);
         inflater.inflate(R.layout.camera_control, rootView);
-        flashButton = ((CameraFlashButton) findViewById(R.id.flash_button));
-
         try {
             startPreviewThread.join();
             if (mStartPreviewFail) {
@@ -416,7 +413,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         ((CameraButton) findViewById(R.id.btn_cancel)).setOnClickListener(this);
         ((CameraButton) findViewById(R.id.btn_done)).setOnClickListener(this);
         ((CameraButton) findViewById(R.id.btn_retake)).setOnClickListener(this);
-        
+        ((CameraFlashButton) findViewById(R.id.flash_button)).setButtonCallback(flashCB);
     }
     private void setOrientationIndicator(int degree) {
     	((CameraFlashButton) findViewById(R.id.flash_button)).setDegree(degree);
@@ -907,7 +904,6 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         if (mPausing || isFinishing()) return;
 
         ensureCameraDevice();
-        flashButton.setButtonCallback(flashCB);
         if (mPreviewing) stopPreview();
 
         setPreviewDisplay(mSurfaceHolder);
@@ -1010,8 +1006,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         PreviewFrameLayout frameLayout = (PreviewFrameLayout) findViewById(R.id.frame_layout);
         frameLayout.setAspectRatio((double) size.width / size.height);
         List<Size> sizes = mParameters.getSupportedPreviewSizes();
-        Size optimalSize = getOptimalPreviewSize(
-                sizes, (double) size.width / size.height);
+        Size optimalSize = getOptimalPreviewSize(sizes, (double) size.width / size.height);
         if (optimalSize != null) {
             mParameters.setPreviewSize(optimalSize.width, optimalSize.height);
         }
@@ -1058,8 +1053,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             mUpdateSet = 0;
         } else {
             if (!mHandler.hasMessages(SET_CAMERA_PARAMETERS_WHEN_IDLE)) {
-                mHandler.sendEmptyMessageDelayed(
-                        SET_CAMERA_PARAMETERS_WHEN_IDLE, 1000);
+                mHandler.sendEmptyMessageDelayed(SET_CAMERA_PARAMETERS_WHEN_IDLE, 1000);
             }
         }
     }
@@ -1082,7 +1076,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     	mStatus = IMAGE_DISPLAYED;
         doAttach();
         findViewById(R.id.shutter_button).setVisibility(View.GONE);
-        flashButton.setVisibility(View.GONE);
+        ((CameraFlashButton) findViewById(R.id.flash_button)).setVisibility(View.GONE);
         int[] pickIds = {R.id.btn_retake, R.id.btn_done, R.id.btn_cancel};
         for (int id : pickIds) {
             CameraButton button = (CameraButton) findViewById(id);
@@ -1098,7 +1092,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             button.setVisibility(View.GONE);
         }
         findViewById(R.id.shutter_button).setVisibility(View.VISIBLE);
-        flashButton.setVisibility(View.VISIBLE);
+        ((CameraFlashButton) findViewById(R.id.flash_button)).setVisibility(View.VISIBLE);
     }
 
     private int calculatePicturesRemaining() {
@@ -1106,12 +1100,10 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             if (!hasStorage()) {
                 return NO_STORAGE_ERROR;
             } else {
-                String storageDirectory =
-                        Environment.getExternalStorageDirectory().toString();
+                String storageDirectory = Environment.getExternalStorageDirectory().toString();
                 StatFs stat = new StatFs(storageDirectory);
                 final int PICTURE_BYTES = 1500000;
-                mPicturesRemaining = (int)(((float) stat.getAvailableBlocks()
-                        * (float) stat.getBlockSize()) / PICTURE_BYTES);
+                mPicturesRemaining = (int)(((float) stat.getAvailableBlocks() * (float) stat.getBlockSize()) / PICTURE_BYTES);
             }
         } catch (Exception ex) {
         	mPicturesRemaining = CANNOT_STAT_ERROR; 
