@@ -23,8 +23,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,6 +51,7 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.ImagePreview;
+import com.vinsol.expensetracker.utils.Log;
 
 public class FavoriteActivity extends Activity implements OnItemClickListener {
 	
@@ -62,6 +65,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 	private FileHelper fileHelper;
 	private boolean isManaging = false;
 	private static final int ACTIVITY_RESULT = 1135;
+	private ListView mFavoriteListview;
+	private EditText searchBox;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +80,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		fileHelper = new FileHelper();
 		final List<Favorite> mList_sort = new ArrayList<Favorite>();
 		TextView headerTitle = (TextView) findViewById(R.id.header_title);
-		final ListView mFavoriteListview = (ListView) findViewById(R.id.edit_body_favorite_listview);
+		mFavoriteListview = (ListView) findViewById(R.id.edit_body_favorite_listview);
 		editDateBarDateview = (TextView) findViewById(R.id.edit_date_bar_dateview);
 		ConvertCursorToListString mConvertCursorToListString = new ConvertCursorToListString(this);
 		mDatabaseAdapter = new DatabaseAdapter(this);
@@ -108,14 +113,16 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		if(mList.size() == 0) {favListEmpty();}
 		mAdapter = new MyAdapter(this, R.layout.expense_listing_inflated_row , mList);
 		mFavoriteListview.setAdapter(mAdapter);
+		int visibleChildCount = (mFavoriteListview.getLastVisiblePosition() - mFavoriteListview.getFirstVisiblePosition()) + 1;
+		Log.d("********************* mFavoriteListview "+visibleChildCount);
 		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
 			dateViewString = editDateBarDateview.getText().toString();
 		} else {
 			dateViewString = "";
 		}
 		mFavoriteListview.setOnItemClickListener(this);
-		
-		final EditText searchBox = (EditText) findViewById(R.id.favorite_search);
+		searchBox = (EditText) findViewById(R.id.favorite_search);
+		mFavoriteListview.setOnScrollListener(toggleSearchBoxListener);
 		searchBox.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -151,6 +158,25 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		});
 	}
 	
+	private OnScrollListener toggleSearchBoxListener = new OnScrollListener() {
+		
+		@Override
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+			// do nothing
+		}
+		
+		@Override
+		public void onScroll(AbsListView view, int firstVisibleItem,int visibleItemCount, int totalItemCount) {
+			if(visibleItemCount < mAdapter.getCount()) {
+				searchBox.setVisibility(View.VISIBLE);
+			} else {
+				searchBox.setVisibility(View.GONE);
+			}
+			mFavoriteListview.setOnScrollListener(null);
+		}
+		
+	};
+	
 	private void favListEmpty() {
 		Toast.makeText(getApplicationContext(), "favorite list empty", Toast.LENGTH_LONG).show();
 		finish();
@@ -169,6 +195,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			}
 			if(Activity.RESULT_CANCELED == resultCode && intentExtras != null && intentExtras.containsKey(Constants.DATA_CHANGED) && position != -1) {
 				mAdapter.mList.remove(position);
+				mFavoriteListview.setOnScrollListener(toggleSearchBoxListener);
 				if(mAdapter.mList.size() == 0) {
 					favListEmpty();
 				}
@@ -180,14 +207,14 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 	private class MyAdapter extends ArrayAdapter<Favorite> {
 		
 		private LayoutInflater mInflater;
-		List<Favorite> mList;
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		private MyAdapter(Context context, int resource,List list1) {
-			super(context, resource,list1);
+		private List<Favorite> mList;
+		
+		private MyAdapter(Context context, int resource,List<Favorite> list) {
+			super(context, resource,list);
 			mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			mList = list1;
+			mList = list;
 		}
-
+		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder viewHolder;
@@ -321,7 +348,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		((ScrollView) findViewById(R.id.edit_body)).setVisibility(View.GONE);
 		((LinearLayout) findViewById(R.id.edit_body_favorite)).setVisibility(View.VISIBLE);
 		((LinearLayout) findViewById(R.id.edit_footer)).setVisibility(View.GONE);
-		((EditText) findViewById(R.id.favorite_search)).setVisibility(View.VISIBLE);
 	}
 	
 	private class MyClickListener implements OnClickListener {
