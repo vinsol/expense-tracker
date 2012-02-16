@@ -84,8 +84,8 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		Bundle intentExtras = getIntent().getExtras();
 		if(intentExtras != null) {
-			if(intentExtras.containsKey(Constants.HIGHLIGHT)) {
-				highlightID = intentExtras.getString(Constants.HIGHLIGHT);
+			if(intentExtras.containsKey(Constants.KEY_HIGHLIGHT)) {
+				highlightID = intentExtras.getString(Constants.KEY_HIGHLIGHT);
 			}
 		}
 		type = getType(intentExtras);
@@ -156,8 +156,8 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		String id = mTempClickedList.id;
 		if (!id.contains(",")) {
 			Bundle bundle = new Bundle();
-			bundle.putParcelable(Constants.ENTRY_LIST_EXTRA, mTempClickedList);
-			bundle.putInt(Constants.POSITION, position);
+			bundle.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, mTempClickedList);
+			bundle.putInt(Constants.KEY_POSITION, position);
 			CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 			if (mTempClickedList.type.equals(getString(R.string.unknown))) {
 				unknownDialog = new UnknownEntryDialog(this,mTempClickedList,new OnClickListener() {
@@ -275,8 +275,8 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		Entry mTempClickedList = (Entry) mSeparatedListAdapter.getItem(position);
 		Intent intent = null;
 		Bundle bundle = new Bundle();
-		bundle.putParcelable(Constants.ENTRY_LIST_EXTRA, mTempClickedList);
-		bundle.putInt(Constants.POSITION, position);
+		bundle.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, mTempClickedList);
+		bundle.putInt(Constants.KEY_POSITION, position);
 		if (mTempClickedList.type.equals(getString(R.string.text))) {
 			intent = new Intent(this, TextEntry.class);
 		} else {
@@ -301,15 +301,15 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		if (RESULT == requestCode) {
 			intentExtras = data.getExtras();
 			if(Activity.RESULT_OK == resultCode) {
-				if(intentExtras != null && intentExtras.containsKey(Constants.DATA_CHANGED)) {
+				if(intentExtras != null && intentExtras.containsKey(Constants.KEY_DATA_CHANGED)) {
 					updateListView(intentExtras);
-					intentExtras.remove(Constants.DATA_CHANGED);
+					intentExtras.remove(Constants.KEY_DATA_CHANGED);
 				} else {
 					initListView();
 				}
 			} else if(Activity.RESULT_CANCELED == resultCode) {
 				int position = -1;
-				if(intentExtras.containsKey(Constants.POSITION)) {position = intentExtras.getInt(Constants.POSITION);}
+				if(intentExtras.containsKey(Constants.KEY_POSITION)) {position = intentExtras.getInt(Constants.KEY_POSITION);}
 				if(position != -1) {
 					removeItem(position);
 				}
@@ -318,9 +318,9 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	}
 
 	protected void updateListView(Bundle bundle) {
-		Entry updatedEntry = bundle.getParcelable(Constants.ENTRY_LIST_EXTRA);
+		Entry updatedEntry = bundle.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 		int position = -1;
-		if(bundle.containsKey(Constants.POSITION)) {position = bundle.getInt(Constants.POSITION);}
+		if(bundle.containsKey(Constants.KEY_POSITION)) {position = bundle.getInt(Constants.KEY_POSITION);}
 		Log.d("************************");
 		Log.d("updating "+position);
 		Log.d("************************");
@@ -459,10 +459,10 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 			if(mArrayList.get(checkI).equals(highlightID)) {
 				Intent expenseSubListing = new Intent(this, ExpenseSubListing.class);
 				Bundle extras = new Bundle();
-				extras.putParcelable(Constants.ENTRY_LIST_EXTRA, entry);
-				extras.putInt(Constants.TYPE, getSubListType());
+				extras.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, entry);
+				extras.putInt(Constants.KEY_TYPE, getSubListType());
 				if(highlightID != null)
-					extras.putString(Constants.HIGHLIGHT, highlightID);
+					extras.putString(Constants.KEY_HIGHLIGHT, highlightID);
 				expenseSubListing.putExtras(extras);
 				startActivityForResult(expenseSubListing, RESULT);
  				finish();
@@ -504,9 +504,9 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	protected void onClickElse(Entry entry,int position) {
 		Intent mSubListIntent = new Intent(this, ExpenseSubListing.class);
 		Bundle extras = new Bundle();
-		extras.putParcelable(Constants.ENTRY_LIST_EXTRA, entry);
-		extras.putInt(Constants.POSITION, position);
-		extras.putInt(Constants.TYPE, getSubListType());
+		extras.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, entry);
+		extras.putInt(Constants.KEY_POSITION, position);
+		extras.putInt(Constants.KEY_TYPE, getSubListType());
 		mSubListIntent.putExtras(extras);
 		startActivityForResult(mSubListIntent,RESULT);
 	}

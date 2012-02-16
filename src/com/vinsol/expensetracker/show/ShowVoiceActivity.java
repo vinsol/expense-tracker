@@ -51,7 +51,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			updateUI();
-			if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+			if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 				File tempFile = fileHelper.getAudioFileEntry(mShowList.id);
 
 				if (tempFile.canRead()) {
@@ -178,7 +178,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 	
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					updateUI();
-					if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+					if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 						File tempFile = fileHelper.getAudioFileEntry(mShowList.id);
 	
 						if (tempFile.canRead()) {
@@ -191,7 +191,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 							showStopButton.setVisibility(View.GONE);
 							showPlayButton.setVisibility(View.GONE);
 						}
-						mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+						mShowList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 						mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
 					}
 				} else {

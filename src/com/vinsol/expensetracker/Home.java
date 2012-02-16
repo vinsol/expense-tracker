@@ -193,7 +193,7 @@ public class Home extends Activity implements OnClickListener {
 			
 		case R.id.manage_favorite:
 			Intent startManagingFavorite = new Intent(this, FavoriteActivity.class);
-			startManagingFavorite.putExtra(Constants.MANAGE_FAVORITE, true);
+			startManagingFavorite.putExtra(Constants.KEY_MANAGE_FAVORITE, true);
 			startActivity(startManagingFavorite);
 			break;
 			

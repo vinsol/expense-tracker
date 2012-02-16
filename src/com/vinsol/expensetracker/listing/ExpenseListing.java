@@ -52,8 +52,8 @@ public class ExpenseListing extends TabActivity {
 	}
 
 	private void setExtras(TabHost tabHost, Intent intentThisWeek, Intent intentThisMonth, Intent intentThisYear, Intent intentAll, Bundle intentExtras) {
-		if(intentExtras != null && intentExtras.containsKey(Constants.TIME_IN_MILLIS_TO_SET_TAB)) {
-			Long timeInMillis = intentExtras.getLong(Constants.TIME_IN_MILLIS_TO_SET_TAB);
+		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB)) {
+			Long timeInMillis = intentExtras.getLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB);
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTimeInMillis(timeInMillis);
 			calendar.setFirstDayOfWeek(Calendar.MONDAY);
@@ -75,8 +75,8 @@ public class ExpenseListing extends TabActivity {
 	}
 
 	private String getTag(Bundle intentExtras) {
-		if(intentExtras != null && intentExtras.containsKey(Constants.TIME_IN_MILLIS_TO_SET_TAB)) {
-			Long timeInMillis = intentExtras.getLong(Constants.TIME_IN_MILLIS_TO_SET_TAB);
+		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB)) {
+			Long timeInMillis = intentExtras.getLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB);
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTimeInMillis(timeInMillis);
 			calendar.setFirstDayOfWeek(Calendar.MONDAY);

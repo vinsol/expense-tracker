@@ -24,7 +24,7 @@ public class ShowTextActivity extends ShowAbstract {
 		typeOfEntryFinished = R.string.finished_textentry;
 		typeOfEntryUnfinished = R.string.unfinished_textentry;
 		showHelper();
-		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
 		}
 	}
@@ -35,7 +35,7 @@ public class ShowTextActivity extends ShowAbstract {
 			intentExtras = data.getExtras();
 			if(Activity.RESULT_OK == resultCode) {
 				doTaskOnActivityResult();
-				mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+				mShowList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 				mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
 				showDelete.setOnClickListener(this);
 				showEdit.setOnClickListener(this);

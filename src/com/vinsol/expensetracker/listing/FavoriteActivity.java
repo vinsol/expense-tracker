@@ -86,24 +86,24 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		intentExtras = getIntent().getExtras();
 		
-		if(intentExtras != null && intentExtras.containsKey(Constants.MANAGE_FAVORITE)) {
+		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_MANAGE_FAVORITE)) {
 			isManaging = true;
 			headerTitle.setText("Managing Favorites");
 			((LinearLayout)findViewById(R.id.edit_date_bar)).setVisibility(View.GONE);
 			((TextView)findViewById(R.id.edit_body_favorite_tag)).setText("Choose an entry to edit or delete");
 		} else {
 			headerTitle.setText("Favorite Entry");
-			if (intentExtras != null && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+			if (intentExtras != null && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 				mEditList = new Entry();
-				mEditList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+				mEditList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 				id = mEditList.id;
 			}
 			
 			//////// ******** Handle Date Bar ********* ////////
-			if (intentExtras != null && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+			if (intentExtras != null && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 				new DateHandler(this, mEditList.timeInMillis);
-			} else if (intentExtras != null && intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
-				new DateHandler(this, intentExtras.getLong(Constants.TIME_IN_MILLIS));
+			} else if (intentExtras != null && intentExtras.containsKey(Constants.KEY_TIME_IN_MILLIS)) {
+				new DateHandler(this, intentExtras.getLong(Constants.KEY_TIME_IN_MILLIS));
 			} else {
 				new DateHandler(this);
 			}
@@ -115,7 +115,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		mFavoriteListview.setAdapter(mAdapter);
 		int visibleChildCount = (mFavoriteListview.getLastVisiblePosition() - mFavoriteListview.getFirstVisiblePosition()) + 1;
 		Log.d("********************* mFavoriteListview "+visibleChildCount);
-		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			dateViewString = editDateBarDateview.getText().toString();
 		} else {
 			dateViewString = "";
@@ -187,13 +187,13 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		if (ACTIVITY_RESULT == requestCode && data != null && data.getExtras() != null) {
 			intentExtras = data.getExtras();
 			int position = -1;
-			if(intentExtras != null && intentExtras.containsKey(Constants.POSITION)) {
-				position = intentExtras.getInt(Constants.POSITION);
+			if(intentExtras != null && intentExtras.containsKey(Constants.KEY_POSITION)) {
+				position = intentExtras.getInt(Constants.KEY_POSITION);
 			}
-			if(Activity.RESULT_OK == resultCode && intentExtras != null && intentExtras.containsKey(Constants.DATA_CHANGED) && position != -1) {
-				mAdapter.mList.set(position, (Favorite) intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA));
+			if(Activity.RESULT_OK == resultCode && intentExtras != null && intentExtras.containsKey(Constants.KEY_DATA_CHANGED) && position != -1) {
+				mAdapter.mList.set(position, (Favorite) intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA));
 			}
-			if(Activity.RESULT_CANCELED == resultCode && intentExtras != null && intentExtras.containsKey(Constants.DATA_CHANGED) && position != -1) {
+			if(Activity.RESULT_CANCELED == resultCode && intentExtras != null && intentExtras.containsKey(Constants.KEY_DATA_CHANGED) && position != -1) {
 				mAdapter.mList.remove(position);
 				mFavoriteListview.setOnScrollListener(toggleSearchBoxListener);
 				if(mAdapter.mList.size() == 0) {
@@ -408,9 +408,9 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 				intent = new Intent(this, CameraActivity.class);
 			}
 			Bundle intentExtras = new Bundle();
-			intentExtras.putParcelable(Constants.ENTRY_LIST_EXTRA, favoriteEntry);
-			intentExtras.putBoolean(Constants.IS_COMING_FROM_FAVORITE, true);
-			intentExtras.putInt(Constants.POSITION, position);
+			intentExtras.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, favoriteEntry);
+			intentExtras.putBoolean(Constants.KEY_IS_COMING_FROM_FAVORITE, true);
+			intentExtras.putInt(Constants.KEY_POSITION, position);
 			intent.putExtras(intentExtras);
 			startActivityForResult(intent, ACTIVITY_RESULT);
 		} else {
@@ -458,16 +458,16 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 					}
 					if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 						try {
-							if (!intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+							if (!intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 								DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
-								if(!intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
+								if(!intentExtras.containsKey(Constants.KEY_TIME_IN_MILLIS)) {
 									DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 									toInsert.timeInMillis = mDateHelper.getTimeMillis();
 								} else {
 									Calendar mCalendar = Calendar.getInstance();
-									mCalendar.setTimeInMillis(intentExtras.getLong(Constants.TIME_IN_MILLIS));
+									mCalendar.setTimeInMillis(intentExtras.getLong(Constants.KEY_TIME_IN_MILLIS));
 									mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 									DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString(),mCalendar);
 									toInsert.timeInMillis = mDateHelper.getTimeMillis();
@@ -486,7 +486,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 						File mFileThumbnail = fileHelper.getCameraFileThumbnailEntry(idCreated);
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							bundle.putString(Constants.HIGHLIGHT, idCreated+"");
+							bundle.putString(Constants.KEY_HIGHLIGHT, idCreated+"");
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							finish();
@@ -502,7 +502,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 						File mFileThumbnail = fileHelper.getCameraFileThumbnailEntry(id);
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							bundle.putString(Constants.HIGHLIGHT, toInsert.id);
+							bundle.putString(Constants.KEY_HIGHLIGHT, toInsert.id);
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
@@ -535,16 +535,16 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 					}
 					if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 						try {
-							if (!intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+							if (!intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 								DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
-								if(!intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
+								if(!intentExtras.containsKey(Constants.KEY_TIME_IN_MILLIS)) {
 									DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 									toInsert.timeInMillis = mDateHelper.getTimeMillis();
 								} else {
 									Calendar mCalendar = Calendar.getInstance();
-									mCalendar.setTimeInMillis(intentExtras.getLong(Constants.TIME_IN_MILLIS));
+									mCalendar.setTimeInMillis(intentExtras.getLong(Constants.KEY_TIME_IN_MILLIS));
 									mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 									DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString(),mCalendar);
 									toInsert.timeInMillis = mDateHelper.getTimeMillis();
@@ -561,7 +561,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 						File mFile = fileHelper.getAudioFileEntry(idCreated);
 						if(mFile.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							bundle.putString(Constants.HIGHLIGHT, idCreated+"");
+							bundle.putString(Constants.KEY_HIGHLIGHT, idCreated+"");
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							finish();
@@ -575,7 +575,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 						File mFile = fileHelper.getAudioFileEntry(id);
 						if(mFile.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-							bundle.putString(Constants.HIGHLIGHT, toInsert.id);
+							bundle.putString(Constants.KEY_HIGHLIGHT, toInsert.id);
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
@@ -606,16 +606,16 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 				}
 				if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 					try {
-						if (!intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+						if (!intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 							DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 							toInsert.timeInMillis = mDateHelper.getTimeMillis();
 						} else {
-							if(!intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
+							if(!intentExtras.containsKey(Constants.KEY_TIME_IN_MILLIS)) {
 								DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
 								Calendar mCalendar = Calendar.getInstance();
-								mCalendar.setTimeInMillis(intentExtras.getLong(Constants.TIME_IN_MILLIS));
+								mCalendar.setTimeInMillis(intentExtras.getLong(Constants.KEY_TIME_IN_MILLIS));
 								mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString(),mCalendar);
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
@@ -628,7 +628,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 					mDatabaseAdapter.open();
 					idCreated = mDatabaseAdapter.insertToEntryTable(toInsert)+"";
 					mDatabaseAdapter.close();
-					bundle.putString(Constants.HIGHLIGHT, idCreated+"");
+					bundle.putString(Constants.KEY_HIGHLIGHT, idCreated+"");
 					expenseListingIntent.putExtras(bundle);
 					startActivity(expenseListingIntent);
 					finish();
@@ -636,7 +636,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 					mDatabaseAdapter.open();
 					mDatabaseAdapter.editEntryTable(toInsert);
 					mDatabaseAdapter.close();
-					bundle.putString(Constants.HIGHLIGHT, toInsert.id);
+					bundle.putString(Constants.KEY_HIGHLIGHT, toInsert.id);
 					expenseListingIntent.putExtras(bundle);
 					startActivity(expenseListingIntent);
 					finish();

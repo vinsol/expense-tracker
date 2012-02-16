@@ -36,7 +36,7 @@ public class ExpenseSubListing extends ListingAbstract {
 		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		intentExtras = getIntent().getExtras();
 		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
-		Entry entry = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+		Entry entry = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,entry.id,type);
 		mSubList = mConvertCursorToListString.getListStringParticularDate(entry.id);
 		if(mSubList.size() > 0) {
@@ -106,7 +106,7 @@ public class ExpenseSubListing extends ListingAbstract {
 	
 	@Override
 	protected int getType(Bundle intentExtras) {
-		return intentExtras.getInt(Constants.TYPE);
+		return intentExtras.getInt(Constants.KEY_TYPE);
 	}
 	
 }

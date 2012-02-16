@@ -43,7 +43,7 @@ public class ShowCameraActivity extends ShowAbstract {
 		typeOfEntryFinished = R.string.finished_cameraentry;
 		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
 		showHelper();
-		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			File mFile = fileHelper.getCameraFileSmallEntry(mShowList.id);
 			if (mFile.canRead()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
@@ -104,7 +104,7 @@ public class ShowCameraActivity extends ShowAbstract {
 			intentExtras = data.getExtras();
 			if(Activity.RESULT_OK == resultCode) {
 				doTaskOnActivityResult();
-				if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+				if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 					File mFile = fileHelper.getCameraFileSmallEntry(mShowList.id);
 					if (mFile.canRead()) {
 						Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
@@ -118,7 +118,7 @@ public class ShowCameraActivity extends ShowAbstract {
 					} else {
 						showImageDisplay.setImageResource(R.drawable.no_image_small);
 					}
-					mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+					mShowList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 					mFavoriteHelper = new FavoriteHelper(this,mDatabaseAdapter,fileHelper,mShowList);
 				}
 				showImageDisplay.setOnClickListener(this);

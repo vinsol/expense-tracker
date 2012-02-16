@@ -97,7 +97,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		editAmount.setOnFocusChangeListener(focusChangeListener);
 		////////********* Get intent extras ******** ////////////
 		intentExtras = getIntent().getExtras();
-		if(intentExtras != null && intentExtras.containsKey(Constants.IS_COMING_FROM_FAVORITE)) {isFromFavorite = true;}
+		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_FAVORITE)) {isFromFavorite = true;}
 	}
 	
 	private OnKeyListener focusTagOnEnter = new OnKeyListener() {
@@ -134,8 +134,8 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			setLocation = intentExtras.getBoolean("setLocation");
 		}
 		
-		if (!isFromFavorite && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
-			mEditList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+		if (!isFromFavorite && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
+			mEditList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 			mFavoriteList = null;
 			entry.id = mEditList.id;
 			entry.amount = mEditList.amount;
@@ -143,25 +143,25 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			((LinearLayout)findViewById(R.id.favorite_layout)).setVisibility(View.GONE);
 			setText(entry.amount, entry.description);
 			editHeaderTitle.setText(new DisplayDate().getLocationDate(mEditList.timeInMillis, mEditList.location));
-		} else if(isFromFavorite && intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+		} else if(isFromFavorite && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			mEditList = null;
 			((LinearLayout)findViewById(R.id.edit_date_bar)).setVisibility(View.GONE);
-			mFavoriteList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA); 
+			mFavoriteList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA); 
 			setText(mFavoriteList.amount, mFavoriteList.description);
 		}
 		
 		if(!isFromFavorite) {
 			////////******** Handle Date Bar ********* ////////
-			if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+			if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 				new DateHandler(this, mEditList.timeInMillis);
-			} else if (intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
-				new DateHandler(this, intentExtras.getLong(Constants.TIME_IN_MILLIS));
+			} else if (intentExtras.containsKey(Constants.KEY_TIME_IN_MILLIS)) {
+				new DateHandler(this, intentExtras.getLong(Constants.KEY_TIME_IN_MILLIS));
 			} else {
 				new DateHandler(this);
 			}
 		}
 		
-		if (!isFromFavorite && !intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+		if (!isFromFavorite && !intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			new FavoriteHelper(this, mDatabaseAdapter, fileHelper, getString(typeOfEntry),entry.id, editAmount, editTag , isChanged);
 		} else {
 			findViewById(R.id.favorite_divider).setVisibility(View.GONE);
@@ -207,16 +207,16 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		list.description = entry.description;
 		if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 			try {
-				if (!intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+				if (!intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 					DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 					list.timeInMillis = mDateHelper.getTimeMillis();
 				} else {
-					if(!intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
+					if(!intentExtras.containsKey(Constants.KEY_TIME_IN_MILLIS)) {
 						DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString());
 						list.timeInMillis = mDateHelper.getTimeMillis();
 					} else {
 						Calendar mCalendar = Calendar.getInstance();
-						mCalendar.setTimeInMillis(intentExtras.getLong(Constants.TIME_IN_MILLIS));
+						mCalendar.setTimeInMillis(intentExtras.getLong(Constants.KEY_TIME_IN_MILLIS));
 						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 						DateHelper mDateHelper = new DateHelper(editDateBarDateview.getText().toString(),mCalendar);
 						list.timeInMillis = mDateHelper.getTimeMillis();
@@ -327,27 +327,27 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editEntryTable(toSave);
 		mDatabaseAdapter.close();
-		if(!intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE)) {
+		if(!intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE)) {
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			Bundle mToHighLight = new Bundle();
-			mToHighLight.putString(Constants.HIGHLIGHT, toSave.id);
+			mToHighLight.putString(Constants.KEY_HIGHLIGHT, toSave.id);
 			if(toSave.timeInMillis != null)
-				mToHighLight.putLong(Constants.TIME_IN_MILLIS_TO_SET_TAB, toSave.timeInMillis);
+				mToHighLight.putLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB, toSave.timeInMillis);
 			intentExpenseListing.putExtras(mToHighLight);
-			if(!intentExtras.containsKey(Constants.POSITION)) {
+			if(!intentExtras.containsKey(Constants.KEY_POSITION)) {
 				startActivity(intentExpenseListing);
 			} else {
-				mToHighLight.putInt(Constants.POSITION, intentExtras.getInt(Constants.POSITION));
-				mToHighLight.putParcelable(Constants.ENTRY_LIST_EXTRA, getEntryListOnResult(toSave));
+				mToHighLight.putInt(Constants.KEY_POSITION, intentExtras.getInt(Constants.KEY_POSITION));
+				mToHighLight.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, getEntryListOnResult(toSave));
 				setActivityResult(mToHighLight);
 			}
 		} else {
 			Bundle tempBundle = new Bundle();
-			tempBundle.putParcelable(Constants.ENTRY_LIST_EXTRA, getEntryListOnResult(toSave));
-			if(intentExtras.containsKey(Constants.POSITION)) {
-				tempBundle.putInt(Constants.POSITION , intentExtras.getInt(Constants.POSITION));
+			tempBundle.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, getEntryListOnResult(toSave));
+			if(intentExtras.containsKey(Constants.KEY_POSITION)) {
+				tempBundle.putInt(Constants.KEY_POSITION , intentExtras.getInt(Constants.KEY_POSITION));
 				if(checkEntryModified()) {
-					tempBundle.putBoolean(Constants.DATA_CHANGED, true);
+					tempBundle.putBoolean(Constants.KEY_DATA_CHANGED, true);
 				}
 			}
 			Intent mIntent = new Intent();
@@ -364,7 +364,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mDatabaseAdapter.editFavoriteTable(toSaveFav);
 		mDatabaseAdapter.close();
 		Bundle bundle = new Bundle();
-		bundle.putParcelable(Constants.ENTRY_LIST_EXTRA, getFavoriteListOnResult(toSaveFav));
+		bundle.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, getFavoriteListOnResult(toSaveFav));
 		setActivityResult(bundle);
 		finish();
 	}
@@ -372,7 +372,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	private void setActivityResult(Bundle bundle) {
 		Intent intent = new Intent();
 		if(isChanged) {
-			bundle.putBoolean(Constants.DATA_CHANGED, isChanged);
+			bundle.putBoolean(Constants.KEY_DATA_CHANGED, isChanged);
 			intentExtras.putAll(bundle);
 		}
 		intent.putExtras(intentExtras);
@@ -487,18 +487,18 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mDatabaseAdapter.deleteEntryTableEntryID(entry.id);
 		mDatabaseAdapter.close();
 		Bundle tempBundle = new Bundle();
-		if(intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE)) {
+		if(intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE)) {
 			Entry displayList = new Entry();
-			tempBundle.putParcelable(Constants.ENTRY_LIST_EXTRA, displayList);
+			tempBundle.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, displayList);
 			mEditList = displayList;
 			startIntentAfterDelete(tempBundle);
 		}
-		if(intentExtras.containsKey(Constants.POSITION)) {
+		if(intentExtras.containsKey(Constants.KEY_POSITION)) {
 			tempBundle = new Bundle();
 			Intent intent = new Intent();
-			tempBundle.putInt(Constants.POSITION, intentExtras.getInt(Constants.POSITION));
+			tempBundle.putInt(Constants.KEY_POSITION, intentExtras.getInt(Constants.KEY_POSITION));
 			if(isChanged) {
-				tempBundle.putBoolean(Constants.DATA_CHANGED, isChanged);
+				tempBundle.putBoolean(Constants.KEY_DATA_CHANGED, isChanged);
 			}
 			intent.putExtras(tempBundle);
 			setResult(Activity.RESULT_CANCELED, intent);
@@ -517,9 +517,9 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mDatabaseAdapter.close();
 		Intent intent = new Intent();
 		Bundle bundle = new Bundle();
-		bundle.putBoolean(Constants.DATA_CHANGED, true);
-		if(intentExtras != null && intentExtras.containsKey(Constants.POSITION)) {
-			bundle.putInt(Constants.POSITION, intentExtras.getInt(Constants.POSITION));
+		bundle.putBoolean(Constants.KEY_DATA_CHANGED, true);
+		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_POSITION)) {
+			bundle.putInt(Constants.KEY_POSITION, intentExtras.getInt(Constants.KEY_POSITION));
 		}
 		intent.putExtras(bundle);
 		setResult(Activity.RESULT_CANCELED,intent);
@@ -531,7 +531,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		FlurryAgent.onEvent(getString(R.string.back_pressed));
 		ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
 		if(!isFromFavorite) {
-			if(intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE) || intentExtras.containsKey(Constants.POSITION)) {
+			if(intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE) || intentExtras.containsKey(Constants.KEY_POSITION)) {
 				//if coming from show page or listing
 				if(checkEntryModified()) {
 					mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
@@ -579,7 +579,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	
 	private void finishAndSetResult() {
 		Bundle bundle = new Bundle();
-		bundle.putInt(Constants.POSITION , intentExtras.getInt(Constants.POSITION));
+		bundle.putInt(Constants.KEY_POSITION , intentExtras.getInt(Constants.KEY_POSITION));
 		setActivityResult(bundle);
 		finish();
 	}

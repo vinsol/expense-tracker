@@ -17,17 +17,18 @@ public class Constants {
 	public static final String DIRECTORY_FAVORITE = "Favorite/";
 	
 	//Intent Extras
-	public static final String HIGHLIGHT = "toHighLight";
-	public static final String ENTRY_LIST_EXTRA = "mDisplayList";
-	public static final String POSITION = "position";
-	public static final String IS_COMING_FROM_SHOW_PAGE = "isFromShowPage";
-	public static final String IS_COMING_FROM_FAVORITE = "isFromFavorite";
-	public static final String DATA_CHANGED = "isChanged";
-	public static final String TYPE = "type";
-	public static final String TIME_IN_MILLIS_TO_SET_TAB = "timeInMillisToSetTab";
-	public static final String FULL_SIZE_IMAGE_PATH = "FullSizeImagePath";
-	public static final String TIME_IN_MILLIS = "timeInMillis";
-	public static final String MANAGE_FAVORITE = "manageFavorite";
+	public static final String KEY_HIGHLIGHT = "toHighLight";
+	public static final String KEY_ID = "_id";
+	public static final String KEY_ENTRY_LIST_EXTRA = "mDisplayList";
+	public static final String KEY_POSITION = "position";
+	public static final String KEY_IS_COMING_FROM_SHOW_PAGE = "isFromShowPage";
+	public static final String KEY_IS_COMING_FROM_FAVORITE = "isFromFavorite";
+	public static final String KEY_DATA_CHANGED = "isChanged";
+	public static final String KEY_TYPE = "type";
+	public static final String KEY_TIME_IN_MILLIS_TO_SET_TAB = "timeInMillisToSetTab";
+	public static final String KEY_FULL_SIZE_IMAGE_PATH = "FullSizeImagePath";
+	public static final String KEY_TIME_IN_MILLIS = "timeInMillis";
+	public static final String KEY_MANAGE_FAVORITE = "manageFavorite";
 	
 	//ExpenseTracker Market UI
 	public static final String EXPENSE_TRACKER_MARKET_URI = "market://details?id=com.vinsol.expensetracker";

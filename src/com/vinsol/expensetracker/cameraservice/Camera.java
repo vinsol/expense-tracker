@@ -1064,8 +1064,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 
     private void setupCaptureParams() {
     	Bundle extras = getIntent().getExtras();
-    	if(extras.containsKey(Constants.FULL_SIZE_IMAGE_PATH)) {
-    		mSaveUri = Uri.fromFile(new File(extras.getString(Constants.FULL_SIZE_IMAGE_PATH)));
+    	if(extras.containsKey(Constants.KEY_FULL_SIZE_IMAGE_PATH)) {
+    		mSaveUri = Uri.fromFile(new File(extras.getString(Constants.KEY_FULL_SIZE_IMAGE_PATH)));
     	} else {
     		Toast.makeText(getApplicationContext(), getString(R.string.camera_error_title), Toast.LENGTH_LONG).show();
     		finish();

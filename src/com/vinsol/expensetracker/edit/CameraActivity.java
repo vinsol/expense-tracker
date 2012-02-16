@@ -50,7 +50,7 @@ public class CameraActivity extends EditAbstract {
 		typeOfEntryFinished = R.string.finished_cameraentry;
 		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
 		editHelper();
-		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			if(setUnknown) {
 				startCamera();
 			}
@@ -75,16 +75,16 @@ public class CameraActivity extends EditAbstract {
 				Entry toInsert = new Entry();
 				if (!dateBarDateview.getText().toString().equals(dateViewString)) {
 					try {
-						if (!intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
+						if (!intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 							DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString());
 							toInsert.timeInMillis = mDateHelper.getTimeMillis();
 						} else {
-							if(!intentExtras.containsKey(Constants.TIME_IN_MILLIS)) {
+							if(!intentExtras.containsKey(Constants.KEY_TIME_IN_MILLIS)) {
 								DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString());
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
 							} else {
 								Calendar mCalendar = Calendar.getInstance();
-								mCalendar.setTimeInMillis(intentExtras.getLong(Constants.TIME_IN_MILLIS));
+								mCalendar.setTimeInMillis(intentExtras.getLong(Constants.KEY_TIME_IN_MILLIS));
 								mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 								DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString(),mCalendar);
 								toInsert.timeInMillis = mDateHelper.getTimeMillis();
@@ -109,7 +109,7 @@ public class CameraActivity extends EditAbstract {
 			}
 		}
 		
-		if (!intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA))
+		if (!intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA))
 			startCamera();
 		
 	}
@@ -129,7 +129,7 @@ public class CameraActivity extends EditAbstract {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			Intent camera = new Intent(this, Camera.class);
 			File file = fileHelper.getCameraFileLargeEntry(entry.id);
-			camera.putExtra(Constants.FULL_SIZE_IMAGE_PATH, file.toString());
+			camera.putExtra(Constants.KEY_FULL_SIZE_IMAGE_PATH, file.toString());
 			startActivityForResult(camera, PICTURE_RESULT);
 		} else {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
@@ -157,7 +157,7 @@ public class CameraActivity extends EditAbstract {
 						adapter.close();
 					}
 				}
-				if(!intentExtras.containsKey(Constants.IS_COMING_FROM_SHOW_PAGE)) {finish();}
+				if(!intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE)) {finish();}
 			}
 		}
 	}

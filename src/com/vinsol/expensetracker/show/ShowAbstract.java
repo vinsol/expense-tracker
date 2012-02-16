@@ -79,8 +79,8 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	public void showHelper() {
 		// ///// ****** Assigning memory ******* /////////
 		
-		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
-			mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
+			mShowList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 
 			if (!(mShowList.amount.equals("") || mShowList.amount == null)) {
 				if (!mShowList.amount.contains("?"))
@@ -112,8 +112,8 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 	}
 	
 	public void doTaskOnActivityResult() {
-		if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA)) {
-			mShowList = intentExtras.getParcelable(Constants.ENTRY_LIST_EXTRA);
+		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
+			mShowList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 			
 			if(!new CheckEntryComplete().isEntryComplete(mShowList, this)) {
 				finish();
@@ -193,8 +193,8 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 			mDatabaseAdapter.deleteEntryTableEntryID(mShowList.id);
 			mDatabaseAdapter.close();
 			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
-			if(intentExtras.containsKey(Constants.POSITION)) {
-				intentExtras.putBoolean(Constants.DATA_CHANGED, true);
+			if(intentExtras.containsKey(Constants.KEY_POSITION)) {
+				intentExtras.putBoolean(Constants.KEY_DATA_CHANGED, true);
 				setResultModifiedToListing();
 			}
 			finish();
@@ -219,7 +219,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 
 	private void setResultModifiedToListing() {
 		if(!istempfavIdequalsfavId()) {
-			intentExtras.putBoolean(Constants.DATA_CHANGED, true);
+			intentExtras.putBoolean(Constants.KEY_DATA_CHANGED, true);
 		}
 		Intent intent = new Intent();
 		intent.putExtras(intentExtras);

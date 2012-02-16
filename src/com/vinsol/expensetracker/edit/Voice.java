@@ -54,7 +54,7 @@ public class Voice extends EditAbstract {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			setGraphicsVoice();
 
-			if (intentExtras.containsKey(Constants.ENTRY_LIST_EXTRA) && !setUnknown) {
+			if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA) && !setUnknown) {
 				File tempFile = fileHelper.getAudioFileEntry(entry.id);
 
 				if (tempFile.canRead()) {
