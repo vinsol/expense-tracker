@@ -23,10 +23,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,7 +51,6 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.ImagePreview;
-import com.vinsol.expensetracker.utils.Log;
 
 public class FavoriteActivity extends Activity implements OnItemClickListener {
 	
@@ -113,8 +112,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		if(mList.size() == 0) {favListEmpty();}
 		mAdapter = new MyAdapter(this, R.layout.expense_listing_inflated_row , mList);
 		mFavoriteListview.setAdapter(mAdapter);
-		int visibleChildCount = (mFavoriteListview.getLastVisiblePosition() - mFavoriteListview.getFirstVisiblePosition()) + 1;
-		Log.d("********************* mFavoriteListview "+visibleChildCount);
 		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			dateViewString = editDateBarDateview.getText().toString();
 		} else {

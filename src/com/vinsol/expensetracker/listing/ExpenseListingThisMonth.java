@@ -19,4 +19,21 @@ public class ExpenseListingThisMonth extends TabLayoutListingAbstract {
 	protected void setType() {
 		type = R.string.sublist_thismonth;
 	}
+
+	@Override
+	protected void setModifiedValues() {
+		isModifiedThisYear = false;
+		isModifiedThisMonth = true;
+		isModifiedThisWeek = false;
+		isModifiedAll = false;
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(!isModifiedThisMonth) {
+			initListView();
+		}
+	}
+	
 }

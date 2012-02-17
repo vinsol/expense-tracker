@@ -299,7 +299,11 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (RESULT == requestCode) {
-			intentExtras = data.getExtras();
+			if(data != null && data.getExtras() != null){
+				intentExtras = data.getExtras();
+			} else {
+				intentExtras = null;
+			}
 			if(Activity.RESULT_OK == resultCode) {
 				if(intentExtras != null && intentExtras.containsKey(Constants.KEY_DATA_CHANGED)) {
 					updateListView(intentExtras);
@@ -309,9 +313,13 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 				}
 			} else if(Activity.RESULT_CANCELED == resultCode) {
 				int position = -1;
-				if(intentExtras.containsKey(Constants.KEY_POSITION)) {position = intentExtras.getInt(Constants.KEY_POSITION);}
+				if(intentExtras != null && intentExtras.containsKey(Constants.KEY_POSITION)) {
+					position = intentExtras.getInt(Constants.KEY_POSITION);
+				}
 				if(position != -1) {
 					removeItem(position);
+				} else {
+					initListView();
 				}
 			}
 		}

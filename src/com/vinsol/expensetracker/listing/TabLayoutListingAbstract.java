@@ -5,6 +5,7 @@
 
 package com.vinsol.expensetracker.listing;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,10 @@ import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 abstract class TabLayoutListingAbstract extends ListingAbstract {
 	
 	private Bundle bundle;
+	protected static boolean isModifiedThisWeek = true;
+	protected static boolean isModifiedThisMonth = true;
+	protected static boolean isModifiedThisYear = true;
+	protected static boolean isModifiedAll = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,12 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 		}
 	}
 	
-	protected abstract void setType();
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		setModifiedValues();
+	}
 	
+	protected abstract void setType();
+	protected abstract void setModifiedValues();
 }

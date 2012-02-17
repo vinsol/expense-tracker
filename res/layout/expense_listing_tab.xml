@@ -31,7 +31,20 @@
 	            android:id="@android:id/tabcontent"
 	            android:layout_width="fill_parent"
 	            android:layout_height="fill_parent"
-	            />
+	            >
+	            <include
+	                android:id="@+id/tab_this_week" 
+	                layout="@layout/expense_listing_listview_common"/>
+	            <include
+	                android:id="@+id/tab_this_month" 
+	                layout="@layout/expense_listing_listview_common"/>
+	            <include
+	                android:id="@+id/tab_this_year" 
+	                layout="@layout/expense_listing_listview_common"/>
+	            <include
+	                android:id="@+id/tab_all" 
+	                layout="@layout/expense_listing_listview_common"/>
+	        </FrameLayout>
    		</LinearLayout>
 
     </TabHost>

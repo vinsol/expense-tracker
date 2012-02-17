@@ -9,7 +9,7 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 
 public class ExpenseListingThisYear extends TabLayoutListingAbstract {
-		
+	
 	@Override
 	protected boolean condition(DisplayDate mDisplayDate) {
 		return mDisplayDate.isCurrentWeek() || mDisplayDate.isCurrentMonth() || mDisplayDate.isCurrentYear();
@@ -20,4 +20,20 @@ public class ExpenseListingThisYear extends TabLayoutListingAbstract {
 		type = R.string.sublist_thisyear;
 	}
 
+	@Override
+	protected void setModifiedValues() {
+		isModifiedThisYear = true;
+		isModifiedThisMonth = false;
+		isModifiedThisWeek = false;
+		isModifiedAll = false;
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(!isModifiedThisYear) {
+			initListView();
+		}
+	}
+	
 }

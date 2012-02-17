@@ -19,7 +19,7 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 
 public class ExpenseListing extends TabActivity {
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,7 +33,6 @@ public class ExpenseListing extends TabActivity {
         Bundle intentExtras = getIntent().getExtras();
         
         // Create an Intent to launch an Activity for the tab (to be reused)
-        
         Intent intentThisWeek = new Intent(this, ExpenseListingThisWeek.class);
         Intent intentThisMonth = new Intent(this, ExpenseListingThisMonth.class);
         Intent intentThisYear = new Intent(this, ExpenseListingThisYear.class);
