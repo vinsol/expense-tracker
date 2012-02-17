@@ -268,6 +268,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
     	mDatabaseAdapter.deleteEntryTableEntryID(((Entry)mSeparatedListAdapter.getItem(position)).id);
     	mDatabaseAdapter.close();
     	mSeparatedListAdapter.remove(position);
+    	setModifiedValues();
     	noItemLayout();
 	}
 	
@@ -525,5 +526,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	protected abstract void setContentView();
 	protected abstract boolean condition(DisplayDate mDisplayDate);
 	protected abstract void initListView();
+	protected abstract void setModifiedValues();
 	
 }

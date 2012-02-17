@@ -335,8 +335,10 @@ class SeparatedListAdapter extends BaseAdapter {
 			updatedEntry.amount = mStringProcessing.getStringDoubleDecimal(updatedEntry.amount);
 			amountDouble += mStringProcessing.getAmount(updatedEntry.amount);
 		}
-		if(mDataDateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
+		if(amountDouble != 0.0 && mDataDateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
 			mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"?");
+		} else if(amountDouble == 0.0 && mDataDateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
+			mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal("?");
 		} else {
 			mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"");
 		}

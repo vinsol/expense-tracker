@@ -80,5 +80,4 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 	}
 	
 	protected abstract void setType();
-	protected abstract void setModifiedValues();
 }

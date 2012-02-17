@@ -108,5 +108,10 @@ public class ExpenseSubListing extends ListingAbstract {
 	protected int getType(Bundle intentExtras) {
 		return intentExtras.getInt(Constants.KEY_TYPE);
 	}
+
+	@Override
+	protected void setModifiedValues() {
+		// do nothing
+	}
 	
 }
