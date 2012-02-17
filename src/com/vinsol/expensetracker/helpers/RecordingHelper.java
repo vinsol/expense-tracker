@@ -21,10 +21,9 @@ public class RecordingHelper {
 	private Context mContext;
 
 	//////// ********* Constructor ********* //////////
-	public RecordingHelper(String mFileName, Context _context) {
+	public RecordingHelper(File mPath, Context _context) {
 		mRecorder = new MediaRecorder();
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-			File mPath = new FileHelper().getAudioFileEntry(mFileName);
 			mRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
 			mRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
 			mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);

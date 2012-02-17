@@ -20,5 +20,13 @@ public class TextEntry extends EditAbstract {
 		typeOfEntryUnfinished = R.string.unfinished_textentry;
 		editHelper();
 	}
+
+	@Override
+	protected boolean checkFavoriteComplete() {
+		if(editAmount != null && !editAmount.getText().equals("") && editTag != null &&!editTag.getText().toString().equals("")) {
+			return true;
+		}
+		return false;
+	}
 	
 }

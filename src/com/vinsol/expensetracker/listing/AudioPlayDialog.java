@@ -29,11 +29,13 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 	private MyCountDownTimer countDownTimer;
 	private String mFile;
 	private Context mContext;
+	private boolean isFromFav;
 	
 	public AudioPlayDialog(Context context, String id) {
 		super(context);
 		doCommonTaskBefore(context, id);
 		mAudioPlay = new AudioPlay(id, context,false);
+		isFromFav = false;
 		doCommonTask();
 	}
 
@@ -41,6 +43,7 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 		super(context);
 		doCommonTaskBefore(context,id);
 		mAudioPlay = new AudioPlay(id, context,true);
+		isFromFav = true;
 		doCommonTask();
 	}
 	
@@ -70,41 +73,44 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 	@Override
 	public void onClick(View v) {
 
-		if (v.getId() == R.id.cancel_button) {
+		switch (v.getId()) {
+		case R.id.cancel_button:
 			countDownTimer.cancel();
 			mAudioPlay.stopPlayBack();
 			dismiss();
-		}
+			break;
 
-		if (v.getId() == R.id.play_button) {
+		case R.id.play_button:
 			playButton.setVisibility(View.GONE);
 			if (mAudioPlay.isAudioPlaying()) {
 				countDownTimer.cancel();
 				mAudioPlay.stopPlayBack();
 			}
-			mAudioPlay = new AudioPlay(mFile, mContext,false);
+			mAudioPlay = new AudioPlay(mFile, mContext, isFromFav);
 			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000,timeDetailsChronometer,stopButton,playButton,mAudioPlay);
 			countDownTimer.start();
 			mAudioPlay.startPlayBack();
 			stopButton.setVisibility(View.VISIBLE);
-		}
-
-		if (v.getId() == R.id.stop_button) {
-
+			break;
+			
+		case R.id.stop_button:
 			stopButton.setVisibility(View.GONE);
 			mAudioPlay.stopPlayBack();
 			countDownTimer.cancel();
 			timeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 			playButton.setVisibility(View.VISIBLE);
+			break;
+			
+		default:
+			break;
 		}
-
 	}
 
 	
 	////// ****  Stops Audio PlayBack When Dialog will dismiss *****  ///////
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		if (mAudioPlay.isAudioPlaying()) {
+		if (mAudioPlay != null && mAudioPlay.isAudioPlaying()) {
 			mAudioPlay.stopPlayBack();
 		}
 	}
@@ -112,7 +118,7 @@ public class AudioPlayDialog extends Dialog implements android.view.View.OnClick
 	////****  Stops Audio PlayBack When Dialog will cancel *****  ///////
 	@Override
 	public void onCancel(DialogInterface dialog) {
-		if (mAudioPlay.isAudioPlaying()) {
+		if (mAudioPlay != null && mAudioPlay.isAudioPlaying()) {
 			mAudioPlay.stopPlayBack();
 		}
 	}

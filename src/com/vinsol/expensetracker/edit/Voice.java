@@ -55,10 +55,15 @@ public class Voice extends EditAbstract {
 			setGraphicsVoice();
 
 			if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA) && !setUnknown) {
-				File tempFile = fileHelper.getAudioFileEntry(entry.id);
-
+				File tempFile;
+				if(isFromFavorite) {
+					tempFile = fileHelper.getAudioFileFavorite(mFavoriteList.favId);
+				} else {
+					tempFile = fileHelper.getAudioFileEntry(entry.id);
+				}
+				
 				if (tempFile.canRead()) {
-					mAudioPlay = new AudioPlay(entry.id, this, false);
+					mAudioPlay = new AudioPlay(entry.id, this, isFromFavorite);
 					editStopButton.setVisibility(View.GONE);
 					editPlayButton.setVisibility(View.VISIBLE);
 					editRerecordButton.setVisibility(View.VISIBLE);
@@ -70,9 +75,11 @@ public class Voice extends EditAbstract {
 					editPlayButton.setVisibility(View.GONE);
 				}
 			} else {
-				mRecordingHelper = new RecordingHelper(entry.id + "", this);
-				mRecordingHelper.startRecording();
-				controlVoiceChronometer();
+				if(!isFromFavorite) {
+					mRecordingHelper = new RecordingHelper(fileHelper.getAudioFileEntry(entry.id), this);
+					mRecordingHelper.startRecording();
+					controlVoiceChronometer();
+				}
 			}
 		} else {
 			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
@@ -152,14 +159,14 @@ public class Voice extends EditAbstract {
 			
 			if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
 			
-			mAudioPlay = new AudioPlay(entry.id , this, false);
+			mAudioPlay = new AudioPlay(entry.id , this, isFromFavorite);
 			editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 			break;
 		
 		// // ***** if play button pressed ****** //////			
 		case R.id.edit_play_button:
 			// //// ******** to handle playback of recorded file ********* ////////
-			mAudioPlay = new AudioPlay(entry.id, this, false);
+			mAudioPlay = new AudioPlay(entry.id, this, isFromFavorite);
 
 			// ///// ******* Chronometer Starts Countdown ****** ///////
 			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, editTimeDetailsChronometer,editStopButton,editPlayButton,mAudioPlay);
@@ -195,7 +202,13 @@ public class Voice extends EditAbstract {
 
 			// //// ****** Restarts chronometer and recording ******* ////////
 			if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
-			mRecordingHelper = new RecordingHelper(entry.id + "", this);
+			File mPath;
+			if(isFromFavorite) {
+				mPath = fileHelper.getAudioFileFavorite(mFavoriteList.favId);
+			} else {
+				mPath = fileHelper.getAudioFileFavorite(entry.id);
+			}
+			mRecordingHelper = new RecordingHelper(mPath, this);
 			mRecordingHelper.startRecording();
 			editTimeDetailsChronometer.setBase(SystemClock.elapsedRealtime());
 			editTimeDetailsChronometer.start();
@@ -226,6 +239,14 @@ public class Voice extends EditAbstract {
 			return true;
 		else 
 			return false;
+	}
+	
+	@Override
+	protected boolean checkFavoriteComplete() {
+		if(editAmount != null && !editAmount.getText().equals("") && isChanged) {
+			return true;
+		}
+		return false;
 	}
 	
 }

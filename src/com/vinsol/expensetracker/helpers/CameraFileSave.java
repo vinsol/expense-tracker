@@ -41,10 +41,15 @@ public class CameraFileSave {
 	}
 	
 	// /////// ********* Resize original Image and save thumbnails ******** /////////////
-	public void resizeImageAndSaveThumbnails(String _filename) {
+	public void resizeImageAndSaveThumbnails(String _filename, boolean isFromFavorite) {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			filename = _filename;
-			File fullSizeImage = fileHelper.getCameraFileLargeEntry(filename);
+			File fullSizeImage;
+			if(isFromFavorite) {
+				fullSizeImage = fileHelper.getCameraFileLargeFavorite(filename);
+			} else {
+				fullSizeImage = fileHelper.getCameraFileLargeEntry(filename);
+			}
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inPurgeable = true;
 			options.inJustDecodeBounds = true;
@@ -66,12 +71,22 @@ public class CameraFileSave {
 				}
 					//Save small image
 				Bitmap bitmap = getBitmap(fullSizeImage, SMALL_MAX_WIDTH, SMALL_MAX_HEIGHT);
-				File smallImage = fileHelper.getCameraFileSmallEntry(filename);
+				File smallImage;
+				if(isFromFavorite) {
+					smallImage = fileHelper.getCameraFileSmallFavorite(filename);
+				} else {
+					smallImage = fileHelper.getCameraFileSmallEntry(filename);
+				}
 				saveImage(smallImage, bitmap);
 				bitmap.recycle();
 				//save Small thumbnail
 				bitmap = getBitmap(fullSizeImage, THUMBNAIL_MAX_WIDTH, THUMBNAIL_MAX_HEIGHT);
-				File thumbnail = fileHelper.getCameraFileThumbnailEntry(filename);
+				File thumbnail;
+				if(isFromFavorite) {
+					thumbnail = fileHelper.getCameraFileThumbnailFavorite(filename);
+				} else {
+					thumbnail = fileHelper.getCameraFileThumbnailFavorite(filename);
+				}
 				saveImage(thumbnail, bitmap);
 				bitmap.recycle();
 			}

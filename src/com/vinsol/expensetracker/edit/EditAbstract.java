@@ -358,15 +358,19 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	}
 	
 	private void saveFavoriteEntry() {
-		Favorite toSaveFav = getSaveFavoriteData();
-		////// ******* Update database if user added additional info *******///////
-		mDatabaseAdapter.open();
-		mDatabaseAdapter.editFavoriteTable(toSaveFav);
-		mDatabaseAdapter.close();
-		Bundle bundle = new Bundle();
-		bundle.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, getFavoriteListOnResult(toSaveFav));
-		setActivityResult(bundle);
-		finish();
+		if(checkFavoriteComplete()) {
+			Favorite toSaveFav = getSaveFavoriteData();
+			////// ******* Update database if user added additional info *******///////
+			mDatabaseAdapter.open();
+			mDatabaseAdapter.editFavoriteTable(toSaveFav);
+			mDatabaseAdapter.close();
+			Bundle bundle = new Bundle();
+			bundle.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, getFavoriteListOnResult(toSaveFav));
+			setActivityResult(bundle);
+			finish();
+		} else {
+			//TODO Show Dialog
+		}
 	}
 	
 	private void setActivityResult(Bundle bundle) {
@@ -600,6 +604,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mIntent.putExtras(tempBundle);
 		setResult(Activity.RESULT_CANCELED, mIntent);
 	}
-	
+	protected abstract boolean checkFavoriteComplete();
 	protected void deleteFile(){}
 }

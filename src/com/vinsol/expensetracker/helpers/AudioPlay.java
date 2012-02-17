@@ -83,8 +83,7 @@ public class AudioPlay {
 	// /////// ********** Check whether audio is playing or not ***********
 	// ////////////
 	public boolean isAudioPlaying() {
-		if (android.os.Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED)) {
+		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			return mPlayer.isPlaying();
 		} else {
 			return false;

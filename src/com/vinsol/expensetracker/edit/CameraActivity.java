@@ -54,7 +54,12 @@ public class CameraActivity extends EditAbstract {
 			if(setUnknown) {
 				startCamera();
 			}
-			File mFile = fileHelper.getCameraFileSmallEntry(entry.id);
+			File mFile;
+			if(isFromFavorite) {
+				mFile = fileHelper.getCameraFileSmallFavorite(mFavoriteList.favId);
+			} else {
+				mFile = fileHelper.getCameraFileSmallEntry(entry.id);
+			}
 			if (mFile.canRead() && mFile.exists()) {
 				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 				setImageResource(mDrawable);
@@ -128,7 +133,12 @@ public class CameraActivity extends EditAbstract {
 		/////// ******* Starting Camera to capture Image ******** //////////
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			Intent camera = new Intent(this, Camera.class);
-			File file = fileHelper.getCameraFileLargeEntry(entry.id);
+			File file;
+			if(isFromFavorite) {
+				file = fileHelper.getCameraFileLargeFavorite(mFavoriteList.favId);
+			} else {
+				file = fileHelper.getCameraFileLargeEntry(entry.id);
+			}
 			camera.putExtra(Constants.KEY_FULL_SIZE_IMAGE_PATH, file.toString());
 			startActivityForResult(camera, PICTURE_RESULT);
 		} else {
@@ -146,7 +156,12 @@ public class CameraActivity extends EditAbstract {
 			} else {
 				isChanged = false;
 				if(!setUnknown) {
-					File mFile = fileHelper.getCameraFileSmallEntry(entry.id);
+					File mFile;
+					if(isFromFavorite) {
+						mFile = fileHelper.getCameraFileSmallFavorite(mFavoriteList.favId);
+					} else {
+						mFile = fileHelper.getCameraFileSmallEntry(entry.id);
+					}
 					if (mFile.canRead()) {
 						Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
 						setImageResource(mDrawable);
@@ -174,7 +189,13 @@ public class CameraActivity extends EditAbstract {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			new CameraFileSave(CameraActivity.this).resizeImageAndSaveThumbnails(entry.id + "");
+			String id;
+			if(isFromFavorite) {
+				id = mFavoriteList.favId;
+			} else {
+				id = entry.id;
+			}
+			new CameraFileSave(CameraActivity.this).resizeImageAndSaveThumbnails(id + "",isFromFavorite);
 			return null;
 		}
 
@@ -246,5 +267,13 @@ public class CameraActivity extends EditAbstract {
 			return true;
 		else 
 			return false;
+	}
+	
+	@Override
+	protected boolean checkFavoriteComplete() {
+		if(editAmount != null && !editAmount.getText().equals("")) {
+			return true;
+		}
+		return false;
 	}
 }
