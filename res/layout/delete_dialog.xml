@@ -13,7 +13,6 @@
   	android:paddingLeft="10dp"
     android:paddingRight="20dp"
     android:paddingTop="10dp"
-    android:background="@drawable/audio_play_dialog_bg"
     >
         
     <TextView 

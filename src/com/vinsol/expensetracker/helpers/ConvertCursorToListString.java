@@ -14,6 +14,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.vinsol.expensetracker.DatabaseAdapter;
+import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
@@ -41,6 +42,15 @@ public class ConvertCursorToListString {
 				listFavorite.description = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TAG));
 				listFavorite.type = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TYPE));
 				listFavorite.location = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_LOCATION));
+				if(listFavorite.description == null || listFavorite.description.equals("")) {
+					if(listFavorite.type.equals(context.getString(R.string.text))) {
+						listFavorite.description = context.getString(R.string.finished_textentry);
+					} else if(listFavorite.type.equals(context.getString(R.string.voice))) {
+						listFavorite.description = context.getString(R.string.finished_voiceentry);
+					} else if(listFavorite.type.equals(context.getString(R.string.camera))) {
+						listFavorite.description = context.getString(R.string.finished_cameraentry);
+					}
+				}
 				mainlist.add(listFavorite);
 				cursor.moveToNext();
 			} while (!cursor.isAfterLast());
