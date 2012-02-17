@@ -8,11 +8,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item 
         android:id="@+id/manage_favorite"
-        android:title="Manage Favorites"/>
+        android:title="Manage Favorites"
+        android:icon="@drawable/menuitem_manage_favorite"/>
 	<item 
 	    android:id="@+id/settings"
-	    android:title="Settings"/>
+	    android:title="Settings"
+	    android:icon="@drawable/menuitem_settings"/>
 	<item 
 	    android:id="@+id/rate_app"
-	    android:title="Rate App"/>
+	    android:title="Rate App"
+	    android:icon="@drawable/menuitem_reviews"/>
 </menu>

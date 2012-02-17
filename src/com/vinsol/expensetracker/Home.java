@@ -205,17 +205,16 @@ public class Home extends Activity implements OnClickListener {
 	
 	private void createDatabaseEntry(int typeOfEntry) {
 		entry.id = insertToDatabase(typeOfEntry).toString();
-		bundle.putLong("_id", Long.parseLong(entry.id));
+		bundle.putLong(Constants.KEY_ID, Long.parseLong(entry.id));
 		
 		if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
-			bundle.putBoolean("setLocation", false);
+			bundle.putBoolean(Constants.KEY_SET_LOCATION, false);
 		} else {
-			bundle.putBoolean("setLocation", true);
+			bundle.putBoolean(Constants.KEY_SET_LOCATION, true);
 		}
 	}
 
-	// /////// ******** function to mark entry into the database and returns the
-	// id of the new entry ***** //////
+	///////// ******** function to mark entry into the database and returns the id of the new entry ***** //////
 	private Long insertToDatabase(int type) {
 		Entry list = new Entry();
 		Calendar mCalendar = Calendar.getInstance();
@@ -223,7 +222,7 @@ public class Home extends Activity implements OnClickListener {
 		if (timeInMillis == 0)
 			list.timeInMillis = mCalendar.getTimeInMillis();
 		else {
-			bundle.putLong("timeInMillis", timeInMillis);
+			bundle.putLong(Constants.KEY_TIME_IN_MILLIS, timeInMillis);
 			list.timeInMillis = timeInMillis;
 			finish();
 		}

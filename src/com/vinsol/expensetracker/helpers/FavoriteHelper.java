@@ -103,17 +103,12 @@ public class FavoriteHelper implements OnClickListener{
 	
 	private void favLayoutHandle(EditText amount, EditText description,String type, Boolean isChanged) {
 		boolean checkStatus;
-		switch (Integer.parseInt(type)) {
-		case R.string.text:
+		if(type.equals(activity.getString(R.string.text))) {
 			checkStatus = !amount.getText().toString().equals("") && !description.getText().toString().equals("") && !isChanged;
-			break;
-		case R.string.voice:
-		case R.string.camera:
+		} else if(type.equals(activity.getString(R.string.voice)) || type.equals(activity.getString(R.string.camera))){
 			checkStatus = !amount.getText().toString().equals("") && !isChanged;
-			break;
-		default:
+		} else {
 			checkStatus = false;
-			break;
 		}
 		if(checkStatus) {
 			showAddFavorite.setEnabled(true);
