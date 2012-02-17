@@ -31,16 +31,19 @@ public class ConfirmSaveEntryDialog extends Dialog implements android.view.View.
 		dialogMessage.setText(message);
 	}
 	
+	public void setButtonText(String yes,String no) {
+		Button saveEntryButton = (Button) findViewById(R.id.delete_dialog_yes);
+		Button discardButton = (Button) findViewById(R.id.delete_dialog_no);
+		saveEntryButton.setText(yes);
+		discardButton.setText(no);
+		saveEntryButton.setOnClickListener(this);
+		discardButton.setOnClickListener(this);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Button saveEntryButton = (Button) findViewById(R.id.delete_dialog_yes);
-		Button discardButton = (Button) findViewById(R.id.delete_dialog_no);
 		((CheckBox) findViewById(R.id.disable_delete_dialog_checkbox)).setVisibility(View.GONE);
-		saveEntryButton.setText(getContext().getString(R.string.save_entry));
-		discardButton.setText(getContext().getString(R.string.discard));
-		saveEntryButton.setOnClickListener(this);
-		discardButton.setOnClickListener(this);
 	}
 
 	@Override

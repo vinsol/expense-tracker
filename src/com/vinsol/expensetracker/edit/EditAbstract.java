@@ -369,7 +369,10 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			setActivityResult(bundle);
 			finish();
 		} else {
-			//TODO Show Dialog
+			ConfirmSaveEntryDialog confirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
+			confirmSaveEntryDialog.setMessage(getString(R.string.unfinish_fav_text));
+			confirmSaveEntryDialog.setButtonText(getString(R.string.cancel), getString(R.string.discard));
+			doConfirmDialogActionToDiscardOrDismiss(confirmSaveEntryDialog);
 		}
 	}
 	
@@ -539,6 +542,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 				//if coming from show page or listing
 				if(checkEntryModified()) {
 					mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
+					mConfirmSaveEntryDialog.setButtonText(getString(R.string.save_entry), getString(R.string.discard));
 					doConfirmDialogAction(mConfirmSaveEntryDialog);
 				} else {
 					finishAndSetResult();
@@ -548,12 +552,14 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 					deleteEntry();
 				} else {
 					mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
+					mConfirmSaveEntryDialog.setButtonText(getString(R.string.save_entry), getString(R.string.discard));
 					doConfirmDialogAction(mConfirmSaveEntryDialog);
 				}
 			}
 		} else {
 			if(checkFavoriteModified()) {
 				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
+				mConfirmSaveEntryDialog.setButtonText(getString(R.string.save_entry), getString(R.string.discard));
 				doConfirmDialogAction(mConfirmSaveEntryDialog);
 			} else {
 				super.onBackPressed();
@@ -577,6 +583,19 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 				} else {
 					finishAndSetResult();
 				}	
+			}
+		});
+	}
+	
+	private void doConfirmDialogActionToDiscardOrDismiss(final ConfirmSaveEntryDialog mConfirmSaveEntryDialog) {
+		mConfirmSaveEntryDialog.show();
+		mConfirmSaveEntryDialog.setOnDismissListener(new OnDismissListener() {
+			
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				if(!mConfirmSaveEntryDialog.isToSave()) {
+					finish();	
+				}
 			}
 		});
 	}
