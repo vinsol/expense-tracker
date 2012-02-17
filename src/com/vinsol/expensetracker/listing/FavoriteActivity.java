@@ -148,11 +148,33 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			}
 			
 			private boolean containsStringIgnoreCase(int i) {
-				return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).description).find()
-						|| Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).location).find()
-						|| Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).amount).find());
+				return isStringInDescription(i) || isStringInLocation(i) || isStringInAmount(i);
 			}
 		});
+	}
+	
+	private boolean isStringInDescription(int i) {
+		if(mList.get(i).description != null) {
+			return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).description).find());
+		} else {
+			return false;
+		}
+	}
+	
+	private boolean isStringInLocation(int i) {
+		if(mList.get(i).location != null) {
+			return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).location).find());
+		} else {
+			return false;
+		}
+	}
+	
+	private boolean isStringInAmount(int i) {
+		if(mList.get(i).amount != null) {
+			return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).amount).find());
+		} else {
+			return false;
+		}
 	}
 	
 	private OnScrollListener toggleSearchBoxListener = new OnScrollListener() {
@@ -231,25 +253,22 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			viewHolder.rowImageview.setFocusable(false);
 			viewHolder.rowImageview.setOnClickListener(new MyClickListener(tempFavorite));
 			viewHolder.rowFavoriteIcon.setVisibility(View.INVISIBLE);
+			
+			if(tempFavorite.amount != null && !tempFavorite.amount.equals("")) {
+				viewHolder.rowAmount.setText(new StringProcessing().getStringDoubleDecimal(tempFavorite.amount));
+			} else {
+				viewHolder.rowAmount.setText("?");
+			}
+			if(tempFavorite.location != null && !tempFavorite.location.equals("")) {
+				viewHolder.rowLocationTime.setText(tempFavorite.location);
+			}
 			if(tempFavorite.type.equals(getString(R.string.voice))) {
-				if(tempFavorite.description != null) {
-					if(!tempFavorite.description.equals("") &&!tempFavorite.description.equals(R.string.unfinished_voiceentry)) {
-						viewHolder.rowTag.setText(tempFavorite.description);
-					}
-				} else {
-					viewHolder.rowTag.setText(getString(R.string.finished_voiceentry));
-				}
-				if(tempFavorite.amount != null ) {
-					if(!tempFavorite.amount.equals("")) {
-						viewHolder.rowAmount.setText(tempFavorite.amount);
-					}
-				} else {
-					viewHolder.rowAmount.setText("?");
-				}
-				if(tempFavorite.location != null && !tempFavorite.location.equals("")) {
-					viewHolder.rowLocationTime.setText(tempFavorite.location);
-				}
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+					if(tempFavorite.description != null && !tempFavorite.description.equals("") &&!tempFavorite.description.equals(R.string.unfinished_voiceentry)) {
+						viewHolder.rowTag.setText(tempFavorite.description);
+					} else {
+						viewHolder.rowTag.setText(getString(R.string.finished_voiceentry));
+					}
 					try {
 						File mFile = fileHelper.getAudioFileFavorite(tempFavorite.favId);
 						if (mFile.canRead()) {
@@ -267,22 +286,10 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			}
 			else if(tempFavorite.type.equals(getString(R.string.camera))) {
 				
-				if(tempFavorite.description != null) {
-					if(!tempFavorite.description.equals("") && !tempFavorite.description.equals(R.string.unfinished_cameraentry)) {
-						viewHolder.rowTag.setText(tempFavorite.description);
-					}
+				if(tempFavorite.description != null && !tempFavorite.description.equals("") && !tempFavorite.description.equals(R.string.unfinished_cameraentry)) {
+					viewHolder.rowTag.setText(tempFavorite.description);
 				} else {
 					viewHolder.rowTag.setText(getString(R.string.finished_cameraentry));
-				}
-				if(tempFavorite.amount != null ) {
-					if(!tempFavorite.amount.equals("")) {
-						viewHolder.rowAmount.setText(tempFavorite.amount);
-					}
-				} else {
-					viewHolder.rowAmount.setText("?");
-				}
-				if(tempFavorite.location != null && !tempFavorite.location.equals("")) {
-					viewHolder.rowLocationTime.setText(tempFavorite.location);
 				}
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					try {
@@ -309,11 +316,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 				} else {
 					viewHolder.rowTag.setText(getString(R.string.finished_textentry));
 				}
-				if(tempFavorite.amount != null && !tempFavorite.amount.equals("")) {
-					viewHolder.rowAmount.setText(new StringProcessing().getStringDoubleDecimal(tempFavorite.amount));
-				} else {
-					viewHolder.rowAmount.setText("?");
-				}
 				
 				if(tempFavorite.description != null) {
 					if (!tempFavorite.description.equals("") && !tempFavorite.description.equals(getString(R.string.unfinished_textentry))) {
@@ -323,9 +325,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 					}
 				} else {
 					viewHolder.rowImageview.setImageResource(R.drawable.text_list_icon_no_tag);
-				}
-				if(tempFavorite.location != null && !tempFavorite.location.equals("")) {
-					viewHolder.rowLocationTime.setText(tempFavorite.location);
 				}
 			}
 			return convertView;
@@ -444,9 +443,10 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				try {
 					toInsert.type = type;
-					if(tag != null) {
-						if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_cameraentry)) && !tag.equals(getString(R.string.finished_cameraentry)))
-							toInsert.description = tag;
+					if(tag != null && !tag.equals("") && !tag.equals(getString(R.string.unfinished_cameraentry)) && !tag.equals(getString(R.string.finished_cameraentry))) {
+						toInsert.description = tag;
+					} else {
+						toInsert.description = getString(R.string.finished_cameraentry);
 					}
 					if(id == null) {
 						if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
@@ -521,9 +521,10 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				try {
 					toInsert.type = type;
-					if(tag != null) {
-						if(!tag.equals("") && !tag.equals(getString(R.string.unfinished_voiceentry)) && !tag.equals(getString(R.string.finished_voiceentry)))
-							toInsert.description = tag;
+					if(tag != null && !tag.equals("") && !tag.equals(getString(R.string.unfinished_voiceentry)) && !tag.equals(getString(R.string.finished_voiceentry))) {
+						toInsert.description = tag;
+					} else {
+						toInsert.description = getString(R.string.finished_voiceentry);
 					}
 					if(id == null) {
 						if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
