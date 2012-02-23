@@ -34,7 +34,7 @@
                 android:id="@+id/show_camera_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/audio_play_dialog_bg"
+                android:background="@drawable/dialog_bg"
                 android:gravity="center"
                 android:visibility="gone" >
                 
@@ -57,7 +57,7 @@
                 android:id="@+id/show_voice_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/audio_play_dialog_bg"
+                android:background="@drawable/dialog_bg"
                 android:visibility="gone" >   
                 
                 <Chronometer 

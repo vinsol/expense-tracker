@@ -73,7 +73,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/audio_play_dialog_bg"
+                android:background="@drawable/dialog_bg"
                 android:gravity="center"
                 android:visibility="gone"
                 >
@@ -120,7 +120,7 @@
                 android:id="@+id/edit_voice_details"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/audio_play_dialog_bg"
+                android:background="@drawable/dialog_bg"
                 android:layout_gravity="center"
                 android:visibility="gone"
                 >
