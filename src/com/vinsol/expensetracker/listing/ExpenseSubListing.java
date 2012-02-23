@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vinsol.expensetracker.Constants;
@@ -35,7 +36,16 @@ public class ExpenseSubListing extends ListingAbstract {
 	protected void initListView() {
 		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		intentExtras = getIntent().getExtras();
-		listingHeader = (TextView) findViewById(R.id.expense_listing_header_title);
+		ImageView listButton = (ImageView) findViewById(R.id.main_listview);
+		listButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(ExpenseSubListing.this, ExpenseListing.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
+		});
+		listingHeader = (TextView) findViewById(R.id.main_header_title);
 		Entry entry = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,entry.id,type);
 		mSubList = mConvertCursorToListString.getListStringParticularDate(entry.id);

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+/**
+ * Copyright (c) 2012 Vinayak Solutions Private Limited 
+ * See the file license.txt for copying permission.
+*/     
+ -->
+<!-- Header -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_header"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/topbar_bg" 
+    >
+
+    <ImageView
+        android:id="@+id/main_listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/list_icon_states" />
+
+    <TextView
+        android:id="@+id/main_header_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="@string/app_name"
+        android:textSize="20dip"
+        android:textStyle="bold"
+        android:textColor="@color/white" 
+        android:layout_marginLeft="10dip" />
+    
+</RelativeLayout>    

@@ -11,8 +11,8 @@
     android:orientation="vertical">
        
     <!-- Header -->
-    <include 
-        layout="@layout/expense_listing_header"/>  
+   	<include 
+   	    layout="@layout/home_header"/>   
     
     <!-- ListView -->
 	<include 

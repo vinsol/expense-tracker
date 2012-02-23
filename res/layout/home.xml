@@ -5,45 +5,19 @@
  * See the file license.txt for copying permission.
 */     
  -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
     
-   	<!-- Header -->
-    <RelativeLayout
-        android:id="@+id/main_header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/topbar_bg" 
-        >
-
-        <ImageView
-            android:id="@+id/main_listview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/list_icon_states" 
-            />
-
-        <TextView
-            android:id="@+id/main_header_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="@string/app_name"
-            android:textSize="20dip"
-            android:textStyle="bold"
-            android:textColor="@color/white" 
-            android:layout_marginLeft="10dip"
-            />
-    </RelativeLayout>    
+    <!-- Header -->
+   	<include 
+   	    layout="@layout/home_header"/>   
     
    	<!-- Body -->
     <RelativeLayout
         android:layout_height="fill_parent"
 	    android:layout_width="fill_parent"
-	    android:layout_below="@id/main_header"
-	    android:layout_above="@+id/versionName"
 	    android:background="@drawable/home_bg"
 	    android:id="@+id/main_body" 
 	    >
@@ -124,7 +98,7 @@
 	    </ScrollView>
 	
 	  	<TextView 
-		    android:id="@id/versionName"
+		    android:id="@+id/versionName"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:gravity="right"
@@ -151,4 +125,4 @@
 	            android:background="@drawable/save_reminder_states"  />
 	    </LinearLayout>
     </RelativeLayout>
-</RelativeLayout>
+</LinearLayout>
