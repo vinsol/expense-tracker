@@ -430,9 +430,13 @@ class SeparatedListAdapter extends BaseAdapter {
 	}
 	
 	private void setBackGround(ViewHolderBody holderBody,CheckEntryComplete mCheckEntryComplete,Entry mlist) {
-		if (mlist.id.equals(highlightID)) {
-			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_highlighted_entry_states);
-		} else if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
+//		if (mlist.id.equals(highlightID)) {
+//			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
+//			//TODO I dont like the background
+////			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_highlighted_entry_states);
+//		} else 
+		
+		if(!mCheckEntryComplete.isEntryComplete(mlist,mContext)) {
 			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_unfinished_states);
 		} else {
 			holderBody.rowListview.setBackgroundResource(R.drawable.listing_row_states);
