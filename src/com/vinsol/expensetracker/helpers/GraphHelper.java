@@ -93,6 +93,10 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
         graphGallery.setVisibility(View.VISIBLE);
         graphGallery.setAdapter(galleryAdapter);
         graphGallery.setSelection(galleryAdapter.getCount() - 1);
+		
+        for(ListDatetimeAmount listDate : mDataDateListGraph) {
+        	Log.d("mDataDateListGraph "+listDate.dateTime);
+        }
         graphGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override

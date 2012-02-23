@@ -83,11 +83,25 @@ public class ConvertCursorToListString {
 		boolean isTempAmountNull = false;
 		if (cursor.getCount() >= 1) {
 			cursor.moveToFirst();
+			Calendar mTempCalendar = Calendar.getInstance();
+			mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+			mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
+			if(!mDisplayDate.isCurrentWeek()) {
+				DisplayDate currentWeekDisplayDate = new DisplayDate(Calendar.getInstance());
+				listDatetimeAmount.dateTime = getValue(currentWeekDisplayDate, isGraph, id, type);
+				listDatetimeAmount.amount = "";
+				mainlist.add(listDatetimeAmount);
+				listDatetimeAmount = new ListDatetimeAmount();
+			}
 			do {
-				Calendar mTempCalendar = Calendar.getInstance();
 				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-				DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
+				mDisplayDate = new DisplayDate(mTempCalendar);
+				if(!mDisplayDate.isCurrentWeek()) {
+					DisplayDate currentWeekDisplayDate = new DisplayDate(Calendar.getInstance());
+					listDatetimeAmount.dateTime = getValue(currentWeekDisplayDate, isGraph, id, type);
+				}
 				listDatetimeAmount.dateTime = getValue(mDisplayDate, isGraph, id, type);
 				String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
 				if (tempAmount != null && !tempAmount.equals("")) {

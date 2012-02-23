@@ -41,7 +41,6 @@ import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
-import com.vinsol.expensetracker.utils.Log;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
 	
