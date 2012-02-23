@@ -10,10 +10,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageButton;
 
 import com.vinsol.expensetracker.R;
 
@@ -31,8 +31,8 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.delete_dialog);
-		Button yesButton = (Button) findViewById(R.id.delete_dialog_yes);
-		Button noButton = (Button) findViewById(R.id.delete_dialog_no);
+		ImageButton yesButton = (ImageButton) findViewById(R.id.delete_dialog_yes);
+		ImageButton noButton = (ImageButton) findViewById(R.id.delete_dialog_no);
 		checkBox = (CheckBox) findViewById(R.id.disable_delete_dialog_checkbox);
 		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			

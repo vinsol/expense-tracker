@@ -6,6 +6,6 @@
 */     
  -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:state_enabled="false" android:drawable="@drawable/favorite_disabled" />
-    <item android:state_enabled="true" android:drawable="@drawable/favorite_icon_states" />
+    <item android:state_enabled="false" android:color="@color/grey_light" />
+    <item android:state_enabled="true" android:color="@color/black" />
 </selector>

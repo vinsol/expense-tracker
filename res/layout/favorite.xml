@@ -38,9 +38,9 @@
 		<TextView 
 		    android:id="@+id/show_add_favorite_textView"
 		    android:layout_width="wrap_content"
+		    android:textColor="@color/favorite_color_states"
 		    android:layout_height="wrap_content"
 		    android:textSize="20dip"
-		    android:textColor="@color/black"
 		    android:visibility="gone" />
      
 	</LinearLayout>

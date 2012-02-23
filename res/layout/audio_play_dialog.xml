@@ -25,8 +25,7 @@
             android:textSize="50sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#4d4d4d"
-            />
+            android:textColor="#4d4d4d"/>
                 
 	</LinearLayout>
                 
@@ -50,8 +49,7 @@
             android:paddingLeft="10dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/voice_stop_states"
-            />
+            android:background="@drawable/voice_stop_states" />
                     
 		<Button
 			android:id="@+id/play_button"
@@ -63,8 +61,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/voice_play_states"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
                     
 		<Button
 			android:id="@+id/cancel_button"
@@ -76,8 +73,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/cancel_states"
-            android:visibility="visible"
-            />
+            android:visibility="visible" />
                     
 	</LinearLayout>
                     

@@ -5,7 +5,7 @@
  * See the file license.txt for copying permission.
 */     
  -->
-<LinearLayout
+<RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -13,6 +13,8 @@
   	android:paddingLeft="10dp"
     android:paddingRight="20dp"
     android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="@drawable/dialog_bg"
     >
         
     <TextView 
@@ -20,37 +22,41 @@
         android:layout_width="fill_parent"
         android:text="@string/delete_dialog_text"
         android:id="@+id/dialog_message"
-        />
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
     
     <CheckBox 
+        android:layout_below="@id/dialog_message"
         android:id="@+id/disable_delete_dialog_checkbox"
         android:checked="true"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:text="@string/delete_dialog_summary_enable"
-        />
+        android:text="@string/delete_dialog_summary_enable" 
+        android:textColor="@color/black"
+        android:textSize="14sp" />
     
     <LinearLayout
+        android:layout_below="@id/disable_delete_dialog_checkbox"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:orientation="horizontal"
+        android:gravity="center"
         >
-        <Button 
-            android:id="@+id/delete_dialog_yes"
-            android:layout_weight="1"
-            android:text="@string/yes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            />
         
-        <Button 
-            android:id="@+id/delete_dialog_no"
-            android:layout_weight="1"
-            android:text="@string/no"
+        <ImageButton 
+            android:id="@+id/delete_dialog_yes"
+            android:background="@drawable/yes_button_states"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            />
+            android:layout_marginRight="10dp"/>
+        
+        <ImageButton 
+            android:id="@+id/delete_dialog_no"
+            android:background="@drawable/no_button_states"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"/>
+        
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
