@@ -39,10 +39,10 @@ public class ExpenseListing extends TabActivity {
         Intent intentAll = new Intent(this, ExpenseListingAll.class);
         setExtras(tabHost, intentThisWeek, intentThisMonth, intentThisYear, intentAll, intentExtras);
         // Initialize a TabSpec for each tab and add it to the TabHost
-        TabSpec tabThisWeek = tabHost.newTabSpec(getString(R.string.tab_thisweek)).setIndicator("This Week").setContent(intentThisWeek);
-        TabSpec tabThisMonth = tabHost.newTabSpec(getString(R.string.tab_thismonth)).setIndicator("This Month").setContent(intentThisMonth);
-        TabSpec tabThisYear = tabHost.newTabSpec(getString(R.string.tab_thisyear)).setIndicator("This Year").setContent(intentThisYear);
-        TabSpec tabAll = tabHost.newTabSpec(getString(R.string.tab_all)).setIndicator("All").setContent(intentAll);
+        TabSpec tabThisWeek = tabHost.newTabSpec(getString(R.string.tab_thisweek)).setIndicator("This Week", getResources().getDrawable(R.drawable.tab_this_week)).setContent(intentThisWeek);
+        TabSpec tabThisMonth = tabHost.newTabSpec(getString(R.string.tab_thismonth)).setIndicator("This Month", getResources().getDrawable(R.drawable.tab_this_month)).setContent(intentThisMonth);
+        TabSpec tabThisYear = tabHost.newTabSpec(getString(R.string.tab_thisyear)).setIndicator("This Year", getResources().getDrawable(R.drawable.tab_this_year)).setContent(intentThisYear);
+        TabSpec tabAll = tabHost.newTabSpec(getString(R.string.tab_all)).setIndicator("All", getResources().getDrawable(R.drawable.tab_all)).setContent(intentAll);
         tabHost.addTab(tabThisWeek);
         tabHost.addTab(tabThisMonth);
         tabHost.addTab(tabThisYear);
