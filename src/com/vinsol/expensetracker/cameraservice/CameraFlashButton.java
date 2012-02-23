@@ -5,8 +5,6 @@
 
 package com.vinsol.expensetracker.cameraservice;
 
-import com.vinsol.expensetracker.R;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -16,6 +14,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 
 public class CameraFlashButton extends ImageView implements OnClickListener {
 
@@ -49,6 +50,7 @@ public class CameraFlashButton extends ImageView implements OnClickListener {
 	}
 	
 	private void Initialize() {
+		selectedResId = new SharedPreferencesHelper(getContext()).getSharedPreferences().getInt(getContext().getString(R.string.pref_key_flash_res_id), 0);
 		setImageDrawable(getResources().getDrawable(resId[selectedResId]));
 		setOnClickListener(this);
 	}
@@ -58,6 +60,7 @@ public class CameraFlashButton extends ImageView implements OnClickListener {
 		selectedResId++;
 		selectedResId%=3;
 		invalidate();
+		new SharedPreferencesHelper(getContext()).setFlashPrefs(selectedResId);
 		mCallbackInterface.onClickListener(selectedResId);
 	}
 	

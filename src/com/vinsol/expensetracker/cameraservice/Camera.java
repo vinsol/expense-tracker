@@ -56,6 +56,7 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 
 public class Camera extends Activity implements View.OnClickListener, ShutterButton.OnShutterButtonListener, SurfaceHolder.Callback {
 
@@ -415,6 +416,20 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         ((CameraButton) findViewById(R.id.btn_retake)).setOnClickListener(this);
         ((CameraFlashButton) findViewById(R.id.flash_button)).setButtonCallback(flashCB);
     }
+	
+	private String getFlashParameter(int resId) {
+		switch (resId) {
+		case 0:
+			return Parameters.FLASH_MODE_AUTO;
+		case 1:
+			return Parameters.FLASH_MODE_OFF;
+		case 2:
+			return Parameters.FLASH_MODE_ON;
+		default:
+			return Parameters.FLASH_MODE_AUTO;
+		}
+	}
+    
     private void setOrientationIndicator(int degree) {
     	((CameraFlashButton) findViewById(R.id.flash_button)).setDegree(degree);
     	((CameraButton) findViewById(R.id.btn_cancel)).setDegree(degree);
@@ -425,21 +440,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     private CameraFlashButtonCBInterface flashCB = new CameraFlashButtonCBInterface() {
 		@Override
 		public void onClickListener(int item) {
-			Parameters parameters = mCameraDevice.getParameters();
-			switch(item) {
-			case 0:
-				parameters.setFlashMode(Parameters.FLASH_MODE_AUTO);
-				mCameraDevice.setParameters(parameters);
-				break;
-			case 1:
-				parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
-				mCameraDevice.setParameters(parameters);
-				break;
-			case 2:
-				parameters.setFlashMode(Parameters.FLASH_MODE_ON);
-				mCameraDevice.setParameters(parameters);
-				break;
-			}
+			updateFlashModeParameter();
 		}		
 	};
 
@@ -978,8 +979,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 
     }
 
-    private boolean setCameraPictureSize(
-            String candidate, List<Size> supported, Parameters parameters) {
+    private boolean setCameraPictureSize(String candidate, List<Size> supported, Parameters parameters) {
         int index = candidate.indexOf('x');
         if (index == NOT_FOUND) return false;
         int width = Integer.parseInt(candidate.substring(0, index));
@@ -999,8 +999,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             initialCameraPictureSize(this, mParameters);
         } else {
             List<Size> supported = mParameters.getSupportedPictureSizes();
-            setCameraPictureSize(
-                    pictureSize, supported, mParameters);
+            setCameraPictureSize(pictureSize, supported, mParameters);
         }
         Size size = mParameters.getPictureSize();
         PreviewFrameLayout frameLayout = (PreviewFrameLayout) findViewById(R.id.frame_layout);
@@ -1010,11 +1009,16 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         if (optimalSize != null) {
             mParameters.setPreviewSize(optimalSize.width, optimalSize.height);
         }
-
         mParameters.setJpegQuality(85);
+        updateFlashModeParameter();
     }
     
-    private void initialCameraPictureSize(Context context, Parameters parameters) {
+    private void updateFlashModeParameter() {
+    	String flashMode = getFlashParameter(new SharedPreferencesHelper(this).getSharedPreferences().getInt(getString(R.string.pref_key_flash_res_id), 0));
+        mParameters.setFlashMode(flashMode);
+	}
+
+	private void initialCameraPictureSize(Context context, Parameters parameters) {
         List<Size> supported = parameters.getSupportedPictureSizes();
         if (supported == null) return;
         for (String candidate : context.getResources().getStringArray(R.array.pref_camera_picturesize_entryvalues)) {

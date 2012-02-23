@@ -13,7 +13,6 @@
     <TabHost 
         android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
-    	android:layout_below="@id/expense_listing_header"
     	android:id="@android:id/tabhost"
     	>
     	

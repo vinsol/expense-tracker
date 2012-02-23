@@ -31,4 +31,11 @@ public class SharedPreferencesHelper {
 		prefEditor.commit();	
 	}
 	
+	public void setFlashPrefs(int resId) {
+		SharedPreferences sharedPreferences = getSharedPreferences();
+		Editor prefEditor = sharedPreferences.edit();
+		prefEditor.putInt(context.getString(R.string.pref_key_flash_res_id), resId);
+		prefEditor.commit();	
+	}
+	
 }

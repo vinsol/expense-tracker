@@ -16,15 +16,13 @@
 		android:id="@+id/expense_listing_listview"
 	   	android:layout_height="fill_parent"
 	   	android:layout_width="fill_parent"
-	   	android:cacheColorHint="#00000000"
-	   	/>
+	   	android:cacheColorHint="#00000000" />
 
 	<!-- Body if no list item -->
     <RelativeLayout
         android:id="@+id/expense_listing_listview_no_item"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/expense_listing_header"
 		android:gravity="center"
 		android:visibility="gone" >
          
