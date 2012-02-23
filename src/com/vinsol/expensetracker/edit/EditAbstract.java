@@ -41,6 +41,7 @@ import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
+import com.vinsol.expensetracker.utils.Log;
 
 abstract class EditAbstract extends Activity implements OnClickListener {
 	
@@ -423,7 +424,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	}
 	
 	private boolean isTagModified(String description) {
-		if(editTag.getText().equals("")) {
+		if(editTag.getText().toString().equals("")) {
 			if(description.equals(getString(typeOfEntryFinished)) || description.equals(getString(typeOfEntryUnfinished)) || description.equals("")) {
 				return false;
 			} else {
