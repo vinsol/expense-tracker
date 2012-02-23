@@ -175,12 +175,12 @@
             	android:layout_marginRight="7dp"
                 android:layout_marginBottom="5dp" />
                 
-            <!-- description text view -->    
        		<TextView 
               	android:id="@+id/show_location"
               	android:layout_width="fill_parent"
               	android:layout_height="wrap_content"
               	android:gravity="top"
+              	android:text="@string/unknown_location"
               	android:textSize="20dip"
               	android:textColor="@color/black"
               	android:layout_marginLeft="7dp"
