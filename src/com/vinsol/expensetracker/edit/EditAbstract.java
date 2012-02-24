@@ -371,7 +371,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		} else {
 			ConfirmSaveEntryDialog confirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
 			confirmSaveEntryDialog.setMessage(getString(R.string.unfinish_fav_text));
-			confirmSaveEntryDialog.setButtonText(getString(R.string.cancel), getString(R.string.discard));
+			confirmSaveEntryDialog.setButtonBackground(R.drawable.cancel_states, R.drawable.discard_button_states);
 			doConfirmDialogActionToDiscardOrDismiss(confirmSaveEntryDialog);
 		}
 	}
@@ -412,7 +412,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			}
 		} else {
 			if(amount.equals("?") || amount.equals("")) {
-				return false;
+				return true;
 			} else {
 				if(Double.parseDouble(editAmount.getText().toString()) != Double.parseDouble(amount))
 					return true;
@@ -542,7 +542,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 				//if coming from show page or listing
 				if(checkEntryModified()) {
 					mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
-					mConfirmSaveEntryDialog.setButtonText(getString(R.string.save_entry), getString(R.string.discard));
+					mConfirmSaveEntryDialog.setButtonBackground(R.drawable.save_entry_button_dialog_states, R.drawable.discard_button_states);
 					doConfirmDialogAction(mConfirmSaveEntryDialog);
 				} else {
 					finishAndSetResult();
@@ -552,19 +552,34 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 					deleteEntry();
 				} else {
 					mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
-					mConfirmSaveEntryDialog.setButtonText(getString(R.string.save_entry), getString(R.string.discard));
-					doConfirmDialogAction(mConfirmSaveEntryDialog);
+					mConfirmSaveEntryDialog.setButtonBackground(R.drawable.save_entry_button_dialog_states, R.drawable.discard_button_states);
+					doConfirmDialogActionWithDelete(mConfirmSaveEntryDialog);
 				}
 			}
 		} else {
 			if(checkFavoriteModified()) {
 				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
-				mConfirmSaveEntryDialog.setButtonText(getString(R.string.save_entry), getString(R.string.discard));
+				mConfirmSaveEntryDialog.setButtonBackground(R.drawable.save_entry_button_dialog_states, R.drawable.discard_button_states);
 				doConfirmDialogAction(mConfirmSaveEntryDialog);
 			} else {
 				super.onBackPressed();
 			}
 		}
+	}
+	
+	private void doConfirmDialogActionWithDelete(final ConfirmSaveEntryDialog mConfirmSaveEntryDialog) {
+		mConfirmSaveEntryDialog.show();
+		mConfirmSaveEntryDialog.setOnDismissListener(new OnDismissListener() {
+			
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				if(mConfirmSaveEntryDialog.isToSave()) {
+					saveEntry();
+				} else {
+					deleteEntry();
+				}	
+			}
+		});
 	}
 	
 	private void doConfirmDialogAction(final ConfirmSaveEntryDialog mConfirmSaveEntryDialog) {
@@ -579,7 +594,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 					} else {
 						saveEntry();
 					}
-					
 				} else {
 					finishAndSetResult();
 				}	

@@ -8,7 +8,7 @@
 <resources>
 
     <string name="app_name">Expense Tracker</string>
-    <string name="version">Version 1.1</string>
+    <string name="version">Version 2</string>
     <string name="unknown">0</string>
     <string name="text">1</string>
     <string name="camera">2</string>

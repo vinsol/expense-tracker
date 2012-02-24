@@ -80,6 +80,7 @@
 	       	android:visibility="invisible"
 	       	android:layout_alignParentTop="true"
 	       	android:layout_alignParentRight="true"
+	       	android:layout_marginRight="5dp"
 	       	android:src="@drawable/listing_favorite_icon" />
 		
 		<!-- amount -->

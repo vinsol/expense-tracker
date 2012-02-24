@@ -32,11 +32,11 @@ public class ConfirmSaveEntryDialog extends Dialog implements android.view.View.
 		dialogMessage.setText(message);
 	}
 	
-	public void setButtonText(String yes,String no) {
+	public void setButtonBackground(int yesResId,int noResId) {
 		ImageButton saveEntryButton = (ImageButton) findViewById(R.id.delete_dialog_yes);
 		ImageButton discardButton = (ImageButton) findViewById(R.id.delete_dialog_no);
-		saveEntryButton.setBackgroundResource(R.drawable.save_entry_button_dialog_states);
-		discardButton.setBackgroundResource(R.drawable.discard_button_states);
+		saveEntryButton.setBackgroundResource(yesResId);
+		discardButton.setBackgroundResource(noResId);
 		saveEntryButton.setOnClickListener(this);
 		discardButton.setOnClickListener(this);
 	}
