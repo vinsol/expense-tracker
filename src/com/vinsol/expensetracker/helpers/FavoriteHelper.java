@@ -161,16 +161,15 @@ public class FavoriteHelper implements OnClickListener{
 						mDatabaseAdapter.open();
 						favID = mDatabaseAdapter.insertToFavoriteTable(mShowList);
 						mDatabaseAdapter.close();
-						
 						fileHelper.copyAllToFavorite(mShowList.id, favID.toString());
 						File mFile = fileHelper.getCameraFileLargeFavorite(favID.toString());
 						File mFileSmall = fileHelper.getCameraFileSmallFavorite(favID.toString());
 						File mFileThumbnail = fileHelper.getCameraFileThumbnailFavorite(favID.toString());
-						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
-						} else {
+						if(!mFile.canRead() && !mFileSmall.canRead() && !mFileThumbnail.canRead()) {
 							mDatabaseAdapter.open();
 							mDatabaseAdapter.deleteFavoriteTableEntryID(favID+"");
 							mDatabaseAdapter.close();
+							fileHelper.deleteAllFavoriteFiles(favID+"");
 						}
 					} catch (Exception e) {	
 					}

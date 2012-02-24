@@ -98,6 +98,7 @@ public class FileHelper {
 			out.close();
 		} catch (Exception e) {
 			//Do Nothing
+			e.printStackTrace();
 		}
 	}
 

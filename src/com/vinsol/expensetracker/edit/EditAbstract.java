@@ -129,7 +129,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 
 		if (intentExtras.containsKey(Constants.KEY_ID))
 			entry.id = intentExtras.getLong(Constants.KEY_ID)+"";
-
+		
 		if(intentExtras.containsKey(Constants.KEY_SET_LOCATION)) {
 			setLocation = intentExtras.getBoolean(Constants.KEY_SET_LOCATION);
 		}
@@ -396,7 +396,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		return false;
 	}
 	
-	protected Boolean checkFavoriteModified() {
+	private Boolean checkFavoriteModified() {
 		if (isTagModified(mFavoriteList.description) || isAmountModified(mFavoriteList.amount)) {
 			return true;
 		}
@@ -562,6 +562,9 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 				mConfirmSaveEntryDialog.setButtonBackground(R.drawable.save_entry_button_dialog_states, R.drawable.discard_button_states);
 				doConfirmDialogAction(mConfirmSaveEntryDialog);
 			} else {
+				if(doTaskIfChanged()) {
+					saveFavoriteEntry();
+				}
 				super.onBackPressed();
 			}
 		}
@@ -595,6 +598,11 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 						saveEntry();
 					}
 				} else {
+					if(isFromFavorite) {
+						if(doTaskIfChanged()) {
+							saveFavoriteEntry();
+						}
+					}
 					finishAndSetResult();
 				}	
 			}
@@ -637,6 +645,14 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mIntent.putExtras(tempBundle);
 		setResult(Activity.RESULT_CANCELED, mIntent);
 	}
-	protected abstract boolean checkFavoriteComplete();
+	private boolean checkFavoriteComplete(){
+		if(editAmount != null && editTag != null && !editAmount.getText().toString().equals("") && !editTag.getText().toString().equals("")) {
+			return true;
+		}
+		return false;
+	}
 	protected void deleteFile(){}
+	protected boolean doTaskIfChanged(){
+		return false;
+	}
 }

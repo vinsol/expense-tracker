@@ -19,12 +19,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -119,7 +118,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		}
 		mFavoriteListview.setOnItemClickListener(this);
 		searchBox = (EditText) findViewById(R.id.favorite_search);
-		mFavoriteListview.setOnScrollListener(toggleSearchBoxListener);
+		setSearchBoxVisibility();
+		
 		searchBox.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -153,6 +153,26 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		});
 	}
 	
+	private void setSearchBoxVisibility() {
+		DisplayMetrics metrics =  new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		int screenHeight = (metrics.heightPixels * 160)/metrics.densityDpi;
+		int rowHeight = (87 * 160)/metrics.densityDpi;
+		int headerHeight = (55 * 160)/metrics.densityDpi;
+		int dateBarHeight = (48 * 160)/metrics.densityDpi;
+		int favBarHeight = (44 * 160)/metrics.densityDpi;
+		int totalHeaderHeight = headerHeight + favBarHeight;
+		if(!isManaging) {
+			totalHeaderHeight = totalHeaderHeight + dateBarHeight; 
+		}
+		
+		if(screenHeight <  ((mAdapter.getCount() * rowHeight ) + totalHeaderHeight)) {
+			searchBox.setVisibility(View.VISIBLE);
+		} else {
+			searchBox.setVisibility(View.GONE);
+		}
+	}
+
 	private boolean isStringInDescription(int i) {
 		if(mList.get(i).description != null) {
 			return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).description).find());
@@ -177,25 +197,6 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		}
 	}
 	
-	private OnScrollListener toggleSearchBoxListener = new OnScrollListener() {
-		
-		@Override
-		public void onScrollStateChanged(AbsListView view, int scrollState) {
-			// do nothing
-		}
-		
-		@Override
-		public void onScroll(AbsListView view, int firstVisibleItem,int visibleItemCount, int totalItemCount) {
-			if(visibleItemCount < mAdapter.getCount()) {
-				searchBox.setVisibility(View.VISIBLE);
-			} else {
-				searchBox.setVisibility(View.GONE);
-			}
-			mFavoriteListview.setOnScrollListener(null);
-		}
-		
-	};
-	
 	private void favListEmpty() {
 		Toast.makeText(getApplicationContext(), "favorite list empty", Toast.LENGTH_LONG).show();
 		finish();
@@ -214,7 +215,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			}
 			if(Activity.RESULT_CANCELED == resultCode && intentExtras != null && intentExtras.containsKey(Constants.KEY_DATA_CHANGED) && position != -1) {
 				mAdapter.mList.remove(position);
-				mFavoriteListview.setOnScrollListener(toggleSearchBoxListener);
+				setSearchBoxVisibility();
 				if(mAdapter.mList.size() == 0) {
 					favListEmpty();
 				}
@@ -362,10 +363,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 					String id = tempFavorite.favId;
 					if (tempFavorite.type.equals(getString(R.string.voice))) {
 						File mFile = fileHelper.getAudioFileFavorite(id);
-						if (mFile.canRead()) {
-							new AudioPlayDialog(FavoriteActivity.this,id,"fav");
-						} else {
-						}
+						if (mFile.canRead()) {new AudioPlayDialog(FavoriteActivity.this,id,"fav");}
+						
 					} else if (tempFavorite.type.equals(getString(R.string.camera))) {
 						File mFile = fileHelper.getCameraFileLargeFavorite(id);
 						File mFileSmall = fileHelper.getCameraFileSmallFavorite(id);

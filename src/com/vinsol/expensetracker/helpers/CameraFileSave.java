@@ -85,7 +85,7 @@ public class CameraFileSave {
 				if(isFromFavorite) {
 					thumbnail = fileHelper.getCameraFileThumbnailFavorite(filename);
 				} else {
-					thumbnail = fileHelper.getCameraFileThumbnailFavorite(filename);
+					thumbnail = fileHelper.getCameraFileThumbnailEntry(filename);
 				}
 				saveImage(thumbnail, bitmap);
 				bitmap.recycle();

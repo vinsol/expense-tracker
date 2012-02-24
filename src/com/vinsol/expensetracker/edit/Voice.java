@@ -63,7 +63,11 @@ public class Voice extends EditAbstract {
 				}
 				
 				if (tempFile.canRead()) {
-					mAudioPlay = new AudioPlay(entry.id, this, isFromFavorite);
+					if(isFromFavorite) {
+						mAudioPlay = new AudioPlay(mFavoriteList.favId, this, isFromFavorite);
+					} else {
+						mAudioPlay = new AudioPlay(entry.id, this, isFromFavorite);
+					}
 					editStopButton.setVisibility(View.GONE);
 					editPlayButton.setVisibility(View.VISIBLE);
 					editRerecordButton.setVisibility(View.VISIBLE);
@@ -158,15 +162,22 @@ public class Voice extends EditAbstract {
 			editTimeDetailsChronometer.stop();
 			
 			if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
-			
-			mAudioPlay = new AudioPlay(entry.id , this, isFromFavorite);
+			if(isFromFavorite) {
+				mAudioPlay = new AudioPlay(mFavoriteList.favId , this, isFromFavorite);
+			} else {
+				mAudioPlay = new AudioPlay(entry.id , this, isFromFavorite);
+			}
 			editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 			break;
 		
 		// // ***** if play button pressed ****** //////			
 		case R.id.edit_play_button:
 			// //// ******** to handle playback of recorded file ********* ////////
-			mAudioPlay = new AudioPlay(entry.id, this, isFromFavorite);
+			if(isFromFavorite) {
+				mAudioPlay = new AudioPlay(mFavoriteList.favId, this, isFromFavorite);
+			} else {
+				mAudioPlay = new AudioPlay(entry.id, this, isFromFavorite);
+			}
 
 			// ///// ******* Chronometer Starts Countdown ****** ///////
 			countDownTimer = new MyCountDownTimer(mAudioPlay.getPlayBackTime(), 1000, editTimeDetailsChronometer,editStopButton,editPlayButton,mAudioPlay);
@@ -234,19 +245,7 @@ public class Voice extends EditAbstract {
 	}
 	
 	@Override
-	protected Boolean checkFavoriteModified() {
-		if(super.checkFavoriteModified() || isChanged)
-			return true;
-		else 
-			return false;
+	protected boolean doTaskIfChanged() {
+		return isChanged;
 	}
-	
-	@Override
-	protected boolean checkFavoriteComplete() {
-		if(editAmount != null && !editAmount.getText().equals("") && isChanged) {
-			return true;
-		}
-		return false;
-	}
-	
 }

@@ -28,7 +28,6 @@ public class AudioPlay {
 		mPlayer = new MediaPlayer();
 		fileHelper = new FileHelper();
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-			
 			mPath = getFile(isFav,id);
 			mPlayer.setScreenOnWhilePlaying(true);
 			mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
