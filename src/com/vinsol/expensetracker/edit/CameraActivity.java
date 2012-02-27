@@ -49,6 +49,35 @@ public class CameraActivity extends EditAbstract {
 		typeOfEntry = R.string.camera;
 		typeOfEntryFinished = R.string.finished_cameraentry;
 		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
+		
+		editHelper();
+		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
+			if(setUnknown) {
+				startCamera();
+			}
+			File mFile;
+			if(isFromFavorite) {
+				mFile = fileHelper.getCameraFileSmallFavorite(mFavoriteList.favId);
+			} else {
+				mFile = fileHelper.getCameraFileSmallEntry(entry.id);
+			}
+			if (mFile.canRead() && mFile.exists()) {
+				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
+				setImageResource(mDrawable);
+			} else {
+				editImageDisplay.setImageResource(R.drawable.no_image_small);
+			}
+		}
+		
+		setGraphicsCamera();
+		setClickListeners();
+
+		// ////// *********** Initializing Database Adaptor **********//////////
+		mDatabaseAdapter = new DatabaseAdapter(this);
+		dateViewString = dateBarDateview.getText().toString();
+		
+		
+		
 		if(entry.id == null ) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				
@@ -88,35 +117,9 @@ public class CameraActivity extends EditAbstract {
 				mDatabaseAdapter.close();
 			}
 		}
-		editHelper();
-		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
-			if(setUnknown) {
-				startCamera();
-			}
-			File mFile;
-			if(isFromFavorite) {
-				mFile = fileHelper.getCameraFileSmallFavorite(mFavoriteList.favId);
-			} else {
-				mFile = fileHelper.getCameraFileSmallEntry(entry.id);
-			}
-			if (mFile.canRead() && mFile.exists()) {
-				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
-				setImageResource(mDrawable);
-			} else {
-				editImageDisplay.setImageResource(R.drawable.no_image_small);
-			}
-		}
-		
-		setGraphicsCamera();
-		setClickListeners();
-
-		// ////// *********** Initializing Database Adaptor **********//////////
-		mDatabaseAdapter = new DatabaseAdapter(this);
-		dateViewString = dateBarDateview.getText().toString();
 		
 		if (!intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA))
 			startCamera();
-		
 	}
 
 	private void setImageResource(Drawable mDrawable) {
