@@ -202,15 +202,21 @@ public class FavoriteHelper implements OnClickListener{
 			showAddFavorite.setChecked(true);
 			showAddFavoriteTextView.setText("Remove from Favorite");
 			Toast.makeText(activity, "Added to Favorite", Toast.LENGTH_SHORT).show();
-		} else if(mShowList.id.equals(activity.getString(R.string.text))) {
+		} else if(mShowList.type.equals(activity.getString(R.string.text))) {
 				mDatabaseAdapter.open();
 				favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
 				mDatabaseAdapter.close();
+				if(favID == -1) {
+					favID = Long.parseLong(mShowList.favId);
+				}
 				doTaskAfter(favID);
 			} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				mDatabaseAdapter.open();
 				favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
 				mDatabaseAdapter.close();
+				if(favID == -1) {
+					favID = Long.parseLong(mShowList.favId);
+				}
 				fileHelper.deleteAllFavoriteFiles(favID.toString());
 				doTaskAfter(favID);
 			} else {

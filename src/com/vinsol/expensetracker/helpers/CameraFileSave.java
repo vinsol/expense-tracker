@@ -16,8 +16,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.utils.Log;
-
 public class CameraFileSave {
 	private String filename;
 
@@ -59,16 +57,6 @@ public class CameraFileSave {
 				FULL_SIZE_IMAGE_HEIGHT = options.outHeight;
 				if(fullSizeBitmap != null)
 					fullSizeBitmap.recycle();
-				Log.d("*********************************************");
-				Log.d("FULL_SIZE_IMAGE_WIDTH "+FULL_SIZE_IMAGE_WIDTH);
-				Log.d("FULL_SIZE_IMAGE_HEIGHT "+FULL_SIZE_IMAGE_HEIGHT);
-				Log.d("*********************************************");
-				
-				////////// ******* To handle Portrait Layout ******* /////////
-				if (FULL_SIZE_IMAGE_HEIGHT > FULL_SIZE_IMAGE_WIDTH) {
-					SMALL_MAX_WIDTH = 120;
-					SMALL_MAX_HEIGHT = 160;
-				}
 					//Save small image
 				Bitmap bitmap = getBitmap(fullSizeImage, SMALL_MAX_WIDTH, SMALL_MAX_HEIGHT);
 				File smallImage;

@@ -198,7 +198,9 @@ public class DatabaseAdapter {
 		Cursor cr = db.query(ENTRY_TABLE,  new String[] {
 				KEY_FAVORITE}, where, null, null, null, null);
 		cr.moveToFirst();
-		Long favId = cr.getLong(cr.getColumnIndex(KEY_FAVORITE));
+		Long favId = -1L ;
+		if(!cr.isAfterLast())
+		favId = cr.getLong(cr.getColumnIndex(KEY_FAVORITE));
 		cr.close();
 		return favId;
 	}

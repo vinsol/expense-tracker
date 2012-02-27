@@ -594,7 +594,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             new File(filepath).delete();
         }
         Bitmap bitmap = makeBitmap(data);
-        bitmap = rotate(bitmap, degree+mOrientationCompensation);
+        bitmap = rotate(bitmap, degree + getDisplayRotation());
         return bitmap;
     }
     
