@@ -13,10 +13,10 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
+
+import com.vinsol.expensetracker.utils.Log;
 
 public class CameraHolder {
-    private static final String TAG = "CameraHolder";
     private android.hardware.Camera mCameraDevice;
     private long mKeepBeforeTime = 0;
     private final Handler mHandler;
@@ -68,7 +68,7 @@ public class CameraHolder {
             try {
                 mCameraDevice = android.hardware.Camera.open();
             } catch (RuntimeException e) {
-                Log.e(TAG, "fail to connect Camera", e);
+                Log.d("fail to connect Camera"+ e);
                 throw new CameraHardwareException(e);
             }
             mParameters = mCameraDevice.getParameters();
@@ -76,7 +76,7 @@ public class CameraHolder {
             try {
                 mCameraDevice.reconnect();
             } catch (IOException e) {
-                Log.e(TAG, "reconnect failed.");
+                Log.d("reconnect failed.");
                 throw new CameraHardwareException(e);
             }
             mCameraDevice.setParameters(mParameters);

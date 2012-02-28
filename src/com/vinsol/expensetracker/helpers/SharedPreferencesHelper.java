@@ -38,4 +38,11 @@ public class SharedPreferencesHelper {
 		prefEditor.commit();	
 	}
 	
+	public void setBooleanPrefs(int keyId, boolean isFirstTime) {
+		SharedPreferences sharedPreferences = getSharedPreferences();
+		Editor prefEditor = sharedPreferences.edit();
+		prefEditor.putBoolean(context.getString(keyId), isFirstTime);
+		prefEditor.commit();	
+	}
+	
 }

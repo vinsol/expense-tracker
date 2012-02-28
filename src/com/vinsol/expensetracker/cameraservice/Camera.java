@@ -258,7 +258,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         checkStorage();
     }
 
-    private final class ShutterCallback implements android.hardware.Camera.ShutterCallback {
+    private class ShutterCallback implements android.hardware.Camera.ShutterCallback {
         public void onShutter() {
             mShutterCallbackTime = System.currentTimeMillis();
             mShutterLag = mShutterCallbackTime - mCaptureStartTime;
@@ -266,21 +266,21 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         }
     }
 
-    private final class PostViewPictureCallback implements PictureCallback {
+    private class PostViewPictureCallback implements PictureCallback {
     	public void onPictureTaken(byte [] data, android.hardware.Camera camera) {
             mPostViewPictureCallbackTime = System.currentTimeMillis();
         }
     }
 
-    private final class RawPictureCallback implements PictureCallback {
+    private class RawPictureCallback implements PictureCallback {
         public void onPictureTaken(byte [] rawData, android.hardware.Camera camera) {
             mRawPictureCallbackTime = System.currentTimeMillis();
         }
     }
 
-    private final class JpegPictureCallback implements PictureCallback {
+    private class JpegPictureCallback implements PictureCallback {
 
-        public void onPictureTaken( final byte [] jpegData, final android.hardware.Camera camera) {
+        public void onPictureTaken( byte [] jpegData, android.hardware.Camera camera) {
             if (mPausing) {return;}
             mJpegPictureCallbackTime = System.currentTimeMillis();
             if (mPostViewPictureCallbackTime != 0) {
@@ -300,7 +300,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         }
     }
 
-    private final class AutoFocusCallback implements android.hardware.Camera.AutoFocusCallback {
+    private class AutoFocusCallback implements android.hardware.Camera.AutoFocusCallback {
         public void onAutoFocus(boolean focused, android.hardware.Camera camera) {
             mFocusCallbackTime = System.currentTimeMillis();
             mAutoFocusTime = mFocusCallbackTime - mFocusStartTime;
@@ -322,7 +322,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         }
     }
 
-    private final class ErrorCallback implements android.hardware.Camera.ErrorCallback {
+    private class ErrorCallback implements android.hardware.Camera.ErrorCallback {
         public void onError(int error, android.hardware.Camera camera) {
             if (error == android.hardware.Camera.CAMERA_ERROR_SERVER_DIED) {
                  mMediaServerDied = true;
@@ -334,7 +334,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 
         byte[] mCaptureOnlyData;
 
-        public void storeImage(final byte[] data,android.hardware.Camera camera) {
+        public void storeImage(byte[] data,android.hardware.Camera camera) {
             mCaptureOnlyData = data;
             showPostCaptureAlert();
         }
@@ -467,19 +467,16 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         }
     }
 
-    private Bitmap makeBitmap(final byte[] jpegData) {
+    private Bitmap makeBitmap(byte[] jpegData) {
         try {
         	if(jpegData != null && jpegData.length > 0) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length, options);
-            if (options.mCancel || options.outWidth == -1
-                    || options.outHeight == -1) {
-                return null;
-            }
+            if (options.mCancel || options.outWidth == -1 || options.outHeight == -1) {return null;}
             options.inJustDecodeBounds = false;
-
             options.inDither = false;
+            options.inPurgeable = true;
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             return BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length, options);
         	}
@@ -586,7 +583,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         return degree;
     }
     
-    private Bitmap createCaptureBitmap(final byte[] data) {
+    private Bitmap createCaptureBitmap(byte[] data) {
         String filepath = mSaveUri.getPath();
         int degree = 0;
         if (saveDataToFile(filepath, data)) {
