@@ -262,6 +262,8 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 			}
 			if(tempFavorite.location != null && !tempFavorite.location.equals("")) {
 				viewHolder.rowLocationTime.setText(tempFavorite.location);
+			} else {
+				viewHolder.rowLocationTime.setText("unknown location");
 			}
 			if(tempFavorite.type.equals(getString(R.string.voice))) {
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
