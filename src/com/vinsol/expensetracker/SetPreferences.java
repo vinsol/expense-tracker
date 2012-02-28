@@ -32,11 +32,10 @@ public class SetPreferences extends PreferenceActivity {
 	}
 	
 	private void setDeletePrefs() {
+		mCheckBoxPreference.setTitle(getString(R.string.delete_dialog_title));
 		if(mCheckBoxPreference.isChecked()) {
-			mCheckBoxPreference.setTitle(getString(R.string.delete_dialog_title_enable));
 			mCheckBoxPreference.setSummary(getString(R.string.delete_dialog_summary_enable));
 		} else {
-			mCheckBoxPreference.setTitle(getString(R.string.delete_dialog_title_disable));
 			mCheckBoxPreference.setSummary(getString(R.string.delete_dialog_summary_disable));
 		}
 	}
