@@ -347,117 +347,122 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		List listString = new ArrayList<List<Entry>>();
 		for (int i = 0; i < mDataDateList.size(); i++) {
 			List<Entry> mList = new ArrayList<Entry>();
+			
 			String date = mDataDateList.get(i).dateTime;
-			Calendar toCHeckCal = Calendar.getInstance();
-			toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
-			toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
-			while (j < mSubList.size() && date.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
-				Entry templist = new Entry();
-				Calendar mCalendar = Calendar.getInstance();
-				mCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
-				mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
-				mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-				DisplayDate mDisplayDate = new DisplayDate(mCalendar);
-				if(!condition(mDisplayDate)) {
-					j = mSubList.size() + 1;
-					break;
-				}
-				if (type == R.string.sublist_thisweek) {
-					templist = getListCurrentWeek(j);
-					mList.add(templist);
-					j++;
-					if (j < mSubList.size()) {
-						toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
-						toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
-					} else {
+			if(j < mSubList.size()) {
+				Calendar toCHeckCal = Calendar.getInstance();
+				toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+				toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
+				while (j < mSubList.size() && date.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
+					Entry templist = new Entry();
+					Calendar mCalendar = Calendar.getInstance();
+					mCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
+					mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+					mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+					DisplayDate mDisplayDate = new DisplayDate(mCalendar);
+					if(!condition(mDisplayDate)) {
+						j = mSubList.size() + 1;
 						break;
 					}
-				} else if (type == R.string.sublist_thismonth || type == R.string.sublist_thisyear || type == R.string.sublist_all) {
-					toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
-					toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
-					while (mDataDateList.get(i).dateTime.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
-						////// Adding i+" "+j as id
-						Entry mTempSubList = new Entry();
-						mTempSubList.id = mSubList.get(j).id +",";
-						
-						///// Adding tag
-						Calendar tempCalendar = Calendar.getInstance();
-						tempCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
-						tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
-						tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-						mDisplayDate = new DisplayDate(tempCalendar);
-						DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
-						int isWeekOfMonth = tempCalendar.get(Calendar.WEEK_OF_MONTH);
-						int isCurrentMonth = tempCalendar.get(Calendar.MONTH);
-						int isCurrentYear = tempCalendar.get(Calendar.YEAR);
-						
-						mTempSubList.description = tempDisplayDate.getSubListTag(type);
-						
-						///// Adding Amount
-						double temptotalAmount = 0;
-						String totalAmountString = null;
-						boolean isTempAmountNull = false;
-						do {
-							String tempAmount = mSubList.get(j).amount;
-							if (tempAmount != null && !tempAmount.equals("")) {
-								try {
-									temptotalAmount += Double.parseDouble(tempAmount);
-								} catch (NumberFormatException e) {
-								}
-							} else {
-								isTempAmountNull = true;
-							}
-							j++;
-							if (j < mSubList.size()) {
-								toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
-								toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
-								tempCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
-								tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
-								tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-								tempDisplayDate = new DisplayDate(tempCalendar);
-								if(getLoopCondition(tempCalendar,isWeekOfMonth,isCurrentMonth,isCurrentYear))
-									mTempSubList.id = mTempSubList.id+mSubList.get(j).id+",";
-							} else {
-								break;
-							}
-						} while (getLoopCondition(tempCalendar,isWeekOfMonth,isCurrentMonth,isCurrentYear));
-						
-						
-						
-						if (isTempAmountNull) {
-							if (temptotalAmount != 0) {
-								totalAmountString = temptotalAmount + " ?";
-							} else {
-								totalAmountString = "?";
-							}
+					if (type == R.string.sublist_thisweek) {
+						templist = getListCurrentWeek(j);
+						mList.add(templist);
+						j++;
+						if (j < mSubList.size()) {
+							toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+							toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
 						} else {
-							totalAmountString = temptotalAmount + "";
-						}
-						mTempSubList.amount = mStringProcessing.getStringDoubleDecimal(totalAmountString);
-						mTempSubList.type = getString(type);
-						mTempSubList.timeInMillis = 0L;
-						if(highlightID != null) {
-							if (j <= mSubList.size()) {
-								if(mTempSubList.id.contains(highlightID)) {
-									startSubListing(mTempSubList);
-								}
-							}
-						}
-						mList.add(mTempSubList);
-						if (j == mSubList.size()) {
 							break;
 						}
+					} else if (type == R.string.sublist_thismonth || type == R.string.sublist_thisyear || type == R.string.sublist_all) {
+						toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+						toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
+						while (mDataDateList.get(i).dateTime.equals(new DisplayDate(toCHeckCal).getHeaderFooterListDisplayDate(type))) {
+							////// Adding i+" "+j as id
+							Entry mTempSubList = new Entry();
+							mTempSubList.id = mSubList.get(j).id +",";
+							
+							///// Adding tag
+							Calendar tempCalendar = Calendar.getInstance();
+							tempCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
+							tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+							tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+							mDisplayDate = new DisplayDate(tempCalendar);
+							DisplayDate tempDisplayDate = new DisplayDate(tempCalendar);
+							int isWeekOfMonth = tempCalendar.get(Calendar.WEEK_OF_MONTH);
+							int isCurrentMonth = tempCalendar.get(Calendar.MONTH);
+							int isCurrentYear = tempCalendar.get(Calendar.YEAR);
+							
+							mTempSubList.description = tempDisplayDate.getSubListTag(type);
+							
+							///// Adding Amount
+							double temptotalAmount = 0;
+							String totalAmountString = null;
+							boolean isTempAmountNull = false;
+							do {
+								String tempAmount = mSubList.get(j).amount;
+								if (tempAmount != null && !tempAmount.equals("")) {
+									try {
+										temptotalAmount += Double.parseDouble(tempAmount);
+									} catch (NumberFormatException e) {
+									}
+								} else {
+									isTempAmountNull = true;
+								}
+								j++;
+								if (j < mSubList.size()) {
+									toCHeckCal.setTimeInMillis(mSubList.get(j).timeInMillis);
+									toCHeckCal.setFirstDayOfWeek(Calendar.MONDAY);
+									tempCalendar.setTimeInMillis(mSubList.get(j).timeInMillis);
+									tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+									tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+									tempDisplayDate = new DisplayDate(tempCalendar);
+									if(getLoopCondition(tempCalendar,isWeekOfMonth,isCurrentMonth,isCurrentYear))
+										mTempSubList.id = mTempSubList.id+mSubList.get(j).id+",";
+								} else {
+									break;
+								}
+							} while (getLoopCondition(tempCalendar,isWeekOfMonth,isCurrentMonth,isCurrentYear));
+							
+							
+							
+							if (isTempAmountNull) {
+								if (temptotalAmount != 0) {
+									totalAmountString = temptotalAmount + " ?";
+								} else {
+									totalAmountString = "?";
+								}
+							} else {
+								totalAmountString = temptotalAmount + "";
+							}
+							mTempSubList.amount = mStringProcessing.getStringDoubleDecimal(totalAmountString);
+							mTempSubList.type = getString(type);
+							mTempSubList.timeInMillis = 0L;
+							if(highlightID != null) {
+								if (j <= mSubList.size()) {
+									if(mTempSubList.id.contains(highlightID)) {
+										startSubListing(mTempSubList);
+									}
+								}
+							}
+							mList.add(mTempSubList);
+							if (j == mSubList.size()) {
+								break;
+							}
+						}
 					}
-				}
-			}
-			if(j > mSubList.size()) {
+				} 
+				
+			} else {
 				break;
 			}
 			listString.add(mList);
 			@SuppressWarnings("rawtypes")
 			List tt = (List) listString.get(i);
-			dateListToSend.add(mDataDateList.get(i));
-			mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing_tab, tt), dateListToSend);
+			if(tt.size() > 0) {
+				dateListToSend.add(mDataDateList.get(i));
+				mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing_tab, tt), dateListToSend);
+			}
 		}
 		doOperationsOnListview();
 	}
