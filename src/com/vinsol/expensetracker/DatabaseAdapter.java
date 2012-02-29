@@ -235,14 +235,12 @@ public class DatabaseAdapter {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int prevVersion, int newVersion) {
-			Log.d("********** prevVersion "+prevVersion+" ********newVersion "+newVersion+" ********");
 			if(prevVersion == 1) {
 				db.execSQL("ALTER TABLE " + PREVIOUS_VERSION_ENTRY_TABLE +" RENAME TO "+ENTRY_TABLE);
 			}
 			if(prevVersion == 2) {
 				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_LOCATION+" TEXT");
 			}
-			Log.d("********** prevVersion "+prevVersion+" ********newVersion "+newVersion+" ********");
 		}
 		
 	}

@@ -124,11 +124,13 @@ public class CameraActivity extends EditAbstract {
 	}
 
 	private void setImageResource(Drawable mDrawable) {
+		float scale = this.getResources().getDisplayMetrics().density;
+		int width = (int) (84 * scale + 0.5f);
+		int height = (int) (111 * scale + 0.5f);			
 		if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
-			final float scale = this.getResources().getDisplayMetrics().density;
-			int width = (int) (84 * scale + 0.5f);
-			int height = (int) (111 * scale + 0.5f);			
 			editImageDisplay.setLayoutParams(new LayoutParams(width, height));
+		} else {
+			editImageDisplay.setLayoutParams(new LayoutParams(height, width));
 		}
 		editImageDisplay.setImageDrawable(mDrawable);
 	}
