@@ -130,8 +130,9 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 
 	protected void editHelper() {
 
-		if (intentExtras.containsKey(Constants.KEY_ID))
+		if (intentExtras.containsKey(Constants.KEY_ID)) {
 			entry.id = intentExtras.getLong(Constants.KEY_ID)+"";
+		}
 		
 		if(intentExtras.containsKey(Constants.KEY_SET_LOCATION)) {
 			setLocation = intentExtras.getBoolean(Constants.KEY_SET_LOCATION);

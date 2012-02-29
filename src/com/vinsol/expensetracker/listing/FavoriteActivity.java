@@ -20,7 +20,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -35,6 +39,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
@@ -151,6 +156,82 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 				return isStringInDescription(i) || isStringInLocation(i) || isStringInAmount(i);
 			}
 		});
+		
+		if(isManaging) {
+			registerForContextMenu(mFavoriteListview);
+		}
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		switch (v.getId()) {
+		
+			case R.id.edit_body_favorite_listview:
+	    	    String[] menuItems = getResources().getStringArray(R.array.listcontextmenu);
+	    	    for (int i = 0; i<menuItems.length; i++) {
+	    	    	menu.add(Menu.NONE, i, i, menuItems[i]);
+	    	    }
+				break;
+				
+			default:
+				break;
+		}
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+		
+  	    switch (item.getItemId()) {
+		//Edit Action	
+  	    case 0:
+  	    	FlurryAgent.onEvent(getString(R.string.context_item_edit));
+  	    	startEditPage(info.position);
+			break;
+			
+		//Delete Action
+  	    case 1:
+  	    	FlurryAgent.onEvent(getString(R.string.context_item_delete));
+  	    	removeItem(info.position);
+  	    	break;
+  	    	
+		default:
+			break;
+		}
+		return super.onContextItemSelected(item);
+	}
+	
+	private void startEditPage(int position) {
+		Favorite favoriteEntry = (Favorite) mAdapter.getItem(position);
+		Intent intent = null;
+		if(favoriteEntry.type.equals(getString(R.string.text))) {
+			intent = new Intent(this, TextEntry.class);
+		} else if(favoriteEntry.type.equals(getString(R.string.voice))) {
+			intent = new Intent(this, Voice.class);
+		} else if(favoriteEntry.type.equals(getString(R.string.camera))) {
+			intent = new Intent(this, CameraActivity.class);
+		}
+		Bundle intentExtras = new Bundle();
+		intentExtras.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, favoriteEntry);
+		intentExtras.putBoolean(Constants.KEY_IS_COMING_FROM_FAVORITE, true);
+		intentExtras.putInt(Constants.KEY_POSITION, position);
+		intent.putExtras(intentExtras);
+		startActivityForResult(intent, ACTIVITY_RESULT);
+	}
+	
+	private void removeItem(int position) {
+		mDatabaseAdapter.open();
+    	mDatabaseAdapter.deleteFavoriteTableEntryID(((Favorite)mAdapter.getItem(position)).favId);
+    	mDatabaseAdapter.editFavoriteIdEntryTable(((Favorite)mAdapter.getItem(position)).favId);
+    	mDatabaseAdapter.close();
+    	fileHelper.deleteAllFavoriteFiles(((Favorite)mAdapter.getItem(position)).favId);
+    	mAdapter.remove(mAdapter.getItem(position));
+    	if(mAdapter.getCount() > 0) {
+    		mAdapter.notifyDataSetChanged();
+    	} else {
+    		favListEmpty();
+    	}
 	}
 	
 	private void setSearchBoxVisibility() {
@@ -394,24 +475,10 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
-		Favorite favoriteEntry = (Favorite) adapter.getItemAtPosition(position);
 		if(isManaging) {
-			Intent intent = null;
-			if(favoriteEntry.type.equals(getString(R.string.text))) {
-				intent = new Intent(this, TextEntry.class);
-			} else if(favoriteEntry.type.equals(getString(R.string.voice))) {
-				intent = new Intent(this, Voice.class);
-			} else if(favoriteEntry.type.equals(getString(R.string.camera))) {
-				intent = new Intent(this, CameraActivity.class);
-			}
-			Bundle intentExtras = new Bundle();
-			intentExtras.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, favoriteEntry);
-			intentExtras.putBoolean(Constants.KEY_IS_COMING_FROM_FAVORITE, true);
-			intentExtras.putInt(Constants.KEY_POSITION, position);
-			intent.putExtras(intentExtras);
-			startActivityForResult(intent, ACTIVITY_RESULT);
+			startEditPage(position);
 		} else {
-			createNewEntry(favoriteEntry);
+			createNewEntry((Favorite) adapter.getItemAtPosition(position));
 		}
 	}
 
