@@ -32,7 +32,7 @@
         android:checked="true"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:text="@string/delete_dialog_summary" 
+        android:text="@string/delete_dialog_title" 
         android:textColor="@color/black"
         android:textSize="14sp" />
     

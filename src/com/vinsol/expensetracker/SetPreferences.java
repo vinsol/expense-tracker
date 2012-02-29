@@ -5,23 +5,26 @@
 
 package com.vinsol.expensetracker;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.view.Window;
 
 public class SetPreferences extends PreferenceActivity {
-
-	CheckBoxPreference mCheckBoxPreference;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
-		mCheckBoxPreference = (CheckBoxPreference) findPreference(getString(R.string.pref_key_delete_dialog));
+		getWindow().setBackgroundDrawableResource(R.color.white);
+		getListView().setBackgroundColor(Color.TRANSPARENT);
+		getListView().setCacheColorHint(Color.TRANSPARENT);
+		CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference) findPreference(getString(R.string.pref_key_delete_dialog));
 		mCheckBoxPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-	
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				return true;

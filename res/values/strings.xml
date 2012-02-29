@@ -62,11 +62,8 @@
     <string name="pref_key_run_first_time">prefKeyRunFirstTime</string>
     
     <!-- Preferences Title-->
-    <string name="delete_dialog_title">Dialog on delete</string>
-    
-    <!-- Preferences Summary -->
-    <string name="delete_dialog_summary">Show delete confirmation dialog</string>
-    
+    <string name="delete_dialog_title">Show delete confirmation dialog</string>
+        
     <!-- Dialog Text -->
     <string name="delete_dialog_text">Are you sure you want to delete ?</string>
     <string name="yes">Yes</string>

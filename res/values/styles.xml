@@ -23,4 +23,8 @@
         <item name="android:windowEnterAnimation">@anim/on_screen_hint_enter</item>
         <item name="android:windowExitAnimation">@anim/on_screen_hint_exit</item>
     </style>
+    <style name="PreferencesTheme">
+    	<item name="android:textColor">@color/black</item>
+    	<item name="android:textSize">16sp</item>
+	</style>
 </resources>
