@@ -9,6 +9,8 @@
     <PreferenceCategory android:title="Settings">
         <CheckBoxPreference
    			android:key="@string/pref_key_delete_dialog"
-   			android:defaultValue="true"/>
+   			android:defaultValue="true"
+   			android:title="@string/delete_dialog_title"
+   			android:summary="@string/delete_dialog_summary"/>
 	</PreferenceCategory>
 </PreferenceScreen>

@@ -65,8 +65,7 @@
     <string name="delete_dialog_title">Dialog on delete</string>
     
     <!-- Preferences Summary -->
-    <string name="delete_dialog_summary_disable">Click here to show dialogs on delete</string>
-    <string name="delete_dialog_summary_enable">Click here to hide dialogs on delete</string>
+    <string name="delete_dialog_summary">Show delete confirmation dialog</string>
     
     <!-- Dialog Text -->
     <string name="delete_dialog_text">Are you sure you want to delete ?</string>

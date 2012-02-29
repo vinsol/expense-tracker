@@ -66,7 +66,6 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 	}
 	
 	private void setDeletePrefs() {
-		checkBox.setText(getContext().getString(R.string.delete_dialog_title));
 		new SharedPreferencesHelper(getContext()).setDeletePrefs(checkBox.isChecked());
 	}
 	
