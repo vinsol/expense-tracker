@@ -10,21 +10,20 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
+import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.vinsol.expensetracker.R;
 
 public class ConfirmSaveEntryDialog extends Dialog implements android.view.View.OnClickListener {
 
-	private boolean toSave;
+	private boolean isOK;
 	
 	public ConfirmSaveEntryDialog(Context context) {
 		super(context);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.delete_dialog);
+		setTitle(context.getString(R.string.confirm_discard));
 	}
 	
 	public void setMessage(String message) {
@@ -32,32 +31,27 @@ public class ConfirmSaveEntryDialog extends Dialog implements android.view.View.
 		dialogMessage.setText(message);
 	}
 	
-	public void setButtonBackground(int yesResId,int noResId) {
-		ImageButton saveEntryButton = (ImageButton) findViewById(R.id.delete_dialog_yes);
-		ImageButton discardButton = (ImageButton) findViewById(R.id.delete_dialog_no);
-		saveEntryButton.setBackgroundResource(yesResId);
-		discardButton.setBackgroundResource(noResId);
-		saveEntryButton.setOnClickListener(this);
-		discardButton.setOnClickListener(this);
-	}
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		((CheckBox) findViewById(R.id.disable_delete_dialog_checkbox)).setVisibility(View.INVISIBLE);
-		((TextView) findViewById(R.id.dialog_message)).setTypeface(Typeface.DEFAULT);
+		((CheckBox) findViewById(R.id.disable_delete_dialog_checkbox)).setVisibility(View.GONE);
+		TextView dialogMessage = (TextView) findViewById(R.id.dialog_message);
+		dialogMessage.setTypeface(Typeface.DEFAULT);
+		dialogMessage.setPadding(0, 0, 0, 15);
+		((Button) findViewById(R.id.delete_dialog_ok)).setOnClickListener(this);
+		((Button) findViewById(R.id.delete_dialog_cancel)).setOnClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		
-		case R.id.delete_dialog_yes:
-			toSave = true;
+		case R.id.delete_dialog_ok:
+			isOK = true;
 			break;
 
-		case R.id.delete_dialog_no:
-			toSave = false;
+		case R.id.delete_dialog_cancel:
+			isOK = false;
 			break;
 			
 		default:
@@ -66,8 +60,8 @@ public class ConfirmSaveEntryDialog extends Dialog implements android.view.View.
 		dismiss();
 	}
 
-	public boolean isToSave() {
-		return toSave;
+	public boolean isOK() {
+		return isOK;
 	}
 
 }

@@ -379,7 +379,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		} else {
 			ConfirmSaveEntryDialog confirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
 			confirmSaveEntryDialog.setMessage(getString(R.string.unfinish_fav_text));
-			confirmSaveEntryDialog.setButtonBackground(R.drawable.cancel_states, R.drawable.discard_button_states);
 			doConfirmDialogActionToDiscardOrDismiss(confirmSaveEntryDialog);
 		}
 	}
@@ -545,12 +544,11 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	public void onBackPressed() {
 		FlurryAgent.onEvent(getString(R.string.back_pressed));
 		ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
+		mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
 		if(!isFromFavorite) {
 			if(intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE) || intentExtras.containsKey(Constants.KEY_POSITION)) {
 				//if coming from show page or listing
 				if(checkEntryModified()) {
-					mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
-					mConfirmSaveEntryDialog.setButtonBackground(R.drawable.save_entry_button_dialog_states, R.drawable.discard_button_states);
 					doConfirmDialogAction(mConfirmSaveEntryDialog);
 				} else {
 					finishAndSetResult();
@@ -559,15 +557,11 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 				if((editAmount.getText().toString().equals("") && editTag.getText().toString().equals("")) && (typeOfEntry == R.string.text || typeOfEntryFinished == R.string.finished_textentry || typeOfEntryUnfinished == R.string.unfinished_textentry)) {
 					deleteEntry();
 				} else {
-					mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
-					mConfirmSaveEntryDialog.setButtonBackground(R.drawable.save_entry_button_dialog_states, R.drawable.discard_button_states);
 					doConfirmDialogActionWithDelete(mConfirmSaveEntryDialog);
 				}
 			}
 		} else {
 			if(checkFavoriteModified()) {
-				mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
-				mConfirmSaveEntryDialog.setButtonBackground(R.drawable.save_entry_button_dialog_states, R.drawable.discard_button_states);
 				doConfirmDialogAction(mConfirmSaveEntryDialog);
 			} else {
 				if(doTaskIfChanged()) {
@@ -578,17 +572,16 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		}
 	}
 	
+	//Confirm
 	private void doConfirmDialogActionWithDelete(final ConfirmSaveEntryDialog mConfirmSaveEntryDialog) {
 		mConfirmSaveEntryDialog.show();
 		mConfirmSaveEntryDialog.setOnDismissListener(new OnDismissListener() {
 			
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				if(mConfirmSaveEntryDialog.isToSave()) {
-					saveEntry();
-				} else {
+				if(mConfirmSaveEntryDialog.isOK()) {
 					deleteEntry();
-				}	
+				}
 			}
 		});
 	}
@@ -599,20 +592,12 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				if(mConfirmSaveEntryDialog.isToSave()) {
-					if(isFromFavorite) {
+				if(mConfirmSaveEntryDialog.isOK()) {
+					if(isFromFavorite && doTaskIfChanged()) {
 						saveFavoriteEntry();
-					} else {
-						saveEntry();
-					}
-				} else {
-					if(isFromFavorite) {
-						if(doTaskIfChanged()) {
-							saveFavoriteEntry();
-						}
 					}
 					finishAndSetResult();
-				}	
+				}
 			}
 		});
 	}
@@ -623,7 +608,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				if(!mConfirmSaveEntryDialog.isToSave()) {
+				if(mConfirmSaveEntryDialog.isOK()) {
 					finish();	
 				}
 			}
@@ -653,17 +638,12 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		mIntent.putExtras(tempBundle);
 		setResult(Activity.RESULT_CANCELED, mIntent);
 	}
-	private boolean checkFavoriteComplete(){
-		if(editAmount != null && editTag != null && !editAmount.getText().toString().equals("") && !editTag.getText().toString().equals("")) {
-			return true;
-		}
-		return false;
-	}
 	
 	protected boolean doTaskIfChanged(){
 		return false;
 	}
 	
 	protected abstract void setDefaultTitle();
+	protected abstract boolean checkFavoriteComplete();
 	protected void deleteFile(){}
 }

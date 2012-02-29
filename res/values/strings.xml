@@ -65,15 +65,19 @@
     <string name="delete_dialog_title">Show delete confirmation dialog</string>
         
     <!-- Dialog Text -->
-    <string name="delete_dialog_text">Are you sure you want to delete ?</string>
+    <string name="delete_dialog_text">Delete this entry?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="backpress_new_entry_text">Unsaved data</string>
-    <string name="backpress_edit_entry_text">Data has been changed</string>
-    <string name="unfinish_fav_text">Unfinished entries not allowed</string>
+    <string name="ok">OK</string>
+    <string name="backpress_edit_entry_text">Discard this entry?</string>
+    <string name="unfinish_fav_text">Unfinished entry, Discard this entry?</string>
     <string name="save_entry">Save Entry</string>
     <string name="discard">Discard</string>
     <string name="cancel">Cancel</string>
+    
+    <!-- Dialog Title -->
+    <string name="confirm_discard">Confirm Discard</string>
+    <string name="confirm_delete">Confirm Delete</string>
     
     <!-- Tab Index -->
     <string name="tab_thisweek">This Week</string>

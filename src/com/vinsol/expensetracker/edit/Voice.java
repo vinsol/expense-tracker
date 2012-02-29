@@ -259,4 +259,12 @@ public class Voice extends EditAbstract {
 			((TextView)findViewById(R.id.header_title)).setText(getString(R.string.finished_voiceentry));
 		}
 	}
+	
+	@Override
+	protected boolean checkFavoriteComplete() {
+		if(editAmount != null && !editAmount.getText().toString().equals("")) {
+			return true;
+		}
+		return false;
+	}
 }

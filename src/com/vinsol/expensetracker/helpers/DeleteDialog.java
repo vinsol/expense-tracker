@@ -9,11 +9,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageButton;
 
 import com.vinsol.expensetracker.R;
 
@@ -24,15 +23,15 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 	
 	public DeleteDialog(Context context) { 
 		super(context);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setTitle(context.getString(R.string.confirm_delete));
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.delete_dialog);
-		ImageButton yesButton = (ImageButton) findViewById(R.id.delete_dialog_yes);
-		ImageButton noButton = (ImageButton) findViewById(R.id.delete_dialog_no);
+		Button yesButton = (Button) findViewById(R.id.delete_dialog_ok);
+		Button noButton = (Button) findViewById(R.id.delete_dialog_cancel);
 		checkBox = (CheckBox) findViewById(R.id.disable_delete_dialog_checkbox);
 		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
@@ -48,11 +47,11 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.delete_dialog_yes:
+		case R.id.delete_dialog_ok:
 			isDelete = true;
 			break;
 
-		case R.id.delete_dialog_no:
+		case R.id.delete_dialog_cancel:
 			isDelete = false;
 			break;
 		default:

@@ -14,7 +14,6 @@
     android:paddingRight="20dp"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
-    android:background="@drawable/dialog_bg"
     >
         
     <TextView 
@@ -22,7 +21,6 @@
         android:layout_width="fill_parent"
         android:text="@string/delete_dialog_text"
         android:id="@+id/dialog_message"
-        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold" />
     
@@ -33,7 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:text="@string/delete_dialog_title" 
-        android:textColor="@color/black"
         android:textSize="14sp" />
     
     <LinearLayout
@@ -44,16 +41,18 @@
         android:gravity="center"
         >
         
-        <ImageButton 
-            android:id="@+id/delete_dialog_yes"
-            android:background="@drawable/yes_button_states"
+        <Button 
+            android:id="@+id/delete_dialog_ok"
+            android:text="@string/ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginRight="10dp"/>
         
-        <ImageButton 
-            android:id="@+id/delete_dialog_no"
-            android:background="@drawable/no_button_states"
+        <Button 
+            android:id="@+id/delete_dialog_cancel"
+            android:text="@string/cancel"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"/>

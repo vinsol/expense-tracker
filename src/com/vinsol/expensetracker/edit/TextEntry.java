@@ -31,4 +31,12 @@ public class TextEntry extends EditAbstract {
 			((TextView)findViewById(R.id.header_title)).setText(getString(R.string.finished_textentry));
 		}
 	}
+	
+	@Override
+	protected boolean checkFavoriteComplete() {
+		if(editAmount != null && !editAmount.getText().toString().equals("") && editTag != null && !editTag.getText().toString().equals("")) {
+			return true;
+		}
+		return false;
+	}
 }
