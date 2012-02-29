@@ -127,12 +127,10 @@ public class BarGraph extends View {
 			RectF mRectF = new RectF(originX+value, topY-(int)((tempDouble/max)*verDiff), finalValue, topY);
 			canvas.drawRect(mRectF,paint);
 			canvas.drawText(horLabels.get(i), originX+value, topY+mTextViewTemp.getTextSize(), textPaint);
-			if(values.get(i) != null) {
-				if(values.get(i).contains("?")) {
-					textPaint.setTextAlign(Align.LEFT);
-					canvas.drawText("?", originX+value-(barWidth/2), topY-(int)((tempDouble/max)*verDiff)-5, textPaint);
-					textPaint.setTextAlign(Align.RIGHT);
-				}
+			if(values.get(i) != null && values.get(i).contains("?")) {
+				textPaint.setTextAlign(Align.LEFT);
+				canvas.drawText("?", originX+value-(barWidth/2), topY-(int)((tempDouble/max)*verDiff)-5, textPaint);
+				textPaint.setTextAlign(Align.RIGHT);
 			}
 		}
 	}
