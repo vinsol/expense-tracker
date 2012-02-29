@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+/**
+ * Copyright (c) 2012 Vinayak Solutions Private Limited 
+ * See the file license.txt for copying permission.
+*/     
+ -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_selected="true" android:drawable="@drawable/update_pressed" />
+    <item android:state_pressed="true" android:state_selected="false" android:drawable="@drawable/update_pressed" />
+    <item android:state_selected="false" android:drawable="@drawable/update" />
+</selector>

@@ -138,6 +138,10 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			setLocation = intentExtras.getBoolean(Constants.KEY_SET_LOCATION);
 		}
 		
+		if(intentExtras.containsKey(Constants.KEY_POSITION)) {
+			editSaveEntry.setBackgroundResource(R.drawable.update_entry_states);
+		}
+		
 		if (!isFromFavorite && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			mEditList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 			mFavoriteList = null;
