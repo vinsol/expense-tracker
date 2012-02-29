@@ -81,6 +81,7 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_page);
+		setDefaultTitle();
 		entry = new Entry();
 		fileHelper = new FileHelper();
 		editAmount = (EditText) findViewById(R.id.edit_amount);
@@ -655,4 +656,5 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	protected boolean doTaskIfChanged(){
 		return false;
 	}
+	protected abstract void setDefaultTitle();
 }

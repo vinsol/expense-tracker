@@ -13,6 +13,7 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.TextView;
 import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -247,5 +248,11 @@ public class Voice extends EditAbstract {
 	@Override
 	protected boolean doTaskIfChanged() {
 		return isChanged;
+	}
+	
+
+	@Override
+	protected void setDefaultTitle() {
+		((TextView)findViewById(R.id.header_title)).setText(getString(R.string.finished_voiceentry));
 	}
 }

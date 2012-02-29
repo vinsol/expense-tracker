@@ -7,6 +7,7 @@
 package com.vinsol.expensetracker.edit;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.vinsol.expensetracker.R;
 
@@ -21,4 +22,9 @@ public class TextEntry extends EditAbstract {
 		editHelper();
 	}
 	
+
+	@Override
+	protected void setDefaultTitle() {
+		((TextView)findViewById(R.id.header_title)).setText(getString(R.string.finished_textentry));
+	}
 }

@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
@@ -272,5 +273,10 @@ public class CameraActivity extends EditAbstract {
 	@Override
 	protected boolean doTaskIfChanged() {
 		return isChanged;
+	}
+	
+	@Override
+	protected void setDefaultTitle() {
+		((TextView)findViewById(R.id.header_title)).setText(getString(R.string.finished_cameraentry));
 	}
 }
