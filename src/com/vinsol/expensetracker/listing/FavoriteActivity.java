@@ -86,7 +86,7 @@ public class FavoriteActivity extends Activity implements OnItemClickListener {
 		
 		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_MANAGE_FAVORITE)) {
 			isManaging = true;
-			headerTitle.setText("Managing Favorites");
+			headerTitle.setText(getString(R.string.manage_favorites));
 			((LinearLayout)findViewById(R.id.edit_date_bar)).setVisibility(View.GONE);
 			((TextView)findViewById(R.id.edit_body_favorite_tag)).setText("Choose an entry to edit or delete");
 		} else {
