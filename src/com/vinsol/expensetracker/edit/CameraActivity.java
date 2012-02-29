@@ -39,6 +39,9 @@ public class CameraActivity extends EditAbstract {
 	private LinearLayout editCameraDetails;
 	private ImageView editImageDisplay;
 	private RelativeLayout editLoadProgress;
+	float scale;
+	int width;
+	int height;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,9 @@ public class CameraActivity extends EditAbstract {
 		typeOfEntryUnfinished = R.string.unfinished_cameraentry;
 		
 		editHelper();
+		scale = this.getResources().getDisplayMetrics().density;
+		width = (int) (84 * scale + 0.5f);
+		height = (int) (111 * scale + 0.5f);
 		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			if(setUnknown) {
 				startCamera();
@@ -123,10 +129,7 @@ public class CameraActivity extends EditAbstract {
 			startCamera();
 	}
 
-	private void setImageResource(Drawable mDrawable) {
-		float scale = this.getResources().getDisplayMetrics().density;
-		int width = (int) (84 * scale + 0.5f);
-		int height = (int) (111 * scale + 0.5f);			
+	private void setImageResource(Drawable mDrawable) {			
 		if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
 			editImageDisplay.setLayoutParams(new LayoutParams(width, height));
 		} else {
@@ -279,6 +282,10 @@ public class CameraActivity extends EditAbstract {
 	
 	@Override
 	protected void setDefaultTitle() {
-		((TextView)findViewById(R.id.header_title)).setText(getString(R.string.finished_cameraentry));
+		if(isFromFavorite) {
+			((TextView)findViewById(R.id.header_title)).setText(getString(R.string.edit_favorite)+" "+getString(R.string.finished_cameraentry));
+		} else {
+			((TextView)findViewById(R.id.header_title)).setText(getString(R.string.finished_cameraentry));
+		}
 	}
 }

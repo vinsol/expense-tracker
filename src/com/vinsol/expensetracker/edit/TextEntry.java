@@ -25,6 +25,10 @@ public class TextEntry extends EditAbstract {
 
 	@Override
 	protected void setDefaultTitle() {
-		((TextView)findViewById(R.id.header_title)).setText(getString(R.string.finished_textentry));
+		if(isFromFavorite) {
+			((TextView)findViewById(R.id.header_title)).setText(getString(R.string.edit_favorite)+" "+getString(R.string.finished_textentry));
+		} else {
+			((TextView)findViewById(R.id.header_title)).setText(getString(R.string.finished_textentry));
+		}
 	}
 }

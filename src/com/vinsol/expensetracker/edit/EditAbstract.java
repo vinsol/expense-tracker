@@ -81,7 +81,6 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_page);
-		setDefaultTitle();
 		entry = new Entry();
 		fileHelper = new FileHelper();
 		editAmount = (EditText) findViewById(R.id.edit_amount);
@@ -99,6 +98,9 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		////////********* Get intent extras ******** ////////////
 		intentExtras = getIntent().getExtras();
 		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_FAVORITE)) {isFromFavorite = true;}
+		
+		// Sets Title of activity
+		setDefaultTitle();
 	}
 	
 	private OnKeyListener focusTagOnEnter = new OnKeyListener() {
@@ -652,9 +654,11 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 		}
 		return false;
 	}
-	protected void deleteFile(){}
+	
 	protected boolean doTaskIfChanged(){
 		return false;
 	}
+	
 	protected abstract void setDefaultTitle();
+	protected void deleteFile(){}
 }

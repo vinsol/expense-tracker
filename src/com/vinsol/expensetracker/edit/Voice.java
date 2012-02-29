@@ -253,6 +253,10 @@ public class Voice extends EditAbstract {
 
 	@Override
 	protected void setDefaultTitle() {
-		((TextView)findViewById(R.id.header_title)).setText(getString(R.string.finished_voiceentry));
+		if(isFromFavorite) {
+			((TextView)findViewById(R.id.header_title)).setText(getString(R.string.edit_favorite)+" "+getString(R.string.finished_voiceentry));
+		} else {
+			((TextView)findViewById(R.id.header_title)).setText(getString(R.string.finished_voiceentry));
+		}
 	}
 }

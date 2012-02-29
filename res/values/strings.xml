@@ -54,6 +54,7 @@
     
     <!-- Activity Title -->
     <string name="manage_favorites">Manage Favorites</string>
+    <string name="edit_favorite">Edit Favorite</string>
     
     <!-- Preferences Key -->
     <string name="pref_key_delete_dialog">prefKeyDeleteDialog</string>
