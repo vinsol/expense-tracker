@@ -66,8 +66,7 @@ public class ExpenseTrackerApplication extends Application {
     	return applicationContext;
     }
 	
-	public void copyDirectory(File sourceLocation , File targetLocation) throws IOException {
-	        
+	private void copyDirectory(File sourceLocation , File targetLocation) throws IOException {
         if (sourceLocation.isDirectory()) {
             if (!targetLocation.exists()) {
                 targetLocation.mkdir();
@@ -93,9 +92,10 @@ public class ExpenseTrackerApplication extends Application {
         }
     }
 	
-	void deleteDirectory(File fileOrDirectory) throws IOException{
-	    if (fileOrDirectory.isDirectory())
+	private void deleteDirectory(File fileOrDirectory) throws IOException{
+	    if (fileOrDirectory.isDirectory()) {
 	        for (File child : fileOrDirectory.listFiles()) { deleteDirectory(child);}
+	    }
 	    fileOrDirectory.delete();
 	}
 

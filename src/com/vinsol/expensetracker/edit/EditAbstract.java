@@ -150,7 +150,9 @@ abstract class EditAbstract extends Activity implements OnClickListener {
 			entry.description = mEditList.description;
 			((LinearLayout)findViewById(R.id.favorite_layout)).setVisibility(View.GONE);
 			setText(entry.amount, entry.description);
-			editHeaderTitle.setText(new DisplayDate().getLocationDate(mEditList.timeInMillis, mEditList.location));
+			TextView locationTime = (TextView) findViewById(R.id.edit_location_time);
+			locationTime.setVisibility(View.VISIBLE);
+			locationTime.setText(new DisplayDate().getLocationDate(mEditList.timeInMillis, mEditList.location));
 		} else if(isFromFavorite && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			mEditList = null;
 			((LinearLayout)findViewById(R.id.edit_date_bar)).setVisibility(View.GONE);

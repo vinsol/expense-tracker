@@ -50,6 +50,18 @@
             android:background="@drawable/next_arrow_states" />
         
     </LinearLayout>
+    
+    <TextView 
+	    android:id="@+id/edit_location_time"
+	    android:layout_height="wrap_content"
+	    android:layout_width="fill_parent"
+	    android:background="@drawable/notification_bg"
+	    android:textColor="@color/white"
+	    android:textStyle="bold"
+	    android:gravity="center_vertical"
+	    android:paddingLeft="7dip"
+	    android:layout_below="@id/edit_date_bar"
+	    android:visibility="gone" />
         
     <!-- ScrollView for body -->
     <ScrollView
@@ -57,7 +69,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/edit_footer"
-        android:layout_below="@id/edit_date_bar"
+        android:layout_below="@id/edit_location_time"
         >
         
         <!-- Layout because Scroll View can contain only single child -->
@@ -88,8 +100,7 @@
                    	android:paddingLeft="2.5dp"
                    	android:paddingRight="2.5dp"
                    	android:paddingBottom="3dp"
-                   	android:scaleType="fitXY" 
-                   	/>
+                   	android:scaleType="fitXY" />
                 
                 <RelativeLayout 
                     android:id="@+id/edit_load_progress"
@@ -102,8 +113,7 @@
                    	
                 	<ProgressBar 
                 	    android:layout_height="wrap_content"
-                	    android:layout_width="wrap_content" 
-                	    />
+                	    android:layout_width="wrap_content" />
                 	
                 </RelativeLayout>
                 
