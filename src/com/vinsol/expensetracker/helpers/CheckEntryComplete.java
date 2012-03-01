@@ -17,7 +17,7 @@ public class CheckEntryComplete {
 	
 	private FileHelper fileHelper;
 	
-	public boolean isEntryComplete(Entry entryList,Context mContext) {
+	public boolean isEntryComplete(Entry entryList, Context mContext) {
 		fileHelper = new FileHelper();
 		if(isAmountValid(entryList.amount)) {
 			if (entryList.type.equals(mContext.getString(R.string.camera))) {
@@ -43,6 +43,7 @@ public class CheckEntryComplete {
 			return false;
 		}
 	}
+	
 	private boolean isTagValid(String tag,Context context) {
 		if(tag != null) {
 			if (tag.equals("") || tag.equals(context.getString(R.string.unfinished_textentry)) || tag.equals(context.getString(R.string.finished_textentry))) {
