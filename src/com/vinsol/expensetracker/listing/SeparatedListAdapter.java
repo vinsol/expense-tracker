@@ -25,7 +25,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,7 +39,6 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.utils.ImagePreview;
-import com.vinsol.expensetracker.utils.Log;
 
 class SeparatedListAdapter extends BaseAdapter {
 
@@ -82,9 +80,6 @@ class SeparatedListAdapter extends BaseAdapter {
 		for (Object section : sections.keySet()) {
 			Adapter adapter = sections.get(section);
 			int size = adapter.getCount() + 2;
-			Log.d("*******************************");
-			Log.d("position " +position);
-			Log.d("*******************************");
 			// check if position inside this section
 			
 			if (position == 0) {
@@ -279,7 +274,6 @@ class SeparatedListAdapter extends BaseAdapter {
 					holderBody.rowLocationTime.setVisibility(View.GONE);
 					holderBody.dividerImageView.setVisibility(View.GONE);
 				}
-				
 				return convertView;
 			}
 			position -= size;

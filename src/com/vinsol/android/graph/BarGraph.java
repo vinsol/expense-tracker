@@ -29,6 +29,8 @@ public class BarGraph extends View {
 	private int verDiff;
 	private int horDiff;
 	private ArrayList<String> horLabels;
+	private String suffix = "";
+	private String[] suffixList = {"B","M","K"};
 	
 	public BarGraph(Context context,ArrayList<String> valueList,ArrayList<String> horLabels) {
 		super(context);
@@ -84,7 +86,8 @@ public class BarGraph extends View {
 			interval = 3;
 		}
 		
-		max =interval*5;
+		max = interval*5;
+		if(max > 9999) {setSuffix();}
 		int value = 0;
 		paint.setTextAlign(Align.RIGHT);
 		TextView mTextView = new TextView(getContext());
@@ -102,6 +105,15 @@ public class BarGraph extends View {
 		}
 		paint = new Paint();
 		paint.setColor(Color.parseColor("#000000"));
+	}
+
+	private void setSuffix() {
+		for(String s : suffixList) {
+			if((double)max / getDivisor(s) >= 1) {
+				suffix = s;
+				return;
+			}
+		}
 	}
 
 	private void drawGraph(Canvas canvas) {
@@ -136,38 +148,25 @@ public class BarGraph extends View {
 	}
 
 	private String getVal(int value,int i) {
-		int divisor = getDivisor(value,i);
+		if(i == 0) {return value+"";}
+		int divisor = getDivisor(suffix);
 		String temp = (double)value/divisor+"";
 		if(temp.endsWith(".0")) {
 			temp = (String) temp.subSequence(0, temp.length()-2);
 		}
-		temp = temp + getSuffix(divisor,i);
+		temp = temp + suffix;
 		return temp;
 	}
-
-	private int getDivisor(int value,int i) {
-		int divisor = 1000000000;
-		while(divisor >= 1000) {
-			if((double)value / divisor >= 1 && i != 0) {
-				return divisor;
-			} else {
-				divisor /= 1000;
-			}
+	
+	private int getDivisor(String suffix) {
+		if(suffix.equals("K")) {
+			return 1000;
+		} else if(suffix.equals("M")) {
+			return 1000000;
+		} else if(suffix.equals("B")) {
+			return 1000000000;
 		}
 		return 1;
-	}
-
-	private String getSuffix(int divisor,int i) {
-		switch (divisor) {
-		case 1000000000:
-			return "B";
-		case 1000000:
-			return "M";
-		case 1000:
-			return "K";
-		default:
-			return "";
-		}
 	}
 
 	private void drawHorinzontalLine(Canvas canvas) {
