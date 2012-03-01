@@ -52,6 +52,10 @@
     <string name="context_item_edit">Context Item Edit</string>
     <string name="context_item_delete">Context Item Delete</string>
     
+    <!-- Toast Text -->
+    <string name="entry_discarded">Discarded</string>
+    <string name="entry_deleted">Deleted</string>
+    
     <!-- Activity Title -->
     <string name="manage_favorites">Manage Favorites</string>
     <string name="edit_favorite">Edit Favorite</string>

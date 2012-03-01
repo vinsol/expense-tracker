@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.vinsol.expensetracker.R;
@@ -49,6 +50,7 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 		switch (v.getId()) {
 		case R.id.delete_dialog_ok:
 			isDelete = true;
+			Toast.makeText(getContext(), getContext().getString(R.string.entry_deleted), Toast.LENGTH_SHORT).show();
 			break;
 
 		case R.id.delete_dialog_cancel:

@@ -13,9 +13,9 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.TextView;
 import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
@@ -23,7 +23,6 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.AudioPlay;
 import com.vinsol.expensetracker.helpers.RecordingHelper;
 import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
-import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
 public class Voice extends EditAbstract {
@@ -94,16 +93,14 @@ public class Voice extends EditAbstract {
 	
 	@Override
 	protected void onPause() {
-		// //// ***** Check whether audio is recording or not ******* ///////
-		// //// ****** If audio recording started then stop recording audio  ***** ///////
+		////// ****** stop recording & audio playback  ***** ///////
 		if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
 		if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
 		super.onPause();
 	}
 
 	private void setClickListeners() {
-		// ////// ******* Adding Click Listeners to UI Items ******** //////////
-
+		//////// ******* Adding Click Listeners to UI Items ******** //////////
 		editStopButton.setOnClickListener(this);
 		editPlayButton.setOnClickListener(this);
 		editRerecordButton.setOnClickListener(this);

@@ -61,6 +61,7 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 	protected Bundle intentExtras;
 	private DatabaseAdapter mDatabaseAdapter;
 	protected int type;
+	private int sectionNum = 0;
 
 	@Override
 	protected void onStart() {
@@ -461,7 +462,8 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 			List tt = (List) listString.get(i);
 			if(tt.size() > 0) {
 				dateListToSend.add(mDataDateList.get(i));
-				mSeparatedListAdapter.addSection(i + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing_tab, tt), dateListToSend);
+				mSeparatedListAdapter.addSection(sectionNum + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing_tab, tt), dateListToSend);
+				sectionNum++;
 			}
 		}
 		doOperationsOnListview();

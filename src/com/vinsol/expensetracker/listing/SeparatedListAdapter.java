@@ -309,11 +309,16 @@ class SeparatedListAdapter extends BaseAdapter {
 	public void remove(int toRemove) {
 		String sectionNumber = getSectionNumber(toRemove);
 		Entry prevEntry = (Entry) getItem(toRemove);
-		sections.get(sectionNumber).remove((Entry)getItem(toRemove));
-		if(sections.get(sectionNumber).getCount() == 0) {
-			removeSection(sectionNumber);
-		} else {
-			updateAmount(sectionNumber, prevEntry, null);
+		Log.d("******************************");
+		Log.d("sectionNumber "+sectionNumber+" \t prevEntry "+prevEntry+" sec "+sections.keySet());
+		Log.d("******************************");
+		if(sections.containsKey(sectionNumber)) {
+			sections.get(sectionNumber).remove((Entry)getItem(toRemove));
+			if(sections.get(sectionNumber).getCount() == 0) {
+				removeSection(sectionNumber);
+			} else {
+				updateAmount(sectionNumber, prevEntry, null);
+			}
 		}
 		notifyDataSetChanged();
 	}

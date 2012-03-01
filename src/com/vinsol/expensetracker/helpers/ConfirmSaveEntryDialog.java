@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vinsol.expensetracker.R;
 
@@ -48,6 +49,7 @@ public class ConfirmSaveEntryDialog extends Dialog implements android.view.View.
 		
 		case R.id.delete_dialog_ok:
 			isOK = true;
+			Toast.makeText(getContext(), getContext().getString(R.string.entry_discarded), Toast.LENGTH_SHORT).show();
 			break;
 
 		case R.id.delete_dialog_cancel:
