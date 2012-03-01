@@ -195,7 +195,7 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
 			if(intentExtras.containsKey(Constants.KEY_POSITION)) {
 				intentExtras.putBoolean(Constants.KEY_DATA_CHANGED, true);
-				setResultModifiedToListing();
+				setResultCanceled();
 			}
 			finish();
 		} else {
@@ -203,6 +203,12 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 		}
 	}
 	
+	private void setResultCanceled() {
+		Intent intent = new Intent();
+		intent.putExtras(intentExtras);
+		setResult(Activity.RESULT_CANCELED, intent);
+	}
+
 	private void showDeleteDialog() {
 		final DeleteDialog mDeleteDialog = new DeleteDialog(this);
 		mDeleteDialog.show();

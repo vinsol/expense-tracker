@@ -84,10 +84,8 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		mStringProcessing = new StringProcessing();
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		Bundle intentExtras = getIntent().getExtras();
-		if(intentExtras != null) {
-			if(intentExtras.containsKey(Constants.KEY_HIGHLIGHT)) {
-				highlightID = intentExtras.getString(Constants.KEY_HIGHLIGHT);
-			}
+		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_HIGHLIGHT)) {
+			highlightID = intentExtras.getString(Constants.KEY_HIGHLIGHT);
 		}
 		type = getType(intentExtras);
 	}
