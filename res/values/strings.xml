@@ -25,7 +25,6 @@
     <string name="unknown_location">Unknown location</string>
     
     <!-- XML Text -->
-    <string name="expense_list_header">Expenses List</string>
     <string name="no_expenses_text">No expenses available to show, Please add expenses</string>
     <string name="favorite_selection_text">Choose an entry to add to expenses</string>
     <string name="search">Search</string>
@@ -54,7 +53,6 @@
     
     <!-- Toast Text -->
     <string name="entry_discarded">Discarded</string>
-    <string name="entry_deleted">Deleted</string>
     
     <!-- Activity Title -->
     <string name="manage_favorites">Manage Favorites</string>
@@ -70,13 +68,9 @@
         
     <!-- Dialog Text -->
     <string name="delete_dialog_text">Delete this entry?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
     <string name="ok">OK</string>
     <string name="backpress_edit_entry_text">Discard this entry?</string>
     <string name="unfinish_fav_text">Unfinished entry, Discard this entry?</string>
-    <string name="save_entry">Save Entry</string>
-    <string name="discard">Discard</string>
     <string name="cancel">Cancel</string>
     
     <!-- Dialog Title -->
