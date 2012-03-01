@@ -55,6 +55,7 @@ public class ConvertCursorToListString {
 				cursor.moveToNext();
 			} while (!cursor.isAfterLast());
 		}
+		cursor.close();
 		adapter.close();
 		return mainlist;
 	}
@@ -142,6 +143,7 @@ public class ConvertCursorToListString {
 				}
 			} while (!cursor.isAfterLast());
 		}
+		cursor.close();
 		adapter.close();
 		return mainlist;
 	}
@@ -183,6 +185,7 @@ public class ConvertCursorToListString {
 				cursor.moveToNext();
 			} while (!cursor.isAfterLast());
 		}
+		cursor.close();
 		adapter.close();
 		return mainlist;
 	}
