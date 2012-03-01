@@ -61,31 +61,25 @@ public class Home extends Activity implements OnClickListener {
 		entry = new Entry();
 
 		////// ********* Adding Click Listeners to MainActivity ********** /////////
-
-		// opens text entry Activity
-		Button textButton = (Button) findViewById(R.id.main_text);
-		textButton.setOnClickListener(this);
+		
+		//opens text entry Activity
+		((Button) findViewById(R.id.main_text)).setOnClickListener(this);
 
 		// opens voice Activity
-		Button voiceButton = (Button) findViewById(R.id.main_voice);
-		voiceButton.setOnClickListener(this);
+		((Button) findViewById(R.id.main_voice)).setOnClickListener(this);
 
 		// opens Camera Activity
-		Button cameraButton = (Button) findViewById(R.id.main_camera);
-		cameraButton.setOnClickListener(this);
+		((Button) findViewById(R.id.main_camera)).setOnClickListener(this);
 
 		// opens Favorite Activity
-		Button favoriteButton = (Button) findViewById(R.id.main_favorite);
-		favoriteButton.setOnClickListener(this);
+		((Button) findViewById(R.id.main_favorite)).setOnClickListener(this);
 
 		// opens Save Reminder Activity
-		Button saveReminderButton = (Button) findViewById(R.id.main_save_reminder);
-		saveReminderButton.setOnClickListener(this);
+		((Button) findViewById(R.id.main_save_reminder)).setOnClickListener(this);
 
 		// opens ListView
-		ImageView showListingButton = (ImageView) findViewById(R.id.main_listview);
-		showListingButton.setOnClickListener(this);
-		
+		((ImageView) findViewById(R.id.main_listview)).setOnClickListener(this);
+
 		graphProgressBar = (ProgressBar) findViewById(R.id.graph_progress_bar);
 		graphProgressBar.setVisibility(View.VISIBLE);
 	}
@@ -207,7 +201,7 @@ public class Home extends Activity implements OnClickListener {
 		entry.id = insertToDatabase(typeOfEntry).toString();
 		bundle.putLong(Constants.KEY_ID, Long.parseLong(entry.id));
 		
-		if(LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+		if(LocationHelper.currentAddress != null && !LocationHelper.currentAddress.trim().equals("")) {
 			bundle.putBoolean(Constants.KEY_SET_LOCATION, false);
 		} else {
 			bundle.putBoolean(Constants.KEY_SET_LOCATION, true);
@@ -227,7 +221,7 @@ public class Home extends Activity implements OnClickListener {
 			finish();
 		}
 
-		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+		if (LocationHelper.currentAddress != null && !LocationHelper.currentAddress.trim().equals("")) {
 			list.location = LocationHelper.currentAddress;
 		}
 		list.type = getString(type);

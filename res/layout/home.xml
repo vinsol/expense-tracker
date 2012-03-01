@@ -5,123 +5,123 @@
  * See the file license.txt for copying permission.
 */     
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:background="@drawable/home_bg" >
     
     <!-- Header -->
    	<include 
+   	    android:id="@+id/main_header_include"
    	    layout="@layout/home_header"/>   
     
    	<!-- Body -->
-    <RelativeLayout
-        android:layout_height="fill_parent"
-	    android:layout_width="fill_parent"
-	    android:background="@drawable/home_bg"
-	    android:id="@+id/main_body" 
-	    >
         
-	    <!-- ScrollView for body-->
-	    <ScrollView
-	        android:layout_height="fill_parent"
-	        android:layout_width="fill_parent" 
-	        >
-	    
-	        <LinearLayout
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:orientation="vertical"
-	            android:gravity="center_horizontal"
-	            >
-	            
-	            <RelativeLayout 
-	                android:layout_width="fill_parent"
-	                android:layout_height="wrap_content"
-	                android:background="@drawable/graph_header"
-	                android:padding="5dp"
-	                >
+    <!-- ScrollView for body-->
+    <ScrollView
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent" 
+        android:fillViewport="true"
+        android:layout_above="@+id/main_footer"
+        android:layout_below="@id/main_header_include"
+        >
+    
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
+            
+            <RelativeLayout 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/graph_header"
+                android:padding="5dp"
+                >
+                
+	            <TextView 
+				    android:id="@+id/graph_header_textview_left"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textColor="@color/black"
+					android:textSize="16sp"
+					android:layout_alignParentLeft="true"
+					android:layout_marginRight="30dp"
+					android:maxLines="1"
+					android:gravity="right"
+					android:maxWidth="60sp"
+					android:scrollHorizontally="true"/>
 	                
-		            <TextView 
-					    android:id="@+id/graph_header_textview_left"
-					    android:layout_width="wrap_content"
-					    android:layout_height="wrap_content"
-					    android:textColor="@color/black"
-						android:textSize="16sp"
-						android:layout_alignParentLeft="true"
-						android:layout_marginRight="30dp"
-						android:maxLines="1"
-						android:gravity="right"
-						android:maxWidth="60sp"
-						android:scrollHorizontally="true"/>
-		                
-		            <TextView 
-					    android:id="@+id/graph_header_textview_center"
-					    android:layout_width="wrap_content"
-					    android:layout_height="wrap_content"
-					    android:textColor="@color/black"
-						android:textSize="16sp"
-						android:maxLines="1"
-						android:layout_centerInParent="true"
-						android:scrollHorizontally="true"
-						android:textStyle="bold"/>
-		            
-		            <TextView 
-					    android:id="@+id/graph_header_textview_right"
-					    android:layout_width="wrap_content"
-					    android:layout_height="wrap_content"
-					    android:textColor="@color/black"
-						android:textSize="16sp"
-						android:maxLines="1"
-						android:scrollHorizontally="true"
-						android:layout_marginLeft="30dp"
-						android:maxWidth="60sp"
-						android:gravity="left"
-						android:layout_alignParentRight="true" />
-		            
-	            </RelativeLayout>
+	            <TextView 
+				    android:id="@+id/graph_header_textview_center"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textColor="@color/black"
+					android:textSize="16sp"
+					android:maxLines="1"
+					android:layout_centerInParent="true"
+					android:scrollHorizontally="true"
+					android:textStyle="bold"/>
 	            
-	            <Gallery 
-                	android:id="@+id/graph_gallery"
-                	android:layout_width="fill_parent"
-                	android:layout_height="wrap_content"
-                	android:visibility="gone" />
+	            <TextView 
+				    android:id="@+id/graph_header_textview_right"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:textColor="@color/black"
+					android:textSize="16sp"
+					android:maxLines="1"
+					android:scrollHorizontally="true"
+					android:layout_marginLeft="30dp"
+					android:maxWidth="60sp"
+					android:gravity="left"
+					android:layout_alignParentRight="true" />
 	            
-	            <include 
-	                layout="@layout/graph"/>
-	            	
+            </RelativeLayout>
+            
+            <Gallery 
+               	android:id="@+id/graph_gallery"
+               	android:layout_width="fill_parent"
+               	android:layout_height="wrap_content"
+               	android:visibility="gone" />
+            
+            <include 
+                layout="@layout/graph"/>
+            	
+            <RelativeLayout 
+                android:layout_width="fill_parent"
+     			android:layout_height="fill_parent">
 	       		<include 
 	     			layout="@layout/new_entry_icons_grid" />
 	    		
-			</LinearLayout>  
-	    </ScrollView>
-	
-	  	<TextView 
-		    android:id="@+id/versionName"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:gravity="right"
-		    android:layout_alignParentRight="true"
-		    android:textSize="12sp"
-		    android:textColor="@color/grey" 
-		    android:text="@string/version"
-		    android:layout_marginRight="5dp" 
-		    android:layout_above="@+id/main_footer"/>
-	  	
-	    <!-- Footer -->
-	    <LinearLayout
-	        android:id="@id/main_footer"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:gravity="center"
-	        android:layout_alignParentBottom="true"
-	        android:background="@drawable/bottom_bar_bg"
-	        >
-	        <Button
-	            android:id="@+id/main_save_reminder"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:background="@drawable/save_reminder_states"  />
-	    </LinearLayout>
-    </RelativeLayout>
-</LinearLayout>
+	       		<TextView 
+				    android:id="@+id/versionName"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_alignParentBottom="true"
+				    android:layout_alignParentRight="true"
+				    android:textSize="12sp"
+				    android:textColor="@color/grey" 
+				    android:text="@string/version"
+				    android:layout_marginRight="5dp" />
+       		</RelativeLayout>
+		</LinearLayout>  
+    </ScrollView>
+
+    
+   	<!-- Footer -->
+    <LinearLayout
+        android:id="@id/main_footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_bar_bg"
+        >
+        <Button
+            android:id="@+id/main_save_reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/save_reminder_states"  />
+    </LinearLayout>
+</RelativeLayout>
