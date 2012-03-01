@@ -86,11 +86,11 @@
 		<!-- amount -->
 	    <TextView
 	        android:id="@id/row_amount"
-	        android:layout_width="50dp"
+	        android:layout_width="56dp"
 	        android:layout_height="wrap_content"
 	    	android:layout_alignParentRight="true"
 	    	android:gravity="right"    
-	        android:maxLength="12"
+	        android:maxLength="14"
 	        android:maxLines="2"
 	        android:textColor="@color/black"
 	        android:textStyle="bold"
