@@ -247,8 +247,9 @@ abstract class ShowAbstract extends Activity implements OnClickListener {
 
 	@Override
 	public void onBackPressed() {
-		FlurryAgent.onEvent(getString(R.string.back_pressed));
-		setResultModifiedToListing();
+		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_DATA_CHANGED)) {
+			setResultModifiedToListing();	
+		}
 		finish();
 		super.onBackPressed();
 	}

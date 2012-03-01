@@ -266,7 +266,10 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 		mDatabaseAdapter.open();
     	mDatabaseAdapter.deleteEntryTableEntryID(((Entry)mSeparatedListAdapter.getItem(position)).id);
     	mDatabaseAdapter.close();
-    	mSeparatedListAdapter.remove(position);
+    	if(!mSeparatedListAdapter.remove(position)) {
+    		initListView();
+    		return;
+    	}
     	setModifiedValues();
     	noItemLayout();
 	}
@@ -422,8 +425,6 @@ abstract class ListingAbstract extends Activity implements OnItemClickListener {
 									break;
 								}
 							} while (getLoopCondition(tempCalendar,isWeekOfMonth,isCurrentMonth,isCurrentYear));
-							
-							
 							
 							if (isTempAmountNull) {
 								if (temptotalAmount != 0) {

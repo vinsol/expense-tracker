@@ -301,7 +301,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		return -1;
 	}
 
-	public void remove(int toRemove) {
+	public boolean remove(int toRemove) {
 		String sectionNumber = getSectionNumber(toRemove);
 		Entry prevEntry = (Entry) getItem(toRemove);
 		if(sections.containsKey(sectionNumber)) {
@@ -311,8 +311,10 @@ class SeparatedListAdapter extends BaseAdapter {
 			} else {
 				updateAmount(sectionNumber, prevEntry, null);
 			}
+			return true;
 		}
 		notifyDataSetChanged();
+		return false;
 	}
 	
 	public void update(Entry updatedEntry,int toUpdate) {
