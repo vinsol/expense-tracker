@@ -25,6 +25,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -309,9 +310,6 @@ class SeparatedListAdapter extends BaseAdapter {
 	public void remove(int toRemove) {
 		String sectionNumber = getSectionNumber(toRemove);
 		Entry prevEntry = (Entry) getItem(toRemove);
-		Log.d("******************************");
-		Log.d("sectionNumber "+sectionNumber+" \t prevEntry "+prevEntry+" sec "+sections.keySet());
-		Log.d("******************************");
 		if(sections.containsKey(sectionNumber)) {
 			sections.get(sectionNumber).remove((Entry)getItem(toRemove));
 			if(sections.get(sectionNumber).getCount() == 0) {
@@ -391,7 +389,6 @@ class SeparatedListAdapter extends BaseAdapter {
 								Intent intent = new Intent(mContext, ImagePreview.class);
 								intent.putExtra(Constants.KEY_ID, mListenerList.id);
 								mContext.startActivity(intent);
-
 							}
 						}
 					}

@@ -16,7 +16,7 @@
         android:id="@+id/expense_listing_list_date_amount_view"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:background="@drawable/list_date_bg"
+        android:background="@drawable/date_bar_bg_wo_shadow"
         android:gravity="center_vertical"
         >
         

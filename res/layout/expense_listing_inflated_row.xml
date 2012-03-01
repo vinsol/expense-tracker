@@ -98,10 +98,4 @@
 	        android:layout_centerVertical="true" />
 	    
 	</RelativeLayout>
-	
-	<ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-    	android:layout_alignParentBottom="true"
-        android:background="@drawable/list_divider" />
 </RelativeLayout>
