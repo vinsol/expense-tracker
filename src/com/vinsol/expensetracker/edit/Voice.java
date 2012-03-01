@@ -94,22 +94,10 @@ public class Voice extends EditAbstract {
 	
 	@Override
 	protected void onPause() {
-
 		// //// ***** Check whether audio is recording or not ******* ///////
 		// //// ****** If audio recording started then stop recording audio  ***** ///////
-		try {
-			if (mRecordingHelper.isRecording()) {
-				mRecordingHelper.stopRecording();
-			}
-		} catch (Exception e) {
-			Log.d("Recording Stops");
-		}
-		try {
-			if (mAudioPlay.isAudioPlaying())
-				mAudioPlay.stopPlayBack();
-		} catch (Exception e) {
-			Log.d("Audio Play Stops");
-		}
+		if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
+		if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
 		super.onPause();
 	}
 
@@ -151,26 +139,8 @@ public class Voice extends EditAbstract {
 		
 		// // ***** if stop button pressed ****** //////
 		case R.id.edit_stop_button:
-			if(countDownTimer != null){countDownTimer.cancel();}
-
-			// //// ****** Handles UI items on button click ****** ///////
-			editStopButton.setVisibility(View.GONE);
-			editPlayButton.setVisibility(View.VISIBLE);
-			editRerecordButton.setVisibility(View.VISIBLE);
-
-			// //// ******* Stop Recording Audio and stop chronometer ******** ////////
-			if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
-			editTimeDetailsChronometer.stop();
-			
-			if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
-			if(isFromFavorite) {
-				mAudioPlay = new AudioPlay(mFavoriteList.favId , this, isFromFavorite);
-			} else {
-				mAudioPlay = new AudioPlay(entry.id , this, isFromFavorite);
-			}
-			editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
+			stopRecording();
 			break;
-		
 		// // ***** if play button pressed ****** //////			
 		case R.id.edit_play_button:
 			// //// ******** to handle playback of recorded file ********* ////////
@@ -266,5 +236,32 @@ public class Voice extends EditAbstract {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		stopRecording();
+		super.onBackPressed();
+	}
+	
+	private void stopRecording() {
+		if(countDownTimer != null){countDownTimer.cancel();}
+
+		// //// ****** Handles UI items on button click ****** ///////
+		editStopButton.setVisibility(View.GONE);
+		editPlayButton.setVisibility(View.VISIBLE);
+		editRerecordButton.setVisibility(View.VISIBLE);
+
+		// //// ******* Stop Recording Audio and stop chronometer ******** ////////
+		if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
+		editTimeDetailsChronometer.stop();
+		
+		if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
+		if(isFromFavorite) {
+			mAudioPlay = new AudioPlay(mFavoriteList.favId , this, isFromFavorite);
+		} else {
+			mAudioPlay = new AudioPlay(entry.id , this, isFromFavorite);
+		}
+		editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 	}
 }
