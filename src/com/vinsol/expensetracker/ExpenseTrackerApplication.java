@@ -16,6 +16,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 
@@ -33,28 +34,32 @@ public class ExpenseTrackerApplication extends Application {
 
 	private void Initialize() {
     	PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-    	FILES_DIR = getExternalFilesDir(null).toString();
-		File mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_AUDIO);
-		mFile.mkdirs();
-		mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + Constants.DIRECTORY_AUDIO);
-		mFile.mkdirs();
-		if(!new SharedPreferencesHelper(applicationContext).getSharedPreferences().contains(getString(R.string.pref_key_run_first_time))) {
-			File prevVerDir = new File(Environment.getExternalStorageDirectory()+"/ExpenseTracker");
-			if(prevVerDir.exists()) {
-				try {
-					copyDirectory(prevVerDir, new File(FILES_DIR+"/ExpenseTracker"));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				try {
-					deleteDirectory(prevVerDir);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			new SharedPreferencesHelper(applicationContext).setBooleanPrefs(R.string.pref_key_run_first_time, false);
-		}
+    	if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+    		FILES_DIR = getExternalFilesDir(null).toString();
+    		File mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_AUDIO);
+    		mFile.mkdirs();
+    		mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + Constants.DIRECTORY_AUDIO);
+    		mFile.mkdirs();
+    		if(!new SharedPreferencesHelper(applicationContext).getSharedPreferences().contains(getString(R.string.pref_key_run_first_time))) {
+    			File prevVerDir = new File(Environment.getExternalStorageDirectory()+"/ExpenseTracker");
+    			if(prevVerDir.exists()) {
+    				try {
+    					copyDirectory(prevVerDir, new File(FILES_DIR+"/ExpenseTracker"));
+    				} catch (IOException e) {
+    					e.printStackTrace();
+    				}
+    				
+    				try {
+    					deleteDirectory(prevVerDir);
+    				} catch (IOException e) {
+    					e.printStackTrace();
+    				}
+    			}
+    			new SharedPreferencesHelper(applicationContext).setBooleanPrefs(R.string.pref_key_run_first_time, false);
+    		}
+    	} else {
+    		Toast.makeText(applicationContext, "sdcard not available", Toast.LENGTH_LONG).show();
+    	}
 	}
 
 	public static Context getContext() {
