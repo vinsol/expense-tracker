@@ -25,6 +25,7 @@ public class DisplayDate {
 	}
 	
 	public DisplayDate(Long timeInMillis) {
+		mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(timeInMillis);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 	}

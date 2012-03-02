@@ -11,22 +11,60 @@ import java.util.Calendar;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+import android.widget.TextView;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
+import com.vinsol.expensetracker.helpers.UnfinishedEntryCount;
 
-public class ExpenseListing extends TabActivity {
+public class ExpenseListing extends TabActivity implements OnClickListener{
+
+	private UnfinishedEntryCount unfinishedEntryCount;
+	private ConvertCursorToListString mConvertCursorToListString;
+	private TextView unfinishedEntryCountAll;
+	private TextView unfinishedEntryCountThisWeek;
+	private TextView unfinishedEntryCountThisMonth;
+	private TextView unfinishedEntryCountThisYear;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.expense_listing_tab);
+		mConvertCursorToListString = new ConvertCursorToListString(this);
+		unfinishedEntryCountAll = (TextView)findViewById(R.id.unfinished_count_all);
+		unfinishedEntryCountThisWeek = (TextView)findViewById(R.id.unfinished_count_this_week);
+		unfinishedEntryCountThisMonth = (TextView)findViewById(R.id.unfinished_count_this_month);
+		unfinishedEntryCountThisYear = (TextView)findViewById(R.id.unfinished_count_this_year);
 		setTab();
+		setUnfinishedEntryNotification();
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		unfinishedEntryCount = new UnfinishedEntryCount(mConvertCursorToListString.getEntryList(""), unfinishedEntryCountThisWeek, unfinishedEntryCountThisMonth, unfinishedEntryCountThisYear, unfinishedEntryCountAll);
+		unfinishedEntryCount.execute();
+	}
+	
+	private void setUnfinishedEntryNotification() {
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		params.setMargins(0, 0, outMetrics.widthPixels/24, 0);
+		unfinishedEntryCountThisMonth.setLayoutParams(params);
+		unfinishedEntryCountThisWeek.setLayoutParams(params);
+		unfinishedEntryCountThisYear.setLayoutParams(params);
+		unfinishedEntryCountAll.setLayoutParams(params);
+	}
+
 	private void setTab() {
         TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
         tabHost.setup();
@@ -91,6 +129,23 @@ public class ExpenseListing extends TabActivity {
 			}
 		} else {
 			return getString(R.string.tab_thisweek);
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		cancelUnfinishedEntryTask();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		cancelUnfinishedEntryTask();
+	}
+	
+	private void cancelUnfinishedEntryTask() {
+		if(unfinishedEntryCount != null && !unfinishedEntryCount.isCancelled()) {
+			unfinishedEntryCount.cancel(true);
 		}
 	}
 	

@@ -9,6 +9,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     
+    <FrameLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        
     <!-- Tab Layout For Listing -->
     <TabHost 
         android:layout_width="fill_parent"
@@ -48,4 +52,72 @@
 
     </TabHost>
     
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+    	<LinearLayout
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_weight="1"
+    	    android:gravity="right"
+    	    >
+	    	<TextView 
+	            android:background="@drawable/alert_number_icon"
+	            android:layout_height="wrap_content"
+	            android:layout_width="wrap_content"
+	            android:textStyle="bold"
+	            android:gravity="center"
+	            android:textColor="@color/white"
+	            android:id="@+id/unfinished_count_this_week"
+	            android:visibility="gone" />
+    	</LinearLayout>
+    	<LinearLayout
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_weight="1"
+    	    android:gravity="right">
+	        <TextView 
+	            android:background="@drawable/alert_number_icon"
+	            android:layout_height="wrap_content"
+	            android:layout_width="wrap_content"
+	            android:textColor="@color/white"
+	            android:gravity="center"
+	            android:textStyle="bold"
+	            android:id="@+id/unfinished_count_this_month"
+	            android:visibility="gone" />
+        </LinearLayout>
+        <LinearLayout
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_weight="1"
+    	    android:gravity="right">
+	        <TextView 
+	            android:background="@drawable/alert_number_icon"
+	            android:layout_height="wrap_content"
+	            android:layout_width="wrap_content"
+	            android:gravity="center"
+	            android:textColor="@color/white"
+	            android:textStyle="bold"
+	            android:id="@+id/unfinished_count_this_year" 
+	            android:visibility="gone" />
+        </LinearLayout>
+        <LinearLayout
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_weight="1"
+    	    android:gravity="right">
+	        <TextView 
+	            android:background="@drawable/alert_number_icon"
+	            android:layout_height="wrap_content"
+	            android:textColor="@color/white"
+	            android:textStyle="bold"
+	            android:gravity="center"
+	            android:layout_width="wrap_content"
+	            android:id="@+id/unfinished_count_all" 
+	            android:visibility="gone" />
+        </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
 </RelativeLayout>

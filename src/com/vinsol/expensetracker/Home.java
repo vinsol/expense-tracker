@@ -21,14 +21,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
+import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.GraphHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
+import com.vinsol.expensetracker.helpers.UnfinishedEntryCount;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
 import com.vinsol.expensetracker.models.Entry;
@@ -39,6 +42,8 @@ public class Home extends Activity implements OnClickListener {
 	private Bundle bundle;
 	private GraphHelper mHandleGraph;
 	private ProgressBar graphProgressBar;
+	private UnfinishedEntryCount unfinishedEntryCount;
+	private ConvertCursorToListString mConvertCursorToListString;
 	
 	@Override
 	protected void onStart() {
@@ -57,7 +62,8 @@ public class Home extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home);
 		bundle = new Bundle();
-
+		mConvertCursorToListString = new ConvertCursorToListString(this);
+		
 		////// ********* Adding Click Listeners to MainActivity ********** /////////
 		
 		//opens text entry Activity
@@ -90,8 +96,9 @@ public class Home extends Activity implements OnClickListener {
 		if(location == null) {
 			mLocationHelper.requestLocationUpdate();
 		}
-		
 		mHandleGraph = new GraphHelper(this,graphProgressBar);
+		unfinishedEntryCount = new UnfinishedEntryCount(mConvertCursorToListString.getEntryList(""),null,null,null,((TextView)findViewById(R.id.home_unfinished_entry_count)));
+		unfinishedEntryCount.execute();
 		mHandleGraph.execute();
 		super.onResume();
 	}
@@ -99,7 +106,8 @@ public class Home extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View clickedView) {
 		int idOfClickedView = clickedView.getId();
-		if(mHandleGraph != null) {mHandleGraph.cancel(true);}
+		cancelHandleGraphTask();
+		cancelUnfinishedEntryTask();
 		switch (idOfClickedView) {
 			// //// ******* opens TextEntry Activity ******** ///////////
 			case R.id.main_text:
@@ -230,10 +238,21 @@ public class Home extends Activity implements OnClickListener {
 	
 	@Override
 	protected void onPause() {
+		cancelHandleGraphTask();
+		cancelUnfinishedEntryTask();
+		super.onPause();
+	}
+	
+	private void cancelUnfinishedEntryTask() {
+		if(unfinishedEntryCount != null && !unfinishedEntryCount.isCancelled()) {
+			unfinishedEntryCount.cancel(true);
+		}
+	}
+	
+	private void cancelHandleGraphTask() {
 		if(mHandleGraph != null && !mHandleGraph.isCancelled()) {
 			mHandleGraph.cancel(true);
 		}
-		super.onPause();
 	}
 	
 }

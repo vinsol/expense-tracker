@@ -12,14 +12,26 @@
     android:layout_height="wrap_content"
     android:background="@drawable/topbar_bg" 
     >
-
+    
     <ImageView
         android:id="@+id/main_listview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/list_icon_states" 
+        android:layout_alignParentRight="true"/>
+	
+    <TextView 
+        android:id="@+id/home_unfinished_entry_count"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:visibility="gone"
         android:layout_alignParentRight="true"
-        android:src="@drawable/list_icon_states" />
-
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:background="@drawable/alert_number_icon"/>
+    
     <TextView
         android:id="@+id/main_header_title"
         android:layout_width="wrap_content"
