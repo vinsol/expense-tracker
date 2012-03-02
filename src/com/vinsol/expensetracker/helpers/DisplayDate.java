@@ -12,8 +12,7 @@ import com.vinsol.expensetracker.R;
 
 public class DisplayDate {
 
-	// /////// ******* Class to pass Calender and get date in display format
-	// ******* ////////
+	// /////// ******* Class to pass Calender and get date in display format ******* ////////
 	Calendar mCalendar;
 
 	public DisplayDate() {
@@ -25,12 +24,16 @@ public class DisplayDate {
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 	}
 	
+	public DisplayDate(Long timeInMillis) {
+		mCalendar.setTimeInMillis(timeInMillis);
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+	}
+	
 	public Calendar getCalendar() {
 		return mCalendar;
 	}
 
-	// ////// ******** Function to get date in proper format to display in
-	// various activities ****** ///////
+	// ////// ******** Function to get date in proper format to display in various activities ****** ///////
 	public String getDisplayDate() {
 		String month, day, year;
 		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
