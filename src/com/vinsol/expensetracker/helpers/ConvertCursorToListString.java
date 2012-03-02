@@ -161,7 +161,7 @@ public class ConvertCursorToListString {
 		return totalAmountString;
 	}
 	
-	public List<Entry> getListStringParticularDate(String id) {
+	public List<Entry> getEntryList(String id) {
 		adapter.open();
 		Cursor cursor;
 		if(id == null || id.equals("")) {

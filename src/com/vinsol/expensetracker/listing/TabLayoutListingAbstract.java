@@ -42,7 +42,7 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,"",type);
-		mSubList = mConvertCursorToListString.getListStringParticularDate("");
+		mSubList = mConvertCursorToListString.getEntryList("");
 		addSections();
 	}
 

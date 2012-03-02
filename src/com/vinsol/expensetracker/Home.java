@@ -37,7 +37,6 @@ public class Home extends Activity implements OnClickListener {
 	
 	private long timeInMillis = 0;
 	private Bundle bundle;
-	private Entry entry;
 	private GraphHelper mHandleGraph;
 	private ProgressBar graphProgressBar;
 	
@@ -58,7 +57,6 @@ public class Home extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home);
 		bundle = new Bundle();
-		entry = new Entry();
 
 		////// ********* Adding Click Listeners to MainActivity ********** /////////
 		
@@ -101,8 +99,7 @@ public class Home extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View clickedView) {
 		int idOfClickedView = clickedView.getId();
-		if(mHandleGraph != null)
-			mHandleGraph.cancel(true);
+		if(mHandleGraph != null) {mHandleGraph.cancel(true);}
 		switch (idOfClickedView) {
 			// //// ******* opens TextEntry Activity ******** ///////////
 			case R.id.main_text:
@@ -198,8 +195,7 @@ public class Home extends Activity implements OnClickListener {
 	}
 	
 	private void createDatabaseEntry(int typeOfEntry) {
-		entry.id = insertToDatabase(typeOfEntry).toString();
-		bundle.putLong(Constants.KEY_ID, Long.parseLong(entry.id));
+		bundle.putLong(Constants.KEY_ID, Long.parseLong(insertToDatabase(typeOfEntry).toString()));
 		
 		if(LocationHelper.currentAddress != null && !LocationHelper.currentAddress.trim().equals("")) {
 			bundle.putBoolean(Constants.KEY_SET_LOCATION, false);

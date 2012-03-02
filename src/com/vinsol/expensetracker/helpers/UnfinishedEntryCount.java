@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.vinsol.expensetracker.ExpenseTrackerApplication;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.utils.Log;
 
 import android.os.AsyncTask;
 
@@ -25,6 +26,13 @@ public class UnfinishedEntryCount extends AsyncTask<Void, Void, Void>{
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	protected void onPostExecute(Void result) {
+		Log.d("***********************");
+		Log.d("count "+count);
+		Log.d("***********************");
 	}
 	
 }

@@ -48,7 +48,7 @@ public class ExpenseSubListing extends ListingAbstract {
 		listingHeader = (TextView) findViewById(R.id.main_header_title);
 		Entry entry = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 		mDataDateList = mConvertCursorToListString.getDateListString(false,entry.id,type);
-		mSubList = mConvertCursorToListString.getListStringParticularDate(entry.id);
+		mSubList = mConvertCursorToListString.getEntryList(entry.id);
 		if(mSubList.size() > 0) {
 			Calendar mTempCalendar = Calendar.getInstance();
 			mTempCalendar.setTimeInMillis(mSubList.get(0).timeInMillis);

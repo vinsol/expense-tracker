@@ -72,7 +72,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 	protected Void doInBackground(Void... arg0) {
 		mConvertCursorToListString = new ConvertCursorToListString(activity);
 		mDataDateListGraph = mConvertCursorToListString.getDateListString(true,"",R.string.sublist_thisweek);
-		mSubList = mConvertCursorToListString.getListStringParticularDate("");
+		mSubList = mConvertCursorToListString.getEntryList("");
 		if (mDataDateListGraph.size() >= 1) {
 			lastDateCalendar.setTimeInMillis(mSubList.get(mSubList.size()-1).timeInMillis);
 			lastDateCalendar.setFirstDayOfWeek(Calendar.MONDAY);
