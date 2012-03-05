@@ -32,6 +32,7 @@ import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.utils.ImagePreview;
+import com.vinsol.expensetracker.utils.Log;
 
 public class CameraActivity extends EditAbstract {
 
@@ -39,9 +40,9 @@ public class CameraActivity extends EditAbstract {
 	private LinearLayout editCameraDetails;
 	private ImageView editImageDisplay;
 	private RelativeLayout editLoadProgress;
-	float scale;
-	int width;
-	int height;
+	private float scale;
+	private int width;
+	private int height;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +83,6 @@ public class CameraActivity extends EditAbstract {
 		// ////// *********** Initializing Database Adaptor **********//////////
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		dateViewString = dateBarDateview.getText().toString();
-		
-		
 		
 		if(entry.id == null ) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
@@ -148,6 +147,7 @@ public class CameraActivity extends EditAbstract {
 			} else {
 				file = fileHelper.getCameraFileLargeEntry(entry.id);
 			}
+			Log.d("camera file path +++++++++++++++++ "+file.toString() );
 			camera.putExtra(Constants.KEY_FULL_SIZE_IMAGE_PATH, file.toString());
 			startActivityForResult(camera, PICTURE_RESULT);
 		} else {

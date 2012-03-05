@@ -12,7 +12,8 @@ public class Constants {
 	public static final String IMAGE_THUMBNAIL_SUFFIX = "_thumbnail.jpg";
 	public static final String IMAGE_LARGE_SUFFIX = ".jpg";
 	public static final String AUDIO_FILE_SUFFIX = ".amr";
-	public static final String DIRECTORY = ExpenseTrackerApplication.FILES_DIR + "/ExpenseTracker/";
+	public static final String ET_FOLDER = "/ExpenseTracker/";
+	public static String DIRECTORY = ExpenseTrackerApplication.FILES_DIR + ET_FOLDER;
 	public static final String DIRECTORY_AUDIO = "Audio/";
 	public static final String DIRECTORY_FAVORITE = "Favorite/";
 	

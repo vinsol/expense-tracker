@@ -55,8 +55,10 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
+import com.vinsol.expensetracker.ExpenseTrackerApplication;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
+import com.vinsol.expensetracker.utils.Log;
 
 public class Camera extends Activity implements View.OnClickListener, ShutterButton.OnShutterButtonListener, SurfaceHolder.Callback {
 
@@ -172,6 +174,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     
     private void checkStorage() {
         calculatePicturesRemaining();
+        Log.d("%%%%%%%%%%%%%%%%%%%%%%%%b  mPicturesRemaining "+mPicturesRemaining);
         updateStorageHint(mPicturesRemaining);
     }
     
@@ -1101,8 +1104,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             if (!hasStorage()) {
                 return NO_STORAGE_ERROR;
             } else {
-                String storageDirectory = Environment.getExternalStorageDirectory().toString();
-                StatFs stat = new StatFs(storageDirectory);
+            	if(!ExpenseTrackerApplication.isInitialized){ExpenseTrackerApplication.Initialize();}
+                StatFs stat = new StatFs(Constants.DIRECTORY);
                 final int PICTURE_BYTES = 1500000;
                 mPicturesRemaining = (int)(((float) stat.getAvailableBlocks() * (float) stat.getBlockSize()) / PICTURE_BYTES);
             }
@@ -1125,6 +1128,9 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
     
     private boolean checkFsWritable() {
+    	if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			if(!ExpenseTrackerApplication.isInitialized){ExpenseTrackerApplication.Initialize();}
+		}
         return new File(Constants.DIRECTORY).canWrite();
     }
 

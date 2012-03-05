@@ -10,12 +10,14 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
+import com.vinsol.expensetracker.ExpenseTrackerApplication;
 import com.vinsol.expensetracker.R;
 
 public class ImagePreview extends Activity {
@@ -37,7 +39,9 @@ public class ImagePreview extends Activity {
 		//Extras
 		id = getIntent().getStringExtra(Constants.KEY_ID);
 		boolean isFavorite = getIntent().getBooleanExtra(Constants.KEY_IS_FAVORITE, false);
-		
+		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			if(!ExpenseTrackerApplication.isInitialized){ExpenseTrackerApplication.Initialize();}
+		}
 		path = Constants.DIRECTORY + (isFavorite ? "Favorite/" : "") + id + Constants.IMAGE_LARGE_SUFFIX;
 		mImageView = (android.widget.ImageView) findViewById(R.id.image_view_full_screen_id);
 		progressBar = (LinearLayout) findViewById(R.id.image_view_full_screen_progress);

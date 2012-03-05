@@ -12,9 +12,18 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import android.os.Environment;
+
 import com.vinsol.expensetracker.Constants;
+import com.vinsol.expensetracker.ExpenseTrackerApplication;
 
 public class FileHelper {
+	
+	public FileHelper() {
+		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) && !ExpenseTrackerApplication.isInitialized) {
+			ExpenseTrackerApplication.Initialize();
+		}
+	}
 	
 	public void copyAllFromFavorite(String _id,String targetId) {
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {

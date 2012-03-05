@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -105,6 +106,9 @@ public class Home extends Activity implements OnClickListener {
 	
 	@Override
 	public void onClick(View clickedView) {
+		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			if(!ExpenseTrackerApplication.isInitialized){ExpenseTrackerApplication.Initialize();}
+		}
 		int idOfClickedView = clickedView.getId();
 		cancelHandleGraphTask();
 		cancelUnfinishedEntryTask();
