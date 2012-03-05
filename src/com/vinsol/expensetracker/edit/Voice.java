@@ -75,7 +75,7 @@ public class Voice extends EditAbstract {
 					editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 				} else {
 					editTimeDetailsChronometer.setText("Audio File Missing");
-					editTimeDetailsChronometer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+					editTimeDetailsChronometer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 					editRerecordButton.setVisibility(View.VISIBLE);
 					editStopButton.setVisibility(View.GONE);
 					editPlayButton.setVisibility(View.GONE);
@@ -191,6 +191,7 @@ public class Voice extends EditAbstract {
 			}
 			mRecordingHelper = new RecordingHelper(mPath, this);
 			mRecordingHelper.startRecording();
+			editTimeDetailsChronometer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
 			editTimeDetailsChronometer.setBase(SystemClock.elapsedRealtime());
 			editTimeDetailsChronometer.start();
 			break;

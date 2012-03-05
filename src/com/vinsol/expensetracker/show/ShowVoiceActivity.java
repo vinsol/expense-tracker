@@ -62,7 +62,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 					showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 				} else {
 					showTimeDetailsChronometer.setText("Audio File Missing");
-					showTimeDetailsChronometer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+					showTimeDetailsChronometer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 					showStopButton.setVisibility(View.GONE);
 					showPlayButton.setVisibility(View.GONE);
 				}
