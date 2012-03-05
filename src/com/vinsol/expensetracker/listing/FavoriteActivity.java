@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
@@ -56,7 +57,7 @@ import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
-public class FavoriteActivity extends Activity implements OnItemClickListener {
+public class FavoriteActivity extends BaseActivity implements OnItemClickListener {
 	
 	private List<Favorite> mList;
 	private DatabaseAdapter mDatabaseAdapter;

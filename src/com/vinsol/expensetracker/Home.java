@@ -8,15 +8,10 @@ package com.vinsol.expensetracker;
 
 import java.util.Calendar;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,7 +32,7 @@ import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
 import com.vinsol.expensetracker.models.Entry;
 
-public class Home extends Activity implements OnClickListener {
+public class Home extends BaseActivity implements OnClickListener {
 	
 	private long timeInMillis = 0;
 	private Bundle bundle;
@@ -173,38 +168,6 @@ public class Home extends Activity implements OnClickListener {
 				break;
 		}//end switch
 	}//end onClick
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.home_optionsmenu, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.settings:
-			Intent intent = new Intent(this, SetPreferences.class);
-            startActivity(intent);
-			break;
-
-		case R.id.rate_app:
-			Intent startMarket = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.EXPENSE_TRACKER_MARKET_URI));
-			startActivity(startMarket);
-			break;
-			
-		case R.id.manage_favorite:
-			Intent startManagingFavorite = new Intent(this, FavoriteActivity.class);
-			startManagingFavorite.putExtra(Constants.KEY_MANAGE_FAVORITE, true);
-			startActivity(startManagingFavorite);
-			break;
-			
-		default:
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 	
 	private void createDatabaseEntry(int typeOfEntry) {
 		bundle.putLong(Constants.KEY_ID, Long.parseLong(insertToDatabase(typeOfEntry).toString()));

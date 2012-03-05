@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
@@ -47,7 +48,7 @@ import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
 import com.vinsol.expensetracker.utils.Log;
 
-abstract class ListingAbstract extends Activity implements OnItemClickListener {
+abstract class ListingAbstract extends BaseActivity implements OnItemClickListener {
 
 	protected List<ListDatetimeAmount> mDataDateList;
 	protected SeparatedListAdapter mSeparatedListAdapter;

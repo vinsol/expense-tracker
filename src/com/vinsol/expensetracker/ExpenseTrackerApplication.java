@@ -19,7 +19,6 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
-import com.vinsol.expensetracker.utils.Log;
 
 public class ExpenseTrackerApplication extends Application {
 	
@@ -38,34 +37,31 @@ public class ExpenseTrackerApplication extends Application {
 	public static void Initialize() {
     	if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
     		FILES_DIR = applicationContext.getExternalFilesDir(null).toString();
-    		File mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_AUDIO);
-    		mFile.mkdirs();
-    		mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + Constants.DIRECTORY_AUDIO);
-    		mFile.mkdirs();
-    		if(!new SharedPreferencesHelper(applicationContext).getSharedPreferences().contains(applicationContext.getString(R.string.pref_key_run_first_time))) {
-    			File prevVerDir = new File(Environment.getExternalStorageDirectory()+"/ExpenseTracker");
-    			if(prevVerDir.exists()) {
-    				try {
-    					copyDirectory(prevVerDir, new File(FILES_DIR+"/ExpenseTracker"));
-    				} catch (IOException e) {
-    					e.printStackTrace();
-    				}
-    				
-    				try {
-    					deleteDirectory(prevVerDir);
-    				} catch (IOException e) {
-    					e.printStackTrace();
-    				}
-    			}
-    			new SharedPreferencesHelper(applicationContext).setBooleanPrefs(R.string.pref_key_run_first_time, false);
-    		}
     		if(FILES_DIR != null) {
-    			isInitialized = true;
     			Constants.DIRECTORY = FILES_DIR + Constants.ET_FOLDER;
+        		File mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_AUDIO);
+        		mFile.mkdirs();
+        		mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + Constants.DIRECTORY_AUDIO);
+        		mFile.mkdirs();
+        		if(!new SharedPreferencesHelper(applicationContext).getSharedPreferences().contains(applicationContext.getString(R.string.pref_key_run_first_time))) {
+        			File prevVerDir = new File(Environment.getExternalStorageDirectory()+"/ExpenseTracker");
+        			if(prevVerDir.exists()) {
+        				try {
+        					copyDirectory(prevVerDir, new File(FILES_DIR+"/ExpenseTracker"));
+        				} catch (IOException e) {
+        					e.printStackTrace();
+        				}
+        				
+        				try {
+        					deleteDirectory(prevVerDir);
+        				} catch (IOException e) {
+        					e.printStackTrace();
+        				}
+        			}
+        			new SharedPreferencesHelper(applicationContext).setBooleanPrefs(R.string.pref_key_run_first_time, false);
+        		}
+        		isInitialized = true;
     		}
-    		Log.d("**************************************************");
-    		Log.d("Files Dir "+ExpenseTrackerApplication.FILES_DIR+" \t "+ExpenseTrackerApplication.isInitialized);
-    		Log.d("**************************************************");
     	} else {
     		Toast.makeText(applicationContext, "sdcard not available", Toast.LENGTH_LONG).show();
     	}
