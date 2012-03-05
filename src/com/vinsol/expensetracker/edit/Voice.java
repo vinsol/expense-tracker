@@ -10,6 +10,7 @@ import java.io.File;
 
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -74,6 +75,7 @@ public class Voice extends EditAbstract {
 					editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 				} else {
 					editTimeDetailsChronometer.setText("Audio File Missing");
+					editTimeDetailsChronometer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 					editRerecordButton.setVisibility(View.VISIBLE);
 					editStopButton.setVisibility(View.GONE);
 					editPlayButton.setVisibility(View.GONE);

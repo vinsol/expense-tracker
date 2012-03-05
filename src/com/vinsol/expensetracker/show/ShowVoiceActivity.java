@@ -11,6 +11,7 @@ import java.io.File;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -61,6 +62,7 @@ public class ShowVoiceActivity extends ShowAbstract {
 					showTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 				} else {
 					showTimeDetailsChronometer.setText("Audio File Missing");
+					showTimeDetailsChronometer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 					showStopButton.setVisibility(View.GONE);
 					showPlayButton.setVisibility(View.GONE);
 				}
