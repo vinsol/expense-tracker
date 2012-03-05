@@ -218,7 +218,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 				}
 			}
 			
-			if(mDisplayDate.isCurrentYear() || mDisplayDate.isPrevYears()) {
+			if(mDisplayDate.isNotCurrentMonthAndCurrentYear() || mDisplayDate.isPrevYears()) {
 				mTempCalender.set(Calendar.DAY_OF_MONTH, mTempCalender.getActualMaximum(Calendar.DAY_OF_MONTH));
 				mTempCalender.setFirstDayOfWeek(Calendar.MONDAY);
 				mDisplayDate = new DisplayDate(mTempCalender);

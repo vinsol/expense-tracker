@@ -101,7 +101,7 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
 			} else if (displayDate.isCurrentMonth()){
 				intentThisMonth.putExtras(intentExtras);
 				return;
-			} else if (displayDate.isCurrentYear()){
+			} else if (displayDate.isNotCurrentMonthAndCurrentYear()){
 				intentThisYear.putExtras(intentExtras);
 				return;
 			} else {
@@ -122,7 +122,7 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
 				return getString(R.string.tab_thisweek);
 			} else if (displayDate.isCurrentMonth()){
 				return getString(R.string.tab_thismonth);
-			} else if (displayDate.isCurrentYear()){
+			} else if (displayDate.isNotCurrentMonthAndCurrentYear()){
 				return getString(R.string.tab_thisyear);
 			} else {
 				return getString(R.string.tab_all);
