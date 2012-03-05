@@ -5,119 +5,115 @@
  * See the file license.txt for copying permission.
 */     
  -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     
-    <FrameLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        
-    <!-- Tab Layout For Listing -->
-    <TabHost 
-        android:layout_width="fill_parent"
-    	android:layout_height="fill_parent"
-    	android:id="@android:id/tabhost"
-    	>
-    	
-    	<LinearLayout
-	        android:orientation="vertical"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent"
-	        >
-	    	<TabWidget
-	            android:id="@android:id/tabs"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content" 
-	            />
-	        <FrameLayout
-	            android:id="@android:id/tabcontent"
-	            android:layout_width="fill_parent"
-	            android:layout_height="fill_parent"
-	            >
-	            <include
-	                android:id="@+id/tab_this_week" 
-	                layout="@layout/expense_listing_listview_common"/>
-	            <include
-	                android:id="@+id/tab_this_month" 
-	                layout="@layout/expense_listing_listview_common"/>
-	            <include
-	                android:id="@+id/tab_this_year" 
-	                layout="@layout/expense_listing_listview_common"/>
-	            <include
-	                android:id="@+id/tab_all" 
-	                layout="@layout/expense_listing_listview_common"/>
-	        </FrameLayout>
-   		</LinearLayout>
+	<!-- Tab Layout For Listing -->
+	<TabHost 
+	    android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:id="@android:id/tabhost"
+		>
+		
+		<LinearLayout
+	     android:orientation="vertical"
+	     android:layout_width="fill_parent"
+	     android:layout_height="fill_parent"
+	     >
+	 	<TabWidget
+	         android:id="@android:id/tabs"
+	         android:layout_width="fill_parent"
+	         android:layout_height="wrap_content" 
+	         />
+	     <FrameLayout
+	         android:id="@android:id/tabcontent"
+	         android:layout_width="fill_parent"
+	         android:layout_height="fill_parent"
+	         >
+	         <include
+	             android:id="@+id/tab_this_week" 
+	             layout="@layout/expense_listing_listview_common"/>
+	         <include
+	             android:id="@+id/tab_this_month" 
+	             layout="@layout/expense_listing_listview_common"/>
+	         <include
+	             android:id="@+id/tab_this_year" 
+	             layout="@layout/expense_listing_listview_common"/>
+	         <include
+	             android:id="@+id/tab_all" 
+	             layout="@layout/expense_listing_listview_common"/>
+	     </FrameLayout>
+		</LinearLayout>
+	
+	</TabHost>
 
-    </TabHost>
-    
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
-    	<LinearLayout
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_weight="1"
-    	    android:gravity="right"
-    	    >
-	    	<TextView 
-	            android:background="@drawable/alert_number_icon"
-	            android:layout_height="wrap_content"
-	            android:layout_width="wrap_content"
-	            android:textStyle="bold"
-	            android:gravity="center"
-	            android:textColor="@color/white"
-	            android:id="@+id/unfinished_count_this_week"
-	            android:visibility="gone" />
-    	</LinearLayout>
-    	<LinearLayout
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_weight="1"
-    	    android:gravity="right">
-	        <TextView 
-	            android:background="@drawable/alert_number_icon"
-	            android:layout_height="wrap_content"
-	            android:layout_width="wrap_content"
-	            android:textColor="@color/white"
-	            android:gravity="center"
-	            android:textStyle="bold"
-	            android:id="@+id/unfinished_count_this_month"
-	            android:visibility="gone" />
-        </LinearLayout>
-        <LinearLayout
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_weight="1"
-    	    android:gravity="right">
-	        <TextView 
-	            android:background="@drawable/alert_number_icon"
-	            android:layout_height="wrap_content"
-	            android:layout_width="wrap_content"
-	            android:gravity="center"
-	            android:textColor="@color/white"
-	            android:textStyle="bold"
-	            android:id="@+id/unfinished_count_this_year" 
-	            android:visibility="gone" />
-        </LinearLayout>
-        <LinearLayout
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_weight="1"
-    	    android:gravity="right">
-	        <TextView 
-	            android:background="@drawable/alert_number_icon"
-	            android:layout_height="wrap_content"
-	            android:textColor="@color/white"
-	            android:textStyle="bold"
-	            android:gravity="center"
-	            android:layout_width="wrap_content"
-	            android:id="@+id/unfinished_count_all" 
-	            android:visibility="gone" />
-        </LinearLayout>
-        </LinearLayout>
-    </FrameLayout>
-</RelativeLayout>
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:baselineAligned="false">
+		<LinearLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:gravity="right"
+		    >
+	 	<TextView 
+	         android:background="@drawable/alert_number_icon"
+	         android:layout_height="wrap_content"
+	         android:layout_width="wrap_content"
+	         android:textStyle="bold"
+	         android:gravity="center"
+	         android:textColor="@color/white"
+	         android:id="@+id/unfinished_count_this_week"
+	         android:visibility="gone" />
+		</LinearLayout>
+		<LinearLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:gravity="right">
+	     <TextView 
+	         android:background="@drawable/alert_number_icon"
+	         android:layout_height="wrap_content"
+	         android:layout_width="wrap_content"
+	         android:textColor="@color/white"
+	         android:gravity="center"
+	         android:textStyle="bold"
+	         android:id="@+id/unfinished_count_this_month"
+	         android:visibility="gone" />
+	    </LinearLayout>
+	    <LinearLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:gravity="right">
+	     <TextView 
+	         android:background="@drawable/alert_number_icon"
+	         android:layout_height="wrap_content"
+	         android:layout_width="wrap_content"
+	         android:gravity="center"
+	         android:textColor="@color/white"
+	         android:textStyle="bold"
+	         android:id="@+id/unfinished_count_this_year" 
+	         android:visibility="gone" />
+	    </LinearLayout>
+	    <LinearLayout
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:gravity="right">
+	     <TextView 
+	         android:background="@drawable/alert_number_icon"
+	         android:layout_height="wrap_content"
+	         android:textColor="@color/white"
+	         android:textStyle="bold"
+	         android:gravity="center"
+	         android:layout_width="wrap_content"
+	         android:id="@+id/unfinished_count_all" 
+	         android:visibility="gone" />
+	    </LinearLayout>
+	</LinearLayout>
+</FrameLayout>
