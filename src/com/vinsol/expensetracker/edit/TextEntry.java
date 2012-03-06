@@ -17,7 +17,7 @@ public class TextEntry extends EditAbstract {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		typeOfEntry = R.string.text;
-		typeOfEntryFinished = R.string.finished_textentry;
+		typeOfEntryFinished = R.string.unfinished_textentry;
 		typeOfEntryUnfinished = R.string.unfinished_textentry;
 		editHelper();
 	}
