@@ -187,7 +187,7 @@ public class Voice extends EditAbstract {
 			if(isFromFavorite) {
 				mPath = fileHelper.getAudioFileFavorite(mFavoriteList.favId);
 			} else {
-				mPath = fileHelper.getAudioFileFavorite(entry.id);
+				mPath = fileHelper.getAudioFileEntry(entry.id);
 			}
 			mRecordingHelper = new RecordingHelper(mPath, this);
 			mRecordingHelper.startRecording();
@@ -240,7 +240,8 @@ public class Voice extends EditAbstract {
 	
 	@Override
 	public void onBackPressed() {
-		stopRecording();
+		if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
+		if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
 		super.onBackPressed();
 	}
 	

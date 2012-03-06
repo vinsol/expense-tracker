@@ -143,10 +143,8 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 				int textlength = searchBox.getText().length();
 				mList_sort.clear();
 				for (int i = 0; i < mList.size(); i++) {
-					if (textlength <= mList.get(i).description.length() || textlength <= mList.get(i).location.length() || textlength <= mList.get(i).amount.length()) {
-						if(containsStringIgnoreCase(i)){
-							mList_sort.add(mList.get(i));
-						}	
+					if((textlength <= mList.get(i).description.length() || textlength <= mList.get(i).location.length() || textlength <= mList.get(i).amount.length()) && containsStringIgnoreCase(i)) {
+						mList_sort.add(mList.get(i));
 					}
 				}
 				mAdapter = new MyAdapter(FavoriteActivity.this, R.layout.expense_listing_inflated_row , mList_sort);
@@ -160,6 +158,15 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 		
 		if(isManaging) {
 			registerForContextMenu(mFavoriteListview);
+		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if(!isManaging){
+			return super.onCreateOptionsMenu(menu);
+		} else {
+			return false;
 		}
 	}
 	
