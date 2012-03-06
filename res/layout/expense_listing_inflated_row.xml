@@ -16,7 +16,7 @@
   		android:id="@+id/row_imageview"
 		android:layout_width="64dp"
   		android:layout_height="59dp"
- 		android:background="@drawable/listing_row_icon_bg_states"
+  		android:background="@drawable/listing_row_states"
  		android:scaleType="centerInside"  
  		android:padding="2dp" />
   	
@@ -30,7 +30,7 @@
 	
   	<RelativeLayout
   	    android:layout_width="fill_parent"
-  	    android:layout_height="fill_parent"
+  	    android:layout_height="59dp"
     	android:background="@drawable/listing_row_states"
    	    android:layout_toRightOf="@id/row_imageview_divider"
     	android:id="@+id/row_listview"

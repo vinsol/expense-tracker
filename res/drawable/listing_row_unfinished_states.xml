@@ -7,8 +7,8 @@
  -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item android:state_selected="true" android:drawable="@drawable/listing_row_selected" />
-    <item android:state_pressed="true" android:state_selected="false" android:drawable="@drawable/listing_row_selected" />
-    <item android:state_selected="false" android:drawable="@drawable/bg_unfinished_entry"/>
+    <item android:state_selected="true" android:drawable="@color/bg_row_selected" />
+    <item android:state_pressed="true" android:state_selected="false" android:drawable="@color/bg_row_selected" />
+    <item android:state_selected="false" android:drawable="@color/bg_unfinished_entry"/>
 
 </selector>

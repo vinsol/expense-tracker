@@ -15,14 +15,23 @@
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     >
+    
+    <View 
+        android:layout_height="2dp"
+        android:layout_width="fill_parent"
+        android:layout_marginRight="2dp"
+        android:layout_marginLeft="2dp"
+        android:background="#ff191919"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/title_divider" />
         
     <TextView 
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:text="@string/delete_dialog_text"
         android:id="@+id/dialog_message"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:layout_below="@id/title_divider"
+        android:textSize="18sp" />
     
     <CheckBox 
         android:layout_below="@id/dialog_message"

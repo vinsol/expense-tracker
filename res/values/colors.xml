@@ -10,4 +10,7 @@
     <color name="black">#ff000000</color>
     <color name="grey_light">#ffcccccc</color>
     <color name="grey">#ff404040</color>
+    <color name="bg_row_selected">#ffdcff95</color>
+    <color name="bg_save_reminder">#fffaeeee</color>
+    <color name="bg_unfinished_entry">#fffaf8d3</color>
 </resources>
