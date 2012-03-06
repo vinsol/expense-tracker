@@ -8,7 +8,7 @@
 <resources>
 
     <string name="app_name">Expense Tracker</string>
-    <string name="version">Version 2</string>
+    <string name="version">Version 1.2</string>
     <string name="unknown">0</string>
     <string name="text">1</string>
     <string name="camera">2</string>
@@ -69,7 +69,8 @@
     <!-- Dialog Text -->
     <string name="delete_dialog_text">Delete this entry?</string>
     <string name="ok">OK</string>
-    <string name="backpress_edit_entry_text">Discard this entry?</string>
+    <string name="backpress_new_entry_text">Discard this entry?</string>
+    <string name="backpress_edit_entry_text">Discard the changes?</string>
     <string name="unfinish_fav_text">Unfinished entry, Discard this entry?</string>
     <string name="cancel">Cancel</string>
     

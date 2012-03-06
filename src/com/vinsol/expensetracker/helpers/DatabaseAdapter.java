@@ -183,9 +183,8 @@ public class DatabaseAdapter {
 	}
 	
 	public Cursor getEntryTableDateDatabase(String id) {
-		if(id != null){
-			if(id.length() > 1)
-				id = id.substring(0, id.length()-1);
+		if(id != null && id.length() > 1){
+			id = id.substring(0, id.length()-1);
 		}
 		String where = KEY_ID+" in ("+id +")";
 		return db.query(ENTRY_TABLE, null, where, null, null, null, KEY_DATE_TIME+" desc");

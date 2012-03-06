@@ -547,7 +547,11 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	public void onBackPressed() {
 		FlurryAgent.onEvent(getString(R.string.back_pressed));
 		ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
-		mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
+		if(intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE) || intentExtras.containsKey(Constants.KEY_POSITION)) {
+			mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
+		} else {
+			mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_new_entry_text));
+		}
 		if(!isFromFavorite) {
 			if(intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE) || intentExtras.containsKey(Constants.KEY_POSITION)) {
 				//if coming from show page or listing

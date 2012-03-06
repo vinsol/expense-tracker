@@ -10,61 +10,15 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-  	android:paddingLeft="10dp"
-    android:paddingRight="20dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
     >
     
-    <View 
-        android:layout_height="2dp"
-        android:layout_width="fill_parent"
-        android:layout_marginRight="2dp"
-        android:layout_marginLeft="2dp"
-        android:background="#ff191919"
-        android:layout_marginBottom="10dp"
-        android:id="@+id/title_divider" />
-        
-    <TextView 
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:text="@string/delete_dialog_text"
-        android:id="@+id/dialog_message"
-        android:layout_below="@id/title_divider"
-        android:textSize="18sp" />
-    
     <CheckBox 
-        android:layout_below="@id/dialog_message"
         android:id="@+id/disable_delete_dialog_checkbox"
         android:checked="true"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:text="@string/delete_dialog_title" 
         android:textSize="14sp" />
-    
-    <LinearLayout
-        android:layout_below="@id/disable_delete_dialog_checkbox"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:orientation="horizontal"
-        android:gravity="center"
-        >
-        
-        <Button 
-            android:id="@+id/delete_dialog_ok"
-            android:text="@string/ok"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp"/>
-        
-        <Button 
-            android:id="@+id/delete_dialog_cancel"
-            android:text="@string/cancel"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"/>
-        
-    </LinearLayout>
 </RelativeLayout>

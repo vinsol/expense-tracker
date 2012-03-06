@@ -5,18 +5,17 @@
 
 package com.vinsol.expensetracker.helpers;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Bundle;
+import android.content.DialogInterface;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.vinsol.expensetracker.R;
 
-public class DeleteDialog extends Dialog implements android.view.View.OnClickListener {
+public class DeleteDialog extends AlertDialog implements DialogInterface.OnClickListener {
 	
 	private boolean isDelete;
 	private CheckBox checkBox;
@@ -24,15 +23,12 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 	public DeleteDialog(Context context) { 
 		super(context);
 		setTitle(context.getString(R.string.confirm_delete));
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.delete_dialog);
-		Button yesButton = (Button) findViewById(R.id.delete_dialog_ok);
-		Button noButton = (Button) findViewById(R.id.delete_dialog_cancel);
-		checkBox = (CheckBox) findViewById(R.id.disable_delete_dialog_checkbox);
+		setMessage(context.getString(R.string.delete_dialog_text));
+		View checkBoxView = getLayoutInflater().inflate(R.layout.delete_dialog, null);
+		setView(checkBoxView);
+		setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.ok), this);
+		setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.cancel), this);
+		checkBox = (CheckBox) checkBoxView.findViewById(R.id.disable_delete_dialog_checkbox);
 		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			@Override
@@ -40,24 +36,6 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 				setDeletePrefs();
 			}
 		});
-		yesButton.setOnClickListener(this);
-		noButton.setOnClickListener(this);
-	}
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.delete_dialog_ok:
-			isDelete = true;
-			break;
-
-		case R.id.delete_dialog_cancel:
-			isDelete = false;
-			break;
-		default:
-			break;
-		}
-		dismiss();
 	}
 
 	public boolean isDelete() {
@@ -66,6 +44,22 @@ public class DeleteDialog extends Dialog implements android.view.View.OnClickLis
 	
 	private void setDeletePrefs() {
 		new SharedPreferencesHelper(getContext()).setDeletePrefs(checkBox.isChecked());
+	}
+
+	@Override
+	public void onClick(DialogInterface dialog, int which) {
+		switch (which) {
+		case DialogInterface.BUTTON_POSITIVE:
+			isDelete = true;
+			break;
+
+		case DialogInterface.BUTTON_NEGATIVE:
+			isDelete = false;
+			break;
+		default:
+			break;
+		}
+		dismiss();		
 	}
 	
 }
