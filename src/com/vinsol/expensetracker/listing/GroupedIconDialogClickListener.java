@@ -16,11 +16,11 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
+import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.models.Entry;
 

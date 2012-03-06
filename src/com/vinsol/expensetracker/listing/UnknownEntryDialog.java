@@ -18,11 +18,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
+import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
 

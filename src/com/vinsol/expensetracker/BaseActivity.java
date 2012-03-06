@@ -14,8 +14,14 @@ public class BaseActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.home_optionsmenu, menu);
+		inflater.inflate(R.menu.common_optionsmenu, menu);
 		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.removeItem(R.id.manage_favorite);
+		return true;
 	}
 	
 	@Override

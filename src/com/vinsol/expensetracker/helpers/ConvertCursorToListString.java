@@ -13,7 +13,6 @@ import java.util.List;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;

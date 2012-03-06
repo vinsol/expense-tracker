@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
+import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.GraphHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.UnfinishedEntryCount;
@@ -51,6 +53,11 @@ public class Home extends BaseActivity implements OnClickListener {
 	protected void onStop() {
 		super.onStop();
 		FlurryAgent.onEndSession(this);
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		return true;
 	}
 	
 	@Override

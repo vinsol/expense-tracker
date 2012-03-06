@@ -20,17 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
+import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.DeleteDialog;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.models.Entry;
 
-abstract class ShowAbstract extends Activity implements OnClickListener {
+abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 
 	protected TextView showAmount;
 	protected TextView showTag;

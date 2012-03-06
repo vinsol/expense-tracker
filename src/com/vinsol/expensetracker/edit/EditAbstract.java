@@ -26,10 +26,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
-import com.vinsol.expensetracker.DatabaseAdapter;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConfirmSaveEntryDialog;
+import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.DeleteDialog;
@@ -42,7 +43,7 @@ import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 
-abstract class EditAbstract extends Activity implements OnClickListener {
+abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	
 	protected Entry mEditList;
 	protected Favorite mFavoriteList;
