@@ -324,23 +324,6 @@ class SeparatedListAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 	
-	private void updateAmount(String sectionNumber, Entry prevEntry, Entry updatedEntry) {
-		StringProcessing mStringProcessing = new StringProcessing();
-		Double amountDouble = mStringProcessing.getAmount(mDataDateList.get(Integer.parseInt(sectionNumber)).amount);
-		amountDouble -= mStringProcessing.getAmount(prevEntry.amount);
-		if(updatedEntry != null && !updatedEntry.amount.contains("?")) { 
-			updatedEntry.amount = mStringProcessing.getStringDoubleDecimal(updatedEntry.amount);
-			amountDouble += mStringProcessing.getAmount(updatedEntry.amount);
-		}
-		if(amountDouble != 0.0 && mDataDateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
-			mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"?");
-		} else if(amountDouble == 0.0 && mDataDateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
-			mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal("?");
-		} else {
-			mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"");
-		}
-	}
-	
 	public String  getSectionNumber(int position) {
 		int sectionNumber = 0;
 		for (Object section : sections.keySet()) {
@@ -355,6 +338,9 @@ class SeparatedListAdapter extends BaseAdapter {
 		return "";
 	}
 	
+	public List<ListDatetimeAmount> getDataDateList() {
+		return mDataDateList;
+	}
 	
 	/////////////////**********************Private Classes **********************////////////////////////
 	private class MyClickListener implements OnClickListener {
@@ -447,9 +433,22 @@ class SeparatedListAdapter extends BaseAdapter {
 		}
 		return false;
 	}
-	
-	public List<ListDatetimeAmount> getDataDateList() {
-		return mDataDateList;
-	}
 
+	private void updateAmount(String sectionNumber, Entry prevEntry, Entry updatedEntry) {
+		StringProcessing mStringProcessing = new StringProcessing();
+		Double amountDouble = mStringProcessing.getAmount(mDataDateList.get(Integer.parseInt(sectionNumber)).amount);
+		amountDouble -= mStringProcessing.getAmount(prevEntry.amount);
+		if(updatedEntry != null && !updatedEntry.amount.contains("?")) { 
+			updatedEntry.amount = mStringProcessing.getStringDoubleDecimal(updatedEntry.amount);
+			amountDouble += mStringProcessing.getAmount(updatedEntry.amount);
+		}
+		if(amountDouble != 0.0 && mDataDateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
+			mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"?");
+		} else if(amountDouble == 0.0 && mDataDateList.get(Integer.parseInt(sectionNumber)).amount.contains("?")) {
+			mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal("?");
+		} else {
+			mDataDateList.get(Integer.parseInt(sectionNumber)).amount = mStringProcessing.getStringDoubleDecimal(amountDouble+"");
+		}
+	}
+	
 }
