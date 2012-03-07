@@ -38,7 +38,6 @@
 		    android:id="@+id/cancel_button"
 		    android:background="@drawable/cancel_states"
 		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    />
+		    android:layout_height="wrap_content" />
 	</LinearLayout>
 </RelativeLayout>

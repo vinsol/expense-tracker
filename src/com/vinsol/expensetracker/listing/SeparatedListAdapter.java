@@ -317,9 +317,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		return false;
 	}
 	
-	public void update(Entry updatedEntry,int toUpdate) {
-		String sectionNumber = getSectionNumber(toUpdate);
-		Entry prevEntry = (Entry) getItem(toUpdate);
+	public void update(Entry updatedEntry,int toUpdate, String sectionNumber, Entry prevEntry) {
 		sections.get(sectionNumber).insert(updatedEntry, toUpdate);
 		sections.get(sectionNumber).remove(prevEntry);
 		updateAmount(sectionNumber, prevEntry, updatedEntry);

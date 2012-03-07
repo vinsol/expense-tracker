@@ -62,7 +62,6 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 	protected Bundle intentExtras;
 	private DatabaseAdapter mDatabaseAdapter;
 	protected int type;
-	private int sectionNum = 0;
 
 	@Override
 	protected void onStart() {
@@ -337,7 +336,13 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 		Log.d("updating "+position);
 		Log.d("************************");
 		if(position != -1) {
-			mSeparatedListAdapter.update(updatedEntry, position);
+			String sectionNumber = mSeparatedListAdapter.getSectionNumber(position);
+			Object prevEntry = mSeparatedListAdapter.getItem(position);
+			if(sectionNumber != null && !sectionNumber.equals("") && prevEntry != null && !prevEntry.equals("")) {
+				mSeparatedListAdapter.update(updatedEntry, position, sectionNumber, (Entry) prevEntry);
+			} else {
+				initListView();
+			}
 			noItemLayout();
 		}
 	}
@@ -346,6 +351,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 	protected void addSections() {
 		int j = 0;
 		List<ListDatetimeAmount> dateListToSend = new ArrayList<ListDatetimeAmount>();
+		int sectionNum = 0;
 		@SuppressWarnings("rawtypes")
 		List listString = new ArrayList<List<Entry>>();
 		for (int i = 0; i < mDataDateList.size(); i++) {
