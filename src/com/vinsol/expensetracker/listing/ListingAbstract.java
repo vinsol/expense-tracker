@@ -76,6 +76,11 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 	}
 	
 	@Override
+	public boolean removeGenerateReport(Menu menu) {
+		return false;
+	}
+	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView();

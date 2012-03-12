@@ -96,8 +96,7 @@ public class Voice extends EditAbstract {
 	@Override
 	protected void onPause() {
 		////// ****** stop recording & audio playback  ***** ///////
-		if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
-		if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
+		stopRecordingAndPlayback();
 		super.onPause();
 	}
 
@@ -240,9 +239,25 @@ public class Voice extends EditAbstract {
 	
 	@Override
 	public void onBackPressed() {
-		if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
-		if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
+		stopRecordingAndPlayback();
 		super.onBackPressed();
+	}
+	
+	private void stopRecordingAndPlayback() {
+		if(mRecordingHelper != null && mRecordingHelper.isRecording()) {
+			if(editTimeDetailsChronometer != null) {editTimeDetailsChronometer.stop();}
+			mRecordingHelper.stopRecording();
+		}
+		if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {
+			if(editTimeDetailsChronometer != null) {editTimeDetailsChronometer.stop();}
+			if(isFromFavorite) {
+				mAudioPlay = new AudioPlay(mFavoriteList.favId , this, isFromFavorite);
+			} else {
+				mAudioPlay = new AudioPlay(entry.id , this, isFromFavorite);
+			}
+			if(editTimeDetailsChronometer != null) {editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));}
+			mAudioPlay.stopPlayBack();
+		}
 	}
 	
 	private void stopRecording() {
@@ -265,4 +280,5 @@ public class Voice extends EditAbstract {
 		}
 		editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
 	}
+	
 }

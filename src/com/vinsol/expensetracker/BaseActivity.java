@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2012 Vinayak Solutions Private Limited 
+ * See the file license.txt for copying permission.
+*/     
+
+
 package com.vinsol.expensetracker;
 
 import com.vinsol.expensetracker.listing.FavoriteActivity;
@@ -20,6 +26,17 @@ public class BaseActivity extends Activity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
+		removeManageFavorite(menu);
+		removeGenerateReport(menu);
+		return true;
+	}
+	
+	public boolean removeGenerateReport(Menu menu){
+		menu.removeItem(R.id.generate_report);
+		return true;
+	}
+	
+	public boolean removeManageFavorite(Menu menu){
 		menu.removeItem(R.id.manage_favorite);
 		return true;
 	}
