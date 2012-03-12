@@ -18,4 +18,24 @@
         <item>320x240</item>
     </string-array>
 
+    <!-- Report Spinner Period -->
+    <string-array name="spinner_period">
+        <item>1 Month</item>
+        <item>1 Quarter</item>
+        <item>Half Year</item>
+        <item>1 Year</item>
+        <item>Choose Period</item>
+    </string-array>
+    
+    <!-- Report Spinner Type -->
+    <string-array name="spinner_type">
+        <item>PDF</item>
+        <item>CSV</item>
+    </string-array>
+    
+    <!-- Context Menu -->
+    <string-array name="listcontextmenu">
+        <item>Edit</item>
+        <item>Delete</item>
+    </string-array>
 </resources>

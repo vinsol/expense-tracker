@@ -10,7 +10,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:background="@color/white" >
+    android:background="@drawable/home_bg" >
     
     <!-- Header -->
 	<LinearLayout
@@ -50,6 +50,7 @@
 
         <Spinner
             android:id="@+id/period_spinner"
+            android:entries="@array/spinner_period"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
@@ -74,6 +75,7 @@
 
         <Spinner
             android:id="@+id/type_spinner"
+            android:entries="@array/spinner_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
