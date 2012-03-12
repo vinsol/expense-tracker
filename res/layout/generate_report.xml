@@ -56,6 +56,36 @@
             android:layout_weight="1" />
 
     </LinearLayout>
+    
+    <LinearLayout
+        android:layout_marginRight="20dp"
+        android:layout_width="fill_parent"
+        android:id="@+id/custom_date_layout"
+        android:layout_height="wrap_content" 
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:gravity="center_vertical|right"
+        android:layout_marginBottom="10dp" >
+        
+        <TextView 
+            android:id="@+id/custom_start_date"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:hint="Start Date"
+            android:background="@drawable/edittext_background"
+            android:minWidth="150dp"
+            android:minHeight="40dp"/>
+        
+        <TextView
+            android:id="@+id/custom_end_date" 
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:hint="End Date"
+            android:minHeight="40dp"
+            android:background="@drawable/edittext_background"
+            android:minWidth="150dp"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_marginBottom="10dp"
