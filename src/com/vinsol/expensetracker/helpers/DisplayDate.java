@@ -179,7 +179,7 @@ public class DisplayDate {
 		return false;
 	}
 
-	// ////// ******* Function which returns month as string ********///////////
+	//////// ******* Function which returns month as string ********///////////
 	private String getMonth(int i) {
 		switch (i) {
 		case 0:

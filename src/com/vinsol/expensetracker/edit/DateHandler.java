@@ -4,11 +4,9 @@
 */     
 
 
-package com.vinsol.expensetracker.helpers;
+package com.vinsol.expensetracker.edit;
 
 import java.util.Calendar;
-
-import com.vinsol.expensetracker.R;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -18,6 +16,9 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.DisplayDate;
+
 public class DateHandler implements OnClickListener {
 
 	private ImageButton previousArrow;
@@ -25,7 +26,7 @@ public class DateHandler implements OnClickListener {
 	private TextView dateview;
 	private DisplayDate mDisplayDate;
 	private Calendar mCalendar;
-	private DatePickerDialog dialog;
+	private EditDatePickerDialog dialog;
 	public static Calendar tempCalenderOnCancel;
 
 	public DateHandler(Activity activity) {
@@ -45,12 +46,9 @@ public class DateHandler implements OnClickListener {
 		dateview = (TextView) activity.findViewById(R.id.edit_date_bar_dateview);
 		previousArrow = (ImageButton) activity.findViewById(R.id.edit_date_bar_previous_arrow);
 		nextArrow = (ImageButton) activity.findViewById(R.id.edit_date_bar_next_arrow);
-
-		if (!beforeCurrentDate(mCalendar))
-			nextArrow.setVisibility(View.INVISIBLE);
-
+		if (!beforeCurrentDate(mCalendar)) {nextArrow.setVisibility(View.INVISIBLE);}
 		dateview.setText(mDisplayDate.getDisplayDate());
-		dialog = new DatePickerDialog(activity, dateview);
+		dialog = new EditDatePickerDialog(activity, dateview);
 		previousArrow.setOnClickListener(this);
 		nextArrow.setOnClickListener(this);
 		dateview.setOnClickListener(this);
@@ -58,7 +56,8 @@ public class DateHandler implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.edit_date_bar_next_arrow) {
+		switch (v.getId()) {
+		case R.id.edit_date_bar_next_arrow:
 			mCalendar.add(Calendar.DATE, 1);
 			mDisplayDate = new DisplayDate(mCalendar);
 			dateview.setText(mDisplayDate.getDisplayDate());
@@ -66,18 +65,18 @@ public class DateHandler implements OnClickListener {
 			if (isCurrentDate(mCalendar)) {
 				nextArrow.setVisibility(View.INVISIBLE);
 			}
-		}
+			break;
 
-		if (v.getId() == R.id.edit_date_bar_previous_arrow) {
+		case R.id.edit_date_bar_previous_arrow:
 			mCalendar.add(Calendar.DATE, -1);
 			mDisplayDate = new DisplayDate(mCalendar);
 			if (!nextArrow.isShown()) {
 				nextArrow.setVisibility(View.VISIBLE);
 			}
 			dateview.setText(mDisplayDate.getDisplayDate());
-		}
-
-		if (v.getId() == R.id.edit_date_bar_dateview) {
+			break;
+			
+		case R.id.edit_date_bar_dateview:
 			dialog.setOnDismissListener(new OnDismissListener() {
 				@Override
 				public void onDismiss(DialogInterface dialog) {
@@ -94,8 +93,10 @@ public class DateHandler implements OnClickListener {
 				}
 			});
 			dialog.show();
+			break;
+		default:
+			break;
 		}
-
 	}
 
 	private boolean beforeCurrentDate(Calendar pCalendar) {

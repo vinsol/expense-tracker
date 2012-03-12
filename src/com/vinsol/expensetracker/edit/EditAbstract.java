@@ -31,7 +31,6 @@ import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConfirmSaveEntryDialog;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
-import com.vinsol.expensetracker.helpers.DateHandler;
 import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.DeleteDialog;
 import com.vinsol.expensetracker.helpers.DisplayDate;

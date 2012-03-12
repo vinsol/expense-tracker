@@ -58,33 +58,64 @@
     </LinearLayout>
     
     <LinearLayout
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="15dp"
         android:layout_width="fill_parent"
         android:id="@+id/custom_date_layout"
         android:layout_height="wrap_content" 
-        android:visibility="gone"
         android:orientation="vertical"
         android:gravity="center_vertical|right"
         android:layout_marginBottom="10dp" >
         
-        <TextView 
-            android:id="@+id/custom_start_date"
-            android:layout_height="wrap_content"
+        <LinearLayout 
             android:layout_width="wrap_content"
-            android:hint="Start Date"
-            android:background="@drawable/edittext_background"
-            android:minWidth="150dp"
-            android:minHeight="40dp"/>
+            android:layout_height="wrap_content"
+            android:baselineAligned="true">
         
-        <TextView
-            android:id="@+id/custom_end_date" 
-            android:layout_height="wrap_content"
+	        <TextView 
+	            android:layout_height="wrap_content"
+	            android:layout_width="wrap_content"
+	            android:textColor="@color/black"
+	            android:textSize="16sp"
+	            android:text="Start Date"
+	            android:minWidth="80dp"
+	            android:minHeight="40dp"/>
+	        
+	        <TextView 
+	            android:id="@+id/custom_start_date"
+	            android:layout_height="wrap_content"
+	            android:layout_width="wrap_content"
+	            android:textColor="@color/black"
+	            android:textSize="16sp"
+	            android:hint="Start Date"
+	            android:background="@drawable/edittext_background"
+	            android:minWidth="110dp"
+	            android:minHeight="40dp"/>
+	        
+        </LinearLayout>
+        <LinearLayout 
             android:layout_width="wrap_content"
-            android:hint="End Date"
-            android:minHeight="40dp"
-            android:background="@drawable/edittext_background"
-            android:minWidth="150dp"/>
-
+            android:layout_height="wrap_content"
+            android:baselineAligned="true">
+	        <TextView 
+	            android:layout_height="wrap_content"
+	            android:layout_width="wrap_content"
+	            android:textColor="@color/black"
+	            android:minWidth="80dp"
+	            android:textSize="16sp"
+	            android:text="End Date"
+	            android:minHeight="40dp"/>
+	        
+	        <TextView
+	            android:id="@+id/custom_end_date" 
+	            android:layout_height="wrap_content"
+	            android:layout_width="wrap_content"
+	            android:textColor="@color/black"
+	            android:textSize="16sp"
+	            android:hint="End Date"
+	            android:minHeight="40dp"
+	            android:background="@drawable/edittext_background"
+	            android:minWidth="110dp"/>
+		</LinearLayout>
     </LinearLayout>
 
     <LinearLayout
