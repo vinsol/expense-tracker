@@ -60,6 +60,9 @@ public class BaseActivity extends Activity {
 			startActivity(startManagingFavorite);
 			break;
 			
+		case R.id.generate_report:
+			
+			break;
 		default:
 			break;
 		}
