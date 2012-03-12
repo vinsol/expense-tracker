@@ -1,26 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+/**
+ * Copyright (c) 2012 Vinayak Solutions Private Limited 
+ * See the file license.txt for copying permission.
+*/     
+ -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:background="@color/white" >
     
-    <include 
-        layout="@layout/simple_header"/>
+    <!-- Header -->
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/topbar_bg"
+	    android:gravity="center_vertical|left" 
+	    >
+	    
+	    <TextView
+	        android:id="@+id/main_header_title"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Export"
+	        android:textSize="20dip"
+	        android:textStyle="bold"
+	        android:textColor="@color/white" 
+	        android:layout_marginLeft="10dip" />
+	    
+	</LinearLayout>    
 
     <LinearLayout
         android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" 
         android:layout_marginLeft="20dp"
+        android:gravity="center_vertical"
         android:layout_marginRight="20dp" >
 
         <TextView
-            android:layout_width="50dp"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:layout_marginRight="10dp"
             android:text="Period" />
 
@@ -34,16 +58,17 @@
 
     <LinearLayout
         android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:gravity="center_vertical"
         android:layout_marginRight="20dp" >
 
         <TextView
-            android:layout_width="50dp"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:layout_marginRight="10dp"
             android:text="Type" />
 
@@ -56,8 +81,8 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
+        android:id="@+id/export_button"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="Export" />
 
