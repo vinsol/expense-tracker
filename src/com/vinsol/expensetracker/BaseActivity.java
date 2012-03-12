@@ -6,6 +6,7 @@
 
 package com.vinsol.expensetracker;
 
+import com.vinsol.expensetracker.helpers.GenerateReport;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
 
 import android.app.Activity;
@@ -61,7 +62,8 @@ public class BaseActivity extends Activity {
 			break;
 			
 		case R.id.generate_report:
-			
+			Intent generateReport = new Intent(this, GenerateReport.class);
+			startActivity(generateReport);
 			break;
 		default:
 			break;
