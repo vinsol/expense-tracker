@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.utils.Log;
 
 public class GenerateReport extends BaseActivity implements OnClickListener,OnItemSelectedListener{
 	
