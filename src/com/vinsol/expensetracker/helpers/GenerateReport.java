@@ -62,6 +62,21 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.export_button:
+			Spinner type = (Spinner) findViewById(R.id.type_spinner);
+			if(period.getSelectedItemId() != 4) {
+				setStartEndDate();
+			}
+			if(period.getSelectedItemId() != 4 || (period.getSelectedItemId() == 4 && checkStartEndDate(true))) {
+				//case if Exoprting to pdf
+				if(type.getSelectedItemId() == 0){
+					exportToPDF();
+				}
+				
+				//case if Exoprting to csv
+				if(type.getSelectedItemId() == 1){
+					exportToCSV();
+				}
+			}
 			break;
 
 		case R.id.custom_start_date:
@@ -74,6 +89,20 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		default:
 			break;
 		}
+	}
+
+	private void exportToCSV() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void exportToPDF() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void setStartEndDate() {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -101,7 +130,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			mCalendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			((TextView)findViewById(R.id.custom_start_date)).setText(new DisplayDate(mCalendar).getDisplayDate());
-			checkStartEndDate();
+			checkStartEndDate(false);
 		}
 	};
 	
@@ -117,15 +146,22 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			((TextView)findViewById(R.id.custom_end_date)).setText(new DisplayDate(mCalendar).getDisplayDate());
 			mCalendar.add(Calendar.DAY_OF_MONTH, 1);
-            checkStartEndDate();
+            checkStartEndDate(false);
 		}
 	};
 	
-	private void checkStartEndDate() {
-		if(customEndDateTextView.getText().toString().equals("") || customStartDateTextView.getText().toString().equals("")) {return;}
+	private boolean checkStartEndDate(boolean isToShowToast) {
+		if(customEndDateTextView.getText().toString().equals("") || customStartDateTextView.getText().toString().equals("")) {
+			if(isToShowToast) {
+				Toast.makeText(getApplicationContext(), "Set Start Date and End Date before exporting", Toast.LENGTH_LONG).show();
+			}
+			return false;
+		}
 		if(!isCombinationCorrect()) {
 			Toast.makeText(getApplicationContext(), "End Date must be greater than Start Date", Toast.LENGTH_LONG).show();
+			return false;
 		}
+		return true;
 	}
 	
 	private boolean isCombinationCorrect() {
