@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.utils.Log;
 
 public class GenerateReport extends BaseActivity implements OnClickListener,OnItemSelectedListener{
 	
@@ -36,6 +37,9 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
     
     private TextView customStartDateTextView;
     private TextView customEndDateTextView;
+    
+    private Calendar endCalendar;
+    private Calendar startCalendar;
     	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,34 +96,41 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 
 	private void exportToCSV() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	private void exportToPDF() {
-		// TODO Auto-generated method stub
-		
+		// TODO
 	}
 
 	private void setStartEndDate() {
+		endCalendar = Calendar.getInstance();
+		endCalendar.set(endCalendar.get(Calendar.YEAR), endCalendar.get(Calendar.MONTH), endCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		endCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+	
+		startCalendar = (Calendar) endCalendar.clone();
 		switch ((int)period.getSelectedItemId()) {
 		//case if period is 1 Month
 		case 0:
-			
+			endCalendar.add(Calendar.MONTH, -1);
+			setDateParameters(startCalendar,endCalendar);
 			break;
 
 		//case if period is 1 Quarter
 		case 1:
-			
+			endCalendar.add(Calendar.MONTH, -3);
+			setDateParameters(startCalendar,endCalendar);
 			break;
 
 		//case if period is Half Year
 		case 2:
-			
+			endCalendar.add(Calendar.MONTH, -6);
+			setDateParameters(startCalendar,endCalendar);
 			break;
 			
 		//case if period is 1 Year
 		case 3:
-			
+			endCalendar.add(Calendar.YEAR, -1);
+			setDateParameters(startCalendar,endCalendar);
 			break;
 			
 		//case if period is Custom
@@ -129,7 +140,15 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		default:
 			break;
 		}
-		// TODO Auto-generated method stub
+	}
+
+	private void setDateParameters(Calendar startCalendar, Calendar endCalendar) {
+		mEndYear = endCalendar.get(Calendar.YEAR);
+		mEndMonth = endCalendar.get(Calendar.MONTH);
+		mEndDay = endCalendar.get(Calendar.DAY_OF_MONTH);
+		mStartYear = startCalendar.get(Calendar.YEAR);
+		mStartMonth = startCalendar.get(Calendar.MONTH);
+		mStartDay = startCalendar.get(Calendar.DAY_OF_MONTH);
 	}
 
 	@Override
