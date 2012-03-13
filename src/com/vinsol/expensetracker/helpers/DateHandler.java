@@ -4,7 +4,7 @@
 */     
 
 
-package com.vinsol.expensetracker.edit;
+package com.vinsol.expensetracker.helpers;
 
 import java.util.Calendar;
 
@@ -13,11 +13,11 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.helpers.DisplayDate;
 
 public class DateHandler implements OnClickListener {
 
@@ -26,8 +26,8 @@ public class DateHandler implements OnClickListener {
 	private TextView dateview;
 	private DisplayDate mDisplayDate;
 	private Calendar mCalendar;
-	private EditDatePickerDialog dialog;
-	public static Calendar tempCalenderOnCancel;
+	private CustomDatePickerDialog dialog;
+	public Calendar tempCalenderOnCancel;
 
 	public DateHandler(Activity activity) {
 		mCalendar = Calendar.getInstance();
@@ -48,11 +48,25 @@ public class DateHandler implements OnClickListener {
 		nextArrow = (ImageButton) activity.findViewById(R.id.edit_date_bar_next_arrow);
 		if (!beforeCurrentDate(mCalendar)) {nextArrow.setVisibility(View.INVISIBLE);}
 		dateview.setText(mDisplayDate.getDisplayDate());
-		dialog = new EditDatePickerDialog(activity, dateview);
+		dialog = new CustomDatePickerDialog(activity, dateSetListener , dateview);
 		previousArrow.setOnClickListener(this);
 		nextArrow.setOnClickListener(this);
 		dateview.setOnClickListener(this);
 	}
+	
+	private CustomDatePickerDialog.OnDateSetListener dateSetListener = new CustomDatePickerDialog.OnDateSetListener() {
+		
+		@Override
+		public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
+			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			dateview.setText(new DisplayDate(mCalendar).getDisplayDate());
+			tempCalenderOnCancel = Calendar.getInstance();
+			tempCalenderOnCancel.setFirstDayOfWeek(Calendar.MONDAY);
+			tempCalenderOnCancel.setTime(mCalendar.getTime());
+		}
+	};
 
 	@Override
 	public void onClick(View v) {

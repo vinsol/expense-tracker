@@ -7,14 +7,13 @@ package com.vinsol.expensetracker.helpers;
 
 import java.util.Calendar;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,15 +33,20 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
     private int mEndMonth;
     private int mEndDay;
     
-    private ReportDatePicker reportDatePicker;
+//    private ReportDatePicker reportDatePicker;
+    
+    private TextView customStartDateTextView;
+    private TextView customEndDateTextView;
     	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.generate_report);
 		((Button)findViewById(R.id.export_button)).setOnClickListener(this);
-		((TextView)findViewById(R.id.custom_start_date)).setOnClickListener(this);
-		((TextView)findViewById(R.id.custom_end_date)).setOnClickListener(this);
+		customStartDateTextView = (TextView)findViewById(R.id.custom_start_date);
+		customStartDateTextView.setOnClickListener(this);
+		customEndDateTextView = (TextView)findViewById(R.id.custom_end_date);
+		customEndDateTextView.setOnClickListener(this);
 		period = (Spinner) findViewById(R.id.period_spinner);
 		period.setOnItemSelectedListener(this);
 		
@@ -62,15 +66,11 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			break;
 
 		case R.id.custom_start_date:
-			reportDatePicker = new ReportDatePicker(this, mEndYear, mEndMonth, mEndDay);
-			reportDatePicker.setOnDismissListener(mStartDismissListener);
-			reportDatePicker.show();
+			new CustomDatePickerDialog(this, mStartDateSetListener, customStartDateTextView).show();
 			break;
 			
 		case R.id.custom_end_date:
-			reportDatePicker = new ReportDatePicker(this, mEndYear, mEndMonth, mEndDay);
-			reportDatePicker.setOnDismissListener(mEndDismissListener);
-			reportDatePicker.show();
+			new CustomDatePickerDialog(this, mEndDateSetListener, customStartDateTextView).show();
 			break;
 		default:
 			break;
@@ -90,62 +90,33 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	public void onNothingSelected(AdapterView<?> adapter) {
 		// do nothing
 	}
-    
-    private OnDismissListener mStartDismissListener = new OnDismissListener() {
+	
+	private CustomDatePickerDialog.OnDateSetListener mStartDateSetListener = new CustomDatePickerDialog.OnDateSetListener() {
 		
 		@Override
-		public void onDismiss(DialogInterface dialog) {
-			if(reportDatePicker.isOk()) {
-				mStartYear = reportDatePicker.getYear();
-				mStartMonth = reportDatePicker.getMonth();
-				mStartDay = reportDatePicker.getDay();
-				((TextView)findViewById(R.id.custom_start_date)).setText(mStartDay+" "+getMonth(mStartMonth)+" "+mStartYear);
-			}
+		public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
+			mStartYear = year;
+			mStartMonth = monthOfYear;
+			mStartDay = dayOfMonth;
+			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			((TextView)findViewById(R.id.custom_start_date)).setText(new DisplayDate(mCalendar).getDisplayDate());
 		}
 	};
 	
-	private OnDismissListener mEndDismissListener = new OnDismissListener() {
+	private CustomDatePickerDialog.OnDateSetListener mEndDateSetListener = new CustomDatePickerDialog.OnDateSetListener() {
 		
 		@Override
-		public void onDismiss(DialogInterface dialog) {
-			if(reportDatePicker.isOk()) {
-		        mEndYear = reportDatePicker.getYear();
-	            mEndMonth = reportDatePicker.getMonth();
-	            mEndDay = reportDatePicker.getDay();
-	            ((TextView)findViewById(R.id.custom_end_date)).setText(mEndDay+" "+getMonth(mEndMonth)+" "+mEndYear);
-			}
+		public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
+			mEndYear = year;
+            mEndMonth = monthOfYear;
+            mEndDay = dayOfMonth;
+			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			((TextView)findViewById(R.id.custom_end_date)).setText(new DisplayDate(mCalendar).getDisplayDate());
 		}
 	};
-	
-	////////******* Function which returns month as string ********///////////
-	private String getMonth(int i) {
-		switch (i) {
-		case 0:
-			return "Jan";
-		case 1:
-			return "Feb";
-		case 2:
-			return "Mar";
-		case 3:
-			return "Apr";
-		case 4:
-			return "May";
-		case 5:
-			return "Jun";
-		case 6:
-			return "Jul";
-		case 7:
-			return "Aug";
-		case 8:
-			return "Sep";
-		case 9:
-			return "Oct";
-		case 10:
-			return "Nov";
-		case 11:
-			return "Dec";
-		}
-		return null;
-	}
 
 }

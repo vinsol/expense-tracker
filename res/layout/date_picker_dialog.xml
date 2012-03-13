@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:layout_gravity="center_horizontal">
+    <TextView 
+    	android:id = "@+id/new_date_label"
+    	android:layout_height = "wrap_content"
+    	android:layout_width = "fill_parent"
+    	android:text = "Future dates are not allowed"
+    	android:textColor="#ffffff"
+    	android:layout_margin="5dp"
+    	android:background="#FF0000"
+    	android:padding="3dp"
+    	android:gravity="center_horizontal"
+    	android:visibility="invisible"/>
+    <DatePicker
+    	android:id="@+id/datePicker"
+    	android:padding="5dip"
+    	android:layout_gravity="center_horizontal"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"/>
+ </LinearLayout>

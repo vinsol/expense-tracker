@@ -101,4 +101,7 @@
 
     <string name="details_ok">OK</string>
     
+    <!-- Name of the button in the date/time picker to accept the date/time change -->
+    <string name="date_time_set">Set</string>
+    
 </resources>

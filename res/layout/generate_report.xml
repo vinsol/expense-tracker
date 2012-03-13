@@ -58,7 +58,7 @@
     </LinearLayout>
     
     <LinearLayout
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="13dp"
         android:layout_width="fill_parent"
         android:id="@+id/custom_date_layout"
         android:layout_height="wrap_content" 
@@ -75,9 +75,9 @@
 	            android:layout_height="wrap_content"
 	            android:layout_width="wrap_content"
 	            android:textColor="@color/black"
-	            android:textSize="16sp"
+	            android:textSize="15sp"
 	            android:text="Start Date"
-	            android:minWidth="80dp"
+	            android:minWidth="70dp"
 	            android:minHeight="40dp"/>
 	        
 	        <TextView 
@@ -85,10 +85,10 @@
 	            android:layout_height="wrap_content"
 	            android:layout_width="wrap_content"
 	            android:textColor="@color/black"
-	            android:textSize="16sp"
+	            android:textSize="15sp"
 	            android:hint="Start Date"
 	            android:background="@drawable/edittext_background"
-	            android:minWidth="110dp"
+	            android:minWidth="122dp"
 	            android:minHeight="40dp"/>
 	        
         </LinearLayout>
@@ -100,7 +100,7 @@
 	            android:layout_height="wrap_content"
 	            android:layout_width="wrap_content"
 	            android:textColor="@color/black"
-	            android:minWidth="80dp"
+	            android:minWidth="70dp"
 	            android:textSize="16sp"
 	            android:text="End Date"
 	            android:minHeight="40dp"/>
@@ -114,7 +114,7 @@
 	            android:hint="End Date"
 	            android:minHeight="40dp"
 	            android:background="@drawable/edittext_background"
-	            android:minWidth="110dp"/>
+	            android:minWidth="122dp"/>
 		</LinearLayout>
     </LinearLayout>
 
