@@ -57,6 +57,8 @@ public class DateHelper {
 		}
 	}
 	
+	
+	
 	public boolean isCurrentWeek() {
 		return isCurrentWeek;
 	}

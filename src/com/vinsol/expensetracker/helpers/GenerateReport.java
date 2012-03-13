@@ -17,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.R;
@@ -32,8 +33,6 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
     private int mEndYear;
     private int mEndMonth;
     private int mEndDay;
-    
-//    private ReportDatePicker reportDatePicker;
     
     private TextView customStartDateTextView;
     private TextView customEndDateTextView;
@@ -102,6 +101,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			mCalendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			((TextView)findViewById(R.id.custom_start_date)).setText(new DisplayDate(mCalendar).getDisplayDate());
+			checkStartEndDate();
 		}
 	};
 	
@@ -110,13 +110,30 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
 			mEndYear = year;
-            mEndMonth = monthOfYear;
-            mEndDay = dayOfMonth;
+			mEndMonth = monthOfYear;
+			mEndDay = dayOfMonth;
 			Calendar mCalendar = Calendar.getInstance();
 			mCalendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			((TextView)findViewById(R.id.custom_end_date)).setText(new DisplayDate(mCalendar).getDisplayDate());
+			mCalendar.add(Calendar.DAY_OF_MONTH, 1);
+            checkStartEndDate();
 		}
 	};
+	
+	private void checkStartEndDate() {
+		if(customEndDateTextView.getText().toString().equals("") || customStartDateTextView.getText().toString().equals("")) {return;}
+		if(!isCombinationCorrect()) {
+			Toast.makeText(getApplicationContext(), "End Date must be greater than Start Date", Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	private boolean isCombinationCorrect() {
+		if(mStartDay == mEndDay && mStartMonth == mEndMonth && mEndYear == mStartYear) {return true;}
+		if(mStartYear > mEndYear) {return false;}
+		if(mStartYear == mEndYear && mStartMonth > mEndMonth) {return false;}
+		if(mStartYear == mEndYear && mStartMonth == mEndMonth && mStartDay > mEndDay) {return false;}
+		return true;
+	}
 
 }
