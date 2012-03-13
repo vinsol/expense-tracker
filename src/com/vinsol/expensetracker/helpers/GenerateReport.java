@@ -62,20 +62,19 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.export_button:
-			Spinner type = (Spinner) findViewById(R.id.type_spinner);
-			if(period.getSelectedItemId() != 4) {
-				setStartEndDate();
-			}
-			if(period.getSelectedItemId() != 4 || (period.getSelectedItemId() == 4 && checkStartEndDate(true))) {
-				//case if Exoprting to pdf
-				if(type.getSelectedItemId() == 0){
-					exportToPDF();
-				}
-				
-				//case if Exoprting to csv
-				if(type.getSelectedItemId() == 1){
-					exportToCSV();
-				}
+			setStartEndDate();
+			switch ((int)((Spinner) findViewById(R.id.type_spinner)).getSelectedItemId()) {
+			//case if Exporting to PDF
+			case 0:
+				exportToPDF();
+				break;
+			//case if Exporting to CSV
+			case 1:
+				exportToCSV();
+				break;
+
+			default:
+				break;
 			}
 			break;
 
@@ -102,6 +101,34 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	}
 
 	private void setStartEndDate() {
+		switch ((int)period.getSelectedItemId()) {
+		//case if period is 1 Month
+		case 0:
+			
+			break;
+
+		//case if period is 1 Quarter
+		case 1:
+			
+			break;
+
+		//case if period is Half Year
+		case 2:
+			
+			break;
+			
+		//case if period is 1 Year
+		case 3:
+			
+			break;
+			
+		//case if period is Custom
+		case 4:
+			checkStartEndDate(true);
+			break;
+		default:
+			break;
+		}
 		// TODO Auto-generated method stub
 	}
 
