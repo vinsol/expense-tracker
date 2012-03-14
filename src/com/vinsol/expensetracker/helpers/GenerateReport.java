@@ -66,6 +66,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
     private File fileLocation;
     
     private String dateRange;
+	private List<Entry> mEntryList;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,20 +93,29 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.export_button:
-			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-				setStartEndDate();
-				switch ((int)((Spinner) findViewById(R.id.type_spinner)).getSelectedItemId()) {
-				//case if Exporting to PDF
-				case 0:
-					exportToPDF();
-					break;
-				//case if Exporting to CSV
-				case 1:
-					exportToCSV();
-					break;
-	
-				default:
-					break;
+				if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+				mEntryList = new ConvertCursorToListString(GenerateReport.this).getEntryList(true, "");
+				if(mEntryList.size() == 0) {
+					Toast.makeText(GenerateReport.this, "No Record to Generate Report, Please add some", Toast.LENGTH_LONG).show();
+				}
+				if(mEntryList.size() <= 5000) {
+					setStartEndDate();
+					switch ((int)((Spinner) findViewById(R.id.type_spinner)).getSelectedItemId()) {
+					//case if Exporting to PDF
+					case 0:
+						exportToPDF();
+						break;
+					//case if Exporting to CSV
+					case 1:
+						exportToCSV();
+						break;
+		
+					default:
+						break;
+					}
+
+				} else {
+					Toast.makeText(GenerateReport.this, "Too many Records, Please select fewer", Toast.LENGTH_LONG).show();
 				}
 			} else {
 				Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
@@ -140,9 +150,9 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		private Font tableHeader;
 		private Font small;
 		private PdfWriter writer;
-		private List<Entry> mEntryList;
 		private Double totalAmount = 0.0;
 		private boolean isAmountNotEntered = false;
+		private boolean isRecordAdded = false;
 		
 		@Override
 		protected void onPreExecute() {
@@ -155,35 +165,27 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		
 		@Override
 		protected Void doInBackground(Void... params) {
-			mEntryList = new ConvertCursorToListString(GenerateReport.this).getEntryList(true, "");
-			if(mEntryList.size() == 0) {
-				Toast.makeText(GenerateReport.this, "No Record to Generate Report, Please add some", Toast.LENGTH_LONG).show();
-			}
-			if(mEntryList.size() <= 5000) {
-				catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-				subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.NORMAL);
-		        tableHeader = new Font();
-		        tableHeader.setStyle(Font.BOLD);
-		        small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-		        Document document = new Document();
-		        File dir = new File(Environment.getExternalStorageDirectory()+"/ExpenseTracker");
-		        if(!dir.exists()) {dir.mkdirs();}
-		        fileLocation = new File(dir, getFileName());
-		        try {
-					writer = PdfWriter.getInstance(document, new FileOutputStream(fileLocation));
-					writer.setPageEvent(new HeaderAndFooter());
-					document.open();
-					addMetaData(document);
-					addContent(document);
-					document.close();
-					writer.close();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (DocumentException e) {
-					e.printStackTrace();
-				}
-			} else {
-				Toast.makeText(GenerateReport.this, "Too many Records, Please select fewer", Toast.LENGTH_LONG).show();
+			catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+			subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.NORMAL);
+	        tableHeader = new Font();
+	        tableHeader.setStyle(Font.BOLD);
+	        small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+	        Document document = new Document();
+	        File dir = new File(Environment.getExternalStorageDirectory()+"/ExpenseTracker");
+	        if(!dir.exists()) {dir.mkdirs();}
+	        fileLocation = new File(dir, getFileName());
+	        try {
+				writer = PdfWriter.getInstance(document, new FileOutputStream(fileLocation));
+				writer.setPageEvent(new HeaderAndFooter());
+				document.open();
+				addMetaData(document);
+				addContent(document);
+				document.close();
+				writer.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (DocumentException e) {
+				e.printStackTrace();
 			}
 			return null;
 		}
@@ -191,6 +193,10 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		@Override
 		protected void onPostExecute(Void result) {
 			progressDialog.cancel();
+			if(!isRecordAdded) {
+				fileLocation.delete();
+				Toast.makeText(GenerateReport.this, "No Record within range to generate report", Toast.LENGTH_LONG).show();
+			}
 		}
 		
 		private String getFileName() {
@@ -301,6 +307,8 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 					isAmountNotEntered = true;
 					table.addCell("?");
 				}
+				
+				isRecordAdded = true;
 				
 				if((i+1) % 500 == 0) {
 					document.add(table);
