@@ -41,8 +41,8 @@ abstract class TabLayoutListingAbstract extends ListingAbstract {
 	protected void initListView() {
 		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
-		mDataDateList = mConvertCursorToListString.getDateListString(false,"",type);
-		mSubList = mConvertCursorToListString.getEntryList("");
+		mDataDateList = mConvertCursorToListString.getDateListString(false,false,"",type);
+		mSubList = mConvertCursorToListString.getEntryList(false,"");
 		addSections();
 	}
 

@@ -50,7 +50,7 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
 	@Override
 	protected void onResume() {
 		super.onResume();
-		unfinishedEntryCount = new UnfinishedEntryCount(mConvertCursorToListString.getEntryList(""), unfinishedEntryCountThisWeek, unfinishedEntryCountThisMonth, unfinishedEntryCountThisYear, unfinishedEntryCountAll);
+		unfinishedEntryCount = new UnfinishedEntryCount(mConvertCursorToListString.getEntryList(false,""), unfinishedEntryCountThisWeek, unfinishedEntryCountThisMonth, unfinishedEntryCountThisYear, unfinishedEntryCountAll);
 		unfinishedEntryCount.execute();
 	}
 	

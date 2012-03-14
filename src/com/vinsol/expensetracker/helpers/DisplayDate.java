@@ -50,6 +50,34 @@ public class DisplayDate {
 
 		return month + " " + day + ", " + year;
 	}
+	
+	//////// ******** Function to get date in proper format to display in various activities ****** ///////
+	public String getDisplayDateReport(long timeInMillis) {
+		Calendar mCalendar = Calendar.getInstance();
+		mCalendar.setTimeInMillis(timeInMillis);
+		return date(mCalendar);
+	}
+	
+	////////******** Function to get date in proper format to display in various activities ****** ///////
+	public String getDisplayDateReport(Calendar calendar) {
+		return date(calendar);
+	}
+	
+	public String getReportDateRange(int mStartDay, int mStartMonth,int mStartYear, int mEndDay, int mEndMonth, int mEndYear) {
+		return getMonth(mStartMonth) + " " + mStartDay + ", " + mStartYear+" - "+getMonth(mEndMonth) + " " + mEndDay + ", " + mEndYear;
+	}
+	
+	private String date(Calendar mCalendar) {
+		String month, day, year;
+		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
+		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+		month = getMonth(mCalendar.get(Calendar.MONTH));
+		day = mCalendar.get(Calendar.DAY_OF_MONTH) + "";
+		year = mCalendar.get(Calendar.YEAR) + "";
+		Calendar currentDate = Calendar.getInstance();
+		currentDate.setFirstDayOfWeek(Calendar.MONDAY);
+		return month + " " + day + ", " + year;
+	}
 
 	// //////******** Function to get date in proper format to display in various activities ****** ///////
 	public String getHeaderFooterListDisplayDate(int type) {
@@ -180,7 +208,7 @@ public class DisplayDate {
 	}
 
 	//////// ******* Function which returns month as string ********///////////
-	private String getMonth(int i) {
+	private static String getMonth(int i) {
 		switch (i) {
 		case 0:
 			return "Jan";

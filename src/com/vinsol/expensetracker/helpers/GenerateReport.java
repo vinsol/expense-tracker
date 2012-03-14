@@ -5,8 +5,14 @@
 
 package com.vinsol.expensetracker.helpers;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Calendar;
+import java.util.List;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -20,8 +26,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfAction;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.models.Entry;
 
 public class GenerateReport extends BaseActivity implements OnClickListener,OnItemSelectedListener{
 	
@@ -41,6 +61,12 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
     private Calendar endCalendar;
     private Calendar startCalendar;
     	
+    private AsyncTask<Void, Void, Void> exportPDF;
+    
+    private File fileLocation;
+    
+    private String dateRange;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -103,9 +129,282 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	}
 
 	private void exportToPDF() {
-		// TODO
+		exportPDF = new ExportPDF().execute();
 	}
+	
+	private class ExportPDF extends AsyncTask<Void, Void, Void> {
+		
+		private ProgressDialog progressDialog;
+		private Font catFont;
+		private Font subFont;
+		private Font tableHeader;
+		private Font small;
+		private PdfWriter writer;
+		private List<Entry> mEntryList;
+		private Double totalAmount = 0.0;
+		private boolean isAmountNotEntered = false;
+		
+		@Override
+		protected void onPreExecute() {
+			progressDialog = new ProgressDialog(GenerateReport.this);
+			progressDialog.setCancelable(false);
+			progressDialog.setTitle("Exporting Report");
+			progressDialog.setMessage("Please Wait...");
+			progressDialog.show();
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			mEntryList = new ConvertCursorToListString(GenerateReport.this).getEntryList(true, "");
+			if(mEntryList.size() == 0) {
+				Toast.makeText(GenerateReport.this, "No Record to Generate Report, Please add some", Toast.LENGTH_LONG).show();
+			}
+			if(mEntryList.size() <= 5000) {
+				catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+				subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.NORMAL);
+		        tableHeader = new Font();
+		        tableHeader.setStyle(Font.BOLD);
+		        small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+		        Document document = new Document();
+		        File dir = new File(Environment.getExternalStorageDirectory()+"/ExpenseTracker");
+		        if(!dir.exists()) {dir.mkdirs();}
+		        fileLocation = new File(dir, getFileName());
+		        try {
+					writer = PdfWriter.getInstance(document, new FileOutputStream(fileLocation));
+					writer.setPageEvent(new HeaderAndFooter());
+					document.open();
+					addMetaData(document);
+					addContent(document);
+					document.close();
+					writer.close();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (DocumentException e) {
+					e.printStackTrace();
+				}
+			} else {
+				Toast.makeText(GenerateReport.this, "Too many Records, Please select fewer", Toast.LENGTH_LONG).show();
+			}
+			return null;
+		}
 
+		@Override
+		protected void onPostExecute(Void result) {
+			progressDialog.cancel();
+		}
+		
+		private String getFileName() {
+			return dateRange+"("+Calendar.getInstance().getTimeInMillis()+").pdf";
+		}
+	    
+	    private void addTable(Document document) throws DocumentException {
+	 		PdfPTable table = new PdfPTable(5);
+	 		table.setWidthPercentage(90);
+	 		table.getDefaultCell().setPadding(5.0F);
+			float totalWidth = ((table.getWidthPercentage()*writer.getPageSize().getWidth())/100);
+			float widths[] = {totalWidth/10,totalWidth/5,totalWidth/5,(3*totalWidth)/10,totalWidth/5};
+			table.setWidths(widths);
+			
+			PdfPCell c1 = new PdfPCell(new Phrase("Sr. No.",tableHeader));
+			c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(c1);
+
+			c1 = new PdfPCell(new Phrase("Date",tableHeader));
+			c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(c1);
+
+			c1 = new PdfPCell(new Phrase("Location",tableHeader));
+			c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(c1);
+			
+			c1 = new PdfPCell(new Phrase("Description",tableHeader));
+			c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(c1);
+			
+			c1 = new PdfPCell(new Phrase("Amount",tableHeader));
+			c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(c1);
+			
+			table.setHeaderRows(1);
+			table.setSplitRows(true);
+
+			addDataToTable(table,document);
+		}
+
+		private void addTitle(Document document) throws DocumentException{
+	 		Paragraph preface = new Paragraph();
+			// We add one empty line
+			addEmptyLine(preface, 1);
+			// Lets write a big header
+			preface.setAlignment(Element.ALIGN_CENTER);
+			preface.add(new Paragraph("Expenses Report", catFont));
+			addEmptyLine(preface, 1);
+			document.add(preface);
+		}
+	    
+		private void addContent(Document document) throws DocumentException {
+	 		addTitle(document);
+	 		addDateRange(document);
+			addTable(document);
+		}
+
+		private void addDateRange(Document document) throws DocumentException {
+			Paragraph preface = new Paragraph();
+			preface.setAlignment(Element.ALIGN_CENTER);
+			preface.add(new Paragraph(dateRange, subFont));
+			addEmptyLine(preface, 2);
+			document.add(preface);
+		}
+
+		// add metadata to the PDF which can be viewed in your Adobe Reader
+	 	// under File -> Properties
+	 	private void addMetaData(Document document) {
+	 		document.addTitle("Expenses Report using Expense Tracker (Vinsol)");
+	 		document.addSubject("PDF created using android app \"Expense Tracker (Vinsol)\"");
+	 		document.addKeywords("Android, PDF, Vinsol, Expense, Tracker, Expense Tracker");
+	 		document.addAuthor("Vinsol");
+	 		document.addCreator("Vinsol");
+	 	}
+
+		private void addDataToTable(PdfPTable table, Document document) throws DocumentException{
+			for(int i=0 ; i < mEntryList.size() ; i++) {
+				Entry entry = mEntryList.get(i);
+				if(!isDateValid(entry.timeInMillis)) {continue;}
+				table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+				
+				// Adding Serial Number
+				table.addCell((i+1)+"");
+				table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_LEFT);
+				
+				// Adding date
+				table.addCell(new DisplayDate().getDisplayDateReport(entry.timeInMillis));
+				
+				// Adding location
+				if(entry.location != null && !entry.location.equals("")) {
+					table.addCell(entry.location);
+				} else {
+					table.addCell(getString(R.string.unknown_location));
+				}
+				
+				// Adding description
+				if(entry.description != null && !entry.description.equals("")) {
+					table.addCell(entry.description);
+				} else {
+					table.addCell(getDescriptionIfNotPresent(entry.type));
+				}
+				
+				// Adding Amount
+				if(entry.amount != null && !entry.amount.equals("") && !entry.amount.contains("?")) {
+					totalAmount = totalAmount + Double.parseDouble(entry.amount);
+					table.addCell(new StringProcessing().getStringDoubleDecimal(entry.amount));
+				} else {
+					isAmountNotEntered = true;
+					table.addCell("?");
+				}
+				
+				if((i+1) % 500 == 0) {
+					document.add(table);
+					table.flushContent();
+				} 
+			}
+			addTotalAmountRow(table);
+			document.add(table);
+			table.flushContent();
+		}
+		
+		private boolean isDateValid(Long timeInMillis) {
+			Calendar mCalendar = getCalendarInstance(timeInMillis);
+	 		if(mEndDay == mCalendar.get(Calendar.DAY_OF_MONTH) && mEndMonth == mCalendar.get(Calendar.MONTH) && mEndYear == mCalendar.get(Calendar.YEAR)) {
+	 			return true;
+	 		}
+	 		if(mStartDay == mCalendar.get(Calendar.DAY_OF_MONTH) && mStartMonth == mCalendar.get(Calendar.MONTH) && mStartYear == mCalendar.get(Calendar.YEAR)) {
+	 			return true;
+	 		}
+	 		if(mEndYear > mCalendar.get(Calendar.YEAR) && mStartYear > mCalendar.get(Calendar.YEAR) ) {
+	 			return true;
+	 		}
+	 		if(mEndMonth > mCalendar.get(Calendar.MONTH) && mStartMonth > mCalendar.get(Calendar.MONTH) ) {
+	 			return true;
+	 		}
+	 		if(mEndDay > mCalendar.get(Calendar.DAY_OF_MONTH) && mStartDay > mCalendar.get(Calendar.DAY_OF_MONTH) ) {
+	 			return true;
+	 		}
+			return false;
+		}
+
+		private void addTotalAmountRow(PdfPTable table) {
+			// Adding Serial Number
+			table.addCell("");
+			
+			// Adding date
+			table.addCell("");
+			
+			// Adding location
+			table.addCell("");
+			
+			// Adding description
+			table.addCell("Total Amount");
+			
+			// Adding Amount
+			if(isAmountNotEntered) {
+				table.addCell(new StringProcessing().getStringDoubleDecimal(totalAmount+"")+" ?");
+			} else {
+				table.addCell(new StringProcessing().getStringDoubleDecimal(totalAmount+"")+"");
+			}
+		}
+		
+		private String getDescriptionIfNotPresent(String type) {
+			if(type.equals(getString(R.string.unknown))) {
+				return getString(R.string.unknown_entry);
+			} else if(type.equals(getString(R.string.text))) {
+				return getString(R.string.finished_textentry);
+			} else if(type.equals(getString(R.string.voice))) {
+				return getString(R.string.finished_voiceentry);
+			} else if(type.equals(getString(R.string.camera))) {
+				return getString(R.string.finished_cameraentry);
+			}
+			
+			return "";
+		}
+
+		private Calendar getCalendarInstance(Long timeInMillis) {
+			Calendar mCalendar = Calendar.getInstance();
+	 		mCalendar.setTimeInMillis(timeInMillis);
+	 		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+	 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			return mCalendar;
+		}
+		
+		private void addEmptyLine(Paragraph paragraph, int number) {
+			for (int i = 0; i < number; i++) {
+				paragraph.add(new Paragraph(" "));
+			}
+		}
+	 	
+	 	public class HeaderAndFooter extends PdfPageEventHelper {
+
+	 		protected PdfPTable footer;
+
+	 		public HeaderAndFooter() {
+	 			footer = new PdfPTable(1);
+	 			footer.setTotalWidth(220);
+	 			footer.getDefaultCell().setBorderWidth(0);
+	 			footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+	 			Chunk chunk = new Chunk("Report Generated Using - Expense Tracker (Vinsol)");
+	 			chunk.setAction(new PdfAction(PdfAction.FIRSTPAGE));
+	 			chunk.setFont(small);
+	 			footer.addCell(new Phrase(chunk));
+	 		}
+	 		
+	 		public void onEndPage(PdfWriter writer, Document document) {
+	 	    	PdfContentByte cb = writer.getDirectContent();
+	 	    	footer.writeSelectedRows(0, -1,(document.right() - document.left() - 200)+ document.leftMargin(), document.bottom() - 10, cb);
+	 	    }
+
+	 	}
+		
+	}
+	
 	private void setStartEndDate() {
 		endCalendar = Calendar.getInstance();
 		endCalendar.set(endCalendar.get(Calendar.YEAR), endCalendar.get(Calendar.MONTH), endCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
@@ -115,25 +414,25 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		switch ((int)period.getSelectedItemId()) {
 		//case if period is 1 Month
 		case 0:
-			endCalendar.add(Calendar.MONTH, -1);
+			startCalendar.add(Calendar.MONTH, -1);
 			setDateParameters(startCalendar,endCalendar);
 			break;
 
 		//case if period is 1 Quarter
 		case 1:
-			endCalendar.add(Calendar.MONTH, -3);
+			startCalendar.add(Calendar.MONTH, -3);
 			setDateParameters(startCalendar,endCalendar);
 			break;
 
 		//case if period is Half Year
 		case 2:
-			endCalendar.add(Calendar.MONTH, -6);
+			startCalendar.add(Calendar.MONTH, -6);
 			setDateParameters(startCalendar,endCalendar);
 			break;
 			
 		//case if period is 1 Year
 		case 3:
-			endCalendar.add(Calendar.YEAR, -1);
+			startCalendar.add(Calendar.YEAR, -1);
 			setDateParameters(startCalendar,endCalendar);
 			break;
 			
@@ -153,6 +452,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		mStartYear = startCalendar.get(Calendar.YEAR);
 		mStartMonth = startCalendar.get(Calendar.MONTH);
 		mStartDay = startCalendar.get(Calendar.DAY_OF_MONTH);
+		dateRange = new DisplayDate().getDisplayDateReport(startCalendar)+" - "+new DisplayDate().getDisplayDateReport(endCalendar);
 	}
 
 	@Override
@@ -211,6 +511,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			Toast.makeText(getApplicationContext(), "End Date must be greater than Start Date", Toast.LENGTH_LONG).show();
 			return false;
 		}
+		dateRange = new DisplayDate().getReportDateRange(mStartDay,mStartMonth,mStartYear,mEndDay,mEndMonth,mEndYear);
 		return true;
 	}
 	
@@ -221,5 +522,14 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		if(mStartYear == mEndYear && mStartMonth == mEndMonth && mStartDay > mEndDay) {return false;}
 		return true;
 	}
-
+	
+	
+	@Override
+	protected void onPause() {
+		if(exportPDF != null && (exportPDF.getStatus().equals(AsyncTask.Status.RUNNING) || exportPDF.getStatus().equals(AsyncTask.Status.PENDING))) {
+			exportPDF.cancel(true);
+			Toast.makeText(this, "PDF Report Exporting Cancelled", Toast.LENGTH_LONG).show();
+		}
+		super.onPause();
+	}
 }

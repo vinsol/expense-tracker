@@ -178,17 +178,28 @@ public class DatabaseAdapter {
 		return false;
 	}
 
-	public Cursor getEntryTableDateDatabase() {
+	public Cursor getEntryTableDateDatabaseDescending() {
 		return db.query(ENTRY_TABLE, null, null, null, null, null, KEY_DATE_TIME+" desc");
 	}
 	
-	public Cursor getEntryTableDateDatabase(String id) {
+	public Cursor getEntryTableDateDatabaseDescending(String id) {
 		if(id != null && id.length() > 1){
 			id = id.substring(0, id.length()-1);
 		}
 		String where = KEY_ID+" in ("+id +")";
 		return db.query(ENTRY_TABLE, null, where, null, null, null, KEY_DATE_TIME+" desc");
-		
+	}
+	
+	public Cursor getEntryTableDateDatabaseAscending() {
+		return db.query(ENTRY_TABLE, null, null, null, null, null, KEY_DATE_TIME+" asc");
+	}
+	
+	public Cursor getEntryTableDateDatabaseAscending(String id) {
+		if(id != null && id.length() > 1){
+			id = id.substring(0, id.length()-1);
+		}
+		String where = KEY_ID+" in ("+id +")";
+		return db.query(ENTRY_TABLE, null, where, null, null, null, KEY_DATE_TIME+" asc");
 	}
 	
 	public Long getFavoriteIdEntryTable(String id) {

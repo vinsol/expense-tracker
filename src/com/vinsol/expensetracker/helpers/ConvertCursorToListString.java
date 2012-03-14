@@ -67,16 +67,16 @@ public class ConvertCursorToListString {
 		}
 	}
 	
-	public List<ListDatetimeAmount> getDateListString(boolean isGraph,String id,int type) {
+	public List<ListDatetimeAmount> getDateListString(boolean isAscending, boolean isGraph,String id,int type) {
 		ListDatetimeAmount listDatetimeAmount = new ListDatetimeAmount();
 		adapter.open();
 		Cursor cursor;
-		StringProcessing mStringProcessing = new StringProcessing();
-		if(id == null || id.equals("")) {
-			cursor = adapter.getEntryTableDateDatabase();
+		if(!isAscending) {
+			cursor = getCursor(id, false);
 		} else {
-			cursor = adapter.getEntryTableDateDatabase(id);
+			cursor = getCursor(id, true);
 		}
+		StringProcessing mStringProcessing = new StringProcessing();
 		List<ListDatetimeAmount> mainlist = new ArrayList<ListDatetimeAmount>();
 		double temptotalAmount = 0;
 		String totalAmountString = null;
@@ -160,13 +160,13 @@ public class ConvertCursorToListString {
 		return totalAmountString;
 	}
 	
-	public List<Entry> getEntryList(String id) {
+	public List<Entry> getEntryList(Boolean isAscending, String id) {
 		adapter.open();
 		Cursor cursor;
-		if(id == null || id.equals("")) {
-			cursor = adapter.getEntryTableDateDatabase();
+		if(!isAscending) {
+			cursor = getCursor(id, false);
 		} else {
-			cursor = adapter.getEntryTableDateDatabase(id);
+			cursor = getCursor(id, true);
 		}
 		List<Entry> mainlist = new ArrayList<Entry>();
 		if (cursor.getCount() >= 1) {
@@ -187,6 +187,21 @@ public class ConvertCursorToListString {
 		cursor.close();
 		adapter.close();
 		return mainlist;
+	}
+	
+	private Cursor getCursor(String id,boolean isAscending) {
+		if(isAscending) {
+			if(id == null || id.equals("")) {
+				return adapter.getEntryTableDateDatabaseAscending();
+			} else {
+				return adapter.getEntryTableDateDatabaseAscending(id);
+			}
+		}
+		if(id == null || id.equals("")) {
+			return adapter.getEntryTableDateDatabaseDescending();
+		} else {
+			return adapter.getEntryTableDateDatabaseDescending(id);
+		}
 	}
 
 }

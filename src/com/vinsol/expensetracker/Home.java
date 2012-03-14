@@ -100,7 +100,7 @@ public class Home extends BaseActivity implements OnClickListener {
 			mLocationHelper.requestLocationUpdate();
 		}
 		mHandleGraph = new GraphHelper(this,graphProgressBar);
-		unfinishedEntryCount = new UnfinishedEntryCount(mConvertCursorToListString.getEntryList(""),null,null,null,((TextView)findViewById(R.id.home_unfinished_entry_count)));
+		unfinishedEntryCount = new UnfinishedEntryCount(mConvertCursorToListString.getEntryList(false,""),null,null,null,((TextView)findViewById(R.id.home_unfinished_entry_count)));
 		unfinishedEntryCount.execute();
 		mHandleGraph.execute();
 		super.onResume();
