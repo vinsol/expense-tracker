@@ -12,9 +12,11 @@ import com.vinsol.expensetracker.listing.FavoriteActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class BaseActivity extends Activity {
 	
@@ -62,8 +64,12 @@ public class BaseActivity extends Activity {
 			break;
 			
 		case R.id.generate_report:
-			Intent generateReport = new Intent(this, GenerateReport.class);
-			startActivity(generateReport);
+			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+				Intent generateReport = new Intent(this, GenerateReport.class);
+				startActivity(generateReport);
+			} else {
+				Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
+			}
 			break;
 		default:
 			break;

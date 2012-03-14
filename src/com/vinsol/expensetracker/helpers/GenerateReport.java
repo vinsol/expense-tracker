@@ -8,6 +8,7 @@ package com.vinsol.expensetracker.helpers;
 import java.util.Calendar;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -65,19 +66,23 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.export_button:
-			setStartEndDate();
-			switch ((int)((Spinner) findViewById(R.id.type_spinner)).getSelectedItemId()) {
-			//case if Exporting to PDF
-			case 0:
-				exportToPDF();
-				break;
-			//case if Exporting to CSV
-			case 1:
-				exportToCSV();
-				break;
-
-			default:
-				break;
+			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+				setStartEndDate();
+				switch ((int)((Spinner) findViewById(R.id.type_spinner)).getSelectedItemId()) {
+				//case if Exporting to PDF
+				case 0:
+					exportToPDF();
+					break;
+				//case if Exporting to CSV
+				case 1:
+					exportToCSV();
+					break;
+	
+				default:
+					break;
+				}
+			} else {
+				Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
 			}
 			break;
 
