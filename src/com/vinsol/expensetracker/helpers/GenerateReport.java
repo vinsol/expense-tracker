@@ -5,9 +5,13 @@
 
 package com.vinsol.expensetracker.helpers;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Calendar;
 import java.util.List;
 
@@ -62,6 +66,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
     private Calendar startCalendar;
     	
     private AsyncTask<Void, Void, Void> exportPDF;
+    private AsyncTask<Void, Void, Void> exportCSV;
     
     private File fileLocation;
     
@@ -135,24 +140,15 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	}
 
 	private void exportToCSV() {
-		// TODO Auto-generated method stub
-	}
-
-	private void exportToPDF() {
-		exportPDF = new ExportPDF().execute();
+		exportCSV = new ExportToCSV().execute();
 	}
 	
-	private class ExportPDF extends AsyncTask<Void, Void, Void> {
-		
-		private ProgressDialog progressDialog;
-		private Font catFont;
-		private Font subFont;
-		private Font tableHeader;
-		private Font small;
-		private PdfWriter writer;
-		private Double totalAmount = 0.0;
-		private boolean isAmountNotEntered = false;
-		private boolean isRecordAdded = false;
+	private abstract class Export extends AsyncTask<Void, Void, Void> {
+
+		protected ProgressDialog progressDialog;
+		protected Double totalAmount = 0.0;
+		protected boolean isAmountNotEntered = false;
+		protected boolean isRecordAdded = false;
 		
 		@Override
 		protected void onPreExecute() {
@@ -162,6 +158,175 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			progressDialog.setMessage("Please Wait...");
 			progressDialog.show();
 		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			progressDialog.cancel();
+			if(!isRecordAdded) {
+				fileLocation.delete();
+				Toast.makeText(GenerateReport.this, "No Record within range to generate report", Toast.LENGTH_LONG).show();
+			}
+		}
+		
+		protected void setFile() {
+			File dir = new File(Environment.getExternalStorageDirectory()+"/ExpenseTracker");
+	        if(!dir.exists()) {dir.mkdirs();}
+	        fileLocation = new File(dir, getFileName());
+		}
+		
+		protected String getFileName() {
+			return dateRange+"("+Calendar.getInstance().getTimeInMillis()+")";
+		}
+		
+		protected boolean isDateValid(Long timeInMillis) {
+			Calendar mCalendar = getCalendarInstance(timeInMillis);
+	 		if(mEndDay == mCalendar.get(Calendar.DAY_OF_MONTH) && mEndMonth == mCalendar.get(Calendar.MONTH) && mEndYear == mCalendar.get(Calendar.YEAR)) {
+	 			return true;
+	 		}
+	 		if(mStartDay == mCalendar.get(Calendar.DAY_OF_MONTH) && mStartMonth == mCalendar.get(Calendar.MONTH) && mStartYear == mCalendar.get(Calendar.YEAR)) {
+	 			return true;
+	 		}
+	 		if(mEndYear > mCalendar.get(Calendar.YEAR) && mStartYear > mCalendar.get(Calendar.YEAR) ) {
+	 			return true;
+	 		}
+	 		if(mEndMonth > mCalendar.get(Calendar.MONTH) && mStartMonth > mCalendar.get(Calendar.MONTH) ) {
+	 			return true;
+	 		}
+	 		if(mEndDay > mCalendar.get(Calendar.DAY_OF_MONTH) && mStartDay > mCalendar.get(Calendar.DAY_OF_MONTH) ) {
+	 			return true;
+	 		}
+			return false;
+		}
+		
+		protected String getDescriptionIfNotPresent(String type) {
+			if(type.equals(getString(R.string.unknown))) {
+				return getString(R.string.unknown_entry);
+			} else if(type.equals(getString(R.string.text))) {
+				return getString(R.string.finished_textentry);
+			} else if(type.equals(getString(R.string.voice))) {
+				return getString(R.string.finished_voiceentry);
+			} else if(type.equals(getString(R.string.camera))) {
+				return getString(R.string.finished_cameraentry);
+			}
+			
+			return "";
+		}
+
+		private Calendar getCalendarInstance(Long timeInMillis) {
+			Calendar mCalendar = Calendar.getInstance();
+	 		mCalendar.setTimeInMillis(timeInMillis);
+	 		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+	 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			return mCalendar;
+		}
+	} 
+	
+	private class ExportToCSV extends Export {
+		
+		private Writer writer;
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+	        setFile();
+	        try {
+				writer = new BufferedWriter(new FileWriter(fileLocation));
+				addContent();
+				writer.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		protected String getFileName() {
+			return super.getFileName()+".csv";
+		}
+	    
+		private void addContent() throws IOException {
+			writer.write("Sr. No.,");
+	    	writer.write("Date,");
+	    	writer.write("Location,");
+	    	writer.write("Description,");
+	    	writer.write("Amount\n");
+			addDataToTable();
+		}
+
+		private void addDataToTable() throws IOException{
+			for(int i=0 ; i < mEntryList.size() ; i++) {
+				Entry entry = mEntryList.get(i);
+				if(!isDateValid(entry.timeInMillis)) {continue;}
+				
+				// Adding Serial Number
+				writer.write((i+1)+",");
+				
+				// Adding date
+				writer.write(new DisplayDate().getDisplayDateReport(entry.timeInMillis).replaceAll(",", " ")+",");
+				
+				// Adding location
+				if(entry.location != null && !entry.location.equals("")) {
+					writer.write(entry.location.replaceAll(",", " ")+",");
+				} else {
+					writer.write(getString(R.string.unknown_location).replaceAll(",", " ")+",");
+				}
+				
+				// Adding description
+				if(entry.description != null && !entry.description.equals("")) {
+					writer.write(entry.description.replaceAll(",", " ")+",");
+				} else {
+					writer.write(getDescriptionIfNotPresent(entry.type).replaceAll(",", " ")+",");
+				}
+				
+				// Adding Amount
+				if(entry.amount != null && !entry.amount.equals("") && !entry.amount.contains("?")) {
+					totalAmount = totalAmount + Double.parseDouble(entry.amount);
+					writer.write(new StringProcessing().getStringDoubleDecimal(entry.amount).replaceAll(",", " ")+"\n");
+				} else {
+					isAmountNotEntered = true;
+					writer.write("?"+"\n");
+				}
+				
+				isRecordAdded = true;
+			}
+			addTotalAmountRow();
+		}
+
+		private void addTotalAmountRow() throws IOException{
+			// Adding Serial Number
+			writer.write(",");
+			
+			// Adding date
+			writer.write(",");
+			
+			// Adding location
+			writer.write(",");
+			
+			// Adding description
+			writer.write("Total Amount,");
+			
+			// Adding Amount
+			if(isAmountNotEntered) {
+				writer.write(new StringProcessing().getStringDoubleDecimal(totalAmount+"").replaceAll(",", " ")+" ?\n");
+			} else {
+				writer.write(new StringProcessing().getStringDoubleDecimal(totalAmount+"").replaceAll(",", " ")+"\n");
+			}
+		}
+		
+	}
+
+	private void exportToPDF() {
+		exportPDF = new ExportPDF().execute();
+	}
+	
+	private class ExportPDF extends Export {
+		
+		private Font catFont;
+		private Font subFont;
+		private Font tableHeader;
+		private Font small;
+		private PdfWriter writer;
 		
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -171,9 +336,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	        tableHeader.setStyle(Font.BOLD);
 	        small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	        Document document = new Document();
-	        File dir = new File(Environment.getExternalStorageDirectory()+"/ExpenseTracker");
-	        if(!dir.exists()) {dir.mkdirs();}
-	        fileLocation = new File(dir, getFileName());
+	        setFile();
 	        try {
 				writer = PdfWriter.getInstance(document, new FileOutputStream(fileLocation));
 				writer.setPageEvent(new HeaderAndFooter());
@@ -189,18 +352,10 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			}
 			return null;
 		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			progressDialog.cancel();
-			if(!isRecordAdded) {
-				fileLocation.delete();
-				Toast.makeText(GenerateReport.this, "No Record within range to generate report", Toast.LENGTH_LONG).show();
-			}
-		}
 		
-		private String getFileName() {
-			return dateRange+"("+Calendar.getInstance().getTimeInMillis()+").pdf";
+		@Override
+		protected String getFileName() {
+			return super.getFileName()+".pdf";
 		}
 	    
 	    private void addTable(Document document) throws DocumentException {
@@ -319,26 +474,6 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			document.add(table);
 			table.flushContent();
 		}
-		
-		private boolean isDateValid(Long timeInMillis) {
-			Calendar mCalendar = getCalendarInstance(timeInMillis);
-	 		if(mEndDay == mCalendar.get(Calendar.DAY_OF_MONTH) && mEndMonth == mCalendar.get(Calendar.MONTH) && mEndYear == mCalendar.get(Calendar.YEAR)) {
-	 			return true;
-	 		}
-	 		if(mStartDay == mCalendar.get(Calendar.DAY_OF_MONTH) && mStartMonth == mCalendar.get(Calendar.MONTH) && mStartYear == mCalendar.get(Calendar.YEAR)) {
-	 			return true;
-	 		}
-	 		if(mEndYear > mCalendar.get(Calendar.YEAR) && mStartYear > mCalendar.get(Calendar.YEAR) ) {
-	 			return true;
-	 		}
-	 		if(mEndMonth > mCalendar.get(Calendar.MONTH) && mStartMonth > mCalendar.get(Calendar.MONTH) ) {
-	 			return true;
-	 		}
-	 		if(mEndDay > mCalendar.get(Calendar.DAY_OF_MONTH) && mStartDay > mCalendar.get(Calendar.DAY_OF_MONTH) ) {
-	 			return true;
-	 		}
-			return false;
-		}
 
 		private void addTotalAmountRow(PdfPTable table) {
 			// Adding Serial Number
@@ -359,28 +494,6 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			} else {
 				table.addCell(new StringProcessing().getStringDoubleDecimal(totalAmount+"")+"");
 			}
-		}
-		
-		private String getDescriptionIfNotPresent(String type) {
-			if(type.equals(getString(R.string.unknown))) {
-				return getString(R.string.unknown_entry);
-			} else if(type.equals(getString(R.string.text))) {
-				return getString(R.string.finished_textentry);
-			} else if(type.equals(getString(R.string.voice))) {
-				return getString(R.string.finished_voiceentry);
-			} else if(type.equals(getString(R.string.camera))) {
-				return getString(R.string.finished_cameraentry);
-			}
-			
-			return "";
-		}
-
-		private Calendar getCalendarInstance(Long timeInMillis) {
-			Calendar mCalendar = Calendar.getInstance();
-	 		mCalendar.setTimeInMillis(timeInMillis);
-	 		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-	 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-			return mCalendar;
 		}
 		
 		private void addEmptyLine(Paragraph paragraph, int number) {
@@ -537,6 +650,10 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		if(exportPDF != null && (exportPDF.getStatus().equals(AsyncTask.Status.RUNNING) || exportPDF.getStatus().equals(AsyncTask.Status.PENDING))) {
 			exportPDF.cancel(true);
 			Toast.makeText(this, "PDF Report Exporting Cancelled", Toast.LENGTH_LONG).show();
+		}
+		if(exportCSV != null && (exportCSV.getStatus().equals(AsyncTask.Status.RUNNING) || exportCSV.getStatus().equals(AsyncTask.Status.PENDING))) {
+			exportCSV.cancel(true);
+			Toast.makeText(this, "CSV Report Exporting Cancelled", Toast.LENGTH_LONG).show();
 		}
 		super.onPause();
 	}
