@@ -188,6 +188,7 @@
 	        <!-- amount -->
 	        <EditText 
 	            android:id="@+id/edit_amount"
+	            android:imeOptions="actionNext"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
 	            android:hint="amount"

@@ -17,8 +17,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.View.OnKeyListener;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -94,8 +94,9 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		editSaveEntry.setOnClickListener(this);
 		editDelete.setOnClickListener(this);
 		editAmount.setSelection(editAmount.getText().length());
-		editAmount.setOnKeyListener(focusTagOnEnter);
+		editAmount.setOnEditorActionListener(setEnterButtonToNext);
 		editAmount.setOnFocusChangeListener(focusChangeListener);
+
 		////////********* Get intent extras ******** ////////////
 		intentExtras = getIntent().getExtras();
 		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_FAVORITE)) {isFromFavorite = true;}
@@ -104,15 +105,15 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		setDefaultTitle();
 	}
 	
-	private OnKeyListener focusTagOnEnter = new OnKeyListener() {
+	private TextView.OnEditorActionListener setEnterButtonToNext = new TextView.OnEditorActionListener() {
 		
 		@Override
-		public boolean onKey(View v, int keyCode, KeyEvent event) {
-			if(keyCode == KeyEvent.KEYCODE_ENTER) {
-				editTag.requestFocus();
-				return true;
-			}
-			return false;
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			if (actionId == EditorInfo.IME_ACTION_NEXT) {
+	        	editTag.requestFocus();
+	            return true;
+	        }
+	        return false;
 		}
 	};
 	
