@@ -46,6 +46,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.utils.Log;
 
 public class GenerateReport extends BaseActivity implements OnClickListener,OnItemSelectedListener{
 	
@@ -98,13 +99,17 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.export_button:
-				if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 				mEntryList = new ConvertCursorToListString(GenerateReport.this).getEntryList(true, "");
 				if(mEntryList.size() == 0) {
 					Toast.makeText(GenerateReport.this, "No Record to Generate Report, Please add some", Toast.LENGTH_LONG).show();
 				}
 				if(mEntryList.size() <= 5000) {
 					setStartEndDate();
+					Log.d("**************Exporting Range****************");
+					Log.d("Start Date "+mStartDay+" "+(mStartMonth+1)+" "+mStartYear);
+					Log.d("End Date "+mEndDay+" "+(mEndMonth+1)+" "+mEndYear);
+					Log.d("******************************");
 					switch ((int)((Spinner) findViewById(R.id.type_spinner)).getSelectedItemId()) {
 					//case if Exporting to PDF
 					case 0:
@@ -132,7 +137,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			break;
 			
 		case R.id.custom_end_date:
-			new CustomDatePickerDialog(this, mEndDateSetListener, customStartDateTextView).show();
+			new CustomDatePickerDialog(this, mEndDateSetListener, customEndDateTextView).show();
 			break;
 		default:
 			break;
@@ -179,22 +184,19 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		}
 		
 		protected boolean isDateValid(Long timeInMillis) {
-			Calendar mCalendar = getCalendarInstance(timeInMillis);
-	 		if(mEndDay == mCalendar.get(Calendar.DAY_OF_MONTH) && mEndMonth == mCalendar.get(Calendar.MONTH) && mEndYear == mCalendar.get(Calendar.YEAR)) {
-	 			return true;
-	 		}
-	 		if(mStartDay == mCalendar.get(Calendar.DAY_OF_MONTH) && mStartMonth == mCalendar.get(Calendar.MONTH) && mStartYear == mCalendar.get(Calendar.YEAR)) {
-	 			return true;
-	 		}
-	 		if(mEndYear > mCalendar.get(Calendar.YEAR) && mStartYear > mCalendar.get(Calendar.YEAR) ) {
-	 			return true;
-	 		}
-	 		if(mEndMonth > mCalendar.get(Calendar.MONTH) && mStartMonth > mCalendar.get(Calendar.MONTH) ) {
-	 			return true;
-	 		}
-	 		if(mEndDay > mCalendar.get(Calendar.DAY_OF_MONTH) && mStartDay > mCalendar.get(Calendar.DAY_OF_MONTH) ) {
-	 			return true;
-	 		}
+			Calendar mCalendar = Calendar.getInstance();
+	 		mCalendar.setTimeInMillis(timeInMillis);
+	 		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+	 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			Calendar startCalendar = Calendar.getInstance();
+			startCalendar.set(mStartYear, mStartMonth, mStartDay, 0, 0, 0);
+			startCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			Calendar endCalendar = Calendar.getInstance();
+			endCalendar.set(mEndYear, mEndMonth, mEndDay, 0, 0, 0);
+			endCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			if(mStartDay == mCalendar.get(Calendar.DAY_OF_MONTH) && mStartMonth == mCalendar.get(Calendar.MONTH) && mStartYear == mCalendar.get(Calendar.YEAR)) {return true;}
+			if(mEndDay == mCalendar.get(Calendar.DAY_OF_MONTH) && mEndMonth == mCalendar.get(Calendar.MONTH) && mEndYear == mCalendar.get(Calendar.YEAR)) {return true;}
+			if(mCalendar.after(startCalendar) && mCalendar.before(endCalendar)) {return true;}
 			return false;
 		}
 		
@@ -210,14 +212,6 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			}
 			
 			return "";
-		}
-
-		private Calendar getCalendarInstance(Long timeInMillis) {
-			Calendar mCalendar = Calendar.getInstance();
-	 		mCalendar.setTimeInMillis(timeInMillis);
-	 		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-	 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-			return mCalendar;
 		}
 	} 
 	
@@ -616,7 +610,6 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			mCalendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
 			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			((TextView)findViewById(R.id.custom_end_date)).setText(new DisplayDate(mCalendar).getDisplayDate());
-			mCalendar.add(Calendar.DAY_OF_MONTH, 1);
             checkStartEndDate(false);
 		}
 	};
