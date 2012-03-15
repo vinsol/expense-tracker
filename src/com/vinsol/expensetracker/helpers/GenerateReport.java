@@ -36,6 +36,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -83,6 +84,19 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	private final int REQUEST_CODE = 1055;
     
 	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
+		FlurryAgent.onEvent(getString(R.string.generate_report));
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
+	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.generate_report);
@@ -121,10 +135,12 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 					switch ((int)((Spinner) findViewById(R.id.type_spinner)).getSelectedItemId()) {
 					//case if Exporting to PDF
 					case 0:
+						FlurryAgent.onEvent(getString(R.string.export_pdf));
 						exportToPDF();
 						break;
 					//case if Exporting to CSV
 					case 1:
+						FlurryAgent.onEvent(getString(R.string.export_csv));
 						exportToCSV();
 						break;
 		

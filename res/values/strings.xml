@@ -36,7 +36,10 @@
     
     <!-- Flurry Events -->
     <string name="flurry_key">Enter Flurry Key</string>
+    <string name="generate_report">Generate Report Activity Started</string>
     <string name="save_reminder">Save Reminder</string>
+    <string name="export_pdf">Exporting To PDF</string>
+    <string name="export_csv">Exporting To CSV</string>
     <string name="list_view">List View</string>
     <string name="favorite">Favorite Entry</string>
     <string name="save_button">Save Button</string>
