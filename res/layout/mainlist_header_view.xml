@@ -5,46 +5,39 @@
  * See the file license.txt for copying permission.
 */     
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- List header -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/expense_listing_list_date_amount_view"
+    android:layout_height="wrap_content"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
+    android:background="@drawable/date_bar_bg_wo_shadow"
+    android:gravity="center_vertical"
+    >
     
-    <!-- List header -->
-    <RelativeLayout
-        android:id="@+id/expense_listing_list_date_amount_view"
+    <TextView 
+        android:id="@+id/expenses_listing_list_date_view"
+        android:layout_alignParentLeft="true"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:background="@drawable/date_bar_bg_wo_shadow"
-        android:gravity="center_vertical"
-        >
-        
-        <TextView 
-            android:id="@+id/expenses_listing_list_date_view"
-            android:layout_alignParentLeft="true"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textStyle="bold" 
-            android:typeface="sans"
-            android:text="Today, Nov 9"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"
-            android:textColor="@color/black"/>
-        
-        <TextView 
-            android:id="@+id/expenses_listing_list_amount_view"
-            android:layout_alignParentRight="true"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textStyle="bold"
-            android:maxWidth="200dp" 
-            android:typeface="sans"
-            android:text="1126.99 ?"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"
-            android:textColor="@color/black"/>
-        
-    </RelativeLayout>
+        android:layout_width="wrap_content"
+        android:textStyle="bold" 
+        android:typeface="sans"
+        android:text="Today, Nov 9"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:textColor="@color/black"/>
     
-</LinearLayout>
+    <TextView 
+        android:id="@+id/expenses_listing_list_amount_view"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textStyle="bold"
+        android:maxWidth="200dp" 
+        android:typeface="sans"
+        android:text="1126.99 ?"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:textColor="@color/black"/>
+    
+</RelativeLayout>

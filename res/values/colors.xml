@@ -13,5 +13,4 @@
     <color name="bg_row_selected">#ffdcff95</color>
     <color name="bg_save_reminder">#fffaeeee</color>
     <color name="bg_unfinished_entry">#fffaf8d3</color>
-    <color name="bg_dialog_buttons">#ff9a9a9a</color>
 </resources>

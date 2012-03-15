@@ -15,7 +15,13 @@ import java.io.Writer;
 import java.util.Calendar;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -73,6 +79,8 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
     
     private String dateRange;
 	private List<Entry> mEntryList;
+	
+	private final int REQUEST_CODE = 1055;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +151,14 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			break;
 		}
 	}
-
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(requestCode == REQUEST_CODE) {
+			finish();
+		}
+	}
+	
 	private void exportToCSV() {
 		exportCSV = new ExportToCSV().execute();
 	}
@@ -170,9 +185,31 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			if(!isRecordAdded) {
 				fileLocation.delete();
 				Toast.makeText(GenerateReport.this, "No Record within range to generate report", Toast.LENGTH_LONG).show();
+			} else {
+				final PackageManager packageManager = getPackageManager();
+				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(fileLocation));
+				List<ResolveInfo> resolveInfo = packageManager.queryIntentActivities(intent,PackageManager.MATCH_DEFAULT_ONLY);
+				if (resolveInfo.size() > 0) {
+					Toast.makeText(GenerateReport.this, "Report Exported to - "+fileLocation, Toast.LENGTH_LONG).show();
+					startActivityForResult(intent, REQUEST_CODE);
+			    } else {
+			    	new AlertDialog.Builder(GenerateReport.this)
+			    	.setMessage(getType()+" Viewer not found, Generated report saved at "+fileLocation)
+			    	.setTitle("Report Generated")
+			    	.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							finish();
+						}
+					})
+			    	.setIcon(android.R.drawable.ic_dialog_info)
+			    	.show();
+			    }
 			}
 		}
 		
+		protected abstract String getType();
+
 		protected void setFile() {
 			File dir = new File(Environment.getExternalStorageDirectory()+"/ExpenseTracker");
 	        if(!dir.exists()) {dir.mkdirs();}
@@ -180,7 +217,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		}
 		
 		protected String getFileName() {
-			return dateRange+"("+Calendar.getInstance().getTimeInMillis()+")";
+			return (dateRange+"("+Calendar.getInstance().getTimeInMillis()+")").replaceAll(" ", "");
 		}
 		
 		protected boolean isDateValid(Long timeInMillis) {
@@ -306,6 +343,11 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			} else {
 				writer.write(new StringProcessing().getStringDoubleDecimal(totalAmount+"").replaceAll(",", " ")+"\n");
 			}
+		}
+
+		@Override
+		protected String getType() {
+			return "CSV";
 		}
 		
 	}
@@ -517,6 +559,11 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	 	    }
 
 	 	}
+	 	
+	 	@Override
+		protected String getType() {
+			return "PDF";
+		}
 		
 	}
 	
@@ -625,7 +672,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			Toast.makeText(getApplicationContext(), "End Date must be greater than Start Date", Toast.LENGTH_LONG).show();
 			return false;
 		}
-		dateRange = new DisplayDate().getReportDateRange(mStartDay,mStartMonth,mStartYear,mEndDay,mEndMonth,mEndYear);
+		dateRange = new DisplayDate().getReportDateRange(mStartDay, mStartMonth, mStartYear, mEndDay, mEndMonth, mEndYear);
 		return true;
 	}
 	
