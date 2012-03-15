@@ -364,15 +364,21 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 
         public void onSnap() {
         	//TODO
-        	findViewById(R.id.frame_layout).setVisibility(View.GONE);
-        	findViewById(R.id.camera_progress_bar).setVisibility(View.VISIBLE);
-        	findViewById(R.id.shutter_button).setVisibility(View.GONE);
-        	findViewById(R.id.flash_button).setVisibility(View.GONE);
             if (mPausing || mStatus == SNAPSHOT_IN_PROGRESS) {return;}
             mCaptureStartTime = System.currentTimeMillis();
             mPostViewPictureCallbackTime = 0;
             mStatus = SNAPSHOT_IN_PROGRESS;
             mImageCapture.initiate();
+            findViewById(R.id.frame_layout).setVisibility(View.GONE);
+        	findViewById(R.id.camera_progress_bar).setVisibility(View.VISIBLE);
+        	findViewById(R.id.shutter_button).setVisibility(View.GONE);
+        	findViewById(R.id.flash_button).setVisibility(View.GONE);
+        	int[] pickIds = {R.id.btn_retake, R.id.btn_done, R.id.btn_cancel};
+            for (int id : pickIds) {
+                CameraButton button = (CameraButton) findViewById(id);
+                button.setVisibility(View.VISIBLE);
+                button.setEnabled(false);
+            }
         }
 
         private void clearLastData() {
@@ -1082,17 +1088,16 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
 
     private void showPostCaptureAlert() {
+    	//TODO
     	mStatus = IMAGE_DISPLAYED;
     	findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.camera_progress_bar).setVisibility(View.GONE);
         doAttach();
-        ((CameraFlashButton) findViewById(R.id.flash_button)).setVisibility(View.GONE);
+        mStatus = IDLE;
         int[] pickIds = {R.id.btn_retake, R.id.btn_done, R.id.btn_cancel};
         for (int id : pickIds) {
-            CameraButton button = (CameraButton) findViewById(id);
-            button.setVisibility(View.VISIBLE);
+            ((CameraButton) findViewById(id)).setEnabled(true);
         }
-        mStatus = IDLE;
     }
 
     private void hidePostCaptureAlert() {
