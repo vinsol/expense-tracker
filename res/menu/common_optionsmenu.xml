@@ -8,7 +8,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item 
 	    android:id="@+id/generate_report"
-	    android:title="Generate Report"/>
+	    android:title="Generate Report"
+	    android:icon="@drawable/menuitem_generate_report"/>
 	<item 
 	    android:id="@+id/manage_favorite"
 	    android:title="Manage Favorites"
