@@ -344,7 +344,12 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 			String sectionNumber = mSeparatedListAdapter.getSectionNumber(position);
 			Object prevEntry = mSeparatedListAdapter.getItem(position);
 			if(sectionNumber != null && !sectionNumber.equals("") && prevEntry != null && !prevEntry.equals("")) {
-				mSeparatedListAdapter.update(updatedEntry, position, sectionNumber, (Entry) prevEntry);
+				try{
+					mSeparatedListAdapter.update(updatedEntry, position, sectionNumber, (Entry) prevEntry);
+				} catch (Exception e) {
+					//XXX dont want to do this but sometimes it throwing error
+					initListView();
+				}
 			} else {
 				initListView();
 			}
