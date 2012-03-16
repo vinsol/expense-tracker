@@ -348,6 +348,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 					mSeparatedListAdapter.update(updatedEntry, position, sectionNumber, (Entry) prevEntry);
 				} catch (Exception e) {
 					//XXX dont want to do this but sometimes it throwing error
+					//
 					initListView();
 				}
 			} else {

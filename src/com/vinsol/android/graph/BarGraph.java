@@ -8,13 +8,14 @@ package com.vinsol.android.graph;
 
 import java.util.ArrayList;
 
-import android.content.Context;
+import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -31,9 +32,13 @@ public class BarGraph extends View {
 	private ArrayList<String> horLabels;
 	private String suffix = "";
 	private String[] suffixList = {"B","M","K"};
+	private float floatPx;
 	
-	public BarGraph(Context context,ArrayList<String> valueList,ArrayList<String> horLabels) {
-		super(context);
+	public BarGraph(Activity activity,ArrayList<String> valueList,ArrayList<String> horLabels) {
+		super(activity);
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		activity.getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+		floatPx = 1 * (outMetrics.densityDpi / 160);
 		values = valueList;
 		paint = new Paint();
 		this.horLabels = horLabels;
@@ -175,6 +180,7 @@ public class BarGraph extends View {
 		int rightX = (int) ((93.75/100)*width);
 		int rightY = originY;
 		horDiff = rightX - originX;
+		paint.setStrokeWidth(floatPx);
 		canvas.drawLine(originX, originY, rightX, rightY, paint);
 	}
 
@@ -184,6 +190,7 @@ public class BarGraph extends View {
 		int topX = originX;
 		int topY = (int) ((Double)(85.76/100)*height);
 		verDiff = topY - originY;
+		paint.setStrokeWidth(floatPx);
 		canvas.drawLine(originX, originY, topX, topY, paint);
 	}
 	
