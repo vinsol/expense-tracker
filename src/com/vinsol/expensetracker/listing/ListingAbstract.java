@@ -62,7 +62,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 	protected Bundle intentExtras;
 	private DatabaseAdapter mDatabaseAdapter;
 	protected int type;
-
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -94,7 +94,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 		}
 		type = getType(intentExtras);
 	}
-
+	
 	protected int getType(Bundle intentExtras) {
 		return 0;
 	}
@@ -260,6 +260,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
   	    	FlurryAgent.onEvent(getString(R.string.context_item_delete));
   	    	Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
   	    	removeItem(info.position);
+  	    	ExpenseListing.resetUnfinishedEntryCount();
   	    	break;
   	    	
 		default:
@@ -272,6 +273,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 		mDatabaseAdapter.open();
     	mDatabaseAdapter.deleteEntryTableEntryID(((Entry)mSeparatedListAdapter.getItem(position)).id);
     	mDatabaseAdapter.close();
+    	//XXX
     	if(!mSeparatedListAdapter.remove(position)) {
     		initListView();
     		return;

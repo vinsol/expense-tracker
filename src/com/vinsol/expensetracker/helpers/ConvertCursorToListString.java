@@ -19,9 +19,10 @@ import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 
 public class ConvertCursorToListString {
-	Context context;
 
-	DatabaseAdapter adapter ;
+	private Context context;
+	private DatabaseAdapter adapter ;
+	
 	public ConvertCursorToListString(Context context) {
 		this.context = context;
 		adapter = new DatabaseAdapter(context);

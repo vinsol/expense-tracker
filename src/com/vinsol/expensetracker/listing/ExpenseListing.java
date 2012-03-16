@@ -27,12 +27,12 @@ import com.vinsol.expensetracker.helpers.UnfinishedEntryCount;
 
 public class ExpenseListing extends TabActivity implements OnClickListener{
 
-	private UnfinishedEntryCount unfinishedEntryCount;
-	private ConvertCursorToListString mConvertCursorToListString;
-	private TextView unfinishedEntryCountAll;
-	private TextView unfinishedEntryCountThisWeek;
-	private TextView unfinishedEntryCountThisMonth;
-	private TextView unfinishedEntryCountThisYear;
+	private static UnfinishedEntryCount unfinishedEntryCount;
+	private static ConvertCursorToListString mConvertCursorToListString;
+	private static TextView unfinishedEntryCountAll;
+	private static TextView unfinishedEntryCountThisWeek;
+	private static TextView unfinishedEntryCountThisMonth;
+	private static TextView unfinishedEntryCountThisYear;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +50,15 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
 	@Override
 	protected void onResume() {
 		super.onResume();
-		unfinishedEntryCount = new UnfinishedEntryCount(mConvertCursorToListString.getEntryList(false,""), unfinishedEntryCountThisWeek, unfinishedEntryCountThisMonth, unfinishedEntryCountThisYear, unfinishedEntryCountAll);
-		unfinishedEntryCount.execute();
+		resetUnfinishedEntryCount();
+	}
+	
+	public static void resetUnfinishedEntryCount() {
+		if(unfinishedEntryCount != null && unfinishedEntryCountAll != null && unfinishedEntryCountThisMonth != null && unfinishedEntryCountThisMonth != null && unfinishedEntryCountThisYear != null) {
+			cancelUnfinishedEntryTask();
+			unfinishedEntryCount = new UnfinishedEntryCount(mConvertCursorToListString.getEntryList(false,""), unfinishedEntryCountThisWeek, unfinishedEntryCountThisMonth, unfinishedEntryCountThisYear, unfinishedEntryCountAll);
+			unfinishedEntryCount.execute();
+		}
 	}
 	
 	private void setUnfinishedEntryNotification() {
@@ -143,7 +150,7 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
 		cancelUnfinishedEntryTask();
 	}
 	
-	private void cancelUnfinishedEntryTask() {
+	private static void cancelUnfinishedEntryTask() {
 		if(unfinishedEntryCount != null && !unfinishedEntryCount.isCancelled()) {
 			unfinishedEntryCount.cancel(true);
 		}
