@@ -206,11 +206,11 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(fileLocation));
 				List<ResolveInfo> resolveInfo = packageManager.queryIntentActivities(intent,PackageManager.MATCH_DEFAULT_ONLY);
 				if (resolveInfo.size() > 0) {
-					Toast.makeText(GenerateReport.this, "Report Exported to - "+fileLocation, Toast.LENGTH_LONG).show();
+					Toast.makeText(GenerateReport.this, "Report Exported to - "+getShowLocation(), Toast.LENGTH_LONG).show();
 					startActivityForResult(intent, REQUEST_CODE);
 			    } else {
 			    	new AlertDialog.Builder(GenerateReport.this)
-			    	.setMessage(getType()+" Viewer not found, Generated report saved at "+fileLocation)
+			    	.setMessage(getType()+" Viewer not found, Generated report saved at "+getShowLocation())
 			    	.setTitle("Report Generated")
 			    	.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 						@Override
@@ -223,6 +223,10 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			    }
 			}
 		}
+		
+		protected String getShowLocation(){
+			return fileLocation.toString().replaceAll("/mnt", "");
+		} 
 		
 		protected abstract String getType();
 
