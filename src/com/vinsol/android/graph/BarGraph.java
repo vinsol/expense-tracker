@@ -142,7 +142,9 @@ public class BarGraph extends View {
 			TextView mTextViewTemp = new TextView(getContext());
 			mTextViewTemp.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
 			RectF mRectF = new RectF(originX+value, topY-(int)((tempDouble/max)*verDiff), finalValue, topY);
+			paint.setColor(Color.parseColor("#3E3535"));
 			canvas.drawRect(mRectF,paint);
+			paint.setColor(Color.parseColor("#000000"));
 			canvas.drawText(horLabels.get(i), originX+value, topY+mTextViewTemp.getTextSize(), textPaint);
 			if(values.get(i) != null && values.get(i).contains("?")) {
 				textPaint.setTextAlign(Align.LEFT);
