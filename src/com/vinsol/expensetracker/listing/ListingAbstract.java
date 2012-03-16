@@ -258,6 +258,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 		//Delete Action
   	    case 1:
   	    	FlurryAgent.onEvent(getString(R.string.context_item_delete));
+  	    	Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
   	    	removeItem(info.position);
   	    	break;
   	    	

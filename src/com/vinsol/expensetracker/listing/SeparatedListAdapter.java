@@ -311,9 +311,9 @@ class SeparatedListAdapter extends BaseAdapter {
 			} else {
 				updateAmount(sectionNumber, prevEntry, null);
 			}
+			notifyDataSetChanged();
 			return true;
 		}
-		notifyDataSetChanged();
 		return false;
 	}
 	
