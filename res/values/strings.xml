@@ -35,7 +35,7 @@
     <string name="finished_voiceentry">Voice Entry</string>
     
     <!-- Flurry Events -->
-    <string name="flurry_key">Enter Flurry Key</string>
+    <string name="flurry_key">AK3AW9INLVFLPMD597YR</string>
     <string name="generate_report">Generate Report Activity Started</string>
     <string name="save_reminder">Save Reminder</string>
     <string name="export_pdf">Exporting To PDF</string>
