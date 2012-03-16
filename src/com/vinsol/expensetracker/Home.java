@@ -86,7 +86,11 @@ public class Home extends BaseActivity implements OnClickListener {
 
 		// opens ListView
 		((ImageView) findViewById(R.id.main_listview)).setOnClickListener(this);
-
+		
+		ImageView mainGenerateReport = (ImageView) findViewById(R.id.main_generate_report);
+		mainGenerateReport.setVisibility(View.VISIBLE);
+		mainGenerateReport.setOnClickListener(this);
+		
 		graphProgressBar = (ProgressBar) findViewById(R.id.graph_progress_bar);
 		graphProgressBar.setVisibility(View.VISIBLE);
 	}
@@ -172,6 +176,10 @@ public class Home extends BaseActivity implements OnClickListener {
 				FlurryAgent.onEvent(getString(R.string.list_view));
 				Intent intentListView2 = new Intent(this, ExpenseListing.class);
 				startActivity(intentListView2);
+				break;
+				
+			case R.id.main_generate_report:
+				startGenerateReportActivity();
 				break;
 		}//end switch
 	}//end onClick

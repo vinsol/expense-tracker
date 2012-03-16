@@ -64,17 +64,21 @@ public class BaseActivity extends Activity {
 			break;
 			
 		case R.id.generate_report:
-			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-				Intent generateReport = new Intent(this, GenerateReport.class);
-				startActivity(generateReport);
-			} else {
-				Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
-			}
+			startGenerateReportActivity();
 			break;
 		default:
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	protected void startGenerateReportActivity() {
+		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			Intent generateReport = new Intent(this, GenerateReport.class);
+			startActivity(generateReport);
+		} else {
+			Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
+		}
 	}
 
 }

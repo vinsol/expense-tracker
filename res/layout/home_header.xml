@@ -19,6 +19,14 @@
         android:layout_height="wrap_content"
         android:src="@drawable/list_icon_states" 
         android:layout_alignParentRight="true"/>
+    
+    <ImageView 
+        android:id="@+id/main_generate_report"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:src="@drawable/generate_report_header_states"
+        android:layout_toLeftOf="@id/main_listview" />
 	
     <TextView 
         android:id="@+id/home_unfinished_entry_count"
