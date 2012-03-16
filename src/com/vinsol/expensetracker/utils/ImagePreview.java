@@ -11,9 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.View;
 import android.view.Window;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
@@ -24,8 +22,8 @@ public class ImagePreview extends Activity {
 
 	private String id = null;
 	private android.widget.ImageView mImageView;
-	private LinearLayout progressBar;
 	private String path;
+	private String smallPath;
 	
 	private Drawable imageDrawable;
 
@@ -43,8 +41,8 @@ public class ImagePreview extends Activity {
 			if(!ExpenseTrackerApplication.isInitialized){ExpenseTrackerApplication.Initialize();}
 		}
 		path = Constants.DIRECTORY + (isFavorite ? "Favorite/" : "") + id + Constants.IMAGE_LARGE_SUFFIX;
+		smallPath = Constants.DIRECTORY + (isFavorite ? "Favorite/" : "") + id + Constants.IMAGE_SMALL_SUFFIX;
 		mImageView = (android.widget.ImageView) findViewById(R.id.image_view_full_screen_id);
-		progressBar = (LinearLayout) findViewById(R.id.image_view_full_screen_progress);
 
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			try {
@@ -60,8 +58,7 @@ public class ImagePreview extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			progressBar.setVisibility(View.VISIBLE);
-			mImageView.setVisibility(View.GONE);
+			mImageView.setImageDrawable(Drawable.createFromPath(smallPath));
 			super.onPreExecute();
 		}
 
@@ -73,8 +70,6 @@ public class ImagePreview extends Activity {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			progressBar.setVisibility(View.GONE);
-			mImageView.setVisibility(View.VISIBLE);
 			mImageView.setImageDrawable(imageDrawable);
 			super.onPostExecute(result);
 		}

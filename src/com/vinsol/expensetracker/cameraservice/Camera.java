@@ -369,16 +369,9 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             mPostViewPictureCallbackTime = 0;
             mStatus = SNAPSHOT_IN_PROGRESS;
             mImageCapture.initiate();
-            findViewById(R.id.frame_layout).setVisibility(View.GONE);
         	findViewById(R.id.camera_progress_bar).setVisibility(View.VISIBLE);
         	findViewById(R.id.shutter_button).setVisibility(View.GONE);
         	findViewById(R.id.flash_button).setVisibility(View.GONE);
-        	int[] pickIds = {R.id.btn_retake, R.id.btn_done, R.id.btn_cancel};
-            for (int id : pickIds) {
-                CameraButton button = (CameraButton) findViewById(id);
-                button.setVisibility(View.VISIBLE);
-                button.setEnabled(false);
-            }
         }
 
         private void clearLastData() {
@@ -1090,13 +1083,14 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     private void showPostCaptureAlert() {
     	//TODO
     	mStatus = IMAGE_DISPLAYED;
-    	findViewById(R.id.frame_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.camera_progress_bar).setVisibility(View.GONE);
         doAttach();
         mStatus = IDLE;
         int[] pickIds = {R.id.btn_retake, R.id.btn_done, R.id.btn_cancel};
         for (int id : pickIds) {
-            ((CameraButton) findViewById(id)).setEnabled(true);
+            CameraButton button = (CameraButton) findViewById(id);
+            button.setVisibility(View.VISIBLE);
+            button.setEnabled(false);
         }
     }
 

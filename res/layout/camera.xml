@@ -27,20 +27,21 @@
                 android:id="@+id/camera_preview"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"/>
+            <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:visibility="gone"
+			    android:id="@+id/camera_progress_bar"
+		        android:gravity="center">
+			   	<ProgressBar 
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content" />
+			</LinearLayout>
             <com.vinsol.expensetracker.cameraservice.FocusRectangle
                 android:id="@+id/focus_rectangle"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"/>
         </FrameLayout>
     </com.vinsol.expensetracker.cameraservice.PreviewFrameLayout>
-    <LinearLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone"
-	    android:id="@+id/camera_progress_bar"
-        android:gravity="center">
-	   	<ProgressBar 
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" />
-	</LinearLayout>
+    
 </LinearLayout>
