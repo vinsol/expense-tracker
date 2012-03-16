@@ -24,8 +24,7 @@ public class ImagePreview extends Activity {
 	private android.widget.ImageView mImageView;
 	private String path;
 	private String smallPath;
-	
-	private Drawable imageDrawable;
+	private AsyncTask<Void, Void, Void> imageViewAsyncTask;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,7 @@ public class ImagePreview extends Activity {
 
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			try {
-				new ImageViewAsyncTask().execute();
+				imageViewAsyncTask = new ImageViewAsyncTask().execute();
 			} catch (Exception e) {
 			}
 		} else {
@@ -56,6 +55,7 @@ public class ImagePreview extends Activity {
 
 	private class ImageViewAsyncTask extends AsyncTask<Void, Void, Void> {
 
+		private Drawable imageDrawable;
 		@Override
 		protected void onPreExecute() {
 			mImageView.setImageDrawable(Drawable.createFromPath(smallPath));
@@ -72,6 +72,14 @@ public class ImagePreview extends Activity {
 		protected void onPostExecute(Void result) {
 			mImageView.setImageDrawable(imageDrawable);
 			super.onPostExecute(result);
+		}
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if(imageViewAsyncTask != null) {
+			imageViewAsyncTask.cancel(true);
 		}
 	}
 }

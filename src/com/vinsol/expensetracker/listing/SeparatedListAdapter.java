@@ -210,7 +210,9 @@ class SeparatedListAdapter extends BaseAdapter {
 							if (mFile.canRead()) {
 								Drawable drawable = Drawable.createFromPath(mFile.getPath());
 								holderBody.rowImageview.setImageDrawable(drawable);
+								holderBody.rowImageview.setPadding(0, 0, 0, 0);
 							} else {
+								holderBody.rowImageview.setPadding(2, 2, 2, 2);
 								holderBody.rowImageview.setImageResource(R.drawable.no_image_small);
 							}
 						} catch (Exception e) {
