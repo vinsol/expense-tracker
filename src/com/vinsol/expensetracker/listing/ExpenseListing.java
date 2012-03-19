@@ -69,7 +69,6 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
 	}
 	
 	public static void resetUnfinishedEntryCount() {
-		Toast.makeText(ExpenseTrackerApplication.getContext(), "exe", Toast.LENGTH_LONG).show();
 		if(unfinishedEntryCountAll != null && unfinishedEntryCountThisMonth != null && unfinishedEntryCountThisMonth != null && unfinishedEntryCountThisYear != null) {
 			cancelUnfinishedEntryTask();
 			unfinishedEntryCount = new UnfinishedEntryCount(mConvertCursorToListString.getEntryList(false,""), unfinishedEntryCountThisWeek, unfinishedEntryCountThisMonth, unfinishedEntryCountThisYear, unfinishedEntryCountAll);
