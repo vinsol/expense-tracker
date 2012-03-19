@@ -22,6 +22,10 @@ public class TextEntry extends EditAbstract {
 		editHelper();
 	}
 	
+	@Override
+	protected String getTypeOfEntryForFlurry() {
+		return getString(R.string.finished_textentry);
+	}
 
 	@Override
 	protected void setDefaultTitle() {

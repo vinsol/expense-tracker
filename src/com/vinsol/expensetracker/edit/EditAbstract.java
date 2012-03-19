@@ -630,15 +630,19 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	}
 	
 	private void setFlurryNewEntryType() {
-		FlurryAgent.onEvent("New Entry "+getString(typeOfEntryFinished));
+		FlurryAgent.onEvent("New Entry "+getTypeOfEntryForFlurry());
 	}
 	
+	protected String getTypeOfEntryForFlurry() {
+		return getString(typeOfEntryFinished);
+	}
+
 	private void setFlurryEditEntryType() {
-		FlurryAgent.onEvent("Edit Entry "+getString(typeOfEntryFinished));
+		FlurryAgent.onEvent("Edit Entry "+getTypeOfEntryForFlurry());
 	}
 	
 	private void setFlurryEditFavoriteType() {
-		FlurryAgent.onEvent("Edit Favorite "+getString(typeOfEntryFinished));
+		FlurryAgent.onEvent("Edit Favorite "+getTypeOfEntryForFlurry());
 	}
 	
 	@Override
