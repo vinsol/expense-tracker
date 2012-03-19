@@ -6,9 +6,6 @@
 
 package com.vinsol.expensetracker;
 
-import com.vinsol.expensetracker.helpers.GenerateReport;
-import com.vinsol.expensetracker.listing.FavoriteActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,9 +15,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.vinsol.expensetracker.listing.FavoriteActivity;
+
 public class BaseActivity extends Activity {
 	
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.common_optionsmenu, menu);
