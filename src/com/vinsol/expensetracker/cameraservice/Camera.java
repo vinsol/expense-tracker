@@ -1090,7 +1090,6 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         for (int id : pickIds) {
             CameraButton button = (CameraButton) findViewById(id);
             button.setVisibility(View.VISIBLE);
-            button.setEnabled(false);
         }
     }
 
