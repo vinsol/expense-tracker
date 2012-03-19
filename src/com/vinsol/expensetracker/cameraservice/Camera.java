@@ -54,6 +54,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.ExpenseTrackerApplication;
 import com.vinsol.expensetracker.R;
@@ -137,6 +138,12 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     public long mJpegCallbackFinishTime;
 
     public static boolean mMediaServerDied = false;
+    
+    @Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
+	}
 
     private final Handler mHandler = new MainHandler();
 
@@ -454,6 +461,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     @Override
     public void onStop() {
         super.onStop();
+		FlurryAgent.onEndSession(this);
         if (mMediaProviderClient != null) {
             mMediaProviderClient.release();
             mMediaProviderClient = null;

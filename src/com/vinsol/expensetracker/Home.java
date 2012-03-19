@@ -121,7 +121,6 @@ public class Home extends BaseActivity implements OnClickListener {
 		switch (idOfClickedView) {
 			// //// ******* opens TextEntry Activity ******** ///////////
 			case R.id.main_text:
-				FlurryAgent.onEvent(getString(R.string.finished_textentry));
 				Intent intentTextEntry = new Intent(this, TextEntry.class);
 				createDatabaseEntry(R.string.text);
 				intentTextEntry.putExtras(bundle);
@@ -130,7 +129,6 @@ public class Home extends BaseActivity implements OnClickListener {
 				
 			// //// ******* opens Voice Activity ******** ///////////
 			case R.id.main_voice:
-				FlurryAgent.onEvent(getString(R.string.finished_voiceentry));
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					Intent intentVoice = new Intent(this, Voice.class);
 					createDatabaseEntry(R.string.voice);
@@ -143,7 +141,6 @@ public class Home extends BaseActivity implements OnClickListener {
 	
 			// //// ******* opens Camera Activity ******** ///////////
 			case R.id.main_camera:
-				FlurryAgent.onEvent(getString(R.string.finished_cameraentry));
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					Intent intentCamera = new Intent(this, CameraActivity.class);
 					bundle = new Bundle();
@@ -156,7 +153,6 @@ public class Home extends BaseActivity implements OnClickListener {
 				
 			// //// ******* opens Favorite Activity ******** ///////////
 			case R.id.main_favorite:
-				FlurryAgent.onEvent(getString(R.string.favorite));
 				Intent intentFavorite = new Intent(this, FavoriteActivity.class);
 				bundle = new Bundle();
 				intentFavorite.putExtras(bundle);
@@ -165,7 +161,6 @@ public class Home extends BaseActivity implements OnClickListener {
 				
 			// //// ******* opens List Activity and adds unknown entry to database ******** ///////////
 			case R.id.main_save_reminder:
-				FlurryAgent.onEvent(getString(R.string.save_reminder));
 				insertToDatabase(R.string.unknown);
 				Intent intentListView = new Intent(this, ExpenseListing.class);
 				startActivity(intentListView);
@@ -173,7 +168,6 @@ public class Home extends BaseActivity implements OnClickListener {
 			
 			////// ******* opens ListView Activity ******** ///////////
 			case R.id.main_listview:
-				FlurryAgent.onEvent(getString(R.string.list_view));
 				Intent intentListView2 = new Intent(this, ExpenseListing.class);
 				startActivity(intentListView2);
 				break;

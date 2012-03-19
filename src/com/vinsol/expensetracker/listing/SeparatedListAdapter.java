@@ -28,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
@@ -359,13 +358,11 @@ class SeparatedListAdapter extends BaseAdapter {
 				if (mListenerList != null)
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						if (mListenerList.type.equals(mContext.getString(R.string.voice))) {
-							FlurryAgent.onEvent(mContext.getString(R.string.list_audio_dialog));
 							File mFile = fileHelper.getAudioFileEntry(mListenerList.id);
 							if (mFile.canRead()) {
 								new AudioPlayDialog(mContext, mListenerList.id);
 							}
 						} else if (mListenerList.type.equals(mContext.getString(R.string.camera))) {
-							FlurryAgent.onEvent(mContext.getString(R.string.list_image_dialog));
 							File mFile = fileHelper.getCameraFileLargeEntry(mListenerList.id);
 							if (mFile.canRead()) {
 								Intent intent = new Intent(mContext, ImagePreview.class);
@@ -375,7 +372,6 @@ class SeparatedListAdapter extends BaseAdapter {
 						}
 					}
 				if (mListenerList.type.equals(mContext.getString(R.string.text))) {
-					FlurryAgent.onEvent(mContext.getString(R.string.list_text_dialog));
 					if (!mListenerList.description.equals(mContext.getString(R.string.unfinished_textentry))) {
 						new DescriptionDialog(mContext, mListenerList.description);
 					}

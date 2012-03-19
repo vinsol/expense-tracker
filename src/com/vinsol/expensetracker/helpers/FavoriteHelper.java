@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 
@@ -132,7 +131,6 @@ public class FavoriteHelper implements OnClickListener{
 		switch (v.getId()) {
 			case R.id.show_add_favorite:
 			case R.id.show_add_favorite_textView:
-				FlurryAgent.onEvent(activity.getString(R.string.added_to_favorite));
 				Boolean toCheck;
 				if(v.getId() == R.id.show_add_favorite) {
 					toCheck = showAddFavorite.isChecked();

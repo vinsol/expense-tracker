@@ -171,7 +171,6 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 				break;
 	
 			case R.id.show_edit:
-				FlurryAgent.onEvent(getString(R.string.edit_button));
 				intentExtras.putBoolean(Constants.KEY_IS_COMING_FROM_SHOW_PAGE, true);
 				intentExtras.remove(Constants.KEY_ENTRY_LIST_EXTRA);
 				if(mShowList.amount.endsWith(".00")) {
@@ -187,7 +186,6 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 	}
 
 	private void delete() {
-		FlurryAgent.onEvent(getString(R.string.delete_button));
 		if (mShowList.id != null) {
 			deleteFile();
 			mDatabaseAdapter.open();

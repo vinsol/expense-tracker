@@ -73,6 +73,18 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 	private EditText searchBox;
 	
 	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
+	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -194,13 +206,11 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
   	    switch (item.getItemId()) {
 		//Edit Action	
   	    case 0:
-  	    	FlurryAgent.onEvent(getString(R.string.context_item_edit));
   	    	startEditPage(info.position);
 			break;
 			
 		//Delete Action
   	    case 1:
-  	    	FlurryAgent.onEvent(getString(R.string.context_item_delete));
   	    	removeItem(info.position);
   	    	break;
   	    	

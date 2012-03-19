@@ -5,6 +5,8 @@
 
 package com.vinsol.expensetracker;
 
+import com.flurry.android.FlurryAgent;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -14,6 +16,18 @@ import android.preference.PreferenceActivity;
 import android.view.Window;
 
 public class SetPreferences extends PreferenceActivity {
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

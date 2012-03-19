@@ -107,7 +107,7 @@
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation" />
          <activity 
-            android:name=".helpers.GenerateReport"
+            android:name=".GenerateReport"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation" />
     </application>

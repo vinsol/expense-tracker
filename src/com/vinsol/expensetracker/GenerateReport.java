@@ -84,12 +84,11 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	private List<Entry> mEntryList;
 	
 	private final int REQUEST_CODE = 1055;
-    
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
 		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
-		FlurryAgent.onEvent(getString(R.string.generate_report));
 	}
 	
 	@Override
@@ -137,12 +136,10 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 						switch ((int)((Spinner) findViewById(R.id.type_spinner)).getSelectedItemId()) {
 						//case if Exporting to PDF
 						case 0:
-							FlurryAgent.onEvent(getString(R.string.export_pdf));
 							exportToPDF();
 							break;
 						//case if Exporting to CSV
 						case 1:
-							FlurryAgent.onEvent(getString(R.string.export_csv));
 							exportToCSV();
 							break;
 			

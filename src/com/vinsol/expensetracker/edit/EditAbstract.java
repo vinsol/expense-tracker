@@ -71,7 +71,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		super.onStart();
 		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
 	}
-
+	
 	@Override
 	protected void onStop() {
 		super.onStop();
@@ -454,7 +454,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		////////******** Adding Action to save entry ********* ///////////
 		switch (v.getId()) {
 		case R.id.edit_save_entry:
-			FlurryAgent.onEvent(getString(R.string.save_button));
 			if(isFromFavorite) {
 				saveFavoriteEntry();
 			} else {
@@ -497,7 +496,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	}
 
 	private void deleteEntry() {
-		FlurryAgent.onEvent(getString(R.string.delete_button));
 		isChanged = true;
 		deleteFile();
 		////// ******* Delete entry from database ******** /////////
@@ -525,7 +523,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	}
 	
 	private void deleteFavorite() {
-		FlurryAgent.onEvent(getString(R.string.delete_button));
 		isChanged = true;
 		fileHelper.deleteAllFavoriteFiles(mFavoriteList.favId);
 		////// ******* Delete entry from database ******** /////////
@@ -546,7 +543,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 
 	@Override
 	public void onBackPressed() {
-		FlurryAgent.onEvent(getString(R.string.back_pressed));
 		ConfirmSaveEntryDialog mConfirmSaveEntryDialog = new ConfirmSaveEntryDialog(this);
 		if(intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE) || intentExtras.containsKey(Constants.KEY_POSITION)) {
 			mConfirmSaveEntryDialog.setMessage(getString(R.string.backpress_edit_entry_text));
