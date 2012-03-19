@@ -131,7 +131,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	}
 
 	protected void editHelper() {
-
 		if (intentExtras.containsKey(Constants.KEY_ID)) {
 			entry.id = intentExtras.getLong(Constants.KEY_ID)+"";
 		}
@@ -145,6 +144,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		}
 		
 		if (!isFromFavorite && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
+			setFlurryEditEntryType();
 			mEditList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 			mFavoriteList = null;
 			entry.id = mEditList.id;
@@ -156,6 +156,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			locationTime.setVisibility(View.VISIBLE);
 			locationTime.setText(new DisplayDate().getLocationDate(mEditList.timeInMillis, mEditList.location));
 		} else if(isFromFavorite && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
+			setFlurryEditFavoriteType();
 			mEditList = null;
 			((LinearLayout)findViewById(R.id.edit_date_bar)).setVisibility(View.GONE);
 			mFavoriteList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA); 
@@ -173,7 +174,9 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			}
 		}
 		
+		//New Entry
 		if (!isFromFavorite && !intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
+			setFlurryNewEntryType();
 			new FavoriteHelper(this, mDatabaseAdapter, fileHelper, getString(typeOfEntry),entry.id, editAmount, editTag , isChanged);
 		} else {
 			findViewById(R.id.favorite_divider).setVisibility(View.GONE);
@@ -624,6 +627,18 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		bundle.putInt(Constants.KEY_POSITION , intentExtras.getInt(Constants.KEY_POSITION));
 		setActivityResult(bundle);
 		finish();
+	}
+	
+	private void setFlurryNewEntryType() {
+		FlurryAgent.onEvent("New Entry "+getString(typeOfEntryFinished));
+	}
+	
+	private void setFlurryEditEntryType() {
+		FlurryAgent.onEvent("Edit Entry "+getString(typeOfEntryFinished));
+	}
+	
+	private void setFlurryEditFavoriteType() {
+		FlurryAgent.onEvent("Edit Favorite "+getString(typeOfEntryFinished));
 	}
 	
 	@Override

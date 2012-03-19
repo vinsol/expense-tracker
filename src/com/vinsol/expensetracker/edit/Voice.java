@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.AudioPlay;
@@ -278,7 +279,9 @@ public class Voice extends EditAbstract {
 		} else {
 			mAudioPlay = new AudioPlay(entry.id , this, isFromFavorite);
 		}
-		editTimeDetailsChronometer.setText(new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime()));
+		String displayTime = new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime());
+		editTimeDetailsChronometer.setText(displayTime);
+		FlurryAgent.onEvent(displayTime);
 	}
 	
 }
