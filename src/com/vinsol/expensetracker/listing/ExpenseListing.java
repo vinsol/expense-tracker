@@ -44,7 +44,7 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
 		unfinishedEntryCountThisMonth = (TextView)findViewById(R.id.unfinished_count_this_month);
 		unfinishedEntryCountThisYear = (TextView)findViewById(R.id.unfinished_count_this_year);
 		setTab();
-		setUnfinishedEntryNotification();
+		setUnfinishedEntryNotificationLayout();
 	}
 	
 	@Override
@@ -61,7 +61,7 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
 		}
 	}
 	
-	private void setUnfinishedEntryNotification() {
+	private void setUnfinishedEntryNotificationLayout() {
 		DisplayMetrics outMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
