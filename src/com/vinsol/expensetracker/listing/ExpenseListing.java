@@ -18,8 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
+import com.vinsol.expensetracker.ExpenseTrackerApplication;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
@@ -54,7 +56,8 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
 	}
 	
 	public static void resetUnfinishedEntryCount() {
-		if(unfinishedEntryCount != null && unfinishedEntryCountAll != null && unfinishedEntryCountThisMonth != null && unfinishedEntryCountThisMonth != null && unfinishedEntryCountThisYear != null) {
+		Toast.makeText(ExpenseTrackerApplication.getContext(), "exe", Toast.LENGTH_LONG).show();
+		if(unfinishedEntryCountAll != null && unfinishedEntryCountThisMonth != null && unfinishedEntryCountThisMonth != null && unfinishedEntryCountThisYear != null) {
 			cancelUnfinishedEntryTask();
 			unfinishedEntryCount = new UnfinishedEntryCount(mConvertCursorToListString.getEntryList(false,""), unfinishedEntryCountThisWeek, unfinishedEntryCountThisMonth, unfinishedEntryCountThisYear, unfinishedEntryCountAll);
 			unfinishedEntryCount.execute();
