@@ -18,11 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.Constants;
-import com.vinsol.expensetracker.ExpenseTrackerApplication;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DisplayDate;
