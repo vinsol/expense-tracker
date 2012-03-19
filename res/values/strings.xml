@@ -53,6 +53,10 @@
     <string name="grouped_icon_click">Grouped Icon Dialog Show</string>
     <string name="context_item_edit">Context Item Edit</string>
     <string name="context_item_delete">Context Item Delete</string>
+    <string name="fav_marked_from_new">Favorite Marked From New</string>
+    <string name="fav_marked_from_show">Favorite Marked From Show</string>
+    <string name="fav_unmarked_from_new">Favorite UnMarked From New</string>
+    <string name="fav_unmarked_from_show">Favorite UnMarked From Show</string>
     
     <!-- Toast Text -->
     <string name="entry_discarded">Discarded</string>

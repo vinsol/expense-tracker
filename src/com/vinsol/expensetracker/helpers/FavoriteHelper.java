@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 
@@ -28,6 +29,7 @@ public class FavoriteHelper implements OnClickListener{
 	private DatabaseAdapter mDatabaseAdapter;
 	private FileHelper fileHelper;
 	private Entry mShowList;
+	private boolean isFromEditPage = false;
 	
 	public FavoriteHelper(Activity activity,DatabaseAdapter mDatabaseAdapter,FileHelper fileHelper,Entry mShowList) {
 		this.mDatabaseAdapter = mDatabaseAdapter;
@@ -53,6 +55,7 @@ public class FavoriteHelper implements OnClickListener{
 		this.mDatabaseAdapter = mDatabaseAdapter;
 		this.activity = activity;
 		this.fileHelper = fileHelper;
+		isFromEditPage = true;
 		mShowList = new Entry();
 		mShowList.id = id;
 		mShowList.type = type;
@@ -198,6 +201,11 @@ public class FavoriteHelper implements OnClickListener{
 			mDatabaseAdapter.close();
 			showAddFavorite.setChecked(true);
 			showAddFavoriteTextView.setText("Remove from Favorite");
+			if(isFromEditPage) {
+				FlurryAgent.onEvent(activity.getString(R.string.fav_marked_from_new) +" "+getTypeForFlurry());
+			} else {
+				FlurryAgent.onEvent(activity.getString(R.string.fav_marked_from_show) +" "+getTypeForFlurry());
+			}
 			Toast.makeText(activity, "Added to Favorite", Toast.LENGTH_SHORT).show();
 		} else if(mShowList.type.equals(activity.getString(R.string.text))) {
 				mDatabaseAdapter.open();
@@ -221,6 +229,19 @@ public class FavoriteHelper implements OnClickListener{
 			}
 	}
 	
+	private String getTypeForFlurry() {
+		if(mShowList.type.equals("0")){
+			return activity.getString(R.string.unknown_entry);
+		} else if(mShowList.type.equals("1")){
+			return activity.getString(R.string.finished_textentry);
+		} else if(mShowList.type.equals("2")){
+			return activity.getString(R.string.finished_cameraentry);
+		} else if(mShowList.type.equals("3")){
+			return activity.getString(R.string.finished_voiceentry);
+		}
+		return "";
+	}
+
 	private void doTaskAfter(Long favID) {
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.deleteFavoriteTableEntryID(favID+"");
@@ -231,6 +252,11 @@ public class FavoriteHelper implements OnClickListener{
 		showAddFavorite.setChecked(false);
 		mShowList.favId = null;
 		showAddFavoriteTextView.setText("Add to Favorite");
+		if(isFromEditPage) {
+			FlurryAgent.onEvent(activity.getString(R.string.fav_unmarked_from_new)+" "+getTypeForFlurry());
+		} else {
+			FlurryAgent.onEvent(activity.getString(R.string.fav_unmarked_from_show)+" "+getTypeForFlurry());
+		}
 		Toast.makeText(activity, "Removed from Favorite", Toast.LENGTH_SHORT).show();
 	}	
 

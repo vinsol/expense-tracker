@@ -138,7 +138,7 @@ public class Voice extends EditAbstract {
 		
 		// // ***** if stop button pressed ****** //////
 		case R.id.edit_stop_button:
-			stopRecording();
+			stopRecording(true);
 			break;
 		// // ***** if play button pressed ****** //////			
 		case R.id.edit_play_button:
@@ -261,7 +261,7 @@ public class Voice extends EditAbstract {
 		}
 	}
 	
-	private void stopRecording() {
+	private void stopRecording(boolean isComingFromViewClick) {
 		if(countDownTimer != null){countDownTimer.cancel();}
 
 		// //// ****** Handles UI items on button click ****** ///////
