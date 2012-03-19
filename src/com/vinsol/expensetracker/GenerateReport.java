@@ -13,7 +13,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -129,8 +131,9 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 				}
 				if(mEntryList.size() <= 5000) {
 					if(setStartEndDate()) {
-						FlurryAgent.onEvent("Start Date "+mStartDay+" "+(mStartMonth+1)+" "+mStartYear);
-						FlurryAgent.onEvent("End Date "+mEndDay+" "+(mEndMonth+1)+" "+mEndYear);
+						Map<String, String> dateRangeArg = new HashMap<String, String>();
+						dateRangeArg.put("Start End Date", mStartDay+" "+(mStartMonth+1)+" "+mStartYear+" - "+mEndDay+" "+(mEndMonth+1)+" "+mEndYear);
+						FlurryAgent.onEvent(getString(R.string.generate_report),dateRangeArg);
 						Log.d("**************Exporting Range****************");
 						Log.d("Start Date "+mStartDay+" "+(mStartMonth+1)+" "+mStartYear);
 						Log.d("End Date "+mEndDay+" "+(mEndMonth+1)+" "+mEndYear);
@@ -344,7 +347,10 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 				
 				isRecordAdded = true;
 			}
-			FlurryAgent.onEvent("CSV Report with "+srNo+" records");
+			Map<String, String> recordType = new HashMap<String, String>();
+			recordType.put("Total Records", +srNo+"");
+			recordType.put("Type ", getType());
+			FlurryAgent.onEvent(getString(R.string.generate_report), recordType);
 			addTotalAmountRow();
 		}
 
@@ -532,7 +538,10 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 					table.flushContent();
 				} 
 			}
-			FlurryAgent.onEvent("PDF Report with "+srNo+" records");
+			Map<String, String> recordType = new HashMap<String, String>();
+			recordType.put("Total Records", +srNo+"");
+			recordType.put("Type ", getType());
+			FlurryAgent.onEvent(getString(R.string.generate_report), recordType);
 			addTotalAmountRow(table);
 			document.add(table);
 			table.flushContent();
