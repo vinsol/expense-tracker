@@ -7,3 +7,4 @@ bin/classes.dex
 .classpath
 .DS_Store
 gen/
+proguard/
