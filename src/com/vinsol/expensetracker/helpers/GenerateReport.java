@@ -127,25 +127,26 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 					Toast.makeText(GenerateReport.this, "No Record to Generate Report, Please add some", Toast.LENGTH_LONG).show();
 				}
 				if(mEntryList.size() <= 5000) {
-					setStartEndDate();
-					Log.d("**************Exporting Range****************");
-					Log.d("Start Date "+mStartDay+" "+(mStartMonth+1)+" "+mStartYear);
-					Log.d("End Date "+mEndDay+" "+(mEndMonth+1)+" "+mEndYear);
-					Log.d("******************************");
-					switch ((int)((Spinner) findViewById(R.id.type_spinner)).getSelectedItemId()) {
-					//case if Exporting to PDF
-					case 0:
-						FlurryAgent.onEvent(getString(R.string.export_pdf));
-						exportToPDF();
-						break;
-					//case if Exporting to CSV
-					case 1:
-						FlurryAgent.onEvent(getString(R.string.export_csv));
-						exportToCSV();
-						break;
-		
-					default:
-						break;
+					if(setStartEndDate()) {
+						Log.d("**************Exporting Range****************");
+						Log.d("Start Date "+mStartDay+" "+(mStartMonth+1)+" "+mStartYear);
+						Log.d("End Date "+mEndDay+" "+(mEndMonth+1)+" "+mEndYear);
+						Log.d("******************************");
+						switch ((int)((Spinner) findViewById(R.id.type_spinner)).getSelectedItemId()) {
+						//case if Exporting to PDF
+						case 0:
+							FlurryAgent.onEvent(getString(R.string.export_pdf));
+							exportToPDF();
+							break;
+						//case if Exporting to CSV
+						case 1:
+							FlurryAgent.onEvent(getString(R.string.export_csv));
+							exportToCSV();
+							break;
+			
+						default:
+							break;
+						}
 					}
 
 				} else {
@@ -587,7 +588,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		
 	}
 	
-	private void setStartEndDate() {
+	private boolean setStartEndDate() {
 		endCalendar = Calendar.getInstance();
 		endCalendar.set(endCalendar.get(Calendar.YEAR), endCalendar.get(Calendar.MONTH), endCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
 		endCalendar.setFirstDayOfWeek(Calendar.MONDAY);
@@ -598,32 +599,31 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		case 0:
 			startCalendar.add(Calendar.MONTH, -1);
 			setDateParameters(startCalendar,endCalendar);
-			break;
+			return true;
 
 		//case if period is 1 Quarter
 		case 1:
 			startCalendar.add(Calendar.MONTH, -3);
 			setDateParameters(startCalendar,endCalendar);
-			break;
+			return true;
 
 		//case if period is Half Year
 		case 2:
 			startCalendar.add(Calendar.MONTH, -6);
 			setDateParameters(startCalendar,endCalendar);
-			break;
+			return true;
 			
 		//case if period is 1 Year
 		case 3:
 			startCalendar.add(Calendar.YEAR, -1);
 			setDateParameters(startCalendar,endCalendar);
-			break;
+			return true;
 			
 		//case if period is Custom
 		case 4:
-			checkStartEndDate(true);
-			break;
+			return checkStartEndDate(true);
 		default:
-			break;
+			return false;
 		}
 	}
 
