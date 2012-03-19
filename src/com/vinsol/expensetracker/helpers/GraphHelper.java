@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.vinsol.android.graph.BarGraph;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
@@ -406,6 +407,7 @@ public class GraphHelper extends AsyncTask<Void, Void, Void> implements OnClickL
 
 	@Override
 	public void onClick(View v) {
+		FlurryAgent.onEvent(activity.getString(R.string.graph_changed_using_textview));
 		int j;
 		j = graphGallery.getSelectedItemPosition();
 		switch (v.getId()) {

@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.R;
 
 public class DeleteDialog extends AlertDialog implements DialogInterface.OnClickListener {
@@ -20,8 +21,9 @@ public class DeleteDialog extends AlertDialog implements DialogInterface.OnClick
 	private boolean isDelete;
 	private CheckBox checkBox;
 	
-	public DeleteDialog(Context context) { 
+	public DeleteDialog(final Context context) { 
 		super(context);
+		FlurryAgent.onEvent(context.getString(R.string.delete_dialog_shown));
 		setTitle(context.getString(R.string.confirm_delete));
 		setMessage(context.getString(R.string.delete_dialog_text));
 		View checkBoxView = getLayoutInflater().inflate(R.layout.delete_dialog, null);
@@ -33,6 +35,7 @@ public class DeleteDialog extends AlertDialog implements DialogInterface.OnClick
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				FlurryAgent.onEvent(context.getString(R.string.delete_dialog_checkbox_status)+" "+isChecked);
 				setDeletePrefs();
 			}
 		});

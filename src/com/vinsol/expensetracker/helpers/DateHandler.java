@@ -17,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.R;
 
 public class DateHandler implements OnClickListener {
@@ -28,6 +29,7 @@ public class DateHandler implements OnClickListener {
 	private Calendar mCalendar;
 	private CustomDatePickerDialog dialog;
 	public Calendar tempCalenderOnCancel;
+	private Activity activity;
 
 	public DateHandler(Activity activity) {
 		mCalendar = Calendar.getInstance();
@@ -41,6 +43,7 @@ public class DateHandler implements OnClickListener {
 	}
 	
 	private void doCommonTaskAfter(Activity activity) {
+		this.activity = activity;
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		mDisplayDate = new DisplayDate(mCalendar);
 		dateview = (TextView) activity.findViewById(R.id.edit_date_bar_dateview);
@@ -72,6 +75,7 @@ public class DateHandler implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.edit_date_bar_next_arrow:
+			FlurryAgent.onEvent(activity.getString(R.string.date_changed_using_next_arrow));
 			mCalendar.add(Calendar.DATE, 1);
 			mDisplayDate = new DisplayDate(mCalendar);
 			dateview.setText(mDisplayDate.getDisplayDate());
@@ -82,6 +86,7 @@ public class DateHandler implements OnClickListener {
 			break;
 
 		case R.id.edit_date_bar_previous_arrow:
+			FlurryAgent.onEvent(activity.getString(R.string.date_changed_using_previous_arrow));
 			mCalendar.add(Calendar.DATE, -1);
 			mDisplayDate = new DisplayDate(mCalendar);
 			if (!nextArrow.isShown()) {
@@ -91,6 +96,7 @@ public class DateHandler implements OnClickListener {
 			break;
 			
 		case R.id.edit_date_bar_dateview:
+			FlurryAgent.onEvent(activity.getString(R.string.date_picker_dialog_open) +" Date Handler");
 			dialog.setOnDismissListener(new OnDismissListener() {
 				@Override
 				public void onDismiss(DialogInterface dialog) {

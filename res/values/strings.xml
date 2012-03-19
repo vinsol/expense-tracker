@@ -36,27 +36,24 @@
     
     <!-- Flurry Events -->
     <string name="flurry_key">AK3AW9INLVFLPMD597YR</string>
-    <string name="generate_report">Generate Report Activity Started</string>
+    <string name="generate_report">Generate Report</string>
     <string name="save_reminder">Save Reminder</string>
-    <string name="export_pdf">Exporting To PDF</string>
-    <string name="export_csv">Exporting To CSV</string>
-    <string name="list_view">List View</string>
-    <string name="favorite">Favorite Entry</string>
-    <string name="save_button">Save Button</string>
-    <string name="delete_button">Delete Button</string>
-    <string name="edit_button">Edit Button</string>
-    <string name="back_pressed">Back Pressed</string>
-    <string name="added_to_favorite">Added to Favorite</string>
-    <string name="list_image_dialog">Listing ImageView Dialog</string>
-    <string name="list_text_dialog">Listing TextView Dialog</string>
-    <string name="list_audio_dialog">Listing AudioDialog</string>
-    <string name="grouped_icon_click">Grouped Icon Dialog Show</string>
-    <string name="context_item_edit">Context Item Edit</string>
-    <string name="context_item_delete">Context Item Delete</string>
     <string name="fav_marked_from_new">Favorite Marked From New</string>
     <string name="fav_marked_from_show">Favorite Marked From Show</string>
     <string name="fav_unmarked_from_new">Favorite UnMarked From New</string>
     <string name="fav_unmarked_from_show">Favorite UnMarked From Show</string>
+    <string name="rate_app">Rate App from Menu</string>
+    <string name="delete_dialog_shown">Delete Dialog Shown</string>
+    <string name="add_expenses_from_listing">Add Expenses From Listing</string>
+    <string name="delete_dialog_checkbox_status">Delete Dialog CheckBox Status</string>
+    <string name="dialog_opened_to">Dialog Opened To</string>
+    <string name="date_changed_using_previous_arrow">Date Changed Using Previous Arrow</string>
+    <string name="date_changed_using_next_arrow">Date Changed Using Next Arrow</string>
+    <string name="date_picker_dialog_open">Date Picker Dialog Opened</string>
+    <string name="graph_changed_using_textview">Graph Changed Using TextView</string>
+    <string name="deleting_using_context_menu">Deleting Using Context Menu</string>
+    <string name="editing_using_context_menu">Editing Using Context Menu</string>
+    
     
     <!-- Toast Text -->
     <string name="entry_discarded">Discarded</string>

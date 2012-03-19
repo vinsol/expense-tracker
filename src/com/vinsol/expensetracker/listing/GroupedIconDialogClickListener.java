@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
@@ -33,6 +34,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 	public GroupedIconDialogClickListener(UnknownEntryDialog unknownDialog,Activity activity,Bundle bundle,Long timeInMillis) {
 		this.unknownDialog = unknownDialog;
 		this.activity = activity;
+		FlurryAgent.onEvent(activity.getString(R.string.dialog_opened_to)+" "+activity.getString(R.string.add_expenses_from_listing));
 		if(bundle != null) {
 			if(!bundle.isEmpty()) {
 				this.bundle = bundle;

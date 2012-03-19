@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
 
 public class BaseActivity extends Activity {
@@ -51,6 +52,7 @@ public class BaseActivity extends Activity {
 			break;
 
 		case R.id.rate_app:
+			FlurryAgent.onEvent(getString(R.string.rate_app));
 			Intent startMarket = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.EXPENSE_TRACKER_MARKET_URI));
 			startActivity(startMarket);
 			break;

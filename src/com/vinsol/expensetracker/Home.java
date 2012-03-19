@@ -161,6 +161,7 @@ public class Home extends BaseActivity implements OnClickListener {
 				
 			// //// ******* opens List Activity and adds unknown entry to database ******** ///////////
 			case R.id.main_save_reminder:
+				FlurryAgent.onEvent(getString(R.string.save_reminder));
 				insertToDatabase(R.string.unknown);
 				Intent intentListView = new Intent(this, ExpenseListing.class);
 				startActivity(intentListView);

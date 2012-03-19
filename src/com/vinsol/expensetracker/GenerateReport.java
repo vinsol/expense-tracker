@@ -108,7 +108,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		customEndDateTextView.setOnClickListener(this);
 		period = (Spinner) findViewById(R.id.period_spinner);
 		period.setOnItemSelectedListener(this);
-		
+		FlurryAgent.onEvent(getString(R.string.generate_report));
 		//set default end day values
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
@@ -129,6 +129,8 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 				}
 				if(mEntryList.size() <= 5000) {
 					if(setStartEndDate()) {
+						FlurryAgent.onEvent("Start Date "+mStartDay+" "+(mStartMonth+1)+" "+mStartYear);
+						FlurryAgent.onEvent("End Date "+mEndDay+" "+(mEndMonth+1)+" "+mEndYear);
 						Log.d("**************Exporting Range****************");
 						Log.d("Start Date "+mStartDay+" "+(mStartMonth+1)+" "+mStartYear);
 						Log.d("End Date "+mEndDay+" "+(mEndMonth+1)+" "+mEndYear);
@@ -306,13 +308,14 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		}
 
 		private void addDataToTable() throws IOException{
+			int srNo = 0;
 			for(int i=0 ; i < mEntryList.size() ; i++) {
 				Entry entry = mEntryList.get(i);
 				if(!isDateValid(entry.timeInMillis)) {continue;}
 				
 				// Adding Serial Number
-				writer.write((i+1)+",");
-				
+				srNo++;
+				writer.write((srNo)+",");
 				// Adding date
 				writer.write(new DisplayDate().getDisplayDateReport(entry.timeInMillis).replaceAll(",", " ")+",");
 				
@@ -341,6 +344,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 				
 				isRecordAdded = true;
 			}
+			FlurryAgent.onEvent("CSV Report with "+srNo+" records");
 			addTotalAmountRow();
 		}
 
@@ -484,13 +488,15 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	 	}
 
 		private void addDataToTable(PdfPTable table, Document document) throws DocumentException{
+			int srNo = 0;
 			for(int i=0 ; i < mEntryList.size() ; i++) {
 				Entry entry = mEntryList.get(i);
 				if(!isDateValid(entry.timeInMillis)) {continue;}
 				table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
 				
 				// Adding Serial Number
-				table.addCell((i+1)+"");
+				srNo++;
+				table.addCell((srNo)+"");
 				table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_LEFT);
 				
 				// Adding date
@@ -526,6 +532,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 					table.flushContent();
 				} 
 			}
+			FlurryAgent.onEvent("PDF Report with "+srNo+" records");
 			addTotalAmountRow(table);
 			document.add(table);
 			table.flushContent();

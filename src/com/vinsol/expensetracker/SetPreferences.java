@@ -37,10 +37,11 @@ public class SetPreferences extends PreferenceActivity {
 		getWindow().setBackgroundDrawableResource(R.color.white);
 		getListView().setBackgroundColor(Color.TRANSPARENT);
 		getListView().setCacheColorHint(Color.TRANSPARENT);
-		CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference) findPreference(getString(R.string.pref_key_delete_dialog));
+		final CheckBoxPreference mCheckBoxPreference = (CheckBoxPreference) findPreference(getString(R.string.pref_key_delete_dialog));
 		mCheckBoxPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
+				FlurryAgent.onEvent("Preference Delete Dialog "+mCheckBoxPreference.isChecked());
 				return true;
 			}
 		});

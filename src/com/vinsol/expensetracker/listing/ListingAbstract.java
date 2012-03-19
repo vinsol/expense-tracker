@@ -251,11 +251,13 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
   	    switch (item.getItemId()) {
 		//Edit Action	
   	    case 0:
+  	    	FlurryAgent.onEvent(getString(R.string.editing_using_context_menu));
   	    	startEditPage(info.position);
 			break;
 			
 		//Delete Action
   	    case 1:
+  	    	FlurryAgent.onEvent(getString(R.string.deleting_using_context_menu));
   	    	Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
   	    	removeItem(info.position);
   	    	ExpenseListing.resetUnfinishedEntryCount();

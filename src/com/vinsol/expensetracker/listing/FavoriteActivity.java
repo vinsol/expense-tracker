@@ -206,11 +206,13 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
   	    switch (item.getItemId()) {
 		//Edit Action	
   	    case 0:
+  	    	FlurryAgent.onEvent("Favorite "+getString(R.string.editing_using_context_menu));
   	    	startEditPage(info.position);
 			break;
 			
 		//Delete Action
   	    case 1:
+  	    	FlurryAgent.onEvent("Favorite "+getString(R.string.deleting_using_context_menu));
   	    	removeItem(info.position);
   	    	break;
   	    	
@@ -494,8 +496,10 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
 		if(isManaging) {
+			FlurryAgent.onEvent("Page Opened to edit Favorite");
 			startEditPage(position);
 		} else {
+			FlurryAgent.onEvent("Creating New Entry Using Favorite");
 			createNewEntry((Favorite) adapter.getItemAtPosition(position));
 		}
 	}
