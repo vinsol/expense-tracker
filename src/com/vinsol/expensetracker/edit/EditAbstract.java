@@ -341,10 +341,10 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		mDatabaseAdapter.close();
 		if(!intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE)) {
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
+			intentExpenseListing.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			Bundle mToHighLight = new Bundle();
 			mToHighLight.putString(Constants.KEY_HIGHLIGHT, toSave.id);
-			if(toSave.timeInMillis != null)
-				mToHighLight.putLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB, toSave.timeInMillis);
+			if(toSave.timeInMillis != null) {mToHighLight.putLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB, toSave.timeInMillis); }
 			intentExpenseListing.putExtras(mToHighLight);
 			if(!intentExtras.containsKey(Constants.KEY_POSITION)) {
 				startActivity(intentExpenseListing);
