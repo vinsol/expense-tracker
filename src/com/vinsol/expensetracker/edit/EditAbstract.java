@@ -6,6 +6,8 @@
 package com.vinsol.expensetracker.edit;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -630,7 +632,9 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	}
 	
 	private void setFlurryNewEntryType() {
-		FlurryAgent.onEvent("New Entry "+getTypeOfEntryForFlurry());
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("type", getTypeOfEntryForFlurry());
+		FlurryAgent.onEvent("New Entry ",map);
 	}
 	
 	protected String getTypeOfEntryForFlurry() {
@@ -638,11 +642,15 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	}
 
 	private void setFlurryEditEntryType() {
-		FlurryAgent.onEvent("Edit Entry "+getTypeOfEntryForFlurry());
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("type", getTypeOfEntryForFlurry());
+		FlurryAgent.onEvent("Edit Entry ",map);
 	}
 	
 	private void setFlurryEditFavoriteType() {
-		FlurryAgent.onEvent("Edit Favorite "+getTypeOfEntryForFlurry());
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("type", getTypeOfEntryForFlurry());
+		FlurryAgent.onEvent("Edit Favorite ",map);
 	}
 	
 	@Override

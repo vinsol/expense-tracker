@@ -5,6 +5,9 @@
 
 package com.vinsol.expensetracker;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.flurry.android.FlurryAgent;
 
 import android.graphics.Color;
@@ -41,7 +44,9 @@ public class SetPreferences extends PreferenceActivity {
 		mCheckBoxPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				FlurryAgent.onEvent("Preference Delete Dialog "+mCheckBoxPreference.isChecked());
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("Checked ", ""+mCheckBoxPreference.isChecked());
+				FlurryAgent.onEvent("Preference Delete Dialog ",map);
 				return true;
 			}
 		});

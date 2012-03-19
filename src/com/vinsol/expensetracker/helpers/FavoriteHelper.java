@@ -6,6 +6,8 @@
 package com.vinsol.expensetracker.helpers;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.Activity;
 import android.text.Editable;
@@ -201,10 +203,13 @@ public class FavoriteHelper implements OnClickListener{
 			mDatabaseAdapter.close();
 			showAddFavorite.setChecked(true);
 			showAddFavoriteTextView.setText("Remove from Favorite");
+			Map<String , String> map = new HashMap<String, String>();
+			map.put("Favorite Status ", true+"");
+			map.put("Entry Type ", getTypeForFlurry());
 			if(isFromEditPage) {
-				FlurryAgent.onEvent(activity.getString(R.string.fav_marked_from_new) +" "+getTypeForFlurry());
+				FlurryAgent.onEvent(activity.getString(R.string.fav_from_new),map);
 			} else {
-				FlurryAgent.onEvent(activity.getString(R.string.fav_marked_from_show) +" "+getTypeForFlurry());
+				FlurryAgent.onEvent(activity.getString(R.string.fav_from_show),map);
 			}
 			Toast.makeText(activity, "Added to Favorite", Toast.LENGTH_SHORT).show();
 		} else if(mShowList.type.equals(activity.getString(R.string.text))) {
@@ -252,10 +257,13 @@ public class FavoriteHelper implements OnClickListener{
 		showAddFavorite.setChecked(false);
 		mShowList.favId = null;
 		showAddFavoriteTextView.setText("Add to Favorite");
+		Map<String , String> map = new HashMap<String, String>();
+		map.put("Favorite Status ", false+"");
+		map.put("Entry Type ", getTypeForFlurry());
 		if(isFromEditPage) {
-			FlurryAgent.onEvent(activity.getString(R.string.fav_unmarked_from_new)+" "+getTypeForFlurry());
+			FlurryAgent.onEvent(activity.getString(R.string.fav_from_new),map);
 		} else {
-			FlurryAgent.onEvent(activity.getString(R.string.fav_unmarked_from_show)+" "+getTypeForFlurry());
+			FlurryAgent.onEvent(activity.getString(R.string.fav_from_show),map);
 		}
 		Toast.makeText(activity, "Removed from Favorite", Toast.LENGTH_SHORT).show();
 	}	

@@ -7,6 +7,8 @@
 package com.vinsol.expensetracker.edit;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -281,7 +283,9 @@ public class Voice extends EditAbstract {
 		}
 		String displayTime = new DisplayTimeForChronometer().getDisplayTime(mAudioPlay.getPlayBackTime());
 		editTimeDetailsChronometer.setText(displayTime);
-		FlurryAgent.onEvent(displayTime);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("Display Time ", displayTime);
+		FlurryAgent.onEvent("Audio Recording Time",map);
 	}
 	
 }

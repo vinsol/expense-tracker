@@ -7,6 +7,8 @@
 package com.vinsol.expensetracker.helpers;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -73,9 +75,12 @@ public class DateHandler implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+		Map<String, String> map = new HashMap<String, String>();
 		switch (v.getId()) {
+		
 		case R.id.edit_date_bar_next_arrow:
-			FlurryAgent.onEvent(activity.getString(R.string.date_changed_using_next_arrow));
+			map.put("Using", "Next Arrow");
+			FlurryAgent.onEvent(activity.getString(R.string.date_changed),map);
 			mCalendar.add(Calendar.DATE, 1);
 			mDisplayDate = new DisplayDate(mCalendar);
 			dateview.setText(mDisplayDate.getDisplayDate());
@@ -86,7 +91,8 @@ public class DateHandler implements OnClickListener {
 			break;
 
 		case R.id.edit_date_bar_previous_arrow:
-			FlurryAgent.onEvent(activity.getString(R.string.date_changed_using_previous_arrow));
+			map.put("Using", "Previous Arrow");
+			FlurryAgent.onEvent(activity.getString(R.string.date_changed),map);
 			mCalendar.add(Calendar.DATE, -1);
 			mDisplayDate = new DisplayDate(mCalendar);
 			if (!nextArrow.isShown()) {
@@ -96,7 +102,8 @@ public class DateHandler implements OnClickListener {
 			break;
 			
 		case R.id.edit_date_bar_dateview:
-			FlurryAgent.onEvent(activity.getString(R.string.date_picker_dialog_open) +" Date Handler");
+			map.put("Using", "Date Picker Dialog");
+			FlurryAgent.onEvent(activity.getString(R.string.date_changed),map);
 			dialog.setOnDismissListener(new OnDismissListener() {
 				@Override
 				public void onDismiss(DialogInterface dialog) {

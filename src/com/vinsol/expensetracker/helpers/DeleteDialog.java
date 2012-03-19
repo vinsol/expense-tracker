@@ -5,6 +5,9 @@
 
 package com.vinsol.expensetracker.helpers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,7 +38,9 @@ public class DeleteDialog extends AlertDialog implements DialogInterface.OnClick
 			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				FlurryAgent.onEvent(context.getString(R.string.delete_dialog_checkbox_status)+" "+isChecked);
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("Status", isChecked+"");
+				FlurryAgent.onEvent(context.getString(R.string.delete_dialog_checkbox_status),map);
 				setDeletePrefs();
 			}
 		});
