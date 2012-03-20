@@ -118,6 +118,21 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		mEndYear = calendar.get(Calendar.YEAR);
 		mEndMonth = calendar.get(Calendar.MONTH);
 		mEndDay = calendar.get(Calendar.DAY_OF_MONTH);
+		mEntryList = new ConvertCursorToListString(GenerateReport.this).getEntryList(true, "");
+		if(mEntryList.size() == 0) {
+			new AlertDialog.Builder(this)
+			.setTitle("Error")
+			.setCancelable(false)
+			.setMessage("No Record to Generate Report, Please add some")
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			})
+			.show();
+		}
 	}
 
 	@Override
@@ -125,10 +140,6 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		switch (v.getId()) {
 		case R.id.export_button:
 			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-				mEntryList = new ConvertCursorToListString(GenerateReport.this).getEntryList(true, "");
-				if(mEntryList.size() == 0) {
-					Toast.makeText(GenerateReport.this, "No Record to Generate Report, Please add some", Toast.LENGTH_LONG).show();
-				}
 				if(mEntryList.size() <= 5000) {
 					if(setStartEndDate()) {
 						Log.d("**************Exporting Range****************");
