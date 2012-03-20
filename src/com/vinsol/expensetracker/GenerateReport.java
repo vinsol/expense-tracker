@@ -162,7 +162,12 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 					}
 
 				} else {
-					Toast.makeText(GenerateReport.this, "Too many Records, Please select fewer", Toast.LENGTH_LONG).show();
+					new AlertDialog.Builder(this)
+					.setTitle("Error")
+					.setMessage("Too many Records, Please select fewer")
+					.setIcon(android.R.drawable.ic_dialog_alert)
+					.setPositiveButton(getString(R.string.ok), (DialogInterface.OnClickListener)null)
+					.show();
 				}
 			} else {
 				Toast.makeText(this, "sdcard not available", Toast.LENGTH_LONG).show();
@@ -213,7 +218,12 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			progressDialog.cancel();
 			if(!isRecordAdded) {
 				fileLocation.delete();
-				Toast.makeText(GenerateReport.this, "No Record within range to generate report", Toast.LENGTH_LONG).show();
+				new AlertDialog.Builder(GenerateReport.this)
+				.setTitle("Error")
+				.setMessage("No Record within range to generate report")
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setPositiveButton(getString(R.string.ok), (DialogInterface.OnClickListener)null)
+				.show();
 			} else {
 				final PackageManager packageManager = getPackageManager();
 				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(fileLocation));
@@ -709,12 +719,22 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 	private boolean checkStartEndDate(boolean isToShowToast) {
 		if(customEndDateTextView.getText().toString().equals("") || customStartDateTextView.getText().toString().equals("")) {
 			if(isToShowToast) {
-				Toast.makeText(getApplicationContext(), "Set Start Date and End Date before exporting", Toast.LENGTH_LONG).show();
+				new AlertDialog.Builder(GenerateReport.this)
+				.setTitle("Error")
+				.setMessage("Set Start Date and End Date before exporting")
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setPositiveButton(getString(R.string.ok), (DialogInterface.OnClickListener)null)
+				.show();
 			}
 			return false;
 		}
 		if(!isCombinationCorrect()) {
-			Toast.makeText(getApplicationContext(), "End Date must be greater than Start Date", Toast.LENGTH_LONG).show();
+			new AlertDialog.Builder(GenerateReport.this)
+			.setTitle("Error")
+			.setMessage("End Date must be greater than Start Date")
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setPositiveButton(getString(R.string.ok), (DialogInterface.OnClickListener)null)
+			.show();
 			return false;
 		}
 		dateRange = new DisplayDate().getReportDateRange(mStartDay, mStartMonth, mStartYear, mEndDay, mEndMonth, mEndYear);
