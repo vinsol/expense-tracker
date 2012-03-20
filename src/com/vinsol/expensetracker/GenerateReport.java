@@ -110,7 +110,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		customEndDateTextView.setOnClickListener(this);
 		period = (Spinner) findViewById(R.id.period_spinner);
 		period.setOnItemSelectedListener(this);
-		FlurryAgent.onEvent(getString(R.string.generate_report));
+		FlurryAgent.onEvent(getString(R.string.generate_report)+" "+"Activity");
 		//set default end day values
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
@@ -131,9 +131,6 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 				}
 				if(mEntryList.size() <= 5000) {
 					if(setStartEndDate()) {
-						Map<String, String> dateRangeArg = new HashMap<String, String>();
-						dateRangeArg.put("Start End Date", mStartDay+" "+(mStartMonth+1)+" "+mStartYear+" - "+mEndDay+" "+(mEndMonth+1)+" "+mEndYear);
-						FlurryAgent.onEvent(getString(R.string.generate_report),dateRangeArg);
 						Log.d("**************Exporting Range****************");
 						Log.d("Start Date "+mStartDay+" "+(mStartMonth+1)+" "+mStartYear);
 						Log.d("End Date "+mEndDay+" "+(mEndMonth+1)+" "+mEndYear);
@@ -227,6 +224,14 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 			    	.show();
 			    }
 			}
+		}
+		
+		protected void addFlurryEvent(int srNo) {
+			Map<String, String> recordType = new HashMap<String, String>();
+			recordType.put("Total Records", +srNo+"");
+			recordType.put("Type ", getType());
+			recordType.put("Date Range",dateRange);
+			FlurryAgent.onEvent(getString(R.string.generate_report), recordType);
 		}
 		
 		protected String getShowLocation(){
@@ -347,10 +352,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 				
 				isRecordAdded = true;
 			}
-			Map<String, String> recordType = new HashMap<String, String>();
-			recordType.put("Total Records", +srNo+"");
-			recordType.put("Type ", getType());
-			FlurryAgent.onEvent(getString(R.string.generate_report), recordType);
+			addFlurryEvent(srNo);
 			addTotalAmountRow();
 		}
 
@@ -538,10 +540,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 					table.flushContent();
 				} 
 			}
-			Map<String, String> recordType = new HashMap<String, String>();
-			recordType.put("Total Records", +srNo+"");
-			recordType.put("Type ", getType());
-			FlurryAgent.onEvent(getString(R.string.generate_report), recordType);
+			addFlurryEvent(srNo);
 			addTotalAmountRow(table);
 			document.add(table);
 			table.flushContent();
