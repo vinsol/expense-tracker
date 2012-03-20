@@ -41,6 +41,7 @@ import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
+import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
@@ -67,6 +68,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	protected Entry entry;
 	protected FileHelper fileHelper;
 	protected boolean isFromFavorite = false; 
+	private String flurryEventId;
 	
 	@Override
 	protected void onStart() {
@@ -146,7 +148,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		}
 		
 		if (!isFromFavorite && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
-			setFlurryEditEntryType();
+			flurryEventId = "Edit Entry";
 			mEditList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 			mFavoriteList = null;
 			entry.id = mEditList.id;
@@ -158,7 +160,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			locationTime.setVisibility(View.VISIBLE);
 			locationTime.setText(new DisplayDate().getLocationDate(mEditList.timeInMillis, mEditList.location));
 		} else if(isFromFavorite && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
-			setFlurryEditFavoriteType();
+			flurryEventId = "Edit Favorite";
 			mEditList = null;
 			((LinearLayout)findViewById(R.id.edit_date_bar)).setVisibility(View.GONE);
 			mFavoriteList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA); 
@@ -178,12 +180,23 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		
 		//New Entry
 		if (!isFromFavorite && !intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
-			setFlurryNewEntryType();
+			flurryEventId = "New Entry";
 			new FavoriteHelper(this, mDatabaseAdapter, fileHelper, getString(typeOfEntry),entry.id, editAmount, editTag , isChanged);
 		} else {
 			findViewById(R.id.favorite_divider).setVisibility(View.GONE);
 		}
 		
+		addFlurryEvent();
+	}
+	
+	private void addFlurryEvent() {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("type", getTypeOfEntryForFlurry());
+		FlurryAgent.onEvent(flurryEventId,map);
+	}
+	
+	protected String getTypeOfEntryForFlurry() {
+		return getString(typeOfEntryFinished);
 	}
 	
 	private void setText(String amount, String description) {
@@ -217,10 +230,12 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			Double mAmount = Double.parseDouble(entry.amount);
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 			list.amount = mAmount+"";
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("Amount Digits", new StringProcessing().getStringDoubleDecimal(list.amount).length()+"");
+			FlurryAgent.onEvent(flurryEventId,map);
 		} else {
 			list.amount = "";
 		}
-		
 		list.description = entry.description;
 		if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 			try {
@@ -629,28 +644,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		bundle.putInt(Constants.KEY_POSITION , intentExtras.getInt(Constants.KEY_POSITION));
 		setActivityResult(bundle);
 		finish();
-	}
-	
-	private void setFlurryNewEntryType() {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("type", getTypeOfEntryForFlurry());
-		FlurryAgent.onEvent("New Entry ",map);
-	}
-	
-	protected String getTypeOfEntryForFlurry() {
-		return getString(typeOfEntryFinished);
-	}
-
-	private void setFlurryEditEntryType() {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("type", getTypeOfEntryForFlurry());
-		FlurryAgent.onEvent("Edit Entry ",map);
-	}
-	
-	private void setFlurryEditFavoriteType() {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("type", getTypeOfEntryForFlurry());
-		FlurryAgent.onEvent("Edit Favorite ",map);
 	}
 	
 	@Override
