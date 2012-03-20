@@ -88,7 +88,7 @@ public class FavoriteHelper implements OnClickListener{
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
 			favLayoutHandle(amount, description, type, isChanged);
-			if(showAddFavorite.isChecked()) {onClickFavorite(false);}
+			if(showAddFavorite.isChecked()) {removeEntryFromFavorite();}
 		}
 		
 		@Override
@@ -147,6 +147,46 @@ public class FavoriteHelper implements OnClickListener{
 
 		default:
 			break;
+		}
+	}
+	
+	private void removeEntryFromFavorite() {
+		Long favID = null;
+		if(mShowList.type.equals(activity.getString(R.string.text))) {
+			mDatabaseAdapter.open();
+			favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
+			mDatabaseAdapter.close();
+			if(favID == -1) {
+				favID = Long.parseLong(mShowList.favId);
+			}
+			setDatabaseAndLayoutValues(favID);
+		} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+			mDatabaseAdapter.open();
+			favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
+			mDatabaseAdapter.close();
+			if(favID == -1) {
+				favID = Long.parseLong(mShowList.favId);
+			}
+			setDatabaseAndLayoutValues(favID);
+		} else {
+			Toast.makeText(activity, "sdcard not available", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	private void setDatabaseAndLayoutValues(Long favID){
+		mDatabaseAdapter.open();
+		mDatabaseAdapter.editFavoriteIdEntryTable(favID+"");
+		mDatabaseAdapter.close();
+		showAddFavorite.setChecked(false);
+		mShowList.favId = null;
+		showAddFavoriteTextView.setText("Add to Favorite");
+		Map<String , String> map = new HashMap<String, String>();
+		map.put("Favorite Status ", false+"");
+		map.put("Entry Type ", getTypeForFlurry());
+		if(isFromEditPage) {
+			FlurryAgent.onEvent(activity.getString(R.string.fav_from_new),map);
+		} else {
+			FlurryAgent.onEvent(activity.getString(R.string.fav_from_show),map);
 		}
 	}
 	
