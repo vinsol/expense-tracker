@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ImageView.ScaleType;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -209,9 +210,9 @@ class SeparatedListAdapter extends BaseAdapter {
 							if (mFile.canRead()) {
 								Drawable drawable = Drawable.createFromPath(mFile.getPath());
 								holderBody.rowImageview.setImageDrawable(drawable);
-								holderBody.rowImageview.setPadding(0, 0, 0, 0);
+								holderBody.rowImageview.setScaleType(ScaleType.FIT_CENTER);
 							} else {
-								holderBody.rowImageview.setPadding(2, 2, 2, 2);
+								holderBody.rowImageview.setScaleType(ScaleType.CENTER_INSIDE);
 								holderBody.rowImageview.setImageResource(R.drawable.no_image_small);
 							}
 						} catch (Exception e) {

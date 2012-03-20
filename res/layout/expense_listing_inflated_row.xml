@@ -17,7 +17,7 @@
 		android:layout_width="64dp"
   		android:layout_height="59dp"
   		android:background="@drawable/listing_row_states"
- 		android:scaleType="centerInside"  
+ 		android:scaleType="centerInside"
  		android:padding="2dp" />
   	
   	<ImageView 

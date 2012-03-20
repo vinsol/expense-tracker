@@ -7,7 +7,8 @@
 package com.vinsol.expensetracker.utils;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,6 +27,8 @@ public class ImagePreview extends Activity {
 	private String path;
 	private String smallPath;
 	private AsyncTask<Void, Void, Void> imageViewAsyncTask;
+	private Bitmap largeFileBitmap;
+	private Bitmap smallFileBitmap;
 
 	@Override
 	protected void onStart() {
@@ -68,22 +71,24 @@ public class ImagePreview extends Activity {
 
 	private class ImageViewAsyncTask extends AsyncTask<Void, Void, Void> {
 
-		private Drawable imageDrawable;
+//		private Drawable imageDrawable;
 		@Override
 		protected void onPreExecute() {
-			mImageView.setImageDrawable(Drawable.createFromPath(smallPath));
+			smallFileBitmap = BitmapFactory.decodeFile(smallPath);
+			mImageView.setImageBitmap(smallFileBitmap);
 			super.onPreExecute();
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			imageDrawable = Drawable.createFromPath(path);
+			largeFileBitmap = BitmapFactory.decodeFile(path);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			mImageView.setImageDrawable(imageDrawable);
+			smallFileBitmap.recycle();
+			mImageView.setImageBitmap(largeFileBitmap);
 			super.onPostExecute(result);
 		}
 	}
@@ -91,6 +96,12 @@ public class ImagePreview extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		if(largeFileBitmap != null) {
+			largeFileBitmap.recycle();
+		}
+		if(smallFileBitmap != null) {
+			smallFileBitmap.recycle();
+		}
 		if(imageViewAsyncTask != null) {
 			imageViewAsyncTask.cancel(true);
 		}

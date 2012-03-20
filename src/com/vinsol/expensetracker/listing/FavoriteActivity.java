@@ -30,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView.ScaleType;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -402,8 +403,10 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 						File mFile = fileHelper.getCameraFileLargeFavorite(tempFavorite.favId);
 						if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Drawable drawable = Drawable.createFromPath(mFileThumbnail.getPath());
+							viewHolder.rowImageview.setScaleType(ScaleType.FIT_CENTER);
 							viewHolder.rowImageview.setImageDrawable(drawable);
 						} else {
+							viewHolder.rowImageview.setScaleType(ScaleType.CENTER_INSIDE);
 							viewHolder.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
 						}
 					} catch (Exception e) {
