@@ -185,14 +185,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		} else {
 			findViewById(R.id.favorite_divider).setVisibility(View.GONE);
 		}
-		
-		addFlurryEvent();
-	}
-	
-	private void addFlurryEvent() {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("type", getTypeOfEntryForFlurry());
-		FlurryAgent.onEvent(flurryEventId,map);
 	}
 	
 	protected String getTypeOfEntryForFlurry() {
@@ -220,6 +212,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	
 	private Entry getSaveEntryData(TextView editDateBarDateview,String dateViewString) {
 		/////// ******* Creating HashMap to update info ******* ////////
+		Map<String, String> map = new HashMap<String, String>();
 		Entry list = new Entry();
 		list.id = entry.id;
 		if(mEditList != null)
@@ -230,12 +223,12 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			Double mAmount = Double.parseDouble(entry.amount);
 			mAmount = (double) ((int) ((mAmount + 0.005) * 100.0) / 100.0);
 			list.amount = mAmount+"";
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("Amount Digits", new StringProcessing().getStringDoubleDecimal(list.amount).length()+"");
-			FlurryAgent.onEvent(flurryEventId,map);
 		} else {
 			list.amount = "";
 		}
+		map.put("type", getTypeOfEntryForFlurry());
+		FlurryAgent.onEvent(flurryEventId,map);
 		list.description = entry.description;
 		if (!editDateBarDateview.getText().toString().equals(dateViewString)) {
 			try {
