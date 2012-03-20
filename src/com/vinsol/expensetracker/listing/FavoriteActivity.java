@@ -513,21 +513,12 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 		Entry toInsert = new Entry();
 		Intent expenseListingIntent = new Intent(this, ExpenseListing.class);
 		expenseListingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		Bundle bundle = new Bundle();
 		
-		if(id != null) {
-			toInsert.id = id+"";
-		}
+		if(id != null) {toInsert.id = id+"";}
 
-		if(amount != null) {
-			if(!amount.contains("?") && !amount.equals(""))
-				toInsert.amount = amount;
-		}
+		if(amount != null && !amount.contains("?") && !amount.equals("")) {toInsert.amount = amount;}
 		
-		if(favID != null) {
-			if(!favID.equals(""))
-				toInsert.favId = favID;
-		}
+		if(favID != null && !favID.equals("")) {toInsert.favId = favID;}
 		
 		if(type.equals(getString(R.string.camera))) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
@@ -573,7 +564,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 						File mFileThumbnail = fileHelper.getCameraFileThumbnailEntry(idCreated);
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
+							Bundle bundle = new Bundle();
 							bundle.putString(Constants.KEY_HIGHLIGHT, idCreated+"");
+							bundle.putLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB, toInsert.timeInMillis);
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							finish();
@@ -589,7 +582,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 						File mFileThumbnail = fileHelper.getCameraFileThumbnailEntry(id);
 						if(mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
+							Bundle bundle = new Bundle();
 							bundle.putString(Constants.KEY_HIGHLIGHT, toInsert.id);
+							bundle.putLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB, toInsert.timeInMillis);
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
@@ -649,7 +644,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 						File mFile = fileHelper.getAudioFileEntry(idCreated);
 						if(mFile.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
+							Bundle bundle = new Bundle();
 							bundle.putString(Constants.KEY_HIGHLIGHT, idCreated+"");
+							bundle.putLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB, toInsert.timeInMillis);
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							finish();
@@ -663,7 +660,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 						File mFile = fileHelper.getAudioFileEntry(id);
 						if(mFile.canRead()) {
 							Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
+							Bundle bundle = new Bundle();
 							bundle.putString(Constants.KEY_HIGHLIGHT, toInsert.id);
+							bundle.putLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB, toInsert.timeInMillis);
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
@@ -716,7 +715,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 					mDatabaseAdapter.open();
 					idCreated = mDatabaseAdapter.insertToEntryTable(toInsert)+"";
 					mDatabaseAdapter.close();
+					Bundle bundle = new Bundle();
 					bundle.putString(Constants.KEY_HIGHLIGHT, idCreated+"");
+					bundle.putLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB, toInsert.timeInMillis);
 					expenseListingIntent.putExtras(bundle);
 					startActivity(expenseListingIntent);
 					finish();
@@ -724,7 +725,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 					mDatabaseAdapter.open();
 					mDatabaseAdapter.editEntryTable(toInsert);
 					mDatabaseAdapter.close();
+					Bundle bundle = new Bundle();
 					bundle.putString(Constants.KEY_HIGHLIGHT, toInsert.id);
+					bundle.putLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB, toInsert.timeInMillis);
 					expenseListingIntent.putExtras(bundle);
 					startActivity(expenseListingIntent);
 					finish();
