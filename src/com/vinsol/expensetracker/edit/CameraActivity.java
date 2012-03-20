@@ -84,7 +84,7 @@ public class CameraActivity extends EditAbstract {
 		mDatabaseAdapter = new DatabaseAdapter(this);
 		dateViewString = dateBarDateview.getText().toString();
 		
-		if(entry.id == null ) {
+		if(!isFromFavorite && entry.id == null) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				
 				Entry toInsert = new Entry();
