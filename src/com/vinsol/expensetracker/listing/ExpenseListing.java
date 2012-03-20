@@ -50,7 +50,7 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		FlurryAgent.onEvent("List Tab Activity");
+		FlurryAgent.onEvent("Expense Listing Activity");
 		setContentView(R.layout.expense_listing_tab);
 		mConvertCursorToListString = new ConvertCursorToListString(this);
 		unfinishedEntryCountAll = (TextView)findViewById(R.id.unfinished_count_all);
