@@ -178,15 +178,19 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			}
 		}
 		
+		setFavoriteHelper();
+	}
+	
+	protected void setFavoriteHelper() {
 		//New Entry
 		if (!isFromFavorite && !intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			flurryEventId = "New Entry";
-			new FavoriteHelper(this, mDatabaseAdapter, fileHelper, getString(typeOfEntry),entry.id, editAmount, editTag , isChanged);
+			new FavoriteHelper(this, mDatabaseAdapter, fileHelper, getString(typeOfEntry), entry.id, editAmount, editTag , isChanged);
 		} else {
 			findViewById(R.id.favorite_divider).setVisibility(View.GONE);
 		}
 	}
-	
+
 	protected String getTypeOfEntryForFlurry() {
 		return getString(typeOfEntryFinished);
 	}

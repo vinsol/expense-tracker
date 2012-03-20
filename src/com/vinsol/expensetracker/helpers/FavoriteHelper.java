@@ -171,9 +171,10 @@ public class FavoriteHelper implements OnClickListener{
 							mDatabaseAdapter.open();
 							mDatabaseAdapter.deleteFavoriteTableEntryID(favID+"");
 							mDatabaseAdapter.close();
-							fileHelper.deleteAllFavoriteFiles(favID+"");
+//							fileHelper.deleteAllFavoriteFiles(favID+"");
 						}
 					} catch (Exception e) {	
+						e.printStackTrace();
 					}
 				} else {
 					Toast.makeText(activity, "sdcard not available", Toast.LENGTH_SHORT).show();
@@ -192,6 +193,7 @@ public class FavoriteHelper implements OnClickListener{
 							mDatabaseAdapter.close();
 						}
 					} catch (Exception e) {	
+						e.printStackTrace();
 					}
 				} else {
 					Toast.makeText(activity, "sdcard not available", Toast.LENGTH_SHORT).show();

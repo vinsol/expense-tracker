@@ -123,9 +123,16 @@ public class CameraActivity extends EditAbstract {
 				mDatabaseAdapter.close();
 			}
 		}
+		//New Entry
+		super.setFavoriteHelper();
 		
 		if (!intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA))
 			startCamera();
+	}
+	
+	@Override
+	protected void setFavoriteHelper() {
+		//DO Nothing
 	}
 
 	private void setImageResource(Drawable mDrawable) {			
