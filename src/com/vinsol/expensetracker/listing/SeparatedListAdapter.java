@@ -199,7 +199,7 @@ class SeparatedListAdapter extends BaseAdapter {
 				} else {
 					holderBody = (ViewHolderBody) convertView.getTag();
 				}
-				
+				holderBody.rowImageview.setScaleType(ScaleType.CENTER_INSIDE);
 				Entry mlist = (Entry) adapter.getItem(position - 1);
 				CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
 				if (mlist.type.equals(mContext.getString(R.string.camera))) {

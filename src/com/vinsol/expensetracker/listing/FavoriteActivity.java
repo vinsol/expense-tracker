@@ -352,6 +352,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 			} else {
 				viewHolder = (ViewHolder) convertView.getTag();
 			}
+			viewHolder.rowImageview.setScaleType(ScaleType.CENTER_INSIDE);
 			Favorite tempFavorite= mList.get(position);
 			viewHolder.rowImageview.setFocusable(false);
 			viewHolder.rowImageview.setOnClickListener(new MyClickListener(tempFavorite));
