@@ -250,11 +250,12 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		protected void addFlurryEvent(int srNo) {
 			Map<String, String> recordType = new HashMap<String, String>();
 			recordType.put("Total Records", +srNo+"");
-			recordType.put("Type ", getType());
+			recordType.put("Type Spinner", getType());
 			recordType.put("Date Range",dateRange);
+			recordType.put("Period Spinner", period.getSelectedItem()+"");
 			FlurryAgent.onEvent(getString(R.string.generate_report), recordType);
 		}
-		
+
 		protected String getShowLocation(){
 			return fileLocation.toString().replaceAll("/mnt", "");
 		} 
