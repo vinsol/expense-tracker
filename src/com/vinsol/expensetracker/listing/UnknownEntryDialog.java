@@ -22,6 +22,7 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
+import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
@@ -149,11 +150,15 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				break;
 				
 			case R.id.main_favorite:
-				Intent intentFavorite = new Intent(getContext(), FavoriteActivity.class);
-				bundle.putParcelable("mDisplayList", mTempClickedList);
-				intentFavorite.putExtras(bundle);
-				getContext().startActivity(intentFavorite);
-				dismiss();
+				if(new ConvertCursorToListString(getContext()).getFavoriteList().size() > 0) {
+					Intent intentFavorite = new Intent(getContext(), FavoriteActivity.class);
+					bundle.putParcelable("mDisplayList", mTempClickedList);
+					intentFavorite.putExtras(bundle);
+					getContext().startActivity(intentFavorite);
+					dismiss();
+				} else {
+					Toast.makeText(getContext(), "favorite list empty", Toast.LENGTH_LONG).show();
+				}
 				break;
 				
 			case R.id.unknown_entry_dialog_cancel:

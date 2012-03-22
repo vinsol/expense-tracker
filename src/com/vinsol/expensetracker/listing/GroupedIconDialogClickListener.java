@@ -20,6 +20,7 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
+import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.models.Entry;
@@ -69,10 +70,10 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 			
 			@Override
 			public void onClick(View v) {
-				unknownDialog.dismiss();
 				switch (v.getId()) {
 				// //// ******* opens TextEntry Activity ******** ///////////
 				case R.id.main_text:
+					unknownDialog.dismiss();
 					Intent intentTextEntry = new Intent(activity, TextEntry.class);
 					createDatabaseEntry(R.string.text,toInsert);
 					intentTextEntry.putExtras(bundle);
@@ -81,6 +82,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 					
 				// //// ******* opens Voice Activity ******** ///////////
 				case R.id.main_voice:
+					unknownDialog.dismiss();
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						Intent intentVoice = new Intent(activity, Voice.class);
 						createDatabaseEntry(R.string.voice,toInsert);
@@ -93,6 +95,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 
 				// //// ******* opens Camera Activity ******** ///////////
 				case R.id.main_camera:
+					unknownDialog.dismiss();
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						Intent intentCamera = new Intent(activity, CameraActivity.class);
 						if (timeInMillis != 0) {
@@ -107,12 +110,17 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 					
 				// //// ******* opens Favorite Activity ******** ///////////
 				case R.id.main_favorite:
-					Intent intentFavorite = new Intent(activity, FavoriteActivity.class);
-					if (timeInMillis != 0) {
-						bundle.putLong("timeInMillis", timeInMillis);
+					if(new ConvertCursorToListString(activity).getFavoriteList().size() > 0) {
+						unknownDialog.dismiss();
+						Intent intentFavorite = new Intent(activity, FavoriteActivity.class);
+						if (timeInMillis != 0) {
+							bundle.putLong("timeInMillis", timeInMillis);
+						}
+						intentFavorite.putExtras(bundle);
+						activity.startActivity(intentFavorite);	
+					} else {
+						Toast.makeText(activity, "favorite list empty", Toast.LENGTH_LONG).show();
 					}
-					intentFavorite.putExtras(bundle);
-					activity.startActivity(intentFavorite);	
 					break;
 				case R.id.unknown_entry_dialog_cancel:
 					unknownDialog.dismiss();
