@@ -6,10 +6,13 @@
 
 package com.vinsol.expensetracker.utils;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Window;
@@ -61,7 +64,11 @@ public class ImagePreview extends Activity {
 
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			try {
-				imageViewAsyncTask = new ImageViewAsyncTask().execute();
+				if(new File(path).canRead() && new File(smallPath).canRead()) {
+					imageViewAsyncTask = new ImageViewAsyncTask().execute();
+				} else {
+					Toast.makeText(this, "File Not Found", Toast.LENGTH_LONG).show();
+				}
 			} catch (Exception e) {
 			}
 		} else {
@@ -71,12 +78,11 @@ public class ImagePreview extends Activity {
 
 	private class ImageViewAsyncTask extends AsyncTask<Void, Void, Void> {
 
-//		private Drawable imageDrawable;
 		@Override
 		protected void onPreExecute() {
-			smallFileBitmap = BitmapFactory.decodeFile(smallPath);
-			mImageView.setImageBitmap(smallFileBitmap);
 			super.onPreExecute();
+			smallFileBitmap = BitmapFactory.decodeFile(smallPath);
+			if(!smallFileBitmap.isRecycled()) {mImageView.setImageBitmap(smallFileBitmap);}
 		}
 
 		@Override
@@ -87,23 +93,23 @@ public class ImagePreview extends Activity {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			smallFileBitmap.recycle();
-			mImageView.setImageBitmap(largeFileBitmap);
 			super.onPostExecute(result);
+			smallFileBitmap.recycle();
+			if(!largeFileBitmap.isRecycled()) {mImageView.setImageBitmap(largeFileBitmap);}
 		}
 	}
 	
 	@Override
-	protected void onPause() {
-		super.onPause();
-		if(largeFileBitmap != null) {
-			largeFileBitmap.recycle();
-		}
-		if(smallFileBitmap != null) {
-			smallFileBitmap.recycle();
-		}
-		if(imageViewAsyncTask != null) {
+	public void onBackPressed() {
+		if(imageViewAsyncTask != null && imageViewAsyncTask.getStatus().equals(Status.PENDING) && imageViewAsyncTask.getStatus().equals(Status.RUNNING)) {
 			imageViewAsyncTask.cancel(true);
 		}
+		if(largeFileBitmap != null && !largeFileBitmap.isRecycled()) {
+			largeFileBitmap.recycle();
+		}
+		if(smallFileBitmap != null && !smallFileBitmap.isRecycled()) {
+			smallFileBitmap.recycle();
+		}
+		finish();
 	}
 }

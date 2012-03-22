@@ -11,7 +11,8 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -43,11 +44,12 @@ public class CameraActivity extends EditAbstract {
 	private float scale;
 	private int width;
 	private int height;
+	private Bitmap bitmap;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// ////// ******** Initializing and assigning memory to UI Items ********** /////////
+		//////// ******** Initializing and assigning memory to UI Items ********** /////////
 		editCameraDetails = (LinearLayout) findViewById(R.id.edit_camera_details);
 		editImageDisplay = (ImageView) findViewById(R.id.edit_image_display);
 		editLoadProgress = (RelativeLayout) findViewById(R.id.edit_load_progress);
@@ -70,8 +72,8 @@ public class CameraActivity extends EditAbstract {
 				mFile = fileHelper.getCameraFileSmallEntry(entry.id);
 			}
 			if (mFile.canRead() && mFile.exists()) {
-				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
-				setImageResource(mDrawable);
+				bitmap = BitmapFactory.decodeFile(mFile.getPath());
+				setImageResource();
 			} else {
 				editImageDisplay.setImageResource(R.drawable.no_image_small);
 			}
@@ -135,13 +137,13 @@ public class CameraActivity extends EditAbstract {
 		//DO Nothing
 	}
 
-	private void setImageResource(Drawable mDrawable) {			
-		if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
+	private void setImageResource() {			
+		if(bitmap.getHeight() > bitmap.getWidth()) {
 			editImageDisplay.setLayoutParams(new LayoutParams(width, height));
 		} else {
 			editImageDisplay.setLayoutParams(new LayoutParams(height, width));
 		}
-		editImageDisplay.setImageDrawable(mDrawable);
+		editImageDisplay.setImageBitmap(bitmap);
 	}
 	
 	private void startCamera() {
@@ -179,8 +181,8 @@ public class CameraActivity extends EditAbstract {
 						mFile = fileHelper.getCameraFileSmallEntry(entry.id);
 					}
 					if (mFile.canRead()) {
-						Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
-						setImageResource(mDrawable);
+						bitmap = BitmapFactory.decodeFile(mFile.getPath());
+						setImageResource();
 					} else {
 						DatabaseAdapter adapter = new DatabaseAdapter(this);
 						adapter.open();
@@ -225,8 +227,8 @@ public class CameraActivity extends EditAbstract {
 			} else {
 				mFile = fileHelper.getCameraFileSmallEntry(entry.id);
 			}
-			Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
-			setImageResource(mDrawable);
+			bitmap = BitmapFactory.decodeFile(mFile.getPath());
+			setImageResource();
 			editDelete.setEnabled(true);
 			editSaveEntry.setEnabled(true);
 			super.onPostExecute(result);
@@ -302,5 +304,15 @@ public class CameraActivity extends EditAbstract {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		recycleBitmap();
+		super.onBackPressed();
+	}
+	
+	private void recycleBitmap() {
+		if(bitmap!=null) {bitmap.recycle();}
 	}
 }

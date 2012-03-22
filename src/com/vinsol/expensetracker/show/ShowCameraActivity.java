@@ -10,7 +10,8 @@ import java.io.File;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ public class ShowCameraActivity extends ShowAbstract {
 
 	private ImageView showImageDisplay;
 	private LinearLayout showCameraDetails;
+	private Bitmap bitmap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +48,14 @@ public class ShowCameraActivity extends ShowAbstract {
 		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			File mFile = fileHelper.getCameraFileSmallEntry(mShowList.id);
 			if (mFile.canRead()) {
-				Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
-				if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
+				bitmap = BitmapFactory.decodeFile(mFile.getPath());
+				if(bitmap.getHeight() > bitmap.getWidth()) {
 					final float scale = this.getResources().getDisplayMetrics().density;
 					int width = (int) (84 * scale + 0.5f);
 					int height = (int) (111 * scale + 0.5f);
 					showImageDisplay.setLayoutParams(new LayoutParams(width, height));
 				}
-				showImageDisplay.setImageDrawable(mDrawable);
+				showImageDisplay.setImageBitmap(bitmap);
 			} else {
 				showImageDisplay.setImageResource(R.drawable.no_image_small);
 			}
@@ -107,14 +109,14 @@ public class ShowCameraActivity extends ShowAbstract {
 				if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 					File mFile = fileHelper.getCameraFileSmallEntry(mShowList.id);
 					if (mFile.canRead()) {
-						Drawable mDrawable = Drawable.createFromPath(mFile.getPath());
-						if(mDrawable.getIntrinsicHeight() > mDrawable.getIntrinsicWidth()) {
+						bitmap = BitmapFactory.decodeFile(mFile.getPath());
+						if(bitmap.getHeight() > bitmap.getWidth()) {
 							final float scale = this.getResources().getDisplayMetrics().density;
 							int width = (int) (84 * scale + 0.5f);
 							int height = (int) (111 * scale + 0.5f);
 							showImageDisplay.setLayoutParams(new LayoutParams(width, height));
 						}
-						showImageDisplay.setImageDrawable(mDrawable);
+						showImageDisplay.setImageBitmap(bitmap);
 					} else {
 						showImageDisplay.setImageResource(R.drawable.no_image_small);
 					}
@@ -130,6 +132,16 @@ public class ShowCameraActivity extends ShowAbstract {
 		if(resultCode == Activity.RESULT_CANCELED) {
 			finish();
 		}
+	}
+	
+	private void recycleBitmap() {
+		if(bitmap!=null) {bitmap.recycle();}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		recycleBitmap();
+		super.onBackPressed();
 	}
 
 }

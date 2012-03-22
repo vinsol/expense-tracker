@@ -15,7 +15,8 @@ import java.util.regex.Pattern;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,10 +31,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView.ScaleType;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -60,7 +61,7 @@ import com.vinsol.expensetracker.utils.ImagePreview;
 
 public class FavoriteActivity extends BaseActivity implements OnItemClickListener {
 	
-	private List<Favorite> mList;
+	private List<Favorite> mListMain;
 	private DatabaseAdapter mDatabaseAdapter;
 	private TextView editDateBarDateview;
 	private Bundle intentExtras;
@@ -126,9 +127,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 			}
 		}
 		
-		mList = mConvertCursorToListString.getFavoriteList();
-		if(mList.size() == 0) {favListEmpty();}
-		mAdapter = new MyAdapter(this, R.layout.expense_listing_inflated_row , mList);
+		mListMain = mConvertCursorToListString.getFavoriteList();
+		if(mListMain.size() == 0) {favListEmpty();}
+		mAdapter = new MyAdapter(this, R.layout.expense_listing_inflated_row , mListMain);
 		mFavoriteListview.setAdapter(mAdapter);
 		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			dateViewString = editDateBarDateview.getText().toString();
@@ -155,9 +156,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 			public void afterTextChanged(Editable s) {
 				int textlength = searchBox.getText().length();
 				mList_sort.clear();
-				for (int i = 0; i < mList.size(); i++) {
-					if((textlength <= mList.get(i).description.length() || textlength <= mList.get(i).location.length() || textlength <= mList.get(i).amount.length()) && containsStringIgnoreCase(i)) {
-						mList_sort.add(mList.get(i));
+				for (int i = 0; i < mListMain.size(); i++) {
+					if((textlength <= mListMain.get(i).description.length() || textlength <= mListMain.get(i).location.length() || textlength <= mListMain.get(i).amount.length()) && containsStringIgnoreCase(i)) {
+						mList_sort.add(mListMain.get(i));
 					}
 				}
 				mAdapter = new MyAdapter(FavoriteActivity.this, R.layout.expense_listing_inflated_row , mList_sort);
@@ -268,7 +269,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 			totalHeaderHeight = totalHeaderHeight + dateBarHeight; 
 		}
 		
-		if(screenHeight <  ((mAdapter.getCount() * rowHeight ) + totalHeaderHeight)) {
+		if(screenHeight <  ((mListMain.size() * rowHeight ) + totalHeaderHeight)) {
 			searchBox.setVisibility(View.VISIBLE);
 		} else {
 			searchBox.setVisibility(View.GONE);
@@ -276,24 +277,24 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 	}
 
 	private boolean isStringInDescription(int i) {
-		if(mList.get(i).description != null) {
-			return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).description).find());
+		if(mListMain.get(i).description != null) {
+			return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mListMain.get(i).description).find());
 		} else {
 			return false;
 		}
 	}
 	
 	private boolean isStringInLocation(int i) {
-		if(mList.get(i).location != null) {
-			return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).location).find());
+		if(mListMain.get(i).location != null) {
+			return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mListMain.get(i).location).find());
 		} else {
 			return false;
 		}
 	}
 	
 	private boolean isStringInAmount(int i) {
-		if(mList.get(i).amount != null) {
-			return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mList.get(i).amount).find());
+		if(mListMain.get(i).amount != null) {
+			return (Pattern.compile(Pattern.quote(searchBox.getText().toString()), Pattern.CASE_INSENSITIVE).matcher(mListMain.get(i).amount).find());
 		} else {
 			return false;
 		}
@@ -316,9 +317,11 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 				mAdapter.mList.set(position, (Favorite) intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA));
 			}
 			if(Activity.RESULT_CANCELED == resultCode && intentExtras != null && intentExtras.containsKey(Constants.KEY_DATA_CHANGED) && position != -1) {
+				mListMain.remove(mAdapter.mList.get(position));
 				mAdapter.mList.remove(position);
+				searchBox.setText("");
 				setSearchBoxVisibility();
-				if(mAdapter.mList.size() == 0) {
+				if(mListMain.size() == 0) {
 					favListEmpty();
 				}
 			}
@@ -352,6 +355,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 			} else {
 				viewHolder = (ViewHolder) convertView.getTag();
 			}
+			
+			if(viewHolder.rowImageViewBitmap != null) {viewHolder.rowImageViewBitmap.recycle();}
+			
 			viewHolder.rowImageview.setScaleType(ScaleType.CENTER_INSIDE);
 			Favorite tempFavorite= mList.get(position);
 			viewHolder.rowImageview.setFocusable(false);
@@ -389,8 +395,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 					viewHolder.rowImageview.setImageResource(R.drawable.no_voice_file_thumbnail);
 					return convertView;
 				}
-			}
-			else if(tempFavorite.type.equals(getString(R.string.camera))) {
+			} else if(tempFavorite.type.equals(getString(R.string.camera))) {
 				
 				if(tempFavorite.description != null && !tempFavorite.description.equals("") && !tempFavorite.description.equals(R.string.unfinished_cameraentry)) {
 					viewHolder.rowTag.setText(tempFavorite.description);
@@ -403,9 +408,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 						File mFileSmall = fileHelper.getCameraFileSmallFavorite(tempFavorite.favId);
 						File mFile = fileHelper.getCameraFileLargeFavorite(tempFavorite.favId);
 						if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
-							Drawable drawable = Drawable.createFromPath(mFileThumbnail.getPath());
+							viewHolder.rowImageViewBitmap = BitmapFactory.decodeFile(mFileThumbnail.getPath());
 							viewHolder.rowImageview.setScaleType(ScaleType.FIT_CENTER);
-							viewHolder.rowImageview.setImageDrawable(drawable);
+							viewHolder.rowImageview.setImageBitmap(viewHolder.rowImageViewBitmap);
 						} else {
 							viewHolder.rowImageview.setScaleType(ScaleType.CENTER_INSIDE);
 							viewHolder.rowImageview.setImageResource(R.drawable.no_image_thumbnail);
@@ -439,12 +444,13 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 		}
 	}
 	
-	private class ViewHolder {
+	private static class ViewHolder {
 		TextView rowTag;
 		TextView rowAmount;
 		ImageView rowImageview;
 		ImageView rowFavoriteIcon;
 		TextView rowLocationTime;
+		Bitmap rowImageViewBitmap;
 	}
 	
 	private void handleUI() {

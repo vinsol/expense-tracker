@@ -14,7 +14,8 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,10 +25,10 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.ImageView.ScaleType;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -199,6 +200,9 @@ class SeparatedListAdapter extends BaseAdapter {
 				} else {
 					holderBody = (ViewHolderBody) convertView.getTag();
 				}
+				
+				if(holderBody.bitmap != null) {holderBody.bitmap.recycle();}
+				
 				holderBody.rowImageview.setScaleType(ScaleType.CENTER_INSIDE);
 				Entry mlist = (Entry) adapter.getItem(position - 1);
 				CheckEntryComplete mCheckEntryComplete = new CheckEntryComplete();
@@ -208,8 +212,8 @@ class SeparatedListAdapter extends BaseAdapter {
 						try {
 							File mFile = fileHelper.getCameraFileThumbnailEntry(mlist.id);
 							if (mFile.canRead()) {
-								Drawable drawable = Drawable.createFromPath(mFile.getPath());
-								holderBody.rowImageview.setImageDrawable(drawable);
+								holderBody.bitmap = BitmapFactory.decodeFile(mFile.getPath());
+								holderBody.rowImageview.setImageBitmap(holderBody.bitmap);
 								holderBody.rowImageview.setScaleType(ScaleType.FIT_CENTER);
 							} else {
 								holderBody.rowImageview.setScaleType(ScaleType.CENTER_INSIDE);
@@ -390,7 +394,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		mDataDateList.remove(Integer.parseInt(sectionKey));
 	}
 
-	private class ViewHolderBody {
+	private static class ViewHolderBody {
 		TextView rowLocationTime;
 		TextView rowTag;
 		TextView rowAmount;
@@ -398,6 +402,7 @@ class SeparatedListAdapter extends BaseAdapter {
 		ImageView rowFavoriteIcon;
 		RelativeLayout rowListview;
 		ImageView dividerImageView;
+		Bitmap bitmap;
 	}
 
 	private class ViewHolderHeader {
