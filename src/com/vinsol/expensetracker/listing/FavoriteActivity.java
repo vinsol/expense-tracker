@@ -500,10 +500,10 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
 		if(isManaging) {
-			FlurryAgent.onEvent("Page Opened to edit Favorite");
+			FlurryAgent.onEvent(getString(R.string.page_opened_to_edit_favorite));
 			startEditPage(position);
 		} else {
-			FlurryAgent.onEvent("Creating New Entry Using Favorite");
+			FlurryAgent.onEvent(getString(R.string.creating_new_entry_using_favorite));
 			createNewEntry((Favorite) adapter.getItemAtPosition(position));
 		}
 	}

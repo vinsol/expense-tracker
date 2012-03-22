@@ -148,7 +148,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		}
 		
 		if (!isFromFavorite && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
-			flurryEventId = "Edit Entry";
+			flurryEventId = getString(R.string.edit_entry);
 			mEditList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 			mFavoriteList = null;
 			entry.id = mEditList.id;
@@ -160,7 +160,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			locationTime.setVisibility(View.VISIBLE);
 			locationTime.setText(new DisplayDate().getLocationDate(mEditList.timeInMillis, mEditList.location));
 		} else if(isFromFavorite && intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
-			flurryEventId = "Edit Favorite";
+			flurryEventId = getString(R.string.edit_fav);
 			mEditList = null;
 			((LinearLayout)findViewById(R.id.edit_date_bar)).setVisibility(View.GONE);
 			mFavoriteList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA); 
@@ -184,7 +184,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	protected void setFavoriteHelper() {
 		//New Entry
 		if (!isFromFavorite && !intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
-			flurryEventId = "New Entry";
+			flurryEventId = getString(R.string.new_entry);
 			new FavoriteHelper(this, mDatabaseAdapter, fileHelper, getString(typeOfEntry), entry.id, editAmount, editTag , isChanged);
 		} else {
 			findViewById(R.id.favorite_divider).setVisibility(View.GONE);

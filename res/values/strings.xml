@@ -29,7 +29,6 @@
     <string name="favorite_selection_text">Choose an entry to add to expenses</string>
     <string name="search">Search</string>
     
-    <!-- Flurry And Other Strings -->
     <string name="finished_textentry">Text Entry</string>
     <string name="finished_cameraentry">Camera Entry</string>
     <string name="finished_voiceentry">Voice Entry</string>
@@ -49,7 +48,16 @@
     <string name="graph_changed_using_textview">Navigating Graph Using Header</string>
     <string name="deleting_using_context_menu">Deleting Using Context Menu</string>
     <string name="editing_using_context_menu">Editing Using Context Menu</string>
-    
+    <string name="edit_entry">Edit Entry</string>
+    <string name="edit_fav">Edit Favorite</string>
+    <string name="new_entry">New Entry</string>
+    <string name="audio_recording_time">Audio Recording Time</string>
+    <string name="expense_listing_activity">Expense Listing Activity</string>
+    <string name="page_opened_to_edit_favorite">Page Opened to edit Favorite</string>
+    <string name="creating_new_entry_using_favorite">Creating New Entry Using Favorite</string>
+    <string name="generate_report_activity">Generate Report Activity</string>
+    <string name="home_screen">Home Screen</string>
+    <string name="preference_delete_dialog">Preference Delete Dialog</string>
     
     <!-- Toast Text -->
     <string name="entry_discarded">Discarded</string>

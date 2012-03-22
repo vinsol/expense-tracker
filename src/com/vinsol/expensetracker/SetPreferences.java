@@ -46,7 +46,7 @@ public class SetPreferences extends PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("Checked ", ""+mCheckBoxPreference.isChecked());
-				FlurryAgent.onEvent("Preference Delete Dialog ",map);
+				FlurryAgent.onEvent(getString(R.string.preference_delete_dialog),map);
 				return true;
 			}
 		});

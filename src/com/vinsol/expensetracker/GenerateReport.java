@@ -110,7 +110,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		customEndDateTextView.setOnClickListener(this);
 		period = (Spinner) findViewById(R.id.period_spinner);
 		period.setOnItemSelectedListener(this);
-		FlurryAgent.onEvent(getString(R.string.generate_report)+" "+"Activity");
+		FlurryAgent.onEvent(getString(R.string.generate_report_activity));
 		//set default end day values
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
@@ -203,6 +203,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		protected Double totalAmount = 0.0;
 		protected boolean isAmountNotEntered = false;
 		protected boolean isRecordAdded = false;
+		protected int totalNumberOfRecordsAdded;
 		
 		@Override
 		protected void onPreExecute() {
@@ -225,6 +226,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 				.setPositiveButton(getString(R.string.ok), (DialogInterface.OnClickListener)null)
 				.show();
 			} else {
+				addFlurryEvent(totalNumberOfRecordsAdded);
 				final PackageManager packageManager = getPackageManager();
 				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(fileLocation));
 				List<ResolveInfo> resolveInfo = packageManager.queryIntentActivities(intent,PackageManager.MATCH_DEFAULT_ONLY);
@@ -374,7 +376,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 				
 				isRecordAdded = true;
 			}
-			addFlurryEvent(srNo);
+			totalNumberOfRecordsAdded = srNo;
 			addTotalAmountRow();
 		}
 
@@ -562,7 +564,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 					table.flushContent();
 				} 
 			}
-			addFlurryEvent(srNo);
+			totalNumberOfRecordsAdded = srNo;
 			addTotalAmountRow(table);
 			document.add(table);
 			table.flushContent();

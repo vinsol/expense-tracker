@@ -285,7 +285,7 @@ public class Voice extends EditAbstract {
 		editTimeDetailsChronometer.setText(displayTime);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("Display Time ", displayTime);
-		FlurryAgent.onEvent("Audio Recording Time",map);
+		FlurryAgent.onEvent(getString(R.string.audio_recording_time),map);
 	}
 	
 }

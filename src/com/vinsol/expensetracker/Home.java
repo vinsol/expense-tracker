@@ -47,6 +47,7 @@ public class Home extends BaseActivity implements OnClickListener {
 	protected void onStart() {
 		super.onStart();
 		FlurryAgent.onStartSession(this, getString(R.string.flurry_key));
+		FlurryAgent.onEvent(getString(R.string.home_screen));
 	}
 	
 	@Override
@@ -66,7 +67,6 @@ public class Home extends BaseActivity implements OnClickListener {
 		setContentView(R.layout.home);
 		bundle = new Bundle();
 		mConvertCursorToListString = new ConvertCursorToListString(this);
-		FlurryAgent.onEvent("Home Screen");
 		////// ********* Adding Click Listeners to MainActivity ********** /////////
 		
 		//opens text entry Activity
