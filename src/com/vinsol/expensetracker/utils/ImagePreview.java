@@ -110,6 +110,6 @@ public class ImagePreview extends Activity {
 		if(smallFileBitmap != null && !smallFileBitmap.isRecycled()) {
 			smallFileBitmap.recycle();
 		}
-		finish();
+		super.onBackPressed();
 	}
 }

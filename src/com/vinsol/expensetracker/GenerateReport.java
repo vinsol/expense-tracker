@@ -59,9 +59,10 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.utils.Log;
 
-public class GenerateReport extends BaseActivity implements OnClickListener,OnItemSelectedListener{
+public class GenerateReport extends BaseActivity implements OnClickListener {
 	
 	private Spinner period;
+	private Spinner typeSpinner;
 	
 	private int mStartYear;
     private int mStartMonth;
@@ -109,7 +110,9 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		customEndDateTextView = (TextView)findViewById(R.id.custom_end_date);
 		customEndDateTextView.setOnClickListener(this);
 		period = (Spinner) findViewById(R.id.period_spinner);
-		period.setOnItemSelectedListener(this);
+		typeSpinner = (Spinner) findViewById(R.id.type_spinner);
+		typeSpinner.setOnItemSelectedListener(typeSpinnerListener);
+		period.setOnItemSelectedListener(periodListener);
 		FlurryAgent.onEvent(getString(R.string.generate_report_activity));
 		//set default end day values
 		Calendar calendar = Calendar.getInstance();
@@ -146,7 +149,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 						Log.d("Start Date "+mStartDay+" "+(mStartMonth+1)+" "+mStartYear);
 						Log.d("End Date "+mEndDay+" "+(mEndMonth+1)+" "+mEndYear);
 						Log.d("******************************");
-						switch ((int)((Spinner) findViewById(R.id.type_spinner)).getSelectedItemId()) {
+						switch ((int)typeSpinner.getSelectedItemId()) {
 						//case if Exporting to PDF
 						case 0:
 							exportToPDF();
@@ -674,20 +677,45 @@ public class GenerateReport extends BaseActivity implements OnClickListener,OnIt
 		mStartDay = startCalendar.get(Calendar.DAY_OF_MONTH);
 		dateRange = new DisplayDate().getDisplayDateReport(startCalendar)+" - "+new DisplayDate().getDisplayDateReport(endCalendar);
 	}
+	
+	private OnItemSelectedListener periodListener = new OnItemSelectedListener() {
 
-	@Override
-	public void onItemSelected(AdapterView<?> adapter, View v, int position,long id) {
-		if(id == 4) {
-			((LinearLayout)findViewById(R.id.custom_date_layout)).setVisibility(View.VISIBLE);
-		} else {
-			((LinearLayout)findViewById(R.id.custom_date_layout)).setVisibility(View.GONE);
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
+			if(id == 4) {
+				((TextView)findViewById(R.id.daterange_textview)).setVisibility(View.GONE);
+				((LinearLayout)findViewById(R.id.custom_date_layout)).setVisibility(View.VISIBLE);
+			} else {
+				setStartEndDate();
+				TextView dateRangeView = (TextView) findViewById(R.id.daterange_textview);
+				dateRangeView.setVisibility(View.VISIBLE);
+				dateRangeView.setText(dateRange);
+				((LinearLayout)findViewById(R.id.custom_date_layout)).setVisibility(View.GONE);
+			}
 		}
-	}
 
-	@Override
-	public void onNothingSelected(AdapterView<?> adapter) {
-		// do nothing
-	}
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			//do nothing
+		}
+	};
+	
+	private OnItemSelectedListener typeSpinnerListener = new OnItemSelectedListener() {
+
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
+			if(id == 0) {
+				findViewById(R.id.type_message_textview).setVisibility(View.GONE);
+			} else {
+				findViewById(R.id.type_message_textview).setVisibility(View.VISIBLE);
+			}
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			//do nothing
+		}
+	};
 	
 	private CustomDatePickerDialog.OnDateSetListener mStartDateSetListener = new CustomDatePickerDialog.OnDateSetListener() {
 		
