@@ -272,7 +272,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 		if(screenHeight <  ((mListMain.size() * rowHeight ) + totalHeaderHeight)) {
 			searchBox.setVisibility(View.VISIBLE);
 		} else {
-			searchBox.setVisibility(View.GONE);
+			if(mAdapter.getCount() == 0) {searchBox.setText("");}
+			if(searchBox.getText().toString().equals(""))
+				searchBox.setVisibility(View.GONE);
 		}
 	}
 
@@ -319,7 +321,6 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 			if(Activity.RESULT_CANCELED == resultCode && intentExtras != null && intentExtras.containsKey(Constants.KEY_DATA_CHANGED) && position != -1) {
 				mListMain.remove(mAdapter.mList.get(position));
 				mAdapter.mList.remove(position);
-				searchBox.setText("");
 				setSearchBoxVisibility();
 				if(mListMain.size() == 0) {
 					favListEmpty();
