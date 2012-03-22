@@ -101,7 +101,7 @@ public class ImagePreview extends Activity {
 	
 	@Override
 	public void onBackPressed() {
-		if(imageViewAsyncTask != null && imageViewAsyncTask.getStatus().equals(Status.PENDING) && imageViewAsyncTask.getStatus().equals(Status.RUNNING)) {
+		if(imageViewAsyncTask != null && (imageViewAsyncTask.getStatus().equals(Status.PENDING) || imageViewAsyncTask.getStatus().equals(Status.RUNNING))) {
 			imageViewAsyncTask.cancel(true);
 		}
 		if(largeFileBitmap != null && !largeFileBitmap.isRecycled()) {
