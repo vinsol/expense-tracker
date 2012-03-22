@@ -320,7 +320,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 			}
 			if(Activity.RESULT_CANCELED == resultCode && intentExtras != null && intentExtras.containsKey(Constants.KEY_DATA_CHANGED) && position != -1) {
 				mListMain.remove(mAdapter.mList.get(position));
-				mAdapter.mList.remove(position);
+				if(mAdapter.mList.size() > 0) {mAdapter.mList.remove(position);}
 				setSearchBoxVisibility();
 				if(mListMain.size() == 0) {
 					favListEmpty();
