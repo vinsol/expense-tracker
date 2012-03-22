@@ -243,13 +243,15 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 	}
 	
 	private void removeItem(int position) {
+		//XXX
 		mDatabaseAdapter.open();
     	mDatabaseAdapter.deleteFavoriteTableEntryID(((Favorite)mAdapter.getItem(position)).favId);
     	mDatabaseAdapter.editFavoriteIdEntryTable(((Favorite)mAdapter.getItem(position)).favId);
     	mDatabaseAdapter.close();
     	fileHelper.deleteAllFavoriteFiles(((Favorite)mAdapter.getItem(position)).favId);
-    	mAdapter.remove(mAdapter.getItem(position));
-    	if(mAdapter.getCount() > 0) {
+    	mListMain.remove(mAdapter.getItem(position));
+    	if(mListMain.size() > 0) {
+    		searchBox.setText(searchBox.getText().toString());
     		mAdapter.notifyDataSetChanged();
     	} else {
     		favListEmpty();
@@ -272,9 +274,12 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 		if(screenHeight <  ((mListMain.size() * rowHeight ) + totalHeaderHeight)) {
 			searchBox.setVisibility(View.VISIBLE);
 		} else {
-			if(mAdapter.getCount() == 0) {searchBox.setText("");}
-			if(searchBox.getText().toString().equals(""))
-				searchBox.setVisibility(View.GONE);
+			if(mAdapter.getCount() == 0) {
+				searchBox.setText("");
+			} else {
+				searchBox.setText(searchBox.getText().toString());
+			}
+			if(searchBox.getText().toString().equals("")) {searchBox.setVisibility(View.GONE);}
 		}
 	}
 
@@ -309,6 +314,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//XXX
 		if (ACTIVITY_RESULT == requestCode && data != null && data.getExtras() != null) {
 			intentExtras = data.getExtras();
 			int position = -1;
@@ -320,7 +326,8 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 			}
 			if(Activity.RESULT_CANCELED == resultCode && intentExtras != null && intentExtras.containsKey(Constants.KEY_DATA_CHANGED) && position != -1) {
 				mListMain.remove(mAdapter.mList.get(position));
-				if(mAdapter.mList.size() > 0) {mAdapter.mList.remove(position);}
+				
+//				if(mAdapter.mList.contains(mAdapter.mList.get(position))) {mAdapter.mList.remove(mAdapter.mList.get(position));}
 				setSearchBoxVisibility();
 				if(mListMain.size() == 0) {
 					favListEmpty();
