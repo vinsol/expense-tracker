@@ -641,24 +641,28 @@ public class GenerateReport extends BaseActivity implements OnClickListener {
 		//case if period is 1 Month
 		case 0:
 			startCalendar.add(Calendar.MONTH, -1);
+			startCalendar.add(Calendar.DAY_OF_MONTH, +1);
 			setDateParameters(startCalendar,endCalendar);
 			return true;
 
 		//case if period is 1 Quarter
 		case 1:
 			startCalendar.add(Calendar.MONTH, -3);
+			startCalendar.add(Calendar.DAY_OF_MONTH, +1);
 			setDateParameters(startCalendar,endCalendar);
 			return true;
 
 		//case if period is Half Year
 		case 2:
 			startCalendar.add(Calendar.MONTH, -6);
+			startCalendar.add(Calendar.DAY_OF_MONTH, +1);
 			setDateParameters(startCalendar,endCalendar);
 			return true;
 			
 		//case if period is 1 Year
 		case 3:
 			startCalendar.add(Calendar.YEAR, -1);
+			startCalendar.add(Calendar.DAY_OF_MONTH, +1);
 			setDateParameters(startCalendar,endCalendar);
 			return true;
 			
