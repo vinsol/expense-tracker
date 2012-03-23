@@ -552,6 +552,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener {
 				}
 				
 				// Adding Amount
+				table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
 				if(entry.amount != null && !entry.amount.equals("") && !entry.amount.contains("?")) {
 					totalAmount = totalAmount + Double.parseDouble(entry.amount);
 					table.addCell(new StringProcessing().getStringDoubleDecimal(entry.amount));
@@ -559,6 +560,7 @@ public class GenerateReport extends BaseActivity implements OnClickListener {
 					isAmountNotEntered = true;
 					table.addCell("?");
 				}
+				table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_LEFT);
 				
 				isRecordAdded = true;
 				
