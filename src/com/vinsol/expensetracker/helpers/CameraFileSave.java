@@ -88,15 +88,16 @@ public class CameraFileSave {
 			try {
 				out = new FileOutputStream(file);
 			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
 			}
 			bitmapToSave.compress(Bitmap.CompressFormat.JPEG, 60, out);
 			try {
 				out.flush();
 				out.close();
 			} catch (IOException e) {
+				e.printStackTrace();
 			}
-
-			// ///////// ********* Clear Bitmap to save VM space ********* /////////
+			/////////// ********* Clear Bitmap to save VM space ********* /////////
 		} else {
 			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}

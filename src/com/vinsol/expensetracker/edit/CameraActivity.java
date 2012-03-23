@@ -136,8 +136,8 @@ public class CameraActivity extends EditAbstract {
 	protected void setFavoriteHelper() {
 		//DO Nothing
 	}
-
-	private void setImageResource() {			
+	
+	private void setImageResource() {
 		if(bitmap.getHeight() > bitmap.getWidth()) {
 			editImageDisplay.setLayoutParams(new LayoutParams(width, height));
 		} else {
