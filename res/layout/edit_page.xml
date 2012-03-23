@@ -220,8 +220,8 @@
         android:layout_above="@+id/edit_footer"
         android:layout_below="@+id/edit_date_bar"
         android:background="@color/white"
-        android:id="@+id/edit_body_favorite"
         android:visibility="gone"
+        android:id="@+id/edit_body_favorite"
         android:orientation="vertical"
         >
         
@@ -254,7 +254,7 @@
         <ImageView
             android:background="@drawable/list_divider"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:layout_width="fill_parent"/>
         
     </LinearLayout>
         
