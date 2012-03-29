@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
 
-public class BaseActivity extends Activity {
+public abstract class BaseActivity extends Activity {
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();

@@ -364,13 +364,13 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         private void capture() {
             mCaptureOnlyData = null;
             mParameters.setRotation(mLastOrientation);
+            ///XXX May b error here
             mCameraDevice.setParameters(mParameters);
             mCameraDevice.takePicture(mShutterCallback, mRawPictureCallback,mPostViewPictureCallback, new JpegPictureCallback());
             mPreviewing = false;
         }
 
         public void onSnap() {
-        	//TODO
             if (mPausing || mStatus == SNAPSHOT_IN_PROGRESS) {return;}
             mCaptureStartTime = System.currentTimeMillis();
             mPostViewPictureCallbackTime = 0;
@@ -1056,6 +1056,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             }
         }
 
+        //// XXX May be error here
         mCameraDevice.setParameters(mParameters);
     }
     
@@ -1089,7 +1090,6 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
 
     private void showPostCaptureAlert() {
-    	//TODO
     	mStatus = IMAGE_DISPLAYED;
         findViewById(R.id.camera_progress_bar).setVisibility(View.GONE);
         doAttach();

@@ -119,7 +119,7 @@ public class Home extends BaseActivity implements OnClickListener {
 		cancelHandleGraphTask();
 		cancelUnfinishedEntryTask();
 		switch (idOfClickedView) {
-			// //// ******* opens TextEntry Activity ******** ///////////
+			////// ******* opens TextEntry Activity ******** ///////////
 			case R.id.main_text:
 				Intent intentTextEntry = new Intent(this, TextEntry.class);
 				createDatabaseEntry(R.string.text);
@@ -127,7 +127,7 @@ public class Home extends BaseActivity implements OnClickListener {
 				startActivity(intentTextEntry);
 				break;
 				
-			// //// ******* opens Voice Activity ******** ///////////
+			////// ******* opens Voice Activity ******** ///////////
 			case R.id.main_voice:
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					Intent intentVoice = new Intent(this, Voice.class);

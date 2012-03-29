@@ -34,7 +34,7 @@
     <string name="finished_voiceentry">Voice Entry</string>
     
     <!-- Flurry Events -->
-    <string name="flurry_key">AK3AW9INLVFLPMD597YR</string>
+    <string name="flurry_key">TWN1Q86PGWA7WWEPDWXA</string>
     <string name="generate_report">Generate Report</string>
     <string name="save_reminder">Save Reminder</string>
     <string name="fav_from_new">Favorite From New</string>

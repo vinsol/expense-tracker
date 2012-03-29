@@ -14,7 +14,6 @@ import java.io.IOException;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.widget.Toast;
 
 public class CameraFileSave {
 	private String filename;
@@ -28,13 +27,10 @@ public class CameraFileSave {
 	
 	private int THUMBNAIL_MAX_HEIGHT = 60;
 	private int THUMBNAIL_MAX_WIDTH = 60;
-
-	private Context mContext;
 	private FileHelper fileHelper;
 
 	// /////// ********* Constructors ******** /////////////
 	public CameraFileSave(Context _context) {
-		mContext = _context;
 		fileHelper = new FileHelper();
 	}
 	
@@ -98,8 +94,6 @@ public class CameraFileSave {
 				e.printStackTrace();
 			}
 			/////////// ********* Clear Bitmap to save VM space ********* /////////
-		} else {
-			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -129,8 +123,6 @@ public class CameraFileSave {
 				originalImageHeight /= 2;
 				scale *= 2;
 			}
-		} else {
-			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();
 		}
 		return scale;
 	}

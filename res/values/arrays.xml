@@ -12,9 +12,12 @@
     <string-array name="pref_camera_picturesize_entryvalues" translatable="false">
         <item>2592x1944</item>
         <item>2592x1936</item>
+        <item>2560x1920</item>
         <item>2048x1536</item>
         <item>1600x1200</item>
+        <item>1280x960</item>
         <item>1024x768</item>
+        <item>640x480</item>
         <item>320x240</item>
     </string-array>
 
