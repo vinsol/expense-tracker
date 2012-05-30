@@ -479,7 +479,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			break;
 		
 		case R.id.edit_delete:
-			if(new SharedPreferencesHelper(this).getSharedPreferences().getBoolean(getString(R.string.pref_key_delete_dialog), false)) {
+			if(SharedPreferencesHelper.getSharedPreferences().getBoolean(getString(R.string.pref_key_delete_dialog), false)) {
 				showDeleteDialog();
 			} else {
 				if(isFromFavorite) {

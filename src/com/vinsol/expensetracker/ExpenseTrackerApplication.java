@@ -43,7 +43,7 @@ public class ExpenseTrackerApplication extends Application {
         		mFile.mkdirs();
         		mFile = new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + Constants.DIRECTORY_AUDIO);
         		mFile.mkdirs();
-        		if(!new SharedPreferencesHelper(applicationContext).getSharedPreferences().contains(applicationContext.getString(R.string.pref_key_run_first_time))) {
+        		if(!SharedPreferencesHelper.getSharedPreferences().contains(applicationContext.getString(R.string.pref_key_run_first_time))) {
         			File prevVerDir = new File(Environment.getExternalStorageDirectory()+"/ExpenseTracker");
         			if(prevVerDir.exists()) {
         				try {
@@ -58,7 +58,7 @@ public class ExpenseTrackerApplication extends Application {
         					e.printStackTrace();
         				}
         			}
-        			new SharedPreferencesHelper(applicationContext).setBooleanPrefs(R.string.pref_key_run_first_time, false);
+        			SharedPreferencesHelper.setBooleanPrefs(R.string.pref_key_run_first_time, false);
         		}
         		isInitialized = true;
     		}

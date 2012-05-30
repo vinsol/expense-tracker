@@ -50,7 +50,7 @@ public class CameraFlashButton extends ImageView implements OnClickListener {
 	}
 	
 	private void Initialize() {
-		selectedResId = new SharedPreferencesHelper(getContext()).getSharedPreferences().getInt(getContext().getString(R.string.pref_key_flash_res_id), 0);
+		selectedResId = SharedPreferencesHelper.getSharedPreferences().getInt(getContext().getString(R.string.pref_key_flash_res_id), 0);
 		setImageDrawable(getResources().getDrawable(resId[selectedResId]));
 		setOnClickListener(this);
 	}
@@ -60,7 +60,7 @@ public class CameraFlashButton extends ImageView implements OnClickListener {
 		selectedResId++;
 		selectedResId%=3;
 		invalidate();
-		new SharedPreferencesHelper(getContext()).setFlashPrefs(selectedResId);
+		SharedPreferencesHelper.setFlashPrefs(selectedResId);
 		mCallbackInterface.onClickListener(selectedResId);
 	}
 	

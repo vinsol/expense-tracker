@@ -68,11 +68,15 @@
     
     <!-- Preferences Key -->
     <string name="pref_key_delete_dialog">prefKeyDeleteDialog</string>
+    <string name="pref_key_sync_email">prefKeySyncEmail</string>
+    <string name="pref_key_sync_password">prefKeySyncPassword</string>
+    <string name="pref_key_set_up_sync">prefKeySetUpSync</string>
     <string name="pref_key_flash_res_id">prefKeyFlashResId</string>
     <string name="pref_key_run_first_time">prefKeyRunFirstTime</string>
     
     <!-- Preferences Title-->
     <string name="delete_dialog_title">Show delete confirmation dialog</string>
+    <string name="sync_pref_title">Set Up Sync</string>
         
     <!-- Dialog Text -->
     <string name="delete_dialog_text">Delete this entry?</string>

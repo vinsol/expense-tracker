@@ -51,7 +51,7 @@ public class DeleteDialog extends AlertDialog implements DialogInterface.OnClick
 	}
 	
 	private void setDeletePrefs() {
-		new SharedPreferencesHelper(getContext()).setDeletePrefs(checkBox.isChecked());
+		SharedPreferencesHelper.setDeletePrefs(checkBox.isChecked());
 	}
 
 	@Override

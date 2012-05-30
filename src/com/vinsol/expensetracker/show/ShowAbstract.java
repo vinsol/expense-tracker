@@ -163,7 +163,7 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		
 			case R.id.show_delete:
-				if(new SharedPreferencesHelper(this).getSharedPreferences().getBoolean(getString(R.string.pref_key_delete_dialog), false)) {
+				if(SharedPreferencesHelper.getSharedPreferences().getBoolean(getString(R.string.pref_key_delete_dialog), false)) {
 					showDeleteDialog();
 				} else {
 					delete();

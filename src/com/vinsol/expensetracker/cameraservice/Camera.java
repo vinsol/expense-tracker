@@ -1026,7 +1026,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
     
     private void updateFlashModeParameter() {
-    	String flashMode = getFlashParameter(new SharedPreferencesHelper(this).getSharedPreferences().getInt(getString(R.string.pref_key_flash_res_id), 0));
+    	String flashMode = getFlashParameter(SharedPreferencesHelper.getSharedPreferences().getInt(getString(R.string.pref_key_flash_res_id), 0));
         mParameters.setFlashMode(flashMode);
 	}
 

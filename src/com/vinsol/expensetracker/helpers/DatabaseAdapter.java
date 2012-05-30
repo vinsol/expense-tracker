@@ -36,7 +36,6 @@ public class DatabaseAdapter {
 	public static final String KEY_FAVORITE = "FAVORITE";
 	public static final String KEY_TYPE = "TYPE";
 	
-
 	// sql open or create database
 	private final String ENTRY_TABLE_CREATE = "create table if not exists "
 			+ ENTRY_TABLE + "(" 
