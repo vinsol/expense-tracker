@@ -35,6 +35,8 @@ public class DatabaseAdapter {
 	public static final String KEY_LOCATION = "LOCATION";
 	public static final String KEY_FAVORITE = "FAVORITE";
 	public static final String KEY_TYPE = "TYPE";
+	public static final String KEY_ID_FROM_SERVER = "id";
+	public static final String KEY_SYNC_BIT = "SYNCBIT";
 	
 	// sql open or create database
 	private final String ENTRY_TABLE_CREATE = "create table if not exists "
@@ -247,6 +249,12 @@ public class DatabaseAdapter {
 			}
 			if(prevVersion == 2) {
 				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_LOCATION+" TEXT");
+			}
+			if(prevVersion == 3) {
+				db.execSQL("ALTER TABLE " + ENTRY_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER," +
+						  KEY_SYNC_BIT+" INTEGER);");
+				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER," +
+						  KEY_SYNC_BIT+" INTEGER);");
 			}
 		}
 		
