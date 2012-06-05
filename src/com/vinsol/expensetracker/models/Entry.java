@@ -34,6 +34,7 @@ public class Entry extends Favorite {
     	location = in.readString();
     	favId = in.readString();
     	timeInMillis = in.readLong();
+    	myHash = in.readString();
     };
     
     @Override
@@ -45,6 +46,7 @@ public class Entry extends Favorite {
 		dest.writeString(location);
 		dest.writeString(favId);
 		dest.writeLong(timeInMillis);
+		dest.writeString(myHash);
 	}
 
 	@Override

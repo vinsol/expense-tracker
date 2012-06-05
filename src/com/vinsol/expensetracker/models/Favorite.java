@@ -16,6 +16,7 @@ public class Favorite implements Parcelable {
 	public String description;
 	public String type;
 	public String location;
+	public String myHash;
 
 	public static final Parcelable.Creator<Favorite> CREATOR = new Parcelable.Creator<Favorite>() {
     	public Favorite createFromParcel(Parcel in) {
@@ -35,6 +36,7 @@ public class Favorite implements Parcelable {
     	type = in.readString();
     	favId = in.readString();
     	location = in.readString();
+    	myHash = in.readString();
     };
     
     @Override
@@ -44,6 +46,7 @@ public class Favorite implements Parcelable {
 		dest.writeString(type);
 		dest.writeString(favId);
 		dest.writeString(location);
+		dest.writeString(myHash);
 	}
 
 	@Override
