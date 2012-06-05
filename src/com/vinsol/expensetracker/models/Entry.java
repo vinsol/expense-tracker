@@ -35,6 +35,8 @@ public class Entry extends Favorite {
     	favId = in.readString();
     	timeInMillis = in.readLong();
     	myHash = in.readString();
+    	idFromServer = in.readString();
+    	syncBit = in.readString();
     };
     
     @Override
@@ -47,6 +49,8 @@ public class Entry extends Favorite {
 		dest.writeString(favId);
 		dest.writeLong(timeInMillis);
 		dest.writeString(myHash);
+		dest.writeString(idFromServer);
+		dest.writeString(syncBit);
 	}
 
 	@Override
