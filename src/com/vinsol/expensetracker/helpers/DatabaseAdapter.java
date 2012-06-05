@@ -145,7 +145,7 @@ public class DatabaseAdapter {
 		return id;
 	}
 
-	public boolean deleteEntryTableEntryID(long id) {
+	public boolean deleteEntryTableEntryID(String id) {
 		String where = KEY_ID + "=" + id;
 		try {
 			Log.d("Deleting");
@@ -167,7 +167,7 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_DATE_TIME, list.timeInMillis);
 		if (list.location != null)
 			contentValues.put(KEY_LOCATION, list.location);
-		if (list.favId != -1)
+		if (list.favId != null)
 			contentValues.put(KEY_FAVORITE, list.favId);
 		if (list.type != null)
 			contentValues.put(KEY_TYPE, list.type);
