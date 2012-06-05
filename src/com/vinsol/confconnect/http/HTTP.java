@@ -27,7 +27,7 @@ import com.vinsol.expensetracker.utils.Utils;
 public class HTTP {
 
 	// Requirements
-	private String baseUrl = "http://confconnect.vinsol.com/";
+	private String baseUrl = "http://192.168.1.7:3000/";
 	private String listTracksEvents = "railsconf-2012.json";
 	private String confConnect = "railsconf-2012/";
 	private String events = "events/";
@@ -42,13 +42,13 @@ public class HTTP {
 		mContext = context;
 	}
 	
-	public String addRating(String eventPermalink, String username, String token, String rating) throws IOException {
-		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-		nameValuePairs.add(new BasicNameValuePair("username", username));
-		nameValuePairs.add(new BasicNameValuePair("token", token));
-		nameValuePairs.add(new BasicNameValuePair("stars", rating));
-		return post(baseUrl+confConnect+events+eventPermalink+"/"+rate, nameValuePairs);
-	}
+//	public String addExpenses(com.vinsol.expensetracker.models.Entry expenseEntry, String email, String token) throws IOException {
+//		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+//		nameValuePairs.add(new BasicNameValuePair("username", username));
+//		nameValuePairs.add(new BasicNameValuePair("token", token));
+//		nameValuePairs.add(new BasicNameValuePair("stars", rating));
+//		return post(baseUrl+confConnect+events+eventPermalink+"/"+rate, nameValuePairs);
+//	}
 	
 	public String addComment(String eventPermalink, String username, String token, String description) throws IOException {
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();

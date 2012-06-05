@@ -35,7 +35,7 @@ public class DatabaseAdapter {
 	public static final String KEY_LOCATION = "LOCATION";
 	public static final String KEY_FAVORITE = "FAVORITE";
 	public static final String KEY_TYPE = "TYPE";
-	public static final String KEY_ID_FROM_SERVER = "id";
+	public static final String KEY_ID_FROM_SERVER = "id_from_server";
 	public static final String KEY_SYNC_BIT = "SYNCBIT";
 	
 	// sql open or create database
@@ -47,7 +47,9 @@ public class DatabaseAdapter {
 			+ KEY_DATE_TIME + " TEXT NOT NULL,"
 			+ KEY_LOCATION + " TEXT, " 
 			+ KEY_FAVORITE + " INTEGER, "
-			+ KEY_TYPE + " VARCHAR(1) NOT NULL " 
+			+ KEY_TYPE + " VARCHAR(1) NOT NULL, "
+			+ KEY_ID_FROM_SERVER + " INTEGER, "
+			+ KEY_SYNC_BIT + " INTEGER " 
 			+ ")";
 
 	private final String FAVORITE_TABLE_CREATE = "create table if not exists "
@@ -56,7 +58,9 @@ public class DatabaseAdapter {
 			+ KEY_TAG + " TEXT,"
 			+ KEY_AMOUNT + " TEXT, " 
 			+ KEY_TYPE + " VARCHAR(1) NOT NULL, " 
-			+ KEY_LOCATION + " TEXT " 
+			+ KEY_LOCATION + " TEXT, "
+			+ KEY_ID_FROM_SERVER + " INTEGER, "
+			+ KEY_SYNC_BIT + " INTEGER "
 			+ ")";
 	
 	
@@ -141,7 +145,7 @@ public class DatabaseAdapter {
 		return id;
 	}
 
-	public boolean deleteEntryTableEntryID(String id) {
+	public boolean deleteEntryTableEntryID(long id) {
 		String where = KEY_ID + "=" + id;
 		try {
 			Log.d("Deleting");
@@ -163,7 +167,7 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_DATE_TIME, list.timeInMillis);
 		if (list.location != null)
 			contentValues.put(KEY_LOCATION, list.location);
-		if (list.favId != null)
+		if (list.favId != -1)
 			contentValues.put(KEY_FAVORITE, list.favId);
 		if (list.type != null)
 			contentValues.put(KEY_TYPE, list.type);

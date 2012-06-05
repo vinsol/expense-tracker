@@ -19,6 +19,7 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
+import com.vinsol.expensetracker.helpers.SyncAdapter;
 
 public class ExpenseTrackerApplication extends Application {
 	
@@ -32,6 +33,7 @@ public class ExpenseTrackerApplication extends Application {
         applicationContext = this;
     	PreferenceManager.setDefaultValues(applicationContext, R.xml.preferences, false);
         Initialize();
+        new SyncAdapter(applicationContext).execute();
     }
 
 	public static void Initialize() {
