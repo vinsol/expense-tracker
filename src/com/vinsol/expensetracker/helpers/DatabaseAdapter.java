@@ -16,6 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.Log;
+import com.vinsol.expensetracker.utils.Utils;
 
 public class DatabaseAdapter {
 
@@ -35,8 +36,9 @@ public class DatabaseAdapter {
 	public static final String KEY_LOCATION = "LOCATION";
 	public static final String KEY_FAVORITE = "FAVORITE";
 	public static final String KEY_TYPE = "TYPE";
-	public static final String KEY_ID_FROM_SERVER = "id_from_server";
+	public static final String KEY_ID_FROM_SERVER = "ID_FROM_SERVER";
 	public static final String KEY_SYNC_BIT = "SYNCBIT";
+	public static final String KEY_MY_HASH = "KEY_MY_HASH";
 	
 	// sql open or create database
 	private final String ENTRY_TABLE_CREATE = "create table if not exists "
@@ -49,7 +51,8 @@ public class DatabaseAdapter {
 			+ KEY_FAVORITE + " INTEGER, "
 			+ KEY_TYPE + " VARCHAR(1) NOT NULL, "
 			+ KEY_ID_FROM_SERVER + " INTEGER, "
-			+ KEY_SYNC_BIT + " INTEGER " 
+			+ KEY_SYNC_BIT + " INTEGER, "
+			+ KEY_MY_HASH + " TEXT "
 			+ ")";
 
 	private final String FAVORITE_TABLE_CREATE = "create table if not exists "
@@ -60,7 +63,8 @@ public class DatabaseAdapter {
 			+ KEY_TYPE + " VARCHAR(1) NOT NULL, " 
 			+ KEY_LOCATION + " TEXT, "
 			+ KEY_ID_FROM_SERVER + " INTEGER, "
-			+ KEY_SYNC_BIT + " INTEGER "
+			+ KEY_SYNC_BIT + " INTEGER, "
+			+ KEY_MY_HASH + " TEXT "
 			+ ")";
 	
 	
@@ -94,8 +98,24 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_AMOUNT, list.amount);
 		contentValues.put(KEY_TYPE, list.type);
 		contentValues.put(KEY_LOCATION, list.location);
+		contentValues.put(KEY_MY_HASH, Utils.getMD5());
 		Log.d("TRYING");
 		long id = db.insert(FAVORITE_TABLE, null, contentValues);
+		Log.d("ADDED");
+		return id;
+	}
+	
+	public Long insertToEntryTable(Entry list) {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_TAG, list.description);
+		contentValues.put(KEY_AMOUNT, list.amount);
+		contentValues.put(KEY_DATE_TIME, list.timeInMillis);
+		contentValues.put(KEY_LOCATION, list.location);
+		contentValues.put(KEY_FAVORITE, list.favId);
+		contentValues.put(KEY_TYPE, list.type);
+		contentValues.put(KEY_MY_HASH, Utils.getMD5());
+		Log.d("TRYING");
+		long id = db.insert(ENTRY_TABLE, null, contentValues);
 		Log.d("ADDED");
 		return id;
 	}
@@ -120,6 +140,7 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_AMOUNT, list.amount);
 		if (list.type != null)
 			contentValues.put(KEY_TYPE, list.type);
+		contentValues.put(KEY_MY_HASH, Utils.getMD5());
 		String where = KEY_ID + "=" + list.favId;
 		try {
 			Log.d("EDITING");
@@ -127,22 +148,9 @@ public class DatabaseAdapter {
 			Log.d("EDITED");
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return false;
-	}
-	
-	public Long insertToEntryTable(Entry list) {
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(KEY_TAG, list.description);
-		contentValues.put(KEY_AMOUNT, list.amount);
-		contentValues.put(KEY_DATE_TIME, list.timeInMillis);
-		contentValues.put(KEY_LOCATION, list.location);
-		contentValues.put(KEY_FAVORITE, list.favId);
-		contentValues.put(KEY_TYPE, list.type);
-		Log.d("TRYING");
-		long id = db.insert(ENTRY_TABLE, null, contentValues);
-		Log.d("ADDED");
-		return id;
 	}
 
 	public boolean deleteEntryTableEntryID(String id) {
@@ -152,6 +160,7 @@ public class DatabaseAdapter {
 			db.delete(ENTRY_TABLE, where, null);
 			Log.d("Deleted");
 		} catch (SQLiteException e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -171,6 +180,7 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_FAVORITE, list.favId);
 		if (list.type != null)
 			contentValues.put(KEY_TYPE, list.type);
+		contentValues.put(KEY_MY_HASH, Utils.getMD5());
 		String where = KEY_ID + "=" + list.id;
 		try {
 			Log.d("EDITING");
@@ -218,10 +228,11 @@ public class DatabaseAdapter {
 		return favId;
 	}
 
-	public void editFavoriteIdEntryTable(String favID) {
+	public void editFavoriteIdEntryTable(String favId) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_FAVORITE, "");
-		String where = KEY_FAVORITE+" = "+favID;
+		contentValues.put(KEY_MY_HASH, Utils.getMD5());
+		String where = KEY_FAVORITE+" = "+favId;
 		db.update(ENTRY_TABLE, contentValues, where, null);
 	}
  
@@ -256,9 +267,11 @@ public class DatabaseAdapter {
 			}
 			if(prevVersion == 3) {
 				db.execSQL("ALTER TABLE " + ENTRY_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER," +
-						  KEY_SYNC_BIT+" INTEGER);");
+						  KEY_SYNC_BIT+" INTEGER)," +
+						  KEY_MY_HASH+" TEXT);");
 				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER," +
-						  KEY_SYNC_BIT+" INTEGER);");
+						  KEY_SYNC_BIT+" INTEGER)," +
+						  KEY_MY_HASH+" TEXT);");
 			}
 		}
 		
