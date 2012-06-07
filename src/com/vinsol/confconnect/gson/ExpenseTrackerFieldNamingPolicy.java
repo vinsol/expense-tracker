@@ -24,9 +24,12 @@ public class ExpenseTrackerFieldNamingPolicy implements FieldNamingStrategy{
 			if(Strings.equal(name, "favId")) { return "_id";}
 		} else {
 			if(Strings.equal(name, "id")) { return "_id";}
+			if(Strings.equal(name, "favId")) { return "favorite";}
 		}
+		if(Strings.equal(name, "myHash")) { return "my_hash";}
 		if(Strings.equal(name, "timeInMillis")) { return "time_milis_utc";}
 		if(Strings.equal(name, "idFromServer")) { return "id";}
+		if(Strings.equal(name, "type")) { return "expense_type";}
 		return name;
 	}
 

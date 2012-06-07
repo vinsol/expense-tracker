@@ -29,6 +29,7 @@ import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.GraphHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
+import com.vinsol.expensetracker.helpers.SyncAdapter;
 import com.vinsol.expensetracker.helpers.UnfinishedEntryCount;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
@@ -93,6 +94,8 @@ public class Home extends BaseActivity implements OnClickListener {
 		
 		graphProgressBar = (ProgressBar) findViewById(R.id.graph_progress_bar);
 		graphProgressBar.setVisibility(View.VISIBLE);
+
+        new SyncAdapter(this).execute();
 	}
 
 	@Override
