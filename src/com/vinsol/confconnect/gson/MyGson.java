@@ -5,8 +5,8 @@ import com.google.gson.GsonBuilder;
 
 public class MyGson {
 
-	public Gson get(boolean isFav) {
-		return new GsonBuilder().setFieldNamingStrategy(new ExpenseTrackerFieldNamingPolicy(isFav)).create(); 
+	public Gson get() {
+		return new GsonBuilder().setFieldNamingStrategy(new ExpenseTrackerFieldNamingPolicy()).create(); 
 	}
 	
 }

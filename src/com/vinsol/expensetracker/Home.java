@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.confconnect.http.SyncStart;
+import com.vinsol.confconnect.http.SyncHelper;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
@@ -95,7 +95,7 @@ public class Home extends BaseActivity implements OnClickListener {
 		graphProgressBar = (ProgressBar) findViewById(R.id.graph_progress_bar);
 		graphProgressBar.setVisibility(View.VISIBLE);
 
-        new SyncStart(this).execute();
+        new SyncHelper(this).execute();
 	}
 
 	@Override
