@@ -29,6 +29,7 @@ public class HTTP {
 	// Requirements
 	private String baseUrl = "http://192.168.1.7:3000/";
 	private String sync = "sync.json";
+	private String verification = "?email=hiteshsondhi88@gmail.com";
 	private String confConnect = "railsconf-2012/";
 	private String events = "events/";
 	private String attendees = "attendees.json";
@@ -86,6 +87,10 @@ public class HTTP {
 		return get(baseUrl+confConnect+"events/"+permalink+".json"+"?username="+username+"&token="+token);
 	}
 	
+	public String getSyncData() throws IOException{
+		return get(baseUrl+sync+verification);
+	}
+	
 	public String get(String url) throws IOException{
 		return execute(url, null, "GET");
 	}
@@ -139,12 +144,21 @@ public class HTTP {
 			}
             
     		// get response
-			Log.d("getting response");
-    		String response = Strings.InputStreamToString(connection.getInputStream()); 
-    		// print response
-    		Log.d("response "+response);
-        	if(connection.getURL().toString().equals(url) && connection.getResponseCode() == 200) {
-	        	
+			Log.d("getting response with status " +connection.getResponseCode() );
+			int responseCode = connection.getResponseCode();
+    		
+        	if(connection.getURL().toString().equals(url) && responseCode == 200) {
+        		String response = Strings.InputStreamToString(connection.getInputStream()); 
+        		// print response
+        		Log.d("response "+response);	
+	        	// return response
+	        	return response;
+        	}
+
+        	if(connection.getURL().toString().equals(url) && responseCode == 422) {
+        		String response = Strings.InputStreamToString(connection.getErrorStream()); 
+        		// print response
+        		Log.d("response error "+response);	
 	        	// return response
 	        	return response;
         	}
