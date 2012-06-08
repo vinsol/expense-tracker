@@ -140,7 +140,6 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_AMOUNT, list.amount);
 		if (list.type != null)
 			contentValues.put(KEY_TYPE, list.type);
-		contentValues.put(KEY_MY_HASH, Utils.getMD5());
 		String where = KEY_ID + "=" + list.favId;
 		try {
 			Log.d("EDITING");
@@ -180,7 +179,6 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_FAVORITE, list.favId);
 		if (list.type != null)
 			contentValues.put(KEY_TYPE, list.type);
-		contentValues.put(KEY_MY_HASH, Utils.getMD5());
 		String where = KEY_ID + "=" + list.id;
 		try {
 			Log.d("EDITING");
@@ -231,7 +229,6 @@ public class DatabaseAdapter {
 	public void editFavoriteIdEntryTable(String favId) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_FAVORITE, "");
-		contentValues.put(KEY_MY_HASH, Utils.getMD5());
 		String where = KEY_FAVORITE+" = "+favId;
 		db.update(ENTRY_TABLE, contentValues, where, null);
 	}

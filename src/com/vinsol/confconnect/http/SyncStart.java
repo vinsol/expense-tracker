@@ -1,16 +1,17 @@
-package com.vinsol.expensetracker.helpers;
+package com.vinsol.confconnect.http;
 
 import com.vinsol.confconnect.gson.MyGson;
+import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.utils.Log;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-public class SyncAdapter extends AsyncTask<Void, Void, Void>{
+public class SyncStart extends AsyncTask<Void, Void, Void>{
 	
 	private Context context;
 	
-	public SyncAdapter(Context context) {
+	public SyncStart(Context context) {
 		this.context = context;
 	}
 	
@@ -18,6 +19,7 @@ public class SyncAdapter extends AsyncTask<Void, Void, Void>{
 	protected Void doInBackground(Void... params) {
 		Log.d("************************** Starting Sync **********************************");
 		Log.d(" *************** Entry JSON \n "+new MyGson().get(false).toJson(new ConvertCursorToListString(context).getEntryList(true, null)));
+		
 		return null;
 	}
 	

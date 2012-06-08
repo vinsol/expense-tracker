@@ -28,7 +28,7 @@ public class HTTP {
 
 	// Requirements
 	private String baseUrl = "http://192.168.1.7:3000/";
-	private String listTracksEvents = "railsconf-2012.json";
+	private String sync = "sync.json";
 	private String confConnect = "railsconf-2012/";
 	private String events = "events/";
 	private String attendees = "attendees.json";
@@ -70,13 +70,13 @@ public class HTTP {
 		return get(baseUrl+confConnect+favoriteEvents+myEvents+"?username="+username+"&token="+token);
 	}
 	
-	public String getListTracksEvents() throws IOException{
-		return get(baseUrl+listTracksEvents);
-	}
-	
-	public String getListTracksEvents(String username,String token) throws IOException{
-		return get(baseUrl+listTracksEvents+"?username="+username+"&token="+token);
-	}
+//	public String getListTracksEvents() throws IOException{
+//		return get(baseUrl+listTracksEvents);
+//	}
+//	
+//	public String getListTracksEvents(String username,String token) throws IOException{
+//		return get(baseUrl+listTracksEvents+"?username="+username+"&token="+token);
+//	}
 	
 	public String getSingleEvent(String permalink) throws IOException{
 		return get(baseUrl+confConnect+"events/"+permalink+".json");
