@@ -435,6 +435,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 									try {
 										temptotalAmount += Double.parseDouble(tempAmount);
 									} catch (NumberFormatException e) {
+										e.printStackTrace();
 									}
 								} else {
 									isTempAmountNull = true;
@@ -488,7 +489,11 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 			@SuppressWarnings("rawtypes")
 			List tt = (List) listString.get(i);
 			if(tt.size() > 0) {
-				dateListToSend.add(mDataDateList.get(i));
+				int temp = i;
+				if(i == 0 && !new DisplayDate(mSubList.get(0).timeInMillis).isCurrentWeek()) {temp++;}
+				dateListToSend.add(mDataDateList.get(temp));
+				Log.d("************ Amount ***************** "+temp);
+				Log.d("mDataDateList "+mDataDateList.get(temp).amount);
 				mSeparatedListAdapter.addSection(sectionNum + "", new ArrayAdapter<Entry>(this, R.layout.expense_listing_tab, tt), dateListToSend);
 				sectionNum++;
 			}

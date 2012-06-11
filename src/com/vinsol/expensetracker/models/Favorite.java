@@ -18,7 +18,9 @@ public class Favorite implements Parcelable {
 	public String location;
 	public String myHash;
 	public String idFromServer;
-	public String syncBit;
+	public int deleted;
+	public int syncBit;  // 0 -> not synced
+							// 1 -> synced
 
 	public static final Parcelable.Creator<Favorite> CREATOR = new Parcelable.Creator<Favorite>() {
     	public Favorite createFromParcel(Parcel in) {
@@ -40,7 +42,7 @@ public class Favorite implements Parcelable {
     	location = in.readString();
     	myHash = in.readString();
     	idFromServer = in.readString();
-    	syncBit = in.readString();
+    	syncBit = in.readInt();
     };
     
     @Override
@@ -52,7 +54,7 @@ public class Favorite implements Parcelable {
 		dest.writeString(location);
 		dest.writeString(myHash);
 		dest.writeString(idFromServer);
-		dest.writeString(syncBit);
+		dest.writeInt(syncBit);
 	}
 
 	@Override

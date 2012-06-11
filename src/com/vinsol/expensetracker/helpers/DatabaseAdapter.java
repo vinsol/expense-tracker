@@ -38,7 +38,8 @@ public class DatabaseAdapter {
 	public static final String KEY_TYPE = "TYPE";
 	public static final String KEY_ID_FROM_SERVER = "ID_FROM_SERVER";
 	public static final String KEY_SYNC_BIT = "SYNCBIT";
-	public static final String KEY_MY_HASH = "KEY_MY_HASH";
+	public static final String KEY_MY_HASH = "MY_HASH";
+	public static final String KEY_DELETE_BIT = "DELETED";
 	
 	// sql open or create database
 	private final String ENTRY_TABLE_CREATE = "create table if not exists "
@@ -52,7 +53,8 @@ public class DatabaseAdapter {
 			+ KEY_TYPE + " VARCHAR(1) NOT NULL, "
 			+ KEY_ID_FROM_SERVER + " INTEGER, "
 			+ KEY_SYNC_BIT + " INTEGER, "
-			+ KEY_MY_HASH + " TEXT "
+			+ KEY_MY_HASH + " TEXT, "
+			+ KEY_DELETE_BIT +" INTEGER "
 			+ ")";
 
 	private final String FAVORITE_TABLE_CREATE = "create table if not exists "
@@ -64,7 +66,8 @@ public class DatabaseAdapter {
 			+ KEY_LOCATION + " TEXT, "
 			+ KEY_ID_FROM_SERVER + " INTEGER, "
 			+ KEY_SYNC_BIT + " INTEGER, "
-			+ KEY_MY_HASH + " TEXT "
+			+ KEY_MY_HASH + " TEXT, "
+			+ KEY_DELETE_BIT + " INTEGER "
 			+ ")";
 	
 	
@@ -122,11 +125,28 @@ public class DatabaseAdapter {
 	
 	public boolean deleteFavoriteTableEntryID(String favID) {
 		String where = KEY_ID + "=" + favID;
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_DELETE_BIT, 1);
 		try {
 			Log.d("Deleting");
-			db.delete(FAVORITE_TABLE, where, null);
+			db.update(FAVORITE_TABLE, contentValues, where, null);
 			Log.d("Deleted");
 		} catch (SQLiteException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean deleteEntryTableEntryID(String id) {
+		String where = KEY_ID + "=" + id;
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_DELETE_BIT, 1);
+		try {
+			Log.d("Deleting");
+			db.update(ENTRY_TABLE, contentValues, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -150,19 +170,6 @@ public class DatabaseAdapter {
 			e.printStackTrace();
 		}
 		return false;
-	}
-
-	public boolean deleteEntryTableEntryID(String id) {
-		String where = KEY_ID + "=" + id;
-		try {
-			Log.d("Deleting");
-			db.delete(ENTRY_TABLE, where, null);
-			Log.d("Deleted");
-		} catch (SQLiteException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
 	}
 
 	public boolean editEntryTable(Entry list) {
@@ -265,10 +272,12 @@ public class DatabaseAdapter {
 			if(prevVersion == 3) {
 				db.execSQL("ALTER TABLE " + ENTRY_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER," +
 						  KEY_SYNC_BIT+" INTEGER)," +
-						  KEY_MY_HASH+" TEXT);");
+						  KEY_MY_HASH+" TEXT)," +
+						  KEY_DELETE_BIT+" INTEGER);");
 				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER," +
 						  KEY_SYNC_BIT+" INTEGER)," +
-						  KEY_MY_HASH+" TEXT);");
+						  KEY_MY_HASH+" TEXT)," +
+						  KEY_DELETE_BIT+" INTEGER);");
 			}
 		}
 		

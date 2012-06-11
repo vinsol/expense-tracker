@@ -40,6 +40,7 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.utils.ImagePreview;
+import com.vinsol.expensetracker.utils.Log;
 
 class SeparatedListAdapter extends BaseAdapter {
 
@@ -71,6 +72,8 @@ class SeparatedListAdapter extends BaseAdapter {
 
 	public void addSection(String section, ArrayAdapter<Entry> adapter,List<ListDatetimeAmount> mDataDateList) {
 		this.mDataDateList = mDataDateList;
+		Log.d("*********** Amount *************");
+		Log.d(" amon "+mDataDateList.get(0).amount);
 		this.headers.add(section);
 		this.footers.add(section);
 		this.sections.put(section, adapter);

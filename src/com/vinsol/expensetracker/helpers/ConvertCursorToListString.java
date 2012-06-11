@@ -43,7 +43,8 @@ public class ConvertCursorToListString {
 				listFavorite.type = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TYPE));
 				listFavorite.location = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_LOCATION));
 				listFavorite.myHash = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_MY_HASH));
-				listFavorite.syncBit = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
+				listFavorite.syncBit = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
+				listFavorite.deleted = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_DELETE_BIT));
 				listFavorite.idFromServer = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID_FROM_SERVER));
 				
 				if(listFavorite.description == null || listFavorite.description.equals("")) {
@@ -113,6 +114,7 @@ public class ConvertCursorToListString {
 					try {
 						temptotalAmount += Double.parseDouble(tempAmount);
 					} catch (NumberFormatException e) {
+						e.printStackTrace();
 					}
 				} else {
 					isTempAmountNull = true;
@@ -187,7 +189,8 @@ public class ConvertCursorToListString {
 				mEntry.timeInMillis = cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME));
 				mEntry.myHash = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_MY_HASH));
 				mEntry.idFromServer = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID_FROM_SERVER));
-				mEntry.syncBit = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
+				mEntry.syncBit = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
+				mEntry.deleted = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_DELETE_BIT));
 				mainlist.add(mEntry);
 				cursor.moveToNext();
 			} while (!cursor.isAfterLast());

@@ -19,6 +19,8 @@ import org.apache.http.message.BasicNameValuePair;
 import android.content.Context;
 import android.os.Build;
 
+import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.Strings;
 import com.vinsol.expensetracker.utils.Utils;
@@ -27,16 +29,14 @@ import com.vinsol.expensetracker.utils.Utils;
 public class HTTP {
 
 	// Requirements
-	private String baseUrl = "http://192.168.1.7:3000/";
+	private String baseUrl = "http://192.168.0.16:3000/";
 	private String sync = "sync.json";
 	private String verification = "?email=hiteshsondhi88@gmail.com";
 	private String confConnect = "railsconf-2012/";
 	private String events = "events/";
+	private String timestamp = "&&timestamp=";
 	private String attendees = "attendees.json";
 	private String comments = "comments.json";
-	private String favoriteEvents = "favorite_events/";
-	private String myEvents = "my_events.json";
-	private String rate = "rate.json";
 	private Context mContext;
 	
 	public HTTP(Context context) {
@@ -66,41 +66,13 @@ public class HTTP {
 	private String delete(String url, List<NameValuePair> nameValuePairs) throws IOException {
 		return execute(url.toString(), null, "DELETE");
 	}
-
-	public String getUserEvents(String username,String token) throws IOException{
-		return get(baseUrl+confConnect+favoriteEvents+myEvents+"?username="+username+"&token="+token);
-	}
-	
-//	public String getListTracksEvents() throws IOException{
-//		return get(baseUrl+listTracksEvents);
-//	}
-//	
-//	public String getListTracksEvents(String username,String token) throws IOException{
-//		return get(baseUrl+listTracksEvents+"?username="+username+"&token="+token);
-//	}
-	
-	public String getSingleEvent(String permalink) throws IOException{
-		return get(baseUrl+confConnect+"events/"+permalink+".json");
-	}
-	
-	public String getSingleEvent(String permalink, String username, String token) throws IOException{
-		return get(baseUrl+confConnect+"events/"+permalink+".json"+"?username="+username+"&token="+token);
-	}
 	
 	public String getSyncData() throws IOException{
-		return get(baseUrl+sync+verification);
+		return get(baseUrl+sync+verification+timestamp+SharedPreferencesHelper.getSharedPreferences().getString(mContext.getString(R.string.pref_key_sync_timestamp), ""));
 	}
 	
 	public String get(String url) throws IOException{
 		return execute(url, null, "GET");
-	}
-	
-	public String getComments(String eventPermalink) throws IOException {
-		return get(baseUrl+confConnect+events+eventPermalink+"/"+comments);
-	}
-	
-	public String getAttendees(String eventPermalink) throws IOException {
-		return get(baseUrl+confConnect+events+eventPermalink+"/"+attendees);
 	}
 	
 	public String addToIsAttending(String eventPermalink,String username,String token) throws IOException {

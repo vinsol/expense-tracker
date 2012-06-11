@@ -50,4 +50,11 @@ public class SharedPreferencesHelper {
 		prefEditor.commit();	
 	}
 	
+	public static void setSyncTimeStamp(String timestamp) {
+		SharedPreferences sharedPreferences = getSharedPreferences();
+		Editor prefEditor = sharedPreferences.edit();
+		prefEditor.putString(context.getString(R.string.pref_key_sync_timestamp), timestamp);
+		prefEditor.commit();	
+	}
+	
 }
