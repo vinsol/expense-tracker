@@ -152,6 +152,31 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
+	public boolean permanentDeleteFavoriteTableEntryID(String favID) {
+		String where = KEY_ID + "=" + favID;
+		try {
+			Log.d("Deleting");
+			db.delete(FAVORITE_TABLE, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean permanentDeleteEntryTableEntryID(String id) {
+		String where = KEY_ID + "=" + id;
+		try {
+			Log.d("Deleting");
+			db.delete(ENTRY_TABLE, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 	public boolean editFavoriteTable(Favorite list) {
 		ContentValues contentValues = new ContentValues();
 		if (list.description != null)

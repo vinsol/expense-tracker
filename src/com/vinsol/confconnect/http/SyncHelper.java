@@ -6,10 +6,8 @@ import java.util.List;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 
 import com.vinsol.confconnect.gson.MyGson;
-import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.models.Entry;
@@ -32,24 +30,25 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	@Override
 	protected Void doInBackground(Void... params) {
 		Log.d("************************** Starting Sync **********************************");
-		Log.d("*********************** Getting SyncData **********************************");
 		try {
+			Log.d("*********************** Getting SyncData **********************************");
+			
 			String fetchedSyncResponse = http.getSyncData(); 
 			Log.d(" *************  "+ fetchedSyncResponse);
 			
 			Sync sync = new MyGson().get().fromJson(fetchedSyncResponse, Sync.class);
-			Log.d("************* Sync TimeStamp ********************* " + sync.timestamp);
 			SharedPreferencesHelper.setSyncTimeStamp(sync.timestamp);
-			Log.d(PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.pref_key_sync_timestamp), null) + " ****** ");
-			String timestamp = SharedPreferencesHelper.getSharedPreferences().getString(context.getString(R.string.pref_key_sync_timestamp), null);
-			Log.d("************** timestamp ****************** "+timestamp);
 			Log.d(" ******************** Started Adding Expenses To DB ****************************** ");
 			Long startTimeInMilis = Calendar.getInstance().getTimeInMillis();
 			addExpenses(sync.add.expenses);
-			updateExpenses(sync.update.expenses);
 			addFavorites(sync.add.favorites);
+			updateExpenses(sync.update.expenses);
 			updateFavorites(sync.update.favorites);
+			deleteExpenses(sync.delete.expenses);
+			deleteFavorites(sync.delete.favorites);
 			Log.d(" ******************** Total Time Taken ****************************** "+(Calendar.getInstance().getTimeInMillis() - startTimeInMilis));
+			
+			
 			Log.d(" ******************** Finished Adding Expenses To DB ****************************** ");
 			
 		} catch (IOException e) {
@@ -97,6 +96,22 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		for(Favorite favorite : favorites) {
 			favorite.syncBit = 1;
 			adapter.editFavoriteTable(favorite);
+		}
+		adapter.close();
+	}
+	
+	private void deleteFavorites(List<Favorite> favorites) {
+		adapter.open();
+		for(Favorite favorite : favorites) {
+			adapter.permanentDeleteFavoriteTableEntryID(favorite.favId);
+		}
+		adapter.close();
+	}
+	
+	private void deleteExpenses(List<Entry> entries) {
+		adapter.open();
+		for(Entry entry : entries) {
+			adapter.permanentDeleteEntryTableEntryID(entry.id);
 		}
 		adapter.close();
 	}

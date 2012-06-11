@@ -24,6 +24,17 @@
     <string name="unfinished_voiceentry">Unfinished Voice Entry</string>
     <string name="unknown_location">Unknown location</string>
     
+    <!-- Default SyncBit Values -->
+    <int name="syncbit_synced">1</int>
+    <int name="syncbit_created">2</int>
+    <int name="syncbit_updated">3</int>
+    <int name="syncbit_deleted">4</int>
+    <int name="syncbit_conflict">5</int>
+    
+    <!-- Default DeleteBit Values -->
+    <int name="deletebit_not_deleted">1</int>
+    <int name="deletebit_deleted_from_client">2</int>
+    
     <!-- XML Text -->
     <string name="no_expenses_text">No expenses available to show, Please add expenses</string>
     <string name="favorite_selection_text">Choose an entry to add to expenses</string>
