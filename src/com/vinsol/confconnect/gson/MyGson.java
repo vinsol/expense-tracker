@@ -6,7 +6,10 @@ import com.google.gson.GsonBuilder;
 public class MyGson {
 
 	public Gson get() {
-		return new GsonBuilder().setFieldNamingStrategy(new ExpenseTrackerFieldNamingPolicy()).create(); 
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.setFieldNamingStrategy(new ExpenseTrackerFieldNamingPolicy());
+		gsonBuilder.setExclusionStrategies(new ExpenseTrackerExclusionStrategy());
+		return gsonBuilder.create(); 
 	}
 	
 }

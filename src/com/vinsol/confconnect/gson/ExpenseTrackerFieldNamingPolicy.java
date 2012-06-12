@@ -9,8 +9,7 @@ public class ExpenseTrackerFieldNamingPolicy implements FieldNamingStrategy{
 	
 	@Override
 	public String translateName(Field f) {
-		String name = f.getName();
-		return getConvention(name);
+		return getConvention(f.getName());
 	}
 	
 	private String getConvention(String name) {
@@ -20,6 +19,8 @@ public class ExpenseTrackerFieldNamingPolicy implements FieldNamingStrategy{
 		if(Strings.equal(name, "timeInMillis")) { return "time_milis_utc";}
 		if(Strings.equal(name, "idFromServer")) { return "id";}
 		if(Strings.equal(name, "type")) { return "expense_type";}
+		if(Strings.equal(name, "updatedAt")) { return "updated_at";}
+		if(Strings.equal(name, "deleted")) { return "delete_bit";}
 		return name;
 	}
 

@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
@@ -29,7 +30,7 @@ import com.vinsol.expensetracker.utils.Utils;
 public class HTTP {
 
 	// Requirements
-	private String baseUrl = "http://192.168.0.16:3000/";
+	private String baseUrl = "http://192.168.0.15:3000/";
 	private String sync = "sync.json";
 	private String verification = "?email=hiteshsondhi88@gmail.com";
 	private String confConnect = "railsconf-2012/";
@@ -37,6 +38,7 @@ public class HTTP {
 	private String timestamp = "&&timestamp=";
 	private String attendees = "attendees.json";
 	private String comments = "comments.json";
+	private String expenses = "expenses.json";
 	private Context mContext;
 	
 	public HTTP(Context context) {
@@ -81,9 +83,18 @@ public class HTTP {
 		nameValuePairs.add(new BasicNameValuePair("token", token));
 		return post(baseUrl+confConnect+events+eventPermalink+"/"+attendees, nameValuePairs);
 	}
+	
+	public String addMultipleExpenses(String postData) throws IOException {
+		return post(baseUrl+expenses+verification, postData);
+	}
 
 	public String post(Object url, List<NameValuePair> nvps) throws IOException {
         return execute(url.toString(), new UrlEncodedFormEntity(nvps, UTF_8), "POST");
+    }
+	
+	public String post(Object url, String postData) throws IOException {
+		StringEntity entity = new StringEntity(postData);
+        return execute(url.toString(), entity, "POST");
     }
 	
 	private String execute(String url, HttpEntity postData, String requestMethod) throws IOException{

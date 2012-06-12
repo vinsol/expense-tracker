@@ -36,6 +36,8 @@ public class Entry extends Favorite {
     	timeInMillis = in.readLong();
     	myHash = in.readString();
     	idFromServer = in.readString();
+    	deleted = in.readByte() == 1; 
+    	updatedAt = in.readString();
     	syncBit = in.readInt();
     };
     
@@ -50,6 +52,8 @@ public class Entry extends Favorite {
 		dest.writeLong(timeInMillis);
 		dest.writeString(myHash);
 		dest.writeString(idFromServer);
+		dest.writeByte((byte) (deleted ? 1 : 0));
+		dest.writeString(updatedAt);
 		dest.writeInt(syncBit);
 	}
 
