@@ -43,11 +43,12 @@ public class DatabaseAdapter {
 	public static final String KEY_SYNC_BIT = "SYNC_BIT";
 	public static final String KEY_MY_HASH = "MY_HASH";
 	public static final String KEY_DELETE_BIT = "DELETED";
+	public static final String KEY_FILE_UPLOADED = "FILE_UPLOADED";
 	
 	// sql open or create database
 	private final String ENTRY_TABLE_CREATE = "create table if not exists "
 			+ ENTRY_TABLE + "(" 
-			+ KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," 
+			+ KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
 			+ KEY_TAG + " TEXT,"
 			+ KEY_AMOUNT + " TEXT, " 
 			+ KEY_DATE_TIME + " TEXT NOT NULL,"
@@ -58,7 +59,8 @@ public class DatabaseAdapter {
 			+ KEY_UPDATED_AT + " STRING, "
 			+ KEY_MY_HASH + " TEXT, "
 			+ KEY_DELETE_BIT +" BOOLEAN, "
-			+ KEY_SYNC_BIT +" INTEGER "
+			+ KEY_SYNC_BIT +" INTEGER, "
+			+ KEY_FILE_UPLOADED +" BOOLEAN "
 			+ ")";
 
 	private final String FAVORITE_TABLE_CREATE = "create table if not exists "
@@ -72,7 +74,8 @@ public class DatabaseAdapter {
 			+ KEY_UPDATED_AT + " STRING, "
 			+ KEY_MY_HASH + " TEXT, "
 			+ KEY_DELETE_BIT + " BOOLEAN, "
-			+ KEY_SYNC_BIT +" INTEGER "
+			+ KEY_SYNC_BIT +" INTEGER, "
+			+ KEY_FILE_UPLOADED +" BOOLEAN "
 			+ ")";
 	
 	
@@ -364,12 +367,14 @@ public class DatabaseAdapter {
 						  KEY_UPDATED_AT+" STRING)," +
 						  KEY_MY_HASH+" TEXT)," +
 						  KEY_DELETE_BIT+" BOOLEAN)," +
-						  KEY_SYNC_BIT+" INTEGER);");
+						  KEY_SYNC_BIT+" INTEGER)," +
+						  KEY_FILE_UPLOADED +" BOOLEAN;");
 				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER UNIQUE," +
 						  KEY_UPDATED_AT+" STRING)," +
 						  KEY_MY_HASH+" TEXT)," +
 						  KEY_DELETE_BIT+" BOOLEAN)," +
-						  KEY_SYNC_BIT+" INTEGER);");
+						  KEY_SYNC_BIT+" INTEGER)," +
+						  KEY_FILE_UPLOADED +" BOOLEAN;");
 			}
 		}
 		
