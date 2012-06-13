@@ -1,7 +1,6 @@
 package com.vinsol.confconnect.http;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.List;
 
@@ -9,10 +8,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.vinsol.confconnect.gson.MyGson;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
+import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.models.Data;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
@@ -85,7 +84,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		String fetchedSyncResponse = http.getSyncData(); 
 		Log.d(" *************  "+ fetchedSyncResponse);
 		Sync sync = new MyGson().get().fromJson(fetchedSyncResponse, Sync.class);
-//		SharedPreferencesHelper.setSyncTimeStamp(sync.timestamp);
+		SharedPreferencesHelper.setSyncTimeStamp(sync.timestamp);
 		Log.d(" ******************** Started Adding Expenses To DB ****************************** ");
 		Long startTimeInMilis = Calendar.getInstance().getTimeInMillis();
 		addExpenses(sync.add.expenses);
@@ -107,7 +106,12 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void addExpenses(List<Entry> entries) {
 		adapter.open();
 		for(Entry entry : entries) {
-			adapter.insertToEntryTable(entry);
+			Log.d("adapter.findEntryById(entry.id) "+adapter.findEntryById(entry.id));
+			if(!adapter.findEntryById(entry.id)) {
+				adapter.insertToEntryTable(entry);
+			} else {
+				adapter.editEntryTable(entry);
+			}
 		}
 		adapter.close();
 	}

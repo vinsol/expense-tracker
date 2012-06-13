@@ -178,6 +178,17 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
+	public boolean findEntryById(String id) {
+		String where = KEY_ID + "=" + id;
+		Cursor cursor = db.query(ENTRY_TABLE, null, where, null, null, null, null);
+		boolean isPresent = false;
+		if(cursor.moveToFirst()) {
+			isPresent = true;
+			cursor.close();
+		}
+		return isPresent;
+	}
+	
 	public boolean permanentDeleteEntryTableEntryID(String id) {
 		String where = KEY_ID + "=" + id;
 		try {
