@@ -36,41 +36,26 @@ public class ConvertCursorToListString {
 			cursor.moveToFirst();
 			do {
 				listFavorite = new Favorite();
-				listFavorite.amount = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
-				listFavorite.favId = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_ID));
-				listFavorite.description = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_TAG));
-				listFavorite.type = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_TYPE));
-				listFavorite.location = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_LOCATION));
-				listFavorite.myHash = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_MY_HASH));
-				listFavorite.updatedAt = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_UPDATED_AT));
-				listFavorite.deleted = cursor.getInt(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_DELETE_BIT))>0;
-				listFavorite.idFromServer = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_ID_FROM_SERVER));
-				listFavorite.fileUploaded = cursor.getInt(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_FILE_UPLOADED))>0;
+				listFavorite.amount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
+				listFavorite.favId = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
+				listFavorite.description = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TAG));
+				listFavorite.type = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TYPE));
+				listFavorite.location = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_LOCATION));
+				listFavorite.myHash = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_MY_HASH));
+				listFavorite.updatedAt = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_UPDATED_AT));
+				listFavorite.deleted = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_DELETE_BIT))>0;
+				listFavorite.idFromServer = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID_FROM_SERVER));
+				listFavorite.fileUploaded = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_UPLOADED))>0;
+				listFavorite.syncBit = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
 
 				if (listFavorite.description == null
 						|| listFavorite.description.equals("")) {
-					if (listFavorite.type.equals(context
-							.getString(R.string.text))) {
-						listFavorite.description = context
-								.getString(R.string.finished_textentry);
-					} else if (listFavorite.type.equals(context
-							.getString(R.string.voice))) {
-						listFavorite.description = context
-								.getString(R.string.finished_voiceentry);
-					} else if (listFavorite.type.equals(context
-							.getString(R.string.camera))) {
-						listFavorite.description = context
-								.getString(R.string.finished_cameraentry);
+					if (listFavorite.type.equals(context.getString(R.string.text))) {
+						listFavorite.description = context.getString(R.string.finished_textentry);
+					} else if (listFavorite.type.equals(context.getString(R.string.voice))) {
+						listFavorite.description = context.getString(R.string.finished_voiceentry);
+					} else if (listFavorite.type.equals(context.getString(R.string.camera))) {
+						listFavorite.description = context.getString(R.string.finished_cameraentry);
 					}
 				}
 				mainlist.add(listFavorite);
@@ -109,34 +94,26 @@ public class ConvertCursorToListString {
 		if (cursor.getCount() >= 1) {
 			cursor.moveToFirst();
 			Calendar mTempCalendar = Calendar.getInstance();
-			mTempCalendar.setTimeInMillis(cursor.getLong(cursor
-					.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+			mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 			mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 			DisplayDate mDisplayDate = new DisplayDate(mTempCalendar);
 			if (!mDisplayDate.isCurrentWeek()) {
-				DisplayDate currentWeekDisplayDate = new DisplayDate(
-						Calendar.getInstance());
-				listDatetimeAmount.dateTime = getValue(currentWeekDisplayDate,
-						isGraph, id, type);
+				DisplayDate currentWeekDisplayDate = new DisplayDate(Calendar.getInstance());
+				listDatetimeAmount.dateTime = getValue(currentWeekDisplayDate,isGraph, id, type);
 				listDatetimeAmount.amount = "";
 				mainlist.add(listDatetimeAmount);
 				listDatetimeAmount = new ListDatetimeAmount();
 			}
 			do {
-				mTempCalendar.setTimeInMillis(cursor.getLong(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+				mTempCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 				mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 				mDisplayDate = new DisplayDate(mTempCalendar);
 				if (!mDisplayDate.isCurrentWeek()) {
-					DisplayDate currentWeekDisplayDate = new DisplayDate(
-							Calendar.getInstance());
-					listDatetimeAmount.dateTime = getValue(
-							currentWeekDisplayDate, isGraph, id, type);
+					DisplayDate currentWeekDisplayDate = new DisplayDate(Calendar.getInstance());
+					listDatetimeAmount.dateTime = getValue(currentWeekDisplayDate, isGraph, id, type);
 				}
-				listDatetimeAmount.dateTime = getValue(mDisplayDate, isGraph,
-						id, type);
-				String tempAmount = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
+				listDatetimeAmount.dateTime = getValue(mDisplayDate, isGraph,id, type);
+				String tempAmount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
 				if (tempAmount != null && !tempAmount.equals("")) {
 					try {
 						temptotalAmount += Double.parseDouble(tempAmount);
@@ -150,28 +127,21 @@ public class ConvertCursorToListString {
 
 				if (!cursor.isAfterLast()) {
 					Calendar mTempSubCalendar = Calendar.getInstance();
-					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor
-							.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
+					mTempSubCalendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME)));
 					mTempSubCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-					DisplayDate mTempDisplayDate = new DisplayDate(
-							mTempSubCalendar);
-					if (!listDatetimeAmount.dateTime.equals(getValue(
-							mTempDisplayDate, isGraph, id, type))) {
-						totalAmountString = getTotalAmount(isTempAmountNull,
-								temptotalAmount, totalAmountString);
+					DisplayDate mTempDisplayDate = new DisplayDate(mTempSubCalendar);
+					if (!listDatetimeAmount.dateTime.equals(getValue(mTempDisplayDate, isGraph, id, type))) {
+						totalAmountString = getTotalAmount(isTempAmountNull,temptotalAmount, totalAmountString);
 						isTempAmountNull = false;
-						totalAmountString = mStringProcessing
-								.getStringDoubleDecimal(totalAmountString);
+						totalAmountString = mStringProcessing.getStringDoubleDecimal(totalAmountString);
 						listDatetimeAmount.amount = totalAmountString;
 						temptotalAmount = 0;
 					}
 				} else {
 					cursor.moveToLast();
-					totalAmountString = getTotalAmount(isTempAmountNull,
-							temptotalAmount, totalAmountString);
+					totalAmountString = getTotalAmount(isTempAmountNull,temptotalAmount, totalAmountString);
 					isTempAmountNull = false;
-					totalAmountString = mStringProcessing
-							.getStringDoubleDecimal(totalAmountString);
+					totalAmountString = mStringProcessing.getStringDoubleDecimal(totalAmountString);
 					listDatetimeAmount.amount = totalAmountString;
 					cursor.moveToNext();
 				}
@@ -218,30 +188,19 @@ public class ConvertCursorToListString {
 			cursor.moveToFirst();
 			do {
 				Entry mEntry = new Entry();
-				mEntry.id = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_ID));
-				mEntry.amount = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
-				mEntry.favId = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_FAVORITE));
-				mEntry.location = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_LOCATION));
-				mEntry.description = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_TAG));
-				mEntry.type = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_TYPE));
-				mEntry.timeInMillis = cursor.getLong(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME));
-				mEntry.myHash = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_MY_HASH));
-				mEntry.idFromServer = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_ID_FROM_SERVER));
-				mEntry.updatedAt = cursor.getString(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_UPDATED_AT));
-				mEntry.deleted = cursor.getInt(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_DELETE_BIT))>0;
-				mEntry.fileUploaded = cursor.getInt(cursor
-						.getColumnIndex(DatabaseAdapter.KEY_FILE_UPLOADED))>0;
+				mEntry.id = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
+				mEntry.amount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
+				mEntry.favId = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_FAVORITE));
+				mEntry.location = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_LOCATION));
+				mEntry.description = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TAG));
+				mEntry.type = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TYPE));
+				mEntry.timeInMillis = cursor.getLong(cursor.getColumnIndex(DatabaseAdapter.KEY_DATE_TIME));
+				mEntry.myHash = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_MY_HASH));
+				mEntry.idFromServer = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID_FROM_SERVER));
+				mEntry.updatedAt = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_UPDATED_AT));
+				mEntry.deleted = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_DELETE_BIT))>0;
+				mEntry.fileUploaded = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_UPLOADED))>0;
+				mEntry.syncBit = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
 				mainlist.add(mEntry);
 				cursor.moveToNext();
 			} while (!cursor.isAfterLast());

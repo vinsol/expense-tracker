@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.vinsol.confconnect.gson.MyGson;
@@ -70,13 +71,15 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void create() {
 		String data = gson.toJson(convertCursorToListString.getEntryListNotSyncedAndCreated());
 		Log.d(data +" size "+convertCursorToListString.getEntryListNotSyncedAndCreated().size());
-		try {
-			String fetchedData = http.addMultipleExpenses(data);
-			Data response = gson.fromJson(fetchedData,Data.class);
-			updateExpenses(response.expenses);
-			Log.d(fetchedData + " en ");
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(data != null) {
+			try {
+				String fetchedData = http.addMultipleExpenses(data);
+				Data response = gson.fromJson(fetchedData,Data.class);
+				updateExpenses(response.expenses);
+				Log.d(fetchedData + " en ");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -85,17 +88,19 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		String fetchedSyncResponse = http.getSyncData(); 
 		Log.d(" *************  "+ fetchedSyncResponse);
 		Sync sync = new MyGson().get().fromJson(fetchedSyncResponse, Sync.class);
-		SharedPreferencesHelper.setSyncTimeStamp(sync.timestamp);
-		Log.d(" ******************** Started Adding Expenses To DB ****************************** ");
-		Long startTimeInMilis = Calendar.getInstance().getTimeInMillis();
-		addExpenses(sync.add.expenses);
-		addFavorites(sync.add.favorites);
-		updateExpenses(sync.update.expenses);
-		updateFavorites(sync.update.favorites);
-		deleteExpenses(sync.delete.expenses);
-		deleteFavorites(sync.delete.favorites);
-		Log.d(" ******************** Total Time Taken ****************************** "+(Calendar.getInstance().getTimeInMillis() - startTimeInMilis));
-		Log.d(" ******************** Finished Adding Expenses To DB ****************************** ");
+		if(sync != null) {
+			SharedPreferencesHelper.setSyncTimeStamp(sync.timestamp);
+			Log.d(" ******************** Started Adding Expenses To DB ****************************** ");
+			Long startTimeInMilis = Calendar.getInstance().getTimeInMillis();
+			addExpenses(sync.add.expenses);
+			addFavorites(sync.add.favorites);
+			updateExpenses(sync.update.expenses);
+			updateFavorites(sync.update.favorites);
+			deleteExpenses(sync.delete.expenses);
+			deleteFavorites(sync.delete.favorites);
+			Log.d(" ******************** Total Time Taken ****************************** "+(Calendar.getInstance().getTimeInMillis() - startTimeInMilis));
+			Log.d(" ******************** Finished Adding Expenses To DB ****************************** ");
+		}
 	}
 
 	@Override
