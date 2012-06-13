@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 import com.vinsol.confconnect.gson.MyGson;
+import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
@@ -106,7 +107,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void addExpenses(List<Entry> entries) {
 		adapter.open();
 		for(Entry entry : entries) {
-			Log.d("adapter.findEntryById(entry.id) "+adapter.findEntryById(entry.id));
+			entry.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
 			if(!adapter.findEntryById(entry.id)) {
 				adapter.insertToEntryTable(entry);
 			} else {
@@ -119,6 +120,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void updateExpenses(List<Entry> entries) {
 		adapter.open();
 		for(Entry entry : entries) {
+			entry.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
 			adapter.editEntryTable(entry);
 		}
 		adapter.close();
@@ -127,6 +129,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void addFavorites(List<Favorite> favorites) {
 		adapter.open();
 		for(Favorite favorite : favorites) {
+			favorite.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
 			adapter.insertToFavoriteTable(favorite);
 		}
 		adapter.close();
@@ -135,6 +138,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void updateFavorites(List<Favorite> favorites) {
 		adapter.open();
 		for(Favorite favorite : favorites) {
+			favorite.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
 			adapter.editFavoriteTable(favorite);
 		}
 		adapter.close();
@@ -143,6 +147,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void deleteFavorites(List<Favorite> favorites) {
 		adapter.open();
 		for(Favorite favorite : favorites) {
+			favorite.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
 			adapter.permanentDeleteFavoriteTableEntryID(favorite.favId);
 		}
 		adapter.close();
@@ -151,6 +156,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void deleteExpenses(List<Entry> entries) {
 		adapter.open();
 		for(Entry entry : entries) {
+			entry.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
 			adapter.permanentDeleteEntryTableEntryID(entry.id);
 		}
 		adapter.close();

@@ -21,6 +21,7 @@ public class ExpenseTrackerFieldNamingPolicy implements FieldNamingStrategy{
 		if(Strings.equal(name, "type")) { return "expense_type";}
 		if(Strings.equal(name, "updatedAt")) { return "updated_at";}
 		if(Strings.equal(name, "deleted")) { return "delete_bit";}
+		if(Strings.equal(name, "syncBit")) { return "sync_bit";}
 		return name;
 	}
 
