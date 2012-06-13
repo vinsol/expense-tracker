@@ -2,7 +2,6 @@ package com.vinsol.confconnect.gson;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
-import com.vinsol.expensetracker.utils.Strings;
 
 public class ExpenseTrackerExclusionStrategy implements ExclusionStrategy {
 

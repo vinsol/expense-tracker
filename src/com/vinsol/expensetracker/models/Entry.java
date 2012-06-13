@@ -39,6 +39,7 @@ public class Entry extends Favorite {
     	deleted = in.readByte() == 1; 
     	updatedAt = in.readString();
     	syncBit = in.readInt();
+    	fileUploaded = in.readByte() == 1;
     };
     
     @Override
@@ -55,6 +56,7 @@ public class Entry extends Favorite {
 		dest.writeByte((byte) (deleted ? 1 : 0));
 		dest.writeString(updatedAt);
 		dest.writeInt(syncBit);
+		dest.writeByte((byte) (fileUploaded ? 1 : 0));
 	}
 
 	@Override

@@ -21,6 +21,7 @@ public class Favorite implements Parcelable {
 	public boolean deleted;
 	public String updatedAt;  
 	public Integer syncBit;
+	public boolean fileUploaded;
 	
 	public static final Parcelable.Creator<Favorite> CREATOR = new Parcelable.Creator<Favorite>() {
     	public Favorite createFromParcel(Parcel in) {
@@ -45,6 +46,7 @@ public class Favorite implements Parcelable {
     	deleted = in.readByte() == 1; 
     	updatedAt = in.readString();
     	syncBit = in.readInt();
+    	fileUploaded = in.readByte() == 1;
     };
     
     @Override
@@ -59,6 +61,7 @@ public class Favorite implements Parcelable {
 		dest.writeByte((byte) (deleted ? 1 : 0));
 		dest.writeString(updatedAt);
 		dest.writeInt(syncBit);
+		dest.writeByte((byte) (fileUploaded ? 1 : 0));
 	}
 
 	@Override

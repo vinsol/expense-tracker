@@ -364,17 +364,17 @@ public class DatabaseAdapter {
 			}
 			if(prevVersion == 3) {
 				db.execSQL("ALTER TABLE " + ENTRY_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER UNIQUE," +
-						  KEY_UPDATED_AT+" STRING)," +
-						  KEY_MY_HASH+" TEXT)," +
-						  KEY_DELETE_BIT+" BOOLEAN)," +
-						  KEY_SYNC_BIT+" INTEGER)," +
-						  KEY_FILE_UPLOADED +" BOOLEAN;");
+						  KEY_UPDATED_AT+" STRING," +
+						  KEY_MY_HASH+" TEXT," +
+						  KEY_DELETE_BIT+" BOOLEAN," +
+						  KEY_SYNC_BIT+" INTEGER," +
+						  KEY_FILE_UPLOADED +" BOOLEAN);");
 				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER UNIQUE," +
-						  KEY_UPDATED_AT+" STRING)," +
-						  KEY_MY_HASH+" TEXT)," +
-						  KEY_DELETE_BIT+" BOOLEAN)," +
-						  KEY_SYNC_BIT+" INTEGER)," +
-						  KEY_FILE_UPLOADED +" BOOLEAN;");
+						  KEY_UPDATED_AT+" STRING," +
+						  KEY_MY_HASH+" TEXT," +
+						  KEY_DELETE_BIT+" BOOLEAN," +
+						  KEY_SYNC_BIT+" INTEGER," +
+						  KEY_FILE_UPLOADED +" BOOLEAN);");
 			}
 		}
 		

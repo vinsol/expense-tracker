@@ -54,6 +54,8 @@ public class ConvertCursorToListString {
 						.getColumnIndex(DatabaseAdapter.KEY_DELETE_BIT))>0;
 				listFavorite.idFromServer = cursor.getString(cursor
 						.getColumnIndex(DatabaseAdapter.KEY_ID_FROM_SERVER));
+				listFavorite.fileUploaded = cursor.getInt(cursor
+						.getColumnIndex(DatabaseAdapter.KEY_FILE_UPLOADED))>0;
 
 				if (listFavorite.description == null
 						|| listFavorite.description.equals("")) {
@@ -238,6 +240,8 @@ public class ConvertCursorToListString {
 						.getColumnIndex(DatabaseAdapter.KEY_UPDATED_AT));
 				mEntry.deleted = cursor.getInt(cursor
 						.getColumnIndex(DatabaseAdapter.KEY_DELETE_BIT))>0;
+				mEntry.fileUploaded = cursor.getInt(cursor
+						.getColumnIndex(DatabaseAdapter.KEY_FILE_UPLOADED))>0;
 				mainlist.add(mEntry);
 				cursor.moveToNext();
 			} while (!cursor.isAfterLast());
