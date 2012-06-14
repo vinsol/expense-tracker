@@ -77,7 +77,7 @@ public class HTTP {
 	}
 	
 	private String delete(String url, List<NameValuePair> nameValuePairs) throws IOException {
-		return execute(url.toString(), null, null, "DELETE");
+		return execute(url.toString(), null, "DELETE");
 	}
 	
 	public String getSyncData() throws IOException{
@@ -85,7 +85,7 @@ public class HTTP {
 	}
 	
 	public String get(String url) throws IOException{
-		return execute(url, null, null, "GET");
+		return execute(url, null, "GET");
 	}
 	
 	public String addToIsAttending(String eventPermalink,String username,String token) throws IOException {
@@ -100,19 +100,19 @@ public class HTTP {
 	}
 
 	public String post(Object url, List<NameValuePair> nvps) throws IOException {
-        return execute(url.toString(), new UrlEncodedFormEntity(nvps, UTF_8), null, "POST");
+        return execute(url.toString(), new UrlEncodedFormEntity(nvps, UTF_8), "POST");
     }
 	
 	public String post(Object url, String postData) throws IOException {
 		StringEntity entity = new StringEntity(postData);
-        return execute(url.toString(), entity, null, "POST");
+        return execute(url.toString(), entity, "POST");
     }
 	
 	public String uploadExpenseFile(File file,String id, boolean isAudio) throws IOException {
 		return uploadFile(baseUrl+expenses+"/"+upload+"/"+id+json+verification, file, isAudio);
 	}
  	
-	private String execute(String url, HttpEntity postData, File file, String requestMethod) throws IOException {
+	private String execute(String url, HttpEntity postData, String requestMethod) throws IOException {
 		if(!Utils.isOnline(mContext)) {return null;}
 		
 		Log.d("***************************** Sending HTTP request *****************************");
@@ -122,7 +122,7 @@ public class HTTP {
     		connection = (HttpURLConnection) new URL(url).openConnection();
     		connection.setConnectTimeout(90 * 1000);
     		connection.setReadTimeout(90 * 1000);
-    		connection.setRequestProperty("User-Agent", String.format("ConfConnect(1.0) Android(%s/%s)", Build.VERSION.RELEASE, Build.VERSION.INCREMENTAL));
+    		connection.setRequestProperty("User-Agent", String.format("ExpenseTracker"+mContext.getString(R.string.version)+" Android(%s/%s)", Build.VERSION.RELEASE, Build.VERSION.INCREMENTAL));
 			connection.setRequestMethod(requestMethod);
 			
 			// print request in log
@@ -171,34 +171,68 @@ public class HTTP {
 	}
 	
 	private String uploadFile(String url, File file, boolean isAudio) throws IOException {
+		if(!Utils.isOnline(mContext)) {return null;}
 		Log.d("********************** Starting File Upload ******************");
-	    HttpClient httpclient = new DefaultHttpClient();
+		
+		Log.d("***************************** Sending HTTP request *****************************");
+		HttpClient httpclient = new DefaultHttpClient();
+		try {
+	
+		    HttpPost httppost = new HttpPost(url);
+	
+		    MultipartEntity mpEntity = new MultipartEntity();
+		    ContentBody cbFile;
+		    if(isAudio) {
+		    	cbFile = new FileBody(file, "audio/basic");
+		    } else {
+		    	cbFile = new FileBody(file, "image/jpeg");
+		    }
+		    mpEntity.addPart("file", cbFile);
+		    httppost.setEntity(mpEntity);
+		    HttpResponse response = httpclient.execute(httppost);
+		    HttpEntity resEntity = response.getEntity();
+		    
+		    Log.d("getting response with status " +response.getStatusLine().getStatusCode() );
+			int responseCode = response.getStatusLine().getStatusCode();
+//			String location = response.getLastHeader("Location").getValue();
+//			if (resEntity != null) {
+//				Log.d(EntityUtils.toString(resEntity));
+//		    }
+//			if (resEntity != null) {
+//				resEntity.consumeContent();
+//			}
+			
+			String responseString = EntityUtils.toString(resEntity);
+			if(responseCode == 200) {
+        		// print response
+        		Log.d("response "+ responseString);	
+	        	// return response
+	        	return responseString;
+        	}
 
-	    HttpPost httppost = new HttpPost(url);
-
-	    MultipartEntity mpEntity = new MultipartEntity();
-	    ContentBody cbFile;
-	    if(isAudio) {
-	    	cbFile = new FileBody(file, "audio/basic");
-	    } else {
-	    	cbFile = new FileBody(file, "image/jpeg");
-	    }
-	    mpEntity.addPart("file", cbFile);
-	    httppost.setEntity(mpEntity);
-	    HttpResponse response = httpclient.execute(httppost);
-	    HttpEntity resEntity = response.getEntity();
-	    Log.d("Response "+response);
-	    Log.d(response.getStatusLine());
-	    if (resEntity != null) {
-	      Log.d(EntityUtils.toString(resEntity));
-	    }
-	    if (resEntity != null) {
-	      resEntity.consumeContent();
-	    }
-
-	    httpclient.getConnectionManager().shutdown();
+			return null;
+//        	if(Strings.equal(location, url) && responseCode == 422) { 
+//        		// print response
+//        		Log.d("response error "+responseString);	
+//	        	// return response
+//	        	return responseString;
+//        	}
+        	
+//		    Log.d("Response "+response.getStatusLine().getStatusCode());
+//		    Log.d(response.getStatusLine());
+//		    if (resEntity != null) {
+//		      Log.d(EntityUtils.toString(resEntity));
+//		    }
+//		    if (resEntity != null) {
+//		      resEntity.consumeContent();
+//		    }
+		} catch(MalformedURLException e) {
+			e.printStackTrace();
+		} finally {
+			httpclient.getConnectionManager().shutdown();
+		}
 	    Log.d("********************** File Uploaded ******************");
-	    return response.toString();
+	    return null;
 	}
 
 }

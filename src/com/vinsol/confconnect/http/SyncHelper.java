@@ -1,6 +1,7 @@
 package com.vinsol.confconnect.http;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -43,7 +44,8 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		try {
 			pull();
 			push();
-			uploadFiles();
+			pullFiles();
+			pushFiles();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -51,14 +53,20 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		return null;
 	}
 	
-	private void uploadFiles() {
+	private void pullFiles() {
+		
+	}
+
+	private void pushFiles() {
 		uploadExpenseFiles();
 		uploadFavoriteFiles();
 	}
 
 	private void uploadExpenseFiles() {
 		List<Entry> entries = convertCursorToListString.getEntryListFileNotUploaded();
+		List<Entry> entriesToUpdate = new ArrayList<Entry>();
 		for(Entry entry : entries) {
+			if(entry.syncBit != context.getResources().getInteger(R.integer.syncbit_synced)) { continue; }
 			boolean isAudio;
 			if(Strings.equal(entry.type, context.getString(R.string.voice))) {
 				isAudio = true; 
@@ -74,11 +82,17 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 				} else {
 					response = http.uploadExpenseFile(FileHelper.getAudioFileEntry(entry.id), entry.id, isAudio);
 				}
-				Log.d(response);
+				Log.d("******************* Getting Response *******************");
+				if(response != null) {
+					Log.d(response);
+					Entry responseEntry = gson.fromJson(response, Entry.class);
+					entriesToUpdate.add(responseEntry);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		updateExpenses(entriesToUpdate);
 	}
 
 	private void uploadFavoriteFiles() {
@@ -123,7 +137,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		Log.d("*********************** Getting SyncData **********************************");
 		String fetchedSyncResponse = http.getSyncData(); 
 		Log.d(" *************  "+ fetchedSyncResponse);
-		Sync sync = new MyGson().get().fromJson(fetchedSyncResponse, Sync.class);
+		Sync sync = gson.fromJson(fetchedSyncResponse, Sync.class);
 		if(sync != null) {
 			SharedPreferencesHelper.setSyncTimeStamp(sync.timestamp);
 			Log.d(" ******************** Started Adding Expenses To DB ****************************** ");

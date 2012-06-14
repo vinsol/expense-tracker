@@ -44,6 +44,7 @@ public class DatabaseAdapter {
 	public static final String KEY_MY_HASH = "MY_HASH";
 	public static final String KEY_DELETE_BIT = "DELETED";
 	public static final String KEY_FILE_UPLOADED = "FILE_UPLOADED";
+	public static final String KEY_FILE_UPDATED_AT = "FILE_UPLOADED_AT";
 	
 	// sql open or create database
 	private final String ENTRY_TABLE_CREATE = "create table if not exists "
@@ -60,7 +61,8 @@ public class DatabaseAdapter {
 			+ KEY_MY_HASH + " TEXT, "
 			+ KEY_DELETE_BIT +" BOOLEAN, "
 			+ KEY_SYNC_BIT +" INTEGER, "
-			+ KEY_FILE_UPLOADED +" BOOLEAN "
+			+ KEY_FILE_UPLOADED +" BOOLEAN, "
+			+ KEY_FILE_UPDATED_AT +" STRING "
 			+ ")";
 
 	private final String FAVORITE_TABLE_CREATE = "create table if not exists "
@@ -75,7 +77,8 @@ public class DatabaseAdapter {
 			+ KEY_MY_HASH + " TEXT, "
 			+ KEY_DELETE_BIT + " BOOLEAN, "
 			+ KEY_SYNC_BIT +" INTEGER, "
-			+ KEY_FILE_UPLOADED +" BOOLEAN "
+			+ KEY_FILE_UPLOADED +" BOOLEAN, "
+			+ KEY_FILE_UPDATED_AT +" STRING "
 			+ ")";
 	
 	
@@ -116,6 +119,7 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_SYNC_BIT, list.syncBit);
 		contentValues.put(KEY_UPDATED_AT, list.updatedAt);
 		contentValues.put(KEY_FILE_UPLOADED, false);
+		contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
 		Log.d("TRYING");
 		long id = db.insert(FAVORITE_TABLE, null, contentValues);
 		Log.d("ADDED");
@@ -136,6 +140,7 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_SYNC_BIT, list.syncBit);
 		contentValues.put(KEY_UPDATED_AT, list.updatedAt);
 		contentValues.put(KEY_FILE_UPLOADED, false);
+		contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
 		Log.d("TRYING");
 		long id = db.insert(ENTRY_TABLE, null, contentValues);
 		Log.d("ADDED");
@@ -227,6 +232,8 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
 		if (list.deleted != null)
 			contentValues.put(KEY_DELETE_BIT, list.deleted);
+		if (list.fileUpdatedAt != null)
+			contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
 		
 		String where = KEY_ID + "=" + list.favId;
 		try {
@@ -264,6 +271,8 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
 		if (list.deleted != null)
 			contentValues.put(KEY_DELETE_BIT, list.deleted);
+		if (list.fileUpdatedAt != null)
+			contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
 		
 		String where = KEY_ID + "=" + list.id;
 		try {
@@ -387,13 +396,15 @@ public class DatabaseAdapter {
 						  KEY_MY_HASH+" TEXT," +
 						  KEY_DELETE_BIT+" BOOLEAN," +
 						  KEY_SYNC_BIT+" INTEGER," +
-						  KEY_FILE_UPLOADED +" BOOLEAN);");
+						  KEY_FILE_UPLOADED +" BOOLEAN," +
+						  KEY_UPDATED_AT +" STRING);");
 				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER UNIQUE," +
 						  KEY_UPDATED_AT+" STRING," +
 						  KEY_MY_HASH+" TEXT," +
 						  KEY_DELETE_BIT+" BOOLEAN," +
 						  KEY_SYNC_BIT+" INTEGER," +
-						  KEY_FILE_UPLOADED +" BOOLEAN);");
+						  KEY_FILE_UPLOADED +" BOOLEAN," +
+						  KEY_UPDATED_AT +" STRING);");
 			}
 		}
 		
