@@ -61,35 +61,35 @@ public class FileHelper {
 		}
 	}
 	
-	public File getAudioFileFavorite(String _id) {
+	public static File getAudioFileFavorite(String _id) {
 		return new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + Constants.DIRECTORY_AUDIO + _id + Constants.AUDIO_FILE_SUFFIX);
 	}
 	
-	public File getAudioFileEntry(String _id) {
+	public static File getAudioFileEntry(String _id) {
 		return new File(Constants.DIRECTORY + Constants.DIRECTORY_AUDIO + _id + Constants.AUDIO_FILE_SUFFIX);
 	}
 	
-	public File getCameraFileLargeFavorite(String _id) {
+	public static File getCameraFileLargeFavorite(String _id) {
 		return new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + _id + Constants.IMAGE_LARGE_SUFFIX);
 	}
 
-	public File getCameraFileLargeEntry(String _id) {
+	public static File getCameraFileLargeEntry(String _id) {
 		return new File(Constants.DIRECTORY + _id + Constants.IMAGE_LARGE_SUFFIX);
 	}
 	
-	public File getCameraFileSmallFavorite(String _id) {
+	public static File getCameraFileSmallFavorite(String _id) {
 		return new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + _id + Constants.IMAGE_SMALL_SUFFIX);
 	}
 
-	public File getCameraFileSmallEntry(String _id) {
+	public static File getCameraFileSmallEntry(String _id) {
 		return new File(Constants.DIRECTORY + _id + Constants.IMAGE_SMALL_SUFFIX);
 	}
 	
-	public File getCameraFileThumbnailFavorite(String _id) {
+	public static File getCameraFileThumbnailFavorite(String _id) {
 		return new File(Constants.DIRECTORY + Constants.DIRECTORY_FAVORITE + _id + Constants.IMAGE_THUMBNAIL_SUFFIX);
 	}
 
-	public File getCameraFileThumbnailEntry(String _id) {
+	public static File getCameraFileThumbnailEntry(String _id) {
 		return new File(Constants.DIRECTORY + _id + Constants.IMAGE_THUMBNAIL_SUFFIX);
 	}
 

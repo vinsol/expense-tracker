@@ -2,6 +2,7 @@ package com.vinsol.confconnect.http;
 
 import static org.apache.http.protocol.HTTP.UTF_8;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -12,10 +13,18 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
 import android.os.Build;
@@ -31,14 +40,16 @@ public class HTTP {
 
 	// Requirements
 	private String baseUrl = "http://192.168.0.19:3000/";
-	private String sync = "sync.json";
+	private String sync = "sync";
 	private String verification = "?email=hiteshsondhi88@gmail.com";
 	private String confConnect = "railsconf-2012/";
 	private String events = "events/";
 	private String timestamp = "&&timestamp=";
 	private String attendees = "attendees.json";
 	private String comments = "comments.json";
-	private String expenses = "expenses.json";
+	private String expenses = "expenses";
+	private String upload = "upload";
+	private String json = ".json";
 	private Context mContext;
 	
 	public HTTP(Context context) {
@@ -66,15 +77,15 @@ public class HTTP {
 	}
 	
 	private String delete(String url, List<NameValuePair> nameValuePairs) throws IOException {
-		return execute(url.toString(), null, "DELETE");
+		return execute(url.toString(), null, null, "DELETE");
 	}
 	
 	public String getSyncData() throws IOException{
-		return get(baseUrl+sync+verification+timestamp+SharedPreferencesHelper.getSharedPreferences().getString(mContext.getString(R.string.pref_key_sync_timestamp), ""));
+		return get(baseUrl+sync+json+verification+timestamp+SharedPreferencesHelper.getSharedPreferences().getString(mContext.getString(R.string.pref_key_sync_timestamp), ""));
 	}
 	
 	public String get(String url) throws IOException{
-		return execute(url, null, "GET");
+		return execute(url, null, null, "GET");
 	}
 	
 	public String addToIsAttending(String eventPermalink,String username,String token) throws IOException {
@@ -85,19 +96,23 @@ public class HTTP {
 	}
 	
 	public String addMultipleExpenses(String postData) throws IOException {
-		return post(baseUrl+expenses+verification, postData);
+		return post(baseUrl+expenses+json+verification, postData);
 	}
 
 	public String post(Object url, List<NameValuePair> nvps) throws IOException {
-        return execute(url.toString(), new UrlEncodedFormEntity(nvps, UTF_8), "POST");
+        return execute(url.toString(), new UrlEncodedFormEntity(nvps, UTF_8), null, "POST");
     }
 	
 	public String post(Object url, String postData) throws IOException {
 		StringEntity entity = new StringEntity(postData);
-        return execute(url.toString(), entity, "POST");
+        return execute(url.toString(), entity, null, "POST");
     }
 	
-	private String execute(String url, HttpEntity postData, String requestMethod) throws IOException{
+	public String uploadExpenseFile(File file,String id, boolean isAudio) throws IOException {
+		return uploadFile(baseUrl+expenses+"/"+upload+"/"+id+json+verification, file, isAudio);
+	}
+ 	
+	private String execute(String url, HttpEntity postData, File file, String requestMethod) throws IOException {
 		if(!Utils.isOnline(mContext)) {return null;}
 		
 		Log.d("***************************** Sending HTTP request *****************************");
@@ -155,4 +170,35 @@ public class HTTP {
 		return null;
 	}
 	
+	private String uploadFile(String url, File file, boolean isAudio) throws IOException {
+		Log.d("********************** Starting File Upload ******************");
+	    HttpClient httpclient = new DefaultHttpClient();
+
+	    HttpPost httppost = new HttpPost(url);
+
+	    MultipartEntity mpEntity = new MultipartEntity();
+	    ContentBody cbFile;
+	    if(isAudio) {
+	    	cbFile = new FileBody(file, "audio/basic");
+	    } else {
+	    	cbFile = new FileBody(file, "image/jpeg");
+	    }
+	    mpEntity.addPart("file", cbFile);
+	    httppost.setEntity(mpEntity);
+	    HttpResponse response = httpclient.execute(httppost);
+	    HttpEntity resEntity = response.getEntity();
+	    Log.d("Response "+response);
+	    Log.d(response.getStatusLine());
+	    if (resEntity != null) {
+	      Log.d(EntityUtils.toString(resEntity));
+	    }
+	    if (resEntity != null) {
+	      resEntity.consumeContent();
+	    }
+
+	    httpclient.getConnectionManager().shutdown();
+	    Log.d("********************** File Uploaded ******************");
+	    return response.toString();
+	}
+
 }

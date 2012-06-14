@@ -171,6 +171,11 @@ public class ConvertCursorToListString {
 		}
 		return totalAmountString;
 	}
+	
+	public List<Entry> getEntryListFileNotUploaded() {
+		adapter.open();
+		return getEntryList(adapter.getEntryDataFileNotUploaded());
+	}
 
 	public List<Entry> getEntryListNotSyncedAndCreated() {
 		adapter.open();

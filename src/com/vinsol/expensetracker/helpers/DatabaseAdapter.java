@@ -115,6 +115,7 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
 		contentValues.put(KEY_SYNC_BIT, list.syncBit);
 		contentValues.put(KEY_UPDATED_AT, list.updatedAt);
+		contentValues.put(KEY_FILE_UPLOADED, false);
 		Log.d("TRYING");
 		long id = db.insert(FAVORITE_TABLE, null, contentValues);
 		Log.d("ADDED");
@@ -134,6 +135,7 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
 		contentValues.put(KEY_SYNC_BIT, list.syncBit);
 		contentValues.put(KEY_UPDATED_AT, list.updatedAt);
+		contentValues.put(KEY_FILE_UPLOADED, false);
 		Log.d("TRYING");
 		long id = db.insert(ENTRY_TABLE, null, contentValues);
 		Log.d("ADDED");
@@ -221,7 +223,10 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_SYNC_BIT, list.syncBit);
 		if (list.updatedAt != null)
 			contentValues.put(KEY_UPDATED_AT, list.updatedAt);
-		
+		if (list.fileUploaded != null)
+			contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
+		if (list.deleted != null)
+			contentValues.put(KEY_DELETE_BIT, list.deleted);
 		
 		String where = KEY_ID + "=" + list.favId;
 		try {
@@ -255,6 +260,10 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_SYNC_BIT, list.syncBit);
 		if (list.updatedAt != null)
 			contentValues.put(KEY_UPDATED_AT, list.updatedAt);
+		if (list.fileUploaded != null)
+			contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
+		if (list.deleted != null)
+			contentValues.put(KEY_DELETE_BIT, list.deleted);
 		
 		String where = KEY_ID + "=" + list.id;
 		try {
@@ -266,6 +275,16 @@ public class DatabaseAdapter {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public Cursor getEntryDataFileNotUploaded() {
+		String where = KEY_FILE_UPLOADED+" IS NULL OR NOT "+KEY_FILE_UPLOADED;
+		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
+	}
+	
+	public Cursor getFavoriteDataFileNotUploaded() {
+		String where = KEY_FILE_UPLOADED+" IS NULL OR NOT "+KEY_FILE_UPLOADED;
+		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
 	}
 	
 	public Cursor getEntryDataNotSyncedAndCreated() {

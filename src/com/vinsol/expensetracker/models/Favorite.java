@@ -18,10 +18,10 @@ public class Favorite implements Parcelable {
 	public String location;
 	public String myHash;
 	public String idFromServer;
-	public boolean deleted;
+	public Boolean deleted;
 	public String updatedAt;  
 	public Integer syncBit;
-	public boolean fileUploaded;
+	public Boolean fileUploaded;
 	
 	public static final Parcelable.Creator<Favorite> CREATOR = new Parcelable.Creator<Favorite>() {
     	public Favorite createFromParcel(Parcel in) {

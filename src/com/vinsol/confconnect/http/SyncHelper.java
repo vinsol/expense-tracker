@@ -6,19 +6,20 @@ import java.util.List;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.vinsol.confconnect.gson.MyGson;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
+import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.models.Data;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.models.Sync;
 import com.vinsol.expensetracker.utils.Log;
+import com.vinsol.expensetracker.utils.Strings;
 
 public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	
@@ -42,6 +43,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		try {
 			pull();
 			push();
+			uploadFiles();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -49,6 +51,40 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		return null;
 	}
 	
+	private void uploadFiles() {
+		uploadExpenseFiles();
+		uploadFavoriteFiles();
+	}
+
+	private void uploadExpenseFiles() {
+		List<Entry> entries = convertCursorToListString.getEntryListFileNotUploaded();
+		for(Entry entry : entries) {
+			boolean isAudio;
+			if(Strings.equal(entry.type, context.getString(R.string.voice))) {
+				isAudio = true; 
+			} else if(Strings.equal(entry.type, context.getString(R.string.camera))) {
+				isAudio = false;
+			} else {
+				continue;
+			}
+			String response;
+			try {
+				if(!isAudio) {
+					response = http.uploadExpenseFile(FileHelper.getCameraFileLargeEntry(entry.id), entry.id, isAudio);
+				} else {
+					response = http.uploadExpenseFile(FileHelper.getAudioFileEntry(entry.id), entry.id, isAudio);
+				}
+				Log.d(response);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void uploadFavoriteFiles() {
+		// TODO Auto-generated method stub
+	}
+
 	private void push() throws IOException {
 		Log.d("****************** Pushing Data ****************");
 		create();
