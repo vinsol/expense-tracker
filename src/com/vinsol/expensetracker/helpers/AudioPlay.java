@@ -17,10 +17,10 @@ import android.widget.Toast;
 public class AudioPlay {
 
 	/////// ******** Declaring variables and classes ******** ///////
-	File mPath;
-	MediaPlayer mPlayer;
-	Context mContext;
-	FileHelper fileHelper;
+	private File mPath;
+	private MediaPlayer mPlayer;
+	private Context mContext;
+	private FileHelper fileHelper;
 
 	//////// ********* Constructor ********* //////////
 	public AudioPlay(String id, Context _context,Boolean isFav) {
@@ -35,7 +35,9 @@ public class AudioPlay {
 				mPlayer.setDataSource(mPath.toString());
 				mPlayer.prepare();
 			} catch (IllegalStateException e) {
+				e.printStackTrace();
 			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		} else {
 			Toast.makeText(mContext, "sdcard not available", Toast.LENGTH_LONG).show();

@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import com.google.gson.Gson;
 import com.vinsol.confconnect.gson.MyGson;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.CameraFileSave;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.FileHelper;
@@ -29,6 +30,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private HTTP http;
 	private ConvertCursorToListString convertCursorToListString;
 	private Gson gson;
+	private FileHelper fileHelper;
 	
 	public SyncHelper(Context context) {
 		this.context = context;
@@ -36,6 +38,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		adapter = new DatabaseAdapter(context);
 		http = new HTTP(context);
 		gson = new MyGson().get();
+		fileHelper = new FileHelper();
 	}
 	
 	@Override
@@ -52,6 +55,11 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	}
 	
 	private void pull() throws IOException {
+		pullData();
+		pullFiles();
+	}
+
+	private void pullData() throws IOException {
 		Log.d("*********************** Getting SyncData **********************************");
 		String fetchedSyncResponse = http.getSyncData(); 
 		Log.d(" *************  "+ fetchedSyncResponse);
@@ -69,6 +77,78 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			Log.d(" ******************** Total Time Taken ****************************** "+(Calendar.getInstance().getTimeInMillis() - startTimeInMilis));
 			Log.d(" ******************** Finished Adding Expenses To DB ****************************** ");
 		}
+	}
+	
+	private void pullFiles() {
+		Log.d("*********************** Pulling Files **********************************");
+		List<Entry> entries = convertCursorToListString.getEntryListFilesToDownload();
+		for(Entry entry : entries) {
+			if(Strings.equal(entry.type, context.getString(R.string.voice))) {
+				try {
+					if(http.downloadExpenseFile(entry.id, entry.idFromServer, true)) {
+						entry.fileToDownload = false;
+						entry.fileUploaded = true;
+						updateEntry(entry);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(Strings.equal(entry.type, context.getString(R.string.camera))) {
+				try {
+					if(http.downloadExpenseFile(entry.id, entry.idFromServer, false)) {
+						new CameraFileSave(context).resizeImageAndSaveThumbnails(entry.id, false);
+						entry.fileToDownload = false;
+						entry.fileUploaded = true;
+						updateEntry(entry);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		List<Favorite> favorites = convertCursorToListString.getFavoriteListFilesToDownload();
+		for(Favorite favorite : favorites) {
+			if(Strings.equal(favorite.type, context.getString(R.string.voice))) {
+				try {
+					if(http.downloadFavoriteFile(favorite.favId, favorite.idFromServer, true)) {
+						favorite.fileToDownload = false;
+						favorite.fileUploaded = true;
+						updateFavorite(favorite);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(Strings.equal(favorite.type, context.getString(R.string.camera))) {
+				try {
+					if(http.downloadFavoriteFile(favorite.favId, favorite.idFromServer, false)) {
+						new CameraFileSave(context).resizeImageAndSaveThumbnails(favorite.favId, true);
+						favorite.fileToDownload = false;
+						favorite.fileUploaded = true;
+						updateFavorite(favorite);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		Log.d("*********************** Pulling Files **********************************");
+	}
+	
+	private void updateEntry(Entry entry) {
+		adapter.open();
+		adapter.editEntryTable(entry);
+		adapter.close();
+	}
+	
+	private void updateFavorite(Favorite favorite) {
+		adapter.open();
+		adapter.editFavoriteTable(favorite);
+		adapter.close();
 	}
 	
 	private void push() throws IOException {
@@ -97,9 +177,9 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			String response;
 			try {
 				if(!isAudio) {
-					response = http.uploadExpenseFile(FileHelper.getCameraFileLargeEntry(entry.id), entry.idFromServer, isAudio);
+					response = http.uploadExpenseFile(fileHelper.getCameraFileLargeEntry(entry.id), entry.idFromServer, isAudio);
 				} else {
-					response = http.uploadExpenseFile(FileHelper.getAudioFileEntry(entry.id), entry.idFromServer, isAudio);
+					response = http.uploadExpenseFile(fileHelper.getAudioFileEntry(entry.id), entry.idFromServer, isAudio);
 				}
 				Log.d("******************* Getting Response *******************");
 				if(response != null) {

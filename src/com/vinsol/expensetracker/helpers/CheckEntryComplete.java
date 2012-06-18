@@ -14,7 +14,6 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 
 public class CheckEntryComplete {
-	
 	private FileHelper fileHelper;
 	
 	public boolean isEntryComplete(Entry entryList, Context mContext) {

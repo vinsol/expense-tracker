@@ -60,9 +60,9 @@ public class DatabaseAdapter {
 			+ KEY_ID_FROM_SERVER + " INTEGER UNIQUE, "
 			+ KEY_UPDATED_AT + " STRING, "
 			+ KEY_MY_HASH + " TEXT, "
-			+ KEY_DELETE_BIT +" BOOLEAN, "
+			+ KEY_DELETE_BIT +" BOOLEAN DEFAULT 'FALSE', "
 			+ KEY_SYNC_BIT +" INTEGER, "
-			+ KEY_FILE_UPLOADED +" BOOLEAN, "
+			+ KEY_FILE_UPLOADED +" BOOLEAN DEFAULT 'FALSE', "
 			+ KEY_FILE_TO_DOWNLOAD +" BOOLEAN DEFAULT 'FALSE', "
 			+ KEY_FILE_UPDATED_AT +" STRING "
 			+ ")";
@@ -77,9 +77,9 @@ public class DatabaseAdapter {
 			+ KEY_ID_FROM_SERVER + " INTEGER UNIQUE, "
 			+ KEY_UPDATED_AT + " STRING, "
 			+ KEY_MY_HASH + " TEXT, "
-			+ KEY_DELETE_BIT + " BOOLEAN, "
+			+ KEY_DELETE_BIT + " BOOLEAN DEFAULT 'FALSE', "
 			+ KEY_SYNC_BIT +" INTEGER, "
-			+ KEY_FILE_UPLOADED +" BOOLEAN, "
+			+ KEY_FILE_UPLOADED +" BOOLEAN DEFAULT 'FALSE', "
 			+ KEY_FILE_TO_DOWNLOAD +" BOOLEAN DEFAULT 'FALSE', "
 			+ KEY_FILE_UPDATED_AT +" STRING "
 			+ ")";
@@ -310,6 +310,16 @@ public class DatabaseAdapter {
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
 	}
 	
+	public Cursor getEntryDataFileToDownload() {
+		String where = KEY_FILE_TO_DOWNLOAD;
+		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
+	}
+	
+	public Cursor getFavoriteDataFileToDownload() {
+		String where = KEY_FILE_TO_DOWNLOAD;
+		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
+	}
+	
 	public Cursor getEntryDataNotSyncedAndUpdated() {
 		String where = KEY_UPDATED_AT+" IS NOT NULL AND "+KEY_SYNC_BIT+" = "+context.getResources().getInteger(R.integer.syncbit_not_synced)+" AND "+getNotDeletedString();
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
@@ -403,17 +413,17 @@ public class DatabaseAdapter {
 				db.execSQL("ALTER TABLE " + ENTRY_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER UNIQUE," +
 						  KEY_UPDATED_AT+" STRING," +
 						  KEY_MY_HASH+" TEXT," +
-						  KEY_DELETE_BIT+" BOOLEAN," +
+						  KEY_DELETE_BIT+" BOOLEAN DEFAULT 'FALSE'," +
 						  KEY_SYNC_BIT+" INTEGER," +
-						  KEY_FILE_UPLOADED +" BOOLEAN," +
+						  KEY_FILE_UPLOADED +" BOOLEAN DEFAULT 'FALSE'," +
 						  KEY_FILE_TO_DOWNLOAD +" BOOLEAN DEFAULT 'FALSE', " +
 						  KEY_UPDATED_AT +" STRING);");
 				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER UNIQUE," +
 						  KEY_UPDATED_AT+" STRING," +
 						  KEY_MY_HASH+" TEXT," +
-						  KEY_DELETE_BIT+" BOOLEAN," +
+						  KEY_DELETE_BIT+" BOOLEAN DEFAULT 'FALSE'," +
 						  KEY_SYNC_BIT+" INTEGER," +
-						  KEY_FILE_UPLOADED +" BOOLEAN," +
+						  KEY_FILE_UPLOADED +" BOOLEAN DEFAULT 'FALSE'," +
 						  KEY_FILE_TO_DOWNLOAD +" BOOLEAN DEFULT 'FALSE', " +
 						  KEY_UPDATED_AT +" STRING);");
 			}

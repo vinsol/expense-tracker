@@ -16,7 +16,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class CameraFileSave {
+	
 	private String filename;
+	private FileHelper fileHelper;
 
 	// ///// ******* Declaring Constants ******** ///////////
 	private int FULL_SIZE_IMAGE_WIDTH;
@@ -27,7 +29,6 @@ public class CameraFileSave {
 	
 	private int THUMBNAIL_MAX_HEIGHT = 60;
 	private int THUMBNAIL_MAX_WIDTH = 60;
-	private FileHelper fileHelper;
 
 	// /////// ********* Constructors ******** /////////////
 	public CameraFileSave(Context _context) {

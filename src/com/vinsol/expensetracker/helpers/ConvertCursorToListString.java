@@ -28,10 +28,13 @@ public class ConvertCursorToListString {
 	}
 
 	public List<Favorite> getFavoriteList() {
+		adapter.open();
+		return getFavoriteList(adapter.getFavoriteTableComplete());
+	}
+	
+	public List<Favorite> getFavoriteList(Cursor cursor) {
 		List<Favorite> mainlist = new ArrayList<Favorite>();
 		Favorite listFavorite;
-		adapter.open();
-		Cursor cursor = adapter.getFavoriteTableComplete();
 		if (cursor.getCount() >= 1) {
 			cursor.moveToFirst();
 			do {
@@ -187,6 +190,16 @@ public class ConvertCursorToListString {
 	public List<Entry> getEntryList(Boolean isAscending, String id) {
 		adapter.open();
 		return getEntryList(getCursor(id, isAscending));
+	}
+	
+	public List<Entry> getEntryListFilesToDownload() {
+		adapter.open();
+		return getEntryList(adapter.getEntryDataFileToDownload());
+	}
+	
+	public List<Favorite> getFavoriteListFilesToDownload() {
+		adapter.open();
+		return getFavoriteList(adapter.getFavoriteDataFileToDownload());
 	}
 
 	public List<Entry> getEntryList(Cursor cursor) {

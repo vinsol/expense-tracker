@@ -55,8 +55,8 @@ class SeparatedListAdapter extends BaseAdapter {
 	private UnknownEntryDialog unknownEntryDialog;
 	private View viewHeader = null;
 	private View viewFooter = null;
-	private FileHelper fileHelper;
 	private String highlightID;
+	private FileHelper fileHelper;
 	
 	public SeparatedListAdapter(Context context,String highlightID) {
 		mContext = context;

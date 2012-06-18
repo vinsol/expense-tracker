@@ -2,8 +2,11 @@ package com.vinsol.confconnect.http;
 
 import static org.apache.http.protocol.HTTP.UTF_8;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -24,12 +27,14 @@ import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.ByteArrayBuffer;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
 import android.os.Build;
 
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.Strings;
@@ -48,11 +53,15 @@ public class HTTP {
 	private String attendees = "attendees.json";
 	private String comments = "comments.json";
 	private String expenses = "expenses";
+	private String favorites = "favorites";
 	private String upload = "upload";
+	private String download = "download";
 	private String json = ".json";
 	private Context mContext;
+	private FileHelper fileHelper;
 	
 	public HTTP(Context context) {
+		fileHelper = new FileHelper();
 		mContext = context;
 	}
 	
@@ -111,6 +120,34 @@ public class HTTP {
 	public String uploadExpenseFile(File file,String idFromServer, boolean isAudio) throws IOException {
 		return uploadFile(baseUrl+expenses+"/"+upload+"/"+idFromServer+json+verification, file, isAudio);
 	}
+	
+	public boolean downloadExpenseFile(String id,String idFromServer, boolean isAudio) throws IOException {
+		String extension;
+		File file;
+		if(isAudio) { 
+			extension = ".amr";
+			file = fileHelper.getAudioFileEntry(id);
+		} else {
+			extension = ".jpg";
+			file = fileHelper.getCameraFileLargeEntry(id);
+		}
+		
+		return downloadFile(baseUrl+expenses+"/"+download+"/"+idFromServer+extension+verification, file);
+	}
+	
+	public boolean downloadFavoriteFile(String id,String idFromServer, boolean isAudio) throws IOException {
+		String extension;
+		File file;
+		if(isAudio) { 
+			extension = ".amr";
+			file = fileHelper.getAudioFileFavorite(id);
+		} else {
+			extension = ".jpg";
+			file = fileHelper.getCameraFileLargeFavorite(id);
+		}
+		
+		return downloadFile(baseUrl+favorites+"/"+download+"/"+idFromServer+extension+verification, file);
+	}
  	
 	private String execute(String url, HttpEntity postData, String requestMethod) throws IOException {
 		if(!Utils.isOnline(mContext)) {return null;}
@@ -166,8 +203,44 @@ public class HTTP {
 		}finally {
 			connection.disconnect();
 		}
-    	// not propogating 404 FileNotFoundException - NR    	
+    	// not propogating 404 FileNotFoundException - NR
 		return null;
+	}
+	
+	public boolean downloadFile(String urlString, File file) throws IOException {
+		HttpURLConnection connection = null;
+        try {
+            URL url = new URL(urlString);
+
+            Log.d("download begining");
+            Log.d("download url:" + url);
+            Log.d("downloaded file name:" + file.toString());
+            
+            connection = (HttpURLConnection) url.openConnection();
+
+            InputStream is = connection.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+
+            ByteArrayBuffer baf = new ByteArrayBuffer(50);
+            int current = 0;
+            while ((current = bis.read()) != -1) {
+                baf.append((byte) current);
+            }
+
+            if(connection.getResponseCode() == 200) {
+            	FileOutputStream fos = new FileOutputStream(file);
+            	fos.write(baf.toByteArray());
+            	fos.close();
+            	return true;
+            }
+            
+        } catch (MalformedURLException e) {
+        	Log.d("Error: ");
+        	e.printStackTrace();
+        } finally {
+        	connection.disconnect();
+        }
+        return false;
 	}
 	
 	private String uploadFile(String url, File file, boolean isAudio) throws IOException {
