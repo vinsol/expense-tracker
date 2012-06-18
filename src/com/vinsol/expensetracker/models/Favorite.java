@@ -22,6 +22,7 @@ public class Favorite implements Parcelable {
 	public String updatedAt;  
 	public Integer syncBit;
 	public Boolean fileUploaded;
+	public Boolean fileToDownload;
 	public String fileUpdatedAt;
 	
 	public static final Parcelable.Creator<Favorite> CREATOR = new Parcelable.Creator<Favorite>() {
@@ -48,6 +49,7 @@ public class Favorite implements Parcelable {
     	updatedAt = in.readString();
     	syncBit = in.readInt();
     	fileUploaded = in.readByte() == 1;
+    	fileToDownload = in.readByte() == 1;
     	fileUpdatedAt = in.readString();
     };
     
@@ -64,6 +66,7 @@ public class Favorite implements Parcelable {
 		dest.writeString(updatedAt);
 		dest.writeInt(syncBit);
 		dest.writeByte((byte) (fileUploaded ? 1 : 0));
+		dest.writeByte((byte) (fileToDownload ? 1 : 0));
 		dest.writeString(fileUpdatedAt);
 	}
 

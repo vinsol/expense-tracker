@@ -46,6 +46,7 @@ public class ConvertCursorToListString {
 				listFavorite.deleted = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_DELETE_BIT))>0;
 				listFavorite.idFromServer = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID_FROM_SERVER));
 				listFavorite.fileUploaded = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_UPLOADED))>0;
+				listFavorite.fileToDownload = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_TO_DOWNLOAD))>0;
 				listFavorite.syncBit = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
 				listFavorite.fileUpdatedAt = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_UPDATED_AT));
 				
@@ -206,6 +207,7 @@ public class ConvertCursorToListString {
 				mEntry.updatedAt = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_UPDATED_AT));
 				mEntry.deleted = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_DELETE_BIT))>0;
 				mEntry.fileUploaded = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_UPLOADED))>0;
+				mEntry.fileToDownload = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_TO_DOWNLOAD))>0;
 				mEntry.syncBit = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
 				mEntry.fileUpdatedAt = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_UPDATED_AT));
 				mainlist.add(mEntry);

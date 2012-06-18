@@ -44,8 +44,6 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		try {
 			pull();
 			push();
-			pullFiles();
-			pushFiles();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -53,8 +51,29 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		return null;
 	}
 	
-	private void pullFiles() {
-		
+	private void pull() throws IOException {
+		Log.d("*********************** Getting SyncData **********************************");
+		String fetchedSyncResponse = http.getSyncData(); 
+		Log.d(" *************  "+ fetchedSyncResponse);
+		Sync sync = gson.fromJson(fetchedSyncResponse, Sync.class);
+		if(sync != null) {
+			SharedPreferencesHelper.setSyncTimeStamp(sync.timestamp);
+			Log.d(" ******************** Started Adding Expenses To DB ****************************** ");
+			Long startTimeInMilis = Calendar.getInstance().getTimeInMillis();
+			addExpenses(sync.add.expenses);
+			addFavorites(sync.add.favorites);
+			updateExpenses(sync.update.expenses);
+			updateFavorites(sync.update.favorites);
+			deleteExpenses(sync.delete.expenses);
+			deleteFavorites(sync.delete.favorites);
+			Log.d(" ******************** Total Time Taken ****************************** "+(Calendar.getInstance().getTimeInMillis() - startTimeInMilis));
+			Log.d(" ******************** Finished Adding Expenses To DB ****************************** ");
+		}
+	}
+	
+	private void push() throws IOException {
+		pushData();
+		pushFiles();
 	}
 
 	private void pushFiles() {
@@ -78,9 +97,9 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			String response;
 			try {
 				if(!isAudio) {
-					response = http.uploadExpenseFile(FileHelper.getCameraFileLargeEntry(entry.id), entry.id, isAudio);
+					response = http.uploadExpenseFile(FileHelper.getCameraFileLargeEntry(entry.id), entry.idFromServer, isAudio);
 				} else {
-					response = http.uploadExpenseFile(FileHelper.getAudioFileEntry(entry.id), entry.id, isAudio);
+					response = http.uploadExpenseFile(FileHelper.getAudioFileEntry(entry.id), entry.idFromServer, isAudio);
 				}
 				Log.d("******************* Getting Response *******************");
 				if(response != null) {
@@ -99,12 +118,21 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		// TODO Auto-generated method stub
 	}
 
-	private void push() throws IOException {
+	private void pushData() throws IOException {
 		Log.d("****************** Pushing Data ****************");
 		create();
 		update();
 		delete();
 		Log.d("****************** Data Pushed ****************");
+	}
+
+	private void create() {
+		createEntry();
+		createFavorites();
+	}
+
+	private void createFavorites() {
+		
 	}
 
 	//Push request to delete records
@@ -116,40 +144,25 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void update() {
 		
 	}
-
+	
 	//Push Request to create new records which are not synced
-	private void create() {
-		String data = gson.toJson(convertCursorToListString.getEntryListNotSyncedAndCreated());
-		Log.d(data +" size "+convertCursorToListString.getEntryListNotSyncedAndCreated().size());
-		if(data != null) {
-			try {
-				String fetchedData = http.addMultipleExpenses(data);
-				Data response = gson.fromJson(fetchedData,Data.class);
-				updateExpenses(response.expenses);
-				Log.d(fetchedData + " en ");
-			} catch (IOException e) {
-				e.printStackTrace();
+	private void createEntry() {
+		List<Entry> entries = convertCursorToListString.getEntryListNotSyncedAndCreated();
+		if(entries.size() > 0) {
+			String data = gson.toJson(entries);
+			Log.d(data +" size "+convertCursorToListString.getEntryListNotSyncedAndCreated().size());
+			if(data != null) {
+				try {
+					String fetchedData = http.addMultipleExpenses(data);
+					if(fetchedData != null) {
+						Data response = gson.fromJson(fetchedData,Data.class);
+						updateExpenses(response.expenses);
+						Log.d(fetchedData + " en ");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-		}
-	}
-
-	private void pull() throws IOException {
-		Log.d("*********************** Getting SyncData **********************************");
-		String fetchedSyncResponse = http.getSyncData(); 
-		Log.d(" *************  "+ fetchedSyncResponse);
-		Sync sync = gson.fromJson(fetchedSyncResponse, Sync.class);
-		if(sync != null) {
-			SharedPreferencesHelper.setSyncTimeStamp(sync.timestamp);
-			Log.d(" ******************** Started Adding Expenses To DB ****************************** ");
-			Long startTimeInMilis = Calendar.getInstance().getTimeInMillis();
-			addExpenses(sync.add.expenses);
-			addFavorites(sync.add.favorites);
-			updateExpenses(sync.update.expenses);
-			updateFavorites(sync.update.favorites);
-			deleteExpenses(sync.delete.expenses);
-			deleteFavorites(sync.delete.favorites);
-			Log.d(" ******************** Total Time Taken ****************************** "+(Calendar.getInstance().getTimeInMillis() - startTimeInMilis));
-			Log.d(" ******************** Finished Adding Expenses To DB ****************************** ");
 		}
 	}
 
@@ -162,7 +175,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void addExpenses(List<Entry> entries) {
 		adapter.open();
 		for(Entry entry : entries) {
-			entry.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
+			setSyncBitAndFileDownloaded(entry);
 			if(!adapter.findEntryById(entry.id)) {
 				adapter.insertToEntryTable(entry);
 			} else {
@@ -175,7 +188,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void updateExpenses(List<Entry> entries) {
 		adapter.open();
 		for(Entry entry : entries) {
-			entry.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
+			setSyncBitAndFileDownloaded(entry);
 			adapter.editEntryTable(entry);
 		}
 		adapter.close();
@@ -184,7 +197,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void addFavorites(List<Favorite> favorites) {
 		adapter.open();
 		for(Favorite favorite : favorites) {
-			favorite.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
+			setSyncBitAndFileDownloaded(favorite);
 			adapter.insertToFavoriteTable(favorite);
 		}
 		adapter.close();
@@ -193,7 +206,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void updateFavorites(List<Favorite> favorites) {
 		adapter.open();
 		for(Favorite favorite : favorites) {
-			favorite.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
+			setSyncBitAndFileDownloaded(favorite);
 			adapter.editFavoriteTable(favorite);
 		}
 		adapter.close();
@@ -202,7 +215,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void deleteFavorites(List<Favorite> favorites) {
 		adapter.open();
 		for(Favorite favorite : favorites) {
-			favorite.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
+			setSyncBit(favorite);
 			adapter.permanentDeleteFavoriteTableEntryID(favorite.favId);
 		}
 		adapter.close();
@@ -211,10 +224,36 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void deleteExpenses(List<Entry> entries) {
 		adapter.open();
 		for(Entry entry : entries) {
-			entry.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
+			setSyncBit(entry);
 			adapter.permanentDeleteEntryTableEntryID(entry.id);
 		}
 		adapter.close();
+	}
+	
+	private void setSyncBitAndFileDownloaded(Entry entry) {
+		setSyncBit(entry);
+		setDownloaded(entry);
+	}
+	
+	private void setSyncBitAndFileDownloaded(Favorite favorite) {
+		setSyncBit(favorite);
+		setDownloaded(favorite);
+	}
+	
+	private void setDownloaded(Entry entry) {
+		entry.fileToDownload = true;
+	}
+	
+	private void setDownloaded(Favorite favorite) {
+		favorite.fileToDownload = true;
+	}
+	
+	private void setSyncBit(Entry entry) {
+		entry.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
+	}
+	
+	private void setSyncBit(Favorite favorite) {
+		favorite.syncBit = context.getResources().getInteger(R.integer.syncbit_synced);
 	}
 	
 }

@@ -39,7 +39,7 @@ import com.vinsol.expensetracker.utils.Utils;
 public class HTTP {
 
 	// Requirements
-	private String baseUrl = "http://192.168.0.19:3000/";
+	private String baseUrl = "http://192.168.0.20:3000/";
 	private String sync = "sync";
 	private String verification = "?email=hiteshsondhi88@gmail.com";
 	private String confConnect = "railsconf-2012/";
@@ -108,8 +108,8 @@ public class HTTP {
         return execute(url.toString(), entity, "POST");
     }
 	
-	public String uploadExpenseFile(File file,String id, boolean isAudio) throws IOException {
-		return uploadFile(baseUrl+expenses+"/"+upload+"/"+id+json+verification, file, isAudio);
+	public String uploadExpenseFile(File file,String idFromServer, boolean isAudio) throws IOException {
+		return uploadFile(baseUrl+expenses+"/"+upload+"/"+idFromServer+json+verification, file, isAudio);
 	}
  	
 	private String execute(String url, HttpEntity postData, String requestMethod) throws IOException {
