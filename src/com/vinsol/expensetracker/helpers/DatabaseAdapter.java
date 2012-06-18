@@ -310,6 +310,11 @@ public class DatabaseAdapter {
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
 	}
 	
+	public Cursor getFavoriteDataNotSyncedAndCreated() {
+		String where = KEY_UPDATED_AT+" IS NULL AND "+getNotDeletedString();
+		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
+	}
+	
 	public Cursor getEntryDataFileToDownload() {
 		String where = KEY_FILE_TO_DOWNLOAD;
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
@@ -325,9 +330,19 @@ public class DatabaseAdapter {
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
 	}
 	
+	public Cursor getFavoriteDataNotSyncedAndUpdated() {
+		String where = KEY_UPDATED_AT+" IS NOT NULL AND "+KEY_SYNC_BIT+" = "+context.getResources().getInteger(R.integer.syncbit_not_synced)+" AND "+getNotDeletedString();
+		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
+	}
+	
 	public Cursor getEntryDataNotSyncedAndDeleted() {
 		String where = KEY_SYNC_BIT+" = "+context.getResources().getInteger(R.integer.syncbit_not_synced)+" AND "+getDeletedString();
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
+	}
+	
+	public Cursor getFavoriteDataNotSyncedAndDeleted() {
+		String where = KEY_SYNC_BIT+" = "+context.getResources().getInteger(R.integer.syncbit_not_synced)+" AND "+getDeletedString();
+		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
 	}
 
 	public Cursor getEntryTableDateDatabaseDescending() {

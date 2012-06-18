@@ -187,6 +187,31 @@ public class ConvertCursorToListString {
 		return getEntryList(adapter.getEntryDataNotSyncedAndCreated());
 	}
 	
+	public List<Entry> getEntryListNotSyncedAndUpdated() {
+		adapter.open();
+		return getEntryList(adapter.getEntryDataNotSyncedAndUpdated());
+	}
+	
+	public List<Favorite> getFavoriteListNotSyncedAndUpdated() {
+		adapter.open();
+		return getFavoriteList(adapter.getFavoriteDataNotSyncedAndUpdated());
+	}
+
+	public List<Entry> getEntryListNotSyncedAndDeleted() {
+		adapter.open();
+		return getEntryList(adapter.getEntryDataNotSyncedAndDeleted());
+	}
+	
+	public List<Favorite> getFavoriteListNotSyncedAndDeleted() {
+		adapter.open();
+		return getFavoriteList(adapter.getFavoriteDataNotSyncedAndDeleted());
+	}
+	
+	public List<Favorite> getFavoriteListNotSyncedAndCreated() {
+		adapter.open();
+		return getFavoriteList(adapter.getFavoriteDataNotSyncedAndCreated());
+	}
+	
 	public List<Entry> getEntryList(Boolean isAscending, String id) {
 		adapter.open();
 		return getEntryList(getCursor(id, isAscending));

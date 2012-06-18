@@ -81,14 +81,6 @@ public class HTTP {
 		return post(baseUrl+confConnect+events+eventPermalink+"/"+comments, nameValuePairs);
 	}
 	
-	public String deleteAttendeeFromEvent(String eventPermalink, String username, String token) throws IOException {
-		return delete(baseUrl+confConnect+"attendees"+"/"+eventPermalink+".json"+"?username="+username+"&token="+token, null);
-	}
-	
-	private String delete(String url, List<NameValuePair> nameValuePairs) throws IOException {
-		return execute(url.toString(), null, "DELETE");
-	}
-	
 	public String getSyncData() throws IOException{
 		return get(baseUrl+sync+json+verification+timestamp+SharedPreferencesHelper.getSharedPreferences().getString(mContext.getString(R.string.pref_key_sync_timestamp), ""));
 	}
@@ -107,14 +99,48 @@ public class HTTP {
 	public String addMultipleExpenses(String postData) throws IOException {
 		return post(baseUrl+expenses+json+verification, postData);
 	}
+	
+	public String updateMultipleExpenses(String postData) throws IOException {
+		return put(baseUrl+expenses+json+verification, postData);
+	}
+	
+	public String updateMultipleFavorites(String postData) throws IOException {
+		return put(baseUrl+favorites+json+verification, postData);
+	}
+	
+	public String deleteMultipleExpenses(String postData) throws IOException {
+		return delete(baseUrl+expenses+json+verification, postData);
+	}
+	
+	public String deleteMultipleFavorites(String postData) throws IOException {
+		return delete(baseUrl+favorites+json+verification, postData);
+	}
+	
+	public String addMultipleFavorites(String postData) throws IOException {
+		return post(baseUrl+favorites+json+verification, postData);
+	}
 
 	public String post(Object url, List<NameValuePair> nvps) throws IOException {
         return execute(url.toString(), new UrlEncodedFormEntity(nvps, UTF_8), "POST");
     }
 	
+	public String put(Object url, List<NameValuePair> nvps) throws IOException {
+        return execute(url.toString(), new UrlEncodedFormEntity(nvps, UTF_8), "PUT");
+    }
+	
 	public String post(Object url, String postData) throws IOException {
 		StringEntity entity = new StringEntity(postData);
         return execute(url.toString(), entity, "POST");
+    }
+	
+	public String put(Object url, String postData) throws IOException {
+		StringEntity entity = new StringEntity(postData);
+        return execute(url.toString(), entity, "PUT");
+    }
+	
+	public String delete(Object url, String postData) throws IOException {
+		StringEntity entity = new StringEntity(postData);
+        return execute(url.toString(), entity, "DELETE");
     }
 	
 	public String uploadExpenseFile(File file,String idFromServer, boolean isAudio) throws IOException {
@@ -284,6 +310,7 @@ public class HTTP {
         	}
 
 			return null;
+			
 //        	if(Strings.equal(location, url) && responseCode == 422) { 
 //        		// print response
 //        		Log.d("response error "+responseString);	

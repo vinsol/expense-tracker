@@ -156,6 +156,152 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		pushFiles();
 	}
 
+	private void pushData() throws IOException {
+		Log.d("****************** Pushing Data ****************");
+		create();
+		update();
+		delete();
+		Log.d("****************** Data Pushed ****************");
+	}
+
+	private void create() {
+		createEntry();
+		createFavorites();
+	}
+	
+	//Push request to update records
+	private void update() {
+		updateEntry();
+		updateFavorites();
+	}
+	
+	private void updateEntry() {
+		List<Entry> entries = convertCursorToListString.getEntryListNotSyncedAndUpdated();
+		if(entries.size() > 0) {
+			String data = gson.toJson(entries);
+			Log.d(data +" size "+convertCursorToListString.getEntryListNotSyncedAndUpdated().size());
+			if(data != null) {
+				try {
+					String fetchedData = http.updateMultipleExpenses(data);
+					if(fetchedData != null) {
+						Data response = gson.fromJson(fetchedData,Data.class);
+						updateExpenses(response.expenses);
+						Log.d(fetchedData + " en ");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private void updateFavorites() {
+		List<Favorite> favorites = convertCursorToListString.getFavoriteListNotSyncedAndUpdated();
+		if(favorites.size() > 0) {
+			String data = gson.toJson(favorites);
+			Log.d(data +" size "+convertCursorToListString.getFavoriteListNotSyncedAndUpdated().size());
+			if(data != null) {
+				try {
+					String fetchedData = http.updateMultipleFavorites(data);
+					if(fetchedData != null) {
+						Data response = gson.fromJson(fetchedData,Data.class);
+						updateFavorites(response.favorites);
+						Log.d(fetchedData + " en ");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	//Push request to delete records
+	private void delete() {
+		deleteEntry();
+		deleteFavorites();
+	}
+	
+	private void deleteEntry() {
+		List<Entry> entries = convertCursorToListString.getEntryListNotSyncedAndDeleted();
+		if(entries.size() > 0) {
+			String data = gson.toJson(entries);
+			Log.d(data +" size "+convertCursorToListString.getEntryListNotSyncedAndDeleted().size());
+			if(data != null) {
+				try {
+					String fetchedData = http.deleteMultipleExpenses(data);
+					if(fetchedData != null) {
+						Data response = gson.fromJson(fetchedData,Data.class);
+						deleteExpenses(response.expenses);
+						Log.d(fetchedData + " en ");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private void deleteFavorites() {
+		List<Favorite> favorites = convertCursorToListString.getFavoriteListNotSyncedAndDeleted();
+		if(favorites.size() > 0) {
+			String data = gson.toJson(favorites);
+			Log.d(data +" size "+convertCursorToListString.getFavoriteListNotSyncedAndDeleted().size());
+			if(data != null) {
+				try {
+					String fetchedData = http.deleteMultipleFavorites(data);
+					if(fetchedData != null) {
+						Data response = gson.fromJson(fetchedData,Data.class);
+						deleteFavorites(response.favorites);
+						Log.d(fetchedData + " en ");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	//Push Request to create new records which are not synced
+	private void createEntry() {
+		List<Entry> entries = convertCursorToListString.getEntryListNotSyncedAndCreated();
+		if(entries.size() > 0) {
+			String data = gson.toJson(entries);
+			Log.d(data +" size "+convertCursorToListString.getEntryListNotSyncedAndCreated().size());
+			if(data != null) {
+				try {
+					String fetchedData = http.addMultipleExpenses(data);
+					if(fetchedData != null) {
+						Data response = gson.fromJson(fetchedData,Data.class);
+						updateExpenses(response.expenses);
+						Log.d(fetchedData + " en ");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private void createFavorites() {
+		List<Favorite> favorites = convertCursorToListString.getFavoriteListNotSyncedAndCreated();
+		if(favorites.size() > 0) {
+			String data = gson.toJson(favorites);
+			Log.d(data +" size "+convertCursorToListString.getFavoriteListNotSyncedAndCreated().size());
+			if(data != null) {
+				try {
+					String fetchedData = http.addMultipleFavorites(data);
+					if(fetchedData != null) {
+						Data response = gson.fromJson(fetchedData,Data.class);
+						updateFavorites(response.favorites);
+						Log.d(fetchedData + " en ");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	private void pushFiles() {
 		uploadExpenseFiles();
 		uploadFavoriteFiles();
@@ -196,54 +342,6 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 
 	private void uploadFavoriteFiles() {
 		// TODO Auto-generated method stub
-	}
-
-	private void pushData() throws IOException {
-		Log.d("****************** Pushing Data ****************");
-		create();
-		update();
-		delete();
-		Log.d("****************** Data Pushed ****************");
-	}
-
-	private void create() {
-		createEntry();
-		createFavorites();
-	}
-
-	private void createFavorites() {
-		
-	}
-
-	//Push request to delete records
-	private void delete() {
-		
-	}
-
-	//Push request to update records
-	private void update() {
-		
-	}
-	
-	//Push Request to create new records which are not synced
-	private void createEntry() {
-		List<Entry> entries = convertCursorToListString.getEntryListNotSyncedAndCreated();
-		if(entries.size() > 0) {
-			String data = gson.toJson(entries);
-			Log.d(data +" size "+convertCursorToListString.getEntryListNotSyncedAndCreated().size());
-			if(data != null) {
-				try {
-					String fetchedData = http.addMultipleExpenses(data);
-					if(fetchedData != null) {
-						Data response = gson.fromJson(fetchedData,Data.class);
-						updateExpenses(response.expenses);
-						Log.d(fetchedData + " en ");
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	@Override
@@ -296,6 +394,9 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		adapter.open();
 		for(Favorite favorite : favorites) {
 			setSyncBit(favorite);
+			if(Strings.equal(favorite.type, context.getString(R.string.voice)) || Strings.equal(favorite.type, context.getString(R.string.camera))) {
+				fileHelper.deleteAllFavoriteFiles(favorite.favId);
+			}
 			adapter.permanentDeleteFavoriteTableEntryID(favorite.favId);
 		}
 		adapter.close();
@@ -305,6 +406,9 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		adapter.open();
 		for(Entry entry : entries) {
 			setSyncBit(entry);
+			if(Strings.equal(entry.type, context.getString(R.string.voice)) || Strings.equal(entry.type, context.getString(R.string.camera))) {
+				fileHelper.deleteAllFavoriteFiles(entry.favId);
+			}
 			adapter.permanentDeleteEntryTableEntryID(entry.id);
 		}
 		adapter.close();
