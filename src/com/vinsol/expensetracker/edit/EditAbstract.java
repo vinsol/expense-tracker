@@ -45,6 +45,7 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
+import com.vinsol.expensetracker.utils.Strings;
 
 abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	
@@ -517,7 +518,11 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		deleteFile();
 		////// ******* Delete entry from database ******** /////////
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.deleteEntryTableEntryID(entry.id);
+		if(Strings.isEmpty(entry.updatedAt)) {
+			mDatabaseAdapter.permanentDeleteEntryTableEntryID(entry.id);
+		} else {
+			mDatabaseAdapter.deleteEntryTableEntryID(entry.id);
+		}
 		mDatabaseAdapter.close();
 		Bundle tempBundle = new Bundle();
 		if(intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE)) {
@@ -545,7 +550,12 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		////// ******* Delete entry from database ******** /////////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editFavoriteIdEntryTable(mFavoriteList.favId);
-		mDatabaseAdapter.deleteFavoriteTableEntryID(mFavoriteList.favId);
+		if(Strings.isEmpty(mFavoriteList.updatedAt)) {
+			mDatabaseAdapter.permanentDeleteFavoriteTableEntryID(mFavoriteList.favId);
+		} else {
+			mDatabaseAdapter.deleteFavoriteTableEntryID(mFavoriteList.favId);
+		}
+		
 		mDatabaseAdapter.close();
 		Intent intent = new Intent();
 		Bundle bundle = new Bundle();

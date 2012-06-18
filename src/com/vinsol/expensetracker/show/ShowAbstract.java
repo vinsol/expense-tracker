@@ -30,6 +30,7 @@ import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.utils.Strings;
 
 abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 
@@ -189,7 +190,11 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 		if (mShowList.id != null) {
 			deleteFile();
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.deleteEntryTableEntryID(mShowList.id);
+			if(Strings.isEmpty(mShowList.updatedAt)) {
+				mDatabaseAdapter.permanentDeleteEntryTableEntryID(mShowList.id);
+			} else {
+				mDatabaseAdapter.deleteEntryTableEntryID(mShowList.id);
+			}
 			mDatabaseAdapter.close();
 			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
 			if(intentExtras.containsKey(Constants.KEY_POSITION)) {
