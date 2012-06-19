@@ -47,6 +47,7 @@ import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
 import com.vinsol.expensetracker.utils.Log;
+import com.vinsol.expensetracker.utils.Strings;
 
 abstract class ListingAbstract extends BaseActivity implements OnItemClickListener {
 
@@ -109,6 +110,13 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 	protected Entry getListCurrentWeek(int j) {
 		Entry templist = new Entry();
 		templist.id = mSubList.get(j).id;
+		templist.deleted = mSubList.get(j).deleted;
+		templist.myHash = mSubList.get(j).myHash;
+		templist.fileToDownload = mSubList.get(j).fileToDownload;
+		templist.fileUploaded = mSubList.get(j).fileUploaded;
+		templist.timeInMillis = mSubList.get(j).timeInMillis;
+		
+		
 		if (mSubList.get(j).description != null && !mSubList.get(j).description.equals("")) {
 			templist.description = mSubList.get(j).description;
 		} else {
@@ -155,9 +163,37 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 		} else {
 			templist.type = "";
 		}
-
-		templist.timeInMillis = mSubList.get(j).timeInMillis;
-		templist.location = mSubList.get(j).location;
+		
+		if(Strings.isEmpty(mSubList.get(j).idFromServer)) {
+			templist.idFromServer = ""; 
+		} else {
+			templist.idFromServer = mSubList.get(j).idFromServer;
+		}
+		
+		if(Strings.isEmpty(mSubList.get(j).syncBit)) {
+			templist.syncBit = ""; 
+		} else {
+			templist.syncBit = mSubList.get(j).syncBit;
+		}
+		
+		if(Strings.isEmpty(mSubList.get(j).updatedAt)) {
+			templist.updatedAt = ""; 
+		} else {
+			templist.updatedAt = mSubList.get(j).updatedAt;
+		}
+		
+		if(Strings.isEmpty(mSubList.get(j).fileUpdatedAt)) {
+			templist.fileUpdatedAt = ""; 
+		} else {
+			templist.fileUpdatedAt = mSubList.get(j).fileUpdatedAt;
+		}
+		
+		if(Strings.isEmpty(mSubList.get(j).location)) {
+			templist.location = ""; 
+		} else {
+			templist.location = mSubList.get(j).location;
+		}
+		
 		return templist;
 	}
 	
@@ -277,8 +313,13 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 	}
 	
 	private void removeItem(int position) {
+		Entry tempEntry = ((Entry)mSeparatedListAdapter.getItem(position));
 		mDatabaseAdapter.open();
-    	mDatabaseAdapter.deleteEntryTableEntryID(((Entry)mSeparatedListAdapter.getItem(position)).id);
+		if(Strings.isEmpty(tempEntry.updatedAt)) {
+			mDatabaseAdapter.permanentDeleteEntryTableEntryID(tempEntry.id);
+		} else {
+			mDatabaseAdapter.deleteEntryTableEntryID(tempEntry.id);
+		}
     	mDatabaseAdapter.close();
     	//XXX
     	if(!mSeparatedListAdapter.remove(position)) {
@@ -448,8 +489,10 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 									tempCalendar.set(tempCalendar.get(Calendar.YEAR), tempCalendar.get(Calendar.MONTH), tempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 									tempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 									tempDisplayDate = new DisplayDate(tempCalendar);
-									if(getLoopCondition(tempCalendar,isWeekOfMonth,isCurrentMonth,isCurrentYear))
-										mTempSubList.id = mTempSubList.id+mSubList.get(j).id+",";
+									if(getLoopCondition(tempCalendar,isWeekOfMonth,isCurrentMonth,isCurrentYear)) {
+										
+										mTempSubList.id = mTempSubList.id + mSubList.get(j).id+",";
+									}
 								} else {
 									break;
 								}
@@ -467,6 +510,14 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 							mTempSubList.amount = mStringProcessing.getStringDoubleDecimal(totalAmountString);
 							mTempSubList.type = getString(type);
 							mTempSubList.timeInMillis = 0L;
+							mTempSubList.deleted = false;
+							mTempSubList.fileToDownload = false;
+							mTempSubList.fileUpdatedAt = "";
+							mTempSubList.fileUploaded = false;
+							mTempSubList.idFromServer = "";
+							mTempSubList.myHash = "";
+							mTempSubList.syncBit = "";
+							mTempSubList.updatedAt = "";
 							if(highlightID != null) {
 								if (j <= mSubList.size()) {
 									if(mTempSubList.id.contains(highlightID)) {
@@ -478,6 +529,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 							if (j == mSubList.size()) {
 								break;
 							}
+							
 						}
 					}
 				} 

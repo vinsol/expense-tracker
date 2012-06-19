@@ -144,7 +144,7 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_SYNC_BIT, list.syncBit);
 		contentValues.put(KEY_UPDATED_AT, list.updatedAt);
 		contentValues.put(KEY_FILE_UPLOADED, false);
-		contentValues.put(KEY_FILE_TO_DOWNLOAD, true);
+		contentValues.put(KEY_FILE_TO_DOWNLOAD, false);
 		contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
 		Log.d("TRYING");
 		long id = db.insert(ENTRY_TABLE, null, contentValues);
@@ -326,22 +326,22 @@ public class DatabaseAdapter {
 	}
 	
 	public Cursor getEntryDataNotSyncedAndUpdated() {
-		String where = KEY_UPDATED_AT+" IS NOT NULL AND "+KEY_SYNC_BIT+" = "+context.getResources().getInteger(R.integer.syncbit_not_synced)+" AND "+getNotDeletedString();
+		String where = KEY_UPDATED_AT+" IS NOT NULL AND "+KEY_SYNC_BIT+" = "+context.getString(R.string.syncbit_not_synced)+" AND "+getNotDeletedString();
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
 	}
 	
 	public Cursor getFavoriteDataNotSyncedAndUpdated() {
-		String where = KEY_UPDATED_AT+" IS NOT NULL AND "+KEY_SYNC_BIT+" = "+context.getResources().getInteger(R.integer.syncbit_not_synced)+" AND "+getNotDeletedString();
+		String where = KEY_UPDATED_AT+" IS NOT NULL AND "+KEY_SYNC_BIT+" = "+context.getString(R.string.syncbit_not_synced)+" AND "+getNotDeletedString();
 		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
 	}
 	
 	public Cursor getEntryDataNotSyncedAndDeleted() {
-		String where = KEY_SYNC_BIT+" = "+context.getResources().getInteger(R.integer.syncbit_not_synced)+" AND "+getDeletedString();
+		String where = getDeletedString();
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
 	}
 	
 	public Cursor getFavoriteDataNotSyncedAndDeleted() {
-		String where = KEY_SYNC_BIT+" = "+context.getResources().getInteger(R.integer.syncbit_not_synced)+" AND "+getDeletedString();
+		String where = getDeletedString();
 		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
 	}
 
@@ -432,7 +432,7 @@ public class DatabaseAdapter {
 						  KEY_SYNC_BIT+" INTEGER," +
 						  KEY_FILE_UPLOADED +" BOOLEAN DEFAULT 'FALSE'," +
 						  KEY_FILE_TO_DOWNLOAD +" BOOLEAN DEFAULT 'FALSE', " +
-						  KEY_UPDATED_AT +" STRING);");
+						  KEY_FILE_UPDATED_AT +" STRING);");
 				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER UNIQUE," +
 						  KEY_UPDATED_AT+" STRING," +
 						  KEY_MY_HASH+" TEXT," +
@@ -440,7 +440,7 @@ public class DatabaseAdapter {
 						  KEY_SYNC_BIT+" INTEGER," +
 						  KEY_FILE_UPLOADED +" BOOLEAN DEFAULT 'FALSE'," +
 						  KEY_FILE_TO_DOWNLOAD +" BOOLEAN DEFULT 'FALSE', " +
-						  KEY_UPDATED_AT +" STRING);");
+						  KEY_FILE_UPDATED_AT +" STRING);");
 			}
 		}
 		

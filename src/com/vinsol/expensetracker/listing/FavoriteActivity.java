@@ -58,6 +58,7 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.ImagePreview;
+import com.vinsol.expensetracker.utils.Strings;
 
 public class FavoriteActivity extends BaseActivity implements OnItemClickListener {
 	
@@ -244,8 +245,14 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 	
 	private void removeItem(int position) {
 		//XXX
+		Favorite tempFav = ((Favorite)mAdapter.getItem(position));
 		mDatabaseAdapter.open();
-    	mDatabaseAdapter.deleteFavoriteTableEntryID(((Favorite)mAdapter.getItem(position)).favId);
+		if(Strings.isEmpty(tempFav.updatedAt)) {
+			mDatabaseAdapter.permanentDeleteFavoriteTableEntryID(tempFav.favId);	
+		} else {
+			mDatabaseAdapter.deleteFavoriteTableEntryID(tempFav.favId);
+		}
+    	
     	mDatabaseAdapter.editFavoriteIdEntryTable(((Favorite)mAdapter.getItem(position)).favId);
     	mDatabaseAdapter.close();
     	fileHelper.deleteAllFavoriteFiles(((Favorite)mAdapter.getItem(position)).favId);

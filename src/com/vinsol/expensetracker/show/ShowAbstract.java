@@ -84,9 +84,8 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 		if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 			mShowList = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 
-			if (!(mShowList.amount.equals("") || mShowList.amount == null)) {
-				if (!mShowList.amount.contains("?"))
-					showAmount.setText(mShowList.amount);
+			if ((!(mShowList.amount.equals("") || mShowList.amount == null)) && !mShowList.amount.contains("?")) {
+				showAmount.setText(mShowList.amount);
 			}
 			
 			if (!(mShowList.description.equals("") || mShowList.description == null || mShowList.description.equals(getString(typeOfEntryUnfinished)))) {
@@ -104,8 +103,7 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 
 			if(mShowList.timeInMillis != null) {
 				new ShowDateHandler(this, mShowList.timeInMillis);
-			}
-			else {
+			} else {
 				new ShowDateHandler(this,typeOfEntry);
 			}
 			

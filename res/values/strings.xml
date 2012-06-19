@@ -25,12 +25,12 @@
     <string name="unknown_location">Unknown location</string>
     
     <!-- Default SyncBit Values -->
-    <integer name="syncbit_synced">1</integer>
-    <integer name="syncbit_created">2</integer>
-    <integer name="syncbit_updated">3</integer>
-    <integer name="syncbit_deleted">4</integer>
-    <integer name="syncbit_conflict">5</integer>
-    <integer name="syncbit_not_synced">6</integer>
+    <string name="syncbit_synced">1</string>
+    <string name="syncbit_created">2</string>
+    <string name="syncbit_updated">3</string>
+    <string name="syncbit_deleted">4</string>
+    <string name="syncbit_conflict">5</string>
+    <string name="syncbit_not_synced">6</string>
     
     <!-- XML Text -->
     <string name="no_expenses_text">No expenses available to show, Please add expenses</string>

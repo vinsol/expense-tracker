@@ -38,7 +38,7 @@ public class Entry extends Favorite {
     	idFromServer = in.readString();
     	deleted = in.readByte() == 1; 
     	updatedAt = in.readString();
-    	syncBit = in.readInt();
+    	syncBit = in.readString();
     	fileUploaded = in.readByte() == 1;
     	fileToDownload = in.readByte() == 1;
     	fileUpdatedAt = in.readString();
@@ -57,7 +57,7 @@ public class Entry extends Favorite {
 		dest.writeString(idFromServer);
 		dest.writeByte((byte) (deleted ? 1 : 0));
 		dest.writeString(updatedAt);
-		dest.writeInt(syncBit);
+		dest.writeString(syncBit);
 		dest.writeByte((byte) (fileUploaded ? 1 : 0));
 		dest.writeByte((byte) (fileToDownload ? 1 : 0));
 		dest.writeString(fileUpdatedAt);

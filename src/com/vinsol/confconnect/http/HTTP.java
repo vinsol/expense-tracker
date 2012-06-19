@@ -44,7 +44,7 @@ import com.vinsol.expensetracker.utils.Utils;
 public class HTTP {
 
 	// Requirements
-	private String baseUrl = "http://192.168.0.20:3000/";
+	private String baseUrl = "http://192.168.0.25:3000/";
 	private String sync = "sync";
 	private String verification = "?email=hiteshsondhi88@gmail.com";
 	private String confConnect = "railsconf-2012/";
@@ -57,6 +57,8 @@ public class HTTP {
 	private String upload = "upload";
 	private String download = "download";
 	private String json = ".json";
+	private String update = "update";
+	private String delete = "delete";
 	private Context mContext;
 	private FileHelper fileHelper;
 	
@@ -101,19 +103,19 @@ public class HTTP {
 	}
 	
 	public String updateMultipleExpenses(String postData) throws IOException {
-		return put(baseUrl+expenses+json+verification, postData);
+		return post(baseUrl+expenses+"/"+update+json+verification, postData);
 	}
 	
 	public String updateMultipleFavorites(String postData) throws IOException {
-		return put(baseUrl+favorites+json+verification, postData);
+		return post(baseUrl+favorites+"/"+update+json+verification, postData);
 	}
 	
 	public String deleteMultipleExpenses(String postData) throws IOException {
-		return delete(baseUrl+expenses+json+verification, postData);
+		return post(baseUrl+expenses+"/"+delete+json+verification, postData);
 	}
 	
 	public String deleteMultipleFavorites(String postData) throws IOException {
-		return delete(baseUrl+favorites+json+verification, postData);
+		return post(baseUrl+favorites+"/"+delete+json+verification, postData);
 	}
 	
 	public String addMultipleFavorites(String postData) throws IOException {
@@ -145,6 +147,10 @@ public class HTTP {
 	
 	public String uploadExpenseFile(File file,String idFromServer, boolean isAudio) throws IOException {
 		return uploadFile(baseUrl+expenses+"/"+upload+"/"+idFromServer+json+verification, file, isAudio);
+	}
+	
+	public String uploadFavoriteFile(File file,String idFromServer, boolean isAudio) throws IOException {
+		return uploadFile(baseUrl+favorites+"/"+upload+"/"+idFromServer+json+verification, file, isAudio);
 	}
 	
 	public boolean downloadExpenseFile(String id,String idFromServer, boolean isAudio) throws IOException {

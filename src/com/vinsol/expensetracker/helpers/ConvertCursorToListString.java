@@ -16,6 +16,7 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
+import com.vinsol.expensetracker.utils.Log;
 
 public class ConvertCursorToListString {
 
@@ -50,7 +51,7 @@ public class ConvertCursorToListString {
 				listFavorite.idFromServer = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID_FROM_SERVER));
 				listFavorite.fileUploaded = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_UPLOADED))>0;
 				listFavorite.fileToDownload = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_TO_DOWNLOAD))>0;
-				listFavorite.syncBit = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
+				listFavorite.syncBit = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
 				listFavorite.fileUpdatedAt = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_UPDATED_AT));
 				
 				if (listFavorite.description == null
@@ -69,6 +70,7 @@ public class ConvertCursorToListString {
 		}
 		cursor.close();
 		adapter.close();
+		
 		return mainlist;
 	}
 
@@ -181,6 +183,11 @@ public class ConvertCursorToListString {
 		adapter.open();
 		return getEntryList(adapter.getEntryDataFileNotUploaded());
 	}
+	
+	public List<Favorite> getFavoriteListFileNotUploaded() {
+		adapter.open();
+		return getFavoriteList(adapter.getFavoriteDataFileNotUploaded());
+	}
 
 	public List<Entry> getEntryListNotSyncedAndCreated() {
 		adapter.open();
@@ -246,9 +253,12 @@ public class ConvertCursorToListString {
 				mEntry.deleted = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_DELETE_BIT))>0;
 				mEntry.fileUploaded = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_UPLOADED))>0;
 				mEntry.fileToDownload = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_TO_DOWNLOAD))>0;
-				mEntry.syncBit = cursor.getInt(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
+				mEntry.syncBit = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
 				mEntry.fileUpdatedAt = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_UPDATED_AT));
 				mainlist.add(mEntry);
+
+				Log.d("*******************************************");
+				Log.d("***  "+mEntry.deleted);
 				cursor.moveToNext();
 			} while (!cursor.isAfterLast());
 		}
