@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.confconnect.http.SyncHelper;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -304,6 +305,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
   	    	Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
   	    	removeItem(info.position);
   	    	ExpenseListing.resetUnfinishedEntryCount();
+  	    	SyncHelper.startSync();
   	    	break;
   	    	
 		default:

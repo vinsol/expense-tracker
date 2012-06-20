@@ -26,9 +26,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.confconnect.http.SyncHelper;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -539,6 +539,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			} else {
 				saveEntry();
 			}
+			SyncHelper.startSync();
 			break;
 		
 		case R.id.edit_delete:
@@ -550,6 +551,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 				} else {
 					deleteEntry();
 				}
+				SyncHelper.startSync();
 			}
 			break;
 		default:
@@ -570,6 +572,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 					} else {
 						deleteEntry();
 					}
+					SyncHelper.startSync();
 				}
 			}
 		});

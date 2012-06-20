@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.confconnect.http.SyncHelper;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -167,6 +168,7 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 				} else {
 					delete();
 				}
+				SyncHelper.startSync();
 				break;
 	
 			case R.id.show_edit:

@@ -25,15 +25,17 @@ import com.vinsol.expensetracker.utils.Strings;
 
 public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	
-	private Context context;
+	private static Context context;
 	private DatabaseAdapter adapter;
 	private HTTP http;
 	private ConvertCursorToListString convertCursorToListString;
 	private Gson gson;
 	private FileHelper fileHelper;
+	public static AsyncTask<Void, Void, Void> syncHelper;
+	public static boolean toConinue = false;
 	
 	public SyncHelper(Context context) {
-		this.context = context;
+		SyncHelper.context = context;
 		convertCursorToListString = new ConvertCursorToListString(context);
 		adapter = new DatabaseAdapter(context);
 		http = new HTTP(context);
@@ -385,6 +387,10 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	protected void onPostExecute(Void result) {
 		Log.d("************************** Finishing Sync **********************************");
 		super.onPostExecute(result);
+		if(toConinue) {
+			toConinue = false;
+			SyncHelper.syncHelper.execute(); 
+		}
 	}
 	
 	private void addExpenses(List<Entry> entries) {
@@ -477,6 +483,15 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	
 	private void setSyncBit(Favorite favorite) {
 		favorite.syncBit = context.getString(R.string.syncbit_synced);
+	}
+	
+	public static void startSync() {
+		if(SyncHelper.syncHelper.getStatus().equals(AsyncTask.Status.RUNNING)) {
+			toConinue = true;
+		} else {
+			toConinue = false;
+			SyncHelper.syncHelper = new SyncHelper(context).execute();
+		}
 	}
 	
 }
