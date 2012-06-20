@@ -612,6 +612,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 							bundle.putLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB, toInsert.timeInMillis);
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
+							toInsert.syncBit = getString(R.string.syncbit_not_synced);
 							mDatabaseAdapter.open();
 							mDatabaseAdapter.editEntryTable(toInsert);
 							mDatabaseAdapter.close();

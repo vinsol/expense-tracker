@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.BaseActivity;
@@ -105,7 +106,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		////////********* Get intent extras ******** ////////////
 		intentExtras = getIntent().getExtras();
 		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_FAVORITE)) {isFromFavorite = true;}
-		
 		// Sets Title of activity
 		setDefaultTitle();
 	}
@@ -253,6 +253,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 					}
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		
@@ -303,6 +304,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			Entry listForFav = new Entry();
 			listForFav.favId = "";
 			listForFav.id = mEditList.id;
+			listForFav.syncBit = getString(R.string.syncbit_not_synced);
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editEntryTable(listForFav);
 			mDatabaseAdapter.close();
@@ -319,6 +321,35 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			displayList.timeInMillis = mEditList.timeInMillis;
 		}
 		displayList.location = mEditList.location;
+		displayList.deleted = mEditList.deleted;
+		displayList.fileToDownload = mEditList.fileToDownload;
+		displayList.fileUploaded = mEditList.fileUploaded;
+		displayList.myHash = mEditList.myHash;
+		
+		if(Strings.isEmpty(list.syncBit)) {
+			displayList.syncBit = "";
+		} else {
+			displayList.syncBit = list.syncBit;
+		}
+		
+		if(Strings.isEmpty(mEditList.idFromServer)) {
+			displayList.idFromServer = "";
+		} else {
+			displayList.idFromServer = mEditList.idFromServer;
+		}
+		
+		if(Strings.isEmpty(mEditList.fileUpdatedAt)) {
+			displayList.fileUpdatedAt = "";
+		} else {
+			displayList.fileUpdatedAt = mEditList.fileUpdatedAt;
+		}
+		
+		if(Strings.isEmpty(mEditList.updatedAt)) {
+			displayList.updatedAt = "";
+		} else {
+			displayList.updatedAt = mEditList.updatedAt;
+		}
+		
 		mEditList = displayList;
 		return displayList;
 	}
@@ -347,12 +378,42 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		}
 			
 		favorite.type = mFavoriteList.type;	
+		favorite.location = mFavoriteList.location;
+		favorite.deleted = mFavoriteList.deleted;
+		favorite.fileToDownload = mFavoriteList.fileToDownload;
+		favorite.fileUploaded = mFavoriteList.fileUploaded;
+		favorite.myHash = mFavoriteList.myHash;
+		
+		if(Strings.isEmpty(favList.syncBit)) {
+			favorite.syncBit = "";
+		} else {
+			favorite.syncBit = favList.syncBit;
+		}
+		
+		if(Strings.isEmpty(mFavoriteList.idFromServer)) {
+			favorite.idFromServer = "";
+		} else {
+			favorite.idFromServer = mFavoriteList.idFromServer;
+		}
+		
+		if(Strings.isEmpty(mFavoriteList.fileUpdatedAt)) {
+			favorite.fileUpdatedAt = "";
+		} else {
+			favorite.fileUpdatedAt = mFavoriteList.fileUpdatedAt;
+		}
+		
+		if(Strings.isEmpty(mFavoriteList.updatedAt)) {
+			favorite.updatedAt = "";
+		} else {
+			favorite.updatedAt = mFavoriteList.updatedAt;
+		}
 		mFavoriteList = favorite;
 		return favorite;
 	}
 
 	private void saveEntry() {
 		Entry toSave = getSaveEntryData(dateBarDateview,dateViewString);
+		toSave.syncBit = getString(R.string.syncbit_not_synced);
 		////// ******* Update database if user added additional info *******///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editEntryTable(toSave);
@@ -390,6 +451,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	private void saveFavoriteEntry() {
 		if(checkFavoriteComplete()) {
 			Favorite toSaveFav = getSaveFavoriteData();
+			toSaveFav.syncBit = getString(R.string.syncbit_not_synced);
 			////// ******* Update database if user added additional info *******///////
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editFavoriteTable(toSaveFav);

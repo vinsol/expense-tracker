@@ -186,11 +186,15 @@ public class Voice extends EditAbstract {
 			// //// ****** Restarts chronometer and recording ******* ////////
 			if(mRecordingHelper != null && mRecordingHelper.isRecording()) {mRecordingHelper.stopRecording();}
 			File mPath;
+			mDatabaseAdapter.open();
 			if(isFromFavorite) {
 				mPath = fileHelper.getAudioFileFavorite(mFavoriteList.favId);
+				mDatabaseAdapter.updateFileUploadedFavoriteTable(mFavoriteList.favId);
 			} else {
 				mPath = fileHelper.getAudioFileEntry(entry.id);
+				mDatabaseAdapter.updateFileUploadedEntryTable(entry.id);
 			}
+			mDatabaseAdapter.close();
 			mRecordingHelper = new RecordingHelper(mPath, this);
 			mRecordingHelper.startRecording();
 			editTimeDetailsChronometer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);

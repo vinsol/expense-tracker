@@ -314,8 +314,10 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void uploadExpenseFiles() {
 		List<Entry> entries = convertCursorToListString.getEntryListFileNotUploaded();
 		List<Entry> entriesToUpdate = new ArrayList<Entry>();
+		boolean toUpdate = false;
 		for(Entry entry : entries) {
 			if(!Strings.equal(entry.syncBit, context.getString(R.string.syncbit_synced))) { continue; }
+			toUpdate = true;
 			boolean isAudio;
 			if(Strings.equal(entry.type, context.getString(R.string.voice))) {
 				isAudio = true; 
@@ -341,14 +343,16 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 				e.printStackTrace();
 			}
 		}
-		updateExpenses(entriesToUpdate);
+		if(toUpdate) updateExpenses(entriesToUpdate);
 	}
 
 	private void uploadFavoriteFiles() {
 		List<Favorite> favorites = convertCursorToListString.getFavoriteListFileNotUploaded();
 		List<Favorite> favoritesToUpdate = new ArrayList<Favorite>();
+		boolean toUpdate = false;
 		for(Favorite favorite : favorites) {
 			if(!Strings.equal(favorite.syncBit, context.getString(R.string.syncbit_synced))) { continue; }
+			toUpdate = true;
 			boolean isAudio;
 			if(Strings.equal(favorite.type, context.getString(R.string.voice))) {
 				isAudio = true; 
@@ -374,7 +378,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 				e.printStackTrace();
 			}
 		}
-		updateFavorites(favoritesToUpdate);
+		if(toUpdate) updateFavorites(favoritesToUpdate);
 	}
 
 	@Override
@@ -415,6 +419,8 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	}
 	
 	private void updateFavorites(List<Favorite> favorites) {
+		Log.d("*****************  Check ");
+		Log.d("favorite "+adapter+"  "+favorites);
 		adapter.open();
 		for(Favorite favorite : favorites) {
 			setSyncBit(favorite);

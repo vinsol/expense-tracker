@@ -170,6 +170,18 @@ public class CameraActivity extends EditAbstract {
 		if (PICTURE_RESULT == requestCode) {
 			if(Activity.RESULT_OK == resultCode) {
 				isChanged = true;
+				
+				if(intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
+					if(isFromFavorite) {
+						mDatabaseAdapter.open();
+						mDatabaseAdapter.updateFileUploadedFavoriteTable(mFavoriteList.favId);
+						mDatabaseAdapter.close();
+					} else {
+						mDatabaseAdapter.open();
+						mDatabaseAdapter.updateFileUploadedEntryTable(entry.id);
+						mDatabaseAdapter.close();
+					}
+				}
 				new SaveAndDisplayImage().execute();
 			} else {
 				isChanged = false;

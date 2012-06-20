@@ -40,6 +40,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	private Entry mTempClickedList;
 	private TextView headerTextView;
 	private TextView locationTextView;
+	private Context context;
 	
 	protected void onCreateDialog() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -57,6 +58,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	
 	public UnknownEntryDialog(Entry toInsert,Context mContext, android.view.View.OnClickListener myClickListener) {
 		super(mContext);
+		context = mContext;
 		onCreateDialog();
 		textEntryButton.setOnClickListener(myClickListener);
 		deleteButton.setVisibility(View.GONE);
@@ -80,6 +82,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	
 	public UnknownEntryDialog(Context mContext,Entry _list,android.view.View.OnClickListener deleteClickListener) {
 		super(mContext);
+		context = mContext;
 		onCreateDialog();
 		textEntryButton.setOnClickListener(this);
 		deleteButton.setOnClickListener(deleteClickListener);
@@ -174,6 +177,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		Entry list = new Entry();
 		list.id = mTempClickedList.id;
 		list.type = getContext().getString(type);
+		list.syncBit = context.getString(R.string.syncbit_not_synced);
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editEntryTable(list);
 		mDatabaseAdapter.close();

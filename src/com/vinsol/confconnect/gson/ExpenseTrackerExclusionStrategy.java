@@ -14,6 +14,7 @@ public class ExpenseTrackerExclusionStrategy implements ExclusionStrategy {
 	@Override
 	public boolean shouldSkipField(FieldAttributes f) {
 		if(Strings.equal(f.getName(), "fileToDownload")) {return true;}
+		if(Strings.equal(f.getName(), "syncBit")) {return true;}
 		return false;
 	}
 

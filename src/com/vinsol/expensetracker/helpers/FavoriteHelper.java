@@ -240,6 +240,7 @@ public class FavoriteHelper implements OnClickListener{
 				}
 			}
 			mShowList.favId = favID+"";
+			mShowList.syncBit = activity.getString(R.string.syncbit_not_synced);
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editEntryTable(mShowList);
 			mDatabaseAdapter.close();

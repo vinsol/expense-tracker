@@ -166,6 +166,36 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
+	public boolean updateFileUploadedEntryTable(String id) {
+		String where = KEY_ID + "=" + id;
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_FILE_UPLOADED, false);
+		contentValues.put(KEY_SYNC_BIT, context.getString(R.string.syncbit_not_synced));
+		try {
+			Log.d("Deleting");
+			db.update(ENTRY_TABLE, contentValues, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean updateFileUploadedFavoriteTable(String favID) {
+		String where = KEY_ID + "=" + favID;
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_FILE_UPLOADED, false);
+		contentValues.put(KEY_SYNC_BIT, context.getString(R.string.syncbit_not_synced));
+		try {
+			Log.d("Deleting");
+			db.update(FAVORITE_TABLE, contentValues, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			return false;
+		}
+		return true;
+	}
+	
 	public boolean deleteEntryTableEntryID(String id) {
 		String where = KEY_ID + "=" + id;
 		ContentValues contentValues = new ContentValues();
@@ -296,22 +326,22 @@ public class DatabaseAdapter {
 	}
 	
 	public Cursor getEntryDataFileNotUploaded() {
-		String where = KEY_FILE_UPLOADED+" IS NULL OR NOT "+KEY_FILE_UPLOADED;
+		String where = KEY_FILE_UPLOADED+" IS NULL OR "+KEY_FILE_UPLOADED+"= \"\" OR NOT "+KEY_FILE_UPLOADED;
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
 	}
 	
 	public Cursor getFavoriteDataFileNotUploaded() {
-		String where = KEY_FILE_UPLOADED+" IS NULL OR NOT "+KEY_FILE_UPLOADED;
+		String where = KEY_FILE_UPLOADED+" IS NULL OR "+KEY_FILE_UPLOADED+"= \"\" OR NOT "+KEY_FILE_UPLOADED;
 		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
 	}
 	
 	public Cursor getEntryDataNotSyncedAndCreated() {
-		String where = KEY_UPDATED_AT+" IS NULL AND "+getNotDeletedString();
+		String where = KEY_UPDATED_AT+" IS NULL OR "+KEY_UPDATED_AT+"= \"\" OR NOT "+KEY_FILE_UPLOADED;
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
 	}
 	
 	public Cursor getFavoriteDataNotSyncedAndCreated() {
-		String where = KEY_UPDATED_AT+" IS NULL AND "+getNotDeletedString();
+		String where = KEY_UPDATED_AT+" IS NULL OR "+KEY_UPDATED_AT+"= \"\" OR NOT "+KEY_FILE_UPLOADED;
 		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
 	}
 	
@@ -326,12 +356,12 @@ public class DatabaseAdapter {
 	}
 	
 	public Cursor getEntryDataNotSyncedAndUpdated() {
-		String where = KEY_UPDATED_AT+" IS NOT NULL AND "+KEY_SYNC_BIT+" = "+context.getString(R.string.syncbit_not_synced)+" AND "+getNotDeletedString();
+		String where = KEY_UPDATED_AT+" IS NOT NULL AND "+KEY_UPDATED_AT+" != \"\" AND "+KEY_SYNC_BIT+" = "+context.getString(R.string.syncbit_not_synced)+" AND "+getNotDeletedString();
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
 	}
 	
 	public Cursor getFavoriteDataNotSyncedAndUpdated() {
-		String where = KEY_UPDATED_AT+" IS NOT NULL AND "+KEY_SYNC_BIT+" = "+context.getString(R.string.syncbit_not_synced)+" AND "+getNotDeletedString();
+		String where = KEY_UPDATED_AT+" IS NOT NULL AND "+KEY_UPDATED_AT+" != \"\" AND "+KEY_SYNC_BIT+" = "+context.getString(R.string.syncbit_not_synced)+" AND "+getNotDeletedString();
 		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
 	}
 	
@@ -383,6 +413,7 @@ public class DatabaseAdapter {
 	public void editFavoriteIdEntryTable(String favId) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_FAVORITE, "");
+		contentValues.put(KEY_SYNC_BIT, context.getString(R.string.syncbit_not_synced));
 		String where = KEY_FAVORITE+" = "+favId;
 		db.update(ENTRY_TABLE, contentValues, where, null);
 	}
