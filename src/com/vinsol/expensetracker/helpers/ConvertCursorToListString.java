@@ -233,6 +233,24 @@ public class ConvertCursorToListString {
 		adapter.open();
 		return getFavoriteList(adapter.getFavoriteDataFileToDownload());
 	}
+	
+	public Favorite getSingleFavoriteByHash(String hash) {
+		adapter.open();
+		List<Favorite> favorites = getFavoriteList(adapter.getFavoriteByHash(hash));
+		if(favorites.size() == 1) {
+			return favorites.get(0);
+		}
+		return null;
+	}
+	
+	public Entry getSingleEntryByHash(String hash) {
+		adapter.open();
+		List<Entry> entries = getEntryList(adapter.getEntryByHash(hash));
+		if(entries.size() == 1) {
+			return entries.get(0);
+		}
+		return null;
+	}
 
 	public List<Entry> getEntryList(Cursor cursor) {
 		List<Entry> mainlist = new ArrayList<Entry>();

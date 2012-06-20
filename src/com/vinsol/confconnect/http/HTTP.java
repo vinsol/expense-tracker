@@ -240,6 +240,7 @@ public class HTTP {
 	}
 	
 	public boolean downloadFile(String urlString, File file) throws IOException {
+		Log.d("******************** Downloading File *********************"+file.toString());
 		HttpURLConnection connection = null;
         try {
             URL url = new URL(urlString);

@@ -121,8 +121,8 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
 		contentValues.put(KEY_SYNC_BIT, list.syncBit);
 		contentValues.put(KEY_UPDATED_AT, list.updatedAt);
-		contentValues.put(KEY_FILE_UPLOADED, false);
-		contentValues.put(KEY_FILE_TO_DOWNLOAD, false);
+		contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
+		contentValues.put(KEY_FILE_TO_DOWNLOAD, list.fileToDownload);
 		contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
 		Log.d("TRYING");
 		long id = db.insert(FAVORITE_TABLE, null, contentValues);
@@ -143,13 +143,27 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
 		contentValues.put(KEY_SYNC_BIT, list.syncBit);
 		contentValues.put(KEY_UPDATED_AT, list.updatedAt);
-		contentValues.put(KEY_FILE_UPLOADED, false);
-		contentValues.put(KEY_FILE_TO_DOWNLOAD, false);
+		contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
+		contentValues.put(KEY_FILE_TO_DOWNLOAD, list.fileToDownload);
 		contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
 		Log.d("TRYING");
 		long id = db.insert(ENTRY_TABLE, null, contentValues);
 		Log.d("ADDED");
 		return id;
+	}
+	
+	public boolean deleteFavoriteTableByHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_DELETE_BIT, true);
+		try {
+			Log.d("Deleting");
+			db.update(FAVORITE_TABLE, contentValues, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			return false;
+		}
+		return true;
 	}
 	
 	public boolean deleteFavoriteTableEntryID(String favID) {
@@ -196,6 +210,72 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
+	public boolean deleteEntryTableByHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_DELETE_BIT, true);
+		try {
+			Log.d("Deleting");
+			db.update(ENTRY_TABLE, contentValues, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public String getEntryIdByHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		try {
+			Log.d("Deleting");
+			Cursor cursor = db.query(ENTRY_TABLE, null, where, null, null, null, null);
+			Log.d("Deleted");
+			return cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
+		} catch (SQLiteException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	public String getFavIdByHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		try {
+			Log.d("Deleting");
+			Cursor cursor = db.query(FAVORITE_TABLE, null, where, null, null, null, null);
+			Log.d("Deleted");
+			return cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
+		} catch (SQLiteException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	public boolean permanentDeleteEntryTableByHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		try {
+			Log.d("Deleting");
+			db.delete(ENTRY_TABLE, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean permanentDeleteFavoriteTableByHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		try {
+			Log.d("Deleting");
+			db.delete(FAVORITE_TABLE, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			return false;
+		}
+		return true;
+	}
+	
 	public boolean deleteEntryTableEntryID(String id) {
 		String where = KEY_ID + "=" + id;
 		ContentValues contentValues = new ContentValues();
@@ -232,6 +312,38 @@ public class DatabaseAdapter {
 			cursor.close();
 		}
 		return isPresent;
+	}
+	
+	public boolean findEntryByMyHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		Cursor cursor = db.query(ENTRY_TABLE, null, where, null, null, null, null);
+		boolean isPresent = false;
+		if(cursor.moveToFirst()) {
+			isPresent = true;
+			cursor.close();
+		}
+		return isPresent;
+	}
+	
+	public boolean findFavoriteByMyHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		Cursor cursor = db.query(FAVORITE_TABLE, null, where, null, null, null, null);
+		boolean isPresent = false;
+		if(cursor.moveToFirst()) {
+			isPresent = true;
+			cursor.close();
+		}
+		return isPresent;
+	}
+	
+	public Cursor getFavoriteByHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
+	}
+	
+	public Cursor getEntryByHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
 	}
 	
 	public boolean permanentDeleteEntryTableEntryID(String id) {
@@ -279,6 +391,84 @@ public class DatabaseAdapter {
 			Log.d("EDITED");
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean editFavoriteTableByHash(Favorite list) {
+		ContentValues contentValues = new ContentValues();
+		if (list.description != null)
+			contentValues.put(KEY_TAG, list.description);
+		if (list.amount != null)
+			contentValues.put(KEY_AMOUNT, list.amount);
+		if (list.type != null)
+			contentValues.put(KEY_TYPE, list.type);
+		if (list.location != null)
+			contentValues.put(KEY_LOCATION, list.location);
+		if (list.idFromServer != null)
+			contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
+		if (list.syncBit != null)
+			contentValues.put(KEY_SYNC_BIT, list.syncBit);
+		if (list.updatedAt != null)
+			contentValues.put(KEY_UPDATED_AT, list.updatedAt);
+		if (list.fileUploaded != null)
+			contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
+		if (list.fileToDownload != null)
+			contentValues.put(KEY_FILE_TO_DOWNLOAD, list.fileToDownload);
+		if (list.deleted != null)
+			contentValues.put(KEY_DELETE_BIT, list.deleted);
+		if (list.fileUpdatedAt != null)
+			contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
+		
+		String where = KEY_MY_HASH + "=\"" + list.myHash+"\"";
+		try {
+			Log.d("EDITING");
+			db.update(FAVORITE_TABLE, contentValues, where, null);
+			Log.d("EDITED");
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean editEntryTableByHash(Entry list) {
+		ContentValues contentValues = new ContentValues();
+		if (list.description != null)
+			contentValues.put(KEY_TAG, list.description);
+		if (list.amount != null)
+			contentValues.put(KEY_AMOUNT, list.amount);
+		if (list.timeInMillis != null)
+			contentValues.put(KEY_DATE_TIME, list.timeInMillis);
+		if (list.location != null)
+			contentValues.put(KEY_LOCATION, list.location);
+		if (list.favId != null)
+			contentValues.put(KEY_FAVORITE, list.favId);
+		if (list.type != null)
+			contentValues.put(KEY_TYPE, list.type);
+		if (list.idFromServer != null)
+			contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
+		if (list.syncBit != null)
+			contentValues.put(KEY_SYNC_BIT, list.syncBit);
+		if (list.updatedAt != null)
+			contentValues.put(KEY_UPDATED_AT, list.updatedAt);
+		if (list.fileUploaded != null)
+			contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
+		if (list.fileToDownload != null)
+			contentValues.put(KEY_FILE_TO_DOWNLOAD, list.fileToDownload);
+		if (list.deleted != null)
+			contentValues.put(KEY_DELETE_BIT, list.deleted);
+		if (list.fileUpdatedAt != null)
+			contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
+		
+		String where = KEY_MY_HASH + "=\"" + list.myHash+"\"";
+		try {
+			Log.d("EDITING");
+			db.update(ENTRY_TABLE, contentValues, where, null);
+			Log.d("EDITED");
+			return true;
+		} catch (SQLiteException e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -336,12 +526,12 @@ public class DatabaseAdapter {
 	}
 	
 	public Cursor getEntryDataNotSyncedAndCreated() {
-		String where = KEY_UPDATED_AT+" IS NULL OR "+KEY_UPDATED_AT+"= \"\" OR NOT "+KEY_FILE_UPLOADED;
+		String where = KEY_UPDATED_AT+" IS NULL OR "+KEY_UPDATED_AT+"= \"\"";
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
 	}
 	
 	public Cursor getFavoriteDataNotSyncedAndCreated() {
-		String where = KEY_UPDATED_AT+" IS NULL OR "+KEY_UPDATED_AT+"= \"\" OR NOT "+KEY_FILE_UPLOADED;
+		String where = KEY_UPDATED_AT+" IS NULL OR "+KEY_UPDATED_AT+"= \"\"";
 		return db.query(FAVORITE_TABLE, null, where, null, null, null, null);
 	}
 	

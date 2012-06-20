@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.vinsol.confconnect.gson.MyGson;
@@ -70,8 +71,8 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			SharedPreferencesHelper.setSyncTimeStamp(sync.timestamp);
 			Log.d(" ******************** Started Adding Expenses To DB ****************************** ");
 			Long startTimeInMilis = Calendar.getInstance().getTimeInMillis();
-			addExpenses(sync.add.expenses);
-			addFavorites(sync.add.favorites);
+			addExpenses(sync.add.expenses,true);
+			addFavorites(sync.add.favorites,true);
 			updateExpenses(sync.update.expenses);
 			updateFavorites(sync.update.favorites);
 			deleteExpenses(sync.delete.expenses);
@@ -83,9 +84,12 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	
 	private void pullFiles() {
 		Log.d("*********************** Pulling Files **********************************");
+		
 		List<Entry> entries = convertCursorToListString.getEntryListFilesToDownload();
 		for(Entry entry : entries) {
+			Log.d("***** entry id "+entry.id+"  "+entry.idFromServer);
 			if(Strings.equal(entry.type, context.getString(R.string.voice))) {
+				Log.d("***** entry id "+entry.id+"  "+entry.idFromServer);
 				try {
 					if(http.downloadExpenseFile(entry.id, entry.idFromServer, true)) {
 						entry.fileToDownload = false;
@@ -393,11 +397,18 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		}
 	}
 	
-	private void addExpenses(List<Entry> entries) {
+	private void addExpenses(List<Entry> entries,boolean isPull) {
 		adapter.open();
 		for(Entry entry : entries) {
+//			if(isPull) {
+//				setSyncBitAndFileDownloaded(entry);
+//			} else {
+//				setSyncBit(entry);
+//			}
 			setSyncBit(entry);
-			if(!adapter.findEntryById(entry.id)) {
+			Log.d("*************************"+"fileToDOwnload "+entry.fileToDownload);
+			
+			if(!adapter.findEntryByMyHash(entry.myHash)) {
 				adapter.insertToEntryTable(entry);
 			} else {
 				adapter.editEntryTable(entry);
@@ -406,20 +417,37 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		adapter.close();
 	}
 	
-	private void updateExpenses(List<Entry> entries) {
+	private void addFavorites(List<Favorite> favorites, boolean isPull) {
 		adapter.open();
-		for(Entry entry : entries) {
-			setSyncBit(entry);
-			adapter.editEntryTable(entry);
+		for(Favorite favorite : favorites) {
+			if(isPull) {
+				setSyncBitAndFileDownloaded(favorite);
+			} else {
+				setSyncBit(favorite);
+			}
+			if(!adapter.findEntryByMyHash(favorite.myHash)) {
+				adapter.insertToFavoriteTable(favorite);
+			} else {
+				adapter.editFavoriteTableByHash(favorite);
+			}
 		}
 		adapter.close();
 	}
 	
-	private void addFavorites(List<Favorite> favorites) {
+	private void updateExpenses(List<Entry> entries) {
 		adapter.open();
-		for(Favorite favorite : favorites) {
-			setSyncBit(favorite);
-			adapter.insertToFavoriteTable(favorite);
+		for(Entry entry : entries) {
+			Entry tempEntry = convertCursorToListString.getSingleEntryByHash(entry.myHash);
+			boolean toFetchFile = true;
+			if(tempEntry != null && Strings.equal(entry.fileUpdatedAt, tempEntry.fileUpdatedAt)) {
+				toFetchFile = false;
+			}
+			if(toFetchFile) {
+				setSyncBitAndFileDownloaded(entry);
+			} else {
+				setSyncBit(entry);
+			}
+			adapter.editEntryTableByHash(entry);
 		}
 		adapter.close();
 	}
@@ -429,8 +457,17 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		Log.d("favorite "+adapter+"  "+favorites);
 		adapter.open();
 		for(Favorite favorite : favorites) {
-			setSyncBit(favorite);
-			adapter.editFavoriteTable(favorite);
+			Favorite tempFavorite = convertCursorToListString.getSingleFavoriteByHash(favorite.myHash);
+			boolean toFetchFile = true;
+			if(tempFavorite != null && Strings.equal(favorite.fileUpdatedAt, tempFavorite.fileUpdatedAt)) {
+				toFetchFile = false;
+			}
+			if(toFetchFile) {
+				setSyncBitAndFileDownloaded(favorite);
+			} else {
+				setSyncBit(favorite);
+			}
+			adapter.editFavoriteTableByHash(favorite);
 		}
 		adapter.close();
 	}
@@ -439,6 +476,10 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		adapter.open();
 		for(Favorite favorite : favorites) {
 			setSyncBit(favorite);
+			adapter.open();
+			favorite.favId = adapter.getFavIdByHash(favorite.myHash);
+			adapter.close();
+			 
 			if(Strings.equal(favorite.type, context.getString(R.string.voice)) || Strings.equal(favorite.type, context.getString(R.string.camera))) {
 				fileHelper.deleteAllFavoriteFiles(favorite.favId);
 			}
@@ -451,6 +492,9 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		adapter.open();
 		for(Entry entry : entries) {
 			setSyncBit(entry);
+			adapter.open();
+			entry.id = adapter.getEntryIdByHash(entry.myHash);
+			adapter.close();
 			if(Strings.equal(entry.type, context.getString(R.string.voice)) || Strings.equal(entry.type, context.getString(R.string.camera))) {
 				fileHelper.deleteAllFavoriteFiles(entry.favId);
 			}
@@ -462,19 +506,29 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private void setSyncBitAndFileDownloaded(Entry entry) {
 		setSyncBit(entry);
 		setDownloaded(entry);
+		setUploaded(entry);
 	}
 	
 	private void setSyncBitAndFileDownloaded(Favorite favorite) {
 		setSyncBit(favorite);
 		setDownloaded(favorite);
+		setUploaded(favorite);
 	}
 	
 	private void setDownloaded(Entry entry) {
-		entry.fileToDownload = true;
+//		entry.fileToDownload = true;
 	}
 	
 	private void setDownloaded(Favorite favorite) {
-		favorite.fileToDownload = true;
+//		favorite.fileToDownload = true;
+	}
+	
+	private void setUploaded(Entry entry) {
+		entry.fileUploaded = true;
+	}
+	
+	private void setUploaded(Favorite favorite) {
+		favorite.fileUploaded = true;
 	}
 	
 	private void setSyncBit(Entry entry) {

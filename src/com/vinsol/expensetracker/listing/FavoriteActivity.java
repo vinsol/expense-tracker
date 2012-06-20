@@ -42,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.confconnect.http.SyncHelper;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -217,6 +218,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
   	    case 1:
   	    	FlurryAgent.onEvent("Favorite "+getString(R.string.deleting_using_context_menu));
   	    	removeItem(info.position);
+  	    	SyncHelper.startSync();
   	    	break;
   	    	
 		default:

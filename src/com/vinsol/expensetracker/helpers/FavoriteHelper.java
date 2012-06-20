@@ -20,6 +20,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.confconnect.http.SyncHelper;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 
@@ -142,6 +143,7 @@ public class FavoriteHelper implements OnClickListener{
 				} else {
 					toCheck = !showAddFavorite.isChecked();
 				}
+				SyncHelper.startSync();
 				onClickFavorite(toCheck);
 				break;
 

@@ -169,6 +169,7 @@ public class Home extends BaseActivity implements OnClickListener {
 				insertToDatabase(R.string.unknown);
 				Intent intentListView = new Intent(this, ExpenseListing.class);
 				startActivity(intentListView);
+				SyncHelper.startSync();
 				break;
 			
 			////// ******* opens ListView Activity ******** ///////////
