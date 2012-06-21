@@ -44,9 +44,9 @@ import com.vinsol.expensetracker.utils.Utils;
 public class HTTP {
 
 	// Requirements
-	private String baseUrl = "http://192.168.0.19:3000/";
+	private String baseUrl = "http://192.168.0.27:3000/";
 	private String sync = "sync";
-	private String verification = "?email=hiteshsondhi88@gmail.com";
+	private String verification = "?email=rishav@gmail.com";
 	private String confConnect = "railsconf-2012/";
 	private String events = "events/";
 	private String timestamp = "&&timestamp=";

@@ -393,7 +393,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		super.onPostExecute(result);
 		if(toConinue) {
 			toConinue = false;
-			SyncHelper.syncHelper.execute(); 
+			SyncHelper.syncHelper = new SyncHelper(context).execute();
 		}
 	}
 	
