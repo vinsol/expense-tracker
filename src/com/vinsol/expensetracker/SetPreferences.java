@@ -5,6 +5,7 @@
 
 package com.vinsol.expensetracker;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,11 @@ import android.view.Window;
 import android.widget.EditText;
 
 import com.flurry.android.FlurryAgent;
+import com.vinsol.confconnect.gson.MyGson;
+import com.vinsol.confconnect.http.HTTP;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
+import com.vinsol.expensetracker.models.User;
+import com.vinsol.expensetracker.utils.Strings;
 
 public class SetPreferences extends PreferenceActivity {
 	
@@ -69,7 +74,30 @@ public class SetPreferences extends PreferenceActivity {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						SharedPreferencesHelper.setSyncPrefs(((EditText)view.findViewById(R.id.sync_email)).getText().toString(), ((EditText)view.findViewById(R.id.sync_password)).getText().toString());
+						String token = null;
+						User user = setUserData(view);
+						try {
+							if(setUserData(view) != null) {
+								String postData = new MyGson().get().toJson(user);
+								String fetchedData = new HTTP(SetPreferences.this).authenticate(postData);
+								if(Strings.notEmpty(token)) {
+									SharedPreferencesHelper.setToken(token);
+								}
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+
+					private User setUserData(View view) {
+						User user = new User();
+						String name = ((EditText) view.findViewById(R.id.sync_name)).getText().toString();
+						String email = ((EditText) view.findViewById(R.id.sync_email)).getText().toString();
+						String password = ((EditText) view.findViewById(R.id.sync_password)).getText().toString();
+						if(Strings.isEmpty(name) || Strings.isEmpty(email) || Strings.isEmpty(password) || password.length() < 5) {
+							return null;
+						}
+						return user;
 					}
 				});
 				builder.setNegativeButton(getString(R.string.cancel), (OnClickListener)null);

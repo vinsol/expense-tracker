@@ -53,6 +53,7 @@ public class HTTP {
 	private String json = ".json";
 	private String update = "update";
 	private String delete = "delete";
+	private String token = "token";
 	private Context mContext;
 	private FileHelper fileHelper;
 	
@@ -98,6 +99,10 @@ public class HTTP {
 	
 	public String addMultipleFavorites(String postData) throws IOException {
 		return post(baseUrl+favorites+json+verification, postData);
+	}
+	
+	public String authenticate(String postData) throws IOException {
+		return post(baseUrl+"/"+token+json, postData);
 	}
 
 	public String post(Object url, List<NameValuePair> nvps) throws IOException {

@@ -5,13 +5,13 @@
 
 package com.vinsol.expensetracker.helpers;
 
-import com.vinsol.expensetracker.ExpenseTrackerApplication;
-import com.vinsol.expensetracker.R;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+
+import com.vinsol.expensetracker.ExpenseTrackerApplication;
+import com.vinsol.expensetracker.R;
 
 public class SharedPreferencesHelper {
 
@@ -42,11 +42,10 @@ public class SharedPreferencesHelper {
 		prefEditor.commit();	
 	}
 	
-	public static void setSyncPrefs(String email, String password) {
+	public static void setToken(String token) {
 		SharedPreferences sharedPreferences = getSharedPreferences();
 		Editor prefEditor = sharedPreferences.edit();
-		prefEditor.putString(context.getString(R.string.pref_key_sync_email), email);
-		prefEditor.putString(context.getString(R.string.pref_key_sync_password), password);
+		prefEditor.putString(context.getString(R.string.pref_key_token), token);
 		prefEditor.commit();	
 	}
 	
