@@ -11,7 +11,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -26,7 +25,6 @@ import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.ByteArrayBuffer;
 import org.apache.http.util.EntityUtils;
 
@@ -47,11 +45,7 @@ public class HTTP {
 	private String baseUrl = "http://192.168.1.37:3000/";
 	private String sync = "sync";
 	private String verification = "?email=hiteshsondhi88@gmail.com";
-	private String confConnect = "railsconf-2012/";
-	private String events = "events/";
 	private String timestamp = "&&timestamp=";
-	private String attendees = "attendees.json";
-	private String comments = "comments.json";
 	private String expenses = "expenses";
 	private String favorites = "favorites";
 	private String upload = "upload";
@@ -74,28 +68,12 @@ public class HTTP {
 //		nameValuePairs.add(new BasicNameValuePair("stars", rating));
 //		return post(baseUrl+confConnect+events+eventPermalink+"/"+rate, nameValuePairs);
 //	}
-	
-	public String addComment(String eventPermalink, String username, String token, String description) throws IOException {
-		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-		nameValuePairs.add(new BasicNameValuePair("username", username));
-		nameValuePairs.add(new BasicNameValuePair("token", token));
-		nameValuePairs.add(new BasicNameValuePair("comment[description]", description));
-		return post(baseUrl+confConnect+events+eventPermalink+"/"+comments, nameValuePairs);
-	}
-	
 	public String getSyncData() throws IOException{
 		return get(baseUrl+sync+json+verification+timestamp+SharedPreferencesHelper.getSharedPreferences().getString(mContext.getString(R.string.pref_key_sync_timestamp), ""));
 	}
 	
 	public String get(String url) throws IOException{
 		return execute(url, null, "GET");
-	}
-	
-	public String addToIsAttending(String eventPermalink,String username,String token) throws IOException {
-		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-		nameValuePairs.add(new BasicNameValuePair("username", username));
-		nameValuePairs.add(new BasicNameValuePair("token", token));
-		return post(baseUrl+confConnect+events+eventPermalink+"/"+attendees, nameValuePairs);
 	}
 	
 	public String addMultipleExpenses(String postData) throws IOException {
