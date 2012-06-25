@@ -31,6 +31,7 @@ import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.Strings;
 
 abstract class ShowAbstract extends BaseActivity implements OnClickListener {
@@ -168,7 +169,6 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 				} else {
 					delete();
 				}
-				SyncHelper.startSync();
 				break;
 	
 			case R.id.show_edit:
@@ -187,20 +187,24 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 	}
 
 	private void delete() {
+		Log.d("*********************** Deleting From ShowAbstract*************************");
 		if (mShowList.id != null) {
-			deleteFile();
 			mDatabaseAdapter.open();
-			if(Strings.isEmpty(mShowList.updatedAt)) {
-				mDatabaseAdapter.permanentDeleteEntryTableEntryID(mShowList.id);
-			} else {
+//			if(Strings.isEmpty(mShowList.updatedAt)) {
+//				deleteFile();
+//				mDatabaseAdapter.permanentDeleteEntryTableEntryID(mShowList.id);
+//			} else {
 				mDatabaseAdapter.deleteEntryTableEntryID(mShowList.id);
-			}
+//			}
 			mDatabaseAdapter.close();
+			SyncHelper.startSync();
 			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
 			if(intentExtras.containsKey(Constants.KEY_POSITION)) {
 				intentExtras.putBoolean(Constants.KEY_DATA_CHANGED, true);
 				setResultCanceled();
 			}
+
+			
 			finish();
 		} else {
 			Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();

@@ -17,6 +17,7 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.utils.Log;
+import com.vinsol.expensetracker.utils.Strings;
 import com.vinsol.expensetracker.utils.Utils;
 
 public class DatabaseAdapter {
@@ -116,8 +117,13 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_AMOUNT, list.amount);
 		contentValues.put(KEY_TYPE, list.type);
 		contentValues.put(KEY_LOCATION, list.location);
-		contentValues.put(KEY_MY_HASH, Utils.getMD5());
-		contentValues.put(KEY_DELETE_BIT, false);
+		if(Strings.isEmpty(list.myHash)) {
+			contentValues.put(KEY_MY_HASH, Utils.getMD5());
+		} else {
+			contentValues.put(KEY_MY_HASH, list.myHash);
+		}
+		
+		contentValues.put(KEY_DELETE_BIT, list.deleted);
 		contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
 		contentValues.put(KEY_SYNC_BIT, list.syncBit);
 		contentValues.put(KEY_UPDATED_AT, list.updatedAt);
@@ -138,8 +144,14 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_LOCATION, list.location);
 		contentValues.put(KEY_FAVORITE, list.favId);
 		contentValues.put(KEY_TYPE, list.type);
-		contentValues.put(KEY_MY_HASH, Utils.getMD5());
-		contentValues.put(KEY_DELETE_BIT, false);
+		
+		if(Strings.isEmpty(list.myHash)) {
+			contentValues.put(KEY_MY_HASH, Utils.getMD5());
+		} else {
+			contentValues.put(KEY_MY_HASH, list.myHash);
+		}
+		
+		contentValues.put(KEY_DELETE_BIT, list.deleted);
 		contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
 		contentValues.put(KEY_SYNC_BIT, list.syncBit);
 		contentValues.put(KEY_UPDATED_AT, list.updatedAt);
@@ -228,10 +240,13 @@ public class DatabaseAdapter {
 	public String getEntryIdByHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
 		try {
-			Log.d("Deleting");
 			Cursor cursor = db.query(ENTRY_TABLE, null, where, null, null, null, null);
-			Log.d("Deleted");
-			return cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
+			if(cursor.moveToFirst()) {
+				String id = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
+				cursor.close();
+				return id;
+			}
+			
 		} catch (SQLiteException e) {
 			e.printStackTrace();
 		}
@@ -241,10 +256,12 @@ public class DatabaseAdapter {
 	public String getFavIdByHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
 		try {
-			Log.d("Deleting");
 			Cursor cursor = db.query(FAVORITE_TABLE, null, where, null, null, null, null);
-			Log.d("Deleted");
-			return cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
+			if(cursor.moveToFirst()) {
+				String id = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
+				cursor.close();
+				return id;
+			}
 		} catch (SQLiteException e) {
 			e.printStackTrace();
 		}
@@ -277,6 +294,7 @@ public class DatabaseAdapter {
 	}
 	
 	public boolean deleteEntryTableEntryID(String id) {
+		Log.d("Check Deleting ************* "+id);
 		String where = KEY_ID + "=" + id;
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_DELETE_BIT, true);

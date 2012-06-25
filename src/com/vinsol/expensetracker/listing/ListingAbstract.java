@@ -317,11 +317,11 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 	private void removeItem(int position) {
 		Entry tempEntry = ((Entry)mSeparatedListAdapter.getItem(position));
 		mDatabaseAdapter.open();
-		if(Strings.isEmpty(tempEntry.updatedAt)) {
-			mDatabaseAdapter.permanentDeleteEntryTableEntryID(tempEntry.id);
-		} else {
+//		if(Strings.isEmpty(tempEntry.updatedAt)) {
+//			mDatabaseAdapter.permanentDeleteEntryTableEntryID(tempEntry.id);
+//		} else {
 			mDatabaseAdapter.deleteEntryTableEntryID(tempEntry.id);
-		}
+//		}
     	mDatabaseAdapter.close();
     	//XXX
     	if(!mSeparatedListAdapter.remove(position)) {

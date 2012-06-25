@@ -143,8 +143,9 @@ public class FavoriteHelper implements OnClickListener{
 				} else {
 					toCheck = !showAddFavorite.isChecked();
 				}
-				SyncHelper.startSync();
 				onClickFavorite(toCheck);
+
+				SyncHelper.startSync();
 				break;
 
 		default:

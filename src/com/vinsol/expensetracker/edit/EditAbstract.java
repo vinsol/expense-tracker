@@ -418,6 +418,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editEntryTable(toSave);
 		mDatabaseAdapter.close();
+
 		if(!intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE)) {
 			Intent intentExpenseListing = new Intent(this, ExpenseListing.class);
 			intentExpenseListing.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -425,6 +426,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			mToHighLight.putString(Constants.KEY_HIGHLIGHT, toSave.id);
 			if(toSave.timeInMillis != null) {mToHighLight.putLong(Constants.KEY_TIME_IN_MILLIS_TO_SET_TAB, toSave.timeInMillis); }
 			intentExpenseListing.putExtras(mToHighLight);
+			SyncHelper.startSync();
 			if(!intentExtras.containsKey(Constants.KEY_POSITION)) {
 				startActivity(intentExpenseListing);
 			} else {
@@ -444,7 +446,9 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			Intent mIntent = new Intent();
 			mIntent.putExtras(tempBundle);
 			setResult(Activity.RESULT_OK, mIntent);
+			SyncHelper.startSync();
 		}
+		
 		finish();
 	}
 	
@@ -456,6 +460,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editFavoriteTable(toSaveFav);
 			mDatabaseAdapter.close();
+			SyncHelper.startSync();
 			Bundle bundle = new Bundle();
 			bundle.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, getFavoriteListOnResult(toSaveFav));
 			setActivityResult(bundle);
@@ -539,7 +544,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			} else {
 				saveEntry();
 			}
-			SyncHelper.startSync();
 			break;
 		
 		case R.id.edit_delete:
@@ -551,7 +555,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 				} else {
 					deleteEntry();
 				}
-				SyncHelper.startSync();
 			}
 			break;
 		default:
@@ -572,7 +575,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 					} else {
 						deleteEntry();
 					}
-					SyncHelper.startSync();
 				}
 			}
 		});
@@ -580,15 +582,17 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 
 	private void deleteEntry() {
 		isChanged = true;
-		deleteFile();
+		
 		////// ******* Delete entry from database ******** /////////
 		mDatabaseAdapter.open();
-		if(Strings.isEmpty(entry.updatedAt)) {
-			mDatabaseAdapter.permanentDeleteEntryTableEntryID(entry.id);
-		} else {
+//		if(Strings.isEmpty(entry.updatedAt)) {
+//			deleteFile();
+//			mDatabaseAdapter.permanentDeleteEntryTableEntryID(entry.id);
+//		} else {
 			mDatabaseAdapter.deleteEntryTableEntryID(entry.id);
-		}
+//		}
 		mDatabaseAdapter.close();
+
 		Bundle tempBundle = new Bundle();
 		if(intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE)) {
 			Entry displayList = new Entry();
@@ -606,22 +610,26 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			intent.putExtras(tempBundle);
 			setResult(Activity.RESULT_CANCELED, intent);
 		}
+		SyncHelper.startSync();
+
 		finish();
 	}
 	
 	private void deleteFavorite() {
 		isChanged = true;
-		fileHelper.deleteAllFavoriteFiles(mFavoriteList.favId);
+		
 		////// ******* Delete entry from database ******** /////////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editFavoriteIdEntryTable(mFavoriteList.favId);
-		if(Strings.isEmpty(mFavoriteList.updatedAt)) {
-			mDatabaseAdapter.permanentDeleteFavoriteTableEntryID(mFavoriteList.favId);
-		} else {
+//		if(Strings.isEmpty(mFavoriteList.updatedAt)) {
+//			fileHelper.deleteAllFavoriteFiles(mFavoriteList.favId);
+//			mDatabaseAdapter.permanentDeleteFavoriteTableEntryID(mFavoriteList.favId);
+//		} else {
 			mDatabaseAdapter.deleteFavoriteTableEntryID(mFavoriteList.favId);
-		}
+//		}
 		
 		mDatabaseAdapter.close();
+
 		Intent intent = new Intent();
 		Bundle bundle = new Bundle();
 		bundle.putBoolean(Constants.KEY_DATA_CHANGED, true);
@@ -630,6 +638,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		}
 		intent.putExtras(bundle);
 		setResult(Activity.RESULT_CANCELED,intent);
+		SyncHelper.startSync();
 		finish();
 	}
 
