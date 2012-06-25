@@ -8,6 +8,7 @@ package com.vinsol.expensetracker;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -94,11 +95,16 @@ public class SetPreferences extends PreferenceActivity {
 						String name = ((EditText) view.findViewById(R.id.sync_name)).getText().toString();
 						String email = ((EditText) view.findViewById(R.id.sync_email)).getText().toString();
 						String password = ((EditText) view.findViewById(R.id.sync_password)).getText().toString();
-						if(Strings.isEmpty(name) || Strings.isEmpty(email) || Strings.isEmpty(password) || password.length() < 5) {
+						if(Strings.isEmpty(name) || Strings.isEmpty(email) || Strings.isEmpty(password) || password.length() < 5 || checkEmail(email)) {
 							return null;
 						}
 						return user;
 					}
+					
+					private boolean checkEmail(String email) {
+				        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+					}
+
 				});
 				builder.setNegativeButton(getString(R.string.cancel), (OnClickListener)null);
 				builder.show();
@@ -106,5 +112,6 @@ public class SetPreferences extends PreferenceActivity {
 			}
 		});
 	}
+	
 	
 }
