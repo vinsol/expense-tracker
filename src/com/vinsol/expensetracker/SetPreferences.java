@@ -8,7 +8,6 @@ package com.vinsol.expensetracker;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -28,6 +27,7 @@ import com.vinsol.confconnect.gson.MyGson;
 import com.vinsol.confconnect.http.HTTP;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.models.User;
+import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.Strings;
 
 public class SetPreferences extends PreferenceActivity {
@@ -77,9 +77,13 @@ public class SetPreferences extends PreferenceActivity {
 					public void onClick(DialogInterface dialog, int which) {
 						String token = null;
 						User user = setUserData(view);
+						Log.d("*********************************");
+						Log.d(" User "+user);
+						
 						try {
 							if(setUserData(view) != null) {
 								String postData = new MyGson().get().toJson(user);
+								Log.d("********************* Post Data "+postData);
 								String fetchedData = new HTTP(SetPreferences.this).authenticate(postData);
 								if(Strings.notEmpty(token)) {
 									SharedPreferencesHelper.setToken(token);
@@ -91,17 +95,19 @@ public class SetPreferences extends PreferenceActivity {
 					}
 
 					private User setUserData(View view) {
-						User user = new User();
+						User user = null;
 						String name = ((EditText) view.findViewById(R.id.sync_name)).getText().toString();
 						String email = ((EditText) view.findViewById(R.id.sync_email)).getText().toString();
 						String password = ((EditText) view.findViewById(R.id.sync_password)).getText().toString();
-						if(Strings.isEmpty(name) || Strings.isEmpty(email) || Strings.isEmpty(password) || password.length() < 5 || checkEmail(email)) {
+						if(Strings.isEmpty(name) || Strings.isEmpty(email) || Strings.isEmpty(password) || password.length() < 5 || !isEmailFormatCorrect(email)) {
 							return null;
+						} else {
+							user = new User(name,email,password);
 						}
 						return user;
 					}
 					
-					private boolean checkEmail(String email) {
+					private boolean isEmailFormatCorrect(String email) {
 				        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
 					}
 
