@@ -23,6 +23,7 @@ import android.view.Window;
 import android.widget.EditText;
 
 import com.flurry.android.FlurryAgent;
+import com.google.gson.Gson;
 import com.vinsol.confconnect.gson.MyGson;
 import com.vinsol.confconnect.http.HTTP;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
@@ -75,18 +76,22 @@ public class SetPreferences extends PreferenceActivity {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						String token = null;
 						User user = setUserData(view);
 						Log.d("*********************************");
 						Log.d(" User "+user);
 						
 						try {
 							if(setUserData(view) != null) {
-								String postData = new MyGson().get().toJson(user);
+								Gson gson = new MyGson().get();
+								String postData = gson.toJson(user);
 								Log.d("********************* Post Data "+postData);
 								String fetchedData = new HTTP(SetPreferences.this).authenticate(postData);
-								if(Strings.notEmpty(token)) {
-									SharedPreferencesHelper.setToken(token);
+								Log.d("************** "+fetchedData);
+								if(fetchedData != null) {
+									User savedUser = gson.fromJson(fetchedData, User.class);
+									if(Strings.notEmpty(savedUser.token)) {
+										SharedPreferencesHelper.setToken(savedUser.token);
+									}	
 								}
 							}
 						} catch (IOException e) {
