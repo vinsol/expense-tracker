@@ -44,7 +44,7 @@ public class HTTP {
 	// Requirements
 	private String baseUrl = "http://192.168.0.21:3000/";
 	private String sync = "sync";
-	private String verification = "?email=hiteshsondhi88@gmail.com";
+	private String verification = "?token=";
 	private String timestamp = "&&timestamp=";
 	private String expenses = "expenses";
 	private String favorites = "favorites";
@@ -69,36 +69,36 @@ public class HTTP {
 //		nameValuePairs.add(new BasicNameValuePair("stars", rating));
 //		return post(baseUrl+confConnect+events+eventPermalink+"/"+rate, nameValuePairs);
 //	}
-	public String getSyncData() throws IOException{
-		return get(baseUrl+sync+json+verification+timestamp+SharedPreferencesHelper.getSharedPreferences().getString(mContext.getString(R.string.pref_key_sync_timestamp), ""));
+	public String getSyncData(String token) throws IOException{
+		return get(baseUrl+sync+json+verification+token+timestamp+SharedPreferencesHelper.getSharedPreferences().getString(mContext.getString(R.string.pref_key_sync_timestamp), ""));
 	}
 	
 	public String get(String url) throws IOException{
 		return execute(url, null, "GET");
 	}
 	
-	public String addMultipleExpenses(String postData) throws IOException {
-		return post(baseUrl+expenses+json+verification, postData);
+	public String addMultipleExpenses(String postData,String token) throws IOException {
+		return post(baseUrl+expenses+json+verification+token, postData);
 	}
 	
-	public String updateMultipleExpenses(String postData) throws IOException {
-		return post(baseUrl+expenses+"/"+update+json+verification, postData);
+	public String updateMultipleExpenses(String postData,String token) throws IOException {
+		return post(baseUrl+expenses+"/"+update+json+verification+token, postData);
 	}
 	
-	public String updateMultipleFavorites(String postData) throws IOException {
-		return post(baseUrl+favorites+"/"+update+json+verification, postData);
+	public String updateMultipleFavorites(String postData,String token) throws IOException {
+		return post(baseUrl+favorites+"/"+update+json+verification+token, postData);
 	}
 	
-	public String deleteMultipleExpenses(String postData) throws IOException {
-		return post(baseUrl+expenses+"/"+delete+json+verification, postData);
+	public String deleteMultipleExpenses(String postData,String token) throws IOException {
+		return post(baseUrl+expenses+"/"+delete+json+verification+token, postData);
 	}
 	
-	public String deleteMultipleFavorites(String postData) throws IOException {
-		return post(baseUrl+favorites+"/"+delete+json+verification, postData);
+	public String deleteMultipleFavorites(String postData,String token) throws IOException {
+		return post(baseUrl+favorites+"/"+delete+json+verification+token, postData);
 	}
 	
-	public String addMultipleFavorites(String postData) throws IOException {
-		return post(baseUrl+favorites+json+verification, postData);
+	public String addMultipleFavorites(String postData,String token) throws IOException {
+		return post(baseUrl+favorites+json+verification+token, postData);
 	}
 	
 	public String authenticate(String postData) throws IOException {
@@ -128,15 +128,15 @@ public class HTTP {
         return execute(url.toString(), entity, "DELETE");
     }
 	
-	public String uploadExpenseFile(File file,String idFromServer, boolean isAudio) throws IOException {
-		return uploadFile(baseUrl+expenses+"/"+upload+"/"+idFromServer+json+verification, file, isAudio);
+	public String uploadExpenseFile(File file,String idFromServer, boolean isAudio,String token) throws IOException {
+		return uploadFile(baseUrl+expenses+"/"+upload+"/"+idFromServer+json+verification+token, file, isAudio);
 	}
 	
-	public String uploadFavoriteFile(File file,String idFromServer, boolean isAudio) throws IOException {
-		return uploadFile(baseUrl+favorites+"/"+upload+"/"+idFromServer+json+verification, file, isAudio);
+	public String uploadFavoriteFile(File file,String idFromServer, boolean isAudio,String token) throws IOException {
+		return uploadFile(baseUrl+favorites+"/"+upload+"/"+idFromServer+json+verification+token, file, isAudio);
 	}
 	
-	public boolean downloadExpenseFile(String id,String idFromServer, boolean isAudio) throws IOException {
+	public boolean downloadExpenseFile(String id,String idFromServer, boolean isAudio,String token) throws IOException {
 		String extension;
 		File file;
 		if(isAudio) { 
@@ -147,10 +147,10 @@ public class HTTP {
 			file = fileHelper.getCameraFileLargeEntry(id);
 		}
 		
-		return downloadFile(baseUrl+expenses+"/"+download+"/"+idFromServer+extension+verification, file);
+		return downloadFile(baseUrl+expenses+"/"+download+"/"+idFromServer+extension+verification+token, file);
 	}
 	
-	public boolean downloadFavoriteFile(String id,String idFromServer, boolean isAudio) throws IOException {
+	public boolean downloadFavoriteFile(String id,String idFromServer, boolean isAudio,String token) throws IOException {
 		String extension;
 		File file;
 		if(isAudio) { 
@@ -161,7 +161,7 @@ public class HTTP {
 			file = fileHelper.getCameraFileLargeFavorite(id);
 		}
 		
-		return downloadFile(baseUrl+favorites+"/"+download+"/"+idFromServer+extension+verification, file);
+		return downloadFile(baseUrl+favorites+"/"+download+"/"+idFromServer+extension+verification+token, file);
 	}
  	
 	private String execute(String url, HttpEntity postData, String requestMethod) throws IOException {

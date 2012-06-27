@@ -21,7 +21,6 @@ import android.preference.PreferenceActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.google.gson.Gson;
@@ -67,7 +66,6 @@ public class SetPreferences extends PreferenceActivity {
 		
 		Preference syncSetUpPref = findPreference(getString(R.string.pref_key_set_up_sync));
 		String token = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_token), null);
-		Toast.makeText(this, "token "+token, Toast.LENGTH_LONG).show();
 		if(Strings.isEmpty(token)) {
 			syncSetUpPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				
