@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 
 import com.vinsol.expensetracker.ExpenseTrackerApplication;
 import com.vinsol.expensetracker.R;
+import com.vinsol.expensetracker.models.User;
 
 public class SharedPreferencesHelper {
 
@@ -42,10 +43,12 @@ public class SharedPreferencesHelper {
 		prefEditor.commit();	
 	}
 	
-	public static void setToken(String token) {
+	public static void setUserDetails(User user) {
 		SharedPreferences sharedPreferences = getSharedPreferences();
 		Editor prefEditor = sharedPreferences.edit();
-		prefEditor.putString(context.getString(R.string.pref_key_token), token);
+		prefEditor.putString(context.getString(R.string.pref_key_token), user.token);
+		prefEditor.putString(context.getString(R.string.pref_key_sync_name), user.name);
+		prefEditor.putString(context.getString(R.string.pref_key_sync_email), user.email);
 		prefEditor.commit();	
 	}
 	

@@ -21,6 +21,7 @@ import android.preference.PreferenceActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.google.gson.Gson;
@@ -65,63 +66,72 @@ public class SetPreferences extends PreferenceActivity {
 		});
 		
 		Preference syncSetUpPref = findPreference(getString(R.string.pref_key_set_up_sync));
-		syncSetUpPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(SetPreferences.this);
-				final View view = getLayoutInflater().inflate(R.layout.pref_sync_dialog, null); 
-				builder.setView(view);
-				builder.setPositiveButton(getString(R.string.ok), new OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						User user = setUserData(view);
-						Log.d("*********************************");
-						Log.d(" User "+user);
+		String token = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_token), null);
+		Toast.makeText(this, "token "+token, Toast.LENGTH_LONG).show();
+		if(Strings.isEmpty(token)) {
+			syncSetUpPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+				
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(SetPreferences.this);
+					final View view = getLayoutInflater().inflate(R.layout.pref_sync_dialog, null); 
+					builder.setView(view);
+					builder.setPositiveButton(getString(R.string.ok), new OnClickListener() {
 						
-						try {
-							if(setUserData(view) != null) {
-								Gson gson = new MyGson().get();
-								String postData = gson.toJson(user);
-								Log.d("********************* Post Data "+postData);
-								String fetchedData = new HTTP(SetPreferences.this).authenticate(postData);
-								Log.d("************** "+fetchedData);
-								if(fetchedData != null) {
-									User savedUser = gson.fromJson(fetchedData, User.class);
-									if(Strings.notEmpty(savedUser.token)) {
-										SharedPreferencesHelper.setToken(savedUser.token);
-									}	
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							User user = setUserData(view);
+							Log.d("*********************************");
+							Log.d(" User "+user);
+							
+							try {
+								if(setUserData(view) != null) {
+									Gson gson = new MyGson().get();
+									String postData = gson.toJson(user);
+									Log.d("********************* Post Data "+postData);
+									String fetchedData = new HTTP(SetPreferences.this).authenticate(postData);
+									Log.d("************** "+fetchedData);
+									if(fetchedData != null) {
+										User savedUser = gson.fromJson(fetchedData, User.class);
+										if(Strings.notEmpty(savedUser.token)) {
+											SharedPreferencesHelper.setUserDetails(savedUser);
+										}
+									}
 								}
+							} catch (IOException e) {
+								e.printStackTrace();
 							}
-						} catch (IOException e) {
-							e.printStackTrace();
 						}
-					}
-
-					private User setUserData(View view) {
-						User user = null;
-						String name = ((EditText) view.findViewById(R.id.sync_name)).getText().toString();
-						String email = ((EditText) view.findViewById(R.id.sync_email)).getText().toString();
-						String password = ((EditText) view.findViewById(R.id.sync_password)).getText().toString();
-						if(Strings.isEmpty(name) || Strings.isEmpty(email) || Strings.isEmpty(password) || password.length() < 5 || !isEmailFormatCorrect(email)) {
-							return null;
-						} else {
-							user = new User(name,email,password);
+	
+						private User setUserData(View view) {
+							User user = null;
+							String name = ((EditText) view.findViewById(R.id.sync_name)).getText().toString();
+							String email = ((EditText) view.findViewById(R.id.sync_email)).getText().toString();
+							String password = ((EditText) view.findViewById(R.id.sync_password)).getText().toString();
+							if(Strings.isEmpty(name) || Strings.isEmpty(email) || Strings.isEmpty(password) || password.length() < 5 || !isEmailFormatCorrect(email)) {
+								return null;
+							} else {
+								user = new User(name,email,password);
+							}
+							return user;
 						}
-						return user;
-					}
-					
-					private boolean isEmailFormatCorrect(String email) {
-				        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-					}
-
-				});
-				builder.setNegativeButton(getString(R.string.cancel), (OnClickListener)null);
-				builder.show();
-				return false;
-			}
-		});
+						
+						private boolean isEmailFormatCorrect(String email) {
+					        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+						}
+	
+					});
+					builder.setNegativeButton(getString(R.string.cancel), (OnClickListener)null);
+					builder.show();
+					return false;
+				}
+			});
+		} else {
+			String name = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_sync_name), "");
+			String email = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_sync_email), "");
+			syncSetUpPref.setTitle("Configured to sync");
+			syncSetUpPref.setSummary(name+"\n"+email);
+		}
 	}
 	
 	
