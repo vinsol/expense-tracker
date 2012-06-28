@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+   	android:padding="5dp"
+   	android:layout_height="fill_parent"
+   	android:orientation="vertical" >
+	<TabHost
+	    android:id="@android:id/tabhost"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent">
+	    <LinearLayout
+	        android:orientation="vertical"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent">
+	        <TabWidget
+	            android:id="@android:id/tabs"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content" />
+	        <FrameLayout
+	            android:id="@android:id/tabcontent"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent">
+	            
+	            <LinearLayout 
+	                android:id="@+id/signup"
+					android:layout_width="fill_parent"
+				   	android:layout_height="fill_parent"
+				   	android:orientation="vertical" >
+				   
+				   	<EditText
+				    	android:id="@+id/sync_name" 
+				       	android:layout_width="fill_parent"
+				       	android:layout_height="wrap_content"
+				       	android:hint="name" />
+				   
+					<EditText
+				    	android:id="@+id/sync_email" 
+				    	android:inputType="textEmailAddress"
+				    	android:layout_width="fill_parent"
+				    	android:layout_height="wrap_content"
+				    	android:hint="email" />
+				   
+					<EditText 
+				    	android:id="@+id/sync_password"
+				       	android:layout_width="fill_parent"
+				       	android:layout_height="wrap_content"
+				       	android:password="true"
+				       	android:hint="password" />
+				</LinearLayout>
+	            
+	            <LinearLayout 
+	                android:id="@+id/signin"
+					android:layout_width="fill_parent"
+				   	android:layout_height="fill_parent"
+				   	android:orientation="vertical" >
+				   
+					<EditText
+				    	android:inputType="textEmailAddress"
+				    	android:layout_width="fill_parent"
+				    	android:layout_height="wrap_content"
+				    	android:hint="email" />
+				   
+					<EditText 
+				       	android:layout_width="fill_parent"
+				       	android:layout_height="wrap_content"
+				       	android:password="true"
+				       	android:hint="password" />
+				</LinearLayout>
+					            
+	            
+	        </FrameLayout>
+	    </LinearLayout>
+	</TabHost>	
+</LinearLayout>

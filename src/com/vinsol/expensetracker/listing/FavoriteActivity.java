@@ -42,7 +42,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.confconnect.http.SyncHelper;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -58,8 +57,8 @@ import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
+import com.vinsol.expensetracker.sync.SyncHelper;
 import com.vinsol.expensetracker.utils.ImagePreview;
-import com.vinsol.expensetracker.utils.Strings;
 
 public class FavoriteActivity extends BaseActivity implements OnItemClickListener {
 	

@@ -5,30 +5,22 @@
 
 package com.vinsol.expensetracker;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.view.View;
+import android.text.Html;
 import android.view.Window;
-import android.widget.EditText;
 
 import com.flurry.android.FlurryAgent;
-import com.google.gson.Gson;
-import com.vinsol.confconnect.gson.MyGson;
-import com.vinsol.confconnect.http.HTTP;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
-import com.vinsol.expensetracker.models.User;
-import com.vinsol.expensetracker.utils.Log;
+import com.vinsol.expensetracker.sync.LoginType;
 import com.vinsol.expensetracker.utils.Strings;
 
 public class SetPreferences extends PreferenceActivity {
@@ -64,72 +56,56 @@ public class SetPreferences extends PreferenceActivity {
 			}
 		});
 		
-		Preference syncSetUpPref = findPreference(getString(R.string.pref_key_set_up_sync));
+		final Preference syncSetUpPref = findPreference(getString(R.string.pref_key_set_up_sync));
 		String token = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_token), null);
 		if(Strings.isEmpty(token)) {
 			syncSetUpPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(SetPreferences.this);
-					final View view = getLayoutInflater().inflate(R.layout.pref_sync_dialog, null); 
-					builder.setView(view);
-					builder.setPositiveButton(getString(R.string.ok), new OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							User user = setUserData(view);
-							Log.d("*********************************");
-							Log.d(" User "+user);
-							
-							try {
-								if(setUserData(view) != null) {
-									Gson gson = new MyGson().get();
-									String postData = gson.toJson(user);
-									Log.d("********************* Post Data "+postData);
-									String fetchedData = new HTTP(SetPreferences.this).authenticate(postData);
-									Log.d("************** "+fetchedData);
-									if(fetchedData != null) {
-										User savedUser = gson.fromJson(fetchedData, User.class);
-										if(Strings.notEmpty(savedUser.token)) {
-											SharedPreferencesHelper.setUserDetails(savedUser);
-										}
-									}
-								}
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
-	
-						private User setUserData(View view) {
-							User user = null;
-							String name = ((EditText) view.findViewById(R.id.sync_name)).getText().toString();
-							String email = ((EditText) view.findViewById(R.id.sync_email)).getText().toString();
-							String password = ((EditText) view.findViewById(R.id.sync_password)).getText().toString();
-							if(Strings.isEmpty(name) || Strings.isEmpty(email) || Strings.isEmpty(password) || password.length() < 5 || !isEmailFormatCorrect(email)) {
-								return null;
-							} else {
-								user = new User(name,email,password);
-							}
-							return user;
-						}
-						
-						private boolean isEmailFormatCorrect(String email) {
-					        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-						}
-	
-					});
-					builder.setNegativeButton(getString(R.string.cancel), (OnClickListener)null);
-					builder.show();
-					return false;
+					startActivity(new Intent(SetPreferences.this, LoginType.class));
+//					final AlertDialog.Builder builder = new AlertDialog.Builder(SetPreferences.this);
+//					final View view = getLayoutInflater().inflate(R.layout.pref_sync_dialog, null);
+//					builder.setView(view);
+//					builder.setNegativeButton(getString(R.string.signin), new OnClickListener() {
+//						
+//						@Override
+//						public void onClick(DialogInterface dialog, int which) {
+//							if(builder.create().getButton(DialogInterface.BUTTON_NEGATIVE).getText().equals(getString(R.string.signin))) {
+//								builder.create().getButton(DialogInterface.BUTTON_NEGATIVE).setText(getString(R.string.signup));
+//								view.findViewById(R.id.sync_name).setVisibility(View.GONE);
+//							} else {
+//								builder.create().getButton(DialogInterface.BUTTON_NEGATIVE).setText(getString(R.string.signup));
+//							}
+//						}
+//					});
+//					builder.setPositiveButton(getString(R.string.ok), new OnClickListener() {
+//						
+//						@Override
+//						public void onClick(DialogInterface dialog, int which) {
+//							if(builder.create().getButton(DialogInterface.BUTTON_NEGATIVE).getText().equals(getString(R.string.signin))) {
+//								signup(view, syncSetUpPref);
+//							} else {
+//								signin(view, syncSetUpPref);
+//							}
+//						}
+//	
+//					});
+//					
+//					builder.show();
+					return true;
 				}
 			});
 		} else {
-			String name = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_sync_name), "");
-			String email = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_sync_email), "");
-			syncSetUpPref.setTitle("Configured to sync");
-			syncSetUpPref.setSummary(name+"\n"+email);
+			uiAfterSync(syncSetUpPref);
 		}
+	}
+	
+	private void uiAfterSync(Preference syncSetUpPref) {
+		String name = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_sync_name), "");
+		String email = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_sync_email), "");
+		syncSetUpPref.setTitle("Sync Details:");
+		syncSetUpPref.setSummary(Html.fromHtml("<font color=\"#6E6E6E\">"+name+"<br>"+email+"</font>"));
 	}
 	
 	

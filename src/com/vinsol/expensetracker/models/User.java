@@ -8,6 +8,7 @@ public class User {
 		this.password = password;
 	}
 	
+	public String idFromServer;
 	public String name;
 	public String email;
 	public String password;

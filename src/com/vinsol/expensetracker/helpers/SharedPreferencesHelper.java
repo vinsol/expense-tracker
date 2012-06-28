@@ -46,6 +46,7 @@ public class SharedPreferencesHelper {
 	public static void setUserDetails(User user) {
 		SharedPreferences sharedPreferences = getSharedPreferences();
 		Editor prefEditor = sharedPreferences.edit();
+		prefEditor.putString(context.getString(R.string.pref_key_sync_user_id), user.idFromServer);
 		prefEditor.putString(context.getString(R.string.pref_key_token), user.token);
 		prefEditor.putString(context.getString(R.string.pref_key_sync_name), user.name);
 		prefEditor.putString(context.getString(R.string.pref_key_sync_email), user.email);

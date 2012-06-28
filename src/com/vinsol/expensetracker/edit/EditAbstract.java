@@ -28,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.confconnect.http.SyncHelper;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -46,6 +45,7 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
+import com.vinsol.expensetracker.sync.SyncHelper;
 import com.vinsol.expensetracker.utils.Strings;
 
 abstract class EditAbstract extends BaseActivity implements OnClickListener {

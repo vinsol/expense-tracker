@@ -1,4 +1,4 @@
-package com.vinsol.confconnect.http;
+package com.vinsol.expensetracker.sync;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 import com.vinsol.confconnect.gson.MyGson;
+import com.vinsol.confconnect.http.HTTP;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CameraFileSave;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
@@ -31,7 +32,6 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	private ConvertCursorToListString convertCursorToListString;
 	private Gson gson;
 	private FileHelper fileHelper;
-	private String token;
 	public static AsyncTask<Void, Void, Void> syncHelper;
 	public static boolean toConinue = false;
 	
@@ -42,7 +42,6 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		http = new HTTP(context);
 		gson = new MyGson().get();
 		fileHelper = new FileHelper();
-		token = SharedPreferencesHelper.getSharedPreferences().getString(context.getString(R.string.pref_key_token), "");
 	}
 	
 	@Override
@@ -65,7 +64,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 
 	private void pullData() throws IOException {
 		Log.d("*********************** Getting SyncData **********************************");
-		String fetchedSyncResponse = http.getSyncData(token); 
+		String fetchedSyncResponse = http.getSyncData(); 
 		Log.d(" *************  "+ fetchedSyncResponse);
 		Sync sync = gson.fromJson(fetchedSyncResponse, Sync.class);
 		if(sync != null) {
@@ -92,7 +91,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			if(Strings.equal(entry.type, context.getString(R.string.voice))) {
 				Log.d("***** entry id "+entry.id+"  "+entry.idFromServer);
 				try {
-					if(http.downloadExpenseFile(entry.id, entry.idFromServer, true,token)) {
+					if(http.downloadExpenseFile(entry.id, entry.idFromServer, true)) {
 						entry.fileToDownload = false;
 						entry.fileUploaded = true;
 						updateEntry(entry);
@@ -104,7 +103,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			
 			if(Strings.equal(entry.type, context.getString(R.string.camera))) {
 				try {
-					if(http.downloadExpenseFile(entry.id, entry.idFromServer, false, token)) {
+					if(http.downloadExpenseFile(entry.id, entry.idFromServer, false)) {
 						new CameraFileSave(context).resizeImageAndSaveThumbnails(entry.id, false);
 						entry.fileToDownload = false;
 						entry.fileUploaded = true;
@@ -120,7 +119,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		for(Favorite favorite : favorites) {
 			if(Strings.equal(favorite.type, context.getString(R.string.voice))) {
 				try {
-					if(http.downloadFavoriteFile(favorite.favId, favorite.idFromServer, true, token)) {
+					if(http.downloadFavoriteFile(favorite.favId, favorite.idFromServer, true)) {
 						favorite.fileToDownload = false;
 						favorite.fileUploaded = true;
 						updateFavorite(favorite);
@@ -132,7 +131,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			
 			if(Strings.equal(favorite.type, context.getString(R.string.camera))) {
 				try {
-					if(http.downloadFavoriteFile(favorite.favId, favorite.idFromServer, false, token)) {
+					if(http.downloadFavoriteFile(favorite.favId, favorite.idFromServer, false)) {
 						new CameraFileSave(context).resizeImageAndSaveThumbnails(favorite.favId, true);
 						favorite.fileToDownload = false;
 						favorite.fileUploaded = true;
@@ -189,7 +188,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			Log.d(data +" size "+convertCursorToListString.getEntryListNotSyncedAndUpdated().size());
 			if(data != null) {
 				try {
-					String fetchedData = http.updateMultipleExpenses(data, token);
+					String fetchedData = http.updateMultipleExpenses(data);
 					if(fetchedData != null) {
 						Data response = gson.fromJson(fetchedData,Data.class);
 						updateExpenses(response.expenses);
@@ -209,7 +208,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			Log.d(data +" size "+convertCursorToListString.getFavoriteListNotSyncedAndUpdated().size());
 			if(data != null) {
 				try {
-					String fetchedData = http.updateMultipleFavorites(data, token);
+					String fetchedData = http.updateMultipleFavorites(data);
 					if(fetchedData != null) {
 						Data response = gson.fromJson(fetchedData,Data.class);
 						updateFavorites(response.favorites);
@@ -238,7 +237,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			Log.d(data +" size "+convertCursorToListString.getEntryListNotSyncedAndDeleted().size());
 			if(data != null) {
 				try {
-					String fetchedData = http.deleteMultipleExpenses(data, token);
+					String fetchedData = http.deleteMultipleExpenses(data);
 					if(fetchedData != null) {
 						Data response = gson.fromJson(fetchedData,Data.class);
 						deleteExpenses(response.expenses);
@@ -258,7 +257,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			Log.d(data +" size "+convertCursorToListString.getFavoriteListNotSyncedAndDeleted().size());
 			if(data != null) {
 				try {
-					String fetchedData = http.deleteMultipleFavorites(data, token);
+					String fetchedData = http.deleteMultipleFavorites(data);
 					if(fetchedData != null) {
 						Data response = gson.fromJson(fetchedData,Data.class);
 						deleteFavorites(response.favorites);
@@ -279,7 +278,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			Log.d(data +" size "+convertCursorToListString.getEntryListNotSyncedAndCreated().size());
 			if(data != null) {
 				try {
-					String fetchedData = http.addMultipleExpenses(data, token);
+					String fetchedData = http.addMultipleExpenses(data);
 					if(fetchedData != null) {
 						Data response = gson.fromJson(fetchedData,Data.class);
 						updateExpenses(response.expenses);
@@ -299,7 +298,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			Log.d(data +" size "+convertCursorToListString.getFavoriteListNotSyncedAndCreated().size());
 			if(data != null) {
 				try {
-					String fetchedData = http.addMultipleFavorites(data, token);
+					String fetchedData = http.addMultipleFavorites(data);
 					Log.d(fetchedData + " en ");
 					if(fetchedData != null) {
 						Data response = gson.fromJson(fetchedData,Data.class);
@@ -336,9 +335,9 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			String response;
 			try {
 				if(!isAudio) {
-					response = http.uploadExpenseFile(fileHelper.getCameraFileLargeEntry(entry.id), entry.idFromServer, isAudio, token);
+					response = http.uploadExpenseFile(fileHelper.getCameraFileLargeEntry(entry.id), entry.idFromServer, isAudio);
 				} else {
-					response = http.uploadExpenseFile(fileHelper.getAudioFileEntry(entry.id), entry.idFromServer, isAudio, token);
+					response = http.uploadExpenseFile(fileHelper.getAudioFileEntry(entry.id), entry.idFromServer, isAudio);
 				}
 				Log.d("******************* Getting Response *******************");
 				if(response != null) {
@@ -371,9 +370,9 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			String response;
 			try {
 				if(!isAudio) {
-					response = http.uploadFavoriteFile(fileHelper.getCameraFileLargeFavorite(favorite.favId), favorite.idFromServer, isAudio, token);
+					response = http.uploadFavoriteFile(fileHelper.getCameraFileLargeFavorite(favorite.favId), favorite.idFromServer, isAudio);
 				} else {
-					response = http.uploadFavoriteFile(fileHelper.getAudioFileFavorite(favorite.favId), favorite.idFromServer, isAudio, token);
+					response = http.uploadFavoriteFile(fileHelper.getAudioFileFavorite(favorite.favId), favorite.idFromServer, isAudio);
 				}
 				Log.d("******************* Getting Response *******************");
 				if(response != null) {

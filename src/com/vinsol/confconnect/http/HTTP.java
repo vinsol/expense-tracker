@@ -42,7 +42,8 @@ import com.vinsol.expensetracker.utils.Utils;
 public class HTTP {
 
 	// Requirements
-	private String baseUrl = "http://192.168.0.21:3000/";
+	private String baseUrl = "http://192.168.0.16:3000/";
+	private String userId;
 	private String sync = "sync";
 	private String verification = "?token=";
 	private String timestamp = "&&timestamp=";
@@ -53,56 +54,57 @@ public class HTTP {
 	private String json = ".json";
 	private String update = "update";
 	private String delete = "delete";
-	private String token = "token";
+	private String signup = "signup";
+	private String signin = "signin";
 	private Context mContext;
 	private FileHelper fileHelper;
+	private int responseCode;
 	
 	public HTTP(Context context) {
 		fileHelper = new FileHelper();
 		mContext = context;
+		verification = "?token="+SharedPreferencesHelper.getSharedPreferences().getString(context.getString(R.string.pref_key_token), "");
+		userId = SharedPreferencesHelper.getSharedPreferences().getString(context.getString(R.string.pref_key_sync_user_id), "");
 	}
 	
-//	public String addExpenses(com.vinsol.expensetracker.models.Entry expenseEntry, String email, String token) throws IOException {
-//		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-//		nameValuePairs.add(new BasicNameValuePair("username", username));
-//		nameValuePairs.add(new BasicNameValuePair("token", token));
-//		nameValuePairs.add(new BasicNameValuePair("stars", rating));
-//		return post(baseUrl+confConnect+events+eventPermalink+"/"+rate, nameValuePairs);
-//	}
-	public String getSyncData(String token) throws IOException{
-		return get(baseUrl+sync+json+verification+token+timestamp+SharedPreferencesHelper.getSharedPreferences().getString(mContext.getString(R.string.pref_key_sync_timestamp), ""));
+	public String getSyncData() throws IOException{
+		return get(baseUrl+userId+"/"+sync+json+verification+timestamp+SharedPreferencesHelper.getSharedPreferences().getString(mContext.getString(R.string.pref_key_sync_timestamp), ""));
 	}
 	
 	public String get(String url) throws IOException{
 		return execute(url, null, "GET");
 	}
 	
-	public String addMultipleExpenses(String postData,String token) throws IOException {
-		return post(baseUrl+expenses+json+verification+token, postData);
+	public String addMultipleExpenses(String postData) throws IOException {
+		return post(baseUrl+userId+"/"+expenses+json+verification, postData);
 	}
 	
-	public String updateMultipleExpenses(String postData,String token) throws IOException {
-		return post(baseUrl+expenses+"/"+update+json+verification+token, postData);
+	public String updateMultipleExpenses(String postData) throws IOException {
+		return post(baseUrl+userId+"/"+expenses+"/"+update+json+verification, postData);
 	}
 	
-	public String updateMultipleFavorites(String postData,String token) throws IOException {
-		return post(baseUrl+favorites+"/"+update+json+verification+token, postData);
+	public String updateMultipleFavorites(String postData) throws IOException {
+		return post(baseUrl+userId+"/"+favorites+"/"+update+json+verification, postData);
 	}
 	
-	public String deleteMultipleExpenses(String postData,String token) throws IOException {
-		return post(baseUrl+expenses+"/"+delete+json+verification+token, postData);
+	public String deleteMultipleExpenses(String postData) throws IOException {
+		return post(baseUrl+userId+"/"+expenses+"/"+delete+json+verification, postData);
 	}
 	
-	public String deleteMultipleFavorites(String postData,String token) throws IOException {
-		return post(baseUrl+favorites+"/"+delete+json+verification+token, postData);
+	public String deleteMultipleFavorites(String postData) throws IOException {
+		return post(baseUrl+userId+"/"+favorites+"/"+delete+json+verification, postData);
 	}
 	
-	public String addMultipleFavorites(String postData,String token) throws IOException {
-		return post(baseUrl+favorites+json+verification+token, postData);
+	public String addMultipleFavorites(String postData) throws IOException {
+		return post(baseUrl+userId+"/"+favorites+json+verification, postData);
 	}
 	
-	public String authenticate(String postData) throws IOException {
-		return post(baseUrl+"/"+token+json, postData);
+	public String signup(String postData) throws IOException {
+		return post(baseUrl+"/"+signup+json, postData);
+	}
+	
+	public String signin(String postData) throws IOException {
+		return post(baseUrl+"/"+signin+json, postData);
 	}
 
 	public String post(Object url, List<NameValuePair> nvps) throws IOException {
@@ -128,15 +130,15 @@ public class HTTP {
         return execute(url.toString(), entity, "DELETE");
     }
 	
-	public String uploadExpenseFile(File file,String idFromServer, boolean isAudio,String token) throws IOException {
-		return uploadFile(baseUrl+expenses+"/"+upload+"/"+idFromServer+json+verification+token, file, isAudio);
+	public String uploadExpenseFile(File file,String idFromServer, boolean isAudio) throws IOException {
+		return uploadFile(baseUrl+userId+"/"+expenses+"/"+upload+"/"+idFromServer+json+verification, file, isAudio);
 	}
 	
-	public String uploadFavoriteFile(File file,String idFromServer, boolean isAudio,String token) throws IOException {
-		return uploadFile(baseUrl+favorites+"/"+upload+"/"+idFromServer+json+verification+token, file, isAudio);
+	public String uploadFavoriteFile(File file,String idFromServer, boolean isAudio) throws IOException {
+		return uploadFile(baseUrl+userId+"/"+favorites+"/"+upload+"/"+idFromServer+json+verification, file, isAudio);
 	}
 	
-	public boolean downloadExpenseFile(String id,String idFromServer, boolean isAudio,String token) throws IOException {
+	public boolean downloadExpenseFile(String id,String idFromServer, boolean isAudio) throws IOException {
 		String extension;
 		File file;
 		if(isAudio) { 
@@ -147,10 +149,10 @@ public class HTTP {
 			file = fileHelper.getCameraFileLargeEntry(id);
 		}
 		
-		return downloadFile(baseUrl+expenses+"/"+download+"/"+idFromServer+extension+verification+token, file);
+		return downloadFile(baseUrl+userId+"/"+expenses+"/"+download+"/"+idFromServer+extension+verification, file);
 	}
 	
-	public boolean downloadFavoriteFile(String id,String idFromServer, boolean isAudio,String token) throws IOException {
+	public boolean downloadFavoriteFile(String id,String idFromServer, boolean isAudio) throws IOException {
 		String extension;
 		File file;
 		if(isAudio) { 
@@ -161,7 +163,7 @@ public class HTTP {
 			file = fileHelper.getCameraFileLargeFavorite(id);
 		}
 		
-		return downloadFile(baseUrl+favorites+"/"+download+"/"+idFromServer+extension+verification+token, file);
+		return downloadFile(baseUrl+userId+"/"+favorites+"/"+download+"/"+idFromServer+extension+verification, file);
 	}
  	
 	private String execute(String url, HttpEntity postData, String requestMethod) throws IOException {
@@ -195,7 +197,7 @@ public class HTTP {
             
     		// get response
 			Log.d("getting response with status " +connection.getResponseCode() );
-			int responseCode = connection.getResponseCode();
+			responseCode = connection.getResponseCode();
     		
         	if(connection.getURL().toString().equals(url) && responseCode == 200) {
         		String response = Strings.InputStreamToString(connection.getInputStream()); 
@@ -242,8 +244,9 @@ public class HTTP {
             while ((current = bis.read()) != -1) {
                 baf.append((byte) current);
             }
+            responseCode = connection.getResponseCode();
 
-            if(connection.getResponseCode() == 200) {
+            if(responseCode == 200) {
             	FileOutputStream fos = new FileOutputStream(file);
             	fos.write(baf.toByteArray());
             	fos.close();
@@ -282,7 +285,7 @@ public class HTTP {
 		    HttpEntity resEntity = response.getEntity();
 		    
 		    Log.d("getting response with status " +response.getStatusLine().getStatusCode() );
-			int responseCode = response.getStatusLine().getStatusCode();
+			responseCode = response.getStatusLine().getStatusCode();
 //			String location = response.getLastHeader("Location").getValue();
 //			if (resEntity != null) {
 //				Log.d(EntityUtils.toString(resEntity));
@@ -323,6 +326,10 @@ public class HTTP {
 		}
 	    Log.d("********************** File Uploaded ******************");
 	    return null;
+	}
+	
+	public int getResponseCode() {
+		return responseCode;
 	}
 
 }

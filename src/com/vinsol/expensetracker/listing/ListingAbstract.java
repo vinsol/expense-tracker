@@ -28,7 +28,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.confconnect.http.SyncHelper;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -46,6 +45,7 @@ import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
 import com.vinsol.expensetracker.show.ShowVoiceActivity;
+import com.vinsol.expensetracker.sync.SyncHelper;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
 import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.Strings;

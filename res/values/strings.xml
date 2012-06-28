@@ -24,6 +24,10 @@
     <string name="unfinished_voiceentry">Unfinished Voice Entry</string>
     <string name="unknown_location">Unknown location</string>
     
+    <!-- Sync Page -->
+    <string name="signin">Sign in</string>
+    <string name="signup">Sign up</string>
+    
     <!-- Default SyncBit Values -->
     <string name="syncbit_synced">1</string>
     <string name="syncbit_created">2</string>
@@ -77,6 +81,7 @@
     <!-- Preferences Key -->
     <string name="pref_key_delete_dialog">prefKeyDeleteDialog</string>
     <string name="pref_key_token">prefKeyToken</string>
+    <string name="pref_key_sync_user_id">prefKeyUserId</string>
     <string name="pref_key_set_up_sync">prefSetUpSync</string>
     <string name="pref_key_sync_name">prefSyncName</string>
     <string name="pref_key_sync_email">prefSyncEmail</string>

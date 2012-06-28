@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Add an ExpenseTracker Account"
+            android:textSize="16sp"/>
+        
+        <View 
+            android:layout_height="3dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="fill_parent"
+            android:background="@android:color/darker_gray"/>
+        
+        <TextView 
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Do you want to add an existing account or create a new one?"/>
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="vertical">
+        
+        <Button 
+            android:id="@+id/userSignIn"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Existing"/>
+        
+        <Button
+            android:id="@+id/userSignUp" 
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="New"/>
+        
+    </LinearLayout>
+
+</RelativeLayout>

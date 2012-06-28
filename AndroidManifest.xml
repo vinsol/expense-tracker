@@ -111,5 +111,13 @@
             android:name=".GenerateReport"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation" />
+         <activity 
+            android:name=".sync.LoginType"
+    		android:screenOrientation="portrait"
+    		android:configChanges="keyboardHidden|orientation" />
+         <activity 
+            android:name=".sync.UserAuthentication"
+    		android:screenOrientation="portrait"
+    		android:configChanges="keyboardHidden|orientation" />
     </application>
 </manifest>

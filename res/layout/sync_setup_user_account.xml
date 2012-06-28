@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_alignParentTop="true"
+	android:padding="10dp"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
+   
+    <TextView 
+        android:id="@+id/headerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" 
+        android:gravity="left"
+        android:text="@string/signup"/>
+    
+    <View 
+		android:layout_height="3dp"
+		android:layout_marginTop="5dp"
+		android:layout_width="fill_parent"
+   	    android:layout_marginBottom="10dp"
+		android:background="@android:color/darker_gray"/>
+    
+   	<EditText
+    	android:id="@+id/sync_name" 
+       	android:layout_width="fill_parent"
+       	android:layout_height="wrap_content"
+       	android:inputType="textPersonName"
+       	android:hint="name" />
+   
+	<EditText
+    	android:id="@+id/sync_email" 
+    	android:inputType="textEmailAddress"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:hint="email" />
+   
+	<EditText 
+    	android:id="@+id/sync_password"
+       	android:layout_width="fill_parent"
+       	android:layout_height="wrap_content"
+       	android:inputType="textPassword"
+       	android:hint="password" />
+	
+	<Button 
+	    android:id="@+id/startAuthenticate"
+		android:layout_height="wrap_content"
+		android:layout_width="100dp"
+		android:layout_gravity="center"
+		android:layout_marginTop="10dp"
+		android:text="@string/signup"/>
+
+</LinearLayout>

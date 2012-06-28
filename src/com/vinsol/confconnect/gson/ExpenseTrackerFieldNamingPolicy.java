@@ -25,6 +25,7 @@ public class ExpenseTrackerFieldNamingPolicy implements FieldNamingStrategy{
 		if(Strings.equal(name, "syncBit")) { return "sync_bit";}
 		if(Strings.equal(name, "fileUploaded")) { return "file_uploaded";}
 		if(Strings.equal(name, "fileUpdatedAt")) { return "file_updated_at";}
+		if(Strings.equal(name, "encrypted_token")) { return "token";}
 		return name;
 	}
 

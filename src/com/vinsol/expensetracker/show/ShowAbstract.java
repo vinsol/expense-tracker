@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.confconnect.http.SyncHelper;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
@@ -31,8 +30,8 @@ import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.sync.SyncHelper;
 import com.vinsol.expensetracker.utils.Log;
-import com.vinsol.expensetracker.utils.Strings;
 
 abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 

@@ -32,6 +32,7 @@ public class Constants {
 	public static final String KEY_FULL_SIZE_IMAGE_PATH = "FullSizeImagePath";
 	public static final String KEY_TIME_IN_MILLIS = "timeInMillis";
 	public static final String KEY_MANAGE_FAVORITE = "manageFavorite";
+	public static final String KEY_IS_SIGNUP = "isSignUp";
 	
 	//ExpenseTracker Market UI
 	public static final String EXPENSE_TRACKER_MARKET_URI = "market://details?id=com.vinsol.expensetracker";

@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.confconnect.http.SyncHelper;
 import com.vinsol.expensetracker.edit.CameraActivity;
 import com.vinsol.expensetracker.edit.TextEntry;
 import com.vinsol.expensetracker.edit.Voice;
@@ -34,6 +33,7 @@ import com.vinsol.expensetracker.helpers.UnfinishedEntryCount;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.sync.SyncHelper;
 
 public class Home extends BaseActivity implements OnClickListener {
 	
