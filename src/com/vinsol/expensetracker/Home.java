@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,11 +30,13 @@ import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.GraphHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
+import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.helpers.UnfinishedEntryCount;
 import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.listing.FavoriteActivity;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.sync.SyncHelper;
+import com.vinsol.expensetracker.utils.Log;
 
 public class Home extends BaseActivity implements OnClickListener {
 	
@@ -99,6 +102,11 @@ public class Home extends BaseActivity implements OnClickListener {
 			SyncHelper.syncHelper = new SyncHelper(this);
         	SyncHelper.syncHelper.execute();
 		}
+		Log.d("******************************* Syncing syncing syncing **************************"+ExpenseTrackerApplication.toSync+" token "+SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_token), ""+" key "+getString(R.string.pref_key_token)));
+		Log.d("******************************* Syncing syncing syncing **************************"+
+				ExpenseTrackerApplication.toSync+" token "+
+				PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.pref_key_token), "")
+				+" key "+getString(R.string.pref_key_token));
 	}
 
 	@Override

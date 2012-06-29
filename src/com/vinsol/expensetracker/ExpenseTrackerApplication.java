@@ -14,11 +14,13 @@ import java.io.OutputStream;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
+import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.Strings;
 
 public class ExpenseTrackerApplication extends Application {
@@ -33,12 +35,22 @@ public class ExpenseTrackerApplication extends Application {
         super.onCreate();
         applicationContext = this;
     	PreferenceManager.setDefaultValues(applicationContext, R.xml.preferences, false);
-    	if(Strings.notEmpty(SharedPreferencesHelper.getSharedPreferences().getString(applicationContext.getString(R.string.pref_key_token), ""))) {
+    	setSyncPrefs();
+        Initialize();
+    }
+    
+    public static void setSyncPrefs() {
+    	String token = SharedPreferencesHelper.getSharedPreferences().getString(getContext().getString(R.string.pref_key_token), "");
+    	if(Strings.notEmpty(token)) {
     		toSync = true;
     	} else {
     		toSync = false;
     	}
-        Initialize();
+    	
+    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext);
+    	Log.d(preferences.getString(applicationContext.getString(R.string.pref_key_token), "not found"));
+    	Log.d("******************************* Syncing syncing syncing **************************"+ExpenseTrackerApplication.toSync+" token "+token+" key "+applicationContext.getString(R.string.pref_key_token));
+    	Log.d("******************************* Syncing syncing syncing **************************"+ExpenseTrackerApplication.toSync+" token "+SharedPreferencesHelper.getSharedPreferences().getString(getContext().getString(R.string.pref_key_sync_email), ""+" key "+applicationContext.getString(R.string.pref_key_token)));
     }
 
 	public static void Initialize() {

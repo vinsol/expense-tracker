@@ -19,6 +19,7 @@ import com.vinsol.confconnect.gson.MyGson;
 import com.vinsol.confconnect.http.HTTP;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
+import com.vinsol.expensetracker.ExpenseTrackerApplication;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.SetPreferences;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
@@ -174,6 +175,11 @@ public class UserAuthentication extends BaseActivity implements OnClickListener 
 	}
 
 	private void startPrefActivity() {
+		ExpenseTrackerApplication.setSyncPrefs();
+		if(ExpenseTrackerApplication.toSync) {
+			SyncHelper.syncHelper = new SyncHelper(this);
+        	SyncHelper.syncHelper.execute();
+		}
 		progressDialog.dismiss();
 		Intent intent = new Intent(this, SetPreferences.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
