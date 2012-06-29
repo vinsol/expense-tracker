@@ -94,9 +94,11 @@ public class Home extends BaseActivity implements OnClickListener {
 		
 		graphProgressBar = (ProgressBar) findViewById(R.id.graph_progress_bar);
 		graphProgressBar.setVisibility(View.VISIBLE);
-
-        SyncHelper.syncHelper = new SyncHelper(this);
-        SyncHelper.syncHelper.execute();
+		
+		if(ExpenseTrackerApplication.toSync) {
+			SyncHelper.syncHelper = new SyncHelper(this);
+        	SyncHelper.syncHelper.execute();
+		}
 	}
 
 	@Override

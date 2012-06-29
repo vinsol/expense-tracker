@@ -19,18 +19,25 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
+import com.vinsol.expensetracker.utils.Strings;
 
 public class ExpenseTrackerApplication extends Application {
 	
 	private static Context applicationContext; 
 	public static String FILES_DIR;
 	public static boolean isInitialized = false;
+	public static boolean toSync = false;
 	
     @Override
     public void onCreate() {
         super.onCreate();
         applicationContext = this;
     	PreferenceManager.setDefaultValues(applicationContext, R.xml.preferences, false);
+    	if(Strings.notEmpty(SharedPreferencesHelper.getSharedPreferences().getString(applicationContext.getString(R.string.pref_key_token), ""))) {
+    		toSync = true;
+    	} else {
+    		toSync = false;
+    	}
         Initialize();
     }
 

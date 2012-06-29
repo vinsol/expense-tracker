@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import com.google.gson.Gson;
 import com.vinsol.confconnect.gson.MyGson;
 import com.vinsol.confconnect.http.HTTP;
+import com.vinsol.expensetracker.ExpenseTrackerApplication;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.CameraFileSave;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
@@ -538,11 +539,13 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	}
 	
 	public static void startSync() {
-		if(SyncHelper.syncHelper.getStatus().equals(AsyncTask.Status.RUNNING)) {
-			toConinue = true;
-		} else {
-			toConinue = false;
-			SyncHelper.syncHelper = new SyncHelper(context).execute();
+		if(ExpenseTrackerApplication.toSync) {
+			if(SyncHelper.syncHelper.getStatus().equals(AsyncTask.Status.RUNNING)) {
+				toConinue = true;
+			} else {
+				toConinue = false;
+				SyncHelper.syncHelper = new SyncHelper(context).execute();
+			}
 		}
 	}
 	
