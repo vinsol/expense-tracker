@@ -11,8 +11,9 @@ import android.os.Parcelable;
 
 public class Entry extends Favorite {
 	
-	public String id;
+	
 	public Long timeInMillis;
+	public String favorite = null;
 	
 	public static final Parcelable.Creator<Entry> CREATOR = new Parcelable.Creator<Entry>() {
     	public Entry createFromParcel(Parcel in) {
@@ -32,7 +33,7 @@ public class Entry extends Favorite {
     	description = in.readString();
     	type = in.readString();
     	location = in.readString();
-    	favId = in.readString();
+    	favorite = in.readString();
     	timeInMillis = in.readLong();
     	myHash = in.readString();
     	idFromServer = in.readString();
@@ -51,7 +52,7 @@ public class Entry extends Favorite {
 		dest.writeString(description);
 		dest.writeString(type);
 		dest.writeString(location);
-		dest.writeString(favId);
+		dest.writeString(favorite);
 		dest.writeLong(timeInMillis);
 		dest.writeString(myHash);
 		dest.writeString(idFromServer);

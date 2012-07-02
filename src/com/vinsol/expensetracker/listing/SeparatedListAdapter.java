@@ -249,8 +249,8 @@ class SeparatedListAdapter extends BaseAdapter {
 						holderBody.rowImageview.setImageResource(R.drawable.no_voice_file_small);
 					}
 				} 
-				if (mlist.favId != null) {
-					if(!mlist.favId.equals("")) {
+				if (mlist.favorite != null) {
+					if(!mlist.favorite.equals("")) {
 						try{
 							if(isCurrentWeek(mDataDateList.get(sectionnum).dateTime)) {
 								holderBody.rowFavoriteIcon.setVisibility(View.VISIBLE);

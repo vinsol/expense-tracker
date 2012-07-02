@@ -108,7 +108,7 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 				new ShowDateHandler(this,typeOfEntry);
 			}
 			
-			tempfavID = mShowList.favId;
+			tempfavID = mShowList.favorite;
 		}
 	}
 	
@@ -240,13 +240,13 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 	}
 
 	private boolean istempfavIdequalsfavId() {
-		if(tempfavID == null && mShowList.favId == null) {
+		if(tempfavID == null && mShowList.favorite == null) {
 			return true;
 		}
-		if(tempfavID == null || mShowList.favId == null) {
+		if(tempfavID == null || mShowList.favorite == null) {
 			return false;
 		}
-		if(tempfavID.equals(mShowList.favId)) {
+		if(tempfavID.equals(mShowList.favorite)) {
 			return true;
 		}
 		return false;

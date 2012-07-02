@@ -42,7 +42,7 @@ import com.vinsol.expensetracker.utils.Utils;
 public class HTTP {
 
 	// Requirements
-	private String baseUrl = "http://192.168.0.19:3000/";
+	private String baseUrl = "http://192.168.0.17:3000/";
 	private String userId;
 	private String sync = "sync";
 	private String verification = "?token=";
@@ -169,7 +169,7 @@ public class HTTP {
 	private String execute(String url, HttpEntity postData, String requestMethod) throws IOException {
 		if(!Utils.isOnline(mContext)) {return null;}
 		
-		Log.d("***************************** Sending HTTP request *****************************");
+		Log.d("***************************** Sending HTTP request *****************************" +url);
     	HttpURLConnection connection = null;
 
     	try {

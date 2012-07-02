@@ -142,7 +142,7 @@ public class DatabaseAdapter {
 		contentValues.put(KEY_AMOUNT, list.amount);
 		contentValues.put(KEY_DATE_TIME, list.timeInMillis);
 		contentValues.put(KEY_LOCATION, list.location);
-		contentValues.put(KEY_FAVORITE, list.favId);
+		contentValues.put(KEY_FAVORITE, list.favorite);
 		contentValues.put(KEY_TYPE, list.type);
 		
 		if(Strings.isEmpty(list.myHash)) {
@@ -261,6 +261,36 @@ public class DatabaseAdapter {
 				String id = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
 				cursor.close();
 				return id;
+			}
+		} catch (SQLiteException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	public String getFavHashById(String id) {
+		String where = KEY_ID + "=" + id;
+		try {
+			Cursor cursor = db.query(FAVORITE_TABLE, null, where, null, null, null, null);
+			if(cursor.moveToFirst()) {
+				String hash = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_MY_HASH));
+				cursor.close();
+				return hash;
+			}
+		} catch (SQLiteException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	public String getEntryHashById(String id) {
+		String where = KEY_ID + "=" + id;
+		try {
+			Cursor cursor = db.query(ENTRY_TABLE, null, where, null, null, null, null);
+			if(cursor.moveToFirst()) {
+				String hash = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_MY_HASH));
+				cursor.close();
+				return hash;
 			}
 		} catch (SQLiteException e) {
 			e.printStackTrace();
@@ -429,7 +459,7 @@ public class DatabaseAdapter {
 		if (list.fileUpdatedAt != null)
 			contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
 		
-		String where = KEY_ID + "=" + list.favId;
+		String where = KEY_ID + "=" + list.id;
 		try {
 			Log.d("EDITING");
 			db.update(FAVORITE_TABLE, contentValues, where, null);
@@ -488,8 +518,8 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_DATE_TIME, list.timeInMillis);
 		if (list.location != null)
 			contentValues.put(KEY_LOCATION, list.location);
-		if (list.favId != null)
-			contentValues.put(KEY_FAVORITE, list.favId);
+		if (list.favorite != null)
+			contentValues.put(KEY_FAVORITE, list.favorite);
 		if (list.type != null)
 			contentValues.put(KEY_TYPE, list.type);
 		if (list.idFromServer != null)
@@ -529,8 +559,8 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_DATE_TIME, list.timeInMillis);
 		if (list.location != null)
 			contentValues.put(KEY_LOCATION, list.location);
-		if (list.favId != null)
-			contentValues.put(KEY_FAVORITE, list.favId);
+		if (list.favorite != null)
+			contentValues.put(KEY_FAVORITE, list.favorite);
 		if (list.type != null)
 			contentValues.put(KEY_TYPE, list.type);
 		if (list.idFromServer != null)

@@ -67,7 +67,7 @@ public class CameraActivity extends EditAbstract {
 			}
 			File mFile;
 			if(isFromFavorite) {
-				mFile = fileHelper.getCameraFileSmallFavorite(mFavoriteList.favId);
+				mFile = fileHelper.getCameraFileSmallFavorite(mFavoriteList.id);
 			} else {
 				mFile = fileHelper.getCameraFileSmallEntry(entry.id);
 			}
@@ -152,7 +152,7 @@ public class CameraActivity extends EditAbstract {
 			Intent camera = new Intent(this, Camera.class);
 			File file;
 			if(isFromFavorite) {
-				file = fileHelper.getCameraFileLargeFavorite(mFavoriteList.favId);
+				file = fileHelper.getCameraFileLargeFavorite(mFavoriteList.id);
 			} else {
 				file = fileHelper.getCameraFileLargeEntry(entry.id);
 			}
@@ -174,7 +174,7 @@ public class CameraActivity extends EditAbstract {
 				if(intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
 					if(isFromFavorite) {
 						mDatabaseAdapter.open();
-						mDatabaseAdapter.updateFileUploadedFavoriteTable(mFavoriteList.favId);
+						mDatabaseAdapter.updateFileUploadedFavoriteTable(mFavoriteList.id);
 						mDatabaseAdapter.close();
 					} else {
 						mDatabaseAdapter.open();
@@ -188,7 +188,7 @@ public class CameraActivity extends EditAbstract {
 				if(!setUnknown) {
 					File mFile;
 					if(isFromFavorite) {
-						mFile = fileHelper.getCameraFileSmallFavorite(mFavoriteList.favId);
+						mFile = fileHelper.getCameraFileSmallFavorite(mFavoriteList.id);
 					} else {
 						mFile = fileHelper.getCameraFileSmallEntry(entry.id);
 					}
@@ -221,7 +221,7 @@ public class CameraActivity extends EditAbstract {
 		protected Void doInBackground(Void... params) {
 			String id;
 			if(isFromFavorite) {
-				id = mFavoriteList.favId;
+				id = mFavoriteList.id;
 			} else {
 				id = entry.id;
 			}
@@ -235,7 +235,7 @@ public class CameraActivity extends EditAbstract {
 			editImageDisplay.setVisibility(View.VISIBLE);
 			File mFile;
 			if(isFromFavorite) {
-				mFile = fileHelper.getCameraFileSmallFavorite(mFavoriteList.favId);
+				mFile = fileHelper.getCameraFileSmallFavorite(mFavoriteList.id);
 			} else {
 				mFile = fileHelper.getCameraFileSmallEntry(entry.id);
 			}

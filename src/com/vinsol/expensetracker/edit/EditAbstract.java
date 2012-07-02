@@ -266,7 +266,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	private Favorite getSaveFavoriteData() {
 		/////// ******* Creating HashMap to update info ******* ////////
 		Favorite favorite = new Favorite();
-		favorite.favId = mFavoriteList.favId;
+		favorite.id = mFavoriteList.id;
 		isChanged = checkFavoriteModified();
 		mFavoriteList.amount = editAmount.getText().toString();
 		mFavoriteList.description = editTag.getText().toString();
@@ -302,15 +302,15 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		
 		if( isChanged ) {
 			Entry listForFav = new Entry();
-			listForFav.favId = "";
+			listForFav.favorite = "";
 			listForFav.id = mEditList.id;
 			listForFav.syncBit = getString(R.string.syncbit_not_synced);
 			mDatabaseAdapter.open();
 			mDatabaseAdapter.editEntryTable(listForFav);
 			mDatabaseAdapter.close();
-			displayList.favId = "";
+			displayList.favorite = "";
 		} else {
-			displayList.favId = mEditList.favId;
+			displayList.favorite = mEditList.favorite;
 		}
 			
 		displayList.type = mEditList.type;	
@@ -356,7 +356,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	
 	private Favorite getFavoriteListOnResult(Favorite favList) {
 		Favorite favorite = new Favorite();
-		favorite.favId = mFavoriteList.favId;
+		favorite.id = mFavoriteList.id;
 		favorite.description = favList.description;
 		favorite.amount = favList.amount;
 		if(favorite.amount == null || favorite.amount.equals("")) {
@@ -373,7 +373,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		
 		if( isChanged ) {
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.editFavoriteIdEntryTable(favorite.favId);
+			mDatabaseAdapter.editFavoriteIdEntryTable(favorite.id);
 			mDatabaseAdapter.close();
 		}
 			
@@ -620,12 +620,12 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		
 		////// ******* Delete entry from database ******** /////////
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editFavoriteIdEntryTable(mFavoriteList.favId);
+		mDatabaseAdapter.editFavoriteIdEntryTable(mFavoriteList.id);
 //		if(Strings.isEmpty(mFavoriteList.updatedAt)) {
 //			fileHelper.deleteAllFavoriteFiles(mFavoriteList.favId);
 //			mDatabaseAdapter.permanentDeleteFavoriteTableEntryID(mFavoriteList.favId);
 //		} else {
-			mDatabaseAdapter.deleteFavoriteTableEntryID(mFavoriteList.favId);
+			mDatabaseAdapter.deleteFavoriteTableEntryID(mFavoriteList.id);
 //		}
 		
 		mDatabaseAdapter.close();

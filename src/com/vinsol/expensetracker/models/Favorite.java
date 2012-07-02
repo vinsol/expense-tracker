@@ -11,7 +11,7 @@ import android.os.Parcelable;
 
 public class Favorite implements Parcelable {
 
-	public String favId = null;
+	public String id = null;
 	public String amount;
 	public String description;
 	public String type;
@@ -41,7 +41,7 @@ public class Favorite implements Parcelable {
     	amount = in.readString();
     	description = in.readString();
     	type = in.readString();
-    	favId = in.readString();
+    	id = in.readString();
     	location = in.readString();
     	myHash = in.readString();
     	idFromServer = in.readString();
@@ -58,7 +58,7 @@ public class Favorite implements Parcelable {
 		dest.writeString(amount);
 		dest.writeString(description);
 		dest.writeString(type);
-		dest.writeString(favId);
+		dest.writeString(id);
 		dest.writeString(location);
 		dest.writeString(myHash);
 		dest.writeString(idFromServer);

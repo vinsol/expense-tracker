@@ -61,14 +61,14 @@ public class Voice extends EditAbstract {
 			if (intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA) && !setUnknown) {
 				File tempFile;
 				if(isFromFavorite) {
-					tempFile = fileHelper.getAudioFileFavorite(mFavoriteList.favId);
+					tempFile = fileHelper.getAudioFileFavorite(mFavoriteList.id);
 				} else {
 					tempFile = fileHelper.getAudioFileEntry(entry.id);
 				}
 				
 				if (tempFile.canRead()) {
 					if(isFromFavorite) {
-						mAudioPlay = new AudioPlay(mFavoriteList.favId, this, isFromFavorite);
+						mAudioPlay = new AudioPlay(mFavoriteList.id, this, isFromFavorite);
 					} else {
 						mAudioPlay = new AudioPlay(entry.id, this, isFromFavorite);
 					}
@@ -146,7 +146,7 @@ public class Voice extends EditAbstract {
 		case R.id.edit_play_button:
 			// //// ******** to handle playback of recorded file ********* ////////
 			if(isFromFavorite) {
-				mAudioPlay = new AudioPlay(mFavoriteList.favId, this, isFromFavorite);
+				mAudioPlay = new AudioPlay(mFavoriteList.id, this, isFromFavorite);
 			} else {
 				mAudioPlay = new AudioPlay(entry.id, this, isFromFavorite);
 			}
@@ -188,8 +188,8 @@ public class Voice extends EditAbstract {
 			File mPath;
 			mDatabaseAdapter.open();
 			if(isFromFavorite) {
-				mPath = fileHelper.getAudioFileFavorite(mFavoriteList.favId);
-				mDatabaseAdapter.updateFileUploadedFavoriteTable(mFavoriteList.favId);
+				mPath = fileHelper.getAudioFileFavorite(mFavoriteList.id);
+				mDatabaseAdapter.updateFileUploadedFavoriteTable(mFavoriteList.id);
 			} else {
 				mPath = fileHelper.getAudioFileEntry(entry.id);
 				mDatabaseAdapter.updateFileUploadedEntryTable(entry.id);
@@ -258,7 +258,7 @@ public class Voice extends EditAbstract {
 		if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {
 			if(editTimeDetailsChronometer != null) {editTimeDetailsChronometer.stop();}
 			if(isFromFavorite) {
-				mAudioPlay = new AudioPlay(mFavoriteList.favId , this, isFromFavorite);
+				mAudioPlay = new AudioPlay(mFavoriteList.id , this, isFromFavorite);
 			} else {
 				mAudioPlay = new AudioPlay(entry.id , this, isFromFavorite);
 			}
@@ -281,7 +281,7 @@ public class Voice extends EditAbstract {
 		
 		if(mAudioPlay != null && mAudioPlay.isAudioPlaying()) {mAudioPlay.stopPlayBack();}
 		if(isFromFavorite) {
-			mAudioPlay = new AudioPlay(mFavoriteList.favId , this, isFromFavorite);
+			mAudioPlay = new AudioPlay(mFavoriteList.id , this, isFromFavorite);
 		} else {
 			mAudioPlay = new AudioPlay(entry.id , this, isFromFavorite);
 		}

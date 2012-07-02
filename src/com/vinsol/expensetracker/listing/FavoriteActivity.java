@@ -251,12 +251,12 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 //		if(Strings.isEmpty(tempFav.updatedAt)) {
 //			mDatabaseAdapter.permanentDeleteFavoriteTableEntryID(tempFav.favId);	
 //		} else {
-			mDatabaseAdapter.deleteFavoriteTableEntryID(tempFav.favId);
+			mDatabaseAdapter.deleteFavoriteTableEntryID(tempFav.id);
 //		}
     	
-    	mDatabaseAdapter.editFavoriteIdEntryTable(((Favorite)mAdapter.getItem(position)).favId);
+    	mDatabaseAdapter.editFavoriteIdEntryTable(((Favorite)mAdapter.getItem(position)).id);
     	mDatabaseAdapter.close();
-    	fileHelper.deleteAllFavoriteFiles(((Favorite)mAdapter.getItem(position)).favId);
+    	fileHelper.deleteAllFavoriteFiles(((Favorite)mAdapter.getItem(position)).id);
     	mListMain.remove(mAdapter.getItem(position));
     	if(mListMain.size() > 0) {
     		searchBox.setText(searchBox.getText().toString());
@@ -398,7 +398,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 						viewHolder.rowTag.setText(getString(R.string.finished_voiceentry));
 					}
 					try {
-						File mFile = fileHelper.getAudioFileFavorite(tempFavorite.favId);
+						File mFile = fileHelper.getAudioFileFavorite(tempFavorite.id);
 						if (mFile.canRead()) {
 							viewHolder.rowImageview.setImageResource(R.drawable.listing_voice_entry_icon);
 						} else {
@@ -420,9 +420,9 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 				}
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					try {
-						File mFileThumbnail = fileHelper.getCameraFileThumbnailFavorite(tempFavorite.favId);
-						File mFileSmall = fileHelper.getCameraFileSmallFavorite(tempFavorite.favId);
-						File mFile = fileHelper.getCameraFileLargeFavorite(tempFavorite.favId);
+						File mFileThumbnail = fileHelper.getCameraFileThumbnailFavorite(tempFavorite.id);
+						File mFileSmall = fileHelper.getCameraFileSmallFavorite(tempFavorite.id);
+						File mFile = fileHelper.getCameraFileLargeFavorite(tempFavorite.id);
 						if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
 							viewHolder.rowImageViewBitmap = BitmapFactory.decodeFile(mFileThumbnail.getPath());
 							viewHolder.rowImageview.setScaleType(ScaleType.FIT_CENTER);
@@ -489,7 +489,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 			switch (v.getId()) {
 			case R.id.row_imageview:
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					String id = tempFavorite.favId;
+					String id = tempFavorite.id;
 					if (tempFavorite.type.equals(getString(R.string.voice))) {
 						File mFile = fileHelper.getAudioFileFavorite(id);
 						if (mFile.canRead()) {new AudioPlayDialog(FavoriteActivity.this,id,"fav");}
@@ -531,7 +531,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 	}
 
 	private void createNewEntry(Favorite adapterList) {
-		String favID = adapterList.favId;
+		String favID = adapterList.id;
 		String type = adapterList.type;
 		String tag = adapterList.description;
 		String amount = adapterList.amount;
@@ -544,7 +544,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 
 		if(amount != null && !amount.contains("?") && !amount.equals("")) {toInsert.amount = amount;}
 		
-		if(favID != null && !favID.equals("")) {toInsert.favId = favID;}
+		if(favID != null && !favID.equals("")) {toInsert.id = favID;}
 		
 		if(type.equals(getString(R.string.camera))) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {

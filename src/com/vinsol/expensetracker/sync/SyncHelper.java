@@ -120,7 +120,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		for(Favorite favorite : favorites) {
 			if(Strings.equal(favorite.type, context.getString(R.string.voice))) {
 				try {
-					if(http.downloadFavoriteFile(favorite.favId, favorite.idFromServer, true)) {
+					if(http.downloadFavoriteFile(favorite.id, favorite.idFromServer, true)) {
 						favorite.fileToDownload = false;
 						favorite.fileUploaded = true;
 						updateFavorite(favorite);
@@ -132,8 +132,8 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			
 			if(Strings.equal(favorite.type, context.getString(R.string.camera))) {
 				try {
-					if(http.downloadFavoriteFile(favorite.favId, favorite.idFromServer, false)) {
-						new CameraFileSave(context).resizeImageAndSaveThumbnails(favorite.favId, true);
+					if(http.downloadFavoriteFile(favorite.id, favorite.idFromServer, false)) {
+						new CameraFileSave(context).resizeImageAndSaveThumbnails(favorite.id, true);
 						favorite.fileToDownload = false;
 						favorite.fileUploaded = true;
 						updateFavorite(favorite);
@@ -371,9 +371,9 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			String response;
 			try {
 				if(!isAudio) {
-					response = http.uploadFavoriteFile(fileHelper.getCameraFileLargeFavorite(favorite.favId), favorite.idFromServer, isAudio);
+					response = http.uploadFavoriteFile(fileHelper.getCameraFileLargeFavorite(favorite.id), favorite.idFromServer, isAudio);
 				} else {
-					response = http.uploadFavoriteFile(fileHelper.getAudioFileFavorite(favorite.favId), favorite.idFromServer, isAudio);
+					response = http.uploadFavoriteFile(fileHelper.getAudioFileFavorite(favorite.id), favorite.idFromServer, isAudio);
 				}
 				Log.d("******************* Getting Response *******************");
 				if(response != null) {
@@ -433,7 +433,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			if(Strings.isEmpty(tempId)) {
 				adapter.insertToFavoriteTable(favorite);
 			} else {
-				favorite.favId = tempId;
+				favorite.id = tempId;
 				adapter.editFavoriteTableByHash(favorite);
 			}
 		}
@@ -455,6 +455,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			}
 			setSyncBit(entry);
 			entry.id = tempEntry.id;
+			entry.favorite = adapter.getFavIdByHash(entry.favorite);
 			adapter.editEntryTableByHash(entry);
 		}
 		adapter.close();
@@ -476,7 +477,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 				setSyncBit(favorite);
 			}
 			setSyncBit(favorite);
-			favorite.favId = tempFavorite.favId;
+			favorite.id = tempFavorite.id;
 			adapter.editFavoriteTableByHash(favorite);
 		}
 		adapter.close();
@@ -486,11 +487,11 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		adapter.open();
 		for(Favorite favorite : favorites) {
 			setSyncBit(favorite);
-			favorite.favId = adapter.getFavIdByHash(favorite.myHash);
+			favorite.id = adapter.getFavIdByHash(favorite.myHash);
 			if(Strings.equal(favorite.type, context.getString(R.string.voice)) || Strings.equal(favorite.type, context.getString(R.string.camera))) {
-				fileHelper.deleteAllFavoriteFiles(favorite.favId);
+				fileHelper.deleteAllFavoriteFiles(favorite.id);
 			}
-			adapter.permanentDeleteFavoriteTableEntryID(favorite.favId);
+			adapter.permanentDeleteFavoriteTableEntryID(favorite.id);
 		}
 		adapter.close();
 	}

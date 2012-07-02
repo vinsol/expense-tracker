@@ -41,7 +41,7 @@ public class ConvertCursorToListString {
 			do {
 				listFavorite = new Favorite();
 				listFavorite.amount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
-				listFavorite.favId = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
+				listFavorite.id = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
 				listFavorite.description = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TAG));
 				listFavorite.type = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TYPE));
 				listFavorite.location = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_LOCATION));
@@ -191,7 +191,11 @@ public class ConvertCursorToListString {
 
 	public List<Entry> getEntryListNotSyncedAndCreated() {
 		adapter.open();
-		return getEntryList(adapter.getEntryDataNotSyncedAndCreated());
+		List<Entry> entries = getEntryList(adapter.getEntryDataNotSyncedAndCreated());
+		for(Entry entry : entries) {
+			entry.favorite = adapter.getFavHashById(entry.favorite);
+		}
+		return entries;
 	}
 	
 	public List<Entry> getEntryListNotSyncedAndUpdated() {
@@ -260,7 +264,7 @@ public class ConvertCursorToListString {
 				Entry mEntry = new Entry();
 				mEntry.id = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_ID));
 				mEntry.amount = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_AMOUNT));
-				mEntry.favId = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_FAVORITE));
+				mEntry.favorite = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_FAVORITE));
 				mEntry.location = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_LOCATION));
 				mEntry.description = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TAG));
 				mEntry.type = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_TYPE));
