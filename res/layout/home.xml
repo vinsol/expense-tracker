@@ -13,7 +13,7 @@
     <!-- Header -->
    	<include 
    	    android:id="@+id/main_header_include"
-   	    layout="@layout/home_header" />   
+   	    layout="@layout/home_header" />
     
    	<!-- Body -->
         

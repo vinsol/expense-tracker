@@ -309,6 +309,33 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
+	public boolean permanentDeleteFavoriteTableMyHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		try {
+			Log.d("Deleting");
+			db.delete(FAVORITE_TABLE, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean deleteEntryTableMyHash(String hash) {
+		String where = KEY_MY_HASH + "=\"" + hash+"\"";
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_DELETE_BIT, true);
+		try {
+			Log.d("Deleting");
+			db.update(ENTRY_TABLE, contentValues, where, null);
+			Log.d("Deleted");
+		} catch (SQLiteException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 	public boolean permanentDeleteFavoriteTableEntryID(String favID) {
 		String where = KEY_ID + "=" + favID;
 		try {

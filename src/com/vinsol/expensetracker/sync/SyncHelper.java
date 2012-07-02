@@ -409,9 +409,11 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			setSyncBit(entry);
 			Log.d("*************************"+"fileToDOwnload "+entry.fileToDownload);
 			
-			if(!adapter.findEntryByMyHash(entry.myHash)) {
+			String tempId = adapter.getEntryIdByHash(entry.myHash);
+			if(Strings.isEmpty(tempId)) {
 				adapter.insertToEntryTable(entry);
 			} else {
+				entry.id = tempId;
 				adapter.editEntryTable(entry);
 			}
 		}
@@ -427,9 +429,11 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 //				setSyncBit(favorite);
 //			}
 			setSyncBit(favorite);
-			if(!adapter.findEntryByMyHash(favorite.myHash)) {
+			String tempId = adapter.getFavIdByHash(favorite.myHash);
+			if(Strings.isEmpty(tempId)) {
 				adapter.insertToFavoriteTable(favorite);
 			} else {
+				favorite.favId = tempId;
 				adapter.editFavoriteTableByHash(favorite);
 			}
 		}
@@ -450,6 +454,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 				setSyncBit(entry);
 			}
 			setSyncBit(entry);
+			entry.id = tempEntry.id;
 			adapter.editEntryTableByHash(entry);
 		}
 		adapter.close();
@@ -471,6 +476,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 				setSyncBit(favorite);
 			}
 			setSyncBit(favorite);
+			favorite.favId = tempFavorite.favId;
 			adapter.editFavoriteTableByHash(favorite);
 		}
 		adapter.close();
