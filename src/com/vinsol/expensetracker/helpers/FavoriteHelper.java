@@ -242,9 +242,9 @@ public class FavoriteHelper implements OnClickListener{
 					Toast.makeText(activity, "sdcard not available", Toast.LENGTH_SHORT).show();
 				}
 			}
-			mShowList.favorite = favID+"";
 			mShowList.syncBit = activity.getString(R.string.syncbit_not_synced);
 			mDatabaseAdapter.open();
+			mShowList.favorite = mDatabaseAdapter.getFavHashById(favID+"");
 			mDatabaseAdapter.editEntryTable(mShowList);
 			mDatabaseAdapter.close();
 			showAddFavorite.setChecked(true);
