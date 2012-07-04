@@ -23,6 +23,7 @@ import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.sync.SyncHelper;
+import com.vinsol.expensetracker.utils.Strings;
 
 public class FavoriteHelper implements OnClickListener{
 	
@@ -154,31 +155,25 @@ public class FavoriteHelper implements OnClickListener{
 	}
 	
 	private void removeEntryFromFavorite() {
-		Long favID = null;
+		String hash = null;
 		if(mShowList.type.equals(activity.getString(R.string.text))) {
 			mDatabaseAdapter.open();
-			favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
+			hash = mDatabaseAdapter.getFavoriteHashEntryTable(mShowList.id);
 			mDatabaseAdapter.close();
-			if(favID == -1) {
-				favID = Long.parseLong(mShowList.favorite);
-			}
-			setDatabaseAndLayoutValues(favID);
+			setDatabaseAndLayoutValues(hash);
 		} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			mDatabaseAdapter.open();
-			favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
+			hash = mDatabaseAdapter.getFavoriteHashEntryTable(mShowList.id);
 			mDatabaseAdapter.close();
-			if(favID == -1) {
-				favID = Long.parseLong(mShowList.favorite);
-			}
-			setDatabaseAndLayoutValues(favID);
+			setDatabaseAndLayoutValues(hash);
 		} else {
 			Toast.makeText(activity, "sdcard not available", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
-	private void setDatabaseAndLayoutValues(Long favID){
+	private void setDatabaseAndLayoutValues(String hash){
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editFavoriteIdEntryTable(favID+"");
+		mDatabaseAdapter.editFavoriteHashEntryTable(hash);
 		mDatabaseAdapter.close();
 		showAddFavorite.setChecked(false);
 		mShowList.favorite = null;
@@ -195,6 +190,7 @@ public class FavoriteHelper implements OnClickListener{
 	
 	public void onClickFavorite(Boolean toCheck) {
 		Long favID = null;
+		String hash = null;
 		if(toCheck) {
 			if(mShowList.type.equals(activity.getString(R.string.text))) {
 				mDatabaseAdapter.open();
@@ -260,21 +256,19 @@ public class FavoriteHelper implements OnClickListener{
 			Toast.makeText(activity, "Added to Favorite", Toast.LENGTH_SHORT).show();
 		} else if(mShowList.type.equals(activity.getString(R.string.text))) {
 				mDatabaseAdapter.open();
-				favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
+				hash = mDatabaseAdapter.getFavoriteHashEntryTable(mShowList.id);
+				String tempId = mDatabaseAdapter.getFavIdByHash(hash);
+				if(Strings.notEmpty(tempId)) favID = Long.parseLong(tempId);
 				mDatabaseAdapter.close();
-				if(favID == -1) {
-					favID = Long.parseLong(mShowList.favorite);
-				}
-				doTaskAfter(favID);
+				doTaskAfter(hash);
 			} else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				mDatabaseAdapter.open();
-				favID = mDatabaseAdapter.getFavoriteIdEntryTable(mShowList.id);
+				hash = mDatabaseAdapter.getFavoriteHashEntryTable(mShowList.id);
+				String tempId = mDatabaseAdapter.getFavIdByHash(hash);
+				if(Strings.notEmpty(tempId)) favID = Long.parseLong(tempId);
 				mDatabaseAdapter.close();
-				if(favID == -1) {
-					favID = Long.parseLong(mShowList.favorite);
-				}
 				fileHelper.deleteAllFavoriteFiles(favID.toString());
-				doTaskAfter(favID);
+				doTaskAfter(hash);
 			} else {
 				Toast.makeText(activity, "sdcard not available", Toast.LENGTH_SHORT).show();
 			}
@@ -293,12 +287,12 @@ public class FavoriteHelper implements OnClickListener{
 		return "";
 	}
 
-	private void doTaskAfter(Long favID) {
+	private void doTaskAfter(String hash) {
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.deleteFavoriteTableEntryID(favID+"");
+		mDatabaseAdapter.deleteFavoriteTableByHash(hash);
 		mDatabaseAdapter.close();
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editFavoriteIdEntryTable(favID+"");
+		mDatabaseAdapter.editFavoriteHashEntryTable(hash);
 		mDatabaseAdapter.close();
 		showAddFavorite.setChecked(false);
 		mShowList.favorite = null;
