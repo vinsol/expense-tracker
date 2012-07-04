@@ -192,9 +192,13 @@ public class ConvertCursorToListString {
 	public List<Entry> getEntryListNotSyncedAndCreated() {
 		adapter.open();
 		List<Entry> entries = getEntryList(adapter.getEntryDataNotSyncedAndCreated());
+		adapter.open();
 		for(Entry entry : entries) {
+			Log.d("************************************* Adding hashes in place of ids *************************************");
+			Log.d("entry.favorite "+entry.favorite+" hash "+adapter.getFavHashById(entry.favorite));
 			entry.favorite = adapter.getFavHashById(entry.favorite);
 		}
+		adapter.close();
 		return entries;
 	}
 	
