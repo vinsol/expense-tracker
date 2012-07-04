@@ -373,7 +373,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		
 		if( isChanged ) {
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.editFavoriteIdEntryTable(favorite.id);
+			mDatabaseAdapter.editFavoriteHashEntryTable(favorite.myHash);
 			mDatabaseAdapter.close();
 		}
 			
@@ -620,7 +620,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		
 		////// ******* Delete entry from database ******** /////////
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editFavoriteIdEntryTable(mFavoriteList.id);
+		mDatabaseAdapter.editFavoriteHashEntryTable(mFavoriteList.myHash);
 //		if(Strings.isEmpty(mFavoriteList.updatedAt)) {
 //			fileHelper.deleteAllFavoriteFiles(mFavoriteList.favId);
 //			mDatabaseAdapter.permanentDeleteFavoriteTableEntryID(mFavoriteList.favId);

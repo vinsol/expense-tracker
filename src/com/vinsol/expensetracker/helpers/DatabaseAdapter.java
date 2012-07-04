@@ -675,11 +675,11 @@ public class DatabaseAdapter {
 		return favId;
 	}
 
-	public void editFavoriteIdEntryTable(String favId) {
+	public void editFavoriteHashEntryTable(String hash) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_FAVORITE, "");
 		contentValues.put(KEY_SYNC_BIT, context.getString(R.string.syncbit_not_synced));
-		String where = KEY_FAVORITE+" = "+favId;
+		String where = KEY_FAVORITE+" = \""+hash+"\"";
 		db.update(ENTRY_TABLE, contentValues, where, null);
 	}
  

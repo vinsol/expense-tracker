@@ -254,7 +254,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 			mDatabaseAdapter.deleteFavoriteTableEntryID(tempFav.id);
 //		}
     	
-    	mDatabaseAdapter.editFavoriteIdEntryTable(((Favorite)mAdapter.getItem(position)).id);
+    	mDatabaseAdapter.editFavoriteHashEntryTable(((Favorite)mAdapter.getItem(position)).myHash);
     	mDatabaseAdapter.close();
     	fileHelper.deleteAllFavoriteFiles(((Favorite)mAdapter.getItem(position)).id);
     	mListMain.remove(mAdapter.getItem(position));
