@@ -544,7 +544,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 
 		if(amount != null && !amount.contains("?") && !amount.equals("")) {toInsert.amount = amount;}
 		
-		if(favID != null && !favID.equals("")) {toInsert.id = favID;}
+		toInsert.favorite = adapterList.myHash;
 		
 		if(type.equals(getString(R.string.camera))) {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
