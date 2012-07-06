@@ -13,6 +13,7 @@ public class ExpenseTrackerFieldNamingPolicy implements FieldNamingStrategy{
 	}
 	
 	private String getConvention(String name) {
+		if(Strings.equal(name, "deviceId")) { return "device_id";}
 		if(Strings.equal(name, "myHash")) { return "my_hash";}
 		if(Strings.equal(name, "timeInMillis")) { return "time_milis_utc";}
 		if(Strings.equal(name, "idFromServer")) { return "id";}

@@ -274,8 +274,6 @@ public class ConvertCursorToListString {
 				mEntry.syncBit = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_SYNC_BIT));
 				mEntry.fileUpdatedAt = cursor.getString(cursor.getColumnIndex(DatabaseAdapter.KEY_FILE_UPDATED_AT));
 				mainlist.add(mEntry);
-
-				Log.d("*******************************************");
 				Log.d("***  "+mEntry.deleted);
 				cursor.moveToNext();
 			} while (!cursor.isAfterLast());

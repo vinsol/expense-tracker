@@ -5,6 +5,7 @@ import java.io.IOException;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -191,7 +192,14 @@ public class UserAuthentication extends BaseActivity implements OnClickListener 
 		if(isEnteredInfoCorrect()) {
 			return null;
 		} else {
-			user = new User(name.getText().toString(),email.getText().toString(),password.getText().toString());
+			user = new User(name.getText().toString(), email.getText().toString(), password.getText().toString());
+		    user.deviceId = ""+Build.BOARD.length()%10+ Build.BRAND.length()%10 +
+	            	Build.CPU_ABI.length()%10 + Build.DEVICE.length()%10 +
+	            	Build.DISPLAY.length()%10 + Build.HOST.length()%10 +
+	            	Build.ID.length()%10 + Build.MANUFACTURER.length()%10 +
+	            	Build.MODEL.length()%10 + Build.PRODUCT.length()%10 +
+	            	Build.TAGS.length()%10 + Build.TYPE.length()%10 +
+	            	Build.USER.length()%10;
 		}
 		return user;
 	}

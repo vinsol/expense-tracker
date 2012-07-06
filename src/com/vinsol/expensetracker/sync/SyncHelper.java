@@ -487,11 +487,11 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		adapter.open();
 		for(Favorite favorite : favorites) {
 			setSyncBit(favorite);
-			favorite.id = adapter.getFavIdByHash(favorite.myHash);
-			if(Strings.equal(favorite.type, context.getString(R.string.voice)) || Strings.equal(favorite.type, context.getString(R.string.camera))) {
-				fileHelper.deleteAllFavoriteFiles(favorite.id);
-			}
-			adapter.permanentDeleteFavoriteTableEntryID(favorite.id);
+//			favorite.id = adapter.getFavIdByHash(favorite.myHash);
+//			if(Strings.equal(favorite.type, context.getString(R.string.voice)) || Strings.equal(favorite.type, context.getString(R.string.camera))) {
+//				fileHelper.deleteAllFavoriteFiles(favorite.id);
+//			}
+//			adapter.permanentDeleteFavoriteTableEntryID(favorite.id);
 		}
 		adapter.close();
 	}
@@ -500,11 +500,11 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 		adapter.open();
 		for(Entry entry : entries) {
 			setSyncBit(entry);
-			entry.id = adapter.getEntryIdByHash(entry.myHash);
-			if(Strings.equal(entry.type, context.getString(R.string.voice)) || Strings.equal(entry.type, context.getString(R.string.camera))) {
-				fileHelper.deleteAllEntryFiles(entry.id);
-			}
-			adapter.permanentDeleteEntryTableEntryID(entry.id);
+//			entry.id = adapter.getEntryIdByHash(entry.myHash);
+//			if(Strings.equal(entry.type, context.getString(R.string.voice)) || Strings.equal(entry.type, context.getString(R.string.camera))) {
+//				fileHelper.deleteAllEntryFiles(entry.id);
+//			}
+//			adapter.permanentDeleteEntryTableEntryID(entry.id);
 		}
 		adapter.close();
 	}
