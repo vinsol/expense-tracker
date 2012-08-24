@@ -93,7 +93,7 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
         
         // Create an Intent to launch an Activity for the tab (to be reused)
         Intent intentThisWeek = new Intent(this, ExpenseListingThisWeek.class);
-        Intent intentThisMonth = new Intent(this, ExpenseListingThisMonth.class);
+        Intent intentThisMonth = new Intent(this, ThisMonth.class);
         Intent intentThisYear = new Intent(this, ExpenseListingThisYear.class);
         Intent intentAll = new Intent(this, ExpenseListingAll.class);
         setExtras(tabHost, intentThisWeek, intentThisMonth, intentThisYear, intentAll, intentExtras);
