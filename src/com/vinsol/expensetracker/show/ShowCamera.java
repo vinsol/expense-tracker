@@ -25,7 +25,7 @@ import com.vinsol.expensetracker.entry.CameraEntry;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
-public class ShowCameraActivity extends ShowAbstract {
+public class ShowCamera extends ShowAbstract {
 
 	private ImageView showImageDisplay;
 	private LinearLayout showCameraDetails;
