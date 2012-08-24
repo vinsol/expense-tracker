@@ -44,7 +44,7 @@ import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
 import com.vinsol.expensetracker.show.ShowTextActivity;
-import com.vinsol.expensetracker.show.ShowVoiceActivity;
+import com.vinsol.expensetracker.show.ShowVoice;
 import com.vinsol.expensetracker.sync.SyncHelper;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
 import com.vinsol.expensetracker.utils.Log;
@@ -244,7 +244,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 						if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
 							intent = new Intent(this, Voice.class);
 						} else {
-							intent = new Intent(this,ShowVoiceActivity.class);
+							intent = new Intent(this,ShowVoice.class);
 						}
 					} else {
 						Toast.makeText(this, "sdcard not available", Toast.LENGTH_SHORT).show();

@@ -27,7 +27,7 @@ import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
 import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.MyCountDownTimer;
 
-public class ShowVoiceActivity extends ShowAbstract {
+public class ShowVoice extends ShowAbstract {
  
 	private RelativeLayout showVoiceDetails;
 	private Button showPlayButton;
