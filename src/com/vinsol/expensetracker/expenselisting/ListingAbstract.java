@@ -34,6 +34,7 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.entry.CameraEntry;
 import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
+import com.vinsol.expensetracker.expenselisting.dialog.UnknownEntryDialog;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;

@@ -4,7 +4,7 @@
 */     
 
 
-package com.vinsol.expensetracker.expenselisting;
+package com.vinsol.expensetracker.expenselisting.dialog;
 
 import com.vinsol.expensetracker.R;
 
