@@ -15,7 +15,7 @@ import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
 
-public class ShowTextActivity extends ShowAbstract {
+public class ShowText extends ShowAbstract {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

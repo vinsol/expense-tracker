@@ -43,7 +43,7 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.ListDatetimeAmount;
 import com.vinsol.expensetracker.show.ShowCameraActivity;
-import com.vinsol.expensetracker.show.ShowTextActivity;
+import com.vinsol.expensetracker.show.ShowText;
 import com.vinsol.expensetracker.show.ShowVoice;
 import com.vinsol.expensetracker.sync.SyncHelper;
 import com.vinsol.expensetracker.utils.GetArrayListFromString;
@@ -237,7 +237,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
 						intent = new Intent(this, Text.class); 
 					} else {
-						intent = new Intent(this,ShowTextActivity.class); 
+						intent = new Intent(this,ShowText.class); 
 					}
 				} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
