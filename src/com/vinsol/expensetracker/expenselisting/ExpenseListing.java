@@ -95,7 +95,7 @@ public class ExpenseListing extends TabActivity implements OnClickListener{
         Intent intentThisWeek = new Intent(this, ThisWeek.class);
         Intent intentThisMonth = new Intent(this, ThisMonth.class);
         Intent intentThisYear = new Intent(this, ThisYear.class);
-        Intent intentAll = new Intent(this, ExpenseListingAll.class);
+        Intent intentAll = new Intent(this, All.class);
         setExtras(tabHost, intentThisWeek, intentThisMonth, intentThisYear, intentAll, intentExtras);
         // Initialize a TabSpec for each tab and add it to the TabHost
         TabSpec tabThisWeek = tabHost.newTabSpec(getString(R.string.tab_thisweek)).setIndicator("This Week", getResources().getDrawable(R.drawable.tab_this_week)).setContent(intentThisWeek);

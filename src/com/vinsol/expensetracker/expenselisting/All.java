@@ -8,7 +8,7 @@ package com.vinsol.expensetracker.expenselisting;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 
-public class ExpenseListingAll extends TabLayoutListingAbstract {
+public class All extends TabLayoutListingAbstract {
 	
 	@Override
 	protected boolean condition(DisplayDate mDisplayDate) {
