@@ -101,6 +101,7 @@
     <string name="backpress_edit_entry_text">Discard the changes?</string>
     <string name="unfinish_fav_text">Unfinished entry, Discard this entry?</string>
     <string name="cancel">Cancel</string>
+    <string name="date_picker_dialog_error_message">Future dates are not allowed</string>
     
     <!-- Dialog Title -->
     <string name="confirm_discard">Confirm Discard</string>
@@ -131,5 +132,8 @@
     
     <!-- Name of the button in the date/time picker to accept the date/time change -->
     <string name="date_time_set">Set</string>
+    
+    <string name="amount">amount</string>
+    <string name="description">description</string>
     
 </resources>

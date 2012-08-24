@@ -15,7 +15,7 @@
     	android:id = "@+id/new_date_label"
     	android:layout_height = "wrap_content"
     	android:layout_width = "fill_parent"
-    	android:text = "Future dates are not allowed"
+    	android:text = "@string/date_picker_dialog_error_message"
     	android:textColor="#ffffff"
     	android:layout_margin="5dp"
     	android:background="#FF0000"
