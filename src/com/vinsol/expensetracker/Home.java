@@ -11,7 +11,6 @@ import java.util.Calendar;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
@@ -125,7 +124,8 @@ public class Home extends BaseActivity implements OnClickListener {
 	
 	@Override
 	public void onClick(View clickedView) {
-		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+		boolean isMediaMounted = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+		if(isMediaMounted) {
 			if(!ExpenseTrackerApplication.isInitialized){ExpenseTrackerApplication.Initialize();}
 		}
 		int idOfClickedView = clickedView.getId();
@@ -142,7 +142,7 @@ public class Home extends BaseActivity implements OnClickListener {
 				
 			////// ******* opens Voice Activity ******** ///////////
 			case R.id.main_voice:
-				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+				if (isMediaMounted) {
 					Intent intentVoice = new Intent(this, Voice.class);
 					createDatabaseEntry(R.string.voice);
 					intentVoice.putExtras(bundle);
@@ -154,7 +154,7 @@ public class Home extends BaseActivity implements OnClickListener {
 	
 			// //// ******* opens Camera Activity ******** ///////////
 			case R.id.main_camera:
-				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+				if (isMediaMounted) {
 					Intent intentCamera = new Intent(this, CameraEntry.class);
 					bundle = new Bundle();
 					intentCamera.putExtras(bundle);
