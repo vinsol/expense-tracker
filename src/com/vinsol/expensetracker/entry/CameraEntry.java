@@ -35,7 +35,7 @@ import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.utils.ImagePreview;
 import com.vinsol.expensetracker.utils.Log;
 
-public class CameraActivity extends EditAbstract {
+public class CameraEntry extends EditAbstract {
 
 	private static final int PICTURE_RESULT = 35;
 	private LinearLayout editCameraDetails;
@@ -225,7 +225,7 @@ public class CameraActivity extends EditAbstract {
 			} else {
 				id = entry.id;
 			}
-			new CameraFileSave(CameraActivity.this).resizeImageAndSaveThumbnails(id + "",isFromFavorite);
+			new CameraFileSave(CameraEntry.this).resizeImageAndSaveThumbnails(id + "",isFromFavorite);
 			return null;
 		}
 

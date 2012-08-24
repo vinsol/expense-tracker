@@ -45,7 +45,7 @@ import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.entry.CameraActivity;
+import com.vinsol.expensetracker.entry.CameraEntry;
 import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
@@ -234,7 +234,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 		} else if(favoriteEntry.type.equals(getString(R.string.voice))) {
 			intent = new Intent(this, Voice.class);
 		} else if(favoriteEntry.type.equals(getString(R.string.camera))) {
-			intent = new Intent(this, CameraActivity.class);
+			intent = new Intent(this, CameraEntry.class);
 		}
 		Bundle intentExtras = new Bundle();
 		intentExtras.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, favoriteEntry);

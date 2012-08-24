@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.expensetracker.entry.CameraActivity;
+import com.vinsol.expensetracker.entry.CameraEntry;
 import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
@@ -156,7 +156,7 @@ public class Home extends BaseActivity implements OnClickListener {
 			// //// ******* opens Camera Activity ******** ///////////
 			case R.id.main_camera:
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					Intent intentCamera = new Intent(this, CameraActivity.class);
+					Intent intentCamera = new Intent(this, CameraEntry.class);
 					bundle = new Bundle();
 					intentCamera.putExtras(bundle);
 					startActivity(intentCamera);

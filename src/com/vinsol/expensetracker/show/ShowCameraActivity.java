@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.entry.CameraActivity;
+import com.vinsol.expensetracker.entry.CameraEntry;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
@@ -80,7 +80,7 @@ public class ShowCameraActivity extends ShowAbstract {
 	
 	@Override
 	protected void editAction() {
-		Intent editIntent = new Intent(this, CameraActivity.class);
+		Intent editIntent = new Intent(this, CameraEntry.class);
 		editIntent.putExtras(intentExtras);
 		startActivityForResult(editIntent,SHOW_RESULT);
 	}

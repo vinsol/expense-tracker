@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.entry.CameraActivity;
+import com.vinsol.expensetracker.entry.CameraEntry;
 import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
@@ -97,7 +97,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 				case R.id.main_camera:
 					unknownDialog.dismiss();
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-						Intent intentCamera = new Intent(activity, CameraActivity.class);
+						Intent intentCamera = new Intent(activity, CameraEntry.class);
 						if (timeInMillis != 0) {
 							bundle.putLong("timeInMillis", timeInMillis);
 						}

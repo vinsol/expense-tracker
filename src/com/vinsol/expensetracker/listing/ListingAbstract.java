@@ -31,7 +31,7 @@ import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.entry.CameraActivity;
+import com.vinsol.expensetracker.entry.CameraEntry;
 import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
@@ -226,7 +226,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 				if (mTempClickedList.type.equals(getString(R.string.camera))) {
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
-							intent = new Intent(this,CameraActivity.class);
+							intent = new Intent(this,CameraEntry.class);
 						} else {
 							intent = new Intent(this,ShowCameraActivity.class); 
 						}
@@ -343,7 +343,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 		} else {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				if (mTempClickedList.type.equals(getString(R.string.camera))) {
-					intent = new Intent(this, CameraActivity.class);
+					intent = new Intent(this, CameraEntry.class);
 				} else if (mTempClickedList.type.equals(getString(R.string.voice))) {
 					intent = new Intent(this, Voice.class);
 				}

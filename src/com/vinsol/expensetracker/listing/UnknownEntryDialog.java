@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.entry.CameraActivity;
+import com.vinsol.expensetracker.entry.CameraEntry;
 import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
@@ -141,7 +141,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				
 			case R.id.main_camera:
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-					Intent intentCamera = new Intent(getContext(), CameraActivity.class);
+					Intent intentCamera = new Intent(getContext(), CameraEntry.class);
 					editDatabase(R.string.camera);
 					bundle.putParcelable("mDisplayList", mTempClickedList);
 					intentCamera.putExtras(bundle);
