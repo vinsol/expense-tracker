@@ -22,7 +22,7 @@ import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.ExpenseTrackerApplication;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.SetPreferences;
+import com.vinsol.expensetracker.Preferences;
 import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.models.User;
 import com.vinsol.expensetracker.utils.Log;
@@ -182,7 +182,7 @@ public class UserAuthentication extends BaseActivity implements OnClickListener 
         	SyncHelper.syncHelper.execute();
 		}
 		progressDialog.dismiss();
-		Intent intent = new Intent(this, SetPreferences.class);
+		Intent intent = new Intent(this, Preferences.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}

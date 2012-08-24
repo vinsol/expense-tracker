@@ -47,7 +47,7 @@ public abstract class BaseActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.settings:
-			Intent intent = new Intent(this, SetPreferences.class);
+			Intent intent = new Intent(this, Preferences.class);
             startActivity(intent);
 			break;
 

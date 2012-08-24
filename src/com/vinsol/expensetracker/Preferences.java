@@ -23,7 +23,7 @@ import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.sync.LoginType;
 import com.vinsol.expensetracker.utils.Strings;
 
-public class SetPreferences extends PreferenceActivity {
+public class Preferences extends PreferenceActivity {
 	
 	@Override
 	protected void onStart() {
@@ -63,7 +63,7 @@ public class SetPreferences extends PreferenceActivity {
 				
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					startActivity(new Intent(SetPreferences.this, LoginType.class));
+					startActivity(new Intent(Preferences.this, LoginType.class));
 //					final AlertDialog.Builder builder = new AlertDialog.Builder(SetPreferences.this);
 //					final View view = getLayoutInflater().inflate(R.layout.pref_sync_dialog, null);
 //					builder.setView(view);
