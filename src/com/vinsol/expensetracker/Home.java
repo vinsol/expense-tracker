@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.entry.CameraActivity;
-import com.vinsol.expensetracker.entry.TextEntry;
+import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
@@ -135,7 +135,7 @@ public class Home extends BaseActivity implements OnClickListener {
 		switch (idOfClickedView) {
 			////// ******* opens TextEntry Activity ******** ///////////
 			case R.id.main_text:
-				Intent intentTextEntry = new Intent(this, TextEntry.class);
+				Intent intentTextEntry = new Intent(this, Text.class);
 				createDatabaseEntry(R.string.text);
 				intentTextEntry.putExtras(bundle);
 				startActivity(intentTextEntry);

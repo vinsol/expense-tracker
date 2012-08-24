@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.vinsol.expensetracker.R;
 
-public class TextEntry extends EditAbstract {
+public class Text extends EditAbstract {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -12,7 +12,7 @@ import android.os.Bundle;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.entry.TextEntry;
+import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
 
 public class ShowTextActivity extends ShowAbstract {
@@ -48,7 +48,7 @@ public class ShowTextActivity extends ShowAbstract {
 
 	@Override
 	protected void editAction() {
-		Intent editIntent = new Intent(this, TextEntry.class);
+		Intent editIntent = new Intent(this, Text.class);
 		editIntent.putExtras(intentExtras);
 		startActivityForResult(editIntent,SHOW_RESULT);
 	}

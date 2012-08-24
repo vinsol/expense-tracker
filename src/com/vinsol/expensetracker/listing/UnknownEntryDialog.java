@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.entry.CameraActivity;
-import com.vinsol.expensetracker.entry.TextEntry;
+import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
@@ -111,7 +111,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		switch (v.getId()) {
 		
 			case R.id.main_text:
-				Intent intentTextEntry = new Intent(getContext(), TextEntry.class);
+				Intent intentTextEntry = new Intent(getContext(), Text.class);
 				editDatabase(R.string.text);
 				bundle.putParcelable("mDisplayList", mTempClickedList);
 				intentTextEntry.putExtras(bundle);

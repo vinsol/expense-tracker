@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.entry.CameraActivity;
-import com.vinsol.expensetracker.entry.TextEntry;
+import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
@@ -74,7 +74,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 				// //// ******* opens TextEntry Activity ******** ///////////
 				case R.id.main_text:
 					unknownDialog.dismiss();
-					Intent intentTextEntry = new Intent(activity, TextEntry.class);
+					Intent intentTextEntry = new Intent(activity, Text.class);
 					createDatabaseEntry(R.string.text,toInsert);
 					intentTextEntry.putExtras(bundle);
 					activity.startActivity(intentTextEntry);

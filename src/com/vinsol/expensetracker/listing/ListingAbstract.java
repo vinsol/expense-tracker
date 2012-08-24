@@ -32,7 +32,7 @@ import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.entry.CameraActivity;
-import com.vinsol.expensetracker.entry.TextEntry;
+import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.CheckEntryComplete;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
@@ -235,7 +235,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 					}
 				} else if (mTempClickedList.type.equals(getString(R.string.text))) {
 					if(!mCheckEntryComplete.isEntryComplete(mTempClickedList,this)) {
-						intent = new Intent(this, TextEntry.class); 
+						intent = new Intent(this, Text.class); 
 					} else {
 						intent = new Intent(this,ShowTextActivity.class); 
 					}
@@ -339,7 +339,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 		bundle.putParcelable(Constants.KEY_ENTRY_LIST_EXTRA, mTempClickedList);
 		bundle.putInt(Constants.KEY_POSITION, position);
 		if (mTempClickedList.type.equals(getString(R.string.text))) {
-			intent = new Intent(this, TextEntry.class);
+			intent = new Intent(this, Text.class);
 		} else {
 			if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 				if (mTempClickedList.type.equals(getString(R.string.camera))) {

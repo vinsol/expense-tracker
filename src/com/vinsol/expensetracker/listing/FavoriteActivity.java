@@ -46,7 +46,7 @@ import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.entry.CameraActivity;
-import com.vinsol.expensetracker.entry.TextEntry;
+import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
@@ -230,7 +230,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 		Favorite favoriteEntry = (Favorite) mAdapter.getItem(position);
 		Intent intent = null;
 		if(favoriteEntry.type.equals(getString(R.string.text))) {
-			intent = new Intent(this, TextEntry.class);
+			intent = new Intent(this, Text.class);
 		} else if(favoriteEntry.type.equals(getString(R.string.voice))) {
 			intent = new Intent(this, Voice.class);
 		} else if(favoriteEntry.type.equals(getString(R.string.camera))) {
