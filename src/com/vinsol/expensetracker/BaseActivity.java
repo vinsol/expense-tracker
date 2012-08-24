@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.expensetracker.listing.FavoriteActivity;
+import com.vinsol.expensetracker.entry.FavoriteActivity;
 
 public abstract class BaseActivity extends Activity {
 	

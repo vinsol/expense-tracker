@@ -4,7 +4,7 @@
 */     
 
 
-package com.vinsol.expensetracker.listing;
+package com.vinsol.expensetracker.entry;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,9 +45,6 @@ import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.BaseActivity;
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.entry.CameraEntry;
-import com.vinsol.expensetracker.entry.Text;
-import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.DateHandler;
@@ -55,6 +52,9 @@ import com.vinsol.expensetracker.helpers.DateHelper;
 import com.vinsol.expensetracker.helpers.FileHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
 import com.vinsol.expensetracker.helpers.StringProcessing;
+import com.vinsol.expensetracker.listing.AudioPlayDialog;
+import com.vinsol.expensetracker.listing.DescriptionDialog;
+import com.vinsol.expensetracker.listing.ExpenseListing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.sync.SyncHelper;
