@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.expensetracker.entry.FavoriteActivity;
+import com.vinsol.expensetracker.entry.FavoriteEntry;
 
 public abstract class BaseActivity extends Activity {
 	
@@ -58,7 +58,7 @@ public abstract class BaseActivity extends Activity {
 			break;
 			
 		case R.id.manage_favorite:
-			Intent startManagingFavorite = new Intent(this, FavoriteActivity.class);
+			Intent startManagingFavorite = new Intent(this, FavoriteEntry.class);
 			startManagingFavorite.putExtra(Constants.KEY_MANAGE_FAVORITE, true);
 			startActivity(startManagingFavorite);
 			break;

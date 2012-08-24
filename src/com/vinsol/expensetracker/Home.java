@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.entry.CameraEntry;
-import com.vinsol.expensetracker.entry.FavoriteActivity;
+import com.vinsol.expensetracker.entry.FavoriteEntry;
 import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
@@ -167,7 +167,7 @@ public class Home extends BaseActivity implements OnClickListener {
 				
 			// //// ******* opens Favorite Activity ******** ///////////
 			case R.id.main_favorite:
-				Intent intentFavorite = new Intent(this, FavoriteActivity.class);
+				Intent intentFavorite = new Intent(this, FavoriteEntry.class);
 				bundle = new Bundle();
 				intentFavorite.putExtras(bundle);
 				startActivity(intentFavorite);	

@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.entry.CameraEntry;
-import com.vinsol.expensetracker.entry.FavoriteActivity;
+import com.vinsol.expensetracker.entry.FavoriteEntry;
 import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
@@ -155,7 +155,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				
 			case R.id.main_favorite:
 				if(new ConvertCursorToListString(getContext()).getFavoriteList().size() > 0) {
-					Intent intentFavorite = new Intent(getContext(), FavoriteActivity.class);
+					Intent intentFavorite = new Intent(getContext(), FavoriteEntry.class);
 					bundle.putParcelable("mDisplayList", mTempClickedList);
 					intentFavorite.putExtras(bundle);
 					getContext().startActivity(intentFavorite);

@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.entry.CameraEntry;
-import com.vinsol.expensetracker.entry.FavoriteActivity;
+import com.vinsol.expensetracker.entry.FavoriteEntry;
 import com.vinsol.expensetracker.entry.Text;
 import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
@@ -113,7 +113,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 				case R.id.main_favorite:
 					if(new ConvertCursorToListString(activity).getFavoriteList().size() > 0) {
 						unknownDialog.dismiss();
-						Intent intentFavorite = new Intent(activity, FavoriteActivity.class);
+						Intent intentFavorite = new Intent(activity, FavoriteEntry.class);
 						if (timeInMillis != 0) {
 							bundle.putLong("timeInMillis", timeInMillis);
 						}

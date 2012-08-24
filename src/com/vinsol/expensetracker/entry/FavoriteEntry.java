@@ -60,7 +60,7 @@ import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.sync.SyncHelper;
 import com.vinsol.expensetracker.utils.ImagePreview;
 
-public class FavoriteActivity extends BaseActivity implements OnItemClickListener {
+public class FavoriteEntry extends BaseActivity implements OnItemClickListener {
 	
 	private List<Favorite> mListMain;
 	private DatabaseAdapter mDatabaseAdapter;
@@ -162,7 +162,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 						mList_sort.add(mListMain.get(i));
 					}
 				}
-				mAdapter = new MyAdapter(FavoriteActivity.this, R.layout.expense_listing_inflated_row , mList_sort);
+				mAdapter = new MyAdapter(FavoriteEntry.this, R.layout.expense_listing_inflated_row , mList_sort);
 				mFavoriteListview.setAdapter(mAdapter);
 			}
 			
@@ -492,14 +492,14 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 					String id = tempFavorite.id;
 					if (tempFavorite.type.equals(getString(R.string.voice))) {
 						File mFile = fileHelper.getAudioFileFavorite(id);
-						if (mFile.canRead()) {new AudioPlayDialog(FavoriteActivity.this,id,"fav");}
+						if (mFile.canRead()) {new AudioPlayDialog(FavoriteEntry.this,id,"fav");}
 						
 					} else if (tempFavorite.type.equals(getString(R.string.camera))) {
 						File mFile = fileHelper.getCameraFileLargeFavorite(id);
 						File mFileSmall = fileHelper.getCameraFileSmallFavorite(id);
 						File mFileThumbnail = fileHelper.getCameraFileThumbnailFavorite(id);
 						if (mFile.canRead() && mFileSmall.canRead() && mFileThumbnail.canRead()) {
-							Intent intent = new Intent(FavoriteActivity.this, ImagePreview.class);
+							Intent intent = new Intent(FavoriteEntry.this, ImagePreview.class);
 							intent.putExtra(Constants.KEY_ID, id);
 							intent.putExtra(Constants.KEY_IS_FAVORITE, true);
 							startActivity(intent);
@@ -508,7 +508,7 @@ public class FavoriteActivity extends BaseActivity implements OnItemClickListene
 				}
 				if (tempFavorite.type.equals(getString(R.string.text))) {
 					if (!tempFavorite.description.equals(getString(R.string.unfinished_textentry))) {
-						new DescriptionDialog(FavoriteActivity.this, tempFavorite.description);
+						new DescriptionDialog(FavoriteEntry.this, tempFavorite.description);
 					}
 				}
 				break;
