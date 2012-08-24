@@ -3,7 +3,7 @@
  * See the file license.txt for copying permission.
 */     
 
-package com.vinsol.expensetracker.listing;
+package com.vinsol.expensetracker.expenselisting;
 
 import android.content.Intent;
 import android.os.Bundle;

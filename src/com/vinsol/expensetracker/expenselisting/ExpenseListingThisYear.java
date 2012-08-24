@@ -3,35 +3,35 @@
  * See the file license.txt for copying permission.
 */     
 
-package com.vinsol.expensetracker.listing;
+package com.vinsol.expensetracker.expenselisting;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 
-public class ExpenseListingAll extends TabLayoutListingAbstract {
+public class ExpenseListingThisYear extends TabLayoutListingAbstract {
 	
 	@Override
 	protected boolean condition(DisplayDate mDisplayDate) {
-		return true;
+		return mDisplayDate.isCurrentWeek() || mDisplayDate.isCurrentMonth() || mDisplayDate.isNotCurrentMonthAndCurrentYear();
 	}
 	
 	@Override
 	protected void setType() {
-		type = R.string.sublist_all;
+		type = R.string.sublist_thisyear;
 	}
 
 	@Override
 	protected void setModifiedValues() {
-		isModifiedThisYear = false;
+		isModifiedThisYear = true;
 		isModifiedThisMonth = false;
 		isModifiedThisWeek = false;
-		isModifiedAll = true;
+		isModifiedAll = false;
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if(!isModifiedAll) {
+		if(!isModifiedThisYear) {
 			initListView();
 		}
 	}
