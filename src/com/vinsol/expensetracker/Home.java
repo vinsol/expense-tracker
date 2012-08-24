@@ -40,7 +40,6 @@ import com.vinsol.expensetracker.utils.Log;
 
 public class Home extends BaseActivity implements OnClickListener {
 	
-	private long timeInMillis = 0;
 	private Bundle bundle;
 	private GraphHelper mHandleGraph;
 	private ProgressBar graphProgressBar;
@@ -209,13 +208,8 @@ public class Home extends BaseActivity implements OnClickListener {
 		Entry list = new Entry();
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-		if (timeInMillis == 0)
-			list.timeInMillis = mCalendar.getTimeInMillis();
-		else {
-			bundle.putLong(Constants.KEY_TIME_IN_MILLIS, timeInMillis);
-			list.timeInMillis = timeInMillis;
-			finish();
-		}
+		
+		list.timeInMillis = mCalendar.getTimeInMillis();
 
 		if (LocationHelper.currentAddress != null && !LocationHelper.currentAddress.trim().equals("")) {
 			list.location = LocationHelper.currentAddress;
