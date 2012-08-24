@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.edit.CameraActivity;
+import com.vinsol.expensetracker.entry.CameraActivity;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.utils.ImagePreview;
 

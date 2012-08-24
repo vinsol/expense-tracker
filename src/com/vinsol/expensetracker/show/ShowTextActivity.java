@@ -12,7 +12,7 @@ import android.os.Bundle;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.edit.TextEntry;
+import com.vinsol.expensetracker.entry.TextEntry;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
 
 public class ShowTextActivity extends ShowAbstract {

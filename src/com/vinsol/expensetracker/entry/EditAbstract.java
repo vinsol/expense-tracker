@@ -3,7 +3,7 @@
  * See the file license.txt for copying permission.
 */     
 
-package com.vinsol.expensetracker.edit;
+package com.vinsol.expensetracker.entry;
 
 import java.util.Calendar;
 import java.util.HashMap;

@@ -4,7 +4,7 @@
 */     
 
 
-package com.vinsol.expensetracker.edit;
+package com.vinsol.expensetracker.entry;
 
 import java.io.File;
 import java.util.HashMap;

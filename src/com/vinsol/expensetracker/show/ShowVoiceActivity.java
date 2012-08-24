@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
-import com.vinsol.expensetracker.edit.Voice;
+import com.vinsol.expensetracker.entry.Voice;
 import com.vinsol.expensetracker.helpers.AudioPlay;
 import com.vinsol.expensetracker.helpers.FavoriteHelper;
 import com.vinsol.expensetracker.utils.DisplayTimeForChronometer;
