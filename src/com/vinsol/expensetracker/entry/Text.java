@@ -20,6 +20,7 @@ public class Text extends EditAbstract {
 		typeOfEntryFinished = R.string.unfinished_textentry;
 		typeOfEntryUnfinished = R.string.unfinished_textentry;
 		editHelper();
+		createDatabaseEntry();
 	}
 	
 	@Override

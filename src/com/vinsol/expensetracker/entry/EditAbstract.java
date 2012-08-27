@@ -748,6 +748,55 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		return false;
 	}
 	
+	protected void createDatabaseEntry() {
+		if(!isFromFavorite && entry.id == null) {
+			if(typeOfEntry == R.string.text) {
+				addEntry();
+			}
+			else if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+				addEntry();
+			}
+		}
+	}
+	
+	private void addEntry() {
+		Entry toInsert = new Entry();
+		if (!dateBarDateview.getText().toString().equals(dateViewString)) {
+			try {
+				if (!intentExtras.containsKey(Constants.KEY_ENTRY_LIST_EXTRA)) {
+					DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString());
+					toInsert.timeInMillis = mDateHelper.getTimeMillis();
+				} else {
+					if(!intentExtras.containsKey(Constants.KEY_TIME_IN_MILLIS)) {
+						DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString());
+						toInsert.timeInMillis = mDateHelper.getTimeMillis();
+					} else {
+						Calendar mCalendar = Calendar.getInstance();
+						mCalendar.setTimeInMillis(intentExtras.getLong(Constants.KEY_TIME_IN_MILLIS));
+						mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+						DateHelper mDateHelper = new DateHelper(dateBarDateview.getText().toString(),mCalendar);
+						toInsert.timeInMillis = mDateHelper.getTimeMillis();
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			Calendar mCalendar = Calendar.getInstance();
+			mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			toInsert.timeInMillis = mCalendar.getTimeInMillis();
+		}
+		
+		if (LocationHelper.currentAddress != null && LocationHelper.currentAddress.trim() != "") {
+			toInsert.location = LocationHelper.currentAddress;
+		}
+		
+		toInsert.type = getString(typeOfEntry);
+		mDatabaseAdapter.open();
+		entry.id = mDatabaseAdapter.insertToEntryTable(toInsert).toString();
+		mDatabaseAdapter.close();
+	}
+	
 	protected abstract void setDefaultTitle();
 	protected abstract boolean checkFavoriteComplete();
 	protected void deleteFile(){}

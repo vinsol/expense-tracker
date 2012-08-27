@@ -54,6 +54,7 @@ public class Voice extends EditAbstract {
 		typeOfEntryFinished = R.string.finished_voiceentry;
 		typeOfEntryUnfinished = R.string.unfinished_voiceentry;
 		editHelper();
+		createDatabaseEntry();
 		// ////// ******** Starts Recording each time activity starts ****** ///////
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 			setGraphicsVoice();

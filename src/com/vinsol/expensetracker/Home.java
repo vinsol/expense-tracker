@@ -137,7 +137,7 @@ public class Home extends BaseActivity implements OnClickListener {
 			case R.id.home_camera:
 				if (isMediaMounted) {
 					Intent intentCamera = new Intent(this, CameraEntry.class);
-					bundle = new Bundle();
+//					bundle = new Bundle();
 					intentCamera.putExtras(bundle);
 					startActivity(intentCamera);
 				} else {
@@ -148,7 +148,7 @@ public class Home extends BaseActivity implements OnClickListener {
 			// //// ******* opens Favorite Activity ******** ///////////
 			case R.id.home_favorite:
 				Intent intentFavorite = new Intent(this, FavoriteEntry.class);
-				bundle = new Bundle();
+//				bundle = new Bundle();
 				intentFavorite.putExtras(bundle);
 				startActivity(intentFavorite);	
 				break;
