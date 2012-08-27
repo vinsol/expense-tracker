@@ -12,7 +12,7 @@
     
     <!-- Header -->
    	<include 
-   	    android:id="@+id/main_header_include"
+   	    android:id="@+id/home_header_include"
    	    layout="@layout/home_header" />
     
    	<!-- Body -->
@@ -22,8 +22,8 @@
         android:layout_height="fill_parent"
         android:layout_width="fill_parent" 
         android:fillViewport="true"
-        android:layout_above="@+id/main_footer"
-        android:layout_below="@id/main_header_include"
+        android:layout_above="@+id/home_footer"
+        android:layout_below="@id/home_header_include"
         >
     
         <LinearLayout
@@ -111,7 +111,7 @@
     
    	<!-- Footer -->
     <LinearLayout
-        android:id="@id/main_footer"
+        android:id="@id/home_footer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -119,7 +119,7 @@
         android:background="@drawable/bottom_bar_bg"
         >
         <Button
-            android:id="@+id/main_save_reminder"
+            android:id="@+id/home_save_reminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/save_reminder_states"  />

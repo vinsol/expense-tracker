@@ -46,11 +46,11 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	protected void onCreateDialog() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.unknown_entry_dialog);
-		textEntryButton = (Button) findViewById(R.id.main_text);
+		textEntryButton = (Button) findViewById(R.id.home_text);
 		deleteButton = (Button) findViewById(R.id.unknown_entry_dialog_delete);
-		voiceEntryButton = (Button) findViewById(R.id.main_voice);
-		cameraEntryButton = (Button) findViewById(R.id.main_camera);
-		favoriteEntryButton = (Button) findViewById(R.id.main_favorite);
+		voiceEntryButton = (Button) findViewById(R.id.home_voice);
+		cameraEntryButton = (Button) findViewById(R.id.home_camera);
+		favoriteEntryButton = (Button) findViewById(R.id.home_favorite);
 		cancelButton = (Button) findViewById(R.id.unknown_entry_dialog_cancel);
 		headerTextView = (TextView) findViewById(R.id.unknown_entry_dialog_header_title);
 		locationTextView = (TextView) findViewById(R.id.unknown_entry_dialog_location);
@@ -111,7 +111,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 	public void onClick(View v) {
 		switch (v.getId()) {
 		
-			case R.id.main_text:
+			case R.id.home_text:
 				Intent intentTextEntry = new Intent(getContext(), Text.class);
 				editDatabase(R.string.text);
 				bundle.putParcelable("mDisplayList", mTempClickedList);
@@ -127,7 +127,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				dismiss();
 				break;
 				
-			case R.id.main_voice:
+			case R.id.home_voice:
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					Intent intentVoice = new Intent(getContext(), Voice.class);
 					editDatabase(R.string.voice);
@@ -140,7 +140,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				}
 				break;
 				
-			case R.id.main_camera:
+			case R.id.home_camera:
 				if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 					Intent intentCamera = new Intent(getContext(), CameraEntry.class);
 					editDatabase(R.string.camera);
@@ -153,7 +153,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 				}
 				break;
 				
-			case R.id.main_favorite:
+			case R.id.home_favorite:
 				if(new ConvertCursorToListString(getContext()).getFavoriteList().size() > 0) {
 					Intent intentFavorite = new Intent(getContext(), FavoriteEntry.class);
 					bundle.putParcelable("mDisplayList", mTempClickedList);

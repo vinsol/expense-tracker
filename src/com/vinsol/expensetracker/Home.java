@@ -11,7 +11,6 @@ import java.util.Calendar;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,11 +30,9 @@ import com.vinsol.expensetracker.helpers.ConvertCursorToListString;
 import com.vinsol.expensetracker.helpers.DatabaseAdapter;
 import com.vinsol.expensetracker.helpers.GraphHelper;
 import com.vinsol.expensetracker.helpers.LocationHelper;
-import com.vinsol.expensetracker.helpers.SharedPreferencesHelper;
 import com.vinsol.expensetracker.helpers.UnfinishedEntryCount;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.sync.SyncHelper;
-import com.vinsol.expensetracker.utils.Log;
 
 public class Home extends BaseActivity implements OnClickListener {
 	
@@ -69,27 +66,16 @@ public class Home extends BaseActivity implements OnClickListener {
 		setContentView(R.layout.home);
 		bundle = new Bundle();
 		mConvertCursorToListString = new ConvertCursorToListString(this);
-		////// ********* Adding Click Listeners to MainActivity ********** /////////
+		////// ********* Adding Click Listeners to HomeActivity ********** /////////
 		
-		//opens text entry Activity
-		((Button) findViewById(R.id.main_text)).setOnClickListener(this);
-
-		// opens voice Activity
-		((Button) findViewById(R.id.main_voice)).setOnClickListener(this);
-
-		// opens Camera Activity
-		((Button) findViewById(R.id.main_camera)).setOnClickListener(this);
-
-		// opens Favorite Activity
-		((Button) findViewById(R.id.main_favorite)).setOnClickListener(this);
-
-		// opens Save Reminder Activity
-		((Button) findViewById(R.id.main_save_reminder)).setOnClickListener(this);
-
-		// opens ListView
-		((ImageView) findViewById(R.id.main_listview)).setOnClickListener(this);
+		((Button) findViewById(R.id.home_text)).setOnClickListener(this);
+		((Button) findViewById(R.id.home_voice)).setOnClickListener(this);
+		((Button) findViewById(R.id.home_camera)).setOnClickListener(this);
+		((Button) findViewById(R.id.home_favorite)).setOnClickListener(this);
+		((Button) findViewById(R.id.home_save_reminder)).setOnClickListener(this);
+		((ImageView) findViewById(R.id.home_listview)).setOnClickListener(this);
 		
-		ImageView mainGenerateReport = (ImageView) findViewById(R.id.main_generate_report);
+		ImageView mainGenerateReport = (ImageView) findViewById(R.id.home_generate_report);
 		mainGenerateReport.setVisibility(View.VISIBLE);
 		mainGenerateReport.setOnClickListener(this);
 		
@@ -100,15 +86,11 @@ public class Home extends BaseActivity implements OnClickListener {
 			SyncHelper.syncHelper = new SyncHelper(this);
         	SyncHelper.syncHelper.execute();
 		}
-		Log.d("******************************* Syncing syncing syncing **************************"+ExpenseTrackerApplication.toSync+" token "+SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_token), ""+" key "+getString(R.string.pref_key_token)));
-		Log.d("******************************* Syncing syncing syncing **************************"+
-				ExpenseTrackerApplication.toSync+" token "+
-				PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.pref_key_token), "")
-				+" key "+getString(R.string.pref_key_token));
 	}
 
 	@Override
 	protected void onResume() {
+		super.onResume();
 		//finding current location
 		LocationHelper mLocationHelper = new LocationHelper();
 		Location location = mLocationHelper.getBestAvailableLocation();
@@ -119,7 +101,6 @@ public class Home extends BaseActivity implements OnClickListener {
 		unfinishedEntryCount = new UnfinishedEntryCount(mConvertCursorToListString.getEntryList(false,""),null,null,null,((TextView)findViewById(R.id.home_unfinished_entry_count)));
 		unfinishedEntryCount.execute();
 		mHandleGraph.execute();
-		super.onResume();
 	}
 	
 	@Override
@@ -133,18 +114,18 @@ public class Home extends BaseActivity implements OnClickListener {
 		cancelUnfinishedEntryTask();
 		switch (idOfClickedView) {
 			////// ******* opens TextEntry Activity ******** ///////////
-			case R.id.main_text:
+			case R.id.home_text:
 				Intent intentTextEntry = new Intent(this, Text.class);
-				createDatabaseEntry(R.string.text);
+//				createDatabaseEntry(R.string.text);
 				intentTextEntry.putExtras(bundle);
 				startActivity(intentTextEntry);
 				break;
 				
 			////// ******* opens Voice Activity ******** ///////////
-			case R.id.main_voice:
+			case R.id.home_voice:
 				if (isMediaMounted) {
 					Intent intentVoice = new Intent(this, Voice.class);
-					createDatabaseEntry(R.string.voice);
+//					createDatabaseEntry(R.string.voice);
 					intentVoice.putExtras(bundle);
 					startActivity(intentVoice);
 				} else {
@@ -153,7 +134,7 @@ public class Home extends BaseActivity implements OnClickListener {
 				break;
 	
 			// //// ******* opens Camera Activity ******** ///////////
-			case R.id.main_camera:
+			case R.id.home_camera:
 				if (isMediaMounted) {
 					Intent intentCamera = new Intent(this, CameraEntry.class);
 					bundle = new Bundle();
@@ -165,7 +146,7 @@ public class Home extends BaseActivity implements OnClickListener {
 				break;
 				
 			// //// ******* opens Favorite Activity ******** ///////////
-			case R.id.main_favorite:
+			case R.id.home_favorite:
 				Intent intentFavorite = new Intent(this, FavoriteEntry.class);
 				bundle = new Bundle();
 				intentFavorite.putExtras(bundle);
@@ -173,7 +154,7 @@ public class Home extends BaseActivity implements OnClickListener {
 				break;
 				
 			// //// ******* opens List Activity and adds unknown entry to database ******** ///////////
-			case R.id.main_save_reminder:
+			case R.id.home_save_reminder:
 				FlurryAgent.onEvent(getString(R.string.save_reminder));
 				insertToDatabase(R.string.unknown);
 				Intent intentListView = new Intent(this, ExpenseListing.class);
@@ -182,26 +163,26 @@ public class Home extends BaseActivity implements OnClickListener {
 				break;
 			
 			////// ******* opens ListView Activity ******** ///////////
-			case R.id.main_listview:
+			case R.id.home_listview:
 				Intent intentListView2 = new Intent(this, ExpenseListing.class);
 				startActivity(intentListView2);
 				break;
 				
-			case R.id.main_generate_report:
+			case R.id.home_generate_report:
 				startGenerateReportActivity();
 				break;
 		}//end switch
 	}//end onClick
 	
-	private void createDatabaseEntry(int typeOfEntry) {
-		bundle.putLong(Constants.KEY_ID, Long.parseLong(insertToDatabase(typeOfEntry).toString()));
-		
-		if(LocationHelper.currentAddress != null && !LocationHelper.currentAddress.trim().equals("")) {
-			bundle.putBoolean(Constants.KEY_SET_LOCATION, false);
-		} else {
-			bundle.putBoolean(Constants.KEY_SET_LOCATION, true);
-		}
-	}
+//	private void createDatabaseEntry(int typeOfEntry) {
+//		bundle.putLong(Constants.KEY_ID, Long.parseLong(insertToDatabase(typeOfEntry).toString()));
+//		
+//		if(LocationHelper.currentAddress != null && !LocationHelper.currentAddress.trim().equals("")) {
+//			bundle.putBoolean(Constants.KEY_SET_LOCATION, false);
+//		} else {
+//			bundle.putBoolean(Constants.KEY_SET_LOCATION, true);
+//		}
+//	}
 
 	///////// ******** function to mark entry into the database and returns the id of the new entry ***** //////
 	private Long insertToDatabase(int type) {
@@ -224,9 +205,9 @@ public class Home extends BaseActivity implements OnClickListener {
 	
 	@Override
 	protected void onPause() {
+		super.onPause();
 		cancelHandleGraphTask();
 		cancelUnfinishedEntryTask();
-		super.onPause();
 	}
 	
 	private void cancelUnfinishedEntryTask() {

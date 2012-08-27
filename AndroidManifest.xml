@@ -35,26 +35,26 @@
         </activity>
         
         <activity 
-            android:name=".edit.TextEntry"
+            android:name=".entry.Text"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
     		android:windowSoftInputMode="adjustPan|stateAlwaysVisible" />
         <activity 
-            android:name=".edit.Voice"
+            android:name=".entry.Voice"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
     		android:windowSoftInputMode="adjustPan|stateAlwaysVisible" />
         <activity 
-            android:name=".edit.CameraActivity"
+            android:name=".entry.CameraEntry"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation"
     		android:windowSoftInputMode="adjustPan|stateAlwaysVisible" />
         <activity 
-            android:name=".listing.ExpenseListing"
+            android:name=".expenselisting.ExpenseListing"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation" />
         <activity 
-            android:name=".listing.ExpenseSubListing"
+            android:name=".expenselisting.ExpenseSubListing"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation" />
         <activity 
@@ -90,19 +90,19 @@
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation" />
         <activity 
-            android:name=".listing.ExpenseListingThisWeek"
+            android:name=".expenselisting.ThisWeek"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation" />
         <activity 
-            android:name=".listing.ExpenseListingThisMonth"
+            android:name=".expenselisting.ThisMonth"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation" />
         <activity 
-            android:name=".listing.ExpenseListingThisYear"
+            android:name=".expenselisting.ThisYear"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation" />
         <activity 
-            android:name=".listing.ExpenseListingAll"
+            android:name=".expenselisting.All"
     		android:screenOrientation="portrait"
     		android:configChanges="keyboardHidden|orientation" />
          <activity 

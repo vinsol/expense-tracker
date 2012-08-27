@@ -73,7 +73,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 			public void onClick(View v) {
 				switch (v.getId()) {
 				// //// ******* opens TextEntry Activity ******** ///////////
-				case R.id.main_text:
+				case R.id.home_text:
 					unknownDialog.dismiss();
 					Intent intentTextEntry = new Intent(activity, Text.class);
 					createDatabaseEntry(R.string.text,toInsert);
@@ -82,7 +82,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 					break;
 					
 				// //// ******* opens Voice Activity ******** ///////////
-				case R.id.main_voice:
+				case R.id.home_voice:
 					unknownDialog.dismiss();
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						Intent intentVoice = new Intent(activity, Voice.class);
@@ -95,7 +95,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 					break;
 
 				// //// ******* opens Camera Activity ******** ///////////
-				case R.id.main_camera:
+				case R.id.home_camera:
 					unknownDialog.dismiss();
 					if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 						Intent intentCamera = new Intent(activity, CameraEntry.class);
@@ -110,7 +110,7 @@ public class GroupedIconDialogClickListener implements OnClickListener {
 					break;
 					
 				// //// ******* opens Favorite Activity ******** ///////////
-				case R.id.main_favorite:
+				case R.id.home_favorite:
 					if(new ConvertCursorToListString(activity).getFavoriteList().size() > 0) {
 						unknownDialog.dismiss();
 						Intent intentFavorite = new Intent(activity, FavoriteEntry.class);

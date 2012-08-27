@@ -15,21 +15,21 @@
     >    		
 	<!-- text and voice button -->
 	<LinearLayout
-	    android:id="@+id/main_text_voice"
+	    android:id="@+id/home_text_voice"
    		android:layout_width="fill_parent"
    		android:layout_height="wrap_content"
    		android:layout_marginBottom="20dp"
    		android:gravity="center"
    		>
    		<Button
-   		    android:id="@+id/main_text"
+   		    android:id="@+id/home_text"
    		    android:layout_width="wrap_content"
    		    android:layout_height="wrap_content"
    		    android:layout_marginRight="60dp"
    		    android:background="@drawable/home_text_states"  />
   		    
  		<Button
-   		    android:id="@+id/main_voice"
+   		    android:id="@+id/home_voice"
    		    android:layout_width="wrap_content"
    		    android:layout_height="wrap_content"
    		    android:background="@drawable/home_voice_states" 
@@ -38,20 +38,20 @@
  		
 	<!-- camera and favorite button -->    
     <LinearLayout
-	    android:id="@+id/main_camera_favorites"
+	    android:id="@+id/home_camera_favorites"
    		android:layout_width="fill_parent"
    		android:layout_height="wrap_content"
    		android:gravity="center" 
    		>
    		<Button
-       		android:id="@+id/main_camera"
+       		android:id="@+id/home_camera"
        		android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
        		android:background="@drawable/home_camera_states" 
        		android:layout_marginRight="40dp" />
 
    		<Button
-       		android:id="@+id/main_favorite"
+       		android:id="@+id/home_favorite"
        		android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
        		android:background="@drawable/home_favorites_states"

@@ -36,7 +36,7 @@ public class ExpenseSubListing extends ListingAbstract {
 	protected void initListView() {
 		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		intentExtras = getIntent().getExtras();
-		ImageView listButton = (ImageView) findViewById(R.id.main_listview);
+		ImageView listButton = (ImageView) findViewById(R.id.home_listview);
 		listButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
