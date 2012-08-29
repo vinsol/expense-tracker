@@ -112,52 +112,40 @@ public class DatabaseAdapter {
 	}
 	
 	public long insertToFavoriteTable(Favorite favorite) {
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(KEY_TAG, favorite.description);
-		contentValues.put(KEY_AMOUNT, favorite.amount);
-		contentValues.put(KEY_TYPE, favorite.type);
-		contentValues.put(KEY_LOCATION, favorite.location);
-		if(Strings.isEmpty(favorite.myHash)) {
-			contentValues.put(KEY_MY_HASH, Utils.getMD5());
-		} else {
-			contentValues.put(KEY_MY_HASH, favorite.myHash);
-		}
-		
-		contentValues.put(KEY_DELETE_BIT, favorite.deleted);
-		contentValues.put(KEY_ID_FROM_SERVER, favorite.idFromServer);
-		contentValues.put(KEY_SYNC_BIT, favorite.syncBit);
-		contentValues.put(KEY_UPDATED_AT, favorite.updatedAt);
-		contentValues.put(KEY_FILE_UPLOADED, favorite.fileUploaded);
-		contentValues.put(KEY_FILE_TO_DOWNLOAD, favorite.fileToDownload);
-		contentValues.put(KEY_FILE_UPDATED_AT, favorite.fileUpdatedAt);
+		ContentValues contentValues = getInsertContentValues(favorite);
 		long id = db.insert(FAVORITE_TABLE, null, contentValues);
 		return id;
 	}
 	
 	public Long insertToEntryTable(Entry entry) {
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(KEY_TAG, entry.description);
-		contentValues.put(KEY_AMOUNT, entry.amount);
+		ContentValues contentValues = getInsertContentValues(entry);
 		contentValues.put(KEY_DATE_TIME, entry.timeInMillis);
-		contentValues.put(KEY_LOCATION, entry.location);
 		contentValues.put(KEY_FAVORITE, entry.favorite);
-		contentValues.put(KEY_TYPE, entry.type);
-		
-		if(Strings.isEmpty(entry.myHash)) {
-			contentValues.put(KEY_MY_HASH, Utils.getMD5());
-		} else {
-			contentValues.put(KEY_MY_HASH, entry.myHash);
-		}
-		
-		contentValues.put(KEY_DELETE_BIT, entry.deleted);
-		contentValues.put(KEY_ID_FROM_SERVER, entry.idFromServer);
-		contentValues.put(KEY_SYNC_BIT, entry.syncBit);
-		contentValues.put(KEY_UPDATED_AT, entry.updatedAt);
-		contentValues.put(KEY_FILE_UPLOADED, entry.fileUploaded);
-		contentValues.put(KEY_FILE_TO_DOWNLOAD, entry.fileToDownload);
-		contentValues.put(KEY_FILE_UPDATED_AT, entry.fileUpdatedAt);
 		long id = db.insert(ENTRY_TABLE, null, contentValues);
 		return id;
+	}
+	
+	private ContentValues getInsertContentValues(Favorite object) {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(KEY_TAG, object.description);
+		contentValues.put(KEY_AMOUNT, object.amount);
+		contentValues.put(KEY_LOCATION, object.location);
+		contentValues.put(KEY_TYPE, object.type);
+		
+		if(Strings.isEmpty(object.myHash)) {
+			contentValues.put(KEY_MY_HASH, Utils.getMD5());
+		} else {
+			contentValues.put(KEY_MY_HASH, object.myHash);
+		}
+		
+		contentValues.put(KEY_DELETE_BIT, object.deleted);
+		contentValues.put(KEY_ID_FROM_SERVER, object.idFromServer);
+		contentValues.put(KEY_SYNC_BIT, object.syncBit);
+		contentValues.put(KEY_UPDATED_AT, object.updatedAt);
+		contentValues.put(KEY_FILE_UPLOADED, object.fileUploaded);
+		contentValues.put(KEY_FILE_TO_DOWNLOAD, object.fileToDownload);
+		contentValues.put(KEY_FILE_UPDATED_AT, object.fileUpdatedAt);
+		return contentValues;
 	}
 	
 	public boolean deleteFavoriteTableByHash(String hash) {
