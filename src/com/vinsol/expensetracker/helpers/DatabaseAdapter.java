@@ -307,7 +307,7 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
-	public boolean permanentDeleteFavoriteTableMyHash(String hash) {
+	public boolean permanentDeleteFavoriteEntryByMyHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
 		try {
 			Log.d("Deleting");
@@ -319,7 +319,7 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
-	public boolean deleteEntryTableMyHash(String hash) {
+	public boolean deleteExpenseEntryByMyHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_DELETE_BIT, true);
