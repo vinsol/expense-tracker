@@ -170,29 +170,20 @@ public class DatabaseAdapter {
 	}
 	
 	public boolean updateFileUploadedEntryTable(String id) {
+		return updateFileUploaded(id, ENTRY_TABLE);
+	}
+	
+	public boolean updateFileUploadedFavoriteTable(String favID) {
+		return updateFileUploaded(favID, FAVORITE_TABLE);
+	}
+	
+	private boolean updateFileUploaded(String id, String TABLE) {
 		String where = KEY_ID + "=" + id;
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_FILE_UPLOADED, false);
 		contentValues.put(KEY_SYNC_BIT, context.getString(R.string.syncbit_not_synced));
 		try {
-			Log.d("Deleting");
-			db.update(ENTRY_TABLE, contentValues, where, null);
-			Log.d("Deleted");
-		} catch (SQLiteException e) {
-			return false;
-		}
-		return true;
-	}
-	
-	public boolean updateFileUploadedFavoriteTable(String favID) {
-		String where = KEY_ID + "=" + favID;
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(KEY_FILE_UPLOADED, false);
-		contentValues.put(KEY_SYNC_BIT, context.getString(R.string.syncbit_not_synced));
-		try {
-			Log.d("Deleting");
-			db.update(FAVORITE_TABLE, contentValues, where, null);
-			Log.d("Deleted");
+			db.update(TABLE, contentValues, where, null);
 		} catch (SQLiteException e) {
 			return false;
 		}
