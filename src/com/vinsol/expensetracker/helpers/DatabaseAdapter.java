@@ -150,18 +150,15 @@ public class DatabaseAdapter {
 	
 	public boolean deleteFavoriteEntryByHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(KEY_DELETE_BIT, true);
-		try {
-			db.update(FAVORITE_TABLE, contentValues, where, null);
-		} catch (SQLiteException e) {
-			return false;
-		}
-		return true;
+		return deleteFavoriteEntry(where);
 	}
 	
 	public boolean deleteFavoriteEntryByID(String favID) {
 		String where = KEY_ID + "=" + favID;
+		return deleteFavoriteEntry(where);
+	}
+	
+	private boolean deleteFavoriteEntry(String where) {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_DELETE_BIT, true);
 		try {
