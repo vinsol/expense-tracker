@@ -389,7 +389,7 @@ public class DatabaseAdapter {
 		return db.query(ENTRY_TABLE, null, where, null, null, null, null);
 	}
 	
-	public boolean permanentDeleteEntryTableEntryID(String id) {
+	public boolean permanentDeleteExpenseEntryID(String id) {
 		String where = KEY_ID + "=" + id;
 		try {
 			Log.d("Deleting");
