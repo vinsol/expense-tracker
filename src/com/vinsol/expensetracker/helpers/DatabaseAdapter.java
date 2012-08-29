@@ -334,7 +334,7 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
-	public boolean permanentDeleteFavoriteTableEntryID(String favID) {
+	public boolean permanentDeleteFavoriteEntryByID(String favID) {
 		String where = KEY_ID + "=" + favID;
 		try {
 			Log.d("Deleting");
