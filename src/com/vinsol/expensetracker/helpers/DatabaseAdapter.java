@@ -266,7 +266,7 @@ public class DatabaseAdapter {
 		return "";
 	}
 	
-	public boolean permanentDeleteEntryTableByHash(String hash) {
+	public boolean permanentDeleteExpenseEntryByHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
 		try {
 			Log.d("Deleting");
@@ -279,7 +279,7 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
-	public boolean permanentDeleteFavoriteTableByHash(String hash) {
+	public boolean permanentDeleteFavoriteEntryByHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
 		try {
 			Log.d("Deleting");
