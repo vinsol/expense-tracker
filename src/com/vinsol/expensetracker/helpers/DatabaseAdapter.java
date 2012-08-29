@@ -110,57 +110,53 @@ public class DatabaseAdapter {
 	protected void dropFavoriteTable() {
 		db.execSQL("drop table " + FAVORITE_TABLE);
 	}
-
-	public long insertToFavoriteTable(Favorite list) {
+	
+	public long insertToFavoriteTable(Favorite favorite) {
 		ContentValues contentValues = new ContentValues();
-		contentValues.put(KEY_TAG, list.description);
-		contentValues.put(KEY_AMOUNT, list.amount);
-		contentValues.put(KEY_TYPE, list.type);
-		contentValues.put(KEY_LOCATION, list.location);
-		if(Strings.isEmpty(list.myHash)) {
+		contentValues.put(KEY_TAG, favorite.description);
+		contentValues.put(KEY_AMOUNT, favorite.amount);
+		contentValues.put(KEY_TYPE, favorite.type);
+		contentValues.put(KEY_LOCATION, favorite.location);
+		if(Strings.isEmpty(favorite.myHash)) {
 			contentValues.put(KEY_MY_HASH, Utils.getMD5());
 		} else {
-			contentValues.put(KEY_MY_HASH, list.myHash);
+			contentValues.put(KEY_MY_HASH, favorite.myHash);
 		}
 		
-		contentValues.put(KEY_DELETE_BIT, list.deleted);
-		contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
-		contentValues.put(KEY_SYNC_BIT, list.syncBit);
-		contentValues.put(KEY_UPDATED_AT, list.updatedAt);
-		contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
-		contentValues.put(KEY_FILE_TO_DOWNLOAD, list.fileToDownload);
-		contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
-		Log.d("TRYING");
+		contentValues.put(KEY_DELETE_BIT, favorite.deleted);
+		contentValues.put(KEY_ID_FROM_SERVER, favorite.idFromServer);
+		contentValues.put(KEY_SYNC_BIT, favorite.syncBit);
+		contentValues.put(KEY_UPDATED_AT, favorite.updatedAt);
+		contentValues.put(KEY_FILE_UPLOADED, favorite.fileUploaded);
+		contentValues.put(KEY_FILE_TO_DOWNLOAD, favorite.fileToDownload);
+		contentValues.put(KEY_FILE_UPDATED_AT, favorite.fileUpdatedAt);
 		long id = db.insert(FAVORITE_TABLE, null, contentValues);
-		Log.d("ADDED");
 		return id;
 	}
 	
-	public Long insertToEntryTable(Entry list) {
+	public Long insertToEntryTable(Entry entry) {
 		ContentValues contentValues = new ContentValues();
-		contentValues.put(KEY_TAG, list.description);
-		contentValues.put(KEY_AMOUNT, list.amount);
-		contentValues.put(KEY_DATE_TIME, list.timeInMillis);
-		contentValues.put(KEY_LOCATION, list.location);
-		contentValues.put(KEY_FAVORITE, list.favorite);
-		contentValues.put(KEY_TYPE, list.type);
+		contentValues.put(KEY_TAG, entry.description);
+		contentValues.put(KEY_AMOUNT, entry.amount);
+		contentValues.put(KEY_DATE_TIME, entry.timeInMillis);
+		contentValues.put(KEY_LOCATION, entry.location);
+		contentValues.put(KEY_FAVORITE, entry.favorite);
+		contentValues.put(KEY_TYPE, entry.type);
 		
-		if(Strings.isEmpty(list.myHash)) {
+		if(Strings.isEmpty(entry.myHash)) {
 			contentValues.put(KEY_MY_HASH, Utils.getMD5());
 		} else {
-			contentValues.put(KEY_MY_HASH, list.myHash);
+			contentValues.put(KEY_MY_HASH, entry.myHash);
 		}
 		
-		contentValues.put(KEY_DELETE_BIT, list.deleted);
-		contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
-		contentValues.put(KEY_SYNC_BIT, list.syncBit);
-		contentValues.put(KEY_UPDATED_AT, list.updatedAt);
-		contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
-		contentValues.put(KEY_FILE_TO_DOWNLOAD, list.fileToDownload);
-		contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
-		Log.d("TRYING");
+		contentValues.put(KEY_DELETE_BIT, entry.deleted);
+		contentValues.put(KEY_ID_FROM_SERVER, entry.idFromServer);
+		contentValues.put(KEY_SYNC_BIT, entry.syncBit);
+		contentValues.put(KEY_UPDATED_AT, entry.updatedAt);
+		contentValues.put(KEY_FILE_UPLOADED, entry.fileUploaded);
+		contentValues.put(KEY_FILE_TO_DOWNLOAD, entry.fileToDownload);
+		contentValues.put(KEY_FILE_UPDATED_AT, entry.fileUpdatedAt);
 		long id = db.insert(ENTRY_TABLE, null, contentValues);
-		Log.d("ADDED");
 		return id;
 	}
 	
@@ -434,32 +430,32 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
-	public boolean editFavoriteTable(Favorite list) {
+	public boolean editFavoriteTable(Favorite favorite) {
 		ContentValues contentValues = new ContentValues();
-		if (list.description != null)
-			contentValues.put(KEY_TAG, list.description);
-		if (list.amount != null)
-			contentValues.put(KEY_AMOUNT, list.amount);
-		if (list.type != null)
-			contentValues.put(KEY_TYPE, list.type);
-		if (list.location != null)
-			contentValues.put(KEY_LOCATION, list.location);
-		if (list.idFromServer != null)
-			contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
-		if (list.syncBit != null)
-			contentValues.put(KEY_SYNC_BIT, list.syncBit);
-		if (list.updatedAt != null)
-			contentValues.put(KEY_UPDATED_AT, list.updatedAt);
-		if (list.fileUploaded != null)
-			contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
-		if (list.fileToDownload != null)
-			contentValues.put(KEY_FILE_TO_DOWNLOAD, list.fileToDownload);
-		if (list.deleted != null)
-			contentValues.put(KEY_DELETE_BIT, list.deleted);
-		if (list.fileUpdatedAt != null)
-			contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
+		if (favorite.description != null)
+			contentValues.put(KEY_TAG, favorite.description);
+		if (favorite.amount != null)
+			contentValues.put(KEY_AMOUNT, favorite.amount);
+		if (favorite.type != null)
+			contentValues.put(KEY_TYPE, favorite.type);
+		if (favorite.location != null)
+			contentValues.put(KEY_LOCATION, favorite.location);
+		if (favorite.idFromServer != null)
+			contentValues.put(KEY_ID_FROM_SERVER, favorite.idFromServer);
+		if (favorite.syncBit != null)
+			contentValues.put(KEY_SYNC_BIT, favorite.syncBit);
+		if (favorite.updatedAt != null)
+			contentValues.put(KEY_UPDATED_AT, favorite.updatedAt);
+		if (favorite.fileUploaded != null)
+			contentValues.put(KEY_FILE_UPLOADED, favorite.fileUploaded);
+		if (favorite.fileToDownload != null)
+			contentValues.put(KEY_FILE_TO_DOWNLOAD, favorite.fileToDownload);
+		if (favorite.deleted != null)
+			contentValues.put(KEY_DELETE_BIT, favorite.deleted);
+		if (favorite.fileUpdatedAt != null)
+			contentValues.put(KEY_FILE_UPDATED_AT, favorite.fileUpdatedAt);
 		
-		String where = KEY_ID + "=" + list.id;
+		String where = KEY_ID + "=" + favorite.id;
 		try {
 			Log.d("EDITING");
 			db.update(FAVORITE_TABLE, contentValues, where, null);
@@ -471,32 +467,32 @@ public class DatabaseAdapter {
 		return false;
 	}
 	
-	public boolean editFavoriteTableByHash(Favorite list) {
+	public boolean editFavoriteTableByHash(Favorite favorite) {
 		ContentValues contentValues = new ContentValues();
-		if (list.description != null)
-			contentValues.put(KEY_TAG, list.description);
-		if (list.amount != null)
-			contentValues.put(KEY_AMOUNT, list.amount);
-		if (list.type != null)
-			contentValues.put(KEY_TYPE, list.type);
-		if (list.location != null)
-			contentValues.put(KEY_LOCATION, list.location);
-		if (list.idFromServer != null)
-			contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
-		if (list.syncBit != null)
-			contentValues.put(KEY_SYNC_BIT, list.syncBit);
-		if (list.updatedAt != null)
-			contentValues.put(KEY_UPDATED_AT, list.updatedAt);
-		if (list.fileUploaded != null)
-			contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
-		if (list.fileToDownload != null)
-			contentValues.put(KEY_FILE_TO_DOWNLOAD, list.fileToDownload);
-		if (list.deleted != null)
-			contentValues.put(KEY_DELETE_BIT, list.deleted);
-		if (list.fileUpdatedAt != null)
-			contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
+		if (favorite.description != null)
+			contentValues.put(KEY_TAG, favorite.description);
+		if (favorite.amount != null)
+			contentValues.put(KEY_AMOUNT, favorite.amount);
+		if (favorite.type != null)
+			contentValues.put(KEY_TYPE, favorite.type);
+		if (favorite.location != null)
+			contentValues.put(KEY_LOCATION, favorite.location);
+		if (favorite.idFromServer != null)
+			contentValues.put(KEY_ID_FROM_SERVER, favorite.idFromServer);
+		if (favorite.syncBit != null)
+			contentValues.put(KEY_SYNC_BIT, favorite.syncBit);
+		if (favorite.updatedAt != null)
+			contentValues.put(KEY_UPDATED_AT, favorite.updatedAt);
+		if (favorite.fileUploaded != null)
+			contentValues.put(KEY_FILE_UPLOADED, favorite.fileUploaded);
+		if (favorite.fileToDownload != null)
+			contentValues.put(KEY_FILE_TO_DOWNLOAD, favorite.fileToDownload);
+		if (favorite.deleted != null)
+			contentValues.put(KEY_DELETE_BIT, favorite.deleted);
+		if (favorite.fileUpdatedAt != null)
+			contentValues.put(KEY_FILE_UPDATED_AT, favorite.fileUpdatedAt);
 		
-		String where = KEY_MY_HASH + "=\"" + list.myHash+"\"";
+		String where = KEY_MY_HASH + "=\"" + favorite.myHash+"\"";
 		try {
 			Log.d("EDITING");
 			db.update(FAVORITE_TABLE, contentValues, where, null);
@@ -508,36 +504,36 @@ public class DatabaseAdapter {
 		return false;
 	}
 	
-	public boolean editEntryTableByHash(Entry list) {
+	public boolean editEntryTableByHash(Entry entry) {
 		ContentValues contentValues = new ContentValues();
-		if (list.description != null)
-			contentValues.put(KEY_TAG, list.description);
-		if (list.amount != null)
-			contentValues.put(KEY_AMOUNT, list.amount);
-		if (list.timeInMillis != null)
-			contentValues.put(KEY_DATE_TIME, list.timeInMillis);
-		if (list.location != null)
-			contentValues.put(KEY_LOCATION, list.location);
-		if (list.favorite != null)
-			contentValues.put(KEY_FAVORITE, list.favorite);
-		if (list.type != null)
-			contentValues.put(KEY_TYPE, list.type);
-		if (list.idFromServer != null)
-			contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
-		if (list.syncBit != null)
-			contentValues.put(KEY_SYNC_BIT, list.syncBit);
-		if (list.updatedAt != null)
-			contentValues.put(KEY_UPDATED_AT, list.updatedAt);
-		if (list.fileUploaded != null)
-			contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
-		if (list.fileToDownload != null)
-			contentValues.put(KEY_FILE_TO_DOWNLOAD, list.fileToDownload);
-		if (list.deleted != null)
-			contentValues.put(KEY_DELETE_BIT, list.deleted);
-		if (list.fileUpdatedAt != null)
-			contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
+		if (entry.description != null)
+			contentValues.put(KEY_TAG, entry.description);
+		if (entry.amount != null)
+			contentValues.put(KEY_AMOUNT, entry.amount);
+		if (entry.timeInMillis != null)
+			contentValues.put(KEY_DATE_TIME, entry.timeInMillis);
+		if (entry.location != null)
+			contentValues.put(KEY_LOCATION, entry.location);
+		if (entry.favorite != null)
+			contentValues.put(KEY_FAVORITE, entry.favorite);
+		if (entry.type != null)
+			contentValues.put(KEY_TYPE, entry.type);
+		if (entry.idFromServer != null)
+			contentValues.put(KEY_ID_FROM_SERVER, entry.idFromServer);
+		if (entry.syncBit != null)
+			contentValues.put(KEY_SYNC_BIT, entry.syncBit);
+		if (entry.updatedAt != null)
+			contentValues.put(KEY_UPDATED_AT, entry.updatedAt);
+		if (entry.fileUploaded != null)
+			contentValues.put(KEY_FILE_UPLOADED, entry.fileUploaded);
+		if (entry.fileToDownload != null)
+			contentValues.put(KEY_FILE_TO_DOWNLOAD, entry.fileToDownload);
+		if (entry.deleted != null)
+			contentValues.put(KEY_DELETE_BIT, entry.deleted);
+		if (entry.fileUpdatedAt != null)
+			contentValues.put(KEY_FILE_UPDATED_AT, entry.fileUpdatedAt);
 		
-		String where = KEY_MY_HASH + "=\"" + list.myHash+"\"";
+		String where = KEY_MY_HASH + "=\"" + entry.myHash+"\"";
 		try {
 			Log.d("EDITING");
 			db.update(ENTRY_TABLE, contentValues, where, null);
@@ -549,36 +545,36 @@ public class DatabaseAdapter {
 		return false;
 	}
 
-	public boolean editEntryTable(Entry list) {
+	public boolean editEntryTable(Entry entry) {
 		ContentValues contentValues = new ContentValues();
-		if (list.description != null)
-			contentValues.put(KEY_TAG, list.description);
-		if (list.amount != null)
-			contentValues.put(KEY_AMOUNT, list.amount);
-		if (list.timeInMillis != null)
-			contentValues.put(KEY_DATE_TIME, list.timeInMillis);
-		if (list.location != null)
-			contentValues.put(KEY_LOCATION, list.location);
-		if (list.favorite != null)
-			contentValues.put(KEY_FAVORITE, list.favorite);
-		if (list.type != null)
-			contentValues.put(KEY_TYPE, list.type);
-		if (list.idFromServer != null)
-			contentValues.put(KEY_ID_FROM_SERVER, list.idFromServer);
-		if (list.syncBit != null)
-			contentValues.put(KEY_SYNC_BIT, list.syncBit);
-		if (list.updatedAt != null)
-			contentValues.put(KEY_UPDATED_AT, list.updatedAt);
-		if (list.fileUploaded != null)
-			contentValues.put(KEY_FILE_UPLOADED, list.fileUploaded);
-		if (list.fileToDownload != null)
-			contentValues.put(KEY_FILE_TO_DOWNLOAD, list.fileToDownload);
-		if (list.deleted != null)
-			contentValues.put(KEY_DELETE_BIT, list.deleted);
-		if (list.fileUpdatedAt != null)
-			contentValues.put(KEY_FILE_UPDATED_AT, list.fileUpdatedAt);
+		if (entry.description != null)
+			contentValues.put(KEY_TAG, entry.description);
+		if (entry.amount != null)
+			contentValues.put(KEY_AMOUNT, entry.amount);
+		if (entry.timeInMillis != null)
+			contentValues.put(KEY_DATE_TIME, entry.timeInMillis);
+		if (entry.location != null)
+			contentValues.put(KEY_LOCATION, entry.location);
+		if (entry.favorite != null)
+			contentValues.put(KEY_FAVORITE, entry.favorite);
+		if (entry.type != null)
+			contentValues.put(KEY_TYPE, entry.type);
+		if (entry.idFromServer != null)
+			contentValues.put(KEY_ID_FROM_SERVER, entry.idFromServer);
+		if (entry.syncBit != null)
+			contentValues.put(KEY_SYNC_BIT, entry.syncBit);
+		if (entry.updatedAt != null)
+			contentValues.put(KEY_UPDATED_AT, entry.updatedAt);
+		if (entry.fileUploaded != null)
+			contentValues.put(KEY_FILE_UPLOADED, entry.fileUploaded);
+		if (entry.fileToDownload != null)
+			contentValues.put(KEY_FILE_TO_DOWNLOAD, entry.fileToDownload);
+		if (entry.deleted != null)
+			contentValues.put(KEY_DELETE_BIT, entry.deleted);
+		if (entry.fileUpdatedAt != null)
+			contentValues.put(KEY_FILE_UPDATED_AT, entry.fileUpdatedAt);
 		
-		String where = KEY_ID + "=" + list.id;
+		String where = KEY_ID + "=" + entry.id;
 		try {
 			Log.d("EDITING");
 			db.update(ENTRY_TABLE, contentValues, where, null);
