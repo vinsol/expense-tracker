@@ -193,7 +193,7 @@ abstract class ShowAbstract extends BaseActivity implements OnClickListener {
 //				deleteFile();
 //				mDatabaseAdapter.permanentDeleteEntryTableEntryID(mShowList.id);
 //			} else {
-				mDatabaseAdapter.deleteEntryTableEntryID(mShowList.id);
+				mDatabaseAdapter.deleteExpenseEntryByID(mShowList.id);
 //			}
 			mDatabaseAdapter.close();
 			SyncHelper.startSync();

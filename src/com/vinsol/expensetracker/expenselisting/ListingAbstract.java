@@ -215,7 +215,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 					public void onClick(View v) {
 						DatabaseAdapter mDatabaseAdapter = new DatabaseAdapter(ListingAbstract.this);
 						mDatabaseAdapter.open();
-						mDatabaseAdapter.deleteEntryTableEntryID(mTempClickedList.id);
+						mDatabaseAdapter.deleteExpenseEntryByID(mTempClickedList.id);
 						mDatabaseAdapter.close();
 						unknownDialog.dismiss();
 						unknownDialogAction(mTempClickedList.id);
@@ -321,7 +321,7 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 //		if(Strings.isEmpty(tempEntry.updatedAt)) {
 //			mDatabaseAdapter.permanentDeleteEntryTableEntryID(tempEntry.id);
 //		} else {
-			mDatabaseAdapter.deleteEntryTableEntryID(tempEntry.id);
+			mDatabaseAdapter.deleteExpenseEntryByID(tempEntry.id);
 //		}
     	mDatabaseAdapter.close();
     	//XXX

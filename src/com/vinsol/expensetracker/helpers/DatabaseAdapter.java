@@ -291,7 +291,7 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
-	public boolean deleteEntryTableEntryID(String id) {
+	public boolean deleteExpenseEntryByID(String id) {
 		Log.d("Check Deleting ************* "+id);
 		String where = KEY_ID + "=" + id;
 		ContentValues contentValues = new ContentValues();

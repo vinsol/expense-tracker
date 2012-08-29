@@ -156,7 +156,7 @@ public class CameraEntry extends EditAbstract {
 					} else {
 						DatabaseAdapter adapter = new DatabaseAdapter(this);
 						adapter.open();
-						adapter.deleteEntryTableEntryID(entry.id + "");
+						adapter.deleteExpenseEntryByID(entry.id + "");
 						adapter.close();
 					}
 				}

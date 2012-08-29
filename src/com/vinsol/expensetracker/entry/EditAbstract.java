@@ -589,7 +589,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 //			deleteFile();
 //			mDatabaseAdapter.permanentDeleteEntryTableEntryID(entry.id);
 //		} else {
-			mDatabaseAdapter.deleteEntryTableEntryID(entry.id);
+			mDatabaseAdapter.deleteExpenseEntryByID(entry.id);
 //		}
 		mDatabaseAdapter.close();
 

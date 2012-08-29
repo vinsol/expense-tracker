@@ -251,7 +251,7 @@ public class FavoriteEntry extends BaseActivity implements OnItemClickListener {
 //		if(Strings.isEmpty(tempFav.updatedAt)) {
 //			mDatabaseAdapter.permanentDeleteFavoriteTableEntryID(tempFav.favId);	
 //		} else {
-			mDatabaseAdapter.deleteFavoriteEntryByID(tempFav.id);
+			mDatabaseAdapter.deleteExpenseEntryByID(tempFav.id);
 //		}
     	
     	mDatabaseAdapter.editFavoriteHashEntryTable(((Favorite)mAdapter.getItem(position)).myHash);
@@ -598,7 +598,7 @@ public class FavoriteEntry extends BaseActivity implements OnItemClickListener {
 							finish();
 						} else {
 							mDatabaseAdapter.open();
-							mDatabaseAdapter.deleteEntryTableEntryID(idCreated);
+							mDatabaseAdapter.deleteExpenseEntryByID(idCreated);
 							mDatabaseAdapter.close();
 						}
 					} else {
@@ -679,7 +679,7 @@ public class FavoriteEntry extends BaseActivity implements OnItemClickListener {
 							finish();
 						} else {
 							mDatabaseAdapter.open();
-							mDatabaseAdapter.deleteEntryTableEntryID(idCreated);
+							mDatabaseAdapter.deleteExpenseEntryByID(idCreated);
 							mDatabaseAdapter.close();
 						}
 					} else {
