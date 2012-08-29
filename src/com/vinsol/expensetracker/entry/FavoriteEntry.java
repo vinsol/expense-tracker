@@ -251,7 +251,7 @@ public class FavoriteEntry extends BaseActivity implements OnItemClickListener {
 //		if(Strings.isEmpty(tempFav.updatedAt)) {
 //			mDatabaseAdapter.permanentDeleteFavoriteTableEntryID(tempFav.favId);	
 //		} else {
-			mDatabaseAdapter.deleteFavoriteTableEntryID(tempFav.id);
+			mDatabaseAdapter.deleteFavoriteEntryByID(tempFav.id);
 //		}
     	
     	mDatabaseAdapter.editFavoriteHashEntryTable(((Favorite)mAdapter.getItem(position)).myHash);

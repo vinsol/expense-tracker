@@ -625,7 +625,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 //			fileHelper.deleteAllFavoriteFiles(mFavoriteList.favId);
 //			mDatabaseAdapter.permanentDeleteFavoriteTableEntryID(mFavoriteList.favId);
 //		} else {
-			mDatabaseAdapter.deleteFavoriteTableEntryID(mFavoriteList.id);
+			mDatabaseAdapter.deleteFavoriteEntryByID(mFavoriteList.id);
 //		}
 		
 		mDatabaseAdapter.close();

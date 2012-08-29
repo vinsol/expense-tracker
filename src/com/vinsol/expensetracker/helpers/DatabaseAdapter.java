@@ -148,28 +148,24 @@ public class DatabaseAdapter {
 		return contentValues;
 	}
 	
-	public boolean deleteFavoriteTableByHash(String hash) {
+	public boolean deleteFavoriteEntryByHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_DELETE_BIT, true);
 		try {
-			Log.d("Deleting");
 			db.update(FAVORITE_TABLE, contentValues, where, null);
-			Log.d("Deleted");
 		} catch (SQLiteException e) {
 			return false;
 		}
 		return true;
 	}
 	
-	public boolean deleteFavoriteTableEntryID(String favID) {
+	public boolean deleteFavoriteEntryByID(String favID) {
 		String where = KEY_ID + "=" + favID;
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_DELETE_BIT, true);
 		try {
-			Log.d("Deleting");
 			db.update(FAVORITE_TABLE, contentValues, where, null);
-			Log.d("Deleted");
 		} catch (SQLiteException e) {
 			return false;
 		}

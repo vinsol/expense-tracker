@@ -208,7 +208,7 @@ public class FavoriteHelper implements OnClickListener{
 						File mFileThumbnail = fileHelper.getCameraFileThumbnailFavorite(favID.toString());
 						if(!mFile.canRead() && !mFileSmall.canRead() && !mFileThumbnail.canRead()) {
 							mDatabaseAdapter.open();
-							mDatabaseAdapter.deleteFavoriteTableEntryID(favID+"");
+							mDatabaseAdapter.deleteFavoriteEntryByID(favID+"");
 							mDatabaseAdapter.close();
 //							fileHelper.deleteAllFavoriteFiles(favID+"");
 						}
@@ -228,7 +228,7 @@ public class FavoriteHelper implements OnClickListener{
 						File mFile = fileHelper.getAudioFileFavorite(favID.toString());
 						if(!mFile.canRead()) {
 							mDatabaseAdapter.open();
-							mDatabaseAdapter.deleteFavoriteTableEntryID(favID+"");
+							mDatabaseAdapter.deleteFavoriteEntryByID(favID+"");
 							mDatabaseAdapter.close();
 						}
 					} catch (Exception e) {	
@@ -289,7 +289,7 @@ public class FavoriteHelper implements OnClickListener{
 
 	private void doTaskAfter(String hash) {
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.deleteFavoriteTableByHash(hash);
+		mDatabaseAdapter.deleteFavoriteEntryByHash(hash);
 		mDatabaseAdapter.close();
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editFavoriteHashEntryTable(hash);
