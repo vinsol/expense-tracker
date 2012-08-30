@@ -412,7 +412,7 @@ public class DatabaseAdapter {
 		return false;
 	}
 	
-	public boolean editFavoriteTableByHash(Favorite favorite) {
+	public boolean editFavoriteEntryByHash(Favorite favorite) {
 		ContentValues contentValues = getEditContentValues(favorite);
 		String where = KEY_MY_HASH + "=\"" + favorite.myHash+"\"";
 		try {

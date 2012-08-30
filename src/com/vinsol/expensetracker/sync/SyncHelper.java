@@ -434,7 +434,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 				adapter.insertToFavoriteTable(favorite);
 			} else {
 				favorite.id = tempId;
-				adapter.editFavoriteTableByHash(favorite);
+				adapter.editFavoriteEntryByHash(favorite);
 			}
 		}
 		adapter.close();
@@ -478,7 +478,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			}
 			setSyncBit(favorite);
 			favorite.id = tempFavorite.id;
-			adapter.editFavoriteTableByHash(favorite);
+			adapter.editFavoriteEntryByHash(favorite);
 		}
 		adapter.close();
 	}
