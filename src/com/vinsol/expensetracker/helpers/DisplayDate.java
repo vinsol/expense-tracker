@@ -6,6 +6,7 @@
 
 package com.vinsol.expensetracker.helpers;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.vinsol.expensetracker.R;
@@ -13,11 +14,9 @@ import com.vinsol.expensetracker.R;
 public class DisplayDate {
 
 	// /////// ******* Class to pass Calender and get date in display format ******* ////////
-	Calendar mCalendar;
+	private Calendar mCalendar;
 
-	public DisplayDate() {
-
-	}
+	public DisplayDate() {}
 
 	public DisplayDate(Calendar calendar) {
 		mCalendar = calendar;
@@ -36,15 +35,16 @@ public class DisplayDate {
 
 	// ////// ******** Function to get date in proper format to display in various activities ****** ///////
 	public String getDisplayDate() {
-		String month, day, year;
+		String month;
+		int day, year;
 		mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 		mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 		month = getMonth(mCalendar.get(Calendar.MONTH));
-		day = mCalendar.get(Calendar.DAY_OF_MONTH) + "";
-		year = mCalendar.get(Calendar.YEAR) + "";
+		day = mCalendar.get(Calendar.DAY_OF_MONTH);
+		year = mCalendar.get(Calendar.YEAR);
 		Calendar currentDate = Calendar.getInstance();
 		currentDate.setFirstDayOfWeek(Calendar.MONDAY);
-		if (Integer.parseInt(day) == currentDate.get(Calendar.DAY_OF_MONTH)&& mCalendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH)&& Integer.parseInt(year) == currentDate.get(Calendar.YEAR)) {
+		if (day == currentDate.get(Calendar.DAY_OF_MONTH)&& mCalendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH)&& year == currentDate.get(Calendar.YEAR)) {
 			return "Today, " + month + " " + day;
 		}
 
