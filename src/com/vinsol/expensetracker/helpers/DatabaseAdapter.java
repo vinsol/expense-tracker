@@ -190,7 +190,7 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
-	public boolean deleteEntryTableByHash(String hash) {
+	public boolean deleteExpenseEntryByHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_DELETE_BIT, true);
