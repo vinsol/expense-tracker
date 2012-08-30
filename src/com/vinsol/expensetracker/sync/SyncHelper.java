@@ -456,7 +456,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 			setSyncBit(entry);
 			entry.id = tempEntry.id;
 			entry.favorite = adapter.getFavIdByHash(entry.favorite);
-			adapter.editEntryTableByHash(entry);
+			adapter.editExpenseEntryByHash(entry);
 		}
 		adapter.close();
 	}
