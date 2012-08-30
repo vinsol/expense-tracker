@@ -458,7 +458,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			toSaveFav.syncBit = getString(R.string.syncbit_not_synced);
 			////// ******* Update database if user added additional info *******///////
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.editFavoriteTable(toSaveFav);
+			mDatabaseAdapter.editFavoriteEntryById(toSaveFav);
 			mDatabaseAdapter.close();
 			SyncHelper.startSync();
 			Bundle bundle = new Bundle();

@@ -400,7 +400,7 @@ public class DatabaseAdapter {
 		return true;
 	}
 	
-	public boolean editFavoriteTable(Favorite favorite) {
+	public boolean editFavoriteEntryById(Favorite favorite) {
 		ContentValues contentValues = getEditContentValues(favorite);
 		String where = KEY_ID + "=" + favorite.id;
 		try {

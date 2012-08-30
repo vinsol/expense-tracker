@@ -154,7 +154,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	
 	private void updateFavorite(Favorite favorite) {
 		adapter.open();
-		adapter.editFavoriteTable(favorite);
+		adapter.editFavoriteEntryById(favorite);
 		adapter.close();
 	}
 	
