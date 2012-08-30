@@ -306,7 +306,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 			listForFav.id = mEditList.id;
 			listForFav.syncBit = getString(R.string.syncbit_not_synced);
 			mDatabaseAdapter.open();
-			mDatabaseAdapter.editEntryTable(listForFav);
+			mDatabaseAdapter.editExpenseEntryById(listForFav);
 			mDatabaseAdapter.close();
 			displayList.favorite = "";
 		} else {
@@ -416,7 +416,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 		toSave.syncBit = getString(R.string.syncbit_not_synced);
 		////// ******* Update database if user added additional info *******///////
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editEntryTable(toSave);
+		mDatabaseAdapter.editExpenseEntryById(toSave);
 		mDatabaseAdapter.close();
 
 		if(!intentExtras.containsKey(Constants.KEY_IS_COMING_FROM_SHOW_PAGE)) {

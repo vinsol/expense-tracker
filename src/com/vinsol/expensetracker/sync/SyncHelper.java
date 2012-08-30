@@ -148,7 +148,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 	
 	private void updateEntry(Entry entry) {
 		adapter.open();
-		adapter.editEntryTable(entry);
+		adapter.editExpenseEntryById(entry);
 		adapter.close();
 	}
 	
@@ -414,7 +414,7 @@ public class SyncHelper extends AsyncTask<Void, Void, Void>{
 				adapter.insertToEntryTable(entry);
 			} else {
 				entry.id = tempId;
-				adapter.editEntryTable(entry);
+				adapter.editExpenseEntryById(entry);
 			}
 		}
 		adapter.close();

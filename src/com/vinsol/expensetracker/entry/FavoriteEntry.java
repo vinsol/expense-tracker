@@ -615,7 +615,7 @@ public class FavoriteEntry extends BaseActivity implements OnItemClickListener {
 							startActivity(expenseListingIntent);
 							toInsert.syncBit = getString(R.string.syncbit_not_synced);
 							mDatabaseAdapter.open();
-							mDatabaseAdapter.editEntryTable(toInsert);
+							mDatabaseAdapter.editExpenseEntryById(toInsert);
 							mDatabaseAdapter.close();
 							finish();
 						} else {
@@ -693,7 +693,7 @@ public class FavoriteEntry extends BaseActivity implements OnItemClickListener {
 							expenseListingIntent.putExtras(bundle);
 							startActivity(expenseListingIntent);
 							mDatabaseAdapter.open();
-							mDatabaseAdapter.editEntryTable(toInsert);
+							mDatabaseAdapter.editExpenseEntryById(toInsert);
 							mDatabaseAdapter.close();
 							finish();
 						} else {
@@ -750,7 +750,7 @@ public class FavoriteEntry extends BaseActivity implements OnItemClickListener {
 					finish();
 				} else {
 					mDatabaseAdapter.open();
-					mDatabaseAdapter.editEntryTable(toInsert);
+					mDatabaseAdapter.editExpenseEntryById(toInsert);
 					mDatabaseAdapter.close();
 					Bundle bundle = new Bundle();
 					bundle.putString(Constants.KEY_HIGHLIGHT, toInsert.id);

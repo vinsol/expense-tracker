@@ -180,7 +180,7 @@ public class UnknownEntryDialog extends Dialog implements android.view.View.OnCl
 		list.type = getContext().getString(type);
 		list.syncBit = context.getString(R.string.syncbit_not_synced);
 		mDatabaseAdapter.open();
-		mDatabaseAdapter.editEntryTable(list);
+		mDatabaseAdapter.editExpenseEntryById(list);
 		mDatabaseAdapter.close();
 	}
 }

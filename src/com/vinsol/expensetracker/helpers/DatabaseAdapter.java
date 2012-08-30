@@ -440,7 +440,7 @@ public class DatabaseAdapter {
 		return false;
 	}
 
-	public boolean editEntryTable(Entry entry) {
+	public boolean editExpenseEntryById(Entry entry) {
 		ContentValues contentValues = getEditContentValues(entry);
 		if (entry.timeInMillis != null)
 			contentValues.put(KEY_DATE_TIME, entry.timeInMillis);

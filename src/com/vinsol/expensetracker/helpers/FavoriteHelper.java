@@ -241,7 +241,7 @@ public class FavoriteHelper implements OnClickListener{
 			mShowList.syncBit = activity.getString(R.string.syncbit_not_synced);
 			mDatabaseAdapter.open();
 			mShowList.favorite = mDatabaseAdapter.getFavHashById(favID+"");
-			mDatabaseAdapter.editEntryTable(mShowList);
+			mDatabaseAdapter.editExpenseEntryById(mShowList);
 			mDatabaseAdapter.close();
 			showAddFavorite.setChecked(true);
 			showAddFavoriteTextView.setText("Remove from Favorite");
