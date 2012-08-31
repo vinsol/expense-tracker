@@ -6,7 +6,6 @@
 
 package com.vinsol.expensetracker.helpers;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.vinsol.expensetracker.R;

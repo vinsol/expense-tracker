@@ -113,19 +113,15 @@ public class Home extends BaseActivity implements OnClickListener {
 		cancelHandleGraphTask();
 		cancelUnfinishedEntryTask();
 		switch (idOfClickedView) {
-			////// ******* opens TextEntry Activity ******** ///////////
 			case R.id.home_text:
 				Intent intentTextEntry = new Intent(this, Text.class);
-//				createDatabaseEntry(R.string.text);
 				intentTextEntry.putExtras(bundle);
 				startActivity(intentTextEntry);
 				break;
 				
-			////// ******* opens Voice Activity ******** ///////////
 			case R.id.home_voice:
 				if (isMediaMounted) {
 					Intent intentVoice = new Intent(this, Voice.class);
-//					createDatabaseEntry(R.string.voice);
 					intentVoice.putExtras(bundle);
 					startActivity(intentVoice);
 				} else {
@@ -133,11 +129,9 @@ public class Home extends BaseActivity implements OnClickListener {
 				}
 				break;
 	
-			// //// ******* opens Camera Activity ******** ///////////
 			case R.id.home_camera:
 				if (isMediaMounted) {
 					Intent intentCamera = new Intent(this, CameraEntry.class);
-//					bundle = new Bundle();
 					intentCamera.putExtras(bundle);
 					startActivity(intentCamera);
 				} else {
@@ -145,15 +139,12 @@ public class Home extends BaseActivity implements OnClickListener {
 				}
 				break;
 				
-			// //// ******* opens Favorite Activity ******** ///////////
 			case R.id.home_favorite:
 				Intent intentFavorite = new Intent(this, FavoriteEntry.class);
-//				bundle = new Bundle();
 				intentFavorite.putExtras(bundle);
 				startActivity(intentFavorite);	
 				break;
 				
-			// //// ******* opens List Activity and adds unknown entry to database ******** ///////////
 			case R.id.home_save_reminder:
 				FlurryAgent.onEvent(getString(R.string.save_reminder));
 				insertToDatabase(R.string.unknown);
@@ -162,7 +153,6 @@ public class Home extends BaseActivity implements OnClickListener {
 				SyncHelper.startSync();
 				break;
 			
-			////// ******* opens ListView Activity ******** ///////////
 			case R.id.home_listview:
 				Intent intentListView2 = new Intent(this, ExpenseListing.class);
 				startActivity(intentListView2);
