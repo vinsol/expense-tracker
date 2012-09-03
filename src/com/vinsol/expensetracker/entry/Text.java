@@ -21,6 +21,7 @@ public class Text extends EditAbstract {
 		typeOfEntryUnfinished = R.string.unfinished_textentry;
 		editHelper();
 		createDatabaseEntry();
+		setFavoriteHelper();
 	}
 	
 	@Override

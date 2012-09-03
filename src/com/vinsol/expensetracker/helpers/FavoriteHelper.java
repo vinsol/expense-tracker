@@ -23,6 +23,7 @@ import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.sync.SyncHelper;
+import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.Strings;
 
 public class FavoriteHelper implements OnClickListener{
@@ -256,6 +257,8 @@ public class FavoriteHelper implements OnClickListener{
 			Toast.makeText(activity, "Added to Favorite", Toast.LENGTH_SHORT).show();
 		} else if(mShowList.type.equals(activity.getString(R.string.text))) {
 				mDatabaseAdapter.open();
+				Log.d("**************************************55555555555******************");
+				Log.d("id "+mShowList.id);
 				hash = mDatabaseAdapter.getFavoriteHashEntryTable(mShowList.id);
 				String tempId = mDatabaseAdapter.getFavIdByHash(hash);
 				if(Strings.notEmpty(tempId)) favID = Long.parseLong(tempId);
@@ -275,13 +278,13 @@ public class FavoriteHelper implements OnClickListener{
 	}
 	
 	private String getTypeForFlurry() {
-		if(mShowList.type.equals("0")){
+		if(mShowList.type.equals("0")) {
 			return activity.getString(R.string.unknown_entry);
-		} else if(mShowList.type.equals("1")){
+		} else if(mShowList.type.equals("1")) {
 			return activity.getString(R.string.finished_textentry);
-		} else if(mShowList.type.equals("2")){
+		} else if(mShowList.type.equals("2")) {
 			return activity.getString(R.string.finished_cameraentry);
-		} else if(mShowList.type.equals("3")){
+		} else if(mShowList.type.equals("3")) {
 			return activity.getString(R.string.finished_voiceentry);
 		}
 		return "";

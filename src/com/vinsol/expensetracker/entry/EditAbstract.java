@@ -178,8 +178,6 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 				new DateHandler(this);
 			}
 		}
-		
-		setFavoriteHelper();
 	}
 	
 	protected void setFavoriteHelper() {
