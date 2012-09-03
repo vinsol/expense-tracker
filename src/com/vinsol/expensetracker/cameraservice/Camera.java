@@ -69,11 +69,20 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     private static final int CLEAR_SCREEN_DELAY = 4;
     private static final int SET_CAMERA_PARAMETERS_WHEN_IDLE = 5;
     private static final String KEY_PICTURE_SIZE = "pref_camera_picturesize_key";
+    
+    // The subset of parameters we need to update in setCameraParameters().
     private static final int UPDATE_PARAM_INITIALIZE = 1;
     private static final int UPDATE_PARAM_PREFERENCE = 4;
     private static final int UPDATE_PARAM_ALL = -1;
+    
     private static final int ORIENTATION_HYSTERESIS = 5;
+    
+    // When setCameraParametersWhenIdle() is called, we accumulate the subsets
+    // needed to be updated in mUpdateSet.
     private int mUpdateSet;
+    
+    // The brightness settings used when it is set to automatic in the system.
+    // The reason why it is set to 0.7 is just because 1.0 is too bright.
     private static final float DEFAULT_CAMERA_BRIGHTNESS = 0.7f;
     private static final int SCREEN_DELAY = 2 * 60 * 1000;
     private Parameters mParameters;
@@ -117,6 +126,9 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     private final PostViewPictureCallback mPostViewPictureCallback = new PostViewPictureCallback();
     private final RawPictureCallback mRawPictureCallback = new RawPictureCallback();
     private final AutoFocusCallback mAutoFocusCallback = new AutoFocusCallback();
+    
+    // Use the ErrorCallback to capture the crash count
+    // on the mediaserver
     private final ErrorCallback mErrorCallback = new ErrorCallback();
 
     private long mFocusStartTime;
@@ -131,12 +143,14 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     
     private OnScreenHint mStorageHint;
 
+    // These latency time are for the CameraLatency test.
     public long mAutoFocusTime;
     public long mShutterLag;
     public long mShutterToPictureDisplayedTime;
     public long mPictureDisplayedToJpegCallbackTime;
     public long mJpegCallbackFinishTime;
 
+    // Add for test
     public static boolean mMediaServerDied = false;
     
     @Override
@@ -147,6 +161,10 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 
     private final Handler mHandler = new MainHandler();
 
+    /**
+     * This Handler is used to post message back onto the main thread of the
+     * application
+     */
     private class MainHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -213,6 +231,9 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
 
     private void keepMediaProviderInstance() {
+        // We want to keep a reference to MediaProvider in camera's lifecycle.
+        // TODO: Utilize mMediaProviderClient instance to replace
+        // ContentResolver calls.
         if (mMediaProviderClient == null) {
             mMediaProviderClient = getContentResolver().acquireContentProviderClient(MediaStore.AUTHORITY);
         }
@@ -233,11 +254,19 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         return mLastOrientation;
     }
 
+    // Snapshots can only be taken after this is called. It should be called
+    // once only. We could have done these things in onCreate() but we want to
+    // make preview screen appear as soon as possible.
     private void initializeFirstTime() {
         if (mFirstTimeInitialized) return;
+        
+        // Create orientation listenter. This should be done first because it
+        // takes some time to get first orientation.
         mOrientationListener = new OrientationEventListener(this) {
             @Override
             public void onOrientationChanged(int orientation) {
+                // We keep the last known orientation. So if the user
+                // first orient the camera then point the camera to
             	if (orientation == ORIENTATION_UNKNOWN) return;
                 mLastOrientation = roundOrientation(orientation);
                 int orientationCompensation = mLastOrientation + getDisplayRotation();
@@ -250,7 +279,11 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         mOrientationListener.enable();
         keepMediaProviderInstance();
         checkStorage();
+        
+        // Initialize last picture button.
         mContentResolver = getContentResolver();
+        
+        // Initialize shutter button.
         mShutterButton = (ShutterButton) findViewById(R.id.shutter_button);
         mShutterButton.setOnShutterButtonListener(this);
         mShutterButton.setVisibility(View.VISIBLE);
@@ -261,8 +294,14 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         mFirstTimeInitialized = true;
     }
 
+    // If the activity is paused and resumed, this method will be called in
+    // onResume.
     private void initializeSecondTime() {
+        // Start orientation listener as soon as possible because it takes
+        // some time to get first orientation.
         mOrientationListener.enable();
+        
+        // Start location update if needed.
         installIntentFilter();
         keepMediaProviderInstance();
         checkStorage();
@@ -293,6 +332,9 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         public void onPictureTaken( byte [] jpegData, android.hardware.Camera camera) {
             if (mPausing) {return;}
             mJpegPictureCallbackTime = System.currentTimeMillis();
+            // If postview callback has arrived, the captured image is displayed
+            // in postview callback. If not, the captured image is displayed in
+            // raw picture callback.
             if (mPostViewPictureCallbackTime != 0) {
                 mShutterToPictureDisplayedTime = mPostViewPictureCallbackTime - mShutterCallbackTime;
                 mPictureDisplayedToJpegCallbackTime = mJpegPictureCallbackTime - mPostViewPictureCallbackTime;
@@ -301,7 +343,13 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
                 mPictureDisplayedToJpegCallbackTime = mJpegPictureCallbackTime - mRawPictureCallbackTime;
             }
             mImageCapture.storeImage(jpegData, camera);
+            
+            // Calculate this in advance of each shot so we don't add to shutter
+            // latency. It's true that someone else could write to the SD card in
+            // the mean time and fill it, but that could have happened between the
+            // shutter press and saving the JPEG too.
             calculatePicturesRemaining();
+            
             if (!mHandler.hasMessages(RESTART_PREVIEW)) {
                 long now = System.currentTimeMillis();
                 mJpegCallbackFinishTime = now - mJpegPictureCallbackTime;
@@ -315,6 +363,9 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             mFocusCallbackTime = System.currentTimeMillis();
             mAutoFocusTime = mFocusCallbackTime - mFocusStartTime;
             if (mFocusState == FOCUSING_SNAP_ON_FINISH) {
+                // Take the picture no matter focus succeeds or fails. No need
+                // to play the AF sound if we're about to play the shutter
+                // sound.
                 if (focused) {
                     mFocusState = FOCUS_SUCCESS;
                 } else {
@@ -322,6 +373,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
                 }
                 mImageCapture.onSnap();
             } else if (mFocusState == FOCUSING) {
+                // User is half-pressing the focus key. Play the focus tone.
+                // Do not take the picture now.
                 if (focused) {
                     mFocusState = FOCUS_SUCCESS;
                 } else {
@@ -344,11 +397,15 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 
         byte[] mCaptureOnlyData;
 
+        // Returns the rotation degree in the jpeg header.
         public void storeImage(byte[] data,android.hardware.Camera camera) {
             mCaptureOnlyData = data;
             showPostCaptureAlert();
         }
 
+        /**
+         * Initiate the capture of an image.
+         */
         public void initiate() {
             if (mCameraDevice == null) {
                 return;
@@ -363,6 +420,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 
         private void capture() {
             mCaptureOnlyData = null;
+            
+            // Set rotation.
             mParameters.setRotation(mLastOrientation);
             ///XXX May b error here
             mCameraDevice.setParameters(mParameters);
@@ -371,6 +430,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         }
 
         public void onSnap() {
+            // If we are already in the middle of taking a snapshot then ignore.
             if (mPausing || mStatus == SNAPSHOT_IN_PROGRESS) {return;}
             mCaptureStartTime = System.currentTimeMillis();
             mPostViewPictureCallbackTime = 0;
@@ -392,12 +452,19 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         setContentView(R.layout.camera);
         mSurfaceView = (SurfaceView) findViewById(R.id.camera_preview);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        
+        /*
+         * To reduce startup time, we start the preview in another thread.
+         * We make sure the preview is started at the end of onCreate.
+         */
         Thread startPreviewThread = new Thread(new Runnable() {
             public void run() {
                 try {
                     mStartPreviewFail = false;
                     startPreview();
                 } catch (CameraHardwareException e) {
+                    // In eng build, we throw the exception so that test tool
+                    // can detect it and report it
                     if ("eng".equals(Build.TYPE)) {
                         throw new RuntimeException(e);
                     }
@@ -407,6 +474,9 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         });
         startPreviewThread.start();
 
+        // don't set mSurfaceHolder here. We have it set ONLY within
+        // surfaceChanged / surfaceDestroyed, other parts of the code
+        // assume that when it is set, the surface is also set.
         SurfaceHolder holder = mSurfaceView.getHolder();
         holder.addCallback(this);
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -417,6 +487,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 
         ViewGroup rootView = (ViewGroup) findViewById(R.id.camera);
         inflater.inflate(R.layout.camera_control, rootView);
+        
+        // Make sure preview is started.
         try {
             startPreviewThread.join();
             if (mStartPreviewFail) {
@@ -653,6 +725,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
 
     private void installIntentFilter() {
+        // install an intent filter to receive SD card related events.
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_MEDIA_MOUNTED);
         intentFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
         intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
@@ -662,6 +735,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 
     private void initializeScreenBrightness() {
         Window win = getWindow();
+        // Overright the brightness settings if it is automatic
         int mode = Settings.System.getInt(
                 getContentResolver(),
                 Settings.System.SCREEN_BRIGHTNESS_MODE,
@@ -681,6 +755,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         mJpegPictureCallbackTime = 0;
         mImageCapture = new ImageCapture();
 
+        // Start the preview if it is not started.
         if (!mPreviewing && !mStartPreviewFail) {
             try {
                 startPreview();
@@ -691,6 +766,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         }
 
         if (mSurfaceHolder != null) {
+            // If first time initialization is not finished, put it in the
+            // message queue.
             if (!mFirstTimeInitialized) {
                 mHandler.sendEmptyMessage(FIRST_TIME_INIT);
             } else {
@@ -704,12 +781,16 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     protected void onPause() {
         mPausing = true;
         stopPreview();
+        // Close the camera now because other activities may need to use it.
         closeCamera();
         resetScreenOn();
         if (mFirstTimeInitialized) {
             mOrientationListener.disable();
             hidePostCaptureAlert();
         }
+        
+        // If we are in an image capture intent and has taken
+        // a picture, we just clear it in onPause.
         mImageCapture.clearLastData();
         mImageCapture = null;
         
@@ -718,6 +799,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             mStorageHint = null;
         }
         
+        // Remove the messages in the event queue.
         mHandler.removeMessages(RESTART_PREVIEW);
         mHandler.removeMessages(FIRST_TIME_INIT);
 
@@ -729,6 +811,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
 
     private void autoFocus() {
+        // Initiate autofocus only when preview is started and snapshot is not
+        // in progress.
         if (canTakePicture()) {
             mFocusStartTime = System.currentTimeMillis();
             mFocusState = FOCUSING;
@@ -738,6 +822,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
 
     private void cancelAutoFocus() {
+        // User releases half-pressed focus key.
         if (mFocusState == FOCUSING || mFocusState == FOCUS_SUCCESS || mFocusState == FOCUS_FAIL) {
             mCameraDevice.cancelAutoFocus();
         }
@@ -768,6 +853,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     @Override
     public void onBackPressed() {
         if (!isCameraIdle()) {
+            // ignore backs while we're taking a picture
             return;
         } else {
         	doCancel();
@@ -789,7 +875,12 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
                 }
                 return true;
             case KeyEvent.KEYCODE_DPAD_CENTER:
+                // If we get a dpad center event without any focused view, move
+                // the focus to the shutter button and press it.
                 if (mFirstTimeInitialized && event.getRepeatCount() == 0) {
+                    // Start auto-focus immediately to reduce shutter lag. After
+                    // the shutter button gets the focus, doFocus() will be
+                    // called again but it is fine.
                     doFocus(true);
                     if (mShutterButton.isInTouchMode()) {
                         mShutterButton.requestFocusFromTouch();
@@ -817,34 +908,66 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
 
     private void doSnap() {
+        // If the user has half-pressed the shutter and focus is completed, we
+        // can take the photo right away. If the focus mode is infinity, we can
+        // also take the photo.
         if ((mFocusState == FOCUS_SUCCESS
                 || mFocusState == FOCUS_FAIL)) {
             mImageCapture.onSnap();
         } else if (mFocusState == FOCUSING) {
+            // Half pressing the shutter (i.e. the focus button event) will
+            // already have requested AF for us, so just request capture on
+            // focus here.
             mFocusState = FOCUSING_SNAP_ON_FINISH;
         } else if (mFocusState == FOCUS_NOT_STARTED) {
+            // Focus key down event is dropped for some reasons. Just ignore.
         }
     }
 
     private void doFocus(boolean pressed) {
-	    if (pressed) {
+        // Do the focus if the mode is not infinity.
+	    if (pressed) { // Focus key down.
 	        autoFocus();
-	    } else {
+	    } else { // Focus key up.
 	        cancelAutoFocus();
 	    }
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+        // Make sure we have a surface in the holder before proceeding.
         if (holder.getSurface() == null) {return;}
+        
+        // We need to save the holder for later use, even when the mCameraDevice
+        // is null. This could happen if onResume() is invoked after this
+        // function.
         mSurfaceHolder = holder;
+        
+        // The mCameraDevice will be null if it fails to connect to the camera
+        // hardware. In this case we will show a dialog and then finish the
+        // activity, so it's OK to ignore it.
         if (mCameraDevice == null) return;
+        
+        // Sometimes surfaceChanged is called after onPause or before onResume.
+        // Ignore it.
         if (mPausing || isFinishing()) return;
+        
         if (mPreviewing && holder.isCreating()) {
+            // Set preview display if the surface is being created and preview
+            // was already started. That means preview display was set to null
+            // and we need to set it now.
             setPreviewDisplay(holder);
         } else {
+            // 1. Restart the preview if the size of surface was changed. The
+            // framework may not support changing preview display on the fly.
+            // 2. Start the preview now if surface was destroyed and preview
+            // stopped.
             restartPreview();
         }
+        
+        // If first time initialization is not finished, send a message to do
+        // it later. We want to finish surfaceChanged as soon as possible to let
+        // user see preview first.
         if (!mFirstTimeInitialized) {
             mHandler.sendEmptyMessage(FIRST_TIME_INIT);
         } else {
@@ -921,6 +1044,9 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         if (mPausing || isFinishing()) return;
 
         ensureCameraDevice();
+        
+        // If we're previewing already, stop the preview first (this will blank
+        // the screen).
         if (mPreviewing) stopPreview();
 
         setPreviewDisplay(mSurfaceHolder);
@@ -954,6 +1080,12 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         Size optimalSize = null;
         double minDiff = Double.MAX_VALUE;
 
+        // Because of bugs of overlay and layout, we sometimes will try to
+        // layout the viewfinder in the portrait orientation and thus get the
+        // wrong size of mSurfaceView. When we change the preview size, the
+        // new overlay will be created before the old one closed, which causes
+        // an exception. For now, just get the screen size
+        
         Display display = getWindowManager().getDefaultDisplay();
         int targetHeight = Math.min(display.getHeight(), display.getWidth());
 
@@ -974,6 +1106,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             }
         }
 
+        // Cannot find the one match the aspect ratio, ignore the requirement
         if (optimalSize == null) {
             minDiff = Double.MAX_VALUE;
             for (Size size : sizes) {
@@ -987,6 +1120,8 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
 
     private void updateCameraParametersInitialize() {
+        // Reset preview frame rate to the maximum because it may be lowered by
+        // video camera application.
         List<Integer> frameRates = mParameters.getSupportedPreviewFrameRates();
         if (frameRates != null) {
             Integer max = Collections.max(frameRates);
@@ -1010,6 +1145,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
     }
     
     private void updateCameraParametersPreference() {
+        // Set picture size.
         String pictureSize = mPreferences.getString(KEY_PICTURE_SIZE, null);
         if (pictureSize == null) {
             initialCameraPictureSize(this, mParameters);
@@ -1017,9 +1153,14 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             List<Size> supported = mParameters.getSupportedPictureSizes();
             setCameraPictureSize(pictureSize, supported, mParameters);
         }
+        
+        // Set the preview frame aspect ratio according to the picture size.
         Size size = mParameters.getPictureSize();
         PreviewFrameLayout frameLayout = (PreviewFrameLayout) findViewById(R.id.frame_layout);
         frameLayout.setAspectRatio((double) size.width / size.height);
+        
+        // Set a preview size that is closest to the viewfinder height and has
+        // the right aspect ratio.
         List<Size> sizes = mParameters.getSupportedPreviewSizes();
         Size optimalSize = getOptimalPreviewSize(sizes, (double) size.width / size.height);
         if (optimalSize != null) {
@@ -1047,6 +1188,9 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         }
     }
 
+    // We separate the parameters into several subsets, so we can update only
+    // the subsets actually need updating. The PREFERENCE set needs extra
+    // locking because the preference can be changed from GLThread as well.
     private void setCameraParameters(int updateSet) {
         mParameters = mCameraDevice.getParameters();
 
@@ -1064,9 +1208,13 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         mCameraDevice.setParameters(mParameters);
     }
     
+    // If the Camera is idle, update the parameters immediately, otherwise
+    // accumulate them in mUpdateSet and update later.
     private void setCameraParametersWhenIdle(int additionalUpdateSet) {
         mUpdateSet |= additionalUpdateSet;
         if (mCameraDevice == null) {
+            // We will update all the parameters when we open the device, so
+            // we don't need to do anything now.
             mUpdateSet = 0;
             return;
         } else if (isCameraIdle()) {
