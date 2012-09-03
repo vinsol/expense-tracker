@@ -30,8 +30,8 @@ public class BarGraph extends View {
 	private int verDiff;
 	private int horDiff;
 	private ArrayList<String> horLabels;
-	private String suffix = "";
-	private String[] suffixList = {"B","M","K"};
+	private String suffix = ""; // Any 1 value from suffixList
+	private String[] suffixList = {"B","M","K"};  // B -> Billion; M -> Million; K -> Thousand
 	private float floatPx;
 	
 	public BarGraph(Activity activity,ArrayList<String> valueList,ArrayList<String> horLabels) {

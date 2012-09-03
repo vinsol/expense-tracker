@@ -4,6 +4,12 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.vinsol.expensetracker.utils.Strings;
 
+/*
+ * ExclusionStrategy -> A strategy (or policy) definition that is used to decide 
+ * whether or not a field or top-level class should be serialized or deserialized 
+ * as part of the JSON output/input
+ * */
+
 public class ExpenseTrackerExclusionStrategy implements ExclusionStrategy {
 
 	@Override

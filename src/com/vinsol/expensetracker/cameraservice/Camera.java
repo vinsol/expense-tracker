@@ -424,6 +424,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
                 return;
             }
         } catch (InterruptedException ex) {
+        	ex.printStackTrace();
         }
         ((CameraButton) findViewById(R.id.btn_cancel)).setOnClickListener(this);
         ((CameraButton) findViewById(R.id.btn_done)).setOnClickListener(this);
@@ -496,6 +497,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
             return BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length, options);
         	}
         } catch (OutOfMemoryError ex) {
+        	ex.printStackTrace();
         }
         return null;
     }
@@ -518,6 +520,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
 			        setResult(RESULT_OK);
 		        }
 		    } catch (IOException ex) {
+		    	ex.printStackTrace();
 		    } finally {
 		        closeSilently(outputStream);
 		    }
@@ -576,6 +579,7 @@ public class Camera extends Activity implements View.OnClickListener, ShutterBut
         try {
             exif = new ExifInterface(filepath);
         } catch (IOException ex) {
+        	ex.printStackTrace();
         }
         if (exif != null) {
             int orientation = exif.getAttributeInt(

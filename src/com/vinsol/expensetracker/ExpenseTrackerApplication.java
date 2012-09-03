@@ -50,7 +50,6 @@ public class ExpenseTrackerApplication extends Application {
     	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext);
     	Log.d(preferences.getString(applicationContext.getString(R.string.pref_key_token), "not found"));
     	Log.d("******************************* Syncing syncing syncing **************************"+ExpenseTrackerApplication.toSync+" token "+token+" key "+applicationContext.getString(R.string.pref_key_token));
-    	Log.d("******************************* Syncing syncing syncing **************************"+ExpenseTrackerApplication.toSync+" token "+SharedPreferencesHelper.getSharedPreferences().getString(getContext().getString(R.string.pref_key_sync_email), ""+" key "+applicationContext.getString(R.string.pref_key_token)));
     }
 
 	public static void Initialize() {
