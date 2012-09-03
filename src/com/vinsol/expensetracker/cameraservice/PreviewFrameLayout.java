@@ -14,6 +14,10 @@ import android.widget.FrameLayout;
 
 import com.vinsol.expensetracker.R;
 
+/**
+ * A layout which handles the preview aspect ratio and the position of
+ * the gripper.
+ */
 public class PreviewFrameLayout extends ViewGroup {
     private static final int MIN_HORIZONTAL_MARGIN = 10; // 10dp
 
@@ -55,6 +59,11 @@ public class PreviewFrameLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        // Try to layout the "frame" in the center of the area, and put
+        // "gripper" just to the left of it. If there is no enough space for
+        // the gripper, the "frame" will be moved a little right so that
+        // they won't overlap with each other.
+    	
         int frameWidth = getWidth();
         int frameHeight = getHeight();
 
@@ -63,9 +72,12 @@ public class PreviewFrameLayout extends ViewGroup {
         int horizontalPadding = Math.max(f.getPaddingLeft() + f.getPaddingRight(),(int) (MIN_HORIZONTAL_MARGIN * mMetrics.density));
         int verticalPadding = f.getPaddingBottom() + f.getPaddingTop();
 
+        // Ignore the vertical paddings, so that we won't draw the frame on the
+        // top and bottom sides
         int previewHeight = frameHeight;
         int previewWidth = frameWidth - horizontalPadding;
 
+        // resize frame and preview for aspect ratio
         if (previewWidth > previewHeight * mAspectRatio) {
             previewWidth = (int) (previewHeight * mAspectRatio + .5);
         } else {
