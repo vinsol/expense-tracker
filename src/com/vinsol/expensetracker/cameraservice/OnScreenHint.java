@@ -16,6 +16,18 @@ import android.widget.TextView;
 
 import com.vinsol.expensetracker.R;
 
+/**
+ * A on-screen hint is a view containing a little message for the user and will
+ * be shown on the screen continuously.  This class helps you create and show
+ * those.
+ *
+ * <p>
+ * When the view is shown to the user, appears as a floating view over the
+ * application.
+ * <p>
+ * The easiest way to use this class is to call one of the static methods that
+ * constructs everything you need and returns a new {@code OnScreenHint} object.
+ */
 public class OnScreenHint {
 
     int mGravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
@@ -44,6 +56,9 @@ public class OnScreenHint {
         mParams.setTitle("OnScreenHint");
     }
 
+    /**
+     * Show the view on the screen.
+     */
     public void show() {
         if (mNextView == null) {
             throw new RuntimeException("setView must have been called");
@@ -51,6 +66,9 @@ public class OnScreenHint {
         mHandler.post(mShow);
     }
 
+    /**
+     * Close the view if it's showing.
+     */
     public void cancel() {
         mHandler.post(mHide);
     }
@@ -70,6 +88,11 @@ public class OnScreenHint {
         return result;
     }
 
+    /**
+     * Update the text in a OnScreenHint that was previously created using one
+     * of the makeText() methods.
+     * @param s The new text for the OnScreenHint.
+     */
     public void setText(CharSequence s) {
         if (mNextView == null) {
             throw new RuntimeException("This OnScreenHint was not "
@@ -111,6 +134,9 @@ public class OnScreenHint {
 
     private synchronized void handleHide() {
         if (mView != null) {
+            // note: checking parent() just to make sure the view has
+            // been added...  i have seen cases where we get here when
+            // the view isn't yet added, so let's try not to crash.
             if (mView.getParent() != null) {
                 mWM.removeView(mView);
             }
