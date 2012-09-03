@@ -18,11 +18,17 @@ import com.vinsol.expensetracker.utils.Log;
 
 public class CameraHolder {
     private android.hardware.Camera mCameraDevice;
-    private long mKeepBeforeTime = 0;
+    private long mKeepBeforeTime = 0; // Keep the Camera before this time.
     private final Handler mHandler;
-    private int mUsers = 0;
+    private int mUsers = 0; // number of open() - number of release()
+    
+    // We store the camera parameters when we actually open the device,
+    // so we can restore them in the subsequent open() requests by the user.
+    // This prevents the parameters set by the Camera activity used by
+    // the VideoCamera activity inadvertently.
     private Parameters mParameters;
 
+    // Use a singleton.
     private static CameraHolder sHolder;
     public static synchronized CameraHolder instance() {
         if (sHolder == null) {
@@ -42,6 +48,11 @@ public class CameraHolder {
             switch(msg.what) {
                 case RELEASE_CAMERA:
                     synchronized (CameraHolder.this) {
+                        // In 'CameraHolder.open', the 'RELEASE_CAMERA' message
+                        // will be removed if it is found in the queue. However,
+                        // there is a chance that this message has been handled
+                        // before being removed. So, we need to add a check
+                        // here:
                         if (CameraHolder.this.mUsers == 0) releaseCamera();
                     }
                     break;
@@ -87,10 +98,16 @@ public class CameraHolder {
         return mCameraDevice;
     }
     
+    /**
+     * Tries to open the hardware camera. If the camera is being used or
+     * unavailable then return {@code null}.
+     */
     public synchronized android.hardware.Camera tryOpen() {
         try {
             return mUsers == 0 ? open() : null;
         } catch (CameraHardwareException e) {
+            // In eng build, we throw the exception so that test tool
+            // can detect it and report it
             if ("eng".equals(Build.TYPE)) {
                 throw new RuntimeException(e);
             }
@@ -119,7 +136,11 @@ public class CameraHolder {
     }
 
     public synchronized void keep() {
+        // We allow (mUsers == 0) for the convenience of the calling activity.
+        // The activity may not have a chance to call open() before the user
+        // choose the menu item to switch to another activity.
         Assert(mUsers == 1 || mUsers == 0);
+        // Keep the camera instance for 3 seconds.
         mKeepBeforeTime = System.currentTimeMillis() + 3000;
     }
 }
