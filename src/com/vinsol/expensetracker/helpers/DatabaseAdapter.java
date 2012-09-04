@@ -126,10 +126,15 @@ public class DatabaseAdapter {
 	
 	private ContentValues getInsertContentValues(Favorite object) {
 		ContentValues contentValues = new ContentValues();
-		contentValues.put(KEY_TAG, object.description);
-		contentValues.put(KEY_AMOUNT, object.amount);
-		contentValues.put(KEY_LOCATION, object.location);
-		contentValues.put(KEY_TYPE, object.type);
+		if(Strings.notEmpty(object.description))
+			contentValues.put(KEY_TAG, object.description);
+		if(Strings.notEmpty(object.amount))
+			contentValues.put(KEY_AMOUNT, object.amount);
+		if(Strings.notEmpty(object.location))
+			contentValues.put(KEY_LOCATION, object.location);
+		
+		if(Strings.notEmpty(object.type))
+			contentValues.put(KEY_TYPE, object.type);
 		
 		if(Strings.isEmpty(object.myHash)) {
 			contentValues.put(KEY_MY_HASH, Utils.getMD5());
@@ -137,13 +142,19 @@ public class DatabaseAdapter {
 			contentValues.put(KEY_MY_HASH, object.myHash);
 		}
 		
-		contentValues.put(KEY_DELETE_BIT, object.deleted);
-		contentValues.put(KEY_ID_FROM_SERVER, object.idFromServer);
-		contentValues.put(KEY_SYNC_BIT, object.syncBit);
-		contentValues.put(KEY_UPDATED_AT, object.updatedAt);
-		contentValues.put(KEY_FILE_UPLOADED, object.fileUploaded);
-		contentValues.put(KEY_FILE_TO_DOWNLOAD, object.fileToDownload);
-		contentValues.put(KEY_FILE_UPDATED_AT, object.fileUpdatedAt);
+		contentValues.put(KEY_DELETE_BIT, object.deleted); // a boolean
+		
+		if(Strings.notEmpty(object.idFromServer))
+			contentValues.put(KEY_ID_FROM_SERVER, object.idFromServer);
+		if(Strings.notEmpty(object.syncBit))
+			contentValues.put(KEY_SYNC_BIT, object.syncBit);
+		if(Strings.notEmpty(object.updatedAt))
+			contentValues.put(KEY_UPDATED_AT, object.updatedAt);
+			
+		contentValues.put(KEY_FILE_UPLOADED, object.fileUploaded); // a boolean	
+		contentValues.put(KEY_FILE_TO_DOWNLOAD, object.fileToDownload); // a boolean
+		if(Strings.notEmpty(object.fileUpdatedAt))
+			contentValues.put(KEY_FILE_UPDATED_AT, object.fileUpdatedAt);
 		return contentValues;
 	}
 	
@@ -426,9 +437,10 @@ public class DatabaseAdapter {
 
 	public boolean editExpenseEntryById(Entry entry) {
 		ContentValues contentValues = getEditContentValues(entry);
-		if (entry.timeInMillis != null)
-			contentValues.put(KEY_DATE_TIME, entry.timeInMillis);
-		if (entry.favorite != null)
+		
+		contentValues.put(KEY_DATE_TIME, entry.timeInMillis);
+		
+		if (Strings.notEmpty(entry.favorite))
 			contentValues.put(KEY_FAVORITE, entry.favorite);
 		String where = KEY_ID + "=" + entry.id;
 		try {
@@ -442,27 +454,26 @@ public class DatabaseAdapter {
 	
 	private ContentValues getEditContentValues(Favorite object) {
 		ContentValues contentValues = new ContentValues();
-		if (object.description != null)
+		if (Strings.notEmpty(object.description))
 			contentValues.put(KEY_TAG, object.description);
-		if (object.amount != null)
+		if (Strings.notEmpty(object.amount))
 			contentValues.put(KEY_AMOUNT, object.amount);
-		if (object.type != null)
+		if (Strings.notEmpty(object.type))
 			contentValues.put(KEY_TYPE, object.type);
-		if (object.location != null)
+		if (Strings.notEmpty(object.location))
 			contentValues.put(KEY_LOCATION, object.location);
-		if (object.idFromServer != null)
+		if (Strings.notEmpty(object.idFromServer))
 			contentValues.put(KEY_ID_FROM_SERVER, object.idFromServer);
-		if (object.syncBit != null)
+		if (Strings.notEmpty(object.syncBit))
 			contentValues.put(KEY_SYNC_BIT, object.syncBit);
-		if (object.updatedAt != null)
+		if (Strings.notEmpty(object.updatedAt))
 			contentValues.put(KEY_UPDATED_AT, object.updatedAt);
-		if (object.fileUploaded != null)
-			contentValues.put(KEY_FILE_UPLOADED, object.fileUploaded);
-		if (object.fileToDownload != null)
-			contentValues.put(KEY_FILE_TO_DOWNLOAD, object.fileToDownload);
-		if (object.deleted != null)
-			contentValues.put(KEY_DELETE_BIT, object.deleted);
-		if (object.fileUpdatedAt != null)
+		
+		contentValues.put(KEY_FILE_UPLOADED, object.fileUploaded); //a boolean
+		contentValues.put(KEY_FILE_TO_DOWNLOAD, object.fileToDownload); // a boolean
+		contentValues.put(KEY_DELETE_BIT, object.deleted);// a boolean
+		
+		if (Strings.notEmpty(object.fileUpdatedAt))
 			contentValues.put(KEY_FILE_UPDATED_AT, object.fileUpdatedAt);
 		return contentValues;
 	}
