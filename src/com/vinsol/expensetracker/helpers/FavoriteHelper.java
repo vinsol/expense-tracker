@@ -257,8 +257,6 @@ public class FavoriteHelper implements OnClickListener{
 			Toast.makeText(activity, "Added to Favorite", Toast.LENGTH_SHORT).show();
 		} else if(mShowList.type.equals(activity.getString(R.string.text))) {
 				mDatabaseAdapter.open();
-				Log.d("**************************************55555555555******************");
-				Log.d("id "+mShowList.id);
 				hash = mDatabaseAdapter.getFavoriteHashEntryTable(mShowList.id);
 				String tempId = mDatabaseAdapter.getFavIdByHash(hash);
 				if(Strings.notEmpty(tempId)) favID = Long.parseLong(tempId);
@@ -270,6 +268,7 @@ public class FavoriteHelper implements OnClickListener{
 				String tempId = mDatabaseAdapter.getFavIdByHash(hash);
 				if(Strings.notEmpty(tempId)) favID = Long.parseLong(tempId);
 				mDatabaseAdapter.close();
+				Log.d("fileHelper " +fileHelper+" favID "+favID);
 				fileHelper.deleteAllFavoriteFiles(favID.toString());
 				doTaskAfter(hash);
 			} else {

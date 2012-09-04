@@ -16,7 +16,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
-import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.Strings;
 import com.vinsol.expensetracker.utils.Utils;
 
@@ -195,9 +194,7 @@ public class DatabaseAdapter {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_DELETE_BIT, true);
 		try {
-			Log.d("Deleting");
 			db.update(ENTRY_TABLE, contentValues, where, null);
-			Log.d("Deleted");
 		} catch (SQLiteException e) {
 			e.printStackTrace();
 			return false;
@@ -269,9 +266,7 @@ public class DatabaseAdapter {
 	public boolean permanentDeleteExpenseEntryByHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
 		try {
-			Log.d("Deleting");
 			db.delete(ENTRY_TABLE, where, null);
-			Log.d("Deleted");
 		} catch (SQLiteException e) {
 			e.printStackTrace();
 			return false;
@@ -282,9 +277,7 @@ public class DatabaseAdapter {
 	public boolean permanentDeleteFavoriteEntryByHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
 		try {
-			Log.d("Deleting");
 			db.delete(FAVORITE_TABLE, where, null);
-			Log.d("Deleted");
 		} catch (SQLiteException e) {
 			return false;
 		}
@@ -292,14 +285,11 @@ public class DatabaseAdapter {
 	}
 	
 	public boolean deleteExpenseEntryByID(String id) {
-		Log.d("Check Deleting ************* "+id);
 		String where = KEY_ID + "=" + id;
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_DELETE_BIT, true);
 		try {
-			Log.d("Deleting");
 			db.update(ENTRY_TABLE, contentValues, where, null);
-			Log.d("Deleted");
 		} catch (SQLiteException e) {
 			e.printStackTrace();
 			return false;
@@ -310,9 +300,7 @@ public class DatabaseAdapter {
 	public boolean permanentDeleteFavoriteEntryByMyHash(String hash) {
 		String where = KEY_MY_HASH + "=\"" + hash+"\"";
 		try {
-			Log.d("Deleting");
 			db.delete(FAVORITE_TABLE, where, null);
-			Log.d("Deleted");
 		} catch (SQLiteException e) {
 			return false;
 		}
@@ -324,9 +312,7 @@ public class DatabaseAdapter {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(KEY_DELETE_BIT, true);
 		try {
-			Log.d("Deleting");
 			db.update(ENTRY_TABLE, contentValues, where, null);
-			Log.d("Deleted");
 		} catch (SQLiteException e) {
 			e.printStackTrace();
 			return false;
@@ -337,9 +323,7 @@ public class DatabaseAdapter {
 	public boolean permanentDeleteFavoriteEntryByID(String favID) {
 		String where = KEY_ID + "=" + favID;
 		try {
-			Log.d("Deleting");
 			db.delete(FAVORITE_TABLE, where, null);
-			Log.d("Deleted");
 		} catch (SQLiteException e) {
 			return false;
 		}
@@ -563,7 +547,7 @@ public class DatabaseAdapter {
 				KEY_FAVORITE}, where, null, null, null, null);
 		cr.moveToFirst();
 		String favHash = "" ;
-		if(!cr.isAfterLast()) {favHash = cr.getString(cr.getColumnIndex(KEY_MY_HASH));}
+		if(!cr.isAfterLast()) {favHash = cr.getString(cr.getColumnIndex(KEY_FAVORITE));}
 		cr.close();
 		return favHash;
 	}
