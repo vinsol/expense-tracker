@@ -118,8 +118,10 @@ public class DatabaseAdapter {
 	
 	public Long insertToEntryTable(Entry entry) {
 		ContentValues contentValues = getInsertContentValues(entry);
-		contentValues.put(KEY_DATE_TIME, entry.timeInMillis);
-		contentValues.put(KEY_FAVORITE, entry.favorite);
+		if(entry.timeInMillis != null)
+			contentValues.put(KEY_DATE_TIME, entry.timeInMillis);
+		if(Strings.notEmpty(entry.favorite))
+			contentValues.put(KEY_FAVORITE, entry.favorite);
 		long id = db.insert(ENTRY_TABLE, null, contentValues);
 		return id;
 	}
@@ -421,9 +423,11 @@ public class DatabaseAdapter {
 	
 	public boolean editExpenseEntryByHash(Entry entry) {
 		ContentValues contentValues = getEditContentValues(entry);
-		if (entry.timeInMillis != null)
+		
+		if(entry.timeInMillis != null)
 			contentValues.put(KEY_DATE_TIME, entry.timeInMillis);
-		if (entry.favorite != null)
+		
+		if (Strings.notEmpty(entry.favorite))
 			contentValues.put(KEY_FAVORITE, entry.favorite);
 		String where = KEY_MY_HASH + "=\"" + entry.myHash+"\"";
 		try {
@@ -436,13 +440,13 @@ public class DatabaseAdapter {
 	}
 
 	public boolean editExpenseEntryById(Entry entry) {
+		String where = KEY_ID + "=" + entry.id;
 		ContentValues contentValues = getEditContentValues(entry);
-		
-		contentValues.put(KEY_DATE_TIME, entry.timeInMillis);
+		if(entry.timeInMillis != null)
+			contentValues.put(KEY_DATE_TIME, entry.timeInMillis);
 		
 		if (Strings.notEmpty(entry.favorite))
 			contentValues.put(KEY_FAVORITE, entry.favorite);
-		String where = KEY_ID + "=" + entry.id;
 		try {
 			db.update(ENTRY_TABLE, contentValues, where, null);
 			return true;

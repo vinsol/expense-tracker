@@ -20,7 +20,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.flurry.android.FlurryAgent;
-import com.vinsol.confconnect.gson.MyGson;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.sync.SyncHelper;
@@ -242,7 +241,7 @@ public class FavoriteHelper implements OnClickListener{
 			}
 			mShowList.syncBit = activity.getString(R.string.syncbit_not_synced);
 			mDatabaseAdapter.open();
-			mShowList.favorite = mDatabaseAdapter.getFavHashById(favID+"");	
+			mShowList.favorite = mDatabaseAdapter.getFavHashById(favID+"");
 			mDatabaseAdapter.editExpenseEntryById(mShowList);
 			mDatabaseAdapter.close();
 			showAddFavorite.setChecked(true);
