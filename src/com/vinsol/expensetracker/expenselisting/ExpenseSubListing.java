@@ -21,10 +21,9 @@ import com.vinsol.expensetracker.Constants;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.helpers.DisplayDate;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.utils.Log;
 
 public class ExpenseSubListing extends ListingAbstract {
-
-	private TextView listingHeader;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +36,7 @@ public class ExpenseSubListing extends ListingAbstract {
 		mSeparatedListAdapter = new SeparatedListAdapter(this,highlightID);
 		intentExtras = getIntent().getExtras();
 		ImageView listButton = (ImageView) findViewById(R.id.home_listview);
+		TextView listingHeader = (TextView) findViewById(R.id.home_header_title);
 		listButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -45,7 +45,6 @@ public class ExpenseSubListing extends ListingAbstract {
 				startActivity(intent);
 			}
 		});
-		listingHeader = (TextView) findViewById(R.id.main_header_title);
 		Entry entry = intentExtras.getParcelable(Constants.KEY_ENTRY_LIST_EXTRA);
 		mDataDateList = mConvertCursorToListString.getDateListString(false, false, entry.id, type);
 		mSubList = mConvertCursorToListString.getEntryList(false, entry.id);
@@ -54,6 +53,10 @@ public class ExpenseSubListing extends ListingAbstract {
 			mTempCalendar.setTimeInMillis(mSubList.get(0).timeInMillis);
 			mTempCalendar.set(mTempCalendar.get(Calendar.YEAR),mTempCalendar.get(Calendar.MONTH),mTempCalendar.get(Calendar.DAY_OF_MONTH),0,0,0);
 			mTempCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			
+			Log.d("listingHeader "+listingHeader);
+			Log.d("getSubListHeaderType "+getSubListHeaderType());
+			Log.d("mTempCalendar "+mTempCalendar);
 			listingHeader.setText(new DisplayDate(mTempCalendar).getHeaderFooterListDisplayDate(getSubListHeaderType()));
 			addSections();
 		} else {

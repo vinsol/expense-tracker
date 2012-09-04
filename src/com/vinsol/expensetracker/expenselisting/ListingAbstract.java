@@ -94,13 +94,6 @@ abstract class ListingAbstract extends BaseActivity implements OnItemClickListen
 		Bundle intentExtras = getIntent().getExtras();
 		if(intentExtras != null && intentExtras.containsKey(Constants.KEY_HIGHLIGHT)) {
 			highlightID = intentExtras.getString(Constants.KEY_HIGHLIGHT);
-			Log.d("*******************************");
-			Log.d("highlightID "+highlightID);
-			Log.d("*******************************");
-		} else {
-			Log.d("*******************************");
-			Log.d("highlightID null");
-			Log.d("*******************************");
 		}
 		type = getType(intentExtras);
 	}
