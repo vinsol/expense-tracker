@@ -23,10 +23,9 @@ import com.flurry.android.FlurryAgent;
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.sync.SyncHelper;
-import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.Strings;
 
-public class FavoriteHelper implements OnClickListener{
+public class FavoriteHelper implements OnClickListener {
 	
 	private ToggleButton showAddFavorite;
 	private TextView showAddFavoriteTextView;
@@ -101,8 +100,10 @@ public class FavoriteHelper implements OnClickListener{
 		
 		@Override
 		public void afterTextChanged(Editable s) {
-			mShowList.amount = amount.getText().toString();
-			mShowList.description = description.getText().toString();
+			if(amount.getText() != null)
+				mShowList.amount = amount.getText().toString();
+			if(description.getText() != null)
+				mShowList.description = description.getText().toString();
 		}
 		
 	}
@@ -172,7 +173,7 @@ public class FavoriteHelper implements OnClickListener{
 		}
 	}
 	
-	private void setDatabaseAndLayoutValues(String hash){
+	private void setDatabaseAndLayoutValues(String hash) {
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editFavoriteHashEntryTable(hash);
 		mDatabaseAdapter.close();
@@ -268,7 +269,6 @@ public class FavoriteHelper implements OnClickListener{
 				String tempId = mDatabaseAdapter.getFavIdByHash(hash);
 				if(Strings.notEmpty(tempId)) favID = Long.parseLong(tempId);
 				mDatabaseAdapter.close();
-				Log.d("fileHelper " +fileHelper+" favID "+favID);
 				fileHelper.deleteAllFavoriteFiles(favID.toString());
 				doTaskAfter(hash);
 			} else {
