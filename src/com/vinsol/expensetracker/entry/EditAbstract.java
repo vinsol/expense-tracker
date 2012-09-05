@@ -46,6 +46,7 @@ import com.vinsol.expensetracker.helpers.StringProcessing;
 import com.vinsol.expensetracker.models.Entry;
 import com.vinsol.expensetracker.models.Favorite;
 import com.vinsol.expensetracker.sync.SyncHelper;
+import com.vinsol.expensetracker.utils.Log;
 import com.vinsol.expensetracker.utils.Strings;
 
 abstract class EditAbstract extends BaseActivity implements OnClickListener {
@@ -412,6 +413,7 @@ abstract class EditAbstract extends BaseActivity implements OnClickListener {
 	private void saveEntry() {
 		Entry toSave = getSaveEntryData(dateBarDateview,dateViewString);
 		toSave.syncBit = getString(R.string.syncbit_not_synced);
+		Log.d("amount toSave "+toSave.amount);
 		////// ******* Update database if user added additional info *******///////
 		mDatabaseAdapter.open();
 		mDatabaseAdapter.editExpenseEntryById(toSave);

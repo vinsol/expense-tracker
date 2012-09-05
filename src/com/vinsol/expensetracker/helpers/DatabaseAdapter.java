@@ -128,10 +128,18 @@ public class DatabaseAdapter {
 	
 	private ContentValues getInsertContentValues(Favorite object) {
 		ContentValues contentValues = new ContentValues();
-		if(Strings.notEmpty(object.description))
+		if(Strings.notEmpty(object.description)) {
 			contentValues.put(KEY_TAG, object.description);
-		if(Strings.notEmpty(object.amount))
+		} else {
+			contentValues.put(KEY_TAG, "");
+		}
+		
+		if(Strings.notEmpty(object.amount)) {
 			contentValues.put(KEY_AMOUNT, object.amount);
+		} else {
+			contentValues.put(KEY_AMOUNT, "");
+		}
+		
 		if(Strings.notEmpty(object.location))
 			contentValues.put(KEY_LOCATION, object.location);
 		
@@ -458,10 +466,18 @@ public class DatabaseAdapter {
 	
 	private ContentValues getEditContentValues(Favorite object) {
 		ContentValues contentValues = new ContentValues();
-		if (Strings.notEmpty(object.description))
+		if (Strings.notEmpty(object.description)) {
 			contentValues.put(KEY_TAG, object.description);
-		if (Strings.notEmpty(object.amount))
+		} else {
+			contentValues.put(KEY_TAG, "");
+		}
+		
+		if (Strings.notEmpty(object.amount)) {
 			contentValues.put(KEY_AMOUNT, object.amount);
+		} else {
+			contentValues.put(KEY_AMOUNT, "");
+		}
+		
 		if (Strings.notEmpty(object.type))
 			contentValues.put(KEY_TYPE, object.type);
 		if (Strings.notEmpty(object.location))

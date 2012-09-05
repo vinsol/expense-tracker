@@ -155,10 +155,12 @@ public class FavoriteEntry extends BaseActivity implements OnItemClickListener {
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				int textlength = searchBox.getText().length();
+				int textlength = 0;
+				if(searchBox.getText() != null)
+					textlength = searchBox.getText().length();
 				mList_sort.clear();
 				for (int i = 0; i < mListMain.size(); i++) {
-					if((textlength <= mListMain.get(i).description.length() || textlength <= mListMain.get(i).location.length() || textlength <= mListMain.get(i).amount.length()) && containsStringIgnoreCase(i)) {
+					if( mListMain.get(i) != null && ((mListMain.get(i).description != null && textlength <= mListMain.get(i).description.length()) || (mListMain.get(i).location != null && textlength <= mListMain.get(i).location.length()) || (mListMain.get(i).amount != null && textlength <= mListMain.get(i).amount.length())) && containsStringIgnoreCase(i)) {
 						mList_sort.add(mListMain.get(i));
 					}
 				}
