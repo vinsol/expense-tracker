@@ -12,6 +12,7 @@ import android.content.Context;
 
 import com.vinsol.expensetracker.R;
 import com.vinsol.expensetracker.models.Entry;
+import com.vinsol.expensetracker.utils.Strings;
 
 public class CheckEntryComplete {
 	private FileHelper fileHelper;
@@ -31,7 +32,7 @@ public class CheckEntryComplete {
 	}
 	
 	private boolean isAmountValid(String amount) {
-		if( amount!= null) {
+		if(Strings.notEmpty(amount)) {
 			if (amount.contains("?")) {
 				return false;
 			} else {
@@ -45,7 +46,7 @@ public class CheckEntryComplete {
 	
 	private boolean isTagValid(String tag,Context context) {
 		if(tag != null) {
-			if (tag.equals("") || tag.equals(context.getString(R.string.unfinished_textentry)) || tag.equals(context.getString(R.string.finished_textentry))) {
+			if (Strings.isEmpty(tag) || tag.equals(context.getString(R.string.unfinished_textentry)) || tag.equals(context.getString(R.string.finished_textentry))) {
 				return false;
 			} else {
 				return true;
