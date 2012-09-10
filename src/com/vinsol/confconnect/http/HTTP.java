@@ -42,7 +42,7 @@ import com.vinsol.expensetracker.utils.Utils;
 public class HTTP {
 
 	// Requirements
-	private String baseUrl = "http://192.168.0.26:3000/";
+	private String baseUrl = "";
 	private String userId;
 	private String sync = "sync";
 	private String verification = "?token=";

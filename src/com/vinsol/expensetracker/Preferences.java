@@ -56,57 +56,28 @@ public class Preferences extends PreferenceActivity {
 			}
 		});
 		
-		final Preference syncSetUpPref = findPreference(getString(R.string.pref_key_set_up_sync));
-		String token = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_token), null);
-		if(Strings.isEmpty(token)) {
-			syncSetUpPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-				
-				@Override
-				public boolean onPreferenceClick(Preference preference) {
-					startActivity(new Intent(Preferences.this, LoginType.class));
-//					final AlertDialog.Builder builder = new AlertDialog.Builder(SetPreferences.this);
-//					final View view = getLayoutInflater().inflate(R.layout.pref_sync_dialog, null);
-//					builder.setView(view);
-//					builder.setNegativeButton(getString(R.string.signin), new OnClickListener() {
-//						
-//						@Override
-//						public void onClick(DialogInterface dialog, int which) {
-//							if(builder.create().getButton(DialogInterface.BUTTON_NEGATIVE).getText().equals(getString(R.string.signin))) {
-//								builder.create().getButton(DialogInterface.BUTTON_NEGATIVE).setText(getString(R.string.signup));
-//								view.findViewById(R.id.sync_name).setVisibility(View.GONE);
-//							} else {
-//								builder.create().getButton(DialogInterface.BUTTON_NEGATIVE).setText(getString(R.string.signup));
-//							}
-//						}
-//					});
-//					builder.setPositiveButton(getString(R.string.ok), new OnClickListener() {
-//						
-//						@Override
-//						public void onClick(DialogInterface dialog, int which) {
-//							if(builder.create().getButton(DialogInterface.BUTTON_NEGATIVE).getText().equals(getString(R.string.signin))) {
-//								signup(view, syncSetUpPref);
-//							} else {
-//								signin(view, syncSetUpPref);
-//							}
-//						}
-//	
-//					});
-//					
-//					builder.show();
-					return true;
-				}
-			});
-		} else {
-			uiAfterSync(syncSetUpPref);
-		}
+//		final Preference syncSetUpPref = findPreference(getString(R.string.pref_key_set_up_sync));
+//		String token = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_token), null);
+//		if(Strings.isEmpty(token)) {
+//			syncSetUpPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+//				
+//				@Override
+//				public boolean onPreferenceClick(Preference preference) {
+//					startActivity(new Intent(Preferences.this, LoginType.class));
+//					return true;
+//				}
+//			});
+//		} else {
+//			uiAfterSync(syncSetUpPref);
+//		}
 	}
 	
-	private void uiAfterSync(Preference syncSetUpPref) {
-		String name = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_sync_name), "");
-		String email = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_sync_email), "");
-		syncSetUpPref.setTitle("Sync Details:");
-		syncSetUpPref.setSummary(Html.fromHtml("<font color=\"#6E6E6E\">"+name+"<br>"+email+"</font>"));
-	}
+//	private void uiAfterSync(Preference syncSetUpPref) {
+//		String name = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_sync_name), "");
+//		String email = SharedPreferencesHelper.getSharedPreferences().getString(getString(R.string.pref_key_sync_email), "");
+//		syncSetUpPref.setTitle("Sync Details:");
+//		syncSetUpPref.setSummary(Html.fromHtml("<font color=\"#6E6E6E\">"+name+"<br>"+email+"</font>"));
+//	}
 	
 	
 }

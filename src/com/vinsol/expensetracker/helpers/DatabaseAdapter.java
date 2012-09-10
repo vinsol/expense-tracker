@@ -22,7 +22,7 @@ import com.vinsol.expensetracker.utils.Utils;
 public class DatabaseAdapter {
 
 	// database and table name
-	private static int DB_VERSION = 3;
+	private static int DB_VERSION = 4;
 	private final String DATABASE_NAME = "ExpenseTrackerDB";
 	private final String ENTRY_TABLE = "EntryTable";
 	private final String FAVORITE_TABLE = "FavoriteTable";
@@ -57,7 +57,7 @@ public class DatabaseAdapter {
 			+ KEY_LOCATION + " TEXT, " 
 			+ KEY_FAVORITE + " INTEGER, "
 			+ KEY_TYPE + " VARCHAR(1) NOT NULL, "
-			+ KEY_ID_FROM_SERVER + " INTEGER UNIQUE, "
+			+ KEY_ID_FROM_SERVER + " INTEGER 'UNIQUE', "
 			+ KEY_UPDATED_AT + " STRING, "
 			+ KEY_MY_HASH + " TEXT, "
 			+ KEY_DELETE_BIT +" BOOLEAN DEFAULT 'FALSE', "
@@ -74,7 +74,7 @@ public class DatabaseAdapter {
 			+ KEY_AMOUNT + " TEXT, " 
 			+ KEY_TYPE + " VARCHAR(1) NOT NULL, " 
 			+ KEY_LOCATION + " TEXT, "
-			+ KEY_ID_FROM_SERVER + " INTEGER UNIQUE, "
+			+ KEY_ID_FROM_SERVER + " INTEGER 'UNIQUE', "
 			+ KEY_UPDATED_AT + " STRING, "
 			+ KEY_MY_HASH + " TEXT, "
 			+ KEY_DELETE_BIT + " BOOLEAN DEFAULT 'FALSE', "
@@ -622,29 +622,68 @@ public class DatabaseAdapter {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int prevVersion, int newVersion) {
-			if(prevVersion == 1) {
-				db.execSQL("ALTER TABLE " + PREVIOUS_VERSION_ENTRY_TABLE +" RENAME TO "+ENTRY_TABLE);
-			}
-			if(prevVersion == 2) {
-				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_LOCATION+" TEXT");
-			}
-			if(prevVersion == 3) {
-				db.execSQL("ALTER TABLE " + ENTRY_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER UNIQUE," +
-						  KEY_UPDATED_AT+" STRING," +
-						  KEY_MY_HASH+" TEXT," +
-						  KEY_DELETE_BIT+" BOOLEAN DEFAULT 'FALSE'," +
-						  KEY_SYNC_BIT+" INTEGER," +
-						  KEY_FILE_UPLOADED +" BOOLEAN DEFAULT 'FALSE'," +
-						  KEY_FILE_TO_DOWNLOAD +" BOOLEAN DEFAULT 'FALSE', " +
-						  KEY_FILE_UPDATED_AT +" STRING);");
-				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD ("+KEY_ID_FROM_SERVER+" INTEGER UNIQUE," +
-						  KEY_UPDATED_AT+" STRING," +
-						  KEY_MY_HASH+" TEXT," +
-						  KEY_DELETE_BIT+" BOOLEAN DEFAULT 'FALSE'," +
-						  KEY_SYNC_BIT+" INTEGER," +
-						  KEY_FILE_UPLOADED +" BOOLEAN DEFAULT 'FALSE'," +
-						  KEY_FILE_TO_DOWNLOAD +" BOOLEAN DEFULT 'FALSE', " +
-						  KEY_FILE_UPDATED_AT +" STRING);");
+			switch (prevVersion) {
+			case 1:
+				db.execSQL("ALTER TABLE " + PREVIOUS_VERSION_ENTRY_TABLE + " RENAME TO " + ENTRY_TABLE);
+			case 2:	
+				db.execSQL("ALTER TABLE " + FAVORITE_TABLE + " ADD " + KEY_LOCATION + " TEXT");
+			case 3:
+				// Adding columns in ENTRY_TABLE
+				db.execSQL("ALTER TABLE " + ENTRY_TABLE + " ADD " + KEY_ID_FROM_SERVER + " INTEGER 'UNIQUE'");
+				db.execSQL("ALTER TABLE " + ENTRY_TABLE + " ADD " + KEY_UPDATED_AT + " STRING");
+				db.execSQL("ALTER TABLE " + ENTRY_TABLE + " ADD " + KEY_MY_HASH + " TEXT");
+				db.execSQL("ALTER TABLE " + ENTRY_TABLE + " ADD " + KEY_DELETE_BIT + " BOOLEAN DEFAULT 'FALSE'");
+				db.execSQL("ALTER TABLE " + ENTRY_TABLE + " ADD " + KEY_SYNC_BIT + " INTEGER");
+				db.execSQL("ALTER TABLE " + ENTRY_TABLE + " ADD " + KEY_FILE_UPLOADED + " BOOLEAN DEFAULT 'FALSE'");
+				db.execSQL("ALTER TABLE " + ENTRY_TABLE + " ADD " + KEY_FILE_TO_DOWNLOAD + " BOOLEAN DEFAULT 'FALSE'");
+				db.execSQL("ALTER TABLE " + ENTRY_TABLE + " ADD " + KEY_FILE_UPDATED_AT + " STRING");
+				
+				
+				// Adding Columns in FAVORITE_TABLE
+				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_ID_FROM_SERVER+" INTEGER 'UNIQUE'");
+				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_UPDATED_AT+" STRING");
+				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_MY_HASH+" TEXT");
+				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_DELETE_BIT+" BOOLEAN DEFAULT 'FALSE'");
+				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_SYNC_BIT+" INTEGER");
+				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_FILE_UPLOADED+" BOOLEAN DEFAULT 'FALSE'");
+				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_FILE_TO_DOWNLOAD+" BOOLEAN DEFAULT 'FALSE'");
+				db.execSQL("ALTER TABLE " + FAVORITE_TABLE +" ADD "+KEY_FILE_UPDATED_AT+" STRING");
+				
+				// add hash to my_hash(ExpenseTable)
+				Cursor cursorEntry = db.query(ENTRY_TABLE, null, KEY_MY_HASH + " is null", null, null, null, null);
+				cursorEntry.moveToFirst();
+				while (!cursorEntry.isAfterLast()) {
+					ContentValues contentValues = new ContentValues();
+					contentValues.put(KEY_MY_HASH, Utils.getMD5());
+					String where = KEY_ID+"="+cursorEntry.getString(cursorEntry.getColumnIndex(KEY_ID));
+					db.update(ENTRY_TABLE, contentValues, where, null);
+					cursorEntry.moveToNext();
+				}
+				cursorEntry.close();
+//				db.execSQL("UPDATE "+ ENTRY_TABLE+" SET "+KEY_MY_HASH+"="+ Utils.getMD5() +" WHERE "+KEY_MY_HASH+" IS NULL");
+				
+				// add hash to my_hash(FavoriteTable)
+				Cursor cursorFav = db.query(FAVORITE_TABLE, null,KEY_MY_HASH+" is null", null, null, null, null);
+				cursorFav.moveToFirst();
+				while (!cursorFav.isAfterLast()) {
+					ContentValues contentValues = new ContentValues();
+					contentValues.put(KEY_MY_HASH, Utils.getMD5());
+					String where = KEY_ID+"="+cursorFav.getString(cursorFav.getColumnIndex(KEY_ID));
+					db.update(FAVORITE_TABLE, contentValues, where, null);
+					cursorFav.moveToNext();
+				}
+				cursorFav.close();
+//				db.execSQL("UPDATE "+ FAVORITE_TABLE+" SET "+KEY_MY_HASH+"="+ Utils.getMD5() +" WHERE "+KEY_MY_HASH+" IS NULL");
+				
+				// change fav_id with hash(ExpenseTable)
+//				ALTER TABLE EntryTable ADD FAVORITE_HASH TEXT;
+//				UPDATE EntryTable SET FAVORITE_HASH=(SELECT MY_HASH FROM FavoriteTable WHERE FavoriteTable._id=EntryTable.FAVORITE);
+				db.execSQL("UPDATE " + ENTRY_TABLE + " SET " + KEY_FAVORITE + "=(SELECT " + KEY_MY_HASH + " FROM " + FAVORITE_TABLE + " WHERE " + FAVORITE_TABLE + "._id = " + ENTRY_TABLE + ".FAVORITE)");
+				
+				// set sync_bit to not synced(if null in ExpenseTable)
+				db.execSQL("UPDATE "+ ENTRY_TABLE+" SET "+KEY_SYNC_BIT+"="+ context.getString(R.string.syncbit_not_synced) +" WHERE "+KEY_SYNC_BIT+" IS NULL");
+			default:
+				break;
 			}
 		}
 		

@@ -11,8 +11,8 @@
    			android:key="@string/pref_key_delete_dialog"
    			android:defaultValue="true"
    			android:title="@string/delete_dialog_title" />
-        <Preference
+        <!-- <Preference
             android:key="@string/pref_key_set_up_sync"
-            android:title="@string/sync_pref_title" />
+            android:title="@string/sync_pref_title" /> -->
 	</PreferenceCategory>
 </PreferenceScreen>
